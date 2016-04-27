@@ -1,0 +1,129 @@
+.albums img{
+	height: 150px;
+	}
+	.albums div{
+	padding: 10px;
+	}
+	.albums div:first-child {
+	text-align: center;
+	font-size: 10px;
+	}
+	.albums div:first-child span:first-child{
+	margin-top: 30px;
+	display: block;
+	padding: 5px;
+	}
+	.modal-header span {
+	margin-top: 0px !important;
+	}
+	.modal-body input,.modal-body textarea {
+	width: 100%;
+	/*margin-top: 10px;*/
+	padding: 5px;
+	} 
+	.albums{
+	padding: 10px !important;
+	margin: 0px 10px;
+	border: 1px solid #EEEEEF;
+	}
+	.createalbum-rightcontent{
+	padding: 30px;
+	margin: 30px 0px;
+	background-color: #eeeeef;
+	font-size: 12px;
+	border-radius: 5px;
+	color: #455469;
+	}
+	.createalbum-rightcontent label{
+	display: block;
+	padding: 10px;
+	}
+	.suggested-players{
+	padding:30px !important;
+	margin: 30px 0px;
+	background-color: #eeeeef;
+	font-size: 12px;
+	border-radius: 5px;
+	color: #455469;
+	}
+	.suggested-players label{
+	display: block;
+	padding: 10px;
+	}
+	.suggested-players img{
+	height: 60px;
+	}
+	.suggested-players .suggested-block{
+	display: inline-block;
+	padding: 0px 20px;
+	}
+	.suggested-players .suggested-block span:first-child{
+	display: block;
+	padding: 0px 10px;
+	}
+	.suggested-players >div{
+	padding: 5px;
+	}
+	.create-newteam{
+	padding:30px !important;
+	margin: 30px 0px;
+	background-color: #eeeeef;
+	font-size: 12px !important;
+	border-radius: 5px;	
+	color: #455469;	
+	}
+	.create-newteam label{
+	display: block;
+	padding: 10px;
+	}
+	.create-album{
+	height: 200px;
+	background-color: #eeeeef;
+	}
+	.create-album button {
+	font-size: 9px;
+	}
+	.content-left{
+	height: 100%;
+	background-color: #eeeeef;
+	}
+	.createalbum-rightcontent button{
+	font-size: 10px;
+	}
+	.album-name{
+	position: absolute;
+	top: 120px;
+	}
+	.album-name span{
+	display: block;
+	color: #fff;
+	margin-left: 20px;
+	font-size: 12px;
+	}
+	.album-name span:last-child{
+	font-size: 10px;
+	}
+	.createalbum-rightcontent label span{
+	padding-right: 10px;
+	}
+	.createalbum-rightcontent fieldset input{
+	font-size: 12px;
+	}
+	html,body{
+	height: 100%;
+	}
+	.glyphicon.glyphicon-picture{
+	font-size: 50px;
+	}
+	.left-list{
+	background-color:#EEEEEF;
+	}
+	.media-gallery{
+	padding: 10px;
+	margin: 0px;
+	}
+	@media only screen and (min-width:630px)and (max-width: 767px){
+	.create-album{
+	width: 260px;
+	}
+	}

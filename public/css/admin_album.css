@@ -1,0 +1,295 @@
+@charset "utf-8";
+/* CSS Document */
+/* -------------------- Gallery Section -------------------- */
+#marketplaceid {
+  margin: 0;
+}
+
+#marketplaceid .thumbnail {
+  position: relative;
+  border: none;
+  border-radius: 0;
+/*  border-bottom: 8px solid rgba(0,0,0,0.08); margin:20px 0;*/
+background-color: transparent;
+  padding: 0;
+  margin:20px 0 0 0;
+}
+#marketplaceid .caption{margin-bottom:30px;font-size: 14px;text-transform: capitalize;}
+#marketplaceid .thumbnail .ImageWrapper img {
+    width: 200px;
+    height: 130px;
+    margin: 0 auto;
+    display: inherit;
+    object-fit: scale-down;
+}
+#marketplaceid .caption .lead,
+#marketplaceid .caption .lead a {
+    font-weight: 400;
+    color: #2F3C4D;
+    padding-left: 0;
+    padding-right: 0;
+}
+#marketplaceid .caption .lead a:hover,
+#marketplaceid .caption .lead a:focus {
+	text-decoration: none;
+	color: #5CAF6D;
+}
+
+#marketplaceid .caption .lead,
+#marketplaceid .caption .lt-grey {
+	display: block;
+	margin-bottom: 0;
+	font-size: 14px;
+}
+img.lazy {
+    margin: 0 auto;
+    display: inherit;
+}
+
+#marketplaceid .thumbnail .ImageWrapper {
+  padding: 15px 15px 0;
+}
+#marketplaceid .thumbnail:hover .actions {
+    -moz-transform: translateY(000px);
+    -webkit-transform: translateY(000px);
+    -o-transform: translateY(000px);
+    -ms-transform: translateY(000px);
+    transform: translateY(000px);
+
+
+}
+
+#marketplaceid .thumbnail .actions {
+    padding: 8px 12px;
+    background: rgba(0,0,0,0.7);
+    position: absolute;
+    width: 100%;
+    margin: 0;
+    bottom: 0;
+    left: 0;
+    -moz-transform: translateY(300px);
+    -webkit-transform: translateY(300px);
+    -o-transform: translateY(300px);
+    -ms-transform: translateY(300px);
+    transform: translateY(300px);
+    -webkit-transition: all 300ms ease;
+    -moz-transition: all 300ms ease;
+    -ms-transition: all 300ms ease;
+    -o-transition: all 300ms ease;
+    transition: all 300ms ease;
+}
+
+#marketplaceid .thumbnail .actions ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+#marketplaceid .thumbnail .actions ul li {
+    display: table-cell;
+    border-right: 1px solid #8E8E8E;
+    width: 1%;
+    text-align: center;
+}
+#marketplaceid .thumbnail .actions ul li:first-child {
+	padding-left: 0;
+}
+#marketplaceid .thumbnail .actions ul li:last-child {
+	border-right: none;
+	padding-right: 0;
+}
+#marketplaceid .thumbnail .actions ul li a {
+    font-size: 16px;
+    color: #fff;
+    padding: 0;
+    border: none;
+    transition: 300ms ease all;
+    text-align: center;
+    display: block;
+    margin: 0 auto;
+    text-decoration: none;
+    padding: 0;
+}
+
+#marketplaceid .thumbnail .actions ul li a:hover {
+	color: #FCDE7E !important;
+}
+
+#marketplaceid .thumbnail .actions ul li .icon-info,
+#marketplaceid .thumbnail .actions ul li .icon-edit,
+#marketplaceid .thumbnail .actions ul li .icon-delete {
+	font-size: 18px;
+	padding: 0;
+	display: inline-block;
+	border-radius: 50%;	
+	color: #fff !important;
+	width: 26px;
+	height: 26px;
+
+	text-align: center;
+}
+#marketplaceid .thumbnail .actions ul li .icon-info:hover,
+#marketplaceid .thumbnail .actions ul li .icon-info:focus,
+#marketplaceid .thumbnail .actions ul li .icon-edit:hover,
+#marketplaceid .thumbnail .actions ul li .icon-edit:focus,
+#marketplaceid .thumbnail .actions ul li .icon-delete:hover,
+#marketplaceid .thumbnail .actions ul li .icon-delete:focus {opacity: .9; color: #fff !important;}
+
+#marketplaceid .thumbnail .actions ul li .icon-info {line-height: 22px; background: #8ed19c;}
+#marketplaceid .thumbnail .actions ul li .icon-info i {position: relative; top: 2px;}
+#marketplaceid .thumbnail .actions ul li .icon-edit {background: #8ed19c;}
+#marketplaceid .thumbnail .actions ul li .icon-delete {background: #768291;}
+
+#marketplaceid .thumbnail .actions ul li .icon-edit,
+#marketplaceid .thumbnail .actions ul li .icon-delete {line-height: 26px; font-size: 14px;}
+
+
+/* Ribbon Approved */
+#marketplaceid .ribbon {
+  position: absolute;
+  left: -5px;
+  top: -5px;
+
+  z-index: 1;
+  overflow: hidden;
+  width: 75px; height: 75px;
+  text-align: right;
+}
+#marketplaceid .ribbon span {
+  font-size: 10px;
+  font-weight: bold;
+  color: #FFF;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 20px;
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  width: 100px;
+  display: block;
+  background: #79A70A;
+  background: linear-gradient(#84CD93 0%, #65C178 100%);
+  box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
+  position: absolute;
+
+  top: 19px;
+
+  left: -21px;
+  letter-spacing: 0.6px;
+}
+
+#marketplaceid .ribbon span::before {
+  content: "";
+  position: absolute;
+  left: 0px;
+  top: 100%;
+  z-index: -1;
+  border-left: 3px solid #56A667;
+  border-right: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid #56A667;
+}
+#marketplaceid .ribbon span::after {
+  content: "";
+  position: absolute;
+  right: 0px;
+  top: 100%;
+  z-index: -1;
+  border-left: 3px solid transparent;
+  border-right: 3px solid #56A667;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid #56A667;
+}
+
+/* Ribbon Not Approved */
+#marketplaceid .ribbon.nt-app {
+	width: 100px;
+	height: 100px;}
+
+#marketplaceid .ribbon.nt-app span {
+	top: 30px;
+	left: -25px;
+	width: 130px;
+	background: #f27676;
+	}
+#marketplaceid .ribbon.nt-app span::before {
+border-top: 3px solid #874141;
+border-left: 3px solid #874141;
+}
+
+
+#marketplaceid .ribbon.nt-app span::after {
+border-top: 3px solid #874141;
+border-right: 3px solid #874141;
+}
+
+/* Ribbon Sold Out */
+#marketplaceid .ribbon.sold-out {
+	width: 100px;
+	height: 100px;}
+
+#marketplaceid .ribbon.sold-out span {
+	top: 30px;
+	left: -25px;
+	width: 130px;
+	background: #FF9800;
+	}
+#marketplaceid .ribbon.sold-out span::before {
+border-top: 3px solid #F57C00;
+border-left: 3px solid #F57C00;
+}
+
+
+#marketplaceid .ribbon.sold-out span::after {
+border-top: 3px solid #F57C00;
+border-right: 3px solid #F57C00;
+}
+
+#marketplaceid .create-album {height: 146px;display: table-cell;vertical-align: middle;width: 1%;}
+.create-album {text-align: center;max-height: 150px;min-height: 130px;}
+.create-album span {
+	margin: 0 0 10px;
+	padding-top: 15%;
+	display: block;
+}
+#marketplaceid .thumbnail  .album-link {background: rgba(0,0,0,0.5); padding: 5px 10px; min-height:inherit;}
+#marketplaceid .thumbnail  .album-link ul li a {font-size: 14px;}
+
+#marketplaceid .thumbnail  .album-link ul li a:hover {color: #FFFFFF !important;}
+#marketplaceid .image_album .thumbnail .ImageWrapper img {height: 150px;}
+#marketplaceid .album-name {
+	top:inherit;
+    position: absolute;
+    bottom: 10%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    text-align: center;
+    font-weight: 500;
+}
+
+.gallery-pg .thumbnail {
+	box-shadow: 0 5px 0 #f2f2f2;
+	margin-top: 10px !important;
+    margin-bottom: 10px !important;
+    border: none;
+    border-radius: 0;}
+.gallery-pg .ImageWrapper {background: #fff;}
+.gallery-pg .ImageWrapper a {
+	padding: 8px;
+    text-align: center;
+    color: #5CAF6D;
+	}
+.gallery-pg .ImageWrapper .delete {	
+    position: absolute;
+    top: 0;
+    right: 8px;
+    color: #f27676;
+
+}
+.gallery-pg .ImageWrapper .delete:hover {
+	opacity: .7;
+}
+
+.view_tageline_mkt{/* border-top: 1px solid rgba(217,221,229,0.8); */height: 0;text-align: center;display:block;margin: 30px 0 30px 0;width:100%;}
+.view_tageline_mkt span {background: #8e9bd0 none repeat scroll 0 0;color: #fff;display: inline-block;padding: 4px 15px;position: relative;text-transform: capitalize;top: -15px;cursor:pointer;border-radius: 18px;font-size: 14px;}
+.view_tageline_mkt span i{ padding:0 5px;}
+.view_tageline_mkt span label{cursor:pointer;margin-bottom: 0;}
