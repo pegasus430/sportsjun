@@ -1,0 +1,532 @@
+/*============	Media 768Px Start ============ */ 
+@media (min-width: 768px) and (max-width: 990px) {
+	/* Header */
+	.kd-headbar { text-align: center; }
+	.logo,.navbar-default {display:block; }
+	.logo { margin-bottom: 0px; }
+	.kode-topbar:after { display: none; }
+	.kode-topbar:before { width: 52%; }
+	.kode-header-absolute { position: static; }
+	.kode-header-three .kd-headbar { background-color: #333; }
+	.kode-header-three .navbar-nav > li > a { padding: 42px 12px; }
+
+	/* Grid */
+
+	.kode-subheader.subheader-height { height: auto; padding: 24px 0; }
+	.subheader-height:after { display: none; }
+	.kode-fixer-list,.kode-team-timeline ul li { float: left; width: 100%; }
+	.fixer-btn a { margin-bottom: 5px; }
+	.pick-event .heading h2{
+		display:block;
+		margin:0px 0px 15px 0px;
+	}
+	.pick-event .heading{
+		width:100%;
+	}
+	.pick-event .form{
+		float:left;
+		width:100%;
+	}
+	.pick-event .form .cover{
+		width:25%;
+		margin:0px;
+		padding:0px 10px;
+	}
+	.pick-event .form input{
+		width:100%;
+	}
+	.pick-event .form .cover i{
+		right:20px;
+	}
+	.pick-event .cover .dropdown button{
+		width:100%;
+	}
+	.kode-modren-btn{
+		padding:2px 10px;
+		width:100%;
+		margin:0px;
+		font-size:15px;
+		text-align:center;
+	}
+	.pick-event .form .cover .kode-modren-btn.thbg-colortwo{
+		margin:0px;
+	}
+	.kode-table{
+		float:left;
+		width:100%;
+		margin-bottom:20px
+	}
+	.kode-navigation{
+		display:none;
+	}
+	.navbar-nav > li > a, .kf_sticky .navbar-nav > li > a{
+		font-size:12px;
+		padding:10px 10px;
+	}
+	.header-8{
+		padding:15px 0px;
+	}
+	.kode-userinfo{
+		float:left;
+		width:100%;
+		text-align:center;
+	}
+	.kode-userinfo li{
+		float:none;
+		display:inline-block;
+		padding:0px 10px;
+	}
+	.kode_bg_white .bx-wrapper{
+		margin-bottom:10px;
+		float:left;
+		width:100%;
+	}
+	 span.kode-barinfo{
+		width:100%;
+		text-align:center;
+	}
+	.navbar-nav .children li{
+		text-align:left;
+	}
+	.kode-result-list article{
+		margin:50px 0px;
+	}
+	.kode-subheader div.col-md-6:first-child{
+		float:left;
+	}
+	.kode-subheader div.col-md-6{
+		float:right;
+		width:auto;
+	}
+	.kode-subheader.subheader-height{
+		padding:15px 0px;
+	}
+	.kode-timezoon{
+		position:static;
+		display:inline-block;
+		padding:7px 0px;
+		height:auto;
+		margin:0px 0px 15px 0px;
+	}
+	.kode-team-timeline ul {
+		float:left;
+		width:100%;
+		margin:0px;
+	}
+	.kode-team-timeline ul li{
+		margin:0px 0px 20px 0px;
+		padding:0px;
+		text-align:center;
+	}
+	.kode-team-timeline ul:before{
+		margin:0px;
+	}
+	.timeline-inner:before, .kode-team-timeline ul li:nth-child(2n) .timeline-inner:before{
+		border:none;
+		height:20px;
+		width:20px;
+		background-color:#fff;
+		transform:rotate(45deg);
+		left:0px;
+		right:0px;
+		top:-10px;
+		margin:auto;
+	}
+	.kode-newslatter h3{
+		font-size:26px;
+		margin-bottom:20px;
+		text-align:center;
+		float: none;
+		padding:0px;
+	}
+	.kode-player-thumb img{
+		width:100%;
+	}
+	.shopmainthumb{
+		float:left;
+		width:100%;
+		margin-bottom:20px;
+	}
+	.kode-images ul{
+		float:none;
+		margin:0px 0px 0px -2%;
+		width:auto;
+	}
+	.kode-images ul li{
+		float:left;
+		width:31.333%;
+		margin:0px 0px 0px 2%;
+	}
+	.kd-counter ul li{
+		padding-bottom:20px;
+		padding-top:20px;
+	}
+	
+}
+
+/*============ Media 420Px Start ============ */
+@media (max-width: 767px) {
+	/* Header */
+	.kode-topbar,.kode-header-three .kd-headbar { text-align: center; }
+	.kode-barinfo,.kode-userinfo,.kode-header-three .logo,.kode-header-three .kode-rightsection { float: none; display: inline-block; width: auto; }
+	.kode-topbar:after,.kode-topbar:before,.navbar-nav > li > a:before,.navbar-nav > li > a:after,
+	.kode-time-zoon:before,.kode-caption { display: none; }
+	.kode-userinfo li { border: none; }
+	.logo { width: auto; }
+	/* Navigation */
+	.navbar-nav > li > a { padding: 12px 18px;}
+	.navbar-toggle { background-color: #fff; margin:12px 18px; border:none;}
+	.navbar-collapse { z-index: 99; position: absolute; right: 0px; top: 100%; width: 320px; background-color: #333333; }
+	.navbar-nav .children { float: left; width: 100%; margin: 0px; position: static; visibility: visible; opacity: 1; -webkit-transform: none; -moz-transform: none; -ms-transform: none; -o-transform: none; transform: none; }
+	.navbar-nav { margin: 0px; }
+	.navbar-nav .children li a { width: 100%; }
+	.nav > li { float: left; width: 100%; }
+	.kode-header-absolute { position: static; }
+	.kode-cart a { color: #666; }
+	.navbar-nav { text-align: left; }
+	.kode-header-three .navbar-collapse { right: auto; left: 0px; }
+	.kode-search { margin-right: 0px; }
+	/* Grid */
+	.kode-content .col-md-4,.kode-content .col-md-3,.kode-simple-form.contact-formtwo ul li {
+		float: left;
+		width: 100%;
+	}
+	.kode-table tr td:last-child,.kode-table tr th:last-child { display: none; }
+
+	.kode-simplebtn ~ .kode-action-info { padding: 15px 0px 0px 0px; width: 100%; float: left; }
+	.kode-result-list article { margin-bottom: 80px; }
+	.kode-testimonial figure { padding: 0px 20px 20px 20px; }
+	.kode-testimnl-thumb ~ figcaption { float: left; width: 100%; padding: 11px 0 0 0px; }
+	.kode-subheader.subheader-height { height: auto; padding: 24px 0; }
+	.subheader-height:after { display: none; }
+	.kode-admin-post figure ~ .admin-info { padding: 0px; float: left; width: 100%; }
+	#kodecomments .children > li { padding-left: 0px; }
+	.kode-fixer-list,.kode-fixer-list ul { float: left; width: 100%; }
+	.table-body li.fixer-btn,.kode-images,.kode-summery,.kode-team-timeline ul li { float: left; width: 100%; }
+	.navbar-default{
+		display:block;
+		float:right;
+		width:100%;
+		position:absolute;
+		right:0px;
+		top:0px;
+	}
+	
+	.header-8{
+		padding:15px 0px;
+		
+	}
+	.header-8 .container{
+		position:relative;
+	}
+	.header-8 .logo{
+		float:left;
+		position:relative;
+		z-index:100;
+	}
+	.kode-wrapper .kode-header-absolute.kf_sticky{
+		position:static;
+	}
+	.header-8 .navbar-collapse{
+		width:100%;
+	}
+	.kf_sticky .navbar-nav > li > a{
+		padding:7px 15px;
+	}
+	.navbar-nav > li:first-child > a{
+		padding-left:18px;
+	}
+	
+	.pick-event .heading h2{
+		display:block;
+		margin:0px 0px 15px 0px;
+	}
+	.pick-event .heading{
+		width:100%;
+	}
+	.pick-event .form{
+		float:left;
+		width:100%;
+	}
+	.pick-event .form .cover{
+		width:100%;
+		margin:0px;
+		margin-bottom:10px;
+	}
+	.pick-event .form input{
+		width:100%;
+	}
+
+	.pick-event .cover .dropdown button{
+		width:100%;
+	}
+	.kode-modren-btn{
+		padding:5px 10px;
+		width:100%;
+		text-align:center;
+	}
+	.pick-event .form .cover .kode-modren-btn.thbg-colortwo{
+		margin:0px;
+	}
+	.kode-table{
+		float:left;
+		width:100%;
+		margin-bottom:30px
+	}
+	.heading h2{
+		font-size:24px;
+	}
+	.countdown-amount, .countdown-section{
+		width:100% !important;
+		margin: 0px;
+	}
+	.is-countdown{
+		float:left;
+		width:100%;
+	}
+	.kode-team-match ul li{
+		margin:0px 0px 20px 0px;
+		width:100%;
+		float:left;
+	}
+	.kode-team-match ul li.home-kode-vs{
+		margin-top:0px;
+	}
+	.kode-subtitle{
+		width:100%;
+	}
+	.kode-testimonials-6 .client-name{
+		width:50%;
+	}
+	#footer1 .footer-medium h3{
+		margin-top:20px;
+	}
+	.kode-newslatter h3{
+		font-size:26px;
+		margin-bottom:20px;
+		text-align:center;
+		float: none;
+		padding:0px;
+	}
+	.kode-timezoon{
+		position:static;
+		display:inline-block;
+		padding:7px 0px;
+		height:auto;
+		margin:0px 0px 15px 0px;
+	}
+	.kode-team-timeline ul {
+		float:left;
+		width:100%;
+		margin:0px;
+	}
+	.kode-team-timeline ul li{
+		margin:0px 0px 20px 0px;
+		padding:0px;
+		text-align:center;
+	}
+	.kode-team-timeline ul:before{
+		margin:0px;
+	}
+	.timeline-inner:before, .kode-team-timeline ul li:nth-child(2n) .timeline-inner:before{
+		border:none;
+		height:20px;
+		width:20px;
+		background-color:#fff;
+		transform:rotate(45deg);
+		left:0px;
+		right:0px;
+		top:-10px;
+		margin:auto;
+	}
+	.kode-navigation{
+		display:none;
+	}
+
+	.kode-wrapper .kode-header-absolute.kf_sticky  .kode-topbar{
+		display:block;
+	}
+	.kode-team-thumb{
+		float:left;
+		width:100%;
+	}
+	.kode-team-list figure figcaption{
+		width:100%;
+	}
+	.table-body{
+		padding:20px 0px;
+		float:left;
+		width:100%;
+	}
+	.table-body li{
+		float:left;
+		width:100%;
+		padding:10px 0px;
+	}
+	.table-body li.fixer-btn{
+		width:100%;
+		text-align:center;
+		padding:0px 0px 20px 0px;
+	}
+	.table-body li.fixer-btn a{
+		display:inline-block;
+		float:none;
+		margin:0px 3px;
+		
+	}
+	.kode-gallery ul li{
+		float:left;
+		width:100%;
+	}
+	.kode-player-thumb img{
+		float:left;
+		width:100%;
+	}
+	.shopmainthumb{
+		float:left;
+		width:100%;
+		margin-bottom:20px;
+	}
+	.kode-images{
+		float:left;
+		width:100%;
+		margin-bottom:30px;
+	}
+	.shopmainthumb img{
+		width:100%;
+	}
+	.kode-images ul li{
+		float:left;
+		margin:0px 0px 0px 2%;
+		width:31.333%;
+	}
+	.kode-images ul{
+		float:none;
+		width:auto;
+		margin:0px 0px 0px -2%;
+	}
+	.kode-images ul li img{
+		width:100%;
+	}
+	.kode-newslatter form{
+		padding:0px;
+	}
+	.kd-counter ul li{
+		padding-bottom:20px;
+		padding-top:20px;
+	}
+	.kode-subheader div.col-md-6{
+		width:100%;
+		text-align:center;
+	}
+	.kode-breadcrumb{
+		float:left;
+		width:100%;
+		text-align:center;
+	}
+	.kode-breadcrumb li{
+		display:inline-block;
+	}
+	.kode-userinfo li{
+		padding:6px 5px 5px 5px;
+	}
+	.kode-blog-list ul li{
+		float:left;
+		width:100%;
+		margin-bottom:30px;
+	}
+	.kode-blog-list .kode-team-network li{
+		margin:0px 5px;
+		float:left;
+		width:auto;
+	}
+	.kode-blog-list .kode-blog-options{
+		float:left;
+		width:100%;
+		text-align:center;
+	}
+	.kode-blog-list .kode-blog-options li{
+		margin:0px 5px;
+		display:inline-block;
+		float:none;
+		width:auto;
+	}
+	#footer1 .footer-medium{
+		padding:20px 0px 50px 0px;
+	}
+	.kode-inner-fixer{
+		padding:20px;
+	}
+	.kode-detail-element h2{
+		margin-bottom:10px;
+	}
+	.kode-team-network{
+		float:left;
+		width:100%;
+		text-align:center;
+		margin:0px 0px 10px 0px;
+	}
+	.kode-team-network li a{
+		background-color:#fff;
+		border-color:#fff;
+	}
+	.kode-table tbody tr td{
+		padding:3px 5px;
+		text-align: center;
+		font-size:12px;
+	}
+	.kode-player-tabs .kode-table thead th{
+		font-size:13px;
+		padding:4px;
+		text-align:center;
+	}
+	.player-nav li{
+		float:left;
+		width:100%;
+		margin:0px;
+	}
+	.player-nav li a{
+		display:block;
+		float:left;
+		width:100%;
+	}
+	.kode-team-list figure figcaption h2 a{
+		width:100%;
+		text-align:center;
+	}
+	.kode-table thead th{
+		font-size:12px;
+		padding:4px 3px;
+		text-align:center;
+	}
+}
+
+/*============ Media 300Px Star ============ */
+@media (max-width: 480px) {
+	.logo { margin: 25px 0 0 10px; }
+	.kode-result-thumb ~ .kode-result-info,.kode-result-list article.kode-even .kode-result-thumb ~ .kode-result-info { float: left; padding: 20px 0 0; width: 100%; }
+	/* Grid */
+	.kode-content .col-md-4,.kode-content .col-md-3,.col-md-12 {
+		float: left;
+		width: 100%;
+	}
+	.countdown-section { margin-left: 0px; display: inline-block; float: none; width: 100%; }
+	.kode-innersearch form { width: 100%; }
+	
+
+}
+
+/*============	Media 940Px Start ============ */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	.kode-search { margin-right: 0px; }
+	.logo { margin-left: 0px; }
+	.navbar-nav > li > a { padding: 42px 9px; }
+
+	/* Force table to not be like tables anymore */
+	.col-md-4 .kode-blog-info:before { left: 18px; }
+	.kode-time-zoon::before { left: 5%; }
+	.kode-navigation ul li a{
+		padding:10px 7px;		
+	}
+	
+}
