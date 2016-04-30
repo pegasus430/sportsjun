@@ -1,0 +1,3488 @@
+/*==================================================
+
+Project:	Kickoff Sports HTML Template
+Version:	1.0
+Last change:	20/08/15
+Author :	KodeForest
+
+/**
+ * Table of Contents :
+ *
+* 1.0 - Default Css
+* 2.0 - TopBaar
+* 3.0 - Navigation
+* 4.0 - Header Two 
+* 5.0 - Header Three
+* 6.0 - Modal Window
+* 7.0 - Kode Search
+* 8.0 - Main Banner
+* 9.0 - Main Content
+* 10.0 - Call To Action 
+* 11.0 - Result's 
+* 11.1 - Result Listing 
+* 12.0 - Shop Listing 
+* 13.0 - TeamListing 
+* 14.0 - BlogPlayer Element 
+* 15.0 - Medium Blog 
+* 16.0 - Services  
+* 17.0 - Fixer Counter 
+* 18.0 - Fixer countdown. 
+* 19.0 - Team Matches 
+* 20.0 - Match Table 
+* 21.0 - Table View two 
+* 22.0 - Blog Large 
+* 22.1 - Blog Grid View Two 
+* 22.2 - BlogFull Width 
+* 22.3 - Pagination 
+* 22.4 - Blog Detail 
+* 22.5 - Related Blog In Detail 
+* 23.0 - Next PrevPost 
+* 24.0 - Admin Post 
+* 25.0 - Comment 
+* 26.0 - Comment Form 
+* 27.0 - Testimonial 
+* 28.0 - Partner 
+* 29.0 - SubHeader 
+* 30.0 - Action 
+* 31.0 - Gallery 
+* 32.0 - Player Detail 
+* 32.1 - Player Tabs 
+* 33.0 - Shop Detail 
+* 34.0 - Fixer List 
+* 35.0 - Team Detail 
+* 35.1 - Team TimeLine View 
+* 36.0 - Contact Us Page 
+* 37.0 - Default Pages 404 
+* 38.0 - UnderConstruction 
+* 39.0 - NewsLetter 
+* 40.0 - Contact Footer 
+* 41.0 - CopyRighht Section 
+* 42.0 - PROJECT FACTS 
+* 43.0 - Header 8 
+* 44.0 - dropdown first level 
+* 45.0 - social network 
+* 46.0 - PICK EVENT 
+* 47.0 - VIDEO SECTION 
+* 48.0 - HEADING STYLE 12 
+* 49.0 - Footer Medium 
+* 50.0 - about-widget 
+* 51.0 - contact-us-widget 
+* 52.0 - social-links1 
+* 53.0 - widget-flickr 
+* 54.0 - TeamGrid 
+* 55.0 - TESTIMONIALS STYLE 6 
+* 56.0 - HEADER 4 
+* 57.0 - HEADER 6 
+* 58.0 - TEAM STYLE 2 
+
+[Color codes]
+
+Background:	#ffffff (white)
+Content:	#505050 (light black)
+Header h1:	#195d10 (green)
+Header h2:	#195d10 (green)
+Footer:		#252525 (dark black)
+
+a (standard):	#ffffff (dark blue)
+a (visited):	#ffffff (light blue)
+a (active):	#ffffff (pink)
+
+[Typography]
+  
+Body copy:		14px/ 'Open Sans', sans-serif;
+Headers:		'Oswald', sans-serif;
+Input, textarea:	'Oswald', sans-serif;
+Sidebar heading:	'Oswald', sans-serif;
+
+-------------------------------------------------------------------*/
+
+@charset "utf-8";
+/* Default Css Starts */
+@import url(shortcode.css);
+* {
+	padding: 0px;
+	margin: 0px;
+}
+
+/* TopBaar Starts */
+.kode-topbar {
+	float: left;
+	width: 100%;
+	background-color: #84cd93;
+	position: relative;
+	font-size: 13px;
+}
+.kode-topbar .bx-controls.bx-has-controls-direction{
+	display:none;
+}
+.kode-topbar:before {
+	content: '';
+	position: absolute;
+	right: 0px;
+	top: 0px;
+	background-color: #65c178;
+	width: 50%;
+	height: 100%;
+}
+.kode-topbar:after {
+	content: '';
+	position: absolute;
+	right: 50%;
+	top: 0px;
+	border-bottom: 39px solid #65c178;
+	border-left: 30px solid transparent;
+}
+.kode-topbar a,.kode-topbar p,.kode-topbar i,.kode-topbar span 			{ color: #ffffff; }
+.kode-barinfo {
+	float: left;
+	padding: 5px 16px 5px 16px;
+	height:30px;
+	overflow:hidden;
+}
+.kode_bg_white .bx-wrapper .bx-viewport{background:none;}
+.kode_bg_white strong{color:#fff;} 
+.kode-userinfo { float: right; }
+.kode-userinfo li {
+	list-style: none;
+	display: inline-block;
+	padding: 6px 11px 5px 15px;
+	border-left: 1px solid rgba(255,255,255,0.4);
+	position: relative;
+}
+.kode-userinfo li i {
+	margin-right: 4px;
+}
+
+/* TopBaar Ends */
+
+/* Main Header Starts */
+.kode-header-absolute {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	z-index: 999;
+}
+.kd-headbar {
+	float: left;
+	width: 100%;
+	background-color: #333333;
+	border-bottom: 3px solid;
+}
+.logo {
+	float: left;
+	margin: 25px 0px 25px 25px;
+	width: 100%;
+}
+.kd-headbar .logo {
+	transition:all 0.3s ease-in-out;
+	
+}
+.kf_sticky .kd-headbar .logo{
+	margin:10px 0 10px 10px;
+}
+.kf_sticky .navbar-nav > li > a{
+	padding:27px 14px
+}
+.kf_sticky .kode-search{
+	margin:21px -14px 0 0;
+}
+
+/* Main Header Ends */
+
+/* Navigation Starts */
+.kode-rightsection { float: right; }
+.navbar-default {
+	background: none;
+	border: none;
+	margin: 0px;
+	float: left;
+	display:none;
+}
+.navbar-default .navbar-nav li {
+	list-style: none;
+}
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+	color: #eb1a1a;
+}
+.navbar-nav > li:first-child > a { padding-left: 0px; }
+.navbar-nav > li > a {
+	padding: 42px 14px;
+	font-size: 14px;
+	color: #ffffff;
+	text-transform: uppercase;
+	font-weight: bold;
+	position: relative;
+	overflow: hidden;
+}
+.navbar-nav > li > a:before {
+	content: "\f106";
+	font-family: FontAwesome;
+	width: 18px;
+	height: 9px;
+	position: absolute;
+	left: 50%;
+	bottom: 0px;
+	border-radius: 40px 40px 0px 0px;
+	color: #ffffff;
+	line-height: 9px;
+	font-size: 9px;
+	padding: 0px 0px 0px 5px;
+	z-index: 4;
+	margin: 0px 0px -8px -12px;
+}
+.navbar-nav > li > a:after {
+	content: '';
+	position: absolute;
+	left: 50%;
+	bottom: 1px;
+	width: 24px;
+	height: 12px;
+	border: 1px solid #eb1a1a;
+	border-bottom: none;
+	border-radius: 40px 40px 0px 0px;
+	z-index: 0;
+	margin: 0px 0px -8px -15px;
+}
+.navbar-nav > li > a:before,.navbar-nav > li > a:after { opacity: 0; }
+.navbar-nav > li:hover > a:before,.navbar-nav > li:hover > a:after { opacity: 1; margin-bottom: 0px; }
+.navbar-nav .children {
+	position: absolute;
+	left: 0px;
+	top: 100%;
+	background-color: #333333;
+	margin: 0px 0px 0px -50px;
+	border-top: 1px solid;
+	opacity: 0;
+	visibility: hidden;
+	z-index: 999;
+
+	-webkit-transition: all 0.4s ease-in-out;
+	   -moz-transition: all 0.4s ease-in-out;
+	    -ms-transition: all 0.4s ease-in-out;
+	     -o-transition: all 0.4s ease-in-out;
+	        transition: all 0.4s ease-in-out;
+	-webkit-transform: translateX(30px);
+	   -moz-transform: translateX(30px);
+	    -ms-transform: translateX(30px);
+	     -o-transform: translateX(30px);
+	        transform: translateX(30px);
+}
+.navbar-nav > li:hover > .children,.navbar-nav .children > li:hover > .children {
+	opacity: 1;
+	visibility: visible;
+
+	-webkit-transform: translateX(0px);
+	   -moz-transform: translateX(0px);
+	    -ms-transform: translateX(0px);
+	     -o-transform: translateX(0px);
+	        transform: translateX(0px);
+}
+.navbar-nav .children li {
+	position: relative;
+	float: left;
+	width: 100%;
+}
+.navbar-nav .children li a {
+	font-size: 12px;
+	color: #ffffff;
+	text-transform: uppercase;
+	float: left;
+	width: 195px;
+	padding: 7px 15px;
+	border-bottom: 1px solid #3e3e3e;
+}
+.navbar-nav .children li a:before {
+	content: "\f105";
+	font-family: FontAwesome;
+	display: inline-block;
+	padding: 0px 14px 0px 0px;
+}
+.navbar-nav .children .children {
+	left: 100%;
+	top: 0;
+	margin: 0px;
+}
+.navbar-nav .children > li:hover > a,.children > li:hover > a:before { color: #ffffff; }
+
+/* Navigation Ends */
+
+/* Header Two */
+
+.kode-header-two .kode-search:before,
+.kode-header-two .kode-search:after {
+	display: none;
+}
+
+/* Header Three */
+
+.kode-header-three .kd-headbar {
+	background: none;
+	border: none;
+}
+.kode-header-three .navbar-nav > li > a:after { display: none; }
+.kode-header-three .navbar-nav > li > a:before {
+	content: '';
+	border-bottom: 2px solid #000;
+	background: none;
+	width: 100%;
+	margin: 0px;
+	left: 0px;
+	bottom: 30px;
+}
+.kode-cart {
+	float: right;
+	padding: 29px 0px 0px 0px;
+}
+.kode-cart a {
+	color: #ffffff;
+	text-transform: uppercase;
+}
+.kode-cart a i {
+	width: 42px;
+	height: 42px;
+	color: #000;
+	border-radius: 100%;
+	text-align: center;
+	padding: 13px 0px 0px 0px;
+	margin-right: 12px;
+}
+
+/* Modal Window Starts */
+
+.modal-dialog { width: 400px; }
+.modal-content { border-radius: 0px; }
+.modal-body {
+	display: inline-block;
+	width: 100%;
+	padding: 15px 22px 4px 22px;
+}
+.modal-header h4 {
+	text-transform: uppercase;
+	color: #ffffff;
+}
+.kode-loginform {
+	display: inline-block;
+	width: 100%;
+}
+.kode-loginform p {
+	display: inline-block;
+	width: 100%;
+}
+.kode-loginform p > span {
+	font-size: 14px;
+	color: #333333;
+	font-weight: bold;
+	display: block;
+	margin-bottom: 6px;
+}
+.kode-loginform p input[type="text"],.kode-loginform p input[type="password"] {
+	float: left;
+	width: 100%;
+	border: 1px solid #e2e2e2;
+	height: 42px;
+}
+.kode-loginform p label {
+	float: left;
+	margin: 0px;
+}
+.kode-loginform p input[type="checkbox"] {
+	float: left;
+	margin: 7px 10px 0px 0px;
+}
+.kode-loginform p label span,.kode-loginform p a {
+	font-size: 14px;
+	color: #333333;
+	font-weight: bold;
+}
+.kode-loginform p a {
+	float: left;
+	margin: 14px 0px 0px 0px;
+}
+.kode-loginform p.kode-submit {
+	padding: 18px 0px 0px 0px;
+	border-top: 1px solid #dfdfdf;
+}
+.kode-loginform p input[type="submit"] {
+	float: right;
+	padding: 5px 30px;
+	color: #000;
+	text-transform: uppercase;
+	box-shadow: 0px 0px 0px 1px #000 inset;
+	border: 7px solid;
+	font-weight: bold;
+}
+.close { opacity: 0.4 }
+
+/* Modal Window Ends */
+
+/* Kode Search Starts */
+
+.kode-search {
+	float: right;
+	width: 160px;
+	margin: 36px -14px 0px 0px;
+	position: relative;
+}
+.kode-search:before {
+	content: '';
+	position: absolute;
+	right: 0px;
+	top: -14px;
+	border-bottom: 14px solid #000;
+	border-right: 14px solid transparent;
+}
+.kode-search:after {
+	content: '';
+	position: absolute;
+	right: 0px;
+	bottom: -14px;
+	border-top: 14px solid #000;
+	border-right: 14px solid transparent;
+}
+.kode-search input[type="text"] {
+	float: left;
+	width: 100%;
+	border: none;
+	font-size: 12px;
+	color: #ffffff;
+	text-transform: uppercase;
+	padding: 6px 15px 6px 15px;
+	height: 29px;
+	box-shadow: none;
+}
+
+/* Kode Search Ends */
+
+/* Main Banner Starts */
+
+#mainbanner {
+	float: left;
+	width: 100%;
+}
+#mainbanner .flex-direction-nav {
+	display: none;
+}
+#mainbanner .container 								{ position: relative; }
+.flexslider .slides .kode-caption img {
+	width: auto;
+	margin-bottom: 16px;
+	display: inline-block;
+}
+.kode-caption {
+	position: absolute;
+	right: 0px;
+	bottom: 130px;
+	z-index: 999;
+	width: 100%;
+	text-align: center;
+	left:0px;
+	margin:auto;
+}
+.kode-caption h2{
+	font-size:50px;
+	color:#000;
+	padding:10px 30px;
+	background-color:#F00;
+	display:inline-block;
+	text-transform:uppercase;
+	position:relative;
+/*	box-shadow:0px 30px 20px 0px rgba(0,0,0,0.5);
+	-moz-box-shadow:0px 30px 20px 0px rgba(0,0,0,0.5);
+	-webkit-box-shadow:0px 30px 20px 0px rgba(0,0,0,0.5);*/
+	margin-bottom:40px;
+}
+.kode-caption p{
+	font-size:24px;
+	line-height:normal;
+}
+/*.kode-caption h2:before{
+	content:"";
+	position:absolute;
+	border-bottom: 95px solid #F00;
+    border-left: 50px solid transparent;
+	left:-50px;
+	top:0px;
+}
+.kode-caption h2:after{
+	content:"";
+	position:absolute;
+	border-bottom: 95px solid #F00;
+    border-right: 50px solid transparent;
+	right:-50px;
+	top:0px;
+}*/
+.kode-caption p {
+	color: #ffffff;
+	display: inline-block;
+	width: 70%;
+	margin-bottom: 25px;
+}
+.kode-modren-btn {
+	color: #fff;
+	display: inline-block;
+	color: #333333;
+	font-size: 20px;
+	text-transform: uppercase;
+	padding: 6px 35px;
+	box-shadow: 0px 0px 0px 1px rgba(0,0,0,0.3) inset;
+	border: 7px solid #ffe325;
+}
+.kode-modren-btn:hover { opacity: 0.7; }
+.kode-content .kode-pagesection.kode-parallax{
+	background-attachment:fixed !important;
+}
+.kode-dark-overlay{
+	position:relative;
+}
+.kode-dark-overlay:before{
+	content:'';
+	position:absolute;
+	left:0;
+	top:0;
+	bottom:0;
+	background:#000;
+	width:100%;
+	height:100%;
+	opacity:0.6;
+}
+
+/* Main Banner Ends */
+
+/* Main Content */
+.kode-content {
+	float: left;
+	width: 100%;
+	padding: 40px 0px 0px 0px;
+}
+/* Call To Action starts */
+.kode-call-action {
+	float: left;
+	width: 100%;
+	text-align: right;
+}
+.kode-call-action .kode-simplebtn { float: right; }
+.kode-simplebtn {
+	display: inline-block;
+	padding: 12px 40px;
+	color: #ffffff;
+	border: 1px solid #fff;
+	font-size: 18px;
+	margin: 10px 0px 0px 0px;
+	position: relative;
+}
+.kode-simplebtn:before {
+	content: '';
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	height: 0;
+	width: 100%;
+	background-color: rgba(0,0,0,0.1);
+}
+.kode-simplebtn:hover:before { height: 100%; }
+.kode-simplebtn ~ .kode-action-info {
+	padding: 0px 220px 0px 0px;
+}
+.kode-action-info h2 { text-transform: uppercase; }
+.kode-action-info h2,.kode-action-info span {
+	color: #ffffff;
+}
+.kode-action-info span {
+	font-size: 16px;
+	text-transform: uppercase;
+}
+
+/* Call To Action ends */
+
+/* Result's starts */
+.kode-section-title {
+	float: left;
+	width: 100%;
+	margin-bottom: 30px;
+}
+.kode-widget-title {
+	float: left;
+	width: 100%;
+	margin-bottom: 18px;
+}
+.kode-section-title h2,.kode-widget-title h2 {
+	text-transform: uppercase;
+	border-bottom: 1px solid;
+	display: inline-block;
+	padding: 0px 0px 7px 0px;
+}
+.widget-recent-news ul li:hover time { color: #ffffff; }
+.kode-section-title.kode-white h2 {
+	color: #ffffff !important;
+	border-bottom-color: #fff !important;
+}
+.kode-white.heading-12 p,
+.kode-white.heading-12 h2{
+	color:#fff !important;
+}
+
+/* Result's ends */
+
+/* Result Listing starts */
+.shape-view .kode-section-title { margin-bottom: 90px; }
+.kode-result-list article {
+	float: left;
+	width: 100%;
+	background-color: #333;
+	padding: 25px 20px;
+	position: relative;
+	min-height: 191px;
+	margin-bottom: 30px;
+	box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+	-moz-box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+	-webkit-box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+}
+.kode-result-list article:before {
+	content: '';
+	position: absolute;
+	right: 0px;
+	top: -46px;
+	border-top: 237px solid #eb1a1a;
+	border-left: 237px solid transparent;
+}
+.kode-result-list article:after {
+	content: '';
+	position: absolute;
+	right: 31px;
+	top: 24px;
+	width: 130px;
+	height: 130px;
+	background-color: #333;
+	border-radius: 100%;
+}
+.kode-result-info h2 {
+	display: inline-block;
+	width: 100%;
+	border-bottom: 1px solid #9d9d9d;
+	text-transform: uppercase;
+	padding: 0px 0px 12px 0px;
+}
+.kode-result-info h2 a {
+	color: #ffffff;
+	display: inline-block;
+}
+.kode-result-info h2 span {
+	float: right;
+	color: #ffffff;
+}
+.kode-result-info ul li {
+	float: left;
+	width: 100%;
+	list-style: none;
+	color: #ffffff;
+}
+.kode-result-info ul li span {
+	float: right;
+}
+.kode-result-thumb ~ .kode-result-info {
+	padding: 0px 200px 0px 0px;
+}
+.kode-result-thumb {
+	float: right;
+	padding: 10px 20px 0 0;
+	position: relative;
+	z-index: 9;
+}
+.kode-result-count {
+	position: absolute;
+	right: 20px;
+	top: -70px;
+	width: 75px;
+	height: 75px;
+	color: #333333;
+	font-size: 45px;
+	text-align: center;
+	font-weight: bold;
+	padding: 5px 0px 0px 0px;
+}
+.kode-result-count:before {
+	content: '';
+	position: absolute;
+	left: -7px;
+	top: 0px;
+	border-bottom: 24px solid #c9b005;
+	border-left: 7px solid transparent;
+}
+.kode-result-list article.kode-even:before {
+	right: auto;
+	left: 0px;
+
+	-webkit-transform: scaleX(-1);
+	   -moz-transform: scaleX(-1);
+	    -ms-transform: scaleX(-1);
+	     -o-transform: scaleX(-1);
+	        transform: scaleX(-1);
+}
+.kode-result-list article.kode-even .kode-result-thumb ~ .kode-result-info {
+    padding: 0px 0px 0px 200px;
+}
+.kode-result-list article.kode-even .kode-result-thumb {
+	float: left;
+	padding: 1px 0px 0 21px;
+}
+.kode-result-list article.kode-even:after {
+	right: auto;
+	left: 31px;
+}
+.kode-result-list article.kode-even .kode-result-count {
+	right: auto;
+	left: 20px;
+}
+.kode-result-count::before {
+	left: auto;
+	right: -7px;
+	-webkit-transform: scaleX(-1);
+	   -moz-transform: scaleX(-1);
+	    -ms-transform: scaleX(-1);
+	     -o-transform: scaleX(-1);
+	        transform: scaleX(-1);
+}
+
+/* Result Listing ends */
+
+/* Shop Listing starts */
+.kode-shop-list ul li {
+	list-style: none;
+}
+.kode-pro-inner {
+	float: left;
+	width: 100%;
+	/*border: 1px solid #868686;*/
+	padding: 5px;
+	margin-bottom: 30px;
+/*	box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+	-moz-box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+	-webkit-box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);*/
+}
+.kode-shop-list figure,.kode-shop-list figure a,.kode-shop-list figure img {
+	float: left;
+	width: 100%;
+	margin: 0px;
+}
+.kode-shop-list figure figcaption {
+	float: left;
+	width: 100%;
+	padding: 16px;
+	background-color: #ffffff;
+}
+.kode-shop-list figure figcaption h4 { text-transform: uppercase; }
+.kode-pro-info {
+	float: left;
+	width: 100%;
+	padding: 10px 16px 8px 16px;
+	background-color: #373737;
+}
+.add_to_cart {
+	display: inline-block;
+	color: #ffffff;
+	text-transform: uppercase;
+}
+.add_to_cart i { margin-right: 8px; }
+.kode-pro-info span {
+	float: right;
+	color: #ffffff;
+	font-weight: bold;
+}
+
+/* Shop Listing ends */
+
+.kode-pro-inner:hover .kode-pro-info a,.kode-pro-inner:hover .kode-pro-info span { color: #000; }
+/* TeamListing starts */
+.kode-team-list > ul > li {
+	list-style: none;
+	margin-bottom: 30px;
+}
+.kode-team-list figure{
+	margin-bottom:20px;
+}
+.kode-team-list figure,.kode-team-list figure img {
+	float: left;
+	width: 100%;
+	background-color: #ffffff;
+}
+.kode-team-thumb {
+	float: left;
+	width: 248px;
+	border: 1px solid #d8d8d8;
+	box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+	-moz-box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+	-webkit-box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+}
+.kode-team-list figure figcaption {
+	position: absolute;
+	right: 0px;
+	bottom: 0px;
+	z-index: 10;
+}
+.kode-team-list figure figcaption:before {
+	content: '';
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 116px;
+	height: 100%;
+}
+.kode-team-network {
+	float: right;
+	margin-bottom: 15px;
+}
+.kode-team-network li {
+	list-style: none;
+	display: inline-block;
+	margin-left: 3px;
+}
+.kode-team-network li a {
+	display: inline-block;
+	border: 1px solid #e6e6e6;
+	color: #999999;
+	width: 26px;
+	height: 26px;
+	text-align: center;
+	padding: 5px 0px 0px 0px;
+}
+.kode-team-list figure figcaption h2 {
+	display: block;
+	text-align: right;
+	text-transform: uppercase;
+	margin-bottom: 15px;
+	box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+	-moz-box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+	-webkit-box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+}
+.kode-team-list figure figcaption h2 a {
+	color: #ffffff;
+	padding: 14px 42px 15px 42px;
+	display: inline-block;
+	box-shadow: 0px 0px 0px 1px #fff inset;
+	border: 4px solid #333;
+	background-color: #333;
+}
+.kode-team-list .kode-modren-btn {
+	font-size: 14px;
+	padding: 5px 18px;
+	float: right;
+	box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+	-moz-box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+	-webkit-box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+}
+.kode-team-network li a:hover { color: #ffffff; }
+
+/* TeamListing ends */
+
+/* BlogPlayer Element starts */
+.kode-blog-player { height: 601px; }
+.kode-blog-player .mejs-controls { display: none; }
+.kode-blog-player .mejs-container {
+  height: 100% !important;
+}
+
+/* BlogPlayer Element ends */
+
+/* Medium Blog start */
+.kode-medium-blog {
+	float: left;
+	width: 100%;
+	background-color: #333;
+	padding: 35px;
+	border-left: 2px solid;
+}
+.kode-medium-blog h2 {
+	color: #ffffff;
+	text-transform: uppercase;
+	margin-bottom: 25px;
+}
+.kode-medium-blog > ul > li {
+	float: left;
+	width: 100%;
+	list-style: none;
+	border-bottom: 1px solid #484848;
+	padding: 0px 0px 5px 0px;
+	margin: 0px 0px 20px 0px;
+}
+.kode-medium-blog > ul > li:last-child {
+	margin: 0px;
+}
+.medium-info {
+	float: left;
+	width: 100%;
+	margin-bottom: 14px;
+}
+.medium-info time {
+	float: left;
+	width: 80px;
+	height: 63px;
+	color: #333333;
+	box-shadow: 0px 0px 0px 1px #9f9f9f inset;
+	border: 4px solid #fff;
+	background-color: #ffffff;
+	font-size: 27px;
+	font-weight: bold;
+	text-align: center;
+	padding: 12px 0px 0px 0px;
+}
+.medium-info time ~ .medium-title { padding: 0px 0px 0px 100px; }
+.medium-title h5 a {
+	color: #ffffff;
+	text-transform: uppercase;
+}
+.kode-blog-options {
+	margin: 0px;
+}
+.kode-blog-options li {
+	display: inline-block;
+	list-style: none;
+	margin-right: 20px;
+}
+.kode-blog-options li i { margin-right: 6px; }
+.kode-medium-blog .kode-blog-options li a,.kode-medium-blog .kode-blog-options li ,
+.kode-medium-blog p{ color: #ffffff; }
+
+/* Medium Blog ends */
+
+/* Services Css starts */
+.kode-services,.service-info {
+	float: left;
+	width: 100%;
+}
+.kode-services ul li {
+	padding: 0px;
+	list-style: none;
+}
+.service-info {
+	background-color: #505050;
+	text-align: center;
+	padding: 55px 10px;
+}
+.service-info i {
+	color: #ffffff;
+	margin-bottom: 15px;
+}
+.service-info h2 {
+	text-transform: uppercase;
+	color: #ffffff;
+}
+
+/* Services Css ends */
+
+/* Fixer Counter Css starts */
+.kode-fixer-counter {
+	float: left;
+	width: 100%;
+	text-align: center;
+}
+.kode-fixer-title {
+	text-transform: uppercase;
+	font-size: 48px;
+}
+.kode-fixer-counter h2 {
+	font-weight: lighter;
+	text-transform: uppercase;
+}
+
+/* Fixer Counter Css ends */
+
+/* Fixer countdown Css starts */
+.is-countdown {
+	display: inline-block;
+	margin: 50px 0px 0px 0px;
+}
+.countdown-amount {
+	background: #333333;
+	color: #fff;
+	display: block;
+	font-size: 55px;
+	font-weight: bold;
+	width: 97px;
+	height: 97px;
+	text-align: center;
+	padding: 9px 0px 0px 0px;
+	margin-bottom: 15px;
+	position: relative;
+		box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+	-moz-box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+	-webkit-box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+
+}
+.countdown-amount:before {
+	content: '';
+	position: absolute;
+	left: 0px;
+	top: -20px;
+	border-top: 116px solid red;
+	border-right: 100px solid transparent;
+	z-index: 0;
+}
+.countdown-amount small { position: relative; }
+.countdown-section {
+	display: inline-block;
+	margin-left: 80px;
+	margin-bottom: 30px;
+}
+.countdown-period {
+	font-size: 20px;
+	color: #505050;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+/* Fixer countdown Css ends */
+
+/* Team Matches css starts */
+.kode-team-match {
+	float: left;
+	width: 100%;
+	text-align: center;
+}
+.kode-team-match ul {
+	display: inline-block;
+	margin-bottom: 35px;
+}
+.kode-team-match ul li {
+	float: left;
+	list-style: none;
+	margin-left: 100px;
+}
+.kode-team-match ul li.home-kode-vs { 
+	margin-top: 32px;
+	box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+	-moz-box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+	-webkit-box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+
+}
+.kode-team-match ul li:first-child,.countdown-section:first-child { margin-left: 0px; }
+.kode-team-match ul li .kode-modren-btn {
+	font-size: 42px;
+	padding: 15px 12px;
+}
+.kode-subtitle {
+	display: inline-block;
+	width: 50%;
+	font-size: 18px;
+}
+
+/* Team Matches css ends */
+
+/* Match Table starts */
+.kode-table { 
+	border-bottom: 3px solid;
+	box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+	-moz-box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+	-webkit-box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+}
+.kode-table tr:hover{
+	background:#666 !important;
+}
+.kode-table thead th {
+	color: #ffffff;
+	border: none;
+	padding: 4px 10px;
+	text-align: center;
+	font-size: 16px;
+	text-transform: uppercase;
+}
+.kode-table thead th:first-child { text-align: left; }
+.kode-table tbody tr {
+	background-color: #333333;
+}
+.kode-table tbody tr:nth-child(even) { background-color: #404040; }
+.kode-table tbody tr:nth-child(even) td { border: none; }
+.kode-table tbody tr td  {
+	color: #ffffff;
+	border: none;
+	border-right: 1px solid #484848;
+	padding: 3px 25px;
+	vertical-align: middle;
+}
+.kode-table span {
+	display: inline-block;
+	text-align: center;
+	width: 33%;
+	font-size: 20px;
+	font-weight: normal;
+}
+
+/* Match Table ends */
+
+/* Table View two starts */
+.kode-table-v2.kode-table tbody tr:nth-child(even) { background-color: #333333; }
+.kode-table-v2.kode-table tbody tr td { border: none; }
+.kode-table-v2.kode-table tbody tr td:first-child {
+	padding: 4px 0px 3px 15px;
+	text-align: left;
+}
+.kode-table-v2.kode-table tbody tr td {
+	padding: 3px 15px;
+	text-align: center;
+}
+
+/* Table View two ends */
+
+/* Blog Large starts */
+.kode-blog-list ul li { list-style: none; }
+.kode-large-blog > ul > li,.kode-grid-blog > ul > li,.kode-fullwidth-blog > ul > li { margin-bottom: 45px; }
+.kode-time-zoon {
+	float: left;
+	width: 100%;
+	background-color: #f4f4f4;
+	padding: 18px;
+	position: relative;
+}
+.kode-time-zoon:before {
+	content: '';
+	position: absolute;
+	left: 20%;
+	top: -2px;
+	width: 264px;
+	height: 2px;
+	background-color: #f4f4f4;
+}
+.kode-large-blog ul li:hover .kode-time-zoon time { color: #ffffff; }
+.kode-blog-list ul li:hover img {
+	opacity: 0.6;
+}
+.kode-time-zoon time {
+	float: left;
+	width: 79px;
+	color: #ffffff;
+	font-size: 32px;
+	text-transform: uppercase;
+	text-align: center;
+	background-color: #2f2f2f;
+	padding: 10px 0px 6px 0px;
+	margin-right: 18px;
+}
+.kode-time-zoon time span {
+	display: block;
+	margin-top: 6px;
+	font-size: 18px;
+}
+.kode-time-zoon h5 {
+	text-transform: uppercase;
+	padding: 14px 0px 0px 0px;
+}
+.kode-blog-list figure,.kode-blog-list figure img {
+	float: left;
+	width: 100%;
+	margin: 0px;
+}
+.kode-blog-info {
+	float: left;
+	width: 100%;
+	background-color: #f4f4f4;
+	padding: 20px 20px 0px 20px;
+	text-align: center;
+	position: relative;
+}
+.kode-blog-info:before {
+	content: '';
+	position: absolute;
+	left:0;
+	right:0px;
+	bottom: -14px;
+	width: 42%;
+	height: 14px;
+	background-color: #f4f4f4;
+	margin:auto;
+}
+.kode-blog-info .kode-team-network {
+	margin: 18px 0px 0px 0px;
+	float: none;
+	display: inline-block;
+}
+.kode-blog-btn {
+	text-transform: uppercase;
+}
+.kode-align-btn {
+	float: left;
+	width: 100%;
+	text-align: center;
+}
+
+/* Blog Large ends */
+
+/* Blog Grid View Two starts */
+.kode-grid-blog .kode-blog-options li 											{ margin-bottom: 12px; }
+.kode-grid-blog .kode-blog-options li a 										{ color: #505050; }
+.kode-grid-blog .kode-blog-info,.kode-grid-blog .kode-blog-info:before 			{ background-color: #eaeaea; }
+.kode-grid-blog .kode-team-network li a 										{ background-color: #ffffff; }
+.kode-grid-blog .kode-blog-info:before 											{ border-bottom: 1px solid; }
+.kode-modrenbtn {
+	display: inline-block;
+	background-color: #2a2a2a;
+	color: #ffffff;
+	text-transform: uppercase;
+	border: 4px solid #2a2a2a;
+	box-shadow: 0px 0px 0px 1px #ffffff inset;
+	padding: 5px 25px;
+	margin: 9px 0px 4px 0px;
+}
+
+/* Blog Grid View Two ends */
+
+/* BlogFull Width starts */
+.kode-fullwidth-blog > ul > li:last-child { margin-bottom: 0px; }
+.kode-fullwidth-blog > ul > li:last-child .kode-blog-info { border: none; padding-bottom: 0px; }
+.kode-fullwidth-blog .kode-blog-info {
+	text-align: left;
+	background-color: #ffffff;
+	padding: 15px 0px 30px 0px;
+	border-bottom: 1px solid #d1d1d1;
+}
+.kode-fullwidth-blog .kode-blog-info:before { display: none; }
+.kode-fullwidth-blog .kode-blog-options {
+	float: left;
+	padding: 4px 0px 0px 0px;
+}
+.kode-fullwidth-blog .kode-team-network {
+	float: right;
+	margin: 3px 0px 0px 0px;
+}
+.kode-fullwidth-blog p {
+	float: left;
+	padding: 13px 0px 0px 0px;
+}
+.kode-fullwidth-blog .kode-modrenbtn { float: left; }
+.kode-fullwidth-blog .kode-time-zoon:before {
+	left: 50%;
+	margin: 0px 0px 0px -100px;
+	background-color: #a5a5a5;
+}
+
+/* BlogFull Width ends */
+
+/* Pagination starts */
+.pagination {
+	float: left;
+	width: 100%;
+	text-align: center;
+}
+.pagination a,.pagination span {
+	display: inline-block;
+	width: 32px;
+	height: 32px;
+	border: 1px solid #d7d7d7;
+	color: #999999;
+	padding: 5px 0px 0px 0px;
+	margin-right: 6px;
+}
+.pagination a:hover,.pagination span { color: #ffffff; }
+
+/* Pagination ends */
+
+/* Blog Detail starts */
+.kode-editor {
+	float: left;
+	width: 100%;
+}
+.kode-editor p {
+	margin: 14px 0px;
+}
+blockquote {
+	float: left;
+	width: 100%;
+	padding: 20px 20px;
+	background-color: #f1f1f1;
+	border-left: 3px solid;
+	font-size: 15px;
+	font-style: italic;
+	color: #666666;
+	margin: 15px 0px;
+}
+
+/* Blog Detail ends */
+
+/* Related Blog In Detail starts */
+.kode-related-blog ul li {
+	list-style: none;
+	margin-bottom: 30px;
+}
+.related-thumb { border-bottom: 3px solid; }
+.kode-related-blog,.related-thumb,.kode-related-blog ul li img,.related-text {
+	float: left;
+	width: 100%;
+}
+.kode-related-blog ul li:hover img { opacity: 0.6; }
+.related-text {
+	text-align: center;
+	padding: 10px 0px 0px 0px;
+}
+.related-text h6 a {
+	text-transform: uppercase;
+	color: #666666;
+}
+
+/* Related Blog In Detail ends */
+
+/* Next PrevPost starts */
+.kode-postsection {
+	float: left;
+	width: 100%;
+	border: 1px solid #ebebeb;
+	border-left: none;
+	border-right: none;
+	padding: 25px 0px;
+	margin-bottom: 30px;
+}
+.kode-postsection h6 {
+	margin: 0px;
+	text-transform: uppercase;
+}
+.kode-postsection h6 a {
+	color: #666666;
+}
+.kode-postsection h6 i {
+	font-size: 34px;
+}
+.kode-prev {
+	float: left;
+}
+.kode-prev i {
+	float: left;
+	margin: -5px 25px 0px 0px;
+}
+.kode-next {
+	float: right;
+}
+.kode-next i {
+	float: right;
+	margin: -5px 0px 0px 25px;
+}
+
+/* Next PrevPost ends */
+
+/* Admin Post starts */
+.kode-admin-post {
+	float: left;
+	width: 100%;
+	background-color: #333333;
+	padding: 24px 75px 24px 75px;
+	position: relative;
+	margin: 36px 0px 30px 0px;
+	box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+	-moz-box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+	-webkit-box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+}
+.kode-admin-post:before {
+	content: '';
+	position: absolute;
+	left: 0px;
+	top: -36px;
+	border-top: 197px solid #eb1a1a;
+	border-right: 230px solid transparent;
+}
+.kode-admin-post figure {
+	border: 5px solid #333333;
+	float: left;
+	width: 110px;
+	margin: 0px;
+}
+.kode-admin-post figure ~ .admin-info { padding: 0px 0px 0px 135px; }
+.admin-info p {
+	color: #ffffff;
+}
+.admin-info h5 {
+	margin-bottom: 0px;
+	text-transform: uppercase;
+}
+.admin-info h5 span {
+	font-size: 14px;
+	margin-left: 9px;
+}
+
+/* Admin Post ends */
+
+/* Comment css starts */
+#kodecomments {
+	float: left;
+	width: 100%;
+}
+#kodecomments ul ul { margin: 0px; }
+#kodecomments ul li {
+	float: left;
+	width: 100%;
+	list-style: none;
+}
+#kodecomments > ul > li {
+	border-bottom: 1px solid #ebebeb;
+	margin-bottom: 25px;
+	padding-bottom: 12px;
+}
+#kodecomments ul li figure {
+	float: left;
+	background-color: #f1f1f1;
+	padding: 5px;
+	border: 1px solid #d4d4d4;
+	box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+	-moz-box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+	-webkit-box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+}
+#kodecomments ul li figure img {
+	border: 1px solid #d4d4d4;
+}
+#kodecomments ul li figure ~ .text {
+	padding: 0px 0px 0px 110px;
+	float: none;
+	width: auto;
+}
+#kodecomments ul li .text h6 { margin: 0px; }
+#kodecomments ul li .text a {
+	float: left;
+}
+#kodecomments ul li .text .replay-btn {
+	float: none;
+	display: inline-block;
+	margin: 0px 0px 0px 10px;
+}
+#kodecomments ul li .text time {
+	color: #b5b5b5;
+	font-size: 12px;
+	text-transform: uppercase;
+	margin-left: 8px;
+}
+#kodecomments ul li .text p { margin-top: 8px; }
+#kodecomments ul li .text time i { margin-right: 7px; }
+
+#kodecomments .children li { margin-bottom: 0px; }
+#kodecomments .children > li { padding: 0px 0px 0px 150px; }
+#kodecomments ul ul.children li {
+	border-top: 1px solid #ebebeb;
+	margin-top: 25px;
+	padding-top: 25px;
+}
+
+/* Comment css ends */
+
+/* Comment Form css starts */
+#koderespond,#koderespond form,#koderespond form p.kd-textarea,#koderespond form p textarea {
+	float: left;
+	width: 100%;
+}
+#koderespond h2 {
+	margin: 0px 0px 15px 0px;
+	text-transform: uppercase;
+}
+#koderespond form p {
+	float: left;
+	width: 33.333%;
+	padding: 0px 25px 25px 0px;
+	margin: 0px;
+}
+#koderespond form p:nth-child(3n),#koderespond form p.kd-textarea { padding-right: 0px; }
+#koderespond form input[type="text"] {
+	float: left;
+	width: 100%;
+	border: 1px solid #dcdcdc;
+	height: 40px;
+	color: #666666;
+	padding: 9px;
+}
+#koderespond form input[type="text"]:focus,#koderespond form p textarea:focus {
+	background-color: #f4f4f4;
+}
+#koderespond form p textarea {
+	height: 170px;
+	border: 1px solid #dcdcdc;
+	color: #666666;
+	padding: 9px;
+}
+#koderespond form p input[type="button"],#koderespond form p input[type="submit"] {
+	float: left;
+	padding: 8px 25px;
+	color: #ffffff;
+	border: 6px solid;
+	text-transform: uppercase;
+	box-shadow: 0px 0px 0px 1px rgba(0,0,0,0.3) inset;
+}
+#koderespond form p.kd-button { width: 100%; }
+
+/* Comment Form css ends */
+
+/* Testimonial css starts */
+.kode-testimonial {
+	margin: 30px 0 0;
+}
+.kode-testimonial figure,.kode-testimonial figure img,.kode-testimonial {
+	float: left;
+	width: 100%;
+}
+.kode-testimonial figure {
+	padding: 16px 80px;
+	background-color: #333537;
+}
+.kode-testimonial ul li {
+	list-style: none;
+	margin-bottom: 55px;
+}
+.kode-testimonial ul li .thcolor{
+	color:#fff;
+}
+.kode-testimonial figure:before {
+	content: '';
+	position: absolute;
+	left: 0px;
+	top: -35px;
+	border-top: 194px solid #eb1a1a;
+	border-right: 270px solid transparent;
+	z-index: 0;
+}
+.kode-testimnl-thumb {
+	float: left;
+	width: 137px;
+	position: relative;
+	border: 4px solid #333537;
+}
+.kode-testimnl-thumb ~ figcaption {
+	padding: 11px 0px 0px 162px;
+}
+.kode-testimonial figure figcaption p { color: #ffffff; }
+
+/* Testimonial css ends */
+
+/* Partner css starts */
+.kode-partner ul li {
+	list-style: none;
+	text-align: center;
+	margin-bottom: 30px;
+}
+.kode-partner ul li a {
+	float: left;
+	width: 100%;
+	border: 1px solid #e2e2e2;
+	box-shadow: 0px 2px 0px 0px #e2e2e2;
+}
+
+/* Partner css ends */
+
+/* SubHeader css starts */
+.kode-subheader {
+	float: left;
+	width: 100%;
+	background-color: #eb1a1a;
+	height: 236px;
+	position: relative;
+}
+.subheader-height:before {
+	content: '';
+	position: absolute;
+	right: 0px;
+	top: 0px;
+	width: 52.2%;
+	height: 100%;
+	background-color: #c50000;
+}
+.subheader-height:after {
+	border-bottom: 198px solid #c50000;
+    border-left: 152px solid transparent;
+    bottom: 0;
+    content: "";
+    position: absolute;
+    right: 52.2%;
+}
+.kode-subheader.subheader-height {
+	padding: 165px 0px 0px 0px;
+}
+.kode-subheader h1 {
+	color: #ffffff;
+	text-transform: uppercase;
+}
+.kode-breadcrumb {
+	float: right;
+	padding: 9px 0px 0px 0px;
+}
+.kode-breadcrumb li {
+	display: inline-block;
+	list-style: none;
+	padding: 0px 15px;
+	position: relative;
+}
+.kode-breadcrumb li:before {
+	content: "\f101";
+	font-family: FontAwesome;
+	position: absolute;
+	right: -5px;
+	top: 0px;
+	color: #ffffff;
+}
+.kode-breadcrumb li:last-child { padding-right: 0px; }
+.kode-breadcrumb li:last-child:before { display: none; }
+.kode-breadcrumb li a {
+	color: #ffffff;
+}
+
+/* SubHeader css ends */
+
+/* Gallery css starts */
+.kode-gallery ul li {
+	list-style: none;
+	margin-bottom: 30px;
+	
+}
+.kode-gallery ul li figure{
+	box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+	-moz-box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+	-webkit-box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+}
+.kode-gallery ul li figure,.kode-gallery ul li figure a,.kode-gallery ul li figure img {
+	float: left;
+	width: 100%;
+	margin: 0px;
+}
+.kode-gallery ul li figure figcaption {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	padding: 10px;
+	opacity: 0;
+
+	-webkit-transform: scale(0);
+	   -moz-transform: scale(0);
+	    -ms-transform: scale(0);
+	     -o-transform: scale(0);
+	        transform: scale(0);
+}
+.kode-gallery ul li:hover figure figcaption {
+	opacity: 1;
+	-webkit-transform: scale(1);
+	   -moz-transform: scale(1);
+	    -ms-transform: scale(1);
+	     -o-transform: scale(1);
+	        transform: scale(1);
+}
+.kode-gallery-info {
+	float: left;
+	width: 100%;
+	border: 1px solid #dedede;
+	padding: 18px 25px;
+}
+.kode-gallery-info h2 {
+	text-transform: uppercase;
+	margin: 0px 0px 0px 0px;
+}
+.kode-gallery-info p {
+	margin: 0px;
+}
+.kode-gallery-hover {
+	width: 100%;
+	height: 100%;
+	display: inline-block;
+	opacity: 0.8;
+}
+.kode-gallery-hover i {
+	font-size: 28px;
+	color: #ffffff;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin: -8px 0px 0px -2px;
+}
+
+/* Gallery css ends */
+
+/* Player Detail css starts */
+.kode-player-thumb {
+	float: left;
+	width: 100%;
+	border: 1px solid #d8d8d8;
+}
+.kode-detail-element {
+	float: left;
+	width: 100%;
+	border-top: 1px solid #eaeaea;
+	border-bottom: 1px solid #eaeaea;
+	padding: 18px 0px 15px 0px;
+	margin-bottom: 20px;
+}
+.kode-detail-element .kode-team-network { margin: 0px; }
+.kode-detail-element h2 {
+	text-transform: uppercase;
+	display: inline-block;
+	margin: 0px;
+}
+.kode-table caption {
+	color: #ffffff;
+	padding: 7px 20px;
+	font-size: 24px;
+	text-transform: uppercase;
+}
+
+/* Player Detail css ends */
+
+/* Player Tabs css starts */
+.kode-player-tabs { margin: 40px 0px 20px 0px; }
+.kode-player-tabs,.player-nav,.kode-player-tabs .tab-content {
+	float: left;
+	width: 100%;
+}
+.player-nav li {
+	float: left;
+	list-style: none;
+	line-height: 1;
+	margin-left: 25px;
+}
+.player-nav li a {
+	font-size: 18px;
+	text-transform: uppercase;
+	border: 1px solid #d0d0d0;
+	border-bottom: none;
+	padding: 14px 45px;
+	float: left;
+}
+.kode-player-tabs .kode-table thead th {
+	padding: 4px 14px;
+	font-size: 15px;
+}
+.kode-player-tabs .kode-table tbody tr td:nth-child(2n) {
+    background-color: #404040;
+}
+.kode-player-tabs .kode-table tbody tr:nth-child(2n) { background-color: #333333; }
+.kode-player-tabs .kode-table tbody tr td {
+	border: none;
+	border-bottom: 1px solid rgba(0,0,0,0.2);
+	border-left: 1px solid rgba(0,0,0,0.2);
+}
+
+/* Player Tabs css ends */
+
+/* Shop Detail css starts */
+.kode-images {
+	float: left;
+	width: 39%;
+}
+.kode-images ul {
+	float: left;
+	width: 101px;
+}
+.kode-images ul li {
+	float: left;
+	width: 100%;
+	border: 1px solid #d9d9d9;
+	margin-bottom: 15px;
+	list-style: none;
+}
+.shopmainthumb {
+	float: right;
+	width: 70%;
+	border: 1px solid #d9d9d9;
+}
+.kode-summery {
+	float: right;
+	width: 60%;
+	padding-left: 20px;
+}
+.summery-title {
+	float: left;
+	width: 100%;
+	border-bottom: 1px solid #c6c6c6;
+	padding-bottom: 15px;
+	margin-bottom: 25px;
+	position: relative;
+}
+.summery-title h2 {
+	text-transform: uppercase;
+	float: left;
+	margin: 0px;
+}
+.priceinfo {
+	float: left;
+	width: 100%;
+	padding: 25px 0px;
+	border-bottom: 1px solid #c6c6c6;
+	margin-bottom: 20px;
+}
+.priceinfo h2 {
+	float: left;
+}
+.priceinfo ul {
+	float: left;
+	width: 70%;
+}
+.priceinfo ul li {
+	list-style: none;
+	float: left;
+	width: 50%;
+	padding-left: 25px;
+}
+.priceinfo ul li span {
+	float: left;
+	width: 25%;
+	padding: 6px 0px 0px 0px;
+}
+.priceinfo ul li select {
+	float: left;
+	width: 75%;
+}
+.kode-summery .kode-modren-btn { 
+	float: left;
+	width:auto;
+	font-size:20px;
+}
+.shop-btn {
+	float: left;
+}
+.shop-btn a {
+	float: left;
+	width: 46px;
+	height: 46px;
+	background-color: #333333;
+	color: #ffffff;
+	padding: 16px 0px 0px 0px;
+	margin: 0px 0px 0px 13px;
+	text-align: center;
+}
+.shop-btn a:hover { color: #ffffff; }
+.shop-nav .tab-content {
+	float: left;
+	width: 100%;
+	padding: 25px;
+	border: 1px solid #dedede;
+}
+.shop-nav {
+	float: left;
+	width: 100%;
+	border-bottom: 1px solid #e5e5e5;
+	padding: 0px 0px 40px 0px;
+	margin: 30px 0px 25px 0px;
+}
+.kode-rating {
+	height: 22px;
+	line-height: 16px;
+	margin-right: 0;
+	padding-bottom: 10px;
+	position: absolute;
+	right: 0px;
+	top: 22px;
+	width: 100px;
+}
+.kode-rating:before, .rating-box:before {
+	color: #ddd;
+	content: "\f005 \f005 \f005 \f005 \f005";
+	font-family: 'FontAwesome';
+	font-size: 16px;
+	left: 0;
+	letter-spacing: 4px;
+	position: absolute;
+	top: 0;
+}
+.rating-box:before {color: #ffae00;}
+.rating-box {
+	height: 16px;
+	left: 0;
+	overflow: hidden;
+	position: absolute;
+	top: 0;
+}
+
+/* Shop Detail css ends */
+
+/* Fixer List css starts */
+.kode-inner-fixer {
+	float: left;
+	width: 100%;
+	background-color: #f2f2f2;
+	border-bottom: 1px solid;
+	padding: 45px 0px;
+	margin-bottom: 30px;
+	box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+	-moz-box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+	-webkit-box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+}
+.kode-inner-fixer .kode-fixer-counter h2 {
+	color: #ffffff;
+	padding: 15px 10px;
+}
+.kode-fixer-list {
+	display: table;
+	width: 100%;
+	box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+	-moz-box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+	-webkit-box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+}
+.kode-fixer-list ul {
+	display: table-row;
+}
+.kode-fixer-list ul li {
+	display: table-cell;
+	vertical-align: middle;
+}
+.table-head li {
+	padding: 15px 10px;
+	text-align: center;
+	width: 20%;
+}
+.table-head li:first-child { width: 32%; }
+.table-head li h5 {
+	color: #ffffff;
+	text-transform: uppercase;
+	margin: 0px;
+}
+.fixer-pagination a {
+	float: right;
+	width: 26px;
+	height: 26px;
+	color: #ffffff;
+	border: 1px solid #ffffff;
+	margin-right: 10px;
+	padding: 4px 0px 0px 0px;
+	border-radius: 2px;
+}
+.fixer-pagination a:hover {
+	background-color: #ffffff;
+}
+.table-body:nth-child(even) li {
+	background-color: #333333;
+}
+.table-body:nth-child(even) li {
+	border-left: 1px solid #404040;
+}
+.table-body li {
+	text-align: center;
+	background-color: #404040;
+	color: #ffffff;
+	padding: 25px 0px;
+}
+.list-thumb {
+	display: inline-block;
+	color: #ffffff;
+}
+.list-thumb img { margin-right: 8px; }
+.table-body li span {
+	display: inline-block;
+	font-size: 20px;
+	width: 22%;
+}
+.table-body li small { text-transform: uppercase; }
+.fixer-btn a {
+	float: right;
+	padding: 3px 14px;
+	color: #333333;
+	background-color: #ffffff;
+	margin-right: 20px;
+	font-weight: bold;
+}
+.table-body li.fixer-btn { width: 26%; }
+.fixer-btn a:hover { color: #ffffff; }
+
+/* Fixer List css ends */
+
+/* Team Detail css starts */
+.icon-list li {
+	list-style: none;
+	color: #666666;
+	border-bottom: 1px solid #ececec;
+	padding: 3px 0px;
+}
+.icon-list li i { margin-right: 10px; }
+
+/* Team Detail css ends */
+
+/* Team TimeLine View css starts */
+.kode-team-timeline {
+	float: left;
+	width: 100%;
+	position: relative;
+}
+.kode-team-timeline ul {
+	margin: 0px 0px 0px -198px;
+	position: relative;
+}
+.kode-team-timeline ul:before {
+	content: '';
+	position: absolute;
+	left: 50%;
+	top: 0px;
+	border-left: 1px solid rgba(255,255,255,0.25);
+	width: 2px;
+	height: 94%;
+	margin: 0px 0px 0px 98px;
+}
+.kode-team-timeline ul li {
+	list-style: none;
+	width: 50%;
+	display: inline-block;
+	margin: 0px -4px 40px 0px;
+	padding: 0px 0px 0px 198px;
+	position: relative;
+}
+.timeline-inner {
+	background-color: #ffffff;
+	border: 1px solid #62666c;
+	padding: 22px 22px 15px 22px;
+	position: relative;
+}
+.timeline-inner:before {
+	content: '';
+	position: absolute;
+	right: -16px;
+	top: 32px;
+	border-bottom: 25px solid #ffffff;
+	border-right: 25px solid transparent;
+}
+.kode-team-timeline ul li:nth-child(even) .timeline-inner:before {
+	right: auto;
+	left: -16px;
+	border-top: 25px solid transparent;
+	border-right: 25px solid #fff;
+	border-bottom: 0px solid transparent;
+}
+.timeline-inner h2 {
+	text-transform: uppercase;
+}
+.kode-timezoon {
+	width: 85px;
+	height: 66px;
+	font-size: 22px;
+	color: #282828;
+	text-transform: uppercase;
+	position: absolute;
+	right: -21%;
+	top: 31px;
+	background-color: #ffffff;
+	box-shadow: 0px 0px 0px 1px #cdcdcd inset;
+	border: 7px solid #ffffff;
+	text-align: center;
+	padding: 10px 0px 0px 0px;
+}
+.timeline-circle {
+	width: 16px;
+	height: 16px;
+	background-color: #ffffff;
+	position: absolute;
+	left: 50%;
+	top: -15px;
+	border-radius: 100%;
+	margin: 0px 0px 0px -8px;
+}
+.bottom-circle {
+	top: auto;
+	bottom: 28px;
+}
+
+/* Team TimeLine View css ends */
+
+/* Contact Us Page Css Starts */
+.contactus-page {
+	float: left;
+	width: 100%;
+	margin-bottom: 20px;
+}
+.contactus-page .kode-forminfo h3, .contactus-page .kode-forminfo p, .contactus-page .kode-form-list li strong,
+.contactus-page .kode-simple-form ul li input[type="text"], .contactus-page .kode-simple-form ul li textarea {
+	color: #666666;
+}
+.contactus-page .kode-form-list li i {
+	border-color: #c4c4c4;
+	color: #666666;
+}
+.contactus-page .kode-forminfo h3 {
+	float: left;
+	margin: 0px 18px 0px 0px;
+}
+.kode-map {
+	float: left;
+	width: 100%;
+	border: 3px solid #e4e4e4;
+	margin-bottom: 40px;
+}
+.kode-simple-form.contact-formtwo ul { margin: 0px 0px 0px -28px; }
+.kode-simple-form.contact-formtwo ul li {
+	width: 33.333%;
+	padding: 0px 0px 10px 28px;
+}
+.kode-simple-form.contact-formtwo ul li.full-column { width: 100%; }
+.kode-plain-divider {
+	float: left;
+	width: 100%;
+	margin: 20px 0px 35px 0px;
+}
+.kode-plain-divider span {
+	float: left;
+	width: 100%;
+	border-bottom: 1px solid #e9e9e9;
+}
+
+/* Contact Us Page Css Ends */
+
+/* Default Pages 404 Css starts */
+
+.kode-404-page {
+	float: left;
+	width: 100%;
+	text-align: center;
+	padding: 25px 0px 80px 0px;
+}
+.kode-404-page h2 {
+	font-size: 40px;
+	text-transform: uppercase;
+}
+.kode-404-page img { margin-bottom: 40px; }
+.kode-404-page span {
+	display: inline-block;
+	margin-bottom: 15px;
+}
+.kode-innersearch {
+	float: left;
+	margin: 20px 0 0;
+	width: 100%;
+}
+.kode-innersearch form {
+	display: inline-block;
+	width: 350px;
+	position: relative;
+}
+.kode-innersearch form input[type="text"] {
+	border: 1px solid #d4d4d4;
+	color: #000;
+	font-size: 16px;
+	height: 47px;
+	padding: 6px 20px 6px 20px;
+	float: left;
+	width: 100%;
+	box-shadow: 0px 2px 0px 0px #d4d4d4;
+}
+.kode-innersearch form label {
+	position: absolute;
+	right: 0px;
+	top: 0px;
+	height: 100%;
+	margin: 0px;
+}
+.kode-innersearch form label:before {
+	content: "\f002";
+	font-family: FontAwesome;
+	position: absolute;
+	right: 15px;
+	top: 16px;
+	color: #999999;
+	cursor: pointer;
+}
+.kode-innersearch form input[type="submit"] {
+	float: right;
+	width: 45px;
+	height: 48px;
+	background: none;
+	border: none;
+}
+
+/* Default Pages 404 Css Ends */
+
+/* UnderConstruction starts */
+
+.kode-underconstruction {
+	float: left;
+	width: 100%;
+	text-align: center;
+}
+.kode-underconstruction h2 {
+	text-transform: uppercase;
+	color: #ffffff;
+	font-size: 60px;
+}
+.kode-underconstruction span.kode-subtitle {
+	font-size: 19px;
+	color: #ffffff;
+	margin-bottom: 20px;
+}
+.kode-underconstruction .countdown-period {
+	color: #ffffff;
+}
+.kode-underconstruction .kode-innersearch form input[type="text"] {
+	background: rgba(255, 255, 255, 0.1);
+	box-shadow: 0 2px 0 0 rgba(255, 255, 255, 0.1);
+	border: none;
+}
+
+/* UnderConstruction Ends */
+
+/* NewsLetter  Starts */
+.kode-newslatter {
+	float: left;
+	width: 100%;
+	padding: 30px 0px;
+	position: relative;
+}
+.kode-newslatter h3 {
+	color: #ffffff;
+	font-size: 36px;
+	float: left;
+	margin: 0px;
+	font-weight: 300;
+	padding-right: 20px;
+}
+.kode-newslatter form {
+	display: inline-block;
+	vertical-align: middle;
+	width: 100%;
+	position: relative;
+	padding-left: 20px;
+}
+.kode-newslatter form input[type="text"] {
+	border: 1px solid #fff;
+	height: 50px;
+	width: 100%;
+	padding: 5px 15px 5px 15px;
+	background: none;
+	font-size: 16px;
+	font-style: italic;
+	color: #ffffff;
+}
+.kode-newslatter form label {
+	position: absolute;
+	right: 0px;
+	top: 0px;
+	margin: 0px;
+}
+.kode-newslatter form label:before {
+	content: "\f1d8";
+	font-family: FontAwesome;
+	position: absolute;
+	right: 20px;
+	top: 12px;
+	color: #ffffff;
+	font-size: 25px;
+	cursor: pointer;
+}
+.kode-newslatter form input[type="submit"] {
+	width: 50px;
+	height: 50px;
+	background: none;
+	border: none;
+}
+.kode-halfbg {
+	position: absolute;
+	right: 0px;
+	top: 0px;
+	width: 50%;
+	height: 100%;
+}
+
+/* NewsLetter  Ends */
+
+/* Contact Footer Starts */
+
+#contact-footer {
+	float: left;
+	width: 100%;
+	background: url(extra-images/footer-bg.jpg);
+	padding: 40px 0px;
+}
+.kode-simple-form {
+	float: left;
+	width: 100%;
+}
+.kode-simple-form ul li {
+	float: left;
+	width: 100%;
+	list-style: none;
+	margin-bottom: 15px;
+}
+.kode-simple-form ul li input[type="text"],
+.kode-simple-form ul li textarea {
+	background-color: rgba(255,255,255,0.10);
+	border: 1px solid #c4c4c4;
+	float: left;
+	width: 100%;
+	height: 43px;
+	color: #ffffff;
+	padding: 6px 20px 6px 20px;
+}
+.kode-simple-form ul li textarea { height: 155px; }
+.kode-simple-form ul li input[type="submit"] {
+	float: left;
+	color: #ffffff;
+	padding: 10px 40px;
+	text-transform: uppercase;
+	border: 7px solid;
+	font-size: 24px;
+	text-transform: uppercase;
+	box-shadow: 0px 0px 0px 1px #f48686 inset;
+	margin-top: 15px;
+}
+.kode-forminfo h3 { text-transform: uppercase; }
+.kode-forminfo h3,.kode-forminfo p,.kode-form-list li strong {
+	color: #000;
+}
+.kode-form-list li {
+	color: #000;
+	list-style: none;
+	margin-bottom: 5px;
+}
+.kode-form-list li i {
+	display: inline-block;
+	width: 32px;
+	height: 32px;
+	border: 1px solid #000;
+	margin-right: 20px;
+	text-align: center;
+	font-size: 18px;
+	padding: 5px 0px 0px 0px;
+	box-shadow:0px 3px 5px 0px rgba(0,0,0,0.3);
+	-moz-box-shadow:0px 3px 5px 0px rgba(0,0,0,0.3);
+	-webkit-box-shadow:0px 3px 5px 0px rgba(0,0,0,0.3);
+}
+.kode-form-list li p {
+	display: inline-block;
+	width: auto;
+}
+.kode-forminfo .kode-team-network {
+	float: left;
+}
+.kode-form-list {
+	float:left;
+	width:100%;
+}
+.kode-forminfo {
+	float: left;
+	padding: 0 15px;
+	width: 100%;
+}
+
+/* Contact Footer Ends */
+
+/* CopyRighht Section Starts */
+
+.kode-bottom-footer {
+	float: left;
+	width: 100%;
+}
+.kode-bottom-footer p {
+	color: #ffffff;
+	padding: 12px 0px;
+	margin: 0px;
+}
+#kode-topbtn {
+	float: right;
+	color: #000;
+	width: 40px;
+	height: 40px;
+	text-align: center;
+	font-size: 20px;
+	padding: 3px 0px 0px 0px;
+	margin-top: -10px;
+	position: relative;
+}
+#kode-topbtn:before,#kode-topbtn:after {
+	content: '';
+	position: absolute;
+	left: -6px;
+	top: -1px;
+	border-bottom: 11px solid #c9b005;
+	border-left: 6px solid transparent;
+}
+#kode-topbtn:after {
+	left: auto;
+	right: -6px;
+	-webkit-transform: scaleX(-1);
+	   -moz-transform: scaleX(-1);
+	    -ms-transform: scaleX(-1);
+	     -o-transform: scaleX(-1);
+	        transform: scaleX(-1);
+}
+
+ /* CopyRighht Section Ends */
+
+/*
+========================================
+		PROJECT FACTS CSS Starts
+========================================
+*/
+.project-fact{
+	padding:50px 0px;
+	float:left;
+	width:100%;
+}
+.project-numbering{
+	text-align:center;
+}
+.project-numbering i{
+	font-size:50px;
+	color:#fff;
+}
+.project-numbering p{
+	color:#fff;
+	text-transform:uppercase;
+	font-weight:bold;
+}
+.project-numbering .counter{
+	font-size:60px;
+	font-family: 'Lato', sans-serif;
+	color:#fff;
+	font-weight:bold;
+}
+
+/*
+===========================================
+		PROJECT FACTS CSS Ends
+===========================================
+*/
+
+/*
+===========================================
+		Header 8 Starts
+===========================================
+*/
+
+.header-8{
+	float:left;
+	width:100%;
+	background-color:rgba(47,60,77,0.9);
+	text-align:center;
+	/*padding:25px 0px;*/
+	padding:10px 0;
+	transition:all 0.3s ease-in-out;
+}
+.kf_sticky .header-8{
+	padding:10px 0px;
+}
+.header-8 .kode-navigation ul li a{
+	text-align:left;
+}
+.header-8 .logo{
+	width:300px;
+	margin:0px auto;
+	float:none;
+/*	border:1px solid red;
+*/	position:relative;
+}
+
+@media screen and (min-width : 1280px) and (max-width: 1920px) {
+
+	.header-8 .logo{ left:-14px;}
+
+}
+
+@media screen and (min-width : 1024px) and (max-width: 1279px) {
+	.header-8 .logo{ width:250px; left:-14px;}
+	
+
+}
+
+@media screen and (min-width : 320px) and (max-width: 768px) {
+	.header-8 .logo{ width:250px;}
+	
+
+}
+
+.header-8 .logo img{ max-width:100%;}
+.kode-navigation ul > li.last ul{
+	left:auto;
+	right:0px;
+}
+.header-8 .kode-navigation.left{
+	float:left;
+}
+.header-8 .kode-navigation.right{
+	float:right;
+}
+
+.logo{
+	float:left;
+}
+.logo a{
+	display:block;
+}
+.logo img{
+	float:left;
+}
+.kode-navigation{
+	float:right;
+	
+}
+
+.kode-navigation ul{
+	float:left;
+	margin:0px;
+	padding:0px;
+	width:100%;
+	list-style:none;
+}
+.kode-navigation ul li{
+	float:left;
+	position:relative;
+	list-style:none;
+}
+.kode-navigation ul li a{
+	display:block;
+	font-size:14px;
+	text-transform:uppercase;
+	color:#fff;
+	font-weight:bold;
+	text-decoration:none;
+	padding:15px 16px;
+}
+.kode-navigation ul li > a:hover{
+
+}
+/*dropdown first level Starts*/
+
+.kode-navigation ul ul{
+	float:left;
+	width:210px;
+	position:absolute;
+	left:0px;
+	top:100%;
+	background-color:rgba(0,0,0,0.8);
+	visibility:hidden;
+	opacity:0;
+	margin:20px 0px 0px 0px;
+	z-index:10;
+	box-shadow:0px 5px 5px 0px rgba(0,0,0,0.1);
+	-moz-box-shadow:0px 5px 5px 0px rgba(0,0,0,0.1);
+	-webkit-box-shadow:0px 5px 5px 0px rgba(0,0,0,0.1);
+	transition:all 0.3s ease-in-out;
+	-moz-transition:all 0.3s ease-in-out;
+	-webkit-transition:all 0.3s ease-in-out;
+	
+}
+
+.kode-navigation ul li:hover > ul{
+	display:block;
+	visibility:visible;
+	opacity:1;
+	margin:0px;
+}
+.kode-navigation ul ul li{
+	width:100%;
+}
+.kode-navigation ul ul li a{
+	font-weight:normal;
+	text-transform:inherit;
+	padding:8px 20px;
+	text-transform:capitalize;
+}
+.kode-navigation ul ul li a:hover{
+	color:#fff;
+}
+.kode-navigation ul ul ul{
+	left:100%;
+	top:0px;
+}
+
+/*dropdown first level Ends*/
+
+/*social network CSS Starts */
+.kode-social-network{
+	float:right;
+	margin:0px 0px 0px 20px;
+}
+
+.kode-social-network ul{
+	list-style:none;
+	float:left;
+	width:100%;
+	margin:4px 0px;
+}
+.kode-social-network ul li{
+	float:left;
+	margin:0px 5px;
+	list-style:none;
+}
+.kode-social-network ul li a{
+	display:block;
+	height:33px;
+	width:33px;
+	background-color:#e5e5e5;
+	color:#686868;
+	font-size:14px;
+	border-radius:100%;
+	text-align:center;
+	padding:4px 0px;
+	transition:all 0.3s ease-in-out;
+	-moz-transition:all 0.3s ease-in-out;
+	-webkit-transition:all 0.3s ease-in-out;
+}
+.kode-social-network ul li a:hover{
+	color:#fff;
+	background-color:#000;
+}
+
+/*social network CSS Ends */
+
+/*
+=====================================
+		PICK EVENT CSS Starts
+=====================================
+*/
+.pick-event{
+	float:left;
+	background-color:#ededed;
+	padding:20px 0px;
+}
+.pick-event .heading{
+	float:left;
+	width:20%;
+	text-align:left;
+}
+.pick-event .heading h4{
+	font-size:16px;
+	font-family: 'Raleway', sans-serif;
+	color:#343434;
+	margin:5px 0px;
+}
+.pick-event .heading h2{
+	font-size:20px;
+	text-transform:uppercase;
+	font-weight:bold;
+	font-family: 'Raleway', sans-serif;
+	margin:6px 0px;
+}
+.pick-event .form{
+	float:left;
+	width:80%;
+}
+.pick-event .form input{
+	width:100%;
+	min-height:42px;
+	background-color:#fff;
+	border:none;
+	padding:10px 10px;
+}
+.pick-event .form .cover{
+	float:left;
+	position:relative;
+	width:25%;
+	padding:0px 10px;
+}
+.pick-event .form .cover .dropdown-menu li{
+	list-style:none;
+}
+.pick-event .form .cover .kode-modren-btn.thbg-colortwo{
+	padding:0px 10px;
+	text-align:center;
+	width:100%;
+	font-size:18px;
+}
+.pick-event .form .cover i{
+	position:absolute;
+	right:20px;
+	top:13px;
+	color:#bbbbbb;
+}
+.pick-event .form div.cover:first-child{
+	margin-left:0px;
+}
+.pick-event .form button.find{
+	display:block;
+	min-height:42px;
+	border:none;
+	text-align:center;
+	font-family: 'Lato', sans-serif;
+	font-size:14px;
+	color:#fff;
+	font-weight:bold;
+	text-transform:uppercase;
+	padding:5px 20px;
+}
+.pick-event .cover .dropdown button{
+	min-height:42px;
+	background-color:#fff;
+	width:100%;
+	border:none;
+	text-align:left;
+	padding:10px 10px;
+}
+.pick-event .cover .dropdown .dropdown-menu{
+	width:100%;
+	
+}
+
+/*
+=====================================
+		PICK EVENT CSS Ends
+=====================================
+*/
+
+/*
+
+================================
+
+*/
+
+/*
+=============================================
+			VIDEO SECTION CSS Starts
+=============================================
+*/
+
+.kode-sport-section{
+	float:left;
+	width:100%;
+	background-image:url(extra-images/bg-paralaxx-1.jpg);
+	background-position:center;
+	background-size:cover;
+	background-repeat:no-repeat;
+	position:relative;
+	text-align:center;
+	padding:50px 0px;
+}
+.kode-sport-section:before{
+	content:"";
+	background-color:rgba(255,255,255,0.7);
+	position:absolute;
+	left:0px;
+	top:0px;
+	height:100%;
+	width:100%;
+	/*background-image:url(extra-images/video-bg-pettern.png);*/
+}
+.kode-video-section{
+	float:left;
+	width:100%;
+	background-image:url(extra-images/slide3.jpg);
+	background-position:center;
+	background-size:cover;
+	background-repeat:no-repeat;
+	position:relative;
+	text-align:center;
+	padding:150px 0px;
+}
+.kode-video-section:before{
+	content:"";
+	background-color:rgba(0,0,0,0.7);
+	position:absolute;
+	left:0px;
+	top:0px;
+	height:100%;
+	width:100%;
+	/*background-image:url(extra-images/video-bg-pettern.png);*/
+}
+.kode-video-section .container{
+	position:relative;
+}
+.kode-video-section h2{
+	font-size:34px;
+	color:#fff;
+	margin:0px 0px 30px 0px;
+	text-transform:uppercase;
+	letter-spacing:10px;
+}
+.kode-video-section h4{
+	font-size:18px;
+	text-transform:uppercase;
+	letter-spacing:5px;
+	color:#fff;
+}
+.kode-video-section p{
+	text-transform:uppercase;
+	color:#fff;
+}
+.kode-video-section i{
+	height:62px;
+	width:62px;
+	border:solid 2px #fff;
+	background-color:rgba(255,255,255,0.2);
+	text-align:center;
+	color:#fff;
+	font-size:24px;
+	padding:15px 0px;
+	border-radius:4px;
+	margin:0px 0px 20px 0px;
+}
+
+/*
+=============================================
+			VIDEO SECTION CSS Ends
+=============================================
+*/
+
+/*HEADING STYLE 12 Css Starts*/
+.heading-12{
+	position:relative;
+}
+.heading-12 h2{
+	margin:0px 0px 15px 0px;
+	display:inline-block;
+	font-weight:bold;
+	position:relative;
+	padding:0px 0px 20px 0px;
+	text-transform:uppercase;
+}
+
+.heading-12 h2:before{
+	content:"";
+	/*width:150px;*/
+	width:100px;
+	border-bottom:dashed 1px #b7b7b7;
+	height:2px;
+	position:absolute;
+	left:0px;
+	right:0px;
+	margin:auto;
+	bottom:0px;
+}
+.heading-12 p{
+	font-size:14px;
+	color:#949494;
+	margin:0px;
+	font-family: 'Open Sans', sans-serif;
+	text-transform:uppercase;
+}
+.heading-12 span.left, .heading-12 span.right{
+	position:absolute;
+	height:9px;
+	width:9px;
+	border-radius:100%;
+	background-color:#db2d14;
+	position:absolute;
+	left:27%;
+	bottom:-4px;
+}
+.heading-12 span.right{
+	left:auto;
+	right:27%;
+}
+
+.heading{
+	float:left;
+	width:100%;
+	text-align:center;
+}
+
+.heading h2{
+	font-family: 'Open Sans', sans-serif;
+	font-size:33px;
+	color:#000;
+	position:relative;
+}
+
+/*HEADING STYLE 12 Css Ends*/
+
+/***Footer Medium Starts***/
+.footer-medium{
+	float:left;
+	width:100%;
+}
+#footer1 .footer-medium h3{
+	font-size:20px;
+	text-transform:uppercase;
+	font-weight:700;
+	color:#252525;	
+}
+#footer1 .footer-medium{
+	padding:50px 0;
+}
+
+/***Footer Medium Ends***/
+
+/*about-widget Starts*/
+
+.about-widget p{
+	margin:17px 0 0;
+}
+.newsletter-widget{
+	float: left;
+	width: 100%;
+}
+.newsletter-widget p{
+	margin:0 0 17px;
+}
+.newsletter-widget form{
+	width:100%;
+	height:40px;
+	float:left;
+	position:relative;
+}
+.newsletter-widget form [type="text"]{
+	border:1px solid #dadada;
+	border-right:0;
+	font-size:13px;
+	text-transform:uppercase;
+	color:#787878;
+	padding:11px 15px;
+	background-color:transparent;
+	float:left;
+	width:100%;
+}
+.newsletter-widget form [type="submit"]{
+	font-size:15px;
+	font-weight:700;
+	text-transform:uppercase;
+	color:#fff;
+	padding:11px 13px;
+	border:none;
+	position:absolute;
+	top:0;
+	right:0;
+}
+
+/*about-widget Ends*/
+
+/***contact-us-widget starts***/
+
+.contact-us-widget{
+	float: left;
+	width: 100%;
+}
+.contact-us-widget p{
+	margin:0 0 17px;
+}
+
+/***contact-us-widget ends***/
+
+/***social-links1 starts***/
+
+.social-links1 li{
+	display:inline-block;
+	margin:0 10px 0 0;
+}
+.social-links1 li:last-child{
+	margin:0;
+}
+.social-links1 li a{
+	width:35px;
+	height:35px;
+	text-align:center;
+	padding:3px 0;
+	display:block;
+	font-size:16px;
+	color:#fff;
+	overflow: hidden;
+	position: relative;
+	z-index: 11;
+	box-shadow:0px 3px 5px 0px rgba(0,0,0,0.3);
+	-moz-box-shadow:0px 3px 5px 0px rgba(0,0,0,0.3);
+	-webkit-box-shadow:0px 3px 5px 0px rgba(0,0,0,0.3);
+}
+.social-links1 li a:before{
+	content: '';
+	position: absolute;
+	top: -100%;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.2);
+}
+.social-links1 li a:hover:before{
+	top: 0;
+}
+.fb-bg1{
+	background-color:#3b5997;
+}
+.tw-bg1{
+	background-color:#00aceb;
+}
+.youtube-bg1{
+	background-color:#ba0204;
+}
+.linkedin-bg1{
+	background-color:#5182aa;
+}
+
+/***social-links1 ends***/
+
+/***widget-flickr css starts***/
+
+.widget-flickr ul{
+	float: left;
+	width: 100%;
+	margin: 0;
+}
+.widget-flickr ul li{
+	float: left;
+	margin: 0 3px 10px;
+	box-shadow:0px 3px 5px 0px rgba(0,0,0,0.3);
+	-moz-box-shadow:0px 3px 5px 0px rgba(0,0,0,0.3);
+	-webkit-box-shadow:0px 3px 5px 0px rgba(0,0,0,0.3);
+}
+.widget-flickr ul li img{
+	border-radius: 3px;
+}
+
+.kode-table tr:hover{
+	transition:all 0.3s ease-in-out;
+	-moz-transition:all 0.3s ease-in-out;
+	-webkit-transition:all 0.3s ease-in-out;
+}
+
+/***widget-flickr css ends***/
+
+/* TeamGrid starts */
+
+.owl-carousel-team .owl-item:hover .team-info { background-color: #333333; }
+.owl-carousel-team .owl-item:hover .team-info h2,.owl-carousel-team .owl-item:hover .team-info h6 { color: #ffffff; }
+.team-info {
+	background-color: #ffffff;
+	padding: 28px 22px 22px 22px;
+	text-align: center;
+	position:relative;
+}
+.team-info h2 {
+	line-height: 1;
+	margin: 0px 0px 4px 0px;
+	font-weight: 500;
+	text-transform: uppercase;
+}
+.team-info h2 a,.team-info h6,.team-info p {
+	color: #777777;
+}
+.team-info p { margin: 0px; }
+.owl-carousel-team .owl-item:hover .team-network {
+	margin: 0px;
+	opacity: 1;	
+	background-color:#333;
+	left:0px;
+	color:#fff;
+}
+.owl-carousel-team .owl-item:hover .team-network ul li a{
+	color:#fff;
+}
+.team-network {
+	float: left;
+	width: 100%;
+	top:50%;
+}
+.team-network ul {
+	display: inline-block;
+	margin: 0px;
+}
+.team-network ul li {
+	float: left;
+	list-style: none;
+	margin: 18px 0px 0px 18px;
+	line-height: 1;
+}
+.team-network ul li:first-child { margin-left: 0px; }
+.team-network ul li a {
+	color: #333;
+	font-size: 20px;
+}
+.kode-team-grid ul li:hover p {
+	color: #ffffff;
+}
+
+/* TeamGrid Ends */
+
+/*
+=============================================
+		TESTIMONIALS STYLE 6 Starts
+=============================================
+*/
+.kode-testimonials-6{
+	float:left;
+	width:100%;
+	position:relative;
+
+	
+}
+.kode-testimonials-6:before{
+	content:"\f10d";
+	background-color:#fff;
+	padding:5px;
+	font-size:40px;
+	font-family:FontAwesome;
+	height:50px;
+	width:50px;
+	position:absolute;
+	left:0px;
+	right:0px;
+	margin:auto;
+	top:-25px;
+	z-index:10;
+	text-align:center;
+	color:#7dbd22;
+}
+.kode-testimonials-6 ul{
+	float:left;
+	margin:0px;
+	width:100%;
+}
+.kode-testimonials-6 .bx-wrapper{
+	
+}
+.kode-testimonials-6 .kode-text{
+	float:left;
+	width:100%;
+	text-align:center;
+	border:solid 1px #eeeeee;
+	padding:40px 40px 90px;
+	margin:0px 0px 60px 0px;
+	position:relative;
+	box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+-moz-box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+-webkit-box-shadow:0px 10px 10px 0px rgba(0,0,0,0.3);
+}
+.kode-testimonials-6 .kode-text p{
+	margin:0px 0px 0px 0px;
+	font-size:20px;
+	color:#666;
+	font-weight:300;
+}
+.kode-testimonials-6 .kode-thumb{
+	height:90px;
+	width:90px;
+	border:solid 14px #fff;
+	box-shadow:0px 0px 0px 1px rgba(0,0,0,0.1);
+	-moz-box-shadow:0px 0px 0px 1px rgba(0,0,0,0.1);
+	-webkit-box-shadow:0px 0px 0px 1px rgba(0,0,0,0.1);
+	display:inline-block;
+}
+.kode-testimonials-6 .client-name{
+	width:15%;
+	left:0px;
+	right:0px;
+	margin:auto;
+	bottom:-50px;
+	position:absolute;
+}
+.kode-testimonials-6 .client-name h4{
+	font-size:14px;
+	font-weight:bold;
+	color:#7dbd22;
+	margin-bottom:10px;
+}
+.kode-testimonials-6 .bx-wrapper .bx-controls-direction a{
+	margin-top:-36px;
+	background-color:#fff;
+	left:-14px;
+}
+.kode-testimonials-6 .bx-wrapper .bx-controls-direction a.bx-next{
+	left:auto;
+	right:-14px;
+}
+.kode-testimonials-6 .bx-wrapper .bx-controls-direction a:before{
+	content:"\f104";
+    font-family: FontAwesome;
+    font-size: 40px;
+    left: 0;
+    line-height: 30px;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+	color:#7dbd22;
+}
+.kode-testimonials-6 .bx-wrapper .bxslider > li{
+	padding:0px 30px;
+}
+.kode-testimonials-6 .bx-wrapper .bx-controls-direction a.bx-next:before{
+	content:"\f105";
+}
+.kode-testimonials-3 .bx-pager{
+	display:none;
+}
+
+/*
+=============================================
+		TESTIMONIALS STYLE 6 Starts
+=============================================
+*/
+
+/*
+
+================================
+
+*/
+
+/*
+==========================================
+				HEADER 4 Starts
+==========================================
+*/
+.header-4{
+	float:left;
+	width:100%;
+	background-color:rgba(0,0,0,0.6);
+}
+.header-4 .kode-top-strip{
+	float:left;
+	width:100%;
+	border-bottom:1px  solid #ccc;
+	padding:5px 0px;
+	text-align:center;
+}
+
+.header-4 .logo{
+	margin:0px 20px 0px 0px;
+	height:90px;
+	position:relative;
+	width:170px;
+}
+.header-4 .logo img{
+	position:absolute;
+	left:0px;
+	top:0px;
+	bottom:0px;
+	margin:auto;
+}
+.header-4 .kode-navigation ul li a{
+	padding:35px 16px;
+}
+.header-4 .kode-navigation ul li:hover > a{
+	color:#fff;
+}
+.header-4 .kode-navigation ul ul li a{
+	padding:10px 16px;
+}
+.header-4  .logo{
+	float:left;
+}
+.header-4 .logo a{
+	display:block;
+}
+.logo img{
+	float:left;
+}
+.header-4 .kode-navigation{
+	float:left;
+}
+.header-4 .kode-top-search{
+	float:right;
+	position:relative;
+	margin:25px 0px;
+}
+.header-4 .kode-top-search input[type="text"]{
+	float:left;
+	width:300px;
+	height:40px;
+	border:solid 1px #ccc;
+	padding:6px 10px;
+}
+.header-4 .kode-top-search input[type="text"]:focus{
+}
+.header-4 .kode-top-search i{
+	position:absolute;
+	height:40px;
+	width:40px;
+	top:0px;
+	right:0px;
+	padding:10px 0px;
+	text-align:center;
+	font-size:16px;
+	color:#000;
+}
+.header-4 .kode-top-search{
+	float:right;
+	position:relative;
+	margin:29px 0px;
+}
+.header-4 .kode-top-search input[type="text"]{
+	float:left;
+	width:300px;
+	height:40px;
+	border-left:none;
+	border-right:none;
+	border-top:none;
+	border-bottom:solid 1px #000;
+	padding:6px 10px;
+	background:rgba(0,0,0,0.3);
+}
+.header-4 .kode-top-search input[type="text"]:focus{
+}
+.header-4 .kode-top-search i{
+	position:absolute;
+	height:40px;
+	top:0px;
+	right:0px;
+	padding:10px 0px;
+	text-align:center;
+	font-size:18px;
+	color:#fff;
+}
+
+/*
+==========================================
+				HEADER 4 Ends
+==========================================
+*/
+
+/*
+==========================================
+				HEADER 6 Starts
+==========================================
+*/
+.header-6{
+	float:left;
+	width:100%;
+	background-color:rgba(0,0,0,0.3);
+}
+.header-6 .kode-nav-container{
+	float:left;
+	width:100%;
+	padding:25px 0px;
+}
+.header-6 .logo{
+	float:left;
+	margin:0px;
+	width:auto;
+}
+.header-6 .logo a.logo{
+	padding:0px;
+	margin:0px;
+}
+.header-6 .logo a{
+	display:block;
+}
+.header-6 .logo img{
+	float:left;
+}
+.header-6 .kode-navigation{
+	float:right;
+	margin-top:6px;
+}
+.header-6 .kode-social-network{
+	margin-top:6px;
+}
+.padding-none{
+	padding:0px 0px 50px 0px;
+}
+
+/*
+==========================================
+				HEADER 6 Ends
+==========================================
+*/
+
+
+/*
+==========================================
+				TEAM STYLE 2 Starts
+==========================================
+*/
+
+section{
+	float:left;
+	width:100%;
+}
+
+/* Counter */
+.kd-counter {
+	float: left;
+	width: 100%;
+}
+.kd-counter ul li {
+	list-style: none;
+	text-align: center;
+}
+.kd-counter ul li i {
+	color: #ffffff;
+	margin: 0px 0px 18px 0px;
+}
+.kd-counter ul li span {
+	color: #ffffff;
+	display: block;
+	font-size: 50px;
+	font-weight: bold;
+	padding: 0px 0px 16px 0px;
+	position: relative;
+	margin-bottom: 5px;
+}
+.kd-counter ul li span:before {
+	content: '';
+	position: absolute;
+	left: 50%;
+	bottom: 0px;
+	width: 80px;
+	height: 3px;
+	border-bottom: 2px solid #ffffff;
+	margin: 0px 0px 0px -40px;
+}
+.kd-counter ul li small {
+	color: #ffffff;
+	font-size: 16px;
+	text-transform: uppercase;
+}
+
+.widget{
+	float:left;
+	width:100%;
+}
+.kode-team-list.kode-team-modern figure figcaption{
+	left:0;
+}
+.kode-team-list.kode-team-modern figure figcaption h2{
+	text-align:center;
+}
+.kode-team-list.kode-team-modern .kode-team-thumb{
+	width:100%;
+}
+.kode-team-list.kode-team-modern .kode-team-network li{
+	background:#fff;
+}
+.kode-team-list.kode-team-modern .kode-team-network{float:none;text-align:center;margin:10px 0;}
+.kode-team-list.kode-team-modern .kode-modren-btn{display:none;}
+.kode-team-list.kode-team-modern.kode-small figure figcaption h2 a{
+	padding:10px;font-size:18px;
+}
+.kode-team-list.kode-team-modern figure figcaption h2{box-shadow:inherit;}
+.kode-team-list.kode-team-modern > ul > li.col-md-5{float:none;display:inline-block;text-align:center;margin:0 auto;}
+.kode-align-center{text-align:center;}
+.links_widget{ position:relative;}
+.links_widget ul{}
+.links_widget ul li{}
+.links_widget ul li a{ cursor:pointer;}
+.bg-squre-pattren{ /*background:url(extra-images/squre-bg.png) repeat;*/ background:#f8f8f8;}
+.how_text{ /*margin:20px 0;*/ position:relative; margin:20px 0px 0px 0px;}
+.how_text_head{ position:relative;}
+.how_text_head h1{ font-size:60px; color:#82cc8d; float:left; margin:0 20px 0 0; line-height:60px; font-weight:300;}
+.how_text_head h2{ margin:0 0 0 0; text-transform:uppercase; margin:0; font-family: "Open Sans",sans-serif; text-transform:none; font-weight:300; line-height:30px; color:#2d3746;}
+.how_text_des{ clear:both;}
+.features-bg{ background:#1c2734 !important;}
+.features_text{ margin:20px 0; position:relative;}
+.features_text i{ margin:5px 0;}
+.features_text h3{ text-transform:uppercase; color:#FFFFFF; font-family: "Oswald",sans-serif; font-size:28px; font-weight:300;}
+.features_text p{ color:#e0e1e1; padding:0 20px; margin-bottom:0;}
+.label_more{ color:#fee31e; font-size:30px;  cursor:pointer; display:inline-block; line-height:24px; letter-spacing:5px;}
+.player_color{ color:#1abc9c !important;}
+.team_color{color:#3498db !important;}
+.organization_color{color:#e74c3c !important;}
+.online_score_color{color:#6a56d2 !important;}
+.league_color{color:#e67e22 !important;}
+.gallery_color{color:#65c178 !important;}
+.market_place_color{color:#19b5fe !important;}
+.sj_white_bg{ background:#fff;}
+.kode_blog_btn_link{ font-size:30px; letter-spacing:6px;}
+
+.feaures_list_view {
+    padding: 50px 0 0;
+}
+.feature_line .fa{ margin-top:25px; }
+.feature_line .fa-thumbs-o-up { color: #64bc5c; }
+.feature_line .fa-share-square-o { color: #34a3cd }
+.feature_line .fa-bar-chart { color: #f07818; }
+.feature_line .fa-user { color: #d96459; }
+.green_alert_box{ background:#d9edd1; border:1px solid #b2dba1; color:#3c763d; width:90%; margin:5px auto; padding:10px; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px;}
+.full_div { margin:0; padding:0; width: 100%; clear: both; background: #ffffff; border-top:1px solid #e9e9e9; z-index:2; position: relative; }
+.set_background { background-color: #f5f5f5 !important;}
+.white_color { background-color: #ffffff !important;}
+.feature_line{ height:45px; position:relative; background:#fff;}
+.half-circle { /*width: 200px; height: 100px; border-top-left-radius: 110px; border-top-right-radius: 110px; border: 2px solid #e9e9e9; border-bottom: 0;
+border-radius: 50%/50%; border-style: solid solid none; border-width: 1px 1px 0; height: 50px; width: 100px;*/
+background:url(extra-images/half_circle.png) center center no-repeat;  width: 176px; height:45px; /*border-bottom:1px solid #e9e9e9;*/ text-align: center; z-index:999; position: relative; margin:0 auto; top:1px;}
+.how_img_dis{ margin:25px auto; text-align:center;}
+.how_img_dis h1{ margin:0 0 20px 0; font-family: "Open Sans",sans-serif; text-transform:uppercase; font-weight:600; font-size:24px;}
+.features_bg_greay{ background:#fafafa; padding:50px 0;}
+.features_bg_whitee{ background:#ffffff; padding:50px 0;}
+.features_txt_dis_new{ padding:0 15px;}
+.features_txt_dis_new ul{ margin:0 0 10px 10px !important;}
+.values_text{ margin:20px 0;}
+.about_content{ position:relative;}
+.about_content img{ float:left; margin:0 20px 0 0;}
+.sj_linkweb{ color:#0099FF !important; font-weight:600;}
+.privacy_page p{ margin-bottom:20px;}
+.privacy_page ul{ margin:0 0 20px 50px;}
+.sport_icon_bg{ background:#f8f8f8; height:100px; width:100px; text-align:center; -webkit-border-radius: 80px; -moz-border-radius: 80px; border-radius: 80px; margin:10px auto;}
+.sport_icon_bg img{ vertical-align:middle; margin-top:20px;}
+.sports_list{ margin:20px 0; height:150px;}
+.scorecard_avila{ background:#ff9800; padding:5px 8px; color:#FFFFFF; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; font-size:12px;}
+.or_text{ color:#FFFFFF; font-weight:600; font-size:18px;}
+.sports_list h4{ font-size:16px; font-family: "Open Sans",sans-serif; font-weight:600;}
+
+
+
+/*
+==========================================
+				TEAM STYLE 2 Ends
+==========================================
+*/
+
+
+/*
+			CSS ENDS
+==========================================
+*/

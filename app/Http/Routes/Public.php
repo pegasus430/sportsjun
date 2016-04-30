@@ -19,9 +19,12 @@ Route::get('matchpublic/scorecard/view/{match_id}', [
 //Tournaments
 
 //Login/Signup pages
+/*
 Route::get('/', function () {
     return view('welcome');
 });
+ * 
+ */
 Route::get('testshare', array('as' => 'testshare', function()
 {
     return 'Hello World!!!';

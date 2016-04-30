@@ -1,0 +1,206 @@
+/* Tabs Widget */
+.kode-content .widget {
+	margin-bottom: 30px;
+	float: left;
+	width: 100%;
+}
+.widget ul li { list-style: none; }
+.tab-widget {
+	float: left;
+	border: 1px solid #e0e0e0;
+	box-shadow: 0px 2px 0px 0px #000,0px 2px 0px 0px #000 inset;
+}
+.widget-tabnav {
+	float: left;
+	width: 100%;
+	border-bottom: 1px solid #e0e0e0;
+}
+.widget-tabnav li {
+	display: inline-block;
+	list-style: none;
+	margin-left: 10px;
+}
+.widget-tabnav li a {
+	font-size: 18px;
+	color: #5c5c5c;
+	padding: 13px 12px;
+	display: inline-block;
+	position: relative;
+}
+.widget-tabnav li a:before {
+	content: '';
+	position: absolute;
+	bottom: -4px;
+	left: 0px;
+	width: 100%;
+	height: 0px;
+	opacity: 0;
+}
+.widget-tabnav li:hover a:before,.widget-tabnav li.active a:before {
+	opacity: 1;
+	height: 4px;
+}
+.match-widget {
+	float: left;
+	margin: 0px;
+	width: 100%;
+	padding: 0px 14px 0px 14px;
+}
+.match-widget li {
+	list-style: none;
+	padding: 18px 0px;
+	border-bottom: 1px solid #e0e0e0;
+	float: left;
+	width: 100%;
+}
+.match-widget li:last-child { border-bottom: none; }
+.kode-cell {
+	display: inline-block;
+	vertical-align: middle;
+	width: 33.333%;
+	margin: 0px -4px 0px 0px;
+	text-align: center;
+}
+.kode-cell small {
+	display: block;
+	line-height: 1;
+	font-size: 14px;
+	margin-top: 8px;
+}
+.kode-vs {
+	display: inline-block;
+	width: 32px;
+	height: 25px;
+	border: 1px solid #dcdcdc;
+	color: #ffffff;
+	background-color: #2a2a2a;
+	line-height: 1;
+	padding: 4px 0px 0px 0px;
+}
+/* RecentBlog Widget */
+.kode-recent-blog ul li figure {
+	float: left;
+	width: 100%;
+}
+.kode-recent-blog > ul > li {
+	float: left;
+	width: 100%;
+	list-style: none;
+	border-bottom: 1px solid #dedede;
+	padding: 0px 0px 11px 0px;
+	margin: 0px 0px 20px 0px;
+}
+.kode-recent-blog > ul > li:last-child {
+	margin-bottom: 0px;
+	border: none;
+	padding: 0px;
+}
+.kode-recent-blog > ul > li:hover img { opacity: 0.6; }
+.kode-recent-thumb { float: right; }
+.kode-recent-thumb ~ figcaption {
+	padding: 0px 108px 0px 0px;
+}
+.kode-recent-blog figcaption ul {
+	margin: 0px;
+	display: inline-block;
+}
+.kode-recent-blog figcaption ul li {
+	display: inline-block;
+	color: #666666;
+	padding: 0px 10px;
+	border-left: 1px solid #919191;
+	line-height: 1;
+}
+.kode-recent-blog figcaption ul li:first-child {
+	padding-left: 0px;
+	border: none;
+}
+.kode-recent-blog figcaption ul li:last-child { padding-right: 0px; }
+/* Recent News */
+.widget-recent-news .medium-title h6 { margin: 0px; }
+.widget-recent-news .medium-title h6 a {
+	color: #666666;
+	text-transform: uppercase;
+}
+.widget-recent-news .medium-info time {
+	background-color: #333333;
+	color: #fff;
+	border: 3px solid #333333;
+	height: 70px;
+	padding: 17px 0px 0px 0px;
+}
+.widget-recent-news .kode-blog-options li a {
+	color: #666666;
+}
+/* Category */
+.widget_categories ul li {
+	float: left;
+	width: 100%;
+	text-align: right;
+	border-bottom: 1px solid #dedede;
+	padding: 3px 0px;
+}
+.widget_categories ul li a {
+	color: #666666;
+	float: left;
+}
+.widget_categories ul li a:before {
+	content: "\f101";
+	font-family: FontAwesome;
+	color: #666666;
+	margin-right: 14px;
+	float: left;
+}
+/* Twitter Widget */
+.twitter-info {
+	float: left;
+	width: 100%;
+	border: 1px solid #e7e7e7;
+	padding: 20px 15px;
+}
+.twitter-info i {
+	float: right;
+	color: #55acee;
+	font-size: 22px;
+	margin: -21px 0px 0px 0px;
+}
+.kode-twitter-widget ul {
+	float: left;
+	width: 100%;
+	height: 240px;
+	overflow-x: hidden;
+	border: 1px solid #e7e7e7;
+	border-top: none;
+}
+.kode-twitter-widget ul li {
+	float: left;
+	width: 100%;
+	border-bottom: 1px solid #eeeeee;
+	padding: 14px 14px 14px 12px;
+}
+.tweet-thumb {
+	float: left;
+	width: 40px;
+	padding: 6px 0px 0px 0px;
+}
+.tweet-thumb ~ .tweet-list { padding: 0px 0px 0px 52px; }
+.tweet-list a {
+	line-height: 18px;
+	float: left;
+	color: #595959;
+}
+.tweet-list span {
+	display: block;
+	color: #949494;
+}
+/* Widget Gallery */
+.widget-gallery ul li a,.widget-gallery ul li a img {
+	float: left;
+	width: 100%;
+}
+.widget-gallery ul li:hover a img { opacity: 0.6; }
+.widget-gallery ul li {
+	float: left;
+	width: 33.333%;
+	padding: 0px 15px 15px 0px;
+}
