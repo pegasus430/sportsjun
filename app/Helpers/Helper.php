@@ -44,7 +44,7 @@ class Helper {
     	// echo"<pre>";print_r($photos);
     	foreach ($photos as $key => $value) {
     		//rename($value, $photoType.'/image1.jpg');
-                $filename = explode('##!!',$value);
+                $filename = explode('####SPORTSJUN####',$value);
                 $title = $filename[0];
                 $url = $filename[1];
 			

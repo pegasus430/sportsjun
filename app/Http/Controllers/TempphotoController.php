@@ -98,7 +98,7 @@ return json_encode(array (
           if($validator->passes()){
             $destinationPath = 'uploads/temp';
             $orgFileName = $file->getClientOriginalName();
-            $filename = $orgFileName.'##!!'.str_random(20).'.'.$file->getClientOriginalExtension();
+            $filename = $orgFileName.'####SPORTSJUN####'.str_random(20).'.'.$file->getClientOriginalExtension();
             $upload_success = $file->move($destinationPath, $filename);
             //$disk = Storage::disk('rackspace')->put($filename);
             //dd($disk);
