@@ -412,7 +412,7 @@ class MarketplaceController extends Controller
         $response = json_decode($response,true);
 		//dd($response);
         if($response["status"] == "error"){
-            customize this as per your framework
+            //customize this as per your framework
             $resp['message'] =  $response["response"]["code"];
             return \Response::json($resp);
         }

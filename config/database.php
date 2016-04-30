@@ -55,9 +55,9 @@ return [
         'mysql' => [
             'driver'    => 'mysql',
             'host'      => 'localhost',
-            'database'  => 'sportsjun',
-            'username'  => 'sapplica',
-            'password'  => 'sapplica',
+            'database'  => 'sportsjun_prod',
+            'username'  => 'sportsjun_prod',
+            'password'  => 'Xedu_h6thEsw',
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix'    => '',

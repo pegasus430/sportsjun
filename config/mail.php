@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'driver' => env('MAIL_DRIVER', 'smtp'),
+    'driver' => env('MAIL_DRIVER', 'sendmail'),
 
     /*
     |--------------------------------------------------------------------------
@@ -54,7 +54,7 @@ return [
     |
     */
 
-    'from' => ['address' => env('MAIL_ADDRESS', 'mainak.paul@sagarsoft.in'), 'name' => env('MAIL_FROM', 'mainak paul')],
+    'from' => ['address' => env('MAIL_ADDRESS', 'ravi.gade@sportsjun.com'), 'name' => env('MAIL_FROM', 'SportsJun')],
 
     /*
     |--------------------------------------------------------------------------
@@ -106,7 +106,7 @@ return [
     |
     */
 
-    'sendmail' => '/usr/sbin/sendmail -bs',
+    'sendmail' => '/usr/sbin/sendmail.postfix -bs',
 
     /*
     |--------------------------------------------------------------------------
