@@ -301,7 +301,7 @@ class UserController extends Controller {
 			$filename = array_filter(explode(',', $request['filelist_profilepic']));
 			if(!empty($filename)) {
 				foreach ($filename as $key => $value) {
-					$file_name = explode('##!!',$value);
+					$file_name = explode('####SPORTSJUN####',$value);
 					$url = $file_name[1];
 					session(['profilepic' => $url]);
 					break;
