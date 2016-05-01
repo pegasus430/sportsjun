@@ -63,11 +63,8 @@
                                                 <div class="kode-navigation pull-left">
                                                         <ul>
                                                                 <li><a href="index.html">Home</a></li>
-                                                                <!--						 <li><a href="aboutus.html">About Us</a></li>
-                                                                -->                          <li><a href="#howitworks">How It Works</a></li>
+                                                                <li><a href="sports.html">Sports</a></li>
                                                                 <li><a href="features.html">Features</a></li>
-
-
                                                         </ul>
                                                 </div>
                                                 <!--NAVIGATION END--> 
@@ -79,11 +76,9 @@
                                                 <!--NAVIGATION START-->
                                                 <div class="kode-navigation">
                                                         <ul>
-                                                                <li><a href="sports.html">Sports</a></li>
-                                                                <li><a href="#">Tournaments</a></li>
-                                                                <!--                        <li><a href="#">Teams and Players</a></li>
-                                                                -->						<!--<li><a href="#">Players</a></li>-->
-                                                                <li><a href="#">Market Place</a></li>
+                                                                <li><a href="#howitworks">Players / Teams</a></li>
+                                                                <li><a href="#tournaments">Tournaments</a></li>
+                                                                <li><a href="#marketplace">Market Place</a></li>
                                                         </ul>
                                                 </div>
                                                 <!--NAVIGATION END-->  
@@ -102,14 +97,14 @@
                                                         <!-- Collect the nav links, forms, and other content for toggling -->
                                                         <div class="collapse navbar-collapse" id="navbar-collapse">
                                                                 <ul class="nav navbar-nav">
-                                                                        <li><a href="#">Home</a></li>
-                                                                        <li><a href="#">About Us</a></li>
-                                                                        <li><a href="#">How It Works</a></li>
-                                                                        <li><a href="#">Features</a></li>
-                                                                        <li><a href="#">Tournaments</a></li>
-                                                                        <li><a href="#">Players</a></li>
-                                                                        <li><a href="#">Market Place</a></li>
-                                                                        <li><a href="#">Contact Us</a></li>
+                                                                        <li><a href="index.html">Home</a></li>
+                                                                        <li><a href="sports.html">Sports</a></li>
+                                                                        <li><a href="features.html">Features</a></li>
+                                                                        <li><a href="#howitworks">Players / Teams</a></li>
+                                                                        <li><a href="#tournaments">Tournaments</a></li>
+                                                                        <li><a href="#marketplace">Market Place</a></li>
+                                                                        <li><a href="#aboutus">About Us</a></li>
+                                                                        <li><a href="contact-us.html">Contact Us</a></li>
                                                                 </ul>
                                                         </div>
                                                         <!--<div class="collapse navbar-collapse" id="navbar-collapse">
@@ -631,97 +626,6 @@
 
 
                                 <!--// Page Content //-->
-                                <section class="kode-pagesection kode-parallax kode-dark-overlay kode-woo-products-style" style="margin-bottom:0;">
-                                        <div class="container">
-                                                <div class="row">
-
-                                                        <div class="col-md-12">
-                                                                <div class="kode-section-title kode-white"> <h2>Market Place</h2> </div>
-                                                                <div class="kode-shop-list">
-
-                                                                        <div class="owl-carousel owl-theme">
-                                                                                <div class="item">
-                                                                                        <div class="kode-pro-inner">
-                                                                                                <figure><a href="#"><img src="home/extra-images/shop-product1.jpg" alt=""></a>
-                                                                                                        <figcaption>
-                                                                                                                <h4><a href="#">Product Name</a></h4>
-                                                                                                                <p class="kode-pro-cat"><a href="#">Categories</a></p>
-                                                                                                        </figcaption>
-                                                                                                </figure>
-                                                                                                <div class="kode-pro-info">
-                                                                                                        <a href="#" class="add_to_cart"><i class="fa fa-shopping-cart"></i> Add To Cart</a>
-                                                                                                        <span>55$</span>
-                                                                                                </div>
-                                                                                        </div>
-                                                                                </div>
-                                                                                <div class="item">
-                                                                                        <div class="kode-pro-inner">
-                                                                                                <figure><a href="#"><img src="home/extra-images/shop-product2.jpg" alt=""></a>
-                                                                                                        <figcaption>
-                                                                                                                <h4><a href="#">Product Name</a></h4>
-                                                                                                                <p class="kode-pro-cat"><a href="#">Categories</a></p>
-                                                                                                        </figcaption>
-                                                                                                </figure>
-                                                                                                <div class="kode-pro-info">
-                                                                                                        <a href="#" class="add_to_cart"><i class="fa fa-shopping-cart"></i> Add To Cart</a>
-                                                                                                        <span>55$</span>
-                                                                                                </div>
-                                                                                        </div>
-                                                                                </div>
-                                                                                <div class="item">
-                                                                                        <div class="kode-pro-inner">
-                                                                                                <figure><a href="#"><img src="home/extra-images/shop-product3.jpg" alt=""></a>
-                                                                                                        <figcaption>
-                                                                                                                <h4><a href="#">Product Name</a></h4>
-                                                                                                                <p class="kode-pro-cat"><a href="#">Categories</a></p>
-                                                                                                        </figcaption>
-                                                                                                </figure>
-                                                                                                <div class="kode-pro-info">
-                                                                                                        <a href="#" class="add_to_cart"><i class="fa fa-shopping-cart"></i> Add To Cart</a>
-                                                                                                        <span>55$</span>
-                                                                                                </div>
-                                                                                        </div>
-                                                                                </div>
-                                                                                <div class="item">
-                                                                                        <div class="kode-pro-inner">
-                                                                                                <figure><a href="#"><img src="home/extra-images/shop-product1.jpg" alt=""></a>
-                                                                                                        <figcaption>
-                                                                                                                <h4><a href="#">Product Name</a></h4>
-                                                                                                                <p class="kode-pro-cat"><a href="#">Categories</a></p>
-                                                                                                        </figcaption>
-                                                                                                </figure>
-                                                                                                <div class="kode-pro-info">
-                                                                                                        <a href="#" class="add_to_cart"><i class="fa fa-shopping-cart"></i> Add To Cart</a>
-                                                                                                        <span>55$</span>
-                                                                                                </div>
-                                                                                        </div>
-                                                                                </div>
-                                                                                <div class="item">
-                                                                                        <div class="kode-pro-inner">
-                                                                                                <figure><a href="#"><img src="home/extra-images/shop-product3.jpg" alt=""></a>
-                                                                                                        <figcaption>
-                                                                                                                <h4><a href="#">Product Name</a></h4>
-                                                                                                                <p class="kode-pro-cat"><a href="#">Categories</a></p>
-                                                                                                        </figcaption>
-                                                                                                </figure>
-                                                                                                <div class="kode-pro-info">
-                                                                                                        <a href="#" class="add_to_cart"><i class="fa fa-shopping-cart"></i> Add To Cart</a>
-                                                                                                        <span>55$</span>
-                                                                                                </div>
-                                                                                        </div>
-                                                                                </div>
-                                                                        </div>
-
-                                                                </div>
-
-                                                                <div class="kode-align-btn"><a href="features.html" class="kode-modren-btn thbg-colortwo">View More</a></div>
-
-                                                        </div>
-
-                                                </div>
-
-                                        </div>
-                                </section>
 
 
                                 <!--// Page Content //-->
@@ -768,13 +672,12 @@
                                 <div class="footer-medium">
                                         <div class="container">
                                                 <div class="row">
-                                                        <div class="col-md-4">
+                                                        <div id="aboutus" class="col-md-4">
                                                                 <div class="about-widget">
                                                                         <h3>About SportsJun</h3>
                                                                         <ul class="kode-form-list">
-                                                                                <li><i class="fa fa-home"></i> <p><strong>Address:</strong> 805 omnis iste natus error.</p></li>
-                                                                                <li><i class="fa fa-phone"></i> <p><strong>Phone:</strong> 111 8756 22  777 4456 112</p></li>
-                                                                                <li><i class="fa fa-envelope-o"></i> <p><strong>Email:</strong> Info@sportyleague.com</p></li>
+                                                                                <li><i class="fa fa-home"></i> <p><strong>Address:</strong> Gachibowli, Hyderabad, Telangana, India 500031.</p></li>
+                                                                                <li><i class="fa fa-envelope-o"></i> <p><strong>Email:</strong> contact@sportsjun.com</p></li>
                                                                         </ul>
                                                                 </div>
                                                         </div>
@@ -793,24 +696,23 @@
                                                         <div class="col-md-4">
                                                                 <div class="contact-us-widget">
                                                                         <h3>Connect with us</h3>
-                                                                        <p>Follow us to stay in the loop on what’s<br>
-                                                                                Sed ut perspiciatis unde omnis iste natus<br> error sit Sed ut perspiciatis unde omnis iste<br> natus error sit</p>
+                                                                        <p>Follow us to stay updated and connected – using your favorite social media.<br></p>
                                                                         <ul class="social-links1">
                                                                                 <li>
-                                                                                        <a href="#" class="tw-bg1"><i class="fa fa-twitter"></i></a>
+                                                                                        <a target="_blank" href="https://twitter.com/sj_sportsjun" class="tw-bg1"><i class="fa fa-twitter"></i></a>
                                                                                 </li>
                                                                                 <li>
-                                                                                        <a href="#" class="fb-bg1"><i class="fa fa-facebook"></i></a>
+                                                                                        <a target="_blank" href="https://www.facebook.com/SJ.SportsJun" class="fb-bg1"><i class="fa fa-facebook"></i></a>
+                                                                                </li>
+                                                                                <!-- li>
+                                                                                        <a target="_blank" href="#" class="youtube-bg1"><i class="fa fa-youtube"></i></a>
                                                                                 </li>
                                                                                 <li>
-                                                                                        <a href="#" class="youtube-bg1"><i class="fa fa-youtube"></i></a>
+                                                                                        <a target="_blank" href="#" class="linkedin-bg1"><i class="fa fa-linkedin"></i></a>
                                                                                 </li>
                                                                                 <li>
-                                                                                        <a href="#" class="linkedin-bg1"><i class="fa fa-linkedin"></i></a>
-                                                                                </li>
-                                                                                <li>
-                                                                                        <a href="#" class="tw-bg1"><i class="fa fa-instagram"></i></a>
-                                                                                </li>
+                                                                                        <a target="_blank" href="#" class="tw-bg1"><i class="fa fa-instagram"></i></a>
+                                                                                </li -->
 
                                                                         </ul>
                                                                 </div>

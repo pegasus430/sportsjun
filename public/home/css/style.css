@@ -3606,3 +3606,25 @@ form#home-register-modal-form span.capcha {
 }
 
 span#verify-email-id {display: block;margin-top: 10px;font-weight: bold;font-style: normal;}
+/* footer */
+div.about-widget ul.kode-form-list li {
+display: block !important;
+clear: both !important;
+margin-bottom:0 !important;
+}
+div.about-widget ul.kode-form-list li i {
+float:left;
+}
+div.about-widget ul.kode-form-list li p {
+float: left;
+width: 250px;
+margin-top: 0;
+margin-bottom: 20px;
+}
+div.about-widget ul.kode-form-list li:first-child {
+margin-top: 10px;
+}
+div.about-widget ul.kode-form-list li:first-child i.fa-home {
+position: relative;
+    top: 7px;
+}
