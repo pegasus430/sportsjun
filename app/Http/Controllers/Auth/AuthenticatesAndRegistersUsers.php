@@ -56,7 +56,16 @@ trait AuthenticatesAndRegistersUsers
                 $this->create($request->all());
                 //$this->auth->login($this->create($request->all()));
                 //return redirect($this->redirectPath());
-                return redirect('verifyemail');
+                if ($request->ajax())
+                {
+                        return response()->json([
+                                'status'   => 'success'
+                        ]);
+                }
+                else
+                {
+                        return redirect('verifyemail');
+                }
         }
 
         /**

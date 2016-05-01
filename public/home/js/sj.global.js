@@ -104,7 +104,11 @@ if (typeof SJ.GLOBAL === 'undefined')
                                                         if (!o.isFunction(errorHandler)) {
                                                                 throw "Invalid error handler function - " + errorHandler;
                                                         } else {
-                                                                errorHandler(_x, _y, _z);
+                                                                if (additionalParams === undefined) {
+                                                                        errorHandler(_x, _y, _z);
+                                                                } else {
+                                                                        errorHandler(additionalParams, _x, _y, _z);
+                                                                }
                                                         }
                                                 }
                                         });

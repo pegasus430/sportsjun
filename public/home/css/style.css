@@ -3487,7 +3487,7 @@ background:url(extra-images/half_circle.png) center center no-repeat;  width: 17
 ==========================================
 */
 
-.kode-loginform p > span.error {
+.kode-loginform p > span.error,.kode-loginform > span.error {
     font-weight: normal;
     font-size: 11px;
     margin: 4px 0 0 0;
@@ -3495,7 +3495,7 @@ background:url(extra-images/half_circle.png) center center no-repeat;  width: 17
     color: #F44336;
 }
 
-.kode-loginform p input.error {
+.kode-loginform p input.error,.kode-loginform input.error {
     border-color:#F44336 !important;
 }
 
@@ -3509,6 +3509,18 @@ background:url(extra-images/half_circle.png) center center no-repeat;  width: 17
    color: #F44336 !important;
 }
 .kode-loginform p input.error:-ms-input-placeholder {
+   color: #F44336 !important;
+}
+.kode-loginform input.error::-webkit-input-placeholder {
+   color: #F44336 !important;
+}
+.kode-loginform input.error:-moz-placeholder {
+   color: #F44336 !important;
+}
+.kode-loginform input.error::-moz-placeholder {
+   color: #F44336 !important;
+}
+.kode-loginform input.error:-ms-input-placeholder {
    color: #F44336 !important;
 }
 /*
@@ -3530,16 +3542,19 @@ input.thbg-colortwo.disabled {
 }
 
 p#home-login-modal-form-msg,
+p#home-register-modal-form-msg,
 p#home-forgot-password-modal-form-msg
 {
-    color: #C62828;
+    //color: #C62828;
+    color: #F44336;
 }
 
 p#home-login-modal-form-msg a,
+p#home-register-modal-form-msg a,
 p#home-forgot-password-modal-form-msg a
 {
     float: none;
-    color: #C62828;
+    color: #F44336;
 }
 
 #home-register-modal-form a.signup_capthca
@@ -3576,3 +3591,18 @@ form#home-register-modal-form span.capcha {
     height: 46px;
     width: 100%;
 }
+
+.modal-body.verify-msg {
+    text-align: center;
+    padding: 20px;
+    font-size: 15px;
+    font-style: italic;
+}
+
+.modal-body.verify-msg a.kode-modren-btn.thbg-colortwo {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    font-style: normal;
+}
+
+span#verify-email-id {display: block;margin-top: 10px;font-weight: bold;font-style: normal;}
