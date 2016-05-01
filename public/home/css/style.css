@@ -323,7 +323,7 @@ Sidebar heading:	'Oswald', sans-serif;
 .kode-header-three .navbar-nav > li > a:after { display: none; }
 .kode-header-three .navbar-nav > li > a:before {
 	content: '';
-	border-bottom: 2px solid #000;
+	border-bottom: 2px solid #333;
 	background: none;
 	width: 100%;
 	margin: 0px;
@@ -341,7 +341,7 @@ Sidebar heading:	'Oswald', sans-serif;
 .kode-cart a i {
 	width: 42px;
 	height: 42px;
-	color: #000;
+	color: #333;
 	border-radius: 100%;
 	text-align: center;
 	padding: 13px 0px 0px 0px;
@@ -406,9 +406,9 @@ Sidebar heading:	'Oswald', sans-serif;
 .kode-loginform p input[type="submit"] {
 	float: right;
 	padding: 5px 30px;
-	color: #000;
+	color: #333;
 	text-transform: uppercase;
-	box-shadow: 0px 0px 0px 1px #000 inset;
+	box-shadow: 0px 0px 0px 1px #333 inset;
 	border: 7px solid;
 	font-weight: bold;
 }
@@ -429,7 +429,7 @@ Sidebar heading:	'Oswald', sans-serif;
 	position: absolute;
 	right: 0px;
 	top: -14px;
-	border-bottom: 14px solid #000;
+	border-bottom: 14px solid #333;
 	border-right: 14px solid transparent;
 }
 .kode-search:after {
@@ -437,7 +437,7 @@ Sidebar heading:	'Oswald', sans-serif;
 	position: absolute;
 	right: 0px;
 	bottom: -14px;
-	border-top: 14px solid #000;
+	border-top: 14px solid #333;
 	border-right: 14px solid transparent;
 }
 .kode-search input[type="text"] {
@@ -481,7 +481,7 @@ Sidebar heading:	'Oswald', sans-serif;
 }
 .kode-caption h2{
 	font-size:50px;
-	color:#000;
+	color:#333;
 	padding:10px 30px;
 	background-color:#F00;
 	display:inline-block;
@@ -541,7 +541,7 @@ Sidebar heading:	'Oswald', sans-serif;
 	left:0;
 	top:0;
 	bottom:0;
-	background:#000;
+	background:#333;
 	width:100%;
 	height:100%;
 	opacity:0.6;
@@ -792,7 +792,7 @@ Sidebar heading:	'Oswald', sans-serif;
 
 /* Shop Listing ends */
 
-.kode-pro-inner:hover .kode-pro-info a,.kode-pro-inner:hover .kode-pro-info span { color: #000; }
+.kode-pro-inner:hover .kode-pro-info a,.kode-pro-inner:hover .kode-pro-info span { color: #333; }
 /* TeamListing starts */
 .kode-team-list > ul > li {
 	list-style: none;
@@ -2139,7 +2139,7 @@ blockquote {
 }
 .kode-innersearch form input[type="text"] {
 	border: 1px solid #d4d4d4;
-	color: #000;
+	color: #333;
 	font-size: 16px;
 	height: 47px;
 	padding: 6px 20px 6px 20px;
@@ -2307,10 +2307,10 @@ blockquote {
 }
 .kode-forminfo h3 { text-transform: uppercase; }
 .kode-forminfo h3,.kode-forminfo p,.kode-form-list li strong {
-	color: #000;
+	color: #333;
 }
 .kode-form-list li {
-	color: #000;
+	color: #333;
 	list-style: none;
 	margin-bottom: 5px;
 }
@@ -2318,7 +2318,7 @@ blockquote {
 	display: inline-block;
 	width: 32px;
 	height: 32px;
-	border: 1px solid #000;
+	border: 1px solid #333;
 	margin-right: 20px;
 	text-align: center;
 	font-size: 18px;
@@ -2359,7 +2359,7 @@ blockquote {
 }
 #kode-topbtn {
 	float: right;
-	color: #000;
+	color: #333;
 	width: 40px;
 	height: 40px;
 	text-align: center;
@@ -2600,7 +2600,7 @@ blockquote {
 }
 .kode-social-network ul li a:hover{
 	color:#fff;
-	background-color:#000;
+	background-color:#333;
 }
 
 /*social network CSS Ends */
@@ -2848,7 +2848,7 @@ blockquote {
 .heading h2{
 	font-family: 'Open Sans', sans-serif;
 	font-size:33px;
-	color:#000;
+	color:#333;
 	position:relative;
 }
 
@@ -3254,7 +3254,7 @@ blockquote {
 	padding:10px 0px;
 	text-align:center;
 	font-size:16px;
-	color:#000;
+	color:#333;
 }
 .header-4 .kode-top-search{
 	float:right;
@@ -3268,7 +3268,7 @@ blockquote {
 	border-left:none;
 	border-right:none;
 	border-top:none;
-	border-bottom:solid 1px #000;
+	border-bottom:solid 1px #333;
 	padding:6px 10px;
 	background:rgba(0,0,0,0.3);
 }
@@ -3486,3 +3486,58 @@ background:url(extra-images/half_circle.png) center center no-repeat;  width: 17
 			CSS ENDS
 ==========================================
 */
+
+.kode-loginform p > span.error {
+    font-weight: normal;
+    font-size: 11px;
+    margin: 4px 0 0 0;
+    display: block;
+    color: #F44336;
+}
+
+.kode-loginform p input.error {
+    border-color:#F44336 !important;
+}
+
+.kode-loginform p input.error::-webkit-input-placeholder {
+   color: #F44336 !important;
+}
+.kode-loginform p input.error:-moz-placeholder {
+   color: #F44336 !important;
+}
+.kode-loginform p input.error::-moz-placeholder {
+   color: #F44336 !important;
+}
+.kode-loginform p input.error:-ms-input-placeholder {
+   color: #F44336 !important;
+}
+/*
+input.thbg-colortwo.disabled {
+    border-color: #ccc !important;
+    background-color: #ccc !important;
+    color: #ADA9A9 !important;
+    box-shadow: 0px 0px 0px 1px #B5B5B7 inset !important;
+}*/
+input.thbg-colortwo.disabled {
+    border-color: #E2E2E2 !important;
+    background-color: #E2E2E2 !important;
+    color: #C7C7C7 !important;
+    box-shadow: 0px 0px 0px 1px #D4D4D4 inset !important;
+}
+
+* {
+    outline:none;
+}
+
+p#home-login-modal-form-msg,
+p#home-forgot-password-modal-form-msg
+{
+    color: #C62828;
+}
+
+p#home-login-modal-form-msg a,
+p#home-forgot-password-modal-form-msg a
+{
+    float: none;
+    color: #C62828;
+}
