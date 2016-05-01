@@ -226,6 +226,29 @@ if (typeof SJ.USER === 'undefined')
                                         g.w.location.href = site_url;
                                 }
                         },
+                        refreshCaptcha : function(form_id) {
+                                var _path = secure_url + '/refereshcapcha';
+                                var _data = {};
+                                var _beforeSend = function () {
+                                };
+                                var _setUpOptions = {
+                                        'dataType': "json"
+                                };
+                                var _params = {
+                                        'form_id': form_id
+                                };
+                                g.makeRequest(_path, 'GET', _data, o.refreshCaptchaResponse, o.handleError, _beforeSend, _params, _setUpOptions);
+                        },
+                        refreshCaptchaResponse : function(result, _params) {
+                                try {
+                                        var $this = $('#' + _params.form_id);
+                                        $this.find('span.capcha').html(result);
+                                } catch (e) {
+                                        console.log(e);
+                                        alert('Please try again!');
+                                }
+                                return false;
+                        },
                         registerValidation: function (form_id) {
                                 var errors = 0;
 

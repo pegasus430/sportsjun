@@ -870,10 +870,17 @@
                                         </div>
                                         <div class="modal-body">
                                                 <form id="home-register-modal-form" class="kode-loginform" onsubmit="SJ.USER.registerValidation(this.id);return false;">
-                                                        <p><span>Email</span> <input type="text" placeholder="Email"></p>
-                                                        <p><span>Password</span> <input type="password" placeholder="Password"></p>
-                                                        <p><span>Retype Password</span> <input type="password" placeholder="Retype Password"></p>
-                                                        <p><label><input type="checkbox"><span>Remember Me</span></label></p>
+                                                        <p><span>First Name</span> <input name="firstname" type="text" placeholder="First Name"></p>
+                                                        <p><span>Last Name</span> <input name="lastname" type="text" placeholder="Last Name"></p>
+                                                        <p><span>Email</span> <input name="email" type="text" placeholder="Email"></p>
+                                                        <p><span>Password</span> <input name="password" type="password" placeholder="Password"></p>
+                                                        <p><span>Retype Password</span> <input name="password_confirmation" type="password" placeholder="Retype Password"></p>
+                                                        <!-- p><label><input type="checkbox"><span>Remember Me</span></label></p -->
+                                                        <span class="capcha"> {!!Captcha::img('flat')!!}</span><br />
+                                                        <input type="text" name="captcha" class="captcha-input">
+                                                        <a href="javascript:void(0)" onclick="SJ.USER.refreshCaptcha('home-register-modal-form');" class="signup_capthca"><img src="{{ asset('/images/refresh.png') }}" alt="Refresh Captcha Image" /></a>
+                                                        <p class="p_checkbox first"><label><input type="checkbox" checked="checked"><span>I agree to the <a href="{{ url('/terms-of-conditions.html') }}" target="_blank">terms and conditions</a> of this site.</span></label></p>
+                                                        <p class="p_checkbox last"><label><input type="checkbox" checked="checked"><span>I wish to receive the weekly bulletin</span></label></p>
                                                         <p class="kode-submit"><a href="javascript:void(0);" data-dismiss="modal" data-toggle="modal" data-target="#home-forgot-password-modal">Lost Your Password</a> <input class="thbg-colortwo" type="submit" value="Sign Up"></p>
                                                 </form>
                                         </div>

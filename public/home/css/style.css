@@ -3541,3 +3541,38 @@ p#home-forgot-password-modal-form-msg a
     float: none;
     color: #C62828;
 }
+
+#home-register-modal-form a.signup_capthca
+{
+    background: #ccc;
+    padding: 7px;
+    position: relative;
+    top: 2px;
+}
+
+form#home-register-modal-form a {
+    float: none;
+}
+
+form#home-register-modal-form label span {
+    font-weight: normal !important;
+}
+
+form#home-register-modal-form p.p_checkbox {
+    margin-bottom: 0;
+}
+
+form#home-register-modal-form p.p_checkbox.first {
+    margin-top: 10px;
+}
+form#home-register-modal-form p.p_checkbox.last {
+    margin-bottom: 10px;
+}
+form#home-register-modal-form span.capcha {
+    display: block;
+    position: relative;
+    top: 12px;
+    clear: both;
+    height: 46px;
+    width: 100%;
+}
