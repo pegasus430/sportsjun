@@ -208,8 +208,8 @@
                                                     One product.<br>
                                                     Everything you need.</p>-->
                                                                         <div class="clearfix"></div>
-                                                                        <a class="kode-modren-btn thbg-colortwo" href="#">Login</a>&nbsp;&nbsp;<span class="or_text">OR</span>&nbsp;&nbsp;
-                                                                        <a class="kode-modren-btn thbg-colortwo" href="#">Register</a>
+                                                                        <a class="kode-modren-btn thbg-colortwo" href="javascript:void(0);" data-toggle="modal" data-target="#home-login-modal">Login</a>&nbsp;&nbsp;<span class="or_text">OR</span>&nbsp;&nbsp;
+                                                                        <a class="kode-modren-btn thbg-colortwo" href="javascript:void(0);" data-toggle="modal" data-target="#home-register-modal">Register</a>
                                                                 </div>
                                                         </div>
                                                 </li>
@@ -877,10 +877,10 @@
                                                         <p><span>Retype Password</span> <input name="password_confirmation" type="password" placeholder="Retype Password"></p>
                                                         <!-- p><label><input type="checkbox"><span>Remember Me</span></label></p -->
                                                         <span class="capcha"> {!!Captcha::img('flat')!!}</span><br />
-                                                        <input type="text" name="captcha" class="captcha-input">
+                                                        <input type="text" name="captcha" class="captcha-input" placeholder="Enter the above captcha">
                                                         <a href="javascript:void(0)" onclick="SJ.USER.refreshCaptcha('home-register-modal-form');" class="signup_capthca"><img src="{{ asset('/images/refresh.png') }}" alt="Refresh Captcha Image" /></a>
-                                                        <p class="p_checkbox first"><label><input type="checkbox" checked="checked"><span>I agree to the <a href="{{ url('/terms-of-conditions.html') }}" target="_blank">terms and conditions</a> of this site.</span></label></p>
-                                                        <p class="p_checkbox last"><label><input type="checkbox" checked="checked"><span>I wish to receive the weekly bulletin</span></label></p>
+                                                        <p class="p_checkbox first"><label><input name="tos" type="checkbox" checked="checked"><span>I agree to the <a href="{{ url('/terms-of-conditions.html') }}" target="_blank">terms and conditions</a> of this site.</span></label></p>
+                                                        <p class="p_checkbox last"><label><input name="newsletter" type="checkbox" checked="checked"><span>I wish to receive the weekly bulletin</span></label></p>
                                                         <p class="kode-submit"><a href="javascript:void(0);" data-dismiss="modal" data-toggle="modal" data-target="#home-forgot-password-modal">Lost Your Password</a> <input class="thbg-colortwo" type="submit" value="Sign Up"></p>
                                                 </form>
                                         </div>
@@ -902,6 +902,22 @@
                                                                 <input class="thbg-colortwo" type="submit" value="Submit">
                                                         </p>
                                                 </form>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+                
+                <div class="modal fade" id="home-email-verify-modal" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog">
+                                <div class="modal-content">
+                                        <div class="modal-header thbg-color">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title">Thank you!</h4>
+                                        </div>
+                                        <div class="modal-body verify-msg">
+                                                The activation link has been sent to your email <span id="verify-email-id"></span><br />
+                                                Please check your email and click on the link to activate your account.<br />
+                                                <a class="kode-modren-btn thbg-colortwo" href="javascript:void(0);" data-dismiss="modal" data-toggle="modal" data-target="#home-login-modal">Login</a>
                                         </div>
                                 </div>
                         </div>
