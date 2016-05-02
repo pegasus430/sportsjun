@@ -57,7 +57,7 @@
 						
 						<div class="accordion" id="section1">1. How do I sign up for SportsJun?<span class="fa fa-plus"></span></div>
                       <div class="accordion-content">
-                          <p>That’s an easy one. Just <a class="sj_linkweb">click here</a> and we’ll have you up and running in just a few second.</p>
+                          <p>That’s an easy one. Just <a href="javascript:void(0);" data-toggle="modal" data-target="#home-register-modal" class="sj_linkweb">click here</a> and we’ll have you up and running in just a few second.</p>
                       </div>
 					  
                       <div class="accordion" id="section2">2. How much does it cost?<span class="fa fa-plus"></span></div>
@@ -77,7 +77,7 @@
                       
 					<div class="accordion" id="section5">5. I forgot my login information. Can you send it to me?<span class="fa fa-plus"></span></div>
                       <div class="accordion-content">
-                          <p>Sure. <a class="sj_linkweb">Send us a message</a> with your full name and the email address you used when you signed up. Keeping privacy at utmost importance SportsJun can ask more information before releasing the information.</p>
+                          <p>Sure. <a href="contact-us.html" class="sj_linkweb">Send us a message</a> with your full name and the email address you used when you signed up. Keeping privacy at utmost importance SportsJun can ask more information before releasing the information.</p>
                       </div>
                       
 					<div class="accordion" id="section6">6. How can I delete my account?<span class="fa fa-plus"></span></div>
