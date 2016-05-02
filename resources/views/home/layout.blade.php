@@ -133,7 +133,7 @@
                                                                         <h3>Links</h3>
                                                                         <ul>
                                                                                 <li><a href="privacy.html">Privacy</a></li>
-                                                                                <li><a href="terms-of-conditions.html">Terms and Conditions</a></li>
+                                                                                <li><a href="terms-and-conditions.html">Terms and Conditions</a></li>
                                                                                 <li><a href="faq.html">FAQ</a></li>
                                                                                 <li><a href="contact-us.html">Contact Us</a></li>
                                                                         </ul>
@@ -231,7 +231,7 @@
                                                         <span class="capcha"> {!!Captcha::img('flat')!!}</span><br />
                                                         <input type="text" name="captcha" class="captcha-input" placeholder="Enter the above captcha">
                                                         <a href="javascript:void(0)" onclick="SJ.USER.refreshCaptcha('home-register-modal-form');" class="signup_capthca"><img src="{{ asset('/images/refresh.png') }}" alt="Refresh Captcha Image" /></a>
-                                                        <p class="p_checkbox first"><label><input name="tos" type="checkbox" checked="checked"><span>I agree to the <a href="{{ url('/terms-of-conditions.html') }}" target="_blank">terms and conditions</a> of this site.</span></label></p>
+                                                        <p class="p_checkbox first"><label><input name="tos" type="checkbox" checked="checked"><span>I agree to the <a href="{{ url('/terms-and-conditions.html') }}" target="_blank">terms and conditions</a> of this site.</span></label></p>
                                                         <p class="p_checkbox last"><label><input name="newsletter" type="checkbox" checked="checked"><span>I wish to receive the weekly bulletin</span></label></p>
                                                         <p class="kode-submit"><a href="javascript:void(0);" data-dismiss="modal" data-toggle="modal" data-target="#home-forgot-password-modal">Lost Your Password</a> <input class="thbg-colortwo" type="submit" value="Sign Up"></p>
                                                 </form>

@@ -5,12 +5,12 @@
         <div class="container">
           <div class="row">
             <div class="col-md-6">
-              <h1>Terms of Conditions</h1>
+              <h1>Terms and Conditions</h1>
             </div>
             <div class="col-md-6">
               <ul class="kode-breadcrumb">
                 <li><a href="{{ url('/') }}">Home</a></li>
-                <li><a href="<?php echo Request::url(); ?>">Terms of Conditions</a></li>
+                <li><a href="<?php echo Request::url(); ?>">Terms and Conditions</a></li>
               </ul>
             </div>
           </div>
