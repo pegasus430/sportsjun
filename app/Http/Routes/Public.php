@@ -30,6 +30,10 @@ Route::get('testshare', array('as' => 'testshare', function()
     return 'Hello World!!!';
 }));
 Route::get('/', 'HomeController@index');
+Route::get('/{page}.html', function ($page) {
+    if ($page == 'index') { return view('home'); }
+    return view('home.' . $page);
+});
 Route::get('/skip', 'HomeController@skip');
 
 // Default Laravel Routes for login,registration and reset password
