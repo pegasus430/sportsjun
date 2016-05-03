@@ -141,7 +141,7 @@
                                                                 <div class="clear clearfix"></div>
 
                                                                 <div class="col-md-12 how_img_dis">
-                                                                        <h1>Track all Your Sports Performances with one profile</h1>                                  
+                                                                        <h1>Organizing Tournaments / Leagues made easy</h1>                                  
                                                                         <img src="{{ asset('/home/extra-images/how-it-works-tournaments.png') }}">
 
                                                                 </div>
