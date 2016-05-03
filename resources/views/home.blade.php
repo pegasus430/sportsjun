@@ -36,13 +36,13 @@
 
                                                         <div class="kode-result-list shape-view col-md-12">
                                                                 <div class="heading heading-12">
-                                                                        <h2><span class="left"></span>How SportsJun Works<span class="right"></span></h2>
+                                                                        <h2><span class="left"></span>Players / Teams<span class="right"></span><span class="sub_right">(How it works)</span></h2>
                                                                 </div>
                                                                 <div class="clear clearfix"></div>
 
                                                                 <div class="col-md-12 how_img_dis">
                                                                         <h1>Track all Your Sports Performances with one profile</h1>                                  
-                                                                        <img src="{{ asset('/home/extra-images/track.png') }}">
+                                                                        <img src="{{ asset('/home/extra-images/how-it-works-players-teams.png') }}">
 
                                                                 </div>
                                                         </div>
@@ -130,64 +130,24 @@
 
                                 <!--// Page Content //-->
 
-                                <section class="kode-pagesection kode-parallax  kode-modern-expert-blogger sj_white_bg" style="margin-bottom:0;">
+                                <section class="kode-pagesection padding-30-topbottom bg-squre-pattren" id="tournaments">
                                         <div class="container">
                                                 <div class="row">
 
-                                                        <div class="col-md-12">
-                                                                <div class="heading heading-12 margin-top-bottom-30">
-                                                                        <h2 class="color-white" style="color:#374457;"><span class="left"></span>Tournaments<span class="right"></span></h2>
+                                                        <div class="kode-result-list shape-view col-md-12">
+                                                                <div class="heading heading-12">
+                                                                        <h2><span class="left"></span>Tournaments<span class="right"></span><span class="sub_right">(How it works)</span></h2>
                                                                 </div>
+                                                                <div class="clear clearfix"></div>
 
-                                                                <div class="kode-blog-list kode-large-blog">
-                                                                        <ul class="row">
+                                                                <div class="col-md-12 how_img_dis">
+                                                                        <h1>Track all Your Sports Performances with one profile</h1>                                  
+                                                                        <img src="{{ asset('/home/extra-images/how-it-works-tournaments.png') }}">
 
-                                                                                <li class="col-md-4">
-                                                                                        <div class="kode-time-zoon">
-                                                                                                <time datetime="2008-02-14 20:00">07 <span>may</span></time>
-                                                                                                <h5><a href="#">Sed ut perspiciatis unde omnisiste natus error</a></h5>
-                                                                                        </div>
-                                                                                        <figure><a href="#"><img src="{{ asset('/home/extra-images/bloggird-1.jpg') }}" alt=""></a></figure>
-                                                                                        <div class="kode-blog-info">
-                                                                                                <p>Lorem ipsum dolor sit amet, cons ecte tuer adipiscing elit, sed diam non ummy nibh euismod tinc idunt ut laoreet dolore magna ali quam erat volutpat. Ut veniam, quis..</p>
-                                                                                                <a href="#" class="kode-blog-btn kode_blog_btn_link">...</a>
-                                                                                                <div class="clearfix"></div>
-
-                                                                                        </div>
-                                                                                </li>
-                                                                                <li class="col-md-4">
-                                                                                        <div class="kode-time-zoon">
-                                                                                                <time datetime="2008-02-14 20:00">07 <span>may</span></time>
-                                                                                                <h5><a href="#">Sed ut perspiciatis unde omnisiste natus error</a></h5>
-                                                                                        </div>
-                                                                                        <figure><a href="#"><img src="{{ asset('/home/extra-images/bloggird-2.jpg') }}" alt=""></a></figure>
-                                                                                        <div class="kode-blog-info">
-                                                                                                <p>Lorem ipsum dolor sit amet, cons ecte tuer adipiscing elit, sed diam non ummy nibh euismod tinc idunt ut laoreet dolore magna ali quam erat volutpat. Ut veniam, quis..</p>
-                                                                                                <a href="#" class="kode-blog-btn kode_blog_btn_link">...</a>
-                                                                                                <div class="clearfix"></div>
-
-                                                                                        </div>
-                                                                                </li>
-                                                                                <li class="col-md-4">
-                                                                                        <div class="kode-time-zoon">
-                                                                                                <time datetime="2008-02-14 20:00">07 <span>may</span></time>
-                                                                                                <h5><a href="#">Sed ut perspiciatis unde omnisiste natus error</a></h5>
-                                                                                        </div>
-                                                                                        <figure><a href="#"><img src="{{ asset('/home/extra-images/bloggird-3.jpg') }}" alt=""></a></figure>
-                                                                                        <div class="kode-blog-info">
-                                                                                                <p>Lorem ipsum dolor sit amet, cons ecte tuer adipiscing elit, sed diam non ummy nibh euismod tinc idunt ut laoreet dolore magna ali quam erat volutpat. Ut veniam, quis..</p>
-                                                                                                <a href="#" class="kode-blog-btn kode_blog_btn_link">...</a>
-                                                                                                <div class="clearfix"></div>
-
-                                                                                        </div>
-                                                                                </li>
-
-                                                                        </ul>
-                                                                        <div class="kode-align-btn"><a href="#" class="kode-modren-btn thbg-colortwo">View More</a></div>
                                                                 </div>
                                                         </div>
-                                                </div>
 
+                                                </div>
                                         </div>
                                 </section>
                                 <!--// Page Content //-->
