@@ -123,11 +123,11 @@ if(empty($userDetails['email'])) {
         </div>
         <!-- end .section section --> 
 		</div>
-		<div class="spacer-t40 spacer-b40">
+		<div class="spacer-t20 spacer-b20">
             <div class="tagline"><span>Address Details</span></div><!-- .tagline -->
         </div>
 		@include ('common.address',['mandatory' => ''])	
-		<div class="spacer-t20 spacer-b40">
+		<div class="spacer-t20 spacer-b20">
 			<div class="tagline"><span> Personal Information </span></div><!-- .tagline -->
 		</div> 
 		 <div class="row">  
@@ -143,7 +143,7 @@ if(empty($userDetails['email'])) {
 		<div class="section">
 		  <label class="form_label">{{  trans('message.users.fields.about') }}</label>
 			<label for="comment" class="field prepend-icon">
-				{!! Form::textarea('about', null, array('class'=>'gui-textarea','style'=>'resize:none','rows'=>3,'placeholder'=>trans('message.users.fields.about'))) !!}
+				{!! Form::textarea('about', null, array('class'=>'gui-textarea sj-user-about','style'=>'resize:none','rows'=>3,'placeholder'=>trans('message.users.fields.about'))) !!}
                             @if ($errors->has('about')) <p class="help-block">{{ $errors->first('about') }}</p> @endif
 				<label for="comment" class="field-icon"><i class="fa fa-comments"></i></label>
 				
@@ -170,7 +170,7 @@ if(empty($userDetails['email'])) {
 		</div>		-->
 		</div>
 		<div class="form-footer">
-                	<button type="submit" class="button btn-primary">Update </button>
+                	<button type="submit" class="button btn-primary sj-btn-user-update">Update </button>
         </div><!-- end .form-footer section -->		
 		{!! Form::close() !!}
 		               
