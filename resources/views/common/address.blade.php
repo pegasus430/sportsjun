@@ -9,9 +9,9 @@
         @endif
         <label for="comment" class="field prepend-icon">
             @if(isset($address))
-             {!! Form::textarea('address', $address, array('class'=>'gui-textarea','style'=>'resize:none','rows'=>3,'id'=>'address','placeholder'=>trans('message.common.fields.address'))) !!}
+             {!! Form::textarea('address', $address, array('class'=>'gui-textarea sj-address','style'=>'resize:none','rows'=>3,'id'=>'address','placeholder'=>trans('message.common.fields.address'))) !!}
             @else
-              {!! Form::textarea('address', null, array('class'=>'gui-textarea','style'=>'resize:none','rows'=>3,'id'=>'address','placeholder'=>trans('message.common.fields.address'))) !!}
+              {!! Form::textarea('address', null, array('class'=>'gui-textarea sj-address','style'=>'resize:none','rows'=>3,'id'=>'address','placeholder'=>trans('message.common.fields.address'))) !!}
               @endif
             @if ($errors->has('address')) <p class="help-block">{{ $errors->first('address') }}</p> @endif
             <label for="comment" class="field-icon"><i class="fa fa-comments"></i></label>

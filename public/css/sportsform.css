@@ -2821,3 +2821,20 @@
         text-align: left
     }
 }
+
+
+/* overrides for specific pages - added by anoop.n */
+.sportsjun-forms textarea.sj-address,.sportsjun-forms textarea.sj-user-about {
+    height:50px;
+}
+.sportsjun-forms textarea.sj-address:focus,.sportsjun-forms textarea.sj-user-about:focus {
+    height:70px;
+}
+.sj-btn-user-update {
+    display: block !important;
+    width: 100%;
+    text-transform: uppercase;
+    padding: 14px 0 !important;
+    letter-spacing: 1px;
+    font-size: 16px !important;
+}
