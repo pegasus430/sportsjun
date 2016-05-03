@@ -3628,3 +3628,18 @@ div.about-widget ul.kode-form-list li:first-child i.fa-home {
 position: relative;
     top: 7px;
 }
+.heading h2 span.sub_right {
+    font-size: 16px;
+    position: relative;
+    top: -3px;
+    padding-left: 15px;
+    display: inline-block;
+    margin-right: -132px;
+}
+@media (max-width: 480px) {
+    .heading h2 span.sub_right {
+        display: block;
+        margin: 0;
+        padding: 10px 0;
+    }
+}
