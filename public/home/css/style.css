@@ -3636,6 +3636,66 @@ position: relative;
     display: inline-block;
     margin-right: -132px;
 }
+a.btn-continue-fb {
+    display: inline-block;
+    width: 272px;
+    height: 61px;
+    background-image: url('/images/btn-facebook.png');
+    background-position: center -3px;
+}
+
+div#home-btn-fb {
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    width: 100%;
+    max-width: 320px;
+    display: inline-block;
+    border-bottom: 1px dotted #85A135;
+}
+
+a.btn-login-fb {
+    display: inline-block;
+    width: 272px;
+    height: 61px;
+    background-image: url('/images/btn-facebook.png');
+    background-position: center -75px;
+}
+
+div#login-btn-fb {
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    width: 100%;
+    text-align: center;
+    display: inline-block;
+    border-bottom: 1px dashed #9E9E9E;
+}
+
+a.btn-register-fb {
+    display: inline-block;
+    width: 272px;
+    height: 61px;
+    background-image: url('/images/btn-facebook.png');
+    background-position: center -3px;
+}
+
+div#register-btn-fb {
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    width: 100%;
+    text-align: center;
+    display: inline-block;
+    border-bottom: 1px dashed #9E9E9E;
+}
+
+a.btn-continue-fb:active {
+    background-position: center -145px;
+}
+a.btn-register-fb:active {
+    background-position: center -145px;
+}
+a.btn-login-fb:active {
+    background-position: center -214px;
+}
 @media (max-width: 480px) {
     .heading h2 span.sub_right {
         display: block;

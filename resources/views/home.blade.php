@@ -11,6 +11,9 @@
                                                                 <div class="kode-caption">       
                                                                         <h2>Your Path to Sports <span>Career</span> and <span>Fame</span></h2>
                                                                         <div class="clearfix"></div>
+                                                                        <div id="home-btn-fb">
+                                                                                <a class="btn-continue-fb" href="{{ route('social.login', ['facebook']) }}"></a>
+                                                                        </div>
                                                                       <!--<p>You. Your team.<br>
                                                     Your sports organization.<br>
                                                     One product.<br>
