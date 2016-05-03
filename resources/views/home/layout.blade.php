@@ -23,6 +23,25 @@
                 <link href="{{ asset('/home/css/jquery.bxslider.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">    
                 <link href="{{ asset('/home/css/prettyphoto.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
                 <link href="{{ asset('/home/css/responsive.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
+                
+                <link rel="apple-touch-icon" sizes="57x57" href="{{ asset('/images/favicon/apple-icon-57x57.png') }}">
+                <link rel="apple-touch-icon" sizes="60x60" href="{{ asset('/images/favicon/apple-icon-60x60.png') }}">
+                <link rel="apple-touch-icon" sizes="72x72" href="{{ asset('/images/favicon/apple-icon-72x72.png') }}">
+                <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('/images/favicon/apple-icon-76x76.png') }}">
+                <link rel="apple-touch-icon" sizes="114x114" href="{{ asset('/images/favicon/apple-icon-114x114.png')}}">
+                <link rel="apple-touch-icon" sizes="120x120" href="{{ asset('/images/favicon/apple-icon-120x120.png')}}">
+                <link rel="apple-touch-icon" sizes="144x144" href="{{ asset('/images/favicon/apple-icon-144x144.png')}}">
+                <link rel="apple-touch-icon" sizes="152x152" href="{{ asset('/images/favicon/apple-icon-152x152.png')}}">
+                <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('/images/favicon/apple-icon-180x180.png')}}">
+                <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('/images/favicon/android-icon-192x192.png')}}">
+                <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('/images/favicon/favicon-32x32.png')}}">
+                <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('/images/favicon/favicon-96x96.png')}}">
+                <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('/images/favicon/favicon-16x16.png')}}">
+                <link rel="manifest" href="/manifest.json">
+                <meta name="msapplication-TileColor" content="#ffffff">
+                <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+                <meta name="theme-color" content="#ffffff">
+    
                 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
                 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
                 <!--[if lt IE 9]>
@@ -197,6 +216,9 @@
                                                 <h4 class="modal-title">Login To Your Account</h4>
                                         </div>
                                         <div class="modal-body">
+                                                <div id="login-btn-fb">
+                                                        <a class="btn-login-fb" href="{{ route('social.login', ['facebook']) }}"></a>
+                                                </div>
                                                 <form id="home-login-modal-form" class="kode-loginform" onsubmit="SJ.USER.loginValidation(this.id);return false;">
                                                         <p><span>Email address</span> <input type="text" placeholder="Enter your email" name="email" /></p>
                                                         <p><span>Password</span> <input type="password" placeholder="Enter your password" name="password" /></p>
@@ -221,6 +243,9 @@
                                                 <h4 class="modal-title">Register</h4>
                                         </div>
                                         <div class="modal-body">
+                                                <div id="register-btn-fb">
+                                                        <a class="btn-register-fb" href="{{ route('social.login', ['facebook']) }}"></a>
+                                                </div>
                                                 <form id="home-register-modal-form" class="kode-loginform" onsubmit="SJ.USER.registerValidation(this.id);return false;">
                                                         <p><span>First Name</span> <input name="firstname" type="text" placeholder="First Name"></p>
                                                         <p><span>Last Name</span> <input name="lastname" type="text" placeholder="Last Name"></p>
