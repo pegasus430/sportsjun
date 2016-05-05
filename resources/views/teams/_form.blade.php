@@ -85,7 +85,7 @@
         <div class="section">
             <div class="option-group field">
                 <label class="option block">
-                    {!! Form::checkbox('player_available', 1, null, ['id' => 'player_available', 'class'=>'gui-input']) !!}
+                    {!! Form::checkbox('player_available', 1, 1, ['id' => 'player_available', 'class'=>'gui-input']) !!}
                     <span class="checkbox"></span> {{ trans('message.team.fields.isavailable') }}
                     @if ($errors->has('player_available')) <p class="help-block">{{ $errors->first('player_available') }}</p> @endif
                 </label>
@@ -97,7 +97,7 @@
         <div class="section">
             <div class="option-group field">
                 <label class="option block">
-                    {!! Form::checkbox('team_available', 1, null, ['id' => 'team_available', 'class'=>'gui-input']) !!}
+                    {!! Form::checkbox('team_available', 1, 1, ['id' => 'team_available', 'class'=>'gui-input']) !!}
                     <span class="checkbox"></span> {{ trans('message.team.fields.teamavailable') }}
                     @if ($errors->has('team_available')) <p class="help-block">{{ $errors->first('team_available') }}</p> @endif
                 </label>
