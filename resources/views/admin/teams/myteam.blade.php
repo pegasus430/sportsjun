@@ -20,10 +20,10 @@
 					<div>
 						<h1>Members</h1>
 						<div>
-						    Avaliable For Players <input type="checkbox" name="player_available" id="player_available" {{ (!empty($teams[0]['player_available']) && $teams[0]['player_available'] == 1)?'checked':'' }}> 
+						    Looking For Players <input type="checkbox" name="player_available" id="player_available" {{ (!empty($teams[0]['player_available']) && $teams[0]['player_available'] == 1)?'checked':'' }}> 
 						</div>
 						<div>
-						    Avaliable For Teams <input type="checkbox"  name="team_available"  id="team_available" {{ (!empty($teams[0]['team_available']) && $teams[0]['team_available'] == 1)?'checked':'' }}> 
+						    Avaliable For Matches <input type="checkbox"  name="team_available"  id="team_available" {{ (!empty($teams[0]['team_available']) && $teams[0]['team_available'] == 1)?'checked':'' }}> 
 						</div>
 						@if(!empty($team_owners_managers))
 						@foreach($team_owners_managers as $own)

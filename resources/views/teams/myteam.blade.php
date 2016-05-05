@@ -21,14 +21,14 @@
 									<div class="pull-left"><h4>Members</h4></div>
 									<div class="players_row_right">
 										<div class="text-center">
-											<span class="switch-head">Avaliable For Players </span>
+											<span class="switch-head">Looking For Players </span>
 											@if($logged_in_user_role == 'owner' || $logged_in_user_role == 'manager')
 											<input type="checkbox" class="switch-class" name="player_available" id="player_available" {{ (!empty($teams[0]['player_available']) && $teams[0]['player_available'] == 1)?'checked':'' }}>
 											@else
 											<span class="switch_but_show">{{ (!empty($teams[0]['player_available']) && $teams[0]['player_available'] == 1)?'YES':'NO' }}</span>
 											@endif
 											&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
-											<span class="switch-head">Avaliable For Teams</span>
+											<span class="switch-head">Avaliable For Matches</span>
 											@if($logged_in_user_role == 'owner' || $logged_in_user_role == 'manager')
 											<input type="checkbox" class="switch-class" name="team_available"  id="team_available" {{ (!empty($teams[0]['team_available']) && $teams[0]['team_available'] == 1)?'checked':'' }}>
 											@else
