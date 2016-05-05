@@ -198,7 +198,32 @@ class SportController extends Controller {
                         }    
                         else {
                             $userStatistic->following_sports = ',' . $sportsId . ',';
+                        }
+                        
+                        if(count($userStatistic->allowed_sports)) {
+                            $sportsCount = count(explode(',',trim($userStatistic->allowed_sports,',')));
+                            if($sportsCount>7) {
+                                return view('sportprofile.'.$dispView, ['sportsCount' => $sportsCount]);
+                            }
+                            
+                            $userStatistic->allowed_sports = $userStatistic->allowed_sports . $sportsId . ',';
                         }    
+                        else {
+                            $userStatistic->allowed_sports = ',' . $sportsId . ',';
+                        }
+                        
+                        if(count($userStatistic->allowed_player_matches)) {
+                            $sportsCount = count(explode(',',trim($userStatistic->allowed_player_matches,',')));
+                            if($sportsCount>7) {
+                                return view('sportprofile.'.$dispView, ['sportsCount' => $sportsCount]);
+                            }
+                            
+                            $userStatistic->allowed_player_matches = $userStatistic->allowed_player_matches . $sportsId . ',';
+                        }    
+                        else {
+                            $userStatistic->allowed_player_matches = ',' . $sportsId . ',';
+                        }
+                        
                         $userStatistic->save();
                     } else {
                         UserStatistic::create(['user_id' => $userId, 'following_sports' => ',' . $sportsId . ',']);
@@ -234,6 +259,9 @@ class SportController extends Controller {
             }
             $statsview = 'sportprofile.'.preg_replace('/\s+/', '',strtolower(config('constants.SPORT_NAME.'.$sportsId))).'statsview';
             
+            // by default insert user to Interested to join teams? and Interested to play matches?
+            //$this->updateUserStatistics();
+            
             //get the allowed sports
             $existingAllowedSportsString = UserStatistic::where('user_id', $userId)->pluck('allowed_sports');
             $existingAllowedSportsString = trim($existingAllowedSportsString,',');
@@ -255,12 +283,12 @@ class SportController extends Controller {
                                                     'userId'=>$userId,'existingAllowedSportsArray' => !empty($existingAllowedSportsArray)?$existingAllowedSportsArray:[],'existingAllowedMatchesArray' => !empty($existingAllowedMatchesArray)?$existingAllowedMatchesArray:[], 
                                                     'statsview'=>!empty($statsview)?$statsview:'', 'matchScheduleData'=>!empty($matchScheduleData)?$matchScheduleData:[],
                                                     'sportDetails'=>$sportDetails,'sportsCount' => $sportsCount,'exception' => $e->getMessage(),
-                                                    'viewFlag'=>$viewFlag]);
+                                                    'viewFlag'=>$viewFlag, 'flag'=>$flag]);
         }
         return view('sportprofile.'.$dispView, ['sportsQuestions' => $questions, 'sportsPlayerStatistics' => $sportsPlayerStatistics, 'sportsId' => $sportsId, 
                                                 'userId'=>$userId,'existingAllowedSportsArray' => $existingAllowedSportsArray,'existingAllowedMatchesArray' => $existingAllowedMatchesArray, 'matchScheduleData'=>$matchScheduleData,
                                                 'statsview'=>$statsview,'sportDetails'=>$sportDetails,'sportsCount' => $sportsCount, 
-                                                'exception' => [], 'viewFlag'=>$viewFlag]);
+                                                'exception' => [], 'viewFlag'=>$viewFlag, 'flag'=>$flag]);
     }
 
     /*
