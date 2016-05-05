@@ -29,14 +29,14 @@
     </div>	
     <ul class="nav sidemenu_nav leftmenu-icon" id="side-menu">
       <!--<li><a class="sidemenu_1" href="{{ url('user/info') }}">Info</a></li>-->
-      <li><a class="sidemenu_2" href="{{ url('/showsportprofile',$userId) }}"><span class="ico ico-members"></span> Sports</a></li>
+      <li><a class="sidemenu_2" href="{{ url('/showsportprofile',$userId) }}"><span class="ico ico-members"></span> Sports Profile</a></li>
       <li><a class="sidemenu_3" href="{{ url('team/teams',$userId) }}"><span class="ico ico-teams"></span> Teams</a></li>
       <li><a class="sidemenu_4" href="{{ url('user/album/show').'/user/'.$userId }}"><span class="ico ico-media-gallery"></span> Media Gallery</a></li>       
       @if(isset($userId) && ($userId == Auth::user()->id))        
       <li><a class="sidemenu_5" href="{{ url('sport/playerrequests').'/'.Auth::user()->id }}"><span class="ico ico-request"></span> Requests</a></li>
        @endif
       <li><a class="sidemenu_6" href="{{ url('/myschedule',[$userId]) }}"><span class="ico ico-schedule"></span> {{$userId == Auth::user()->id?'My Schedule':'Schedule'}}</a></li>
-     
+      <li><a class="sidemenu_7" href="{{ url('/following',[$userId]) }}"><span class="ico ico-schedule"></span> Following</a></li>
     </ul>
   </div>
 </div>

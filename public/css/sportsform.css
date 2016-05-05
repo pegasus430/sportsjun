@@ -2825,10 +2825,10 @@
 
 /* overrides for specific pages - added by anoop.n */
 .sportsjun-forms textarea.sj-address,.sportsjun-forms textarea.sj-user-about {
-    height:50px;
+    height:30px;
 }
 .sportsjun-forms textarea.sj-address:focus,.sportsjun-forms textarea.sj-user-about:focus {
-    height:70px;
+    height:50px;
 }
 .sj-btn-user-update {
     display: block !important;

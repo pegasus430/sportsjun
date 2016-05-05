@@ -357,6 +357,10 @@ Route::post('tempphoto/store', 'TempphotoController@store1');
 
 // End My Schedules        
 
+// Following
+        Route::get('following/{userId}', array('as' => 'following',
+		'uses' => 'User\FollowController@index'));
+        
 //Matches
 	Route::get('match/scorecard/edit/{match_id}', [
 				'as' => 'match/scorecard/edit', 'uses' => 'User\ScoreCardController@createScorecard'
