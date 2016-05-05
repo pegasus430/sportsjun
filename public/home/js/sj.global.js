@@ -14,6 +14,17 @@ if (typeof SJ.GLOBAL === 'undefined')
                                 window.site_url = ( typeof site_url === 'undefined' ) ? 'http://' + window.location.hostname : site_url;
 				window.secure_url = ( typeof secure_url === 'undefined' ) ? 'http://' + window.location.hostname : secure_url;
                                 this.defaultAjaxSettings = $.extend( true, {}, $.ajaxSettings );
+                                o.bootstrapModalInit();
+                        },
+                        bootstrapModalInit: function(){
+                                $('.modal').on('show.bs.modal', function () {
+                                    $('.modal').not($(this)).each(function () {
+                                        $(this).modal('hide');
+                                    });
+                                });
+                                $('.modal').on('shown.bs.modal', function () {
+                                        $('body').addClass("modal-open");
+                                });
                         },
                         makeRequest: function (_url, _method, _data, successHandler, errorHandler, beforeSendHandler, additionalParams, setUp)
                         {

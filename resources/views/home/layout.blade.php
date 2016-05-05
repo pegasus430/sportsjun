@@ -213,20 +213,45 @@
                                 <div class="modal-content">
                                         <div class="modal-header thbg-color">
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                <h4 class="modal-title">Login To Your Account</h4>
+                                                <h4 class="modal-title">Login</h4>
+                                                <span class="modal-title-right-msg">Don't have an account? 
+                                                        <a href="javascript:void(0);" data-toggle="modal" data-target="#home-register-modal">Register here</a>
+                                                </span>
                                         </div>
                                         <div class="modal-body">
-                                                <div id="login-btn-fb">
-                                                        <a class="btn-login-fb" href="{{ route('social.login', ['facebook']) }}"></a>
-                                                </div>
                                                 <form id="home-login-modal-form" class="kode-loginform" onsubmit="SJ.USER.loginValidation(this.id);return false;">
                                                         <p><span>Email address</span> <input type="text" placeholder="Enter your email" name="email" /></p>
                                                         <p><span>Password</span> <input type="password" placeholder="Enter your password" name="password" /></p>
                                                         <!-- p><label><input type="checkbox"><span>Remember Me</span></label></p -->
                                                         <p class="kode-submit">
-                                                                <a href="javascript:void(0);" data-dismiss="modal" data-toggle="modal" data-target="#home-forgot-password-modal">Lost Your Password</a>
-                                                                <input class="thbg-colortwo" type="submit" value="Sign in">
+                                                                <input class="thbg-colortwo btn-home-login" type="submit" value="Login">
                                                         </p>
+                                                        <p>
+                                                                <span class="btn-home-forgot">
+                                                                        <a href="javascript:void(0);" data-toggle="modal" data-target="#home-forgot-password-modal">Forgot Password?</a>
+                                                                </span>
+                                                        </p>
+                                                        <div class="tagline"><span>OR</span></div>
+                                                        <div class="col-md-6 social_but">
+                                                           <a class="btn btn-block btn-social btn-facebook" href="{{ route('social.login', ['facebook']) }}">
+                                                               <span class="fa fa-facebook"></span> Facebook
+                                                           </a>
+                                                        </div>
+                                                        <div class="col-md-6 social_but">
+                                                            <a class="btn btn-block btn-social btn-twitter" href="{{ route('social.login', ['twitter']) }}">
+                                                                <span class="fa fa-twitter"></span> Twitter
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-md-6 social_but">
+                                                           <a class="btn btn-block btn-social btn-google" href="{{ route('social.login', ['google']) }}">
+                                                               <span class="fa fa-google-plus"></span> Google
+                                                           </a>
+                                                        </div>
+                                                        <div class="col-md-6 social_but">
+                                                            <a class="btn btn-block btn-social btn-linkedin" href="{{ route('social.login', ['linkedin']) }}">
+                                                                <span class="fa fa-linkedin"></span> LinkedIn
+                                                            </a>
+                                                        </div>
                                                 </form>
                                         </div>
                                 </div>
@@ -258,7 +283,7 @@
                                                         <a href="javascript:void(0)" onclick="SJ.USER.refreshCaptcha('home-register-modal-form');" class="signup_capthca"><img src="{{ asset('/images/refresh.png') }}" alt="Refresh Captcha Image" /></a>
                                                         <p class="p_checkbox first"><label><input name="tos" type="checkbox" checked="checked"><span>I agree to the <a href="{{ url('/terms-and-conditions.html') }}" target="_blank">terms and conditions</a> of this site.</span></label></p>
                                                         <p class="p_checkbox last"><label><input name="newsletter" type="checkbox" checked="checked"><span>I wish to receive the weekly bulletin</span></label></p>
-                                                        <p class="kode-submit"><a href="javascript:void(0);" data-dismiss="modal" data-toggle="modal" data-target="#home-forgot-password-modal">Lost Your Password</a> <input class="thbg-colortwo" type="submit" value="Sign Up"></p>
+                                                        <p class="kode-submit"><a href="javascript:void(0);" data-toggle="modal" data-target="#home-forgot-password-modal">Lost Your Password</a> <input class="thbg-colortwo" type="submit" value="Sign Up"></p>
                                                 </form>
                                         </div>
                                 </div>
@@ -298,7 +323,7 @@
                                         <div class="modal-body verify-msg">
                                                 The activation link has been sent to your email <span id="verify-email-id"></span><br />
                                                 Please check your email and click on the link to activate your account.<br />
-                                                <a class="kode-modren-btn thbg-colortwo" href="javascript:void(0);" data-dismiss="modal" data-toggle="modal" data-target="#home-login-modal">Login</a>
+                                                <a class="kode-modren-btn thbg-colortwo" href="javascript:void(0);" data-toggle="modal" data-target="#home-login-modal">Login</a>
                                         </div>
                                 </div>
                         </div>
