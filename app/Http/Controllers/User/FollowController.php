@@ -16,6 +16,8 @@ use Auth;
 use App\Helpers\Helper;
 use App\Model\Followers;
 use DB;
+use App\Model\TournamentGroups;
+use App\Model\TournamentGroupTeams;
 
 class FollowController extends Controller
 {
