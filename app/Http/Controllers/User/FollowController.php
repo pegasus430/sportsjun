@@ -142,7 +142,8 @@ class FollowController extends Controller
                 }
 
                 $follow_playerDetails = [];
-
+                $sports = [];
+                $sports_array = array();
                 if (count($following_player_array) > 0)
                 {
                         /*
@@ -161,14 +162,12 @@ class FollowController extends Controller
                                 ->get();
                         
                         $sports = Sport::get();
+                        foreach($sports as $sport){
+                                $sports_array[$sport->id] = $sport->sports_name;
+                        }
                         
                         //print_r($followingPlayersArray);exit;
                         //$followingPlayersArray->toArray();
-                }
-                
-                $sports_array = array();
-                foreach($sports as $sport){
-                        $sports_array[$sport->id] = $sport->sports_name;
                 }
                 
 
