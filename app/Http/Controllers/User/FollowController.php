@@ -160,14 +160,15 @@ class FollowController extends Controller
                                 ->whereNull('users.deleted_at')
                                 ->get();
                         
-                        $sports = Sport::get();	
-                        $sports_array = array();
-                        foreach($sports as $sport){
-                                $sports_array[$sport->id] = $sport->sports_name;
-                        }
+                        $sports = Sport::get();
                         
                         //print_r($followingPlayersArray);exit;
                         //$followingPlayersArray->toArray();
+                }
+                
+                $sports_array = array();
+                foreach($sports as $sport){
+                        $sports_array[$sport->id] = $sport->sports_name;
                 }
                 
 
