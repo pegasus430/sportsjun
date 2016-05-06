@@ -111,14 +111,14 @@ $team_b_count = $team_b_scnd_ing_count; //team b player count
 	<table class="table table-striped">
 	<thead class="thead">
 		<tr>
-			<th>Bowler </th>
-			<th>overs</th>
-			<th>Maidens</th>
-			<th>Runs</th>
-			<th>Wkts</th>
+			<th>Bowlers</th>
+			<th>O</th>
+			<th>M</th>
+			<th>R</th>
+			<th>WK</th>
 			<th>Econ</th>
-			<th>Wide</th>
-			<th>No ball</th>
+			<th>Wd</th>	
+			<th>Nb</th>
 			<th></th>
 			<th></th>
 			<th></th>
@@ -185,10 +185,10 @@ $team_b_count = $team_b_scnd_ing_count; //team b player count
 	<table class="table table-striped">
 	<thead class="thead">
 		<tr>
-			<th>Wide</th>
-			<th>No Ball</th>
-			<th>Leg Bye</th>
-			<th>Bye</th>
+			<th>Wd</th>
+			<th>Nb</th>
+			<th>Lb</th>
+			<th>B</th>
 			<th>Others</th>
 			<th>Total</th>
 			<th></th>
@@ -224,10 +224,10 @@ $team_b_count = $team_b_scnd_ing_count; //team b player count
 	<table  class="table table-striped">
 	<thead class="thead">
 		<tr>
-			<th>Wicket</th>
-			<th>Player</th>
-			<th>Runs</th>
-			<th>Over</th>
+			<th>Wk</th>
+			<th>Players</th>
+			<th>R</th>
+			<th>O</th>
 			<th></th>
 			<th></th>
 			<th></th>
@@ -388,14 +388,14 @@ $team_b_count = $team_b_scnd_ing_count; //team b player count
 	<table class="table table-striped">
     	<thead class="thead">
 		<tr>
-			<th>Bowler</th>
-			<th>overs</th>
-			<th>Maidens</th>
-			<th>Runs</th>
-			<th>Wkts</th>
+			<th>Bowlers</th>
+			<th>O</th>
+			<th>M</th>
+			<th>R</th>
+			<th>WK</th>
 			<th>Econ</th>
-			<th>Wide</th>
-			<th>No Ball</th>
+			<th>Wd</th>	
+			<th>Nb</th>
 			<th></th>
 			<th></th>
 			<th></th>
@@ -463,10 +463,10 @@ $team_b_count = $team_b_scnd_ing_count; //team b player count
 	<table class="table table-striped">
 	<thead class="thead">
 		<tr>
-			<th>Wide</th>
-			<th>No Ball</th>
-			<th>Leg Bye</th>
-			<th>Bye</th>
+			<th>Wd</th>
+			<th>Nb</th>
+			<th>Lb</th>
+			<th>B</th>
 			<th>Others</th>
 			<th>Total</th>
 			<th></th>
@@ -501,10 +501,10 @@ $team_b_count = $team_b_scnd_ing_count; //team b player count
 	<table class="table table-striped">
     	<thead class="thead">
 		<tr>
-			<th>Wicket</th>
-			<th>Player</th>
-			<th>Runs</th>
-			<th>Over</th>
+			<th>Wk</th>
+			<th>Players</th>
+			<th>R</th>
+			<th>O</th>
 			<th></th>
 			<th></th>
 			<th></th>

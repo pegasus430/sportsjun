@@ -60,13 +60,13 @@
 	<thead class="thead">
 		<tr>
 			<th>Players</th>
-			<th>overs</th>
-			<th>Maidens</th>
-			<th>Runs</th>
-			<th>Wkts</th>
+			<th>O</th>
+			<th>M</th>
+			<th>R</th>
+			<th>Wk</th>
 			<th>Econ</th>
-			<th>Wide</th>	
-			<th>No Ball</th>
+			<th>Wd</th>	
+			<th>Nb</th>
 			<th></th>
 			<th></th>
 			<th></th>
@@ -112,10 +112,10 @@
 	<table class="table table-striped">
 	<thead class="thead">
 		<tr> 
-			<th>Wicket</th>
-			<th>Player</th>
-			<th>Runs</th>
-			<th>Over</th>
+			<th>Wk</th>
+			<th>Players</th>
+			<th>R</th>
+			<th>O</th>
 			<th></th>
 			<th></th>
 			<th></th>
@@ -221,13 +221,13 @@
 	 <thead class="thead">
 		<tr>
 			<th>Players</th>
-			<th>overs</th>
-			<th>Maidens</th>
-			<th>Runs</th>
-			<th>Wkts</th>
+			<th>O</th>
+			<th>M</th>
+			<th>R</th>
+			<th>Wk</th>
 			<th>Econ</th>
-			<th>Wide</th>	
-			<th>No ball</th>		
+			<th>Wd</th>	
+			<th>Nb</th>		
 			<th></th>		
 			<th></th>		
 			<th></th>	
@@ -271,10 +271,10 @@
 	<table class="table table-striped">
 	<thead class="thead">
 		<tr> 
-			<th>Wicket</th>
-			<th>Player</th>
-			<th>Runs</th>
-			<th>Over</th>
+			<th>Wk</th>
+			<th>Players</th>
+			<th>R</th>
+			<th>O</th>
 			<th></th>
 			<th></th>
 			<th></th>
