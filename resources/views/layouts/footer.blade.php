@@ -21,6 +21,7 @@
 <script src="{{ asset('/js/sj.global.js') }}?v=<?php echo $js_version;?>"></script>
 <script src="{{ asset('/js/sj.team.js') }}?v=<?php echo $js_version;?>"></script>
 <script src="{{ asset('/js/sj.tournament.js') }}?v=<?php echo $js_version;?>"></script>
+<script src="{{ asset('/js/sj.scorecard.js') }}?v=<?php echo $js_version;?>"></script>
 <script>
 var resizeId;
 $(function () {

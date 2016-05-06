@@ -280,7 +280,11 @@ if (typeof SJ.GLOBAL === 'undefined')
 			},
 			isFloat : function( num ) {
 				return !!( num % 1 );
-			}
+			},
+                        toTitleCase: function(str)
+                        {
+                            return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+                        }
                 };
                 z.GLOBAL = o;
         })(SJ, $);

@@ -392,6 +392,7 @@
 	font-size: 14px;
 	display: inline-block;
 	margin-bottom: 15px;
+        text-transform: uppercase;
 	}
 .table-striped > tbody > tr:nth-of-type(odd) {background: #fff;}
 .col_standard hr {
@@ -817,15 +818,15 @@
         
         
 /* Cricket scorecard - Toss modal - added by anoop.n */
-div#tossDetail .modal-dialog {
+div.tossDetail .modal-dialog {
     max-width: 400px;
 }
 
-div#tossDetail h4 {
+div.tossDetail h4 {
     color: #fff;
 }
 
-#tossDetail .form-group {
+.tossDetail .form-group {
     display: block;
     margin: 10px 0 20px 0;
     text-align: left;
@@ -839,14 +840,14 @@ div#tossDetail h4 {
     width: 45%;
 }
 
-#tossDetail .radio-box > .radio {
+.tossDetail .radio-box > .radio {
     position: relative;
     margin: 0;
     padding: 0;
     display: inline-block;
 }
 
-#tossDetail .radio input[type="radio"] {
+.tossDetail .radio input[type="radio"] {
     opacity: 0;
     position: absolute;
     margin: 0;
@@ -856,7 +857,7 @@ div#tossDetail h4 {
     padding: 0;
 }
 
-#tossDetail .radio label {
+.tossDetail .radio label {
     display: inline-block;
     padding: 0 !important;
     margin: 0;
@@ -867,110 +868,110 @@ div#tossDetail h4 {
     margin-right: 10px;
 }
 
-#tossDetail .modal-body {
+.tossDetail .modal-body {
     padding: 15px 20px;
 }
 
-#tossDetail div.iradio_square-green {
+.tossDetail div.iradio_square-green {
     margin: -3px 3px 0 0;
 }
-div#tossDetail .modal-header .close {
+div.tossDetail .modal-header .close {
     margin-top: 4px;
     position: relative;
     right: 5px;
 }
 
-div#tossDetail .btn-primary .btn-sm {
+div.tossDetail .btn-primary .btn-sm {
     line-height: 28px;
     text-decoration: none;
     font-size: 14px;
 }
-div#tossDetail .btn-primary {
+div.tossDetail .btn-primary {
     background-color: #84cd93;
     border-radius: 3px;
     border: none;
 }
 
-div#tossDetail .btn-primary:hover,
-div#tossDetail .btn-primary:focus {
+div.tossDetail .btn-primary:hover,
+div.tossDetail .btn-primary:focus {
     background-color: #84CD93
 }
 
-div#tossDetail .btn-primary:active {
+div.tossDetail .btn-primary:active {
     background-color: #53A865
 }
 
-div#tossDetail .btn-primary,
-div#tossDetail .btn-primary:hover,
-div#tossDetail .btn-primary:focus,
-div#tossDetail .btn-primary:active {
+div.tossDetail .btn-primary,
+div.tossDetail .btn-primary:hover,
+div.tossDetail .btn-primary:focus,
+div.tossDetail .btn-primary:active {
     color: #fff;
     text-shadow: 0 1px rgba(0, 0, 0, 0.08)
 }
-div#tossDetail .btn-secondary {
+div.tossDetail .btn-secondary {
     background-color: #768291;
     border-radius: 3px;
     border: none;
 }
 
-div#tossDetail .btn-secondary:hover,
-div#tossDetail .btn-secondary:focus {
+div.tossDetail .btn-secondary:hover,
+div.tossDetail .btn-secondary:focus {
     background-color: #768291;
 }
 
-div#tossDetail .btn-secondary:active {
+div.tossDetail .btn-secondary:active {
     background-color: #2F3C4D
 }
 
-div#tossDetail .btn-secondary,
-div#tossDetail .btn-secondary:hover,
-div#tossDetail .btn-secondary:focus,
-div#tossDetail .btn-secondary:active {
+div.tossDetail .btn-secondary,
+div.tossDetail .btn-secondary:hover,
+div.tossDetail .btn-secondary:focus,
+div.tossDetail .btn-secondary:active {
     color: #fff;
     text-shadow: 0 1px rgba(0, 0, 0, 0.08)
 }
-div#tossDetail .btn-tertiary {
+div.tossDetail .btn-tertiary {
     background-color: #EF6C00;
     border-radius: 3px;
     border: none;
 }
 
-div#tossDetail .btn-tertiary:hover,
-div#tossDetail .btn-tertiary:focus {
+div.tossDetail .btn-tertiary:hover,
+div.tossDetail .btn-tertiary:focus {
     background-color: #EF6C00;
 }
 
-div#tossDetail .btn-tertiary:active {
+div.tossDetail .btn-tertiary:active {
     background-color: #E65100
 }
 
-div#tossDetail .btn-tertiary,
-div#tossDetail .btn-tertiary:hover,
-div#tossDetail .btn-tertiary:focus,
-div#tossDetail .btn-tertiary:active {
+div.tossDetail .btn-tertiary,
+div.tossDetail .btn-tertiary:hover,
+div.tossDetail .btn-tertiary:focus,
+div.tossDetail .btn-tertiary:active {
     color: #fff;
     text-shadow: 0 1px rgba(0, 0, 0, 0.08)
 }
 
-div#tossDetail .btn-primary-border {border:1px solid #21b640;}
-div#tossDetail .btn-secondary-border {border: 1px solid #34495e;}
-div#tossDetail .btn-tertiary-border {border: 1px solid #e99c5d;}
+div.tossDetail .btn-primary-border {border:1px solid #21b640;}
+div.tossDetail .btn-secondary-border {border: 1px solid #34495e;}
+div.tossDetail .btn-tertiary-border {border: 1px solid #e99c5d;}
 
-div#tossDetail .btn-rounded {
+div.tossDetail .btn-rounded {
     -webkit-border-radius: 22px;
     -moz-border-radius: 22px;
     -o-border-radius: 22px;
     border-radius: 22px
 }
 
-div#tossDetail .button-left,
-div#tossDetail .button-right {
+div.tossDetail .button-left,
+div.tossDetail .button-right {
     position: relative;
     z-index: 9
 }
 
-div#tossDetail .button-left:before,
-div#tossDetail .button-right:before {
+div.tossDetail .button-left:before,
+div.tossDetail .button-right:before {
     content: '';
     z-index: -1;
     width: 32px;
@@ -982,7 +983,7 @@ div#tossDetail .button-right:before {
     top: 5px
 }
 
-div#tossDetail .button-left {
+div.tossDetail .button-left {
     border-left-width: 0;
     padding: 0 18px 0 7px;
     -webkit-border-radius: 0 3px 3px 0;
@@ -992,7 +993,7 @@ div#tossDetail .button-left {
     margin-left: 20px
 }
 
-div#tossDetail .button-left:before {
+div.tossDetail .button-left:before {
     left: -15px;
     -webkit-border-radius: 2px 5px 0 5px;
     -moz-border-radius: 2px 5px 0 5px;
@@ -1005,7 +1006,7 @@ div#tossDetail .button-left:before {
     transform: rotate(-45deg)
 }
 
-div#tossDetail .button-right {
+div.tossDetail .button-right {
     padding: 0 7px 0 18px;
     border-right-width: 0;
     -webkit-border-radius: 3px 0 0 3px;
@@ -1015,7 +1016,7 @@ div#tossDetail .button-right {
     margin-right: 20px
 }
 
-div#tossDetail .button-right:before {
+div.tossDetail .button-right:before {
     right: -15px;
     -webkit-border-radius: 5px 2px 5px 0;
     -moz-border-radius: 5px 2px 5px 0;
@@ -1028,11 +1029,30 @@ div#tossDetail .button-right:before {
     transform: rotate(45deg)
 }
 
-div#tossDetail .btn-primary,div#tossDetail .btn-secondary {
+div.tossDetail .btn-primary,div.tossDetail .btn-secondary {
     padding: 6px 40px;
     margin: 0 4px;
 }
 
-div#tossDetail .modal-footer {
+div.tossDetail .modal-footer {
     text-align: center;
+}
+
+#matchTossNote { font-weight:bold; margin-top: 15px; }
+
+span#edit_first_innings,span#edit_second_innings {
+    position: absolute;
+    top: 13px;
+    z-index: 100;
+    background: #fff;
+    padding: 4px 10px;
+    margin-left: 10px;
+    font-size: 12px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    cursor: pointer;
+    display:none;
+}
+li.active span#edit_first_innings,li.active span#edit_second_innings {
+    display:inline;
 }

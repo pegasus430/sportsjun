@@ -105,14 +105,14 @@
 	<table class="table table-striped">
 	<thead class="thead">
 		<tr>
-			<th>Bowler </th>
-			<th>overs</th>
-			<th>Maidens </th>
-			<th>Runs</th>
-			<th>Wkts</th>
+			<th>Bowlers</th>
+			<th>O</th>
+			<th>M</th>
+			<th>R</th>
+			<th>Wk</th>
 			<th>Econ</th>
-			<th>Wide</th>
-			<th>No Ball</th>
+			<th>Wd</th>
+			<th>Nb</th>
 			<th></th>
 			<th></th>
 			<th></th>
@@ -179,10 +179,10 @@
 	<table class="table table-striped">
 	<thead class="thead">
 		<tr>
-			<th>Wide</th>
-			<th>No Ball</th>
-			<th>Leg Bye</th>
-			<th>Bye</th>
+			<th>Wd</th>
+			<th>Nb</th>
+			<th>Lb</th>
+			<th>B</th>
 			<th>Others</th>
 			<th>Total</th>
 			<th></th>
@@ -218,10 +218,10 @@
 	<table class="table table-striped">
 	<thead class="thead">
 		<tr>
-			<th>Wicket</th>
-			<th>Player</th>
-			<th>Runs</th>
-			<th>Over</th>
+			<th>Wk</th>
+			<th>Players</th>
+			<th>R</th>
+			<th>O</th>
 			<th></th>
 			<th></th>
 			<th></th>
@@ -382,14 +382,14 @@
 	<table class="table table-striped">
 	 <thead class="thead">
 		<tr>
-			<th>Bowler </th>
-			<th>overs</th>
-			<th>Maidens</th>
-			<th>Runs</th>
-			<th>Wkts</th>
+			<th>Bowlers</th>
+			<th>O</th>
+			<th>M</th>
+			<th>R</th>
+			<th>Wk</th>
 			<th>Econ</th>
-			<th>Wide</th>
-			<th>No Ball</th>
+			<th>Wd</th>
+			<th>Nb</th>
 			<th></th>
 			<th></th>
 			<th></th>
@@ -456,10 +456,10 @@
 	<table class="table table-striped">
 	<thead class="thead">
 		<tr>
-			<th>Wide</th>
-			<th>No Ball</th>
-			<th>Leg Bye</th>
-			<th>Bye</th>
+			<th>Wd</th>
+			<th>Nb</th>
+			<th>Lb</th>
+			<th>B</th>
 			<th>Others</th>
 			<th>Total</th>
 			<th></th>
@@ -494,10 +494,10 @@
 	<table class="table table-striped">
 	<thead class="thead">
 		<tr>
-			<th>Wicket</th>
-			<th>Player</th>
-			<th>Runs</th>
-			<th>Over</th>
+			<th>Wk</th>
+			<th>Players</th>
+			<th>R</th>
+			<th>O</th>
 			<th></th>
 			<th></th>
 			<th></th>
@@ -613,8 +613,6 @@
  <input type="hidden" name="l" value="{{ (!empty($team_b_fst_ing_bowling_array))?$b_bowl_fst_ing:2 }}" id="l">
  <input type="hidden" name="x" value="{{ (!empty($team_wise_match_details[$match_data[0]['a_id']]['first']) && $a_keyCount>0)?$team_a_fall_wkts:2 }}" id="x">
  <input type="hidden" name="z" value="{{ (!empty($team_wise_match_details[$match_data[0]['b_id']]['first']) && $b_keyCount)?$team_b_fall_wkt:2 }}" id="z">
-
- <script src="{{ asset('/js/cricketfirstinning.js') }}"></script>
 <script>
 checkDuplicatePlayers('a_player');
 checkDuplicatePlayers('b_bowler');

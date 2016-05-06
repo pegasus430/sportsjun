@@ -36,16 +36,16 @@
                             <div class="team_score">
                               <span> @if($match_data[0]['match_type']=='test') {{'I st'}} @endif
                                 <div>
-                                  <input readonly class="onchangetd" type="text" name="fst_ing_a_score" id="fst_ing_a_score" placeholder="score" value="{{ $team_a_fst_ing_score }}"/>
-                                  <input readonly class="onchangetd" type="text" name="fst_ing_a_wkts" id="fst_ing_a_wkts" placeholder="wickets" value="{{ $team_a_fst_ing_wkt }}" />
+                                  <input readonly class="onchangetd" type="text" name="fst_ing_a_score" id="fst_ing_a_score" placeholder="Score" value="{{ $team_a_fst_ing_score }}"/>
+                                  <input readonly class="onchangetd" type="text" name="fst_ing_a_wkts" id="fst_ing_a_wkts" placeholder="Wickets" value="{{ $team_a_fst_ing_wkt }}" />
                                   <input readonly class="onchangetd" type="text" name="fst_ing_a_over" id="fst_ing_a_over" placeholder="Overs"  value="{{ $team_a_fst_ing_overs }}"/>
                                 </div>
                               </span>
                               @if($match_data[0]['match_type']=='test')
                               <span>II nd
                                 <div>
-                                  <input type="text" class="onchangetd" readonly name="scnd_ing_a_score" id="scnd_ing_a_score" placeholder="score" value="{{ $team_a_scnd_ing_score }}" />
-                                  <input type="text" class="onchangetd" readonly name="scnd_ing_a_wkts" id="scnd_ing_a_wkts" placeholder="wickets" value="{{ $team_a_scnd_ing_wkt }}" />
+                                  <input type="text" class="onchangetd" readonly name="scnd_ing_a_score" id="scnd_ing_a_score" placeholder="Score" value="{{ $team_a_scnd_ing_score }}" />
+                                  <input type="text" class="onchangetd" readonly name="scnd_ing_a_wkts" id="scnd_ing_a_wkts" placeholder="Wickets" value="{{ $team_a_scnd_ing_wkt }}" />
                                   <input type="text" class="onchangetd" readonly name="scnd_ing_a_over" id="scnd_ing_a_over" placeholder="Overs" value="{{ $team_a_scnd_ing_overs }}" />
                                 </div>
                               </span>
@@ -84,8 +84,8 @@
                             <div class="team_score">
                               <span>@if($match_data[0]['match_type']=='test') {{'I st'}} @endif
                                 <div>
-                                  <input type="text" readonly class="onchangetd" name="fst_ing_b_score" id="fst_ing_b_score" placeholder="score" value="{{ $team_b_fst_ing_score }}" />
-                                  <input class="onchangetd" readonly type="text" name="fst_ing_b_wkts" id="fst_ing_b_wkts" placeholder="wickets" value="{{ $team_b_fst_ing_wkt }}" />
+                                  <input type="text" readonly class="onchangetd" name="fst_ing_b_score" id="fst_ing_b_score" placeholder="Score" value="{{ $team_b_fst_ing_score }}" />
+                                  <input class="onchangetd" readonly type="text" name="fst_ing_b_wkts" id="fst_ing_b_wkts" placeholder="Wickets" value="{{ $team_b_fst_ing_wkt }}" />
                                   <input class="onchangetd" readonly type="text" name="fst_ing_b_over" id="fst_ing_b_over" placeholder="Overs" value="{{ $team_b_fst_ing_overs }}" />
                                 </div>
                               </span>
@@ -93,8 +93,8 @@
 
                               <span>II nd
                                 <div>
-                                  <input type="text" class="onchangetd" readonly name="scnd_ing_b_score" id="scnd_ing_b_score" placeholder="score" value="{{ $team_b_scnd_ing_score }}" />
-                                  <input type="text" class="onchangetd" readonly name="scnd_ing_b_wkts" id="scnd_ing_b_wkts" placeholder="wickets" value="{{ $team_b_scnd_ing_wkt }}" />
+                                  <input type="text" class="onchangetd" readonly name="scnd_ing_b_score" id="scnd_ing_b_score" placeholder="Score" value="{{ $team_b_scnd_ing_score }}" />
+                                  <input type="text" class="onchangetd" readonly name="scnd_ing_b_wkts" id="scnd_ing_b_wkts" placeholder="Wickets" value="{{ $team_b_scnd_ing_wkt }}" />
                                   <input type="text" name="scnd_ing_b_over" readonly class="onchangetd" id="scnd_ing_b_over" placeholder="Overs" value="{{ $team_b_scnd_ing_overs }}" />
                                 </div>
                               </span>
@@ -149,7 +149,7 @@
                                             <?php if (empty($match_data[0]['tournament_round_number'])) { ?>
                                             <option <?php if ($match_data[0]['is_tied'] > 0) echo " selected"; ?> value="tie" >Tie</option>
                                             <?php } ?>    
-                                            <option <?php if ($match_data[0]['is_tied'] == 0 && $match_data[0]['winner_id'] > 0) echo " selected"; ?> value="win">win</option>
+                                            <option <?php if ($match_data[0]['is_tied'] == 0 && $match_data[0]['winner_id'] > 0) echo " selected"; ?> value="win">Win</option>
                                     </select>
                             </div>
                             <div class="form-group" style="margin-top:15px;">
@@ -161,7 +161,7 @@
                             </div>
                             @endif	
                             @endif	  
-                            <div class="form-group">
+                            <div class="form-group" id="tossWonBy" style="display:none;">
                                     <!--<label for="team">Ist Ing Batting:</label>-->
                                     <label for="team">Toss Won By</label>
                                     <select class="form-control selectpicker selectpicker_new_span" name="toss_won" id="toss_won" onchange="tosswonby();">
@@ -170,60 +170,109 @@
                                     </select>
                             </div>
                             
+                            <?php 
+                                
+                                $first_inning_editable = !(!empty($team_a_fst_ing_array) || !empty($team_b_fst_ing_array) || !empty($team_a_fst_ing_bowling_array) || !empty($team_b_fst_ing_bowling_array))?1:0;
+                                $second_inning_editable = 0;
+                                if ($match_data[0]['match_type']=='test')
+                                {
+                                        $second_inning_editable = !(!empty($team_a_secnd_ing_array) || !empty($team_b_secnd_ing_array) || !empty($team_a_scnd_ing_bowling_array) || !empty($team_b_scnd_ing_bowling_array))?1:0;
+                                }
+                            ?>
+                            @if($first_inning_editable!=0)
                             <!-- Toss won by modal start -->
-                            <div class="modal fade in" tabindex="-1" role="modal" aria-labelledby="matchScheduleForm" id="tossDetail" style="display: block;">
-                              <div class="vertical-alignment-helper">
-                                <div class="modal-dialog modal-lg vertical-align-center">
-                                  <div class="modal-content create-team-model create-album-popup model-align">
-                                    <div class="modal-header text-center">
-                                      <button type="button" class="close" data-dismiss="modal">×</button>
-                                      <h4>TOSS DETAILS</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                      <form class="content">
-                                        <div class="form-group">
-                                          <div class="toss-detail">
-                                            <span class="head">TOSS WON BY</span>
-                                            <div class="radio-box">
-                                              <div class="radio">
-                                                <input name="team" type="radio" value="toss" id="india" checked="">
-                                                <label for="india">INDIA</label>
-                                              </div>
-                                              <div class="radio">
-                                                <input name="team" type="radio" value="toss" id="AUSTRALIA ">
-                                                <label for="AUSTRALIA ">AUSTRALIA </label>
-                                              </div>
+                            <div class="modal fade in tossDetail" tabindex="-1" role="modal" aria-labelledby="tossDetail" id="tossModal" style="display: block;">
+                                    <div class="vertical-alignment-helper">
+                                            <div class="modal-dialog modal-lg vertical-align-center">
+                                                    <div class="modal-content create-team-model create-album-popup model-align">
+                                                            <div class="modal-header text-center">
+                                                                    <button type="button" class="close" data-dismiss="modal">×</button>
+                                                                    <h4>TOSS DETAILS</h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                    <form class="content">
+                                                                            <div id="tossWonByRadio" class="form-group">
+                                                                                    <div class="toss-detail">
+                                                                                            <span class="head">TOSS WON BY</span>
+                                                                                            <div class="radio-box">
+                                                                                                    <div class="radio">
+                                                                                                            <input name="team" type="radio" value="toss" id="{{ $match_data[0]['a_id'] }}" checked="">
+                                                                                                            <label for="{{ $match_data[0]['a_id'] }}">{{ $team_a_name }}</label>
+                                                                                                    </div>
+                                                                                                    <div class="radio">
+                                                                                                            <input name="team" type="radio" value="toss" id="{{ $match_data[0]['b_id'] }} ">
+                                                                                                            <label for="{{ $match_data[0]['b_id'] }} ">{{ $team_b_name }}</label>
+                                                                                                    </div>
+                                                                                            </div>
+                                                                                    </div>
+                                                                            </div>
+                                                                            <div id="batRadio" class="form-group">
+                                                                                    <div class="toss-detail">
+                                                                                            <span class="head">ELECTED</span>
+                                                                                            <div class="radio-box">
+                                                                                                    <div class="radio">
+                                                                                                            <input name="elected" type="radio" value="bat" id="bat" checked="">
+                                                                                                            <label for="bat">BAT</label>
+                                                                                                    </div>
+                                                                                                    <div class="radio">
+                                                                                                            <input name="elected" type="radio" value="bowl" id="bowl">
+                                                                                                            <label for="bowl">BOWL</label>
+                                                                                                    </div>
+                                                                                            </div>
+                                                                                    </div>
+                                                                            </div>
+                                                                    </form>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                    <button type="button" class="button btn-primary" onclick="SJ.SCORECARD.doneTossModal();">Done</button>
+                                                                    <button type="button" class="button btn-secondary" data-dismiss="modal">Cancel</button>
+                                                            </div>
+                                                    </div>
                                             </div>
-                                          </div>
-                                        </div>
-                                        <div class="form-group">
-                                          <div class="toss-detail">
-                                            <span class="head">ELECTED</span>
-                                            <div class="radio-box">
-                                              <div class="radio">
-                                                <input name="elected" type="radio" value="" id="bat" checked="">
-                                                <label for="bat">BAT</label>
-                                              </div>
-                                              <div class="radio">
-                                                <input name="elected" type="radio" value="" id="bowl">
-                                                <label for="bowl">BOWL</label>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </form>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="button btn-primary">Done</button>
-                                        <button type="button" class="button btn-secondary" data-dismiss="modal">Cancel</button>
-                                      </div>
-                                  </div>
-                                </div>
-                              </div>
                             </div>
                             <!-- Toss won by modal end -->
+                            @endif
+                            @if($match_data[0]['match_type']=='test' && $second_inning_editable != 0)
+                            <div class="modal fade in tossDetail" tabindex="-1" id="secondInningsBatModal" role="modal" aria-labelledby="secondInningsBatModal">
+                                    <div class="vertical-alignment-helper">
+                                            <div class="modal-dialog modal-lg vertical-align-center">
+                                                    <div class="modal-content create-team-model create-album-popup model-align">
+                                                            <div class="modal-header text-center">
+                                                                    <button type="button" class="close" data-dismiss="modal">×</button>
+                                                                    <h4>SECOND INNING BATTING</h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                    <form class="content">
+                                                                            <div id="bat2ndInningBatting" class="form-group">
+                                                                                    <div class="toss-detail">
+                                                                                            <span class="head">Select Team to Start Second Innings Batting</span>
+                                                                                            <div class="radio-box">
+                                                                                                    <div class="radio">
+                                                                                                            <input name="team" type="radio" value="toss" id="{{ $match_data[0]['a_id'] }}" checked="">
+                                                                                                            <label for="{{ $match_data[0]['a_id'] }}">{{ $team_a_name }}</label>
+                                                                                                    </div>
+                                                                                                    <div class="radio">
+                                                                                                            <input name="team" type="radio" value="toss" id="{{ $match_data[0]['b_id'] }} ">
+                                                                                                            <label for="{{ $match_data[0]['b_id'] }} ">{{ $team_b_name }}</label>
+                                                                                                    </div>
+                                                                                            </div>
+                                                                                    </div>
+                                                                            </div>
+                                                                    </form>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                    <button type="button" class="button btn-primary" onclick="SJ.SCORECARD.done2ndInningModal();">Done</button>
+                                                                    <button type="button" class="button btn-secondary" data-dismiss="modal">Cancel</button>
+                                                            </div>
+                                                    </div>
+                                            </div>
+                                    </div>
+                            </div>
+                            @endif
                             
-                            <div class="form-group">
+                            
+                            <div class="form-group" id="bat1stInning" style="display:none;">
                                     <label for="team">Ist Ing Batting:</label>
                                     <select class="form-control selectpicker selectpicker_new_span" name="team" id="team" onchange="getTeamName();">
                                             <option value="{{ $match_data[0]['player_a_ids'] }}" <?php if (!empty($score_status_array['fst_ing_batting']) && $match_data[0]['a_id'] == $score_status_array['fst_ing_batting']) echo 'selected'; ?> data-status="{{ $match_data[0]['a_id'] }}" >{{ $team_a_name }}</option>
@@ -231,7 +280,7 @@
                                     </select>
                             </div>
                             @if($match_data[0]['match_type']=='test')
-                            <div class="form-group">
+                            <div class="form-group" id="bat2ndInning" style="display:none;">
                                     <label for="team">II Ing Batting:</label>
                                     <select class="form-control selectpicker selectpicker_new_span" name="team" id="teams" onchange="getTeamNames();">
                                             <option value="{{ $match_data[0]['player_a_ids'] }}" <?php if (!empty($score_status_array['scnd_ing_batting']) && $match_data[0]['a_id'] == $score_status_array['scnd_ing_batting']) echo 'selected'; ?> data-status="{{ $match_data[0]['a_id'] }}" >{{ $team_a_name }}</option>
@@ -247,9 +296,19 @@
 				
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs nav-justified">
-                    <li class="active"><a href="#first_innings" data-toggle="tab" aria-expanded="true">Ist Innings</a></li>
+                    <li class="active">
+                            @if($first_inning_editable!=0)
+                            <span id="edit_first_innings" onclick="SJ.SCORECARD.firstInningsModal();">Edit</span>
+                            @endif
+                            <a href="#first_innings" data-toggle="tab" aria-expanded="true">Ist Innings</a>
+                    </li>
                     @if($match_data[0]['match_type']=='test')
-                    <li class=""><a href="#second_innings" data-toggle="tab" aria-expanded="false">2nd Innings </a></li>
+                    <li class="">
+                            @if($second_inning_editable != 0)
+                            <span id="edit_second_innings" onclick="SJ.SCORECARD.secondInningBattingOrderModal();">Edit</span>
+                            @endif
+                            <a href="#second_innings" data-toggle="tab" aria-expanded="false" onclick="SJ.SCORECARD.secondInningBattingOrderModal();">2nd Innings</a>
+                    </li>
                     @endif
                 </ul>
                 <div  class="tab-content">
