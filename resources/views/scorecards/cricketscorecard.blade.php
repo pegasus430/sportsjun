@@ -121,70 +121,127 @@
         <div class="container">	
 	<div class="panel panel-default">	
             <div class="panel-body row">
-            	<h5 class="scoreboard_title">Cricket Scorecard @if($match_data[0]['match_type']!='other')
-											<span class='match_type_text'>({{ $match_data[0]['match_type']=='odi'?strtoupper($match_data[0]['match_type']):ucfirst($match_data[0]['match_type']) }})</span>
-									@endif</h5>
+            	<h5 class="scoreboard_title">Cricket Scorecard 
+                @if($match_data[0]['match_type']!='other')
+                        <span class='match_type_text'>({{ $match_data[0]['match_type']=='odi'?strtoupper($match_data[0]['match_type']):ucfirst($match_data[0]['match_type']) }})</span>
+                @endif
+                </h5>
                 
-                <div class="form-inline">				
-					@if($match_data[0]['match_status']=='completed' && $match_data[0]['winner_id']>0)
+                    <div class="form-inline">				
+                            @if($match_data[0]['match_status']=='completed' && $match_data[0]['winner_id']>0)
 
-							  <div class="form-group">
-								<label class="win_head">Winner</label> 
-                                <h3 class="win_team">{{ ($match_data[0]['a_id']==$match_data[0]['winner_id'])?$team_a_name:$team_b_name }}</h3>                              </div>
-						
-					@else
-					@if($match_data[0]['match_status']=='completed' && $match_data[0]['is_tied']>0)
-							<div class="form-group">
-								<label>Match Result : {{ 'Tie' }}</label>
+                            <div class="form-group">
+                                    <label class="win_head">Winner</label> 
+                                    <h3 class="win_team">{{ ($match_data[0]['a_id']==$match_data[0]['winner_id'])?$team_a_name:$team_b_name }}</h3>
+                            </div>
 
-						  </div>   
-					@else
-                          <div class="form-group">
-                            <label for="match_result">Match Result:</label>
-                            <select class="form-control selectpicker selectpicker_new_span" name="match_result" id="match_result" onchange="getTeam();" autocomplete="off">
-                                <option value="" >Select</option>
-                                <?php if(empty($match_data[0]['tournament_round_number'])) { ?>
-                                    <option <?php if($match_data[0]['is_tied']>0) echo " selected";?> value="tie" >Tie</option>
-                                <?php } ?>    
-                                <option <?php if($match_data[0]['is_tied']==0 && $match_data[0]['winner_id']>0) echo " selected";?> value="win">win</option>
-                            </select>
-                          </div>
-                          <div class="form-group" style="margin-top:15px;">
-                            <label class="show_teams">Select Winner:</label>
-                            <select name="winner_id" id="winner_id" class="show_teams form-control selectpicker selectpicker_new_span" onchange="selectWinner();" autocomplete="off">
-                                        <option <?php if (isset($match_data[0]['winner_id']) && $match_data[0]['winner_id']==$match_data[0]['a_id']) echo ' selected';?> value="{{ $match_data[0]['a_id'] }}" >{{ $team_a_name }}</option>
-                                        <option <?php if (isset($match_data[0]['winner_id']) && $match_data[0]['winner_id']==$match_data[0]['b_id']) echo ' selected';?> value="{{ $match_data[0]['b_id'] }}">{{ $team_b_name }}</option>
+                            @else
+                            @if($match_data[0]['match_status']=='completed' && $match_data[0]['is_tied']>0)
+                            <div class="form-group">
+                                    <label>Match Result : {{ 'Tie' }}</label>
+
+                            </div>   
+                            @else
+                            <div class="form-group">
+                                    <label for="match_result">Match Result:</label>
+                                    <select class="form-control selectpicker selectpicker_new_span" name="match_result" id="match_result" onchange="getTeam();" autocomplete="off">
+                                            <option value="" >Select</option>
+                                            <?php if (empty($match_data[0]['tournament_round_number'])) { ?>
+                                            <option <?php if ($match_data[0]['is_tied'] > 0) echo " selected"; ?> value="tie" >Tie</option>
+                                            <?php } ?>    
+                                            <option <?php if ($match_data[0]['is_tied'] == 0 && $match_data[0]['winner_id'] > 0) echo " selected"; ?> value="win">win</option>
                                     </select>
-                          </div>
-					@endif	
-					@endif	  
-						<div class="form-group">
-                            <!--<label for="team">Ist Ing Batting:</label>-->
-							<label for="team">Toss Won By</label>
-                            <select class="form-control selectpicker selectpicker_new_span" name="toss_won" id="toss_won" onchange="tosswonby();">
-                                <option value="{{ $match_data[0]['a_id'] }}" <?php if(!empty($score_status_array['toss_won_by']) && $match_data[0]['a_id']==$score_status_array['toss_won_by']) echo 'selected';?>>{{ $team_a_name }}</option>
-                                <option value="{{ $match_data[0]['b_id'] }}" <?php if(!empty($score_status_array['toss_won_by']) && $match_data[0]['b_id']==$score_status_array['toss_won_by']) echo 'selected';?>>{{ $team_b_name }}</option>
-                            </select>
-                        </div>
-                          <div class="form-group">
-                            <label for="team">Ist Ing Batting:</label>
-                            <select class="form-control selectpicker selectpicker_new_span" name="team" id="team" onchange="getTeamName();">
-                                <option value="{{ $match_data[0]['player_a_ids'] }}" <?php if(!empty($score_status_array['fst_ing_batting']) && $match_data[0]['a_id']==$score_status_array['fst_ing_batting']) echo 'selected';?> data-status="{{ $match_data[0]['a_id'] }}" >{{ $team_a_name }}</option>
-                                <option value="{{ $match_data[0]['player_b_ids'] }}" <?php if(!empty($score_status_array['fst_ing_batting']) && $match_data[0]['b_id']==$score_status_array['fst_ing_batting']) echo 'selected';?> data-status="{{ $match_data[0]['b_id'] }}">{{ $team_b_name }}</option>
-                            </select>
-                          </div>
-						   @if($match_data[0]['match_type']=='test')
-						   <div class="form-group">
-                            <label for="team">II Ing Batting:</label>
-                           <select class="form-control selectpicker selectpicker_new_span" name="team" id="teams" onchange="getTeamNames();">
-							 <option value="{{ $match_data[0]['player_a_ids'] }}" <?php if(!empty($score_status_array['scnd_ing_batting']) && $match_data[0]['a_id']==$score_status_array['scnd_ing_batting']) echo 'selected';?> data-status="{{ $match_data[0]['a_id'] }}" >{{ $team_a_name }}</option>
-							 <option value="{{ $match_data[0]['player_b_ids'] }}" <?php if(!empty($score_status_array['scnd_ing_batting']) && $match_data[0]['b_id']==$score_status_array['scnd_ing_batting']) echo 'selected';?> data-status="{{ $match_data[0]['b_id'] }}" >{{ $team_b_name }}</option>
-							 </select>
-                          </div>
-						  @endif
-						  <p class="match-status mg"><a href="{{ url('user/album/show').'/match'.'/0'.'/'.$action_id }}"><span class="fa" style="float: left; margin-left: 8px;"><img src="{{ asset('/images/sc-gallery.png') }}" height="18" width="22"></span> <b>Media Gallery</b></a></p>
-						  <p class="match-status">@include('scorecards.scorecardstatus')</p>
-				</div>
+                            </div>
+                            <div class="form-group" style="margin-top:15px;">
+                                    <label class="show_teams">Select Winner:</label>
+                                    <select name="winner_id" id="winner_id" class="show_teams form-control selectpicker selectpicker_new_span" onchange="selectWinner();" autocomplete="off">
+                                            <option <?php if (isset($match_data[0]['winner_id']) && $match_data[0]['winner_id'] == $match_data[0]['a_id']) echo ' selected'; ?> value="{{ $match_data[0]['a_id'] }}" >{{ $team_a_name }}</option>
+                                            <option <?php if (isset($match_data[0]['winner_id']) && $match_data[0]['winner_id'] == $match_data[0]['b_id']) echo ' selected'; ?> value="{{ $match_data[0]['b_id'] }}">{{ $team_b_name }}</option>
+                                    </select>
+                            </div>
+                            @endif	
+                            @endif	  
+                            <div class="form-group">
+                                    <!--<label for="team">Ist Ing Batting:</label>-->
+                                    <label for="team">Toss Won By</label>
+                                    <select class="form-control selectpicker selectpicker_new_span" name="toss_won" id="toss_won" onchange="tosswonby();">
+                                            <option value="{{ $match_data[0]['a_id'] }}" <?php if (!empty($score_status_array['toss_won_by']) && $match_data[0]['a_id'] == $score_status_array['toss_won_by']) echo 'selected'; ?>>{{ $team_a_name }}</option>
+                                            <option value="{{ $match_data[0]['b_id'] }}" <?php if (!empty($score_status_array['toss_won_by']) && $match_data[0]['b_id'] == $score_status_array['toss_won_by']) echo 'selected'; ?>>{{ $team_b_name }}</option>
+                                    </select>
+                            </div>
+                            
+                            <!-- Toss won by modal start -->
+                            <div class="modal fade in" tabindex="-1" role="modal" aria-labelledby="matchScheduleForm" id="tossDetail" style="display: block;">
+                              <div class="vertical-alignment-helper">
+                                <div class="modal-dialog modal-lg vertical-align-center">
+                                  <div class="modal-content create-team-model create-album-popup model-align">
+                                    <div class="modal-header text-center">
+                                      <button type="button" class="close" data-dismiss="modal">×</button>
+                                      <h4>TOSS DETAILS</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                      <form class="content">
+                                        <div class="form-group">
+                                          <div class="toss-detail">
+                                            <span class="head">TOSS WON BY</span>
+                                            <div class="radio-box">
+                                              <div class="radio">
+                                                <input name="team" type="radio" value="toss" id="india" checked="">
+                                                <label for="india">INDIA</label>
+                                              </div>
+                                              <div class="radio">
+                                                <input name="team" type="radio" value="toss" id="AUSTRALIA ">
+                                                <label for="AUSTRALIA ">AUSTRALIA </label>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="form-group">
+                                          <div class="toss-detail">
+                                            <span class="head">ELECTED</span>
+                                            <div class="radio-box">
+                                              <div class="radio">
+                                                <input name="elected" type="radio" value="" id="bat" checked="">
+                                                <label for="bat">BAT</label>
+                                              </div>
+                                              <div class="radio">
+                                                <input name="elected" type="radio" value="" id="bowl">
+                                                <label for="bowl">BOWL</label>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="button btn-primary">Done</button>
+                                        <button type="button" class="button btn-secondary" data-dismiss="modal">Cancel</button>
+                                      </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <!-- Toss won by modal end -->
+                            
+                            <div class="form-group">
+                                    <label for="team">Ist Ing Batting:</label>
+                                    <select class="form-control selectpicker selectpicker_new_span" name="team" id="team" onchange="getTeamName();">
+                                            <option value="{{ $match_data[0]['player_a_ids'] }}" <?php if (!empty($score_status_array['fst_ing_batting']) && $match_data[0]['a_id'] == $score_status_array['fst_ing_batting']) echo 'selected'; ?> data-status="{{ $match_data[0]['a_id'] }}" >{{ $team_a_name }}</option>
+                                            <option value="{{ $match_data[0]['player_b_ids'] }}" <?php if (!empty($score_status_array['fst_ing_batting']) && $match_data[0]['b_id'] == $score_status_array['fst_ing_batting']) echo 'selected'; ?> data-status="{{ $match_data[0]['b_id'] }}">{{ $team_b_name }}</option>
+                                    </select>
+                            </div>
+                            @if($match_data[0]['match_type']=='test')
+                            <div class="form-group">
+                                    <label for="team">II Ing Batting:</label>
+                                    <select class="form-control selectpicker selectpicker_new_span" name="team" id="teams" onchange="getTeamNames();">
+                                            <option value="{{ $match_data[0]['player_a_ids'] }}" <?php if (!empty($score_status_array['scnd_ing_batting']) && $match_data[0]['a_id'] == $score_status_array['scnd_ing_batting']) echo 'selected'; ?> data-status="{{ $match_data[0]['a_id'] }}" >{{ $team_a_name }}</option>
+                                            <option value="{{ $match_data[0]['player_b_ids'] }}" <?php if (!empty($score_status_array['scnd_ing_batting']) && $match_data[0]['b_id'] == $score_status_array['scnd_ing_batting']) echo 'selected'; ?> data-status="{{ $match_data[0]['b_id'] }}" >{{ $team_b_name }}</option>
+                                    </select>
+                            </div>
+                            @endif
+                            <p class="match-status mg"><a href="{{ url('user/album/show').'/match'.'/0'.'/'.$action_id }}"><span class="fa" style="float: left; margin-left: 8px;"><img src="{{ asset('/images/sc-gallery.png') }}" height="18" width="22"></span> <b>Media Gallery</b></a></p>
+                            <p class="match-status">@include('scorecards.scorecardstatus')</p>
+                    </div>
 				
 
 				

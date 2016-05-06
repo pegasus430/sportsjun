@@ -130,18 +130,21 @@ class FollowController extends Controller
                         
                         $tournament_ids = implode(',',array_column($followingTournamentsArray, 'id'));
                         
-                        DB::setFetchMode(PDO::FETCH_ASSOC);
-                        $existing_tournament_ids = DB::select("SELECT DISTINCT t.id as item
-                        FROM `tournaments` t
-                        INNER JOIN `tournament_final_teams` f ON f.tournament_id = t.id AND f.team_id = $self_user_id
-                        WHERE t.schedule_type = 'individual' AND t.id IN ($tournament_ids) AND t.type != 'league'  
-                        UNION ALL
-                        SELECT DISTINCT t.id 
-                        FROM `tournaments` t
-                        INNER JOIN `tournament_group_teams` g ON g.tournament_id = t.id AND g.team_id = $self_user_id
-                        WHERE t.schedule_type = 'individual' AND t.id IN ($tournament_ids) AND t.type != 'knockout' ");
-                        DB::setFetchMode(PDO::FETCH_CLASS);
-                        $existing_tournament_ids = array_column($existing_tournament_ids, 'team');
+                        if (!empty($tournament_ids))
+                        {
+                                DB::setFetchMode(PDO::FETCH_ASSOC);
+                                $existing_tournament_ids = DB::select("SELECT DISTINCT t.id as item
+                                FROM `tournaments` t
+                                INNER JOIN `tournament_final_teams` f ON f.tournament_id = t.id AND f.team_id = $self_user_id
+                                WHERE t.schedule_type = 'individual' AND t.id IN ($tournament_ids) AND t.type != 'league'  
+                                UNION ALL
+                                SELECT DISTINCT t.id 
+                                FROM `tournaments` t
+                                INNER JOIN `tournament_group_teams` g ON g.tournament_id = t.id AND g.team_id = $self_user_id
+                                WHERE t.schedule_type = 'individual' AND t.id IN ($tournament_ids) AND t.type != 'knockout' ");
+                                DB::setFetchMode(PDO::FETCH_CLASS);
+                                $existing_tournament_ids = array_column($existing_tournament_ids, 'team');
+                        }
                 }
 
 
@@ -165,15 +168,19 @@ class FollowController extends Controller
                 // check if user already exists in team
                 $existing_team_ids = [];
                 $player_available_in_teams = [];
-                DB::setFetchMode(PDO::FETCH_ASSOC);
+                
                 $team_ids_csv = implode(',', $team_ids);
-                $existing_team_ids = DB::select("SELECT DISTINCT tp.team_id
+                if (!empty($team_ids_csv))
+                {
+                        DB::setFetchMode(PDO::FETCH_ASSOC);
+                        $existing_team_ids = DB::select("SELECT DISTINCT tp.team_id
                                         FROM `team_players` tp  
                                         WHERE tp.user_id = $self_user_id "
                                         . "AND tp.team_id IN ($team_ids_csv) "
                                         . "AND `status` != 'rejected' "
                                         . "AND tp.deleted_at IS NULL ");
-                DB::setFetchMode(PDO::FETCH_CLASS);
+                        DB::setFetchMode(PDO::FETCH_CLASS);
+                }
                 foreach ($followingTeamsArray as $row)
                 {
                         $player_available_in_teams[$row['id']] = $row['player_available'];
@@ -217,13 +224,16 @@ class FollowController extends Controller
                                         $checkArray.= $player->user_id.",";
                         }
                         $checkArray = trim($checkArray,",");
-                        DB::setFetchMode(PDO::FETCH_ASSOC);
-                        $follow_array = DB::select("SELECT DISTINCT tp.type_id as item
-                        FROM `followers` tp  
-                        WHERE tp.user_id = $user_id "
-                        . "AND tp.type_id IN ($checkArray) "
-                        . "AND `type` = 'player' AND tp.deleted_at IS NULL ");
-                        DB::setFetchMode(PDO::FETCH_CLASS);
+                        if (!empty($checkArray))
+                        {
+                                DB::setFetchMode(PDO::FETCH_ASSOC);
+                                $follow_array = DB::select("SELECT DISTINCT tp.type_id as item
+                                FROM `followers` tp  
+                                WHERE tp.user_id = $user_id "
+                                . "AND tp.type_id IN ($checkArray) "
+                                . "AND `type` = 'player' AND tp.deleted_at IS NULL ");
+                                DB::setFetchMode(PDO::FETCH_CLASS);
+                        }
                         if (!empty($follow_array))
                         {
                                 $follow_array = array_column($follow_array, 'item');

@@ -814,3 +814,225 @@
 	#team_vs .vs:after {margin-left: 20px;}
 	.team_detail{text-align: center;}
 	}
+        
+        
+/* Cricket scorecard - Toss modal - added by anoop.n */
+div#tossDetail .modal-dialog {
+    max-width: 400px;
+}
+
+div#tossDetail h4 {
+    color: #fff;
+}
+
+#tossDetail .form-group {
+    display: block;
+    margin: 10px 0 20px 0;
+    text-align: left;
+}
+
+.toss-detail .radio-box {
+    margin-top: 10px;
+}
+
+.toss-detail .radio-box .radio {
+    width: 45%;
+}
+
+#tossDetail .radio-box > .radio {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+}
+
+#tossDetail .radio input[type="radio"] {
+    opacity: 0;
+    position: absolute;
+    margin: 0;
+    float: inherit;
+    left: 0px;
+    top: 0px;
+    padding: 0;
+}
+
+#tossDetail .radio label {
+    display: inline-block;
+    padding: 0 !important;
+    margin: 0;
+    text-transform: capitalize;
+    min-height: 26px;
+    color: #333;
+    font-size: 14px;
+    margin-right: 10px;
+}
+
+#tossDetail .modal-body {
+    padding: 15px 20px;
+}
+
+#tossDetail div.iradio_square-green {
+    margin: -3px 3px 0 0;
+}
+div#tossDetail .modal-header .close {
+    margin-top: 4px;
+    position: relative;
+    right: 5px;
+}
+
+div#tossDetail .btn-primary .btn-sm {
+    line-height: 28px;
+    text-decoration: none;
+    font-size: 14px;
+}
+div#tossDetail .btn-primary {
+    background-color: #84cd93;
+    border-radius: 3px;
+    border: none;
+}
+
+div#tossDetail .btn-primary:hover,
+div#tossDetail .btn-primary:focus {
+    background-color: #84CD93
+}
+
+div#tossDetail .btn-primary:active {
+    background-color: #53A865
+}
+
+div#tossDetail .btn-primary,
+div#tossDetail .btn-primary:hover,
+div#tossDetail .btn-primary:focus,
+div#tossDetail .btn-primary:active {
+    color: #fff;
+    text-shadow: 0 1px rgba(0, 0, 0, 0.08)
+}
+div#tossDetail .btn-secondary {
+    background-color: #768291;
+    border-radius: 3px;
+    border: none;
+}
+
+div#tossDetail .btn-secondary:hover,
+div#tossDetail .btn-secondary:focus {
+    background-color: #768291;
+}
+
+div#tossDetail .btn-secondary:active {
+    background-color: #2F3C4D
+}
+
+div#tossDetail .btn-secondary,
+div#tossDetail .btn-secondary:hover,
+div#tossDetail .btn-secondary:focus,
+div#tossDetail .btn-secondary:active {
+    color: #fff;
+    text-shadow: 0 1px rgba(0, 0, 0, 0.08)
+}
+div#tossDetail .btn-tertiary {
+    background-color: #EF6C00;
+    border-radius: 3px;
+    border: none;
+}
+
+div#tossDetail .btn-tertiary:hover,
+div#tossDetail .btn-tertiary:focus {
+    background-color: #EF6C00;
+}
+
+div#tossDetail .btn-tertiary:active {
+    background-color: #E65100
+}
+
+div#tossDetail .btn-tertiary,
+div#tossDetail .btn-tertiary:hover,
+div#tossDetail .btn-tertiary:focus,
+div#tossDetail .btn-tertiary:active {
+    color: #fff;
+    text-shadow: 0 1px rgba(0, 0, 0, 0.08)
+}
+
+div#tossDetail .btn-primary-border {border:1px solid #21b640;}
+div#tossDetail .btn-secondary-border {border: 1px solid #34495e;}
+div#tossDetail .btn-tertiary-border {border: 1px solid #e99c5d;}
+
+div#tossDetail .btn-rounded {
+    -webkit-border-radius: 22px;
+    -moz-border-radius: 22px;
+    -o-border-radius: 22px;
+    border-radius: 22px
+}
+
+div#tossDetail .button-left,
+div#tossDetail .button-right {
+    position: relative;
+    z-index: 9
+}
+
+div#tossDetail .button-left:before,
+div#tossDetail .button-right:before {
+    content: '';
+    z-index: -1;
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    background-color: inherit;
+    border-color: inherit;
+    border: 0;
+    top: 5px
+}
+
+div#tossDetail .button-left {
+    border-left-width: 0;
+    padding: 0 18px 0 7px;
+    -webkit-border-radius: 0 3px 3px 0;
+    -moz-border-radius: 0 3px 3px 0;
+    -o-border-radius: 0 3px 3px 0;
+    border-radius: 0 3px 3px 0;
+    margin-left: 20px
+}
+
+div#tossDetail .button-left:before {
+    left: -15px;
+    -webkit-border-radius: 2px 5px 0 5px;
+    -moz-border-radius: 2px 5px 0 5px;
+    -o-border-radius: 2px 5px 0 5px;
+    border-radius: 2px 5px 0 5px;
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    transform: rotate(-45deg)
+}
+
+div#tossDetail .button-right {
+    padding: 0 7px 0 18px;
+    border-right-width: 0;
+    -webkit-border-radius: 3px 0 0 3px;
+    -moz-border-radius: 3px 0 0 3px;
+    -o-border-radius: 3px 0 0 3px;
+    border-radius: 3px 0 0 3px;
+    margin-right: 20px
+}
+
+div#tossDetail .button-right:before {
+    right: -15px;
+    -webkit-border-radius: 5px 2px 5px 0;
+    -moz-border-radius: 5px 2px 5px 0;
+    -o-border-radius: 5px 2px 5px 0;
+    border-radius: 5px 2px 5px 0;
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    transform: rotate(45deg)
+}
+
+div#tossDetail .btn-primary,div#tossDetail .btn-secondary {
+    padding: 6px 40px;
+    margin: 0 4px;
+}
+
+div#tossDetail .modal-footer {
+    text-align: center;
+}
