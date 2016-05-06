@@ -60,7 +60,7 @@
             </div>
             @endforeach
             </ul>
-            </li>      
+            </li>
             @endif
             </ul>   
           </div>
@@ -77,7 +77,16 @@
               <div class="sportsjun-forms custom_form" id='sportsjun_forms_{{$userSport->id}}'>
               {!! Form::open(array('route' => array('sport.update',$userId),'class'=>'form-horizontal','method' => 'put')) !!}
               <div class="form-body" style="padding: 0 15px;">
-              <div id='question_div_{{$userSport->id}}' class="question_div_class"></div>
+                        @if(!$selfProfile)
+                        <div class="sj_actions_new">
+                                <div class="sb_join_p_main">
+                                        <a href="javascript:void(0);" onclick="SJ.TEAM.addToTeam({{$userSport->id}},{{$userId}});" class="sj_add_but">
+                                                <span><i class="fa fa-plus"></i>Add To Team</span>
+                                        </a>
+                                </div>
+                        </div>
+                        @endif
+                        <div id='question_div_{{$userSport->id}}' class="question_div_class"></div>
               </div>
               {!! Form::close() !!}
               </div>
@@ -86,7 +95,8 @@
             @endforeach
           </div>
         </div>
-      </div>    
+      </div>
+@include ('widgets.teamspopup')      
       @else
       @if (count($sports))
       @foreach($sports as $sport)

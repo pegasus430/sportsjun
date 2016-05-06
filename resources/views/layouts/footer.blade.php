@@ -18,6 +18,9 @@
 <script src="{{ asset('/js/jquery.select-multiple.js') }}?v=<?php echo $js_version;?>"></script>
 <script src="{{ asset('/js/jquery.touch.js') }}?v=<?php echo $js_version;?>"></script>
 <script src="{{ asset('/js/sportsjun.js') }}?v=<?php echo $js_version;?>"></script>
+<script src="{{ asset('/js/sj.global.js') }}?v=<?php echo $js_version;?>"></script>
+<script src="{{ asset('/js/sj.team.js') }}?v=<?php echo $js_version;?>"></script>
+<script src="{{ asset('/js/sj.tournament.js') }}?v=<?php echo $js_version;?>"></script>
 <script>
 var resizeId;
 $(function () {

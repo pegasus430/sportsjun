@@ -10,6 +10,13 @@
         @endif
 		<div class="sports_text">{{ $left_menu_data['sports_matchtype'] or '' }}</div>
 		<div class="more desc">{{ $left_menu_data['description'] or 'Description' }}</div>
+                <?php if(!in_array($tournament_id,$left_menu_data['exist_array']) && (!empty($left_menu_data['sub_tournament_details']['end_date'] && $left_menu_data['sub_tournament_details']['end_date']!='0000-00-00')?strtotime($left_menu_data['sub_tournament_details']['end_date']) >= strtotime(date(config('constants.DATE_FORMAT.DB_STORE_DATE_FORMAT'))):strtotime($left_menu_data['sub_tournament_details']['start_date']) >= strtotime(date(config('constants.DATE_FORMAT.DB_STORE_DATE_FORMAT'))))) {?>
+                        <div class="sb_join_tournament_main">
+                                <a href="javascript:void(0);" onclick="SJ.TOURNAMENT.joinTournament({{Auth::user()->id}},{{$left_menu_data['sub_tournament_details']['id']}},{{$left_menu_data['sub_tournament_details']['sports_id']}},'{{!empty($left_menu_data['sub_tournament_details']['schedule_type'])?(($left_menu_data['sub_tournament_details']['schedule_type']=='individual')?'PLAYER_TO_TOURNAMENT':'TEAM_TO_TOURNAMENT'):''}}');" class="sj_add_but">
+                                        <span><i class="fa fa-check"></i>Join Tournament</span>
+                                </a>
+                        </div>
+                <?php } ?>
 		<?php $follow_unfollow = Helper::checkFollowUnfollow(Auth::user()->id,'TOURNAMENT',$action_id);?>
 	   <div class="follow_unfollow_tournament" id="follow_unfollow_tournament_{{$action_id}}" uid="{{$action_id}}" val="TOURNAMENT" flag="{{ !empty($follow_unfollow)?0:1 }}"><a href="#" id="follow_unfollow_tournament_a_{{$action_id}}" class="{{ !empty($follow_unfollow)?'sj_unfollow':'sj_follow' }}"><span id="follow_unfollow_tournament_span_{{$action_id}}"><i class="{{ !empty($follow_unfollow)?'fa fa-remove':'fa fa-check' }}"></i>{{ !empty($follow_unfollow)?'Unfollow':'Follow' }}</span></a></div> 
 	</div>
@@ -28,3 +35,4 @@
 	</ul>
 </div>
 </div>
+@include ('widgets.teamspopup')

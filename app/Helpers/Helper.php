@@ -95,9 +95,33 @@ class Helper {
         if(!empty($managing_teams))
         {
             $managing_team_ids = explode(',', trim($managing_teams,','));
-        }        
+        }
+        
+        // check if user already exists in team
+        DB::setFetchMode(PDO::FETCH_ASSOC);
+        $exist_array = DB::select("SELECT count(*) as count
+                FROM `team_players` tp  
+                WHERE tp.user_id = $userId "
+                . "AND tp.team_id IN ($team_id) "
+                . "AND `status` != 'rejected' "
+                . "AND tp.deleted_at IS NULL ");
+        DB::setFetchMode(PDO::FETCH_CLASS);
+        $user_in_team = ($exist_array[0]['count'] > 0) ? true : false;
+        
+        if (!$user_in_team)     // if the user already doesn't exist in team
+        {
+                $player_available_in_team = DB::table('teams')
+                ->select('teams.player_available')
+                ->where('teams.player_available',1)
+                ->whereNull('teams.deleted_at')
+                ->where('teams.isactive', '=', 1)
+                ->where('teams.id', '=', $team_id)
+                ->get();
+        }
+        $player_available_in_team = (isset($player_available_in_team[0]->player_available) && !empty($player_available_in_team[0]->player_available)) ? true : false;
+        
         View::share(['team_name' => (!empty($teams['name']) ? $teams['name'] : ''), 'location' => (!empty($location ) ? $location : ''), 'sport' => (!empty($teams['sports']['sports_name']) ? $teams['sports']['sports_name'] : 'NA'), 'description' => (!empty($teams['description']) ? $teams['description'] : ''), 'photo_path' => (count($teams['photos']) ? ('teams/' . $teams['photos'][0]['url']) : ''),
-            'sport_id' => (!empty($teams['sports_id']) ? $teams['sports_id'] : '0'), 'team_id' => (!empty($teams['id']) ? $teams['id'] : '0'),'managing_team_ids'=>$managing_team_ids,'follow_unfollow'=>$follow_unfollow]);
+            'sport_id' => (!empty($teams['sports_id']) ? $teams['sports_id'] : '0'), 'team_id' => (!empty($teams['id']) ? $teams['id'] : '0'),'managing_team_ids'=>$managing_team_ids,'follow_unfollow'=>$follow_unfollow,'user_in_team'=>$user_in_team,'player_available_in_team'=>$player_available_in_team]);
     }
 
     public static function getPlayerInfo($userId) {
@@ -1450,7 +1474,21 @@ $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids
 	//tournament left menu
 	public static function getLeftMenuData($parent_tournament_id,$manager_id,$sub_tournament_details)
 	{
+                $userId = Auth::user()->id;
+                DB::setFetchMode(PDO::FETCH_ASSOC);
+                $exist_array = DB::select("SELECT DISTINCT t.id as item
+                        FROM `tournaments` t
+                        INNER JOIN `tournament_final_teams` f ON f.tournament_id = t.id AND f.team_id = $userId
+                        WHERE t.schedule_type = 'individual' AND t.id IN ($parent_tournament_id) AND t.type != 'league'  
+                        UNION ALL
+                        SELECT DISTINCT t.id 
+                        FROM `tournaments` t
+                        INNER JOIN `tournament_group_teams` g ON g.tournament_id = t.id AND g.team_id = $userId
+                        WHERE t.schedule_type = 'individual' AND t.id IN ($parent_tournament_id) AND t.type != 'knockout' ");
+                DB::setFetchMode(PDO::FETCH_CLASS);
+                
 		$parent_tournament_details = TournamentParent::where('id',$parent_tournament_id)->get();
+                
 		$menu_details = array();
                 $sub_tournament_name = $sub_tournament_details[0]['name'];
                 $sport_name = Sport::where('id', $sub_tournament_details[0]['sports_id'])->pluck('sports_name');
@@ -1469,6 +1507,8 @@ $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids
 			$menu_details['path'] = config('constants.PHOTO_PATH.TOURNAMENT');
 			$menu_details['id'] = $parent_tournament_id;
 			$menu_details['sports_matchtype'] = $sport_name.' '.$match_type;
+                        $menu_details['exist_array'] = $exist_array;
+                        $menu_details['sub_tournament_details'] = $sub_tournament_details[0];
 		}
 		return $menu_details;
 	}
