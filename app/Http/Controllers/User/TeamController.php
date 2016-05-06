@@ -25,6 +25,7 @@ use URL;
 use App\Model\Photo;
 use Zofe\Rapyd\RapydServiceProvider;
 use DB;
+use PDO;
 use Carbon\Carbon;
 use App\Helpers\Helper;
 use App\Helpers\SendMail;
@@ -350,7 +351,16 @@ class TeamController extends Controller
 		}
 		//get role for the logged in user id
 		$logged_in_user_role = TeamPlayers::where('user_id', $userId)->where('team_id',$team_id)->pluck('role');
-        return view('teams.myteam')->with('teams',$teams)->with('team_owners_managers',$team_owners_managers)->with('team_players',$team_players)->with('logged_in_user_role',$logged_in_user_role)->with('following_sportids',$following_sportids)->with('managing_teams',$managing_teams)->with('sport_id',$sport_id)->with('team_id',$team_id);
+                
+        return view('teams.myteam')
+                ->with('teams',$teams)
+                ->with('team_owners_managers',$team_owners_managers)
+                ->with('team_players',$team_players)
+                ->with('logged_in_user_role',$logged_in_user_role)
+                ->with('following_sportids',$following_sportids)
+                ->with('managing_teams',$managing_teams)
+                ->with('sport_id',$sport_id)
+                ->with('team_id',$team_id);
     }
 	
     /**

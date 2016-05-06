@@ -21,7 +21,7 @@
       	<span class="fa fa-pencil" title="Edit"></span>
       </a>
       @endif
-      <div class="desc">{!! Helper::getPlayerInfo($userId) !!}</div>
+      <div class="desc" id="userFullName">{!! Helper::getPlayerInfo($userId) !!}</div>
       <?php $follow_unfollow = Helper::checkFollowUnfollow(Auth::user()->id,'PLAYER',$userId);?>
       @if(Auth::user()->id != $userId)
       <div class="follow_unfollow_player" id="follow_unfollow_player_{{$userId}}" uid="{{$userId}}" val="PLAYER" flag="{{ !empty($follow_unfollow)?0:1 }}"><a href="#" id="follow_unfollow_player_a_{{$userId}}" class="{{ !empty($follow_unfollow)?'sj_unfollow':'sj_follow' }}"><span id="follow_unfollow_player_span_{{$userId}}"><i class="{{ !empty($follow_unfollow)?'fa fa-remove':'fa fa-check' }}"></i>{{ !empty($follow_unfollow)?'Unfollow':'Follow' }}</span></a></div> 

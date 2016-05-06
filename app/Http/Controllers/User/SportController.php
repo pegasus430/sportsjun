@@ -98,6 +98,8 @@ class SportController extends Controller {
     
     public function editSportProfile($userId) {
 	   Helper::setMenuToSelect(3,2);
+           $self_user_id        = Auth::user()->id;
+           $selfProfile         = ($userId != $self_user_id) ? false : true;
 	   $user = User::where('id', $userId)->first();
 	   $userExists = 'true';
 	   if(!count($user)) {
@@ -116,7 +118,7 @@ class SportController extends Controller {
                 $followingSportsArray = explode(',', trim($userStatistic->following_sports, ','));
                 $userSports = Sport::whereIn('id', $followingSportsArray)->get(['id', 'sports_name']);
                 $sports = Sport::whereNotIn('id', $followingSportsArray)->get(['id', 'sports_name']);
-                return view('sportprofile.edit', ['sports' => $sports, 'userSports' => $userSports, 'followingSports' => !empty($followingSportsArray) ? $followingSportsArray : [],'userId'=>  $userId,'managing_teams'=>$managing_teams,'userExists' => $userExists]);
+                return view('sportprofile.edit', ['sports' => $sports, 'userSports' => $userSports, 'followingSports' => !empty($followingSportsArray) ? $followingSportsArray : [],'userId'=>  $userId,'managing_teams'=>$managing_teams,'userExists' => $userExists,'selfProfile'=>$selfProfile]);
             }else
             {
                 $sports = Sport::all(['id', 'sports_name']);

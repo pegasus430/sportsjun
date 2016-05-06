@@ -43,10 +43,18 @@
                                                                                                         <li>Teams <span class="green">{{ $followedTeam['team_count'] }}</span></li>
                                                                                                 </ul>
                                                                                                 <p class="lt-grey">{{ $followedTeam['description'] }}</p>
+                                                                                                <?php if (!in_array($followedTeam['id'],$existing_tournament_ids) && (!empty($followedTeam['end_date'] && $followedTeam['end_date']!='0000-00-00')?strtotime($followedTeam['end_date']) >= strtotime(date(config('constants.DATE_FORMAT.DB_STORE_DATE_FORMAT'))):strtotime($followedTeam['start_date']) >= strtotime(date(config('constants.DATE_FORMAT.DB_STORE_DATE_FORMAT'))))) {?>
+                                                                                                <div class="sb_join_tournament_main">
+                                                                                                        <a href="javascript:void(0);" onclick="SJ.TOURNAMENT.joinTournament({{$self_user_id}},{{$followedTeam['id']}},{{$followedTeam['sports_id']}},'{{!empty($followedTeam['schedule_type'])?(($followedTeam['schedule_type']=='individual')?'PLAYER_TO_TOURNAMENT':'TEAM_TO_TOURNAMENT'):''}}','{{ $followedTeam['name'] }}');" class="sj_add_but">
+                                                                                                                <span><i class="fa fa-check"></i>Join Tournament</span>
+                                                                                                        </a>
+                                                                                                </div>
+                                                                                                <?php } ?>
                                                                                         </div>
                                                                                 </div>
                                                                         </div>
                                                                         @endforeach
+                                                                        @include ('widgets.teamspopup')
                                                                         @else
                                                                         <div class="message_new_for_team">Search for Tournaments and Follow easily.</div>
                                                                         @endif
@@ -92,7 +100,15 @@
                                                                                                                 <li>Sport: <span>{{ !empty($following_team['sports']['sports_name'])?$following_team['sports']['sports_name']:'' }}</span></li>
                                                                                                                 <li>Players: <span>{{ !empty($following_team['teamplayers'])?count($following_team['teamplayers']):0 }}</span></li>
                                                                                                         </ul>
-                                                                                                        <p class="lt-grey">{{ !empty($following_team['description'])?$following_team['description']:'' }}</p>                                                        </div>     
+                                                                                                        <p class="lt-grey">{{ !empty($following_team['description'])?$following_team['description']:'' }}</p>
+                                                                                                </div>
+                                                                                                <?php if (!in_array($following_team['id'],$existing_team_ids) && (isset($player_available_in_teams[$following_team['id']]) && $player_available_in_teams[$following_team['id']] == 1)) { ?>
+                                                                                                <div class="sb_join_team_main">
+                                                                                                        <a href="javascript:void(0);" onclick="SJ.TEAM.joinTeam({{$following_team['id']}},{{$self_user_id}},'{{ $following_team['name'] or 'Team'}}');" class="sj_add_but">
+                                                                                                                <span><i class="fa fa-check"></i>Join Team</span>
+                                                                                                        </a>
+                                                                                                </div>
+                                                                                                <?php } ?>
                                                                                         </div>
                                                                                 </div>
                                                                         </div>
@@ -118,7 +134,6 @@
                                                                         <div class="t_details">   
                                                                                 <div class="row main_tour">	
                                                                                         <div class="search_thumbnail right-caption">
-
                                                                                                 <div class="col-md-2 col-sm-3 col-xs-12 text-center">
                                                                                                         @if(!empty($player->logo))
                                                                                                          <!--   <img class="img-circle img-border" src="{{ asset('/uploads/'.config('constants.PHOTO_PATH.TEAMS_FOLDER_PATH').'/'.(!empty($p['url'])?$p['url']:'')) }}" onerror="this.onerror=null;this.src='{{ asset('/images/default-profile-pic.jpg') }}';" style="width: 90%;height:90%;">-->
@@ -149,12 +164,24 @@
                                                                                                                 </span>
                                                                                                             </li>
                                                                                                         </ul>                      
-                                                                                                </div>                      	
+                                                                                                </div>
+                                                                                                @if(!$selfProfile || ($selfProfile && in_array($player->user_id,$follow_array)))
+                                                                                                <div class="sj_actions_new">
+                                                                                                        <div class="follow_unfollow_player" id="follow_unfollow_player_{{$player->user_id}}" uid="{{$player->user_id}}" val="PLAYER" flag="{{ in_array($player->user_id,$follow_array)?0:1 }}">
+                                                                                                                <a href="#" id="follow_unfollow_player_a_{{$player->user_id}}" class="{{ in_array($player->user_id,$follow_array)?'sj_unfollow':'sj_follow' }}">
+                                                                                                                        <span id="follow_unfollow_player_span_{{$player->user_id}}">
+                                                                                                                                <i class="{{ in_array($player->user_id,$follow_array)?'fa fa-remove':'fa fa-check' }}"></i>
+                                                                                                                                {{ in_array($player->user_id,$follow_array)?'Unfollow':'Follow' }}
+                                                                                                                        </span>
+                                                                                                                </a>
+                                                                                                        </div>
+                                                                                                </div>
+                                                                                                @endif
                                                                                         </div>
                                                                                 </div>
                                                                         </div>
                                                                         @endforeach
-
+                                                                        
                                                                         @else
                                                                         <div class="message_new_for_team">Search for Players and Follow easily.</div>
                                                                         @endif
@@ -169,5 +196,4 @@
         </div>
 </div>
 <div id="displaytournament"></div>
-
 @endsection

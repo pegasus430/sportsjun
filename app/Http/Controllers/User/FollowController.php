@@ -16,6 +16,7 @@ use Auth;
 use App\Helpers\Helper;
 use App\Model\Followers;
 use DB;
+use PDO;
 use App\Model\TournamentGroups;
 use App\Model\TournamentGroupTeams;
 
@@ -30,10 +31,15 @@ class FollowController extends Controller
         public function index($id = "")
         {
                 Helper::setMenuToSelect(3, 7);
+                $self_user_id = Auth::user()->id;
                 if ($id == '')
-                        $user_id = Auth::user()->id;
+                        $user_id = $self_user_id;
                 else
                         $user_id = $id;
+                
+                
+                $selfProfile = ($user_id != $self_user_id) ? false : true;
+                        
 
                 $followingPlayersArray     = $followingTournamentsArray = $followingTeamsArray       = [];
 
@@ -53,13 +59,18 @@ class FollowController extends Controller
                         $followingTournamentDetails = Tournaments::with('photos')
                                 ->whereIn('id', $following_team_array)
                                 ->get(['id', 'name', 'created_by', 'sports_id', 'type',
-                                'final_stage_teams', 'description']);
+                                'final_stage_teams', 'description', 'end_date', 'schedule_type']);
                 }
-
+                
+                $existing_tournament_ids = [];
                 if (count($followingTournamentDetails))
                 {
                         foreach ($followingTournamentDetails->toArray() as $followKey => $followedTournament)
                         {
+                                $followingTournamentDetails[$followKey]['sports_id'] = $followedTournament['sports_id'];
+                                $followingTournamentDetails[$followKey]['end_date'] = $followedTournament['end_date'];
+                                $followingTournamentDetails[$followKey]['schedule_type'] = $followedTournament['schedule_type'];
+                                
                                 $sportsName                                            = Sport::where('id', $followedTournament['sports_id'])->first(['sports_name']);
                                 if (count($sportsName))
                                         $followingTournamentDetails[$followKey]['sports_name'] = $sportsName->sports_name;
@@ -116,6 +127,21 @@ class FollowController extends Controller
                                 }
                         }
                         $followingTournamentsArray = $followingTournamentDetails->toArray();
+                        
+                        $tournament_ids = implode(',',array_column($followingTournamentsArray, 'id'));
+                        
+                        DB::setFetchMode(PDO::FETCH_ASSOC);
+                        $existing_tournament_ids = DB::select("SELECT DISTINCT t.id as item
+                        FROM `tournaments` t
+                        INNER JOIN `tournament_final_teams` f ON f.tournament_id = t.id AND f.team_id = $self_user_id
+                        WHERE t.schedule_type = 'individual' AND t.id IN ($tournament_ids) AND t.type != 'league'  
+                        UNION ALL
+                        SELECT DISTINCT t.id 
+                        FROM `tournaments` t
+                        INNER JOIN `tournament_group_teams` g ON g.tournament_id = t.id AND g.team_id = $self_user_id
+                        WHERE t.schedule_type = 'individual' AND t.id IN ($tournament_ids) AND t.type != 'knockout' ");
+                        DB::setFetchMode(PDO::FETCH_CLASS);
+                        $existing_tournament_ids = array_column($existing_tournament_ids, 'team');
                 }
 
 
@@ -134,18 +160,34 @@ class FollowController extends Controller
                         $teamObj             = new \App\Http\Controllers\User\TeamController;
                         $followingTeamsArray = $teamObj->getteamdetails($following_team_array);
                 }
+                $team_ids = array_column($followingTeamsArray, 'id');
+                
+                // check if user already exists in team
+                $existing_team_ids = [];
+                $player_available_in_teams = [];
+                DB::setFetchMode(PDO::FETCH_ASSOC);
+                $team_ids_csv = implode(',', $team_ids);
+                $existing_team_ids = DB::select("SELECT DISTINCT tp.team_id
+                                        FROM `team_players` tp  
+                                        WHERE tp.user_id = $self_user_id "
+                                        . "AND tp.team_id IN ($team_ids_csv) "
+                                        . "AND `status` != 'rejected' "
+                                        . "AND tp.deleted_at IS NULL ");
+                DB::setFetchMode(PDO::FETCH_CLASS);
+                foreach ($followingTeamsArray as $row)
+                {
+                        $player_available_in_teams[$row['id']] = $row['player_available'];
+                }
                 
                 // get following players
                 $follow_playerDetails = $modelObj->getFollowingList($user_id, 'player');
-                $following_player_array     = array();
+                $following_player_array     = [];
                 if (isset($follow_playerDetails) && count($follow_playerDetails) > 0)
                 {
                         $following_player_array = array_filter(explode(',', $follow_playerDetails[0]->following_list));
                 }
 
-                $follow_playerDetails = [];
-                $sports = [];
-                $sports_array = array();
+                $sports_array = $follow_array = $sports = [];
                 if (count($following_player_array) > 0)
                 {
                         /*
@@ -159,6 +201,7 @@ class FollowController extends Controller
                         $followingPlayersArray = DB::table('users')
                                 ->select('users.*','user_statistics.*')
                                 ->join('user_statistics', 'users.id', '=', 'user_statistics.user_id')
+                                ->where('users.id', '!=' , $self_user_id)
                                 ->whereIn('users.id', $following_player_array)
                                 ->whereNull('users.deleted_at')
                                 ->get();
@@ -168,7 +211,25 @@ class FollowController extends Controller
                                 $sports_array[$sport->id] = $sport->sports_name;
                         }
                         
-                        //print_r($followingPlayersArray);exit;
+                        // data for performing checks of user following
+                        $checkArray = "";
+                        foreach($followingPlayersArray as $player){
+                                        $checkArray.= $player->user_id.",";
+                        }
+                        $checkArray = trim($checkArray,",");
+                        DB::setFetchMode(PDO::FETCH_ASSOC);
+                        $follow_array = DB::select("SELECT DISTINCT tp.type_id as item
+                        FROM `followers` tp  
+                        WHERE tp.user_id = $user_id "
+                        . "AND tp.type_id IN ($checkArray) "
+                        . "AND `type` = 'player' AND tp.deleted_at IS NULL ");
+                        DB::setFetchMode(PDO::FETCH_CLASS);
+                        if (!empty($follow_array))
+                        {
+                                $follow_array = array_column($follow_array, 'item');
+                        }
+                        
+                        //print_r($follow_array);exit;
                         //$followingPlayersArray->toArray();
                 }
                 
@@ -178,7 +239,13 @@ class FollowController extends Controller
                         'followingTeams'        => $followingTeamsArray,
                         'followingPlayers'      => $followingPlayersArray,
                         'sports_array'          => $sports_array,
-                        'userId'                => $user_id
+                        'userId'                => $user_id,
+                        'follow_array'          => $follow_array,
+                        'selfProfile'          => $selfProfile,
+                        'self_user_id'         => $self_user_id,
+                        'existing_team_ids'    => $existing_team_ids,
+                        'player_available_in_teams' => $player_available_in_teams,
+                        'existing_tournament_ids'    => $existing_tournament_ids
                 ));
         }
 

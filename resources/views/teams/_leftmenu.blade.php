@@ -9,8 +9,15 @@
           <span class="fa fa-pencil" title="Edit"></span>
         </a>
         @endif
-		<div class="locations"><i class="fa fa-map-marker"></i>&nbsp;<span style="word-wrap: break-word;">{{ !empty($location)?$location:'Location' }}</span>&nbsp;&nbsp;<i class="fa fa-globe"></i>&nbsp;<span>{{ $sport or 'Sport'}}</span></div>
-		<div class="more desc">{{ $description or 'Description' }}</div>
+        <div class="locations"><i class="fa fa-map-marker"></i>&nbsp;<span style="word-wrap: break-word;">{{ !empty($location)?$location:'Location' }}</span>&nbsp;&nbsp;<i class="fa fa-globe"></i>&nbsp;<span>{{ $sport or 'Sport'}}</span></div>
+        <div class="more desc">{{ $description or 'Description' }}</div>
+        <?php if (!$user_in_team && $player_available_in_team) { ?>
+        <div class="sb_join_team_main">
+                <a href="javascript:void(0);" onclick="SJ.TEAM.joinTeam({{$team_id}},{{Auth::user()->id}},'{{ $team_name or 'Team'}}');" class="sj_add_but">
+                        <span><i class="fa fa-check"></i>Join Team</span>
+                </a>
+        </div>
+        <?php } ?>
         <div class="follow_unfollow_team" id="follow_unfollow_team_{{$team_id}}" uid="{{$team_id}}" val="TEAM" flag="{{ !empty($follow_unfollow)?0:1 }}"><a href="#" id="follow_unfollow_team_a_{{$team_id}}" class="{{ !empty($follow_unfollow)?'sj_unfollow':'sj_follow' }}"><span id="follow_unfollow_team_span_{{$team_id}}"><i class="{{ !empty($follow_unfollow)?'fa fa-remove':'fa fa-check' }}"></i>{{ !empty($follow_unfollow)?'Unfollow':'Follow' }}</span></a></div>
 	</div>
      

@@ -28,13 +28,13 @@
                             </li>
                         </ul>
                         <div class="sj_actions_new">
-	                        <?php if(!in_array($lis['id'],$exist_array) && $lis['player_available'] == 1) {?>
-							<div class="sb_join_team_main" id="{{$lis['id']}}" val="PLAYER_TO_TEAM"><a href="#" class="sj_add_but"><span><i class="fa fa-check"></i>Join Team</span></a></div>
-							<?php } ?>
-							<div class="follow_unfollow_team" id="follow_unfollow_team_{{$lis['id']}}" uid="{{$lis['id']}}" val="TEAM" flag="{{ in_array($lis['id'],$follow_array)?0:1 }}"><a href="#" id="follow_unfollow_team_a_{{$lis['id']}}" class="{{ in_array($lis['id'],$follow_array)?'sj_unfollow':'sj_follow' }}"><span id="follow_unfollow_team_span_{{$lis['id']}}"><i class="{{ in_array($lis['id'],$follow_array)?'fa fa-remove':'fa fa-check' }}"></i>{{ in_array($lis['id'],$follow_array)?'Unfollow':'Follow' }}</span></a></div>
-						</div>						
-					</div>
-				</div>
+                                <?php if (!in_array($lis['id'],$exist_array) && $lis['player_available'] == 1) { ?>
+                                <div class="sb_join_team_main" id="{{$lis['id']}}" val="PLAYER_TO_TEAM"><a href="#" class="sj_add_but"><span><i class="fa fa-check"></i>Join Team</span></a></div>
+                                <?php } ?>
+                                <div class="follow_unfollow_team" id="follow_unfollow_team_{{$lis['id']}}" uid="{{$lis['id']}}" val="TEAM" flag="{{ in_array($lis['id'],$follow_array)?0:1 }}"><a href="#" id="follow_unfollow_team_a_{{$lis['id']}}" class="{{ in_array($lis['id'],$follow_array)?'sj_unfollow':'sj_follow' }}"><span id="follow_unfollow_team_span_{{$lis['id']}}"><i class="{{ in_array($lis['id'],$follow_array)?'fa fa-remove':'fa fa-check' }}"></i>{{ in_array($lis['id'],$follow_array)?'Unfollow':'Follow' }}</span></a></div>
+                        </div>						
+		</div>
+	</div>
 			</div>
 			<?php $i++;?>
 			@endforeach
