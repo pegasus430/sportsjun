@@ -40,6 +40,17 @@
                         @endif  
                     </span>
                 </p>
+                <?php 
+                        $schedule['match_start_date'] = trim($schedule['match_start_date']);
+                        if (strpos($schedule['match_start_date'], ':') == false)
+                        {
+                                $schedule['match_start_date'] = DateTime::createFromFormat('d/m/Y', $schedule['match_start_date'])->format('jS F, Y');
+                        }
+                        else
+                        {
+                                $schedule['match_start_date'] = DateTime::createFromFormat('d/m/Y g:i A', $schedule['match_start_date'])->format('jS F, Y g:i A');
+                        }
+                    ?>
                 <p>
                     <span>{{ $schedule['match_start_date'] }}</span>
                     <span class='sports_text'>{{ isset($schedule['sport']['sports_name'])?$schedule['sport']['sports_name']:'' }}</span>
@@ -50,7 +61,7 @@
                 
                 <?php 
                         if (strpos($schedule['match_start_date'], ':') == false) {
-                                $schedule['match_start_date'] .= '00:00 AM'; 
+                                $schedule['match_start_date'] .= ' 00:00 AM'; 
                         }
                 ?>
                 
