@@ -2281,8 +2281,8 @@ ul.dropdown-alerts .alert-head {
     font-size: 16px;
 	}
 .tournament_form li.active a {
-    background: #8e9bd0 !important;
-    color: #FFF !important;
+    background: #fff !important;
+    color: #333 !important;
 	border: none !important;
 	border-radius: 0 !important;
 }
