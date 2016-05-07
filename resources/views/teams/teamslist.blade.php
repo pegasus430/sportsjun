@@ -95,7 +95,7 @@
                                                                         <span class="steps_to_follow">Steps to follow:</span>
                                                                         <li>Click on the <span class="bold">Create New +</span> button on the top left side, select <span class="bold">Organization</span></li>
                                                                         <li>Fill all the details and select <span class="bold">teams</span> from drop-down (if needed) and <span class="bold">Create</span></li>
-                                                                        <li>Manage all your Teams under one Organization umbrella</li>
+                                                                        <li>Manage all your Teams under one Organization umbrella.</li>
                                                                 </ul>
                                                         </div>
                                                         @endif

@@ -2740,10 +2740,11 @@ p {
 	border: 1px solid rgba(25, 181, 254, 0.1);
     padding: 8px 12px;
     color: rgb(51, 107, 134);
-    font-size: 13px;
+    font-size: 16px;
     margin-bottom: 0px;
     background: rgba(25, 181, 254, 0.1);
     text-align: center;
+    font-weight: 400;
 	}
 	
 .sportsprofile-tabs {padding: 8px 0 0;}

@@ -2824,3 +2824,31 @@ ul.intro_list_on_empty_pages span.bold {
     font-weight: 400;
     padding: 0 5px;
 }
+.sports_profile_msg_arrow_down {
+	position: relative;
+	background: #E8F8FF;
+	border: 4px solid #D3F2FF;
+}
+.sports_profile_msg_arrow_down:after, .sports_profile_msg_arrow_down:before {
+	top: 100%;
+	left: 50%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.sports_profile_msg_arrow_down:after {
+	border-color: rgba(232, 248, 255, 0);
+	border-top-color: #E8F8FF;
+	border-width: 13px;
+	margin-left: -13px;
+}
+.sports_profile_msg_arrow_down:before {
+	border-color: rgba(211, 242, 255, 0);
+	border-top-color: #D3F2FF;
+	border-width: 15px;
+	margin-left: -15px;
+}
