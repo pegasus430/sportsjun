@@ -95,9 +95,17 @@
 
                                 @endforeach
                                  @else
-										<div class="message_new_for_team">Organizing Tournaments made easy.</div>
-                                    @endif
-									</td>
+                                <div class="message_new_for_team">Organizing Tournaments made easy.</div>
+                                <div class="intro_list_container">
+                                        <ul class="intro_list_on_empty_pages">
+                                                <span class="steps_to_follow">Steps to follow:</span>
+                                                <li>Click on the <span class="bold">Create New +</span> button on the top left side, select <span class="bold">Tournament.</span></li>
+                                                <li><span class="bold">Firstly,</span> fill the high level tournament details. <span class="bold">Secondly,</span> provide tournament events details.</li>
+                                                <li>Post Tournaments for Teams / Players to join</li>
+                                        </ul>
+                                </div>
+                                @endif
+                                </td>
                                  </tr>
                             </tbody>
                         </table>
@@ -139,7 +147,15 @@
                                         </div>
                                 @endforeach
                                  @else
-										<div class="message_new_for_team"> Find and Join Tournaments easily.</div>
+                                <div class="message_new_for_team"> Find and Join Tournaments easily.</div>
+                                <div class="intro_list_container">
+                                        <ul class="intro_list_on_empty_pages">
+                                                <span class="steps_to_follow">Steps to follow:</span>
+                                                <li><span class="bold">Search</span> for Tournaments in any locality in any sport</li>
+                                                <li>Click <span class="bold">Join,</span> your request will be sent to the Tournament Organizer</li>
+                                                <li>Once Request is accepted, you are part of the Tournament.</li>
+                                        </ul>
+                                </div>
                                     @endif
                                     </td>
                                 </tr>
@@ -176,7 +192,15 @@
                                         </div>
                                 @endforeach
                                  @else
-										<div class="message_new_for_team">Search for Tournaments and Follow easily.</div>
+                                <div class="message_new_for_team">Search for Tournaments and Follow easily.</div>
+                                <div class="intro_list_container">
+                                        <ul class="intro_list_on_empty_pages">
+                                                <span class="steps_to_follow">Steps to follow:</span>
+                                                <li><span class="bold">Search</span> for Tournaments in any sport</li>
+                                                <li>Click <span class="bold">Follow</span></li>
+                                                <li>Now, you can easily follow all your favorite Tournaments from this section</li>
+                                        </ul>
+                                </div>
                                     @endif
                                     </td>
                                 </tr>

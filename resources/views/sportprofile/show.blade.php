@@ -33,7 +33,7 @@
                         User doesnot exist
                     </div>
 					@else
-					<div class="displaymessage">
+					<div class="displaymessage sports_profile_msg_arrow_down">
 						{{ trans('message.sports.addsportsprofile') }}
 					</div>
                     <div class="cardheader">

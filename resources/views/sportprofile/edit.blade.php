@@ -12,7 +12,7 @@
       <?php $i=0;
       $j=0;  
       ?>
-        <div class="displaymessage">
+        <div class="displaymessage sports_profile_msg_arrow_down">
             {{ trans('message.sports.addsportsprofile') }}
         </div>
       <input type="hidden" id="user_question" value="2">
