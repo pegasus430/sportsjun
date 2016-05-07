@@ -179,8 +179,8 @@ return [
         ],
         'AUTOCOMPLETE_LIMIT'       => 3,
         'DATE_FORMAT'              => [
-                'PHP_DATE_TIME_FORMAT'           => 'd/m/Y H:i:s',
-                'PHP_DATE_FORMAT'                => 'd/m/Y',
+                'PHP_DATE_TIME_FORMAT'           => 'd/m/Y H:i:s',      /* not used */
+                'PHP_DATE_FORMAT'                => 'd/m/Y',            /* not used */
                 'PHP_TIME_FORMAT'                => 'H:i:s',
                 'JQUERY_DATE_TIME_FORMAT'        => 'DD/MM/YYYY h:mm A',
                 'JQUERY_DATE_FORMAT'             => 'DD/MM/YYYY',
