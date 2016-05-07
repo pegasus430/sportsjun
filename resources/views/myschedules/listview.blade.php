@@ -53,6 +53,12 @@
                         @endif
                     </p>
                     
+                        <?php 
+                                if (strpos($schedule['match_start_date'], ':') == false) {
+                                        $schedule['match_start_date'] .= '00:00 AM'; 
+                                }
+                        ?>
+                    
                     @if(isset($schedule['winner_text']))
                         @if($schedule['winner_text']=='Edit') 
                             <p><span><a href="#" id="scheduleEdit_{{$schedule['id']}}" onclick="editMatchSchedule({{$schedule['id']}}, 1, '', 'mainmatchschedule')" class="add_score_but">Edit</a></span></p>
