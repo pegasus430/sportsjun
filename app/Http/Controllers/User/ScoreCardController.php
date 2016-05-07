@@ -112,7 +112,7 @@ class ScoreCardController extends Controller {
 		$is_singles = '';
 		if(!empty($match_data))
 		{
-			
+			$tournamentDetails = [];
 			//if bye match, b_id is null
 			
 			//if b_id is null update a_id as winner
@@ -145,24 +145,24 @@ class ScoreCardController extends Controller {
 				$sport_name = $sportsDetails[0]['sports_name'];
 				if(strtolower($sport_name)==strtolower('Tennis'))//if match is related to tennis
 				{
-					return  $this->tennisOrTableTennisScoreCard($match_data,$match='Tennis');
+					return  $this->tennisOrTableTennisScoreCard($match_data,$match='Tennis',$sportsDetails,$tournamentDetails);
 				}else if(strtolower($sport_name)==strtolower('Table Tennis'))//if match is related to table tennis
 				{	
-					return $this->tennisOrTableTennisScoreCard($match_data,$match='Table Tennis');
+					return $this->tennisOrTableTennisScoreCard($match_data,$match='Table Tennis',$sportsDetails,$tournamentDetails);
 				}else if(strtolower($sport_name)==strtolower('Cricket'))
 				{
-					return $this->cricketScoreCard($match_data);
+					return $this->cricketScoreCard($match_data,$sportsDetails,$tournamentDetails);
 				}
 				else if(strtolower($sport_name)==strtolower('soccer'))
 				{
-					return $this->soccerScoreCard($match_data);
+					return $this->soccerScoreCard($match_data,$sportsDetails,$tournamentDetails);
 				}
 			}
 		}
 	}
 
 	//function to display tennis score card form
-	public function tennisOrTableTennisScoreCard($match_data,$match,$is_from_view=0)
+	public function tennisOrTableTennisScoreCard($match_data,$match,$sportsDetails=[],$tournamentDetails=[],$is_from_view=0)
 	{
 		
 		$score_a_array=array();
@@ -325,12 +325,12 @@ class ScoreCardController extends Controller {
 				{
 					//for form submit pass id from controller
 					$form_id = 'tennis';
-					return view('scorecards.tennisscorecard',array('user_a_name'=>$user_a_name,'user_b_name'=>$user_b_name,'user_a_logo'=>$user_a_logo,'user_b_logo'=>$user_b_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'is_singles'=>$is_singles,'score_a_array'=>$score_a_array,'score_b_array'=>$score_b_array,'b_players'=>$b_players,'a_players'=>$a_players,'team_a_player_images'=>$team_a_player_images,'team_b_player_images'=>$team_b_player_images,'decoded_match_details'=>$decoded_match_details,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'form_id'=>$form_id));
+					return view('scorecards.tennisscorecard',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'user_a_name'=>$user_a_name,'user_b_name'=>$user_b_name,'user_a_logo'=>$user_a_logo,'user_b_logo'=>$user_b_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'is_singles'=>$is_singles,'score_a_array'=>$score_a_array,'score_b_array'=>$score_b_array,'b_players'=>$b_players,'a_players'=>$a_players,'team_a_player_images'=>$team_a_player_images,'team_b_player_images'=>$team_b_player_images,'decoded_match_details'=>$decoded_match_details,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'form_id'=>$form_id));
 				}else
 				{
 					//for form submit pass id from controller
 					$form_id = 'tabletennis';
-					return view('scorecards.tabletennisscorecard',array('user_a_name'=>$user_a_name,'user_b_name'=>$user_b_name,'user_a_logo'=>$user_a_logo,'user_b_logo'=>$user_b_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'is_singles'=>$is_singles,'score_a_array'=>$score_a_array,'score_b_array'=>$score_b_array,'b_players'=>$b_players,'a_players'=>$a_players,'team_a_player_images'=>$team_a_player_images,'team_b_player_images'=>$team_b_player_images,'decoded_match_details'=>$decoded_match_details,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'form_id'=>$form_id));
+					return view('scorecards.tabletennisscorecard',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'user_a_name'=>$user_a_name,'user_b_name'=>$user_b_name,'user_a_logo'=>$user_a_logo,'user_b_logo'=>$user_b_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'is_singles'=>$is_singles,'score_a_array'=>$score_a_array,'score_b_array'=>$score_b_array,'b_players'=>$b_players,'a_players'=>$a_players,'team_a_player_images'=>$team_a_player_images,'team_b_player_images'=>$team_b_player_images,'decoded_match_details'=>$decoded_match_details,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'form_id'=>$form_id));
 				}
 			}
 			
@@ -926,7 +926,7 @@ class ScoreCardController extends Controller {
 		
 	}
 	//function to save cricket details
-	public function cricketScoreCard($match_data,$is_from_view=0)
+	public function cricketScoreCard($match_data,$sportsDetails=[],$tournamentDetails=[],$is_from_view=0)
 	{
 		$loginUserId = '';
 		$loginUserRole = '';
@@ -1392,11 +1392,11 @@ class ScoreCardController extends Controller {
 			
 			$enum_shortcuts = array('bowled' => 'b', 'caught' => 'c', 'handled_ball' => 'htb', 'hit_ball_twice' => 'htbt', 'hit_wicket' => 'hw', 'lbw' => 'lbw', 'obstructing_the_field' => 'otf' ,'retired' => 'r', 'run_out' => 'ro', 'stumped' => 's', 'timed_out'=>'to');
 
-			return view('scorecards.cricketscorecardview',array('team_a'=>[''=>'Select Player']+$team_a,'team_b'=>[''=>'Select Player']+$team_b,'match_data'=>$match_data,'team_a_name'=>$team_a_name,'team_b_name'=>$team_b_name,'enum'=> ['' => 'Select Out As'] + $enum,'team_a_fst_ing_array'=>$team_a_fst_ing_array,'team_b_fst_ing_array'=>$team_b_fst_ing_array,'team_a_secnd_ing_array'=>$team_a_secnd_ing_array,'team_b_secnd_ing_array'=>$team_b_secnd_ing_array,'team_wise_match_details'=>$team_wise_match_details,'team_a_count'=>$team_a_count,'team_b_count'=>$team_b_count,'team_a_logo'=>$team_a_logo,'team_b_logo'=>$team_b_logo,'team_a_fst_ing_score'=>$team_a_fst_ing_score,'team_a_fst_ing_wkt'=>$team_a_fst_ing_wkt,'team_a_fst_ing_overs'=>$team_a_fst_ing_overs,'team_a_scnd_ing_score'=>$team_a_scnd_ing_score,'team_a_scnd_ing_wkt'=>$team_a_scnd_ing_wkt,'team_a_scnd_ing_overs'=>$team_a_scnd_ing_overs,'team_b_fst_ing_score'=>$team_b_fst_ing_score,'team_b_fst_ing_wkt'=>$team_b_fst_ing_wkt,'team_b_fst_ing_overs'=>$team_b_fst_ing_overs,'team_b_scnd_ing_score'=>$team_b_scnd_ing_score,'team_b_scnd_ing_wkt'=>$team_b_scnd_ing_wkt,'team_b_scnd_ing_overs'=>$team_b_scnd_ing_overs,'player_name_array'=>$player_name_array,'a_keyCount'=>$a_keyCount_fst_ing,'b_keyCount'=>$b_keyCount_fst_ing,'a_keycount_scnd_ing'=>$a_keycount_scnd_ing,'b_keycount_scnd_ing'=>$b_keycount_scnd_ing,'enum_shortcuts'=>$enum_shortcuts,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_scnd_ing_count'=>$team_a_scnd_ing_count,'team_b_scnd_ing_count'=>$team_b_scnd_ing_count,'team_a_scnd_ing'=>[''=>'Select Player']+$team_a_scnd_ing,'team_b_scnd_ing'=>[''=>'Select Player']+$team_b_scnd_ing,'team_a_fst_ing_bowling_array'=>$team_a_fst_ing_bowling_array,'team_b_fst_ing_bowling_array'=>$team_b_fst_ing_bowling_array,'team_a_scnd_ing_bowling_array'=>$team_a_scnd_ing_bowling_array,'team_b_scnd_ing_bowling_array'=>$team_b_scnd_ing_bowling_array,'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city));
+			return view('scorecards.cricketscorecardview',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'team_a'=>[''=>'Select Player']+$team_a,'team_b'=>[''=>'Select Player']+$team_b,'match_data'=>$match_data,'team_a_name'=>$team_a_name,'team_b_name'=>$team_b_name,'enum'=> ['' => 'Select Out As'] + $enum,'team_a_fst_ing_array'=>$team_a_fst_ing_array,'team_b_fst_ing_array'=>$team_b_fst_ing_array,'team_a_secnd_ing_array'=>$team_a_secnd_ing_array,'team_b_secnd_ing_array'=>$team_b_secnd_ing_array,'team_wise_match_details'=>$team_wise_match_details,'team_a_count'=>$team_a_count,'team_b_count'=>$team_b_count,'team_a_logo'=>$team_a_logo,'team_b_logo'=>$team_b_logo,'team_a_fst_ing_score'=>$team_a_fst_ing_score,'team_a_fst_ing_wkt'=>$team_a_fst_ing_wkt,'team_a_fst_ing_overs'=>$team_a_fst_ing_overs,'team_a_scnd_ing_score'=>$team_a_scnd_ing_score,'team_a_scnd_ing_wkt'=>$team_a_scnd_ing_wkt,'team_a_scnd_ing_overs'=>$team_a_scnd_ing_overs,'team_b_fst_ing_score'=>$team_b_fst_ing_score,'team_b_fst_ing_wkt'=>$team_b_fst_ing_wkt,'team_b_fst_ing_overs'=>$team_b_fst_ing_overs,'team_b_scnd_ing_score'=>$team_b_scnd_ing_score,'team_b_scnd_ing_wkt'=>$team_b_scnd_ing_wkt,'team_b_scnd_ing_overs'=>$team_b_scnd_ing_overs,'player_name_array'=>$player_name_array,'a_keyCount'=>$a_keyCount_fst_ing,'b_keyCount'=>$b_keyCount_fst_ing,'a_keycount_scnd_ing'=>$a_keycount_scnd_ing,'b_keycount_scnd_ing'=>$b_keycount_scnd_ing,'enum_shortcuts'=>$enum_shortcuts,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_scnd_ing_count'=>$team_a_scnd_ing_count,'team_b_scnd_ing_count'=>$team_b_scnd_ing_count,'team_a_scnd_ing'=>[''=>'Select Player']+$team_a_scnd_ing,'team_b_scnd_ing'=>[''=>'Select Player']+$team_b_scnd_ing,'team_a_fst_ing_bowling_array'=>$team_a_fst_ing_bowling_array,'team_b_fst_ing_bowling_array'=>$team_b_fst_ing_bowling_array,'team_a_scnd_ing_bowling_array'=>$team_a_scnd_ing_bowling_array,'team_b_scnd_ing_bowling_array'=>$team_b_scnd_ing_bowling_array,'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city));
 		}
 		else //to view and edit cricket score card
 		{
-			return view('scorecards.cricketscorecard',array('team_a'=>[''=>'Select Player']+$team_a,'team_b'=>[''=>'Select Player']+$team_b,'match_data'=>$match_data,'team_a_name'=>$team_a_name,'team_b_name'=>$team_b_name,'enum'=> ['' => 'Select Out As'] + $enum,'team_a_fst_ing_array'=>$team_a_fst_ing_array,'team_b_fst_ing_array'=>$team_b_fst_ing_array,'team_a_secnd_ing_array'=>$team_a_secnd_ing_array,'team_b_secnd_ing_array'=>$team_b_secnd_ing_array,'team_wise_match_details'=>$team_wise_match_details,'team_a_count'=>$team_a_count,'team_b_count'=>$team_b_count,'team_a_logo'=>$team_a_logo,'team_b_logo'=>$team_b_logo,'team_a_fst_ing_score'=>$team_a_fst_ing_score,'team_a_fst_ing_wkt'=>$team_a_fst_ing_wkt,'team_a_fst_ing_overs'=>$team_a_fst_ing_overs,'team_a_scnd_ing_score'=>$team_a_scnd_ing_score,'team_a_scnd_ing_wkt'=>$team_a_scnd_ing_wkt,'team_a_scnd_ing_overs'=>$team_a_scnd_ing_overs,'team_b_fst_ing_score'=>$team_b_fst_ing_score,'team_b_fst_ing_wkt'=>$team_b_fst_ing_wkt,'team_b_fst_ing_overs'=>$team_b_fst_ing_overs,'team_b_scnd_ing_score'=>$team_b_scnd_ing_score,'team_b_scnd_ing_wkt'=>$team_b_scnd_ing_wkt,'team_b_scnd_ing_overs'=>$team_b_scnd_ing_overs,'a_keyCount'=>$a_keyCount_fst_ing,'b_keyCount'=>$b_keyCount_fst_ing,'a_keycount_scnd_ing'=>$a_keycount_scnd_ing,'b_keycount_scnd_ing'=>$b_keycount_scnd_ing,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_scnd_ing_count'=>$team_a_scnd_ing_count,'team_b_scnd_ing_count'=>$team_b_scnd_ing_count,'team_a_scnd_ing'=>[''=>'Select Player']+$team_a_scnd_ing,'team_b_scnd_ing'=>[''=>'Select Player']+$team_b_scnd_ing,'team_a_fst_ing_bowling_array'=>$team_a_fst_ing_bowling_array,'team_b_fst_ing_bowling_array'=>$team_b_fst_ing_bowling_array,'team_a_scnd_ing_bowling_array'=>$team_a_scnd_ing_bowling_array,'team_b_scnd_ing_bowling_array'=>$team_b_scnd_ing_bowling_array,'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city));
+			return view('scorecards.cricketscorecard',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'team_a'=>[''=>'Select Player']+$team_a,'team_b'=>[''=>'Select Player']+$team_b,'match_data'=>$match_data,'team_a_name'=>$team_a_name,'team_b_name'=>$team_b_name,'enum'=> ['' => 'Select Out As'] + $enum,'team_a_fst_ing_array'=>$team_a_fst_ing_array,'team_b_fst_ing_array'=>$team_b_fst_ing_array,'team_a_secnd_ing_array'=>$team_a_secnd_ing_array,'team_b_secnd_ing_array'=>$team_b_secnd_ing_array,'team_wise_match_details'=>$team_wise_match_details,'team_a_count'=>$team_a_count,'team_b_count'=>$team_b_count,'team_a_logo'=>$team_a_logo,'team_b_logo'=>$team_b_logo,'team_a_fst_ing_score'=>$team_a_fst_ing_score,'team_a_fst_ing_wkt'=>$team_a_fst_ing_wkt,'team_a_fst_ing_overs'=>$team_a_fst_ing_overs,'team_a_scnd_ing_score'=>$team_a_scnd_ing_score,'team_a_scnd_ing_wkt'=>$team_a_scnd_ing_wkt,'team_a_scnd_ing_overs'=>$team_a_scnd_ing_overs,'team_b_fst_ing_score'=>$team_b_fst_ing_score,'team_b_fst_ing_wkt'=>$team_b_fst_ing_wkt,'team_b_fst_ing_overs'=>$team_b_fst_ing_overs,'team_b_scnd_ing_score'=>$team_b_scnd_ing_score,'team_b_scnd_ing_wkt'=>$team_b_scnd_ing_wkt,'team_b_scnd_ing_overs'=>$team_b_scnd_ing_overs,'a_keyCount'=>$a_keyCount_fst_ing,'b_keyCount'=>$b_keyCount_fst_ing,'a_keycount_scnd_ing'=>$a_keycount_scnd_ing,'b_keycount_scnd_ing'=>$b_keycount_scnd_ing,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_scnd_ing_count'=>$team_a_scnd_ing_count,'team_b_scnd_ing_count'=>$team_b_scnd_ing_count,'team_a_scnd_ing'=>[''=>'Select Player']+$team_a_scnd_ing,'team_b_scnd_ing'=>[''=>'Select Player']+$team_b_scnd_ing,'team_a_fst_ing_bowling_array'=>$team_a_fst_ing_bowling_array,'team_b_fst_ing_bowling_array'=>$team_b_fst_ing_bowling_array,'team_a_scnd_ing_bowling_array'=>$team_a_scnd_ing_bowling_array,'team_b_scnd_ing_bowling_array'=>$team_b_scnd_ing_bowling_array,'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city));
 		}
 		
 	}
@@ -2015,7 +2015,7 @@ class ScoreCardController extends Controller {
 		}
 	}
 	// function to insert soccer score card
-	public function soccerScoreCard($match_data,$is_from_view=0)
+	public function soccerScoreCard($match_data,$sportsDetails=[],$tournamentDetails=[],$is_from_view=0)
 	{
 		$loginUserId = Auth::user()->id;
 		$loginUserRole = Auth::user()->role;
@@ -2171,10 +2171,10 @@ class ScoreCardController extends Controller {
             foreach ($users as $user) {
                 $player_name_array[$user['id']] = $user['name']; //get team names
             }
-			return view('scorecards.soccerscorecardview',array('team_a'=>[''=>'Select Player']+$team_a,'team_b'=>[''=>'Select Player']+$team_b,'match_data'=>$match_data,'team_a_name'=>$team_a_name,'team_b_name'=>$team_b_name,'team_a_soccer_scores_array'=>$team_a_soccer_scores_array,'team_b_soccer_scores_array'=>$team_b_soccer_scores_array,'team_a_count'=>$team_a_count,'team_b_count'=>$team_b_count,'team_a_logo'=>$team_a_logo,'team_b_logo'=>$team_b_logo,'team_a_goals'=>$team_a_goals,'team_b_goals'=>$team_b_goals,'player_name_array'=> $player_name_array,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'team_a_red_count'=>$team_a_red_count,'team_a_yellow_count'=>$team_a_yellow_count,'team_b_red_count'=>$team_b_red_count,'team_b_yellow_count'=>$team_b_yellow_count,'form_id'=>$form_id));
+			return view('scorecards.soccerscorecardview',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'team_a'=>[''=>'Select Player']+$team_a,'team_b'=>[''=>'Select Player']+$team_b,'match_data'=>$match_data,'team_a_name'=>$team_a_name,'team_b_name'=>$team_b_name,'team_a_soccer_scores_array'=>$team_a_soccer_scores_array,'team_b_soccer_scores_array'=>$team_b_soccer_scores_array,'team_a_count'=>$team_a_count,'team_b_count'=>$team_b_count,'team_a_logo'=>$team_a_logo,'team_b_logo'=>$team_b_logo,'team_a_goals'=>$team_a_goals,'team_b_goals'=>$team_b_goals,'player_name_array'=> $player_name_array,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'team_a_red_count'=>$team_a_red_count,'team_a_yellow_count'=>$team_a_yellow_count,'team_b_red_count'=>$team_b_red_count,'team_b_yellow_count'=>$team_b_yellow_count,'form_id'=>$form_id));
 		}else //soccer score view and edit
 		{
-			return view('scorecards.soccerscorecard',array('team_a'=>[''=>'Select Player']+$team_a,'team_b'=>[''=>'Select Player']+$team_b,'match_data'=>$match_data,'team_a_name'=>$team_a_name,'team_b_name'=>$team_b_name,'team_a_soccer_scores_array'=>$team_a_soccer_scores_array,'team_b_soccer_scores_array'=>$team_b_soccer_scores_array,'team_a_count'=>$team_a_count,'team_b_count'=>$team_b_count,'team_a_logo'=>$team_a_logo,'team_b_logo'=>$team_b_logo,'team_a_goals'=>$team_a_goals,'team_b_goals'=>$team_b_goals,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'team_a_red_count'=>$team_a_red_count,'team_a_yellow_count'=>$team_a_yellow_count,'team_b_red_count'=>$team_b_red_count,'team_b_yellow_count'=>$team_b_yellow_count,'form_id'=>$form_id));
+			return view('scorecards.soccerscorecard',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'team_a'=>[''=>'Select Player']+$team_a,'team_b'=>[''=>'Select Player']+$team_b,'match_data'=>$match_data,'team_a_name'=>$team_a_name,'team_b_name'=>$team_b_name,'team_a_soccer_scores_array'=>$team_a_soccer_scores_array,'team_b_soccer_scores_array'=>$team_b_soccer_scores_array,'team_a_count'=>$team_a_count,'team_b_count'=>$team_b_count,'team_a_logo'=>$team_a_logo,'team_b_logo'=>$team_b_logo,'team_a_goals'=>$team_a_goals,'team_b_goals'=>$team_b_goals,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'team_a_red_count'=>$team_a_red_count,'team_a_yellow_count'=>$team_a_yellow_count,'team_b_red_count'=>$team_b_red_count,'team_b_yellow_count'=>$team_b_yellow_count,'form_id'=>$form_id));
 		}
 		
 	}
@@ -2471,22 +2471,29 @@ class ScoreCardController extends Controller {
 		{
 			$sport_id = $match_data[0]['sports_id'];//get sport id
 			$sportsDetails = Sport::where('id',$sport_id)->get()->toArray();//get sports details
+                        
+                        $tournamentDetails = [];
+                        if (!empty($match_data[0]['tournament_id']))
+                        {
+                                $tournamentDetails = Tournaments::where('id', '=', $match_data[0]['tournament_id'])->first();
+                        }
+                        
 			if(!empty($sportsDetails))
 			{
 				$sport_name = $sportsDetails[0]['sports_name'];
 				if(strtolower($sport_name)==strtolower('Tennis'))//if match is related to tennis
 				{
-					return  $this->tennisOrTableTennisScoreCard($match_data,$match='Tennis',$is_from_view=1);
+					return  $this->tennisOrTableTennisScoreCard($match_data,$match='Tennis',$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}else if(strtolower($sport_name)==strtolower('Table Tennis'))//if match is related to table tennis
 				{
-					return $this->tennisOrTableTennisScoreCard($match_data,$match='Table Tennis',$is_from_view=1);
+					return $this->tennisOrTableTennisScoreCard($match_data,$match='Table Tennis',$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}else if(strtolower($sport_name)==strtolower('Cricket'))
 				{
-					return $this->cricketScoreCard($match_data,$is_from_view=1);
+					return $this->cricketScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
 				else if(strtolower($sport_name)==strtolower('soccer'))
 				{
-					return $this->soccerScoreCard($match_data,$is_from_view=1);
+					return $this->soccerScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
 			}
 		}
@@ -2503,22 +2510,29 @@ class ScoreCardController extends Controller {
 		{
 			$sport_id = $match_data[0]['sports_id'];//get sport id
 			$sportsDetails = Sport::where('id',$sport_id)->get()->toArray();//get sports details
+                        
+                        $tournamentDetails = [];
+                        if (!empty($match_data[0]['tournament_id']))
+                        {
+                                $tournamentDetails = Tournaments::where('id', '=', $match_data[0]['tournament_id'])->first();
+                        }
+                        
 			if(!empty($sportsDetails))
 			{
 				$sport_name = $sportsDetails[0]['sports_name'];
 				if(strtolower($sport_name)==strtolower('Tennis'))//if match is related to tennis
 				{
-					return  $this->tennisOrTableTennisScoreCard($match_data,$match='Tennis',$is_from_view=1);
+					return  $this->tennisOrTableTennisScoreCard($match_data,$match='Tennis',$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}else if(strtolower($sport_name)==strtolower('Table Tennis'))//if match is related to table tennis
 				{
-					return $this->tennisOrTableTennisScoreCard($match_data,$match='Table Tennis',$is_from_view=1);
+					return $this->tennisOrTableTennisScoreCard($match_data,$match='Table Tennis',$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}else if(strtolower($sport_name)==strtolower('Cricket'))
 				{
-					return $this->cricketScoreCard($match_data,$is_from_view=1);
+					return $this->cricketScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
 				else if(strtolower($sport_name)==strtolower('soccer'))
 				{
-					return $this->soccerScoreCard($match_data,$is_from_view=1);
+					return $this->soccerScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
 			}
 		}
