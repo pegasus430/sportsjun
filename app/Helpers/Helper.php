@@ -1375,8 +1375,21 @@ $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids
 				}
 				
 			}else{
+                                if ($matchData[0]['schedule_type'] == 'player')
+                                {
+                                        $valid_user_for_approve = ($score_status_array['active_user']!=$loginUserId);
+                                }
+                                else
+                                {
+                                        $valid_user_for_approve = (self::isTeamOwnerorcaptain($team_a_id, $loginUserId) && self::isTeamOwnerorcaptain($team_b_id, $loginUserId));
+                                        if (!$valid_user_for_approve)
+                                        {
+                                                $valid_user_for_approve = ($score_status_array['active_user']!=$loginUserId);
+                                        }
+                                }
+                                
 				if(!empty($score_status_array['added_by']) 
-                                        && (self::isTeamOwnerorcaptain($team_a_id, $loginUserId) || self::isTeamOwnerorcaptain($team_b_id, $loginUserId)) 
+                                        && $valid_user_for_approve
                                         && $matchData[0]['scoring_status']=='approval_pending')
 				{
 					return true;
