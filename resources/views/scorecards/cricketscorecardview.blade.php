@@ -158,28 +158,6 @@
 			 <textarea name="rej_note" id="rej_note" rows="4" cols="50" placeholder="Reject Note" style="margin:20px 0 10px 0;"></textarea>
         </div>
 	@endif		
-    
-    
-    	
-
-            <!-- Start Score card -->
-            <meta property="og:url"           content="http://sj.com/matchpublic/scorecard/view/262" />
-            <meta property="og:type"          content="Sportsjun website" />
-            <meta property="og:title"         content="Sportsjun title" />
-            <meta property="og:description"   content="Sportsjun description" />
-            <meta property="og:image"         content="https://www.planwallpaper.com/static/images/Winter-Tiger-Wild-Cat-Images.jpg" />
-            <!-- Scripts -->
-            <script type="text/javascript">var switchTo5x=true;</script>
-            <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
-            <script type="text/javascript">stLight.options({publisher: "9f510197-8a40-4bb0-9bb1-e5150213e5de", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>
-            
-            <!-- Social share items-->
-            <span class='st_' displayText=''></span>
-            <span class='st_twitter' displayText='Tweet'></span>
-            <span class='st_facebook' displayText='Facebook'></span>
-            <span class='st_googleplus' displayText='Google +'></span>
-            <!-- End score card -->
-    
         </div>
 		</div> 
 	</div>
