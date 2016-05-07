@@ -51,7 +51,8 @@
                         @if($schedule['match_type']!='other')
                             <span class='match_type_text'>({{ $schedule['match_type']=='odi'?strtoupper($schedule['match_type']):ucfirst($schedule['match_type']) }})</span>
                         @endif
-                    </p>  
+                    </p>
+                    
                     @if(isset($schedule['winner_text']))
                         @if($schedule['winner_text']=='Edit') 
                             <p><span><a href="#" id="scheduleEdit_{{$schedule['id']}}" onclick="editMatchSchedule({{$schedule['id']}}, 1, '', 'mainmatchschedule')" class="add_score_but">Edit</a></span></p>
@@ -61,8 +62,12 @@
                             <p><span style="color:rgba(0,0,0,0.5)">{{ trans('message.schedule.invitationrejected') }}</span></p>
                         @else    
                             <p><span><a href="{{ url('match/scorecard/edit/'.$schedule['id']) }}" class="add_score_but">{{$schedule['winner_text']}}</a></span></p>
-                        @endif    
+                        @endif
+                    @elseif(strtotime($schedule['match_start_date']) < time())
+                        <p><span><a href="{{ url('match/scorecard/edit/'.$schedule['id']) }}" class="add_score_but">{{trans('message.schedule.viewscore')}}</a></span></p>
                     @endif
+                    
+                    
                 </div>
     
                 <div id="teamtwo" class="col-sm-3 score_view_img">

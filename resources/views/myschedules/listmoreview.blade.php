@@ -57,6 +57,8 @@
                     @else    
                         <p><span><a href="{{ url('match/scorecard/edit/'.$schedule['id']) }}" class="add_score_but">{{$schedule['winner_text']}}</a></span></p>
                     @endif    
+                @elseif(strtotime($schedule['match_start_date']) < time())
+                        <p><span><a href="{{ url('match/scorecard/edit/'.$schedule['id']) }}" class="add_score_but">{{trans('message.schedule.viewscore')}}</a></span></p>
                 @endif
             </div>
     
