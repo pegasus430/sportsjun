@@ -23,8 +23,8 @@
                 <td>{{$statistic->lost}}</td>
                 <!--<td>{{$statistic->tied}}</td>-->
                 <td>{{number_format(($statistic->won/$statistic->matches)*100,2)}}</td>
-                <td>{{$statistic->double_faults}}</td>
                 <td>{{$statistic->aces}}</td>
+                <td>{{$statistic->double_faults}}</td>
             </tr>
             @endforeach
         </tbody>
