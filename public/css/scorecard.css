@@ -794,7 +794,7 @@
 .match-status {
     text-align: center;
     position: absolute;
-    top: 25%;
+    top: 13%;
     right: 20px;
     margin-bottom: 0;
 }
@@ -1055,4 +1055,57 @@ span#edit_first_innings,span#edit_second_innings {
 }
 li.active span#edit_first_innings,li.active span#edit_second_innings {
     display:inline;
+}
+.sj-ico {
+    background: url("http://www.cricbuzz.com/images/icon_sprite_v_1_3_5.png") no-repeat scroll;
+    display: inline-block;
+}
+div.share-scorecard {
+    position: absolute;
+    top: 52px;
+    left: 4%;
+}
+.sj-social {
+    margin: 7px 0 0 -4px;
+}
+.sj-social-td {
+    width: 75px;
+    font-weight: normal;
+}
+.sj-social-ancr-fb {
+    background: #325A97;
+}
+.sj-social-ancr {
+    border-radius: 2px;
+    max-width: 65px;
+    max-height: 27px;
+    font-size: 12px;
+    color: #FFF;
+    display: block;
+}
+.sj-fb-share {
+    background-position: -85px -15px;
+    height: 20px;
+    width: 22px;
+}
+.sj-font-12 {
+    font-size: 12px;
+    position: relative;
+    top: -3px;
+}
+.sj-social-ancr-twt {
+    background: #00ACED;
+}
+.sj-twt-share {
+    background-position: -224px -12px;
+    height: 20px;
+    width: 22px;
+}
+.sj-social-ancr-gplus {
+    background: #DD4B39;
+}
+.sj-gplus-share {
+    background-position: -103px -15px;
+    height: 20px;
+    width: 22px;
 }
