@@ -1349,6 +1349,8 @@ $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids
 	{
 		$loginUserId = Auth::user()->id;
 		$loginUserRole = Auth::user()->role;
+                $team_a_id = $matchData[0]['a_id'];
+		$team_b_id = $matchData[0]['b_id'];
 		$score_status_array = json_decode($matchData[0]['score_added_by'],true);
 		if($loginUserRole=='admin') // if admin login
 		{
@@ -1373,7 +1375,9 @@ $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids
 				}
 				
 			}else{
-				if(!empty($score_status_array['added_by']) && $score_status_array['active_user']!=$loginUserId && $matchData[0]['scoring_status']=='approval_pending')
+				if(!empty($score_status_array['added_by']) 
+                                        && (self::isTeamOwnerorcaptain($team_a_id, $loginUserId) || self::isTeamOwnerorcaptain($team_b_id, $loginUserId)) 
+                                        && $matchData[0]['scoring_status']=='approval_pending')
 				{
 					return true;
 				}

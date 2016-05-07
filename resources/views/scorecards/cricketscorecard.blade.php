@@ -127,19 +127,35 @@
                 @endif
                 </h5>
                 
-                    <div class="form-inline">				
+                    <div class="form-inline">
+                                <?php   if (!empty($score_status_array['toss_won_by'])) { ?>
+                                        <div id="matchTossNote">
+                                        <?php   if ($match_data[0]['a_id'] == $score_status_array['toss_won_by']) { ?>
+                                                {{ $team_a_name }} 
+                                        <?php   } else { ?>
+                                                {{ $team_b_name }} 
+                                        <?php   } ?>
+                                                won the toss 
+                                        <?php   if (!empty($score_status_array['fst_ing_batting'])) { ?>
+                                                and chose to 
+                                                <?php if ($match_data[0]['a_id'] == $score_status_array['fst_ing_batting']) { ?>
+                                                        Bat
+                                                <?php   } else { ?>
+                                                        Bowl
+                                                <?php   } ?>
+                                        <?php   } ?>.
+                                        </div>
+                                <?php   } ?>
+                            
                             @if($match_data[0]['match_status']=='completed' && $match_data[0]['winner_id']>0)
-
                             <div class="form-group">
                                     <label class="win_head">Winner</label> 
                                     <h3 class="win_team">{{ ($match_data[0]['a_id']==$match_data[0]['winner_id'])?$team_a_name:$team_b_name }}</h3>
                             </div>
-
                             @else
                             @if($match_data[0]['match_status']=='completed' && $match_data[0]['is_tied']>0)
                             <div class="form-group">
                                     <label>Match Result : {{ 'Tie' }}</label>
-
                             </div>   
                             @else
                             <div class="form-group">
