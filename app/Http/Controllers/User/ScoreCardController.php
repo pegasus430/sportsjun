@@ -2619,34 +2619,34 @@ class ScoreCardController extends Controller {
 			{
 				if(!empty($team_b_owner_id)) //condition added if two team owneres are same
 				{
-					if($loginUserId!=$team_b_owner_id)
+					//if($loginUserId!=$team_b_owner_id)
 						AllRequests::sendnotifications($team_b_owner_id,$message,$url);	//notification for owner
 				}
 				if(!empty($team_b_manager_id))
 				{
-					if($loginUserId!=$team_b_manager_id)
+					//if($loginUserId!=$team_b_manager_id)
 						AllRequests::sendnotifications($team_b_manager_id,$message,$url);	//notification for manager
 				}					
 				if(!empty($team_b_captain_id))
 				{
-					if($loginUserId!=$team_b_captain_id)
+					//if($loginUserId!=$team_b_captain_id)
 						AllRequests::sendnotifications($team_b_captain_id,$message,$url);	//notification for captain
 				}
 			}else
 			{
 				if(!empty($team_a_owner_id)) //condition added if two team owneres are same
 				{
-					if($loginUserId!=$team_a_owner_id)
+					//if($loginUserId!=$team_a_owner_id)
 					AllRequests::sendnotifications($team_a_owner_id,$message,$url);	//notification for owner
 				}
 				if(!empty($team_a_manager_id))
 				{
-					if($loginUserId!=$team_a_manager_id)
+					//if($loginUserId!=$team_a_manager_id)
 					AllRequests::sendnotifications($team_a_manager_id,$message,$url);	//notification for manager
 				}
 				if(!empty($team_a_captain_id))
 				{
-					if($loginUserId!=$team_a_captain_id)
+					//if($loginUserId!=$team_a_captain_id)
 					AllRequests::sendnotifications($team_a_captain_id,$message,$url); //notification for captain
 				}
 			}
