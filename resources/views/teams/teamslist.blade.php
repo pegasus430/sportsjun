@@ -88,8 +88,16 @@
                                                      </div>
                                                      
                                                         @endforeach
-														@else
-															<div class="message_new_for_team"> Manage all your teams easily by grouping them under an Organisation.</div>
+                                                        @else
+                                                        <div class="message_new_for_team">Manage all your teams easily by grouping them under an Organization.</div>
+                                                        <div class="intro_list_container">
+                                                                <ul class="intro_list_on_empty_pages">
+                                                                        <span class="steps_to_follow">Steps to follow:</span>
+                                                                        <li>Click on the <span class="bold">Create New +</span> button on the top left side, select <span class="bold">Organization</span></li>
+                                                                        <li>Fill all the details and select <span class="bold">teams</span> from drop-down (if needed) and <span class="bold">Create</span></li>
+                                                                        <li>Manage all your Teams under one Organization umbrella</li>
+                                                                </ul>
+                                                        </div>
                                                         @endif
 														
 															
@@ -150,7 +158,15 @@
                                                         
                                                 @endforeach
                                               	@else
-															<div class="message_new_for_team">Create your Team(s), Search and Schedule matches with other teams.</div>
+						<div class="message_new_for_team">Create your Team(s), Search and Schedule matches with other teams.</div>
+                                                <div class="intro_list_container">
+                                                        <ul class="intro_list_on_empty_pages">
+                                                                <span class="steps_to_follow">Steps to follow:</span>
+                                                                <li>Click on the <span class="bold">Create +</span> button on the top left side, select <span class="bold">Team</span></li>
+                                                                <li>Fill all the details and select <span class="bold">Organization</span> (if needed) from drop-down and <span class="bold">Create</span></li>
+                                                                <li>Now, search for other Teams and schedule matches easily</li>
+                                                        </ul>
+                                                </div>
                                               @endif
                                             </td>
                                         </tr>
@@ -194,8 +210,16 @@
                                                 </div>
                                                 </div>
                                                 @endforeach
-												@else
-															<div class="message_new_for_team"> Search for Teams in your locality and Join easily.</div>
+                                                @else
+                                                <div class="message_new_for_team">Search for Teams in your locality and Join easily.</div>
+                                                <div class="intro_list_container">
+                                                        <ul class="intro_list_on_empty_pages">
+                                                                <span class="steps_to_follow">Steps to follow:</span>
+                                                                <li><span class="bold">Search</span> for Teams in any locality in any sport</li>
+                                                                <li>Click <span class="bold">Join,</span> your request will be sent to the Team Management</li>
+                                                                <li>Once Request is accepted, you are part of the Team</li>
+                                                        </ul>
+                                                </div>
                                               @endif
                                                 
                                             </td>
@@ -241,8 +265,16 @@
                                                 </div>
                                             @endforeach
 											
-											@else
-															<div class="message_new_for_team">Search for Teams and Follow easily.</div>
+                                                @else
+                                                <div class="message_new_for_team">Search for Teams and Follow easily.</div>
+                                                <div class="intro_list_container">
+                                                        <ul class="intro_list_on_empty_pages">
+                                                                <span class="steps_to_follow">Steps to follow:</span>
+                                                                <li><span class="bold">Search</span> for Teams in any sport</li>
+                                                                <li>Click <span class="bold">Follow</span></li>
+                                                                <li>Now, you can easily follow all your favorite teams from this section</li>
+                                                        </ul>
+                                                </div>
                                               @endif
 														
                                             </td>
