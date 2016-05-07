@@ -131,19 +131,19 @@
                                 <?php   if (!empty($score_status_array['toss_won_by'])) { ?>
                                         <div id="matchTossNote">
                                         <?php   if ($match_data[0]['a_id'] == $score_status_array['toss_won_by']) { ?>
-                                                {{ $team_a_name }} 
+                                                {{ ucwords($team_a_name) }} 
                                         <?php   } else { ?>
-                                                {{ $team_b_name }} 
+                                                {{ ucwords($team_b_name) }} 
                                         <?php   } ?>
                                                 won the toss 
                                         <?php   if (!empty($score_status_array['fst_ing_batting'])) { ?>
                                                 and chose to 
                                                 <?php if ($match_data[0]['a_id'] == $score_status_array['fst_ing_batting']) { ?>
-                                                        Bat
+                                                        Bat.
                                                 <?php   } else { ?>
-                                                        Bowl
+                                                        Bowl.
                                                 <?php   } ?>
-                                        <?php   } ?>.
+                                        <?php   } ?>
                                         </div>
                                 <?php   } ?>
                             
