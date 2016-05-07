@@ -38,6 +38,12 @@
                     @endif
                 </p>  
                 
+                <?php 
+                        if (strpos($schedule['match_start_date'], ':') == false) {
+                                $schedule['match_start_date'] .= '00:00 AM'; 
+                        }
+                ?>
+                
                 @if(isset($schedule['winner_text']))
                 <p>
                     <span style="color:rgba(0,0,0,0.5)">
@@ -52,6 +58,8 @@
                 </p>
                 @elseif($isOwner)
                 <p><span><a href="#" id="scheduleEdit_{{$schedule['id']}}" onclick="editMatchSchedule({{$schedule['id']}},{{$isOwner}},'','myModal')" class="add_score_but">Edit</a></span></p>
+                @elseif(strtotime($schedule['match_start_date']) < time())
+                        <p><span><a href="{{ url('match/scorecard/view/'.$schedule['id']) }}" class="add_score_but">{{trans('message.schedule.viewscore')}}</a></span></p>
                 @endif
                  
              </div>
