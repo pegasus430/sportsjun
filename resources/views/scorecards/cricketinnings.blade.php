@@ -12,8 +12,8 @@
 		<tr>
 			<th>Batsman</th>
 			<th>How Out</th>
+                        <th>Fielder</th>
 			<th>Bowler</th>
-			<th>Fielder</th>
 			<th>R</th>
 			<th>B</th>
 			<th>4s</th>
@@ -39,7 +39,7 @@
 					@endforeach
 				</select>
 				 <div id="demoBasic">
-                        </div>
+                                </div>
 				</td>
 
 				<td><select name='a_outas_{{ $a_bat_fst_ing }}' class='gui-input team_a_wkt' id='a_outas_{{$a_bat_fst_ing}}'>
@@ -48,6 +48,14 @@
 					@endforeach
 				</select>
 				</td>
+                                
+                                <td><select name='a_fielder_{{ $a_bat_fst_ing }}' class='gui-input' id='a_fielder_{{$a_bat_fst_ing}}'>
+					@foreach($team_b as $b_player_key => $b_player_val)
+					<option value="{{$b_player_key}}" <?php if (isset($a_fst_inning['fielder_id']) && $a_fst_inning['fielder_id']==$b_player_key) echo ' selected';?>>{{ $b_player_val }}</option>
+					@endforeach
+				</select>
+				<span id="a_fildershow_{{ $a_bat_fst_ing }}" style="display:none;">{{'--'}}</span>
+				</td>
 
 				<td><select name='a_bowled_{{ $a_bat_fst_ing }}' class='gui-input' id='a_bowled_{{$a_bat_fst_ing}}'>
 					@foreach($team_b as $b_key => $b_val)
@@ -55,14 +63,6 @@
 					@endforeach
 				</select>
 				<span id="a_bowlershow_{{ $a_bat_fst_ing }}" style="display:none;">{{'--'}}</span>
-				</td>
-
-				<td><select name='a_fielder_{{ $a_bat_fst_ing }}' class='gui-input' id='a_fielder_{{$a_bat_fst_ing}}'>
-					@foreach($team_b as $b_player_key => $b_player_val)
-					<option value="{{$b_player_key}}" <?php if (isset($a_fst_inning['fielder_id']) && $a_fst_inning['fielder_id']==$b_player_key) echo ' selected';?>>{{ $b_player_val }}</option>
-					@endforeach
-				</select>
-				<span id="a_fildershow_{{ $a_bat_fst_ing }}" style="display:none;">{{'--'}}</span>
 				</td>
 
 				<td>{!! Form::text('a_runs_'.$a_bat_fst_ing , (!empty($a_fst_inning['totalruns']))?$a_fst_inning['totalruns']:'', array('class'=>'gui-input allownumericwithdecimal team_a_score runs_new','id'=>'a_runs_'.$a_bat_fst_ing,'onkeyup'=>"strikeratecalculator('a_runs_$a_bat_fst_ing','a_balls_$a_bat_fst_ing','a_strik_rate_$a_bat_fst_ing');")) !!}</td>
@@ -79,11 +79,11 @@
 				<td>{!! Form::select('a_player_1',$team_a,null,array('class'=>'gui-input a_player','id'=>'a_player_1')) !!}</td>
 				<!--<td>{!! Form::text('a_outas_1', null, array('class'=>'gui-input','id'=>'a_outas_1')) !!}</td>-->
 				<td>{!! Form::select('a_outas_1',$enum,null,array('class'=>'gui-input team_a_wkt','id'=>'a_outas_1')) !!}</td>
+                                <td>{!! Form::select('a_fielder_1',$team_b,null,array('class'=>'gui-input','id'=>'a_fielder_1')) !!}
+				<span id="a_fildershow_{{ $a_bat_fst_ing }}" style="display:none;">{{'--'}}</span>
+				</td>
 				<td>{!! Form::select('a_bowled_1',$team_b,null,array('class'=>'gui-input','id'=>'a_bowled_1')) !!}
 				<span id="a_bowlershow_{{ $a_bat_fst_ing }}" style="display:none;">{{'--'}}</span>
-				</td>
-				<td>{!! Form::select('a_fielder_1',$team_b,null,array('class'=>'gui-input','id'=>'a_fielder_1')) !!}
-				<span id="a_fildershow_{{ $a_bat_fst_ing }}" style="display:none;">{{'--'}}</span>
 				</td>
 				<td>{!! Form::text('a_runs_1', null, array('class'=>'gui-input allownumericwithdecimal team_a_score runs_new','id'=>'a_runs_1','onkeyup'=>"strikeratecalculator('a_runs_$a_bat_fst_ing','a_balls_$a_bat_fst_ing','a_strik_rate_$a_bat_fst_ing');")) !!}</td>
 				<td>{!! Form::text('a_balls_1', null, array('class'=>'gui-input allownumericwithdecimal runs_new','id'=>'a_balls_1','onkeyup'=>"strikeratecalculator('a_runs_$a_bat_fst_ing','a_balls_$a_bat_fst_ing','a_strik_rate_$a_bat_fst_ing');")) !!}</td>
@@ -292,8 +292,8 @@
 		<tr>
 			<th>Batsman</th>
 			<th>How Out</th>
+                        <th>Fielder</th>
 			<th>Bowler</th>
-			<th>Fielder</th>
 			<th>R</th>
 			<th>B</th>
 			<th>4s</th>
@@ -326,21 +326,21 @@
 					@endforeach
 				</select>
 				</td>
-
+                                
+                                <td><select name='b_fielder_{{ $team_b_bat_fst_ing }}' class='gui-input' id='b_fielder_{{$team_b_bat_fst_ing}}'>
+					@foreach($team_a as $b_bating_key => $b_bating_val)
+					<option value="{{$b_bating_key}}" <?php if (isset($team_b_bat['fielder_id']) && $team_b_bat['fielder_id']==$b_bating_key) echo ' selected';?>>{{ $b_bating_val }}</option>
+					@endforeach
+				</select>
+				<span id="b_fildershow_{{ $team_b_bat_fst_ing }}" style="display:none;">{{'--'}}</span>
+				</td>
+                                
 				<td><select name='b_bowled_{{ $team_b_bat_fst_ing }}' class='gui-input' id='b_bowled_{{$team_b_bat_fst_ing}}'>
 					@foreach($team_a as $b_bowled_key => $b_bowled_val)
 					<option value="{{$b_bowled_key}}" <?php if (isset($team_b_bat['bowled_id']) && $team_b_bat['bowled_id']==$b_bowled_key) echo ' selected';?>>{{ $b_bowled_val }}</option>
 					@endforeach
 				</select>
 				<span id="b_bowlershow_{{ $team_b_bat_fst_ing }}" style="display:none;">{{'--'}}</span>
-				</td>
-
-				<td><select name='b_fielder_{{ $team_b_bat_fst_ing }}' class='gui-input' id='b_fielder_{{$team_b_bat_fst_ing}}'>
-					@foreach($team_a as $b_bating_key => $b_bating_val)
-					<option value="{{$b_bating_key}}" <?php if (isset($team_b_bat['fielder_id']) && $team_b_bat['fielder_id']==$b_bating_key) echo ' selected';?>>{{ $b_bating_val }}</option>
-					@endforeach
-				</select>
-				<span id="b_fildershow_{{ $team_b_bat_fst_ing }}" style="display:none;">{{'--'}}</span>
 				</td>
 
 				<td>{!! Form::text('b_runs_'.$team_b_bat_fst_ing, (!empty($team_b_bat['totalruns']))?$team_b_bat['totalruns']:'', array('class'=>'gui-input allownumericwithdecimal team_b_score runs_new','id'=>'b_runs_'.$team_b_bat_fst_ing,'onkeyup'=>"strikeratecalculator('b_runs_$team_b_bat_fst_ing','b_balls_$team_b_bat_fst_ing','b_strik_rate_$team_b_bat_fst_ing');")) !!}</td>
@@ -357,11 +357,11 @@
 				<td>{!! Form::select('b_player_1',$team_b,null,array('class'=>'gui-input b_player','id'=>'b_player_1')) !!}</td>
 				<!--<td>{!! Form::text('b_outas_1', null, array('class'=>'gui-input','id'=>'b_outas_1')) !!}</td>-->
 				<td>{!! Form::select('b_outas_1',$enum,null,array('class'=>'gui-input team_b_wkt','id'=>'b_outas_1')) !!}</td>
-				<td>{!! Form::select('b_bowled_1',$team_a,null,array('class'=>'gui-input','id'=>'b_bowled_1')) !!}
-				<span id="b_bowlershow_{{ $team_b_bat_fst_ing }}" style="display:none;">{{'--'}}</span>
-				</td>
 				<td>{!! Form::select('b_fielder_1',$team_a,null,array('class'=>'gui-input','id'=>'b_fielder_1')) !!}
 				<span id="b_fildershow_{{ $team_b_bat_fst_ing }}" style="display:none;">{{'--'}}</span>
+				</td>
+                                <td>{!! Form::select('b_bowled_1',$team_a,null,array('class'=>'gui-input','id'=>'b_bowled_1')) !!}
+				<span id="b_bowlershow_{{ $team_b_bat_fst_ing }}" style="display:none;">{{'--'}}</span>
 				</td>
 				<td>{!! Form::text('b_runs_1', null, array('class'=>'gui-input allownumericwithdecimal team_b_score runs_new','id'=>'b_runs_1','onkeyup'=>"strikeratecalculator('b_runs_$team_b_bat_fst_ing','b_balls_$team_b_bat_fst_ing','b_strik_rate_$team_b_bat_fst_ing');")) !!}</td>
 				<td>{!! Form::text('b_balls_1', null, array('class'=>'gui-input allownumericwithdecimal runs_new','id'=>'b_balls_1','onkeyup'=>"strikeratecalculator('b_runs_$team_b_bat_fst_ing','b_balls_$team_b_bat_fst_ing','b_strik_rate_$team_b_bat_fst_ing');")) !!}</td>
@@ -729,8 +729,8 @@ function getTeamName()
 							});
 							$("#a_player_1").html(options);
 							$("#a_bowler_1").html(options);
+                                                        $("#b_fielder_1").html(options);
 							$("#b_bowled_1").html(options);
-							$("#b_fielder_1").html(options);
 							$("#a_wkt_player_1").html(options);
 
 
@@ -749,8 +749,8 @@ var player_b_id = $( "#team option:not(:selected)" ).val();
 							});
 							$("#b_player_1").html(options);
 							$("#b_bowler_1").html(options);
+                                                        $("#a_fielder_1").html(options);
 							$("#a_bowled_1").html(options);
-							$("#a_fielder_1").html(options);
 							$("#b_wkt_player_1").html(options);
 
 					}
@@ -782,8 +782,8 @@ function getPlayerTr(i)
 
 	var newContent = "<tr class='team_a_bat_open_row'><td><select  class='gui-input a_player' name='a_player_"+i+"' id='a_player_"+i+"'><option value=''>Select Player</option></select></td>"+
 					"<td><select  class='gui-input team_a_wkt' name='a_outas_"+i+"' id='a_outas_"+i+"'><option value=''>Select Out As</option></select></td>"+
-					"<td><select  class='gui-input' name='a_bowled_"+i+"' id='a_bowled_"+i+"'><option value=''>Select Bowler</option></select><span  id='a_bowlershow_"+i+"' style='display:none;'>--</span></td>"+
 					"<td><select  class='gui-input' name='a_fielder_"+i+"' id='a_fielder_"+i+"'><option value=''>Select Fielder</option></select><span  id='a_fildershow_"+i+"' style='display:none;'>--</span></td>"+
+                                        "<td><select  class='gui-input' name='a_bowled_"+i+"' id='a_bowled_"+i+"'><option value=''>Select Bowler</option></select><span  id='a_bowlershow_"+i+"' style='display:none;'>--</span></td>"+
 					<!--"<td><input type='text' class='gui-input' name='a_outas_"+i+"' /></td>"+-->
 					"<td><input type='text' class='gui-input allownumericwithdecimal team_a_score runs_new' id='a_runs_"+i+"' name='a_runs_"+i+"' /></td>"+
 					"<td><input type='text' class='gui-input allownumericwithdecimal runs_new' id='a_balls_"+i+"' name='a_balls_"+i+"' /></td>"+
@@ -827,9 +827,8 @@ function getPlayerTr(i)
 									options += "<option value='" + value['id'] + "'>" + value['name'] + "</option>";
 									});
 									var val = i-1;
+                                                                        $("#a_fielder_"+val).html(options);
 									$("#a_bowled_"+val).html(options);
-									$("#a_fielder_"+val).html(options);
-
 							}
 					});
 
@@ -946,8 +945,8 @@ function getteamBPlayerTr(k)
 	var newContent = "<tr class='team_b_bat_open_row'><td><select class='b_player' name='b_player_"+k+"' id='b_player_"+k+"'><option value=''>Select Player</option></select></td>"+
 					<!--"<td><input type='text' class='gui-input' name='b_outas_"+k+"' /></td>"+-->
 					"<td><select  class='gui-input team_b_wkt' name='b_outas_"+k+"' id='b_outas_"+k+"'><option value=''>Select Out As</option></select></td>"+
+                                        "<td><select  class='gui-input' name='b_fielder_"+k+"' id='b_fielder_"+k+"'><option value=''>Select Fielder</option></select><span  id='b_fildershow_"+k+"' style='display:none;'>--</span></td>"+
 					"<td><select  class='gui-input' name='b_bowled_"+k+"' id='b_bowled_"+k+"'><option value=''>Select Bowler</option></select><span  id='b_bowlershow_"+k+"' style='display:none;'>--</span></td>"+
-					"<td><select  class='gui-input' name='b_fielder_"+k+"' id='b_fielder_"+k+"'><option value=''>Select Fielder</option></select><span  id='b_fildershow_"+k+"' style='display:none;'>--</span></td>"+
 					"<td><input type='text' class='gui-input allownumericwithdecimal team_b_score runs_new' id='b_runs_"+k+"' name='b_runs_"+k+"' /></td>"+
 					"<td><input type='text' class='gui-input allownumericwithdecimal runs_new' id='b_balls_"+k+"'  name='b_balls_"+k+"' /></td>"+
 					"<td><input type='text' class='gui-input allownumericwithdecimal runs_new' name='b_fours_"+k+"' /></td>"+
@@ -986,8 +985,8 @@ function getteamBPlayerTr(k)
 									options += "<option value='" + value['id'] + "'>" + value['name'] + "</option>";
 									});
 									var val = k-1;
+                                                                        $("#b_fielder_"+val).html(options);
 									$("#b_bowled_"+val).html(options);
-									$("#b_fielder_"+val).html(options);
 
 							}
 					});

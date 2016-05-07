@@ -2852,3 +2852,6 @@ ul.intro_list_on_empty_pages span.bold {
 	border-width: 15px;
 	margin-left: -15px;
 }
+#create-tournament-instructions {
+    padding: 15% 15% 15% 10%;
+}

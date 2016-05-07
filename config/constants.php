@@ -88,7 +88,7 @@ return [
                                 'handled_ball' => 'Handled the ball', 'hit_ball_twice' => 'Hit the ball twice',
                                 'hit_wicket' => 'Hit wicket', 'lbw' => 'LBW', 'obstructing_the_field' => 'Obstructing the field',
                                 'retired' => 'Retired', 'run_out' => 'Run out', 'stumped' => 'Stumped',
-                                'timed_out' => 'Timed out']
+                                'timed_out' => 'Timed out', 'not_out' => 'Not out']
                 ],
                 'SPORTS'       =>
                 [

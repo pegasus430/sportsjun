@@ -1062,7 +1062,7 @@ li.active span#edit_first_innings,li.active span#edit_second_innings {
 }
 div.share-scorecard {
     position: absolute;
-    top: 40px;
+    bottom: 15%;
     left: 4%;
 }
 .sj-social {
