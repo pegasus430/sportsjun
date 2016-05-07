@@ -1109,3 +1109,7 @@ div.share-scorecard {
     height: 20px;
     width: 22px;
 }
+.sj-social-ancr:hover {
+    text-decoration: none;
+    color: #fff;
+}

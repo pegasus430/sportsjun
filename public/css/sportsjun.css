@@ -2746,7 +2746,9 @@ fieldset[disabled] .btn-sj-secondary.active {
 .score_data_bold{ font-weight:700;}
 .col_standard button.selectpicker{ }
 .col_standard button.selectpicker .filter-option{ width:50px !important; margin-right:8px; white-space: nowrap;}
-.message_new_for_team{text-align:center; padding:5px 0;}
+.message_new_for_team{text-align:center;     padding: 40px 0 20px 0;
+    font-size: 20px;
+    font-weight: 200;}
 .tab_new_label_txt{ display:block; padding-bottom:10px;}
 .search_header_msg{ color:#67a1ea; font-size:15px; font-weight:500;}
 .widget_div{display:inline-block;}
@@ -2795,3 +2797,30 @@ body.viewport-xs {
 }
 .switch_but_show{ background:#8e9bd0; border:1px solid #cccccc; padding:2px 10px; color:#FFFFFF;}
 
+
+ul.intro_list_on_empty_pages li {
+    list-style-type: decimal;
+    margin-bottom: 15px;
+    font-weight: 300;
+    list-style-position: inside;
+    text-align: left;
+}
+ul.intro_list_on_empty_pages span.steps_to_follow {
+    display: block;
+    text-align: left;
+    position: relative;
+    font-weight: 400;
+    margin-bottom: 16px;
+}
+div.intro_list_container {
+    text-align: center;
+}
+
+ul.intro_list_on_empty_pages {
+    display: inline-block;
+    padding: 0;
+}
+ul.intro_list_on_empty_pages span.bold {
+    font-weight: 400;
+    padding: 0 5px;
+}
