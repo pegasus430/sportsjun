@@ -2802,8 +2802,9 @@ ul.intro_list_on_empty_pages li {
     list-style-type: decimal;
     margin-bottom: 15px;
     font-weight: 300;
-    list-style-position: inside;
+    list-style-position: outside;
     text-align: left;
+    margin-left: 15px;
 }
 ul.intro_list_on_empty_pages span.steps_to_follow {
     display: block;
@@ -2855,3 +2856,7 @@ ul.intro_list_on_empty_pages span.bold {
 #create-tournament-instructions {
     padding: 15% 15% 15% 10%;
 }
+.btn_schedule_match{ display:inline-block;}
+.btn_schedule_match a{ background:#65c178; color:#FFFFFF; border-radius: 40px; color: #ffffff !important; display: inline-block; font-size: 12px; margin: 2px 0 5px; padding: 2px 8px; text-decoration: none !important;}
+.btn_schedule_match a i{ font-size: 11px; padding: 0 4px 0 0;}
+div.sportsjun_actions div.col-sm-2.col-xs-12 { display:none; }

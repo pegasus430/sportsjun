@@ -11,7 +11,7 @@
             
             <div style="background:#fff;">
             
-            	<p style="padding:20px; font-size:18px; font-weight:400;">Thanks for joining SportsJun! The activation link has been sent to your registered email. Please check your email and click on the link to activate your account. <a href="{{ url('/auth/login') }}">Login</a></p>
+            	<p style="padding:20px; font-size:18px; font-weight:400;">Thanks for joining SportsJun! The activation link has been sent to your registered email. Please check your email and click on the link to activate your account. <a href="{{ url('/?open_popup=login') }}">Login</a></p>
             
             </div>
             

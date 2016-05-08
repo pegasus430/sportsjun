@@ -20,7 +20,15 @@ if (typeof SJ.TEAM === 'undefined')
                 var g = SJ.TEAM;
                 var o = {
                         init: function () {
-
+                                if ($('#left-menu-sport-name').length > 0)
+                                {
+                                        this.sportID = $('#left-menu-sport-name').attr('data-sport-id');
+                                }
+                                if ($('#left-menu-team-name').length > 0)
+                                {
+                                        this.teamID = $('#left-menu-team-name').attr('data-team-id');
+                                        this.scheduleType = $('#left-menu-team-name').attr('data-schedule-type');
+                                }
                         },
                         addToTeam: function (sportID, userID) {
                                 var title = $("#userFullName span:first").html();
@@ -82,6 +90,13 @@ if (typeof SJ.TEAM === 'undefined')
                                         }
                                 });
 
+                        },
+                        scheduleMatch: function() {
+                                $('#main_match_schedule').trigger('click');
+                                if (typeof this.sportID !== 'undefined')
+                                {
+                                        $('#main_sports_id').val(this.sportID);
+                                }
                         }
                 };
                 z.TEAM = o;
