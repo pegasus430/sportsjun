@@ -54,7 +54,7 @@ return [
     |
     */
 
-    'from' => ['address' => env('MAIL_ADDRESS', 'admin@sportsjun.com'), 'name' => env('MAIL_FROM', 'SportsJun')],
+    'from' => ['address' => env('MAIL_ADDRESS', 'no-reply@sportsjun.com'), 'name' => env('MAIL_FROM', 'SportsJun')],
 
     /*
     |--------------------------------------------------------------------------
