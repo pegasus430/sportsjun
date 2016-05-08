@@ -2802,8 +2802,9 @@ ul.intro_list_on_empty_pages li {
     list-style-type: decimal;
     margin-bottom: 15px;
     font-weight: 300;
-    list-style-position: inside;
+    list-style-position: outside;
     text-align: left;
+    margin-left: 15px;
 }
 ul.intro_list_on_empty_pages span.steps_to_follow {
     display: block;
