@@ -6,7 +6,7 @@
     <div class="modal-content sportsjun-forms">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">{{ trans('message.tournament.fields.heading') }}</h4>
+        <h4 class="modal-title">{{ trans('message.tournament.edit_tournament_event_modal.heading') }}</h4>
       </div>
 
 <!--<div class="form-header header-primary"><h4><i class="fa fa-pencil-square"></i>{{ trans('message.tournament.fields.heading') }}</h4></div>-->
