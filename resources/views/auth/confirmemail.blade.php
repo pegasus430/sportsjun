@@ -10,19 +10,19 @@
 					@if($userDetails->is_verified == 0)
 					<div class="panel-body">
                    	Hey, Welcome to SportsJun. Your  account verified successfully.
-					Please click <a href="{!! url('auth/login') !!}"> here</a> to login.
+					Please click <a href="{!! url('?open_popup=login') !!}"> here</a> to login.
 					</div>
 					@endif
 					@if($userDetails->is_verified == 1)
 					<div class="panel-body">
                    	Hey, your account is already verified.
-					Please click <a href="{!! url('auth/login') !!}"> here</a> to login.
+					Please click <a href="{!! url('?open_popup=login') !!}"> here</a> to login.
 					</div>
 					@endif
 				@else
 					<div class="panel-body">
-                   	Hey, to confirm your email please register and getback.
-					Please click <a href="{!! url('auth/register') !!}"> here</a> to register.
+                   	Hey, to confirm your email please register and get back.
+					Please click <a href="{!! url('?open_popup=register') !!}"> here</a> to register.
 					</div>
 				@endif
                
