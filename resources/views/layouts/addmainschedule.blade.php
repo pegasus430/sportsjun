@@ -294,13 +294,22 @@
       //for autocomplete opponent team or player    
       $("#main_oppteam").autocomplete({
         source: function(request, response) {
+                var main_scheduletype = '';
+                if ($('#main_scheduletype').val() != null)
+                {
+                        main_scheduletype = $('#main_scheduletype').val();
+                }
+                else if (typeof SJ.TEAM.scheduleType !== 'undefined')
+                {
+                        main_scheduletype = SJ.TEAM.scheduleType;
+                }
               $.ajax({
                   url: base_url+"/oppositeteamdetails",
                   dataType:'json',
                   data: {
                       team_id:$("#main_my_team_id").val(),
                       sport_id:$("#main_sports_id").val(),
-                      scheduled_type:$('#main_scheduletype').val(),
+                      scheduled_type:main_scheduletype,
                       term: request.term
                   },
                 success: function (data){
@@ -327,13 +336,22 @@
       //for autocomplete opponent team or player    
       $("#main_oppteam").autocomplete({
         source: function(request, response) {
+                var main_scheduletype = '';
+                if ($('#main_scheduletype').val() != null)
+                {
+                        main_scheduletype = $('#main_scheduletype').val();
+                }
+                else if (typeof SJ.TEAM.scheduleType !== 'undefined')
+                {
+                        main_scheduletype = SJ.TEAM.scheduleType;
+                }
               $.ajax({
                   url: base_url+"/oppositeteamdetails",
                   dataType:'json',
                   data: {
                       team_id:$("#main_my_team_id").val(),
                       sport_id:$("#main_sports_id").val(),
-                      scheduled_type:$('#main_scheduletype').val(),
+                      scheduled_type:main_scheduletype,
                       term: request.term
                   },
                 success: function (data){
