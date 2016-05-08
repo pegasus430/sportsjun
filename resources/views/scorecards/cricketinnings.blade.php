@@ -1409,7 +1409,7 @@ function BowlerFielderDisplay(team,isFielderDisplay)
 				$('#'+team+'_fielder_'+isFielderDisplay).hide();
 				$('#'+team+'_fildershow_'+isFielderDisplay).show();
 			}
-			if(out_as_value=='handled_ball' || out_as_value=='obstructing_the_field' || out_as_value=='retired' || out_as_value=='run_out' || out_as_value=='timed_out')
+			if(out_as_value=='not_out' || out_as_value=='handled_ball' || out_as_value=='obstructing_the_field' || out_as_value=='retired' || out_as_value=='run_out' || out_as_value=='timed_out')
 			{
 				$('#'+team+'_bowled_'+isFielderDisplay).hide();
 				$('#'+team+'_bowlershow_'+isFielderDisplay).show();
