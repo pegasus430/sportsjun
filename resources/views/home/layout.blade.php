@@ -69,8 +69,8 @@
                                                                 <ul class="kode-userinfo">
                                                                         <li><a href="aboutus.html"><i class="fa fa-list"></i> About SportsJun</a></li>
                                                                         <!-- li><a href="#"><i class="fa fa-user"></i> My Account</a></li -->
-                                                                        <li><a href="javascript:void(0);" data-toggle="modal" data-target="#home-login-modal"><i class="fa fa-sign-in"></i> Login</a></li>
-                                                                        <li><a href="javascript:void(0);" data-toggle="modal" data-target="#home-register-modal"><i class="fa fa-user-plus"></i> Register</a></li>
+                                                                        <li><a id="top_bar_login" href="javascript:void(0);" data-toggle="modal" data-target="#home-login-modal"><i class="fa fa-sign-in"></i> Login</a></li>
+                                                                        <li><a id="top_bar_register" href="javascript:void(0);" data-toggle="modal" data-target="#home-register-modal"><i class="fa fa-user-plus"></i> Register</a></li>
                                                                 </ul>
                                                         </div>
                                                 </div>
