@@ -406,22 +406,24 @@ class SportController extends Controller {
             return false;
         }
     } 
-    //function to remove an element from an array
-    public function removeFromArray($existing_ids_str,$new_id)
-    {
-        $existing_ids_str = trim($existing_ids_str,',');
-        $existing_ids = explode(',',$existing_ids_str);
-        $key = array_search($new_id, $existing_ids);
-        unset($existing_ids[$key]);
-        $final_str = null;
-        if(count($existing_ids))
+    
+        //function to remove an element from an array
+        public function removeFromArray($existing_ids_str, $new_id)
         {
-            $final_str = implode(',', $existing_ids);
-            $final_str = ','.$final_str.',';            
+                $existing_ids_str = trim($existing_ids_str, ',');
+                $existing_ids     = explode(',', $existing_ids_str);
+                $key              = array_search($new_id, $existing_ids);
+                unset($existing_ids[$key]);
+                $final_str        = null;
+                $existing_ids     = array_unique(array_filter($existing_ids));
+                if (count($existing_ids))
+                {
+                        $final_str = implode(',', $existing_ids);
+                }
+                return $final_str;
         }
-        return $final_str;
-    }   
-    //function to delete the quenstion's answers
+
+        //function to delete the quenstion's answers
 
     function deleteUserSportAnswers($userId,$sportsId) 
     {
@@ -478,28 +480,45 @@ class SportController extends Controller {
         return Response::json(['sports'=>$sports]);
     }
     
-    public function removeFollowedSport($sportId) {
-        $userId = Auth::user()->id;
-        $userSports = [];
-        $result['userId']=$userId;
-        $existingAllowedSportsString = UserStatistic::where('user_id', $userId)->pluck('following_sports');
-        $updatedAllowedSportsString = $this->removeFromArray($existingAllowedSportsString,$sportId);
-        if(UserStatistic::where('user_id', $userId)->update(['following_sports'=>$updatedAllowedSportsString,'updated_at'=>Carbon::now()])) {
-            if (!empty($updatedAllowedSportsString)) {
-                $followingSportsArray = explode(',', trim($updatedAllowedSportsString, ','));
-                $userSports = Sport::whereIn('id', $followingSportsArray)->get(['id', 'sports_name']);
-                if(count($userSports)) {
-                    $userSports = $userSports->toArray();
+        public function removeFollowedSport($sportId)
+        {
+                $userId           = Auth::user()->id;
+                $userSports       = [];
+                $updated          = [];
+                $result['userId'] = $userId;
+
+                $existing = UserStatistic::where('user_id', $userId)->get(['following_sports',
+                        'allowed_player_matches', 'allowed_sports']);
+                $existing = $existing->toarray();
+
+                $updated['following_sports']       = $this->removeFromArray($existing[0]['following_sports'], $sportId);
+                $updated['allowed_player_matches'] = $this->removeFromArray($existing[0]['allowed_player_matches'], $sportId);
+                $updated['allowed_sports']         = $this->removeFromArray($existing[0]['allowed_sports'], $sportId);
+
+                if (UserStatistic::where('user_id', $userId)->update(
+                                 ['allowed_sports'         => $updated['allowed_sports']
+                                , 'allowed_player_matches' => $updated['allowed_player_matches']
+                                , 'following_sports'       => $updated['following_sports']
+                                , 'updated_at'             => Carbon::now()]))
+                {
+                        if (!empty($updated['following_sports']))
+                        {
+                                $followingSportsArray = explode(',', trim($updated['following_sports'], ','));
+                                $userSports           = Sport::whereIn('id', $followingSportsArray)->get(['id','sports_name']);
+                                if (count($userSports))
+                                {
+                                        $userSports = $userSports->toArray();
+                                }
+                        }
+                        $result['result']     = 'success';
+                        $result['userSports'] = $userSports;
+                        return Response::json($result);
                 }
-            }
-            $result['result']='success';
-            $result['userSports']=$userSports;
-            return Response::json($result);
+                else
+                {
+                        $result['result'] = 'fail';
+                        return Response::json($result);
+                }
         }
-        else{
-            $result['result']='fail';
-            return Response::json($result);
-        }
-        
-    }
+
 }
