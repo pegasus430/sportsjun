@@ -140,7 +140,7 @@ window.onload = function() {
                 <p>Your session has expired, please login to continue.</p>
             </div>
             <div class="modal-footer">
-                <a href="{{url('/auth/login')}}" class="btn btn-danger" style="inline-table">Login</a>
+                <a href="{{url('/?open_popup=login')}}" class="btn btn-danger" style="inline-table">Login</a>
             </div>
         </div>
     </div>
