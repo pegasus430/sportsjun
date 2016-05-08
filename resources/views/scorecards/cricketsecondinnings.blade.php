@@ -1641,7 +1641,7 @@ function BowlerFielderDisplayScndIng(team,isFielderDisplay)
 				$('#'+team+'_fielder_second_ing_'+isFielderDisplay).hide();
 				$('#'+team+'_ingfieldershow_'+isFielderDisplay).show();
 			}
-			if(out_as_value=='handled_ball' || out_as_value=='obstructing_the_field' || out_as_value=='retired' || out_as_value=='run_out' || out_as_value=='timed_out')
+			if(out_as_value=='not_out' || out_as_value=='handled_ball' || out_as_value=='obstructing_the_field' || out_as_value=='retired' || out_as_value=='run_out' || out_as_value=='timed_out')
 			{
 				$('#'+team+'_bowled_second_ing_'+isFielderDisplay).hide();
 				$('#'+team+'_ingbowlershow_'+isFielderDisplay).show();
