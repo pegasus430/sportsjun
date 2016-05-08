@@ -18,7 +18,11 @@
                 </a>
         </div>
         <?php } ?>
-        <div class="follow_unfollow_team" id="follow_unfollow_team_{{$team_id}}" uid="{{$team_id}}" val="TEAM" flag="{{ !empty($follow_unfollow)?0:1 }}"><a href="#" id="follow_unfollow_team_a_{{$team_id}}" class="{{ !empty($follow_unfollow)?'sj_unfollow':'sj_follow' }}"><span id="follow_unfollow_team_span_{{$team_id}}"><i class="{{ !empty($follow_unfollow)?'fa fa-remove':'fa fa-check' }}"></i>{{ !empty($follow_unfollow)?'Unfollow':'Follow' }}</span></a></div>
+        <div class="follow_unfollow_team" id="follow_unfollow_team_{{$team_id}}" uid="{{$team_id}}" val="TEAM" flag="{{ !empty($follow_unfollow)?0:1 }}">
+                <a href="javascript:void(0);" id="follow_unfollow_team_a_{{$team_id}}" class="{{ !empty($follow_unfollow)?'sj_unfollow':'sj_follow' }}">
+                        <span id="follow_unfollow_team_span_{{$team_id}}"><i class="{{ !empty($follow_unfollow)?'fa fa-remove':'fa fa-check' }}"></i>{{ !empty($follow_unfollow)?'Unfollow':'Follow' }}</span>
+                </a>
+        </div>
 	</div>
      
 	<ul class="nav sidemenu_nav leftmenu-icon" id="side-menu">
