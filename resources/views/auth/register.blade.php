@@ -103,7 +103,7 @@
                                         Register
                                     </button>
                                     
-                                    <a href="{{ url('/auth/login') }}" class="forgot_link pull-right">&larr; Back to login</a>
+                                    <a href="{{ url('/?open_popup=login') }}" class="forgot_link pull-right">&larr; Back to login</a>
                                 </div>
                             </div>
                         </div>     

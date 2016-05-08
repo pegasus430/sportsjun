@@ -422,9 +422,9 @@ return [
 		'rejected' => 'Scorecard is Rejected.',
 		'fields'=>[
 		'selectteam' => 'Select Team',
-		'addplayer' => 'Add Player',
+		'addplayer' => 'Add Player to Scoresheet',
 		'player' => 'Player',
-		'addunkownplayer' => 'Add Unknown Player',
+		'addunkownplayer' => 'Add Unregistered Player to Scoresheet',
 		'email' => 'Email',
 		],
 		'soccer_fields'=>[

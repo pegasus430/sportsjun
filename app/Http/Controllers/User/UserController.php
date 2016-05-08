@@ -263,7 +263,7 @@ class UserController extends Controller {
 
         $authUser = $this->findOrCreateUser($socialUser, $provider);
         if($authUser->isactive==0) {
-            return redirect(url('/auth/login'))->withErrors(['socialloginerror'=>trans('message.login.accountdeactived',['email'=>$authUser->email])]);
+            return redirect(url('/?open_popup=login'))->withErrors(['socialloginerror'=>trans('message.login.accountdeactived',['email'=>$authUser->email])]);
         }else{
             Auth::login($authUser, true);
             session(['socialuser' => $provider, 'avatar' => $socialUser->avatar]);
