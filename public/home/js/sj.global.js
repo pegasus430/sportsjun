@@ -19,6 +19,11 @@ if (typeof SJ.GLOBAL === 'undefined')
                                 {
                                         $('#top_bar_login').trigger('click');
                                 }
+                                
+                                if (window.location.href.indexOf("?open_popup=register") > -1)
+                                {
+                                        $('#top_bar_register').trigger('click');
+                                }
                         },
                         bootstrapModalInit: function(){
                                 $('.modal').on('show.bs.modal', function () {

@@ -2853,6 +2853,10 @@ ul.intro_list_on_empty_pages span.bold {
 	border-width: 15px;
 	margin-left: -15px;
 }
+div.card.hovercard div.sports_profile_msg_arrow_down:after, div.card.hovercard div.sports_profile_msg_arrow_down:before {
+border-top-color:#DCEEF5 !important;
+}
+
 #create-tournament-instructions {
     padding: 15% 15% 15% 10%;
 }
