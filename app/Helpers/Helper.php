@@ -86,7 +86,7 @@ class Helper {
     //function to send left menu variables
     public static function leftMenuVariables($team_id) {
         $teams = Team::with('sports', 'photos')->where('id', $team_id)->first();
-		$location = Helper::addressInfo($teams['city'],$teams['state'],$teams['country']);
+        $location = Helper::addressInfo($teams['city'],$teams['state'],$teams['country']);
         $userId = Auth::user()->id;
         $managing_teams = Helper::getManagingTeamIds($userId);
         $managing_team_ids = array();
@@ -119,8 +119,8 @@ class Helper {
                 ->get();
         }
         $player_available_in_team = (isset($player_available_in_team[0]->player_available) && !empty($player_available_in_team[0]->player_available)) ? true : false;
-        
-        View::share(['team_name' => (!empty($teams['name']) ? $teams['name'] : ''), 'location' => (!empty($location ) ? $location : ''), 'sport' => (!empty($teams['sports']['sports_name']) ? $teams['sports']['sports_name'] : 'NA'), 'description' => (!empty($teams['description']) ? $teams['description'] : ''), 'photo_path' => (count($teams['photos']) ? ('teams/' . $teams['photos'][0]['url']) : ''),
+        $sport_schedule_type = (!empty($teams->sports['sports_type'])) ? $teams->sports['sports_type'] : '';
+        View::share(['sport_schedule_type'=>$sport_schedule_type,'team_name' => (!empty($teams['name']) ? $teams['name'] : ''), 'location' => (!empty($location ) ? $location : ''), 'sport' => (!empty($teams['sports']['sports_name']) ? $teams['sports']['sports_name'] : 'NA'), 'description' => (!empty($teams['description']) ? $teams['description'] : ''), 'photo_path' => (count($teams['photos']) ? ('teams/' . $teams['photos'][0]['url']) : ''),
             'sport_id' => (!empty($teams['sports_id']) ? $teams['sports_id'] : '0'), 'team_id' => (!empty($teams['id']) ? $teams['id'] : '0'),'managing_team_ids'=>$managing_team_ids,'follow_unfollow'=>$follow_unfollow,'user_in_team'=>$user_in_team,'player_available_in_team'=>$player_available_in_team]);
     }
 

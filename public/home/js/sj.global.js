@@ -15,6 +15,10 @@ if (typeof SJ.GLOBAL === 'undefined')
 				window.secure_url = ( typeof secure_url === 'undefined' ) ? 'http://' + window.location.hostname : secure_url;
                                 this.defaultAjaxSettings = $.extend( true, {}, $.ajaxSettings );
                                 o.bootstrapModalInit();
+                                if (window.location.href.indexOf("?open_popup=login") > -1)
+                                {
+                                        $('#top_bar_login').trigger('click');
+                                }
                         },
                         bootstrapModalInit: function(){
                                 $('.modal').on('show.bs.modal', function () {

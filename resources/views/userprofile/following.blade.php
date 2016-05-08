@@ -50,6 +50,11 @@
                                                                                                         </a>
                                                                                                 </div>
                                                                                                 <?php } ?>
+                                                                                                <div class="follow_unfollow_tournament" id="follow_unfollow_tournament_{{$followedTeam['id']}}" uid="{{$followedTeam['id']}}" val="TOURNAMENT" flag="0">
+                                                                                                        <a href="javascript:void(0);" id="follow_unfollow_tournament_a_{{$followedTeam['id']}}" class="sj_unfollow">
+                                                                                                                <span id="follow_unfollow_tournament_span_{{$followedTeam['id']}}"><i class="fa fa-remove"></i>Unfollow</span>
+                                                                                                        </a>
+                                                                                                </div>
                                                                                         </div>
                                                                                 </div>
                                                                         </div>
@@ -109,6 +114,11 @@
                                                                                                         </a>
                                                                                                 </div>
                                                                                                 <?php } ?>
+                                                                                                <div class="follow_unfollow_team" id="follow_unfollow_team_{{$following_team['id']}}" uid="{{$following_team['id']}}" val="TEAM" flag="0">
+                                                                                                        <a href="javascript:void(0);" id="follow_unfollow_team_a_{{$following_team['id']}}" class="sj_unfollow">
+                                                                                                                <span id="follow_unfollow_team_span_{{$following_team['id']}}"><i class="fa fa-remove"></i>Unfollow</span>
+                                                                                                        </a>
+                                                                                                </div>
                                                                                         </div>
                                                                                 </div>
                                                                         </div>

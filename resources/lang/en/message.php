@@ -221,6 +221,19 @@ return [
 		],
 	],
 	'tournament' => [
+                'edit_tournament_detail_page' => [
+                        'heading' => 'Edit Tournament / League Details',
+                        'details_tab' => 'Tournament Details',
+                        'events_tab' => 'Tournament Events'
+                ],
+                'edit_tournament_event_modal' => [
+                        'heading' => 'Edit Tournament Event Details'
+                ],
+                'add_tournament_detail_page' => [
+                        'heading' => 'Create Tournaments / Leagues',
+                        'details_tab' => 'Tournament Details',
+                        'events_tab' => 'Tournament Events'
+                ],
 	'create' => 'Tournament Created Successfully',
 	'update' => 'Details Updated Successfully',
 	'delete' => 'Tournament Deleted Successfully',
@@ -422,9 +435,9 @@ return [
 		'rejected' => 'Scorecard is Rejected.',
 		'fields'=>[
 		'selectteam' => 'Select Team',
-		'addplayer' => 'Add Player',
+		'addplayer' => 'Add Player to Scoresheet',
 		'player' => 'Player',
-		'addunkownplayer' => 'Add Unknown Player',
+		'addunkownplayer' => 'Add Unregistered Player to Scoresheet',
 		'email' => 'Email',
 		],
 		'soccer_fields'=>[
