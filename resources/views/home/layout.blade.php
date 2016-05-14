@@ -147,7 +147,7 @@
                                                                 </div>
                                                         </div>
 
-                                                        <div class="col-md-3">
+                                                        <div class="col-md-2">
                                                                 <div class="widget links_widget">
                                                                         <h3>Links</h3>
                                                                         <ul>
@@ -182,7 +182,7 @@
                                                                         </ul>
                                                                 </div>
                                                         </div>
-                                                        <div id="footer-partners" class="col-md-1">
+                                                        <div id="footer-partners" class="col-md-2">
                                                                 <div class="widget footer-partners">
                                                                         <h3>Partner</h3>
                                                                         <a target="_blank" href="https://msg91.com/startups/?utm_source=startup-banner"><img src="https://msg91.com/images/startups/msg91Badge.png" title="MSG91 - SMS for Startups" alt="Bulk SMS - MSG91"></a>
