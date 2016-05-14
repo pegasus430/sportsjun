@@ -132,6 +132,19 @@
                                 </div>
                         </header>
 @yield('content')
+                        <div id="footer-partners">
+                                <div class="container">
+                                        <div class="row">
+                                                <div class="col-md-12">
+                                                        <h3>Partners</h3>
+                                                        <div id="foot-partner-msg91" class="foot-partner">
+                                                        <a target="_blank" href="https://msg91.com/startups/?utm_source=startup-banner"><img src="https://msg91.com/images/startups/msg91Badge.png" title="MSG91 - SMS for Startups" alt="Bulk SMS - MSG91"></a>
+                                                        </div>
+                                                </div>
+                                        </div>
+                                </div>
+                        </div>
+                        <div class="kd-divider divider4"><span></span></div>
                         <footer id="footer1" class="kode-parallax kode-dark-overlay kode-bg-pattern">
                                 <!--Footer Medium-->
                                 <div class="footer-medium">
