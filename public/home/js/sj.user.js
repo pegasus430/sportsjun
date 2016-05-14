@@ -5,7 +5,7 @@ if (typeof SJ.GLOBAL === 'undefined') {
         (function () {
                 var _global_js = 'home/js/sj.global.js';
                 window.site_url = (typeof site_url === 'undefined') ? 'http://' + window.location.hostname : site_url;
-                window.secure_url = (typeof secure_url === 'undefined') ? 'https://' + window.location.hostname : secure_url;
+                window.secure_url = (typeof secure_url === 'undefined') ? 'http://' + window.location.hostname : secure_url;
 
                 var _node = document.createElement('script');
                 _node.type = 'text/javascript';
