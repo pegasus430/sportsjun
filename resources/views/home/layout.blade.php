@@ -132,18 +132,20 @@
                                 </div>
                         </header>
 @yield('content')
+                        <div class="kd-divider divider4"><span></span></div>
                         <footer id="footer1" class="kode-parallax kode-dark-overlay kode-bg-pattern">
                                 <!--Footer Medium-->
                                 <div class="footer-medium">
                                         <div class="container">
                                                 <div class="row">
                                                         <div id="aboutus" class="col-md-4">
-                                                                <div class="about-widget">
+                                                                <div class="widget about-widget">
                                                                         <h3>About SportsJun</h3>
                                                                         <ul class="kode-form-list">
                                                                                 <li><i class="fa fa-home"></i> <p><strong>Address:</strong> Gachibowli, Hyderabad, Telangana, India 500031.</p></li>
                                                                                 <li><i class="fa fa-envelope-o"></i> <p><strong>Email:</strong> contact@sportsjun.com</p></li>
                                                                         </ul>
+                                                                        <div class="clearfix"></div>
                                                                 </div>
                                                         </div>
 
@@ -159,7 +161,7 @@
                                                                 </div>
                                                         </div>
                                                         <div class="col-md-4">
-                                                                <div class="contact-us-widget">
+                                                                <div class="widget contact-us-widget">
                                                                         <h3>Connect with us</h3>
                                                                         <p>Follow us to stay updated and connected – using your favorite social media.<br></p>
                                                                         <ul class="social-links1">
@@ -274,9 +276,28 @@
                                                 <h4 class="modal-title">Register</h4>
                                         </div>
                                         <div class="modal-body">
-                                                <div id="register-btn-fb">
-                                                        <a class="btn-register-fb" href="{{ route('social.login', ['facebook']) }}"></a>
+                                                <div class="col-md-6 social_but">
+                                                   <a class="btn btn-block btn-social btn-facebook" href="{{ route('social.login', ['facebook']) }}">
+                                                       <span class="fa fa-facebook"></span> Facebook
+                                                   </a>
                                                 </div>
+                                                <div class="col-md-6 social_but">
+                                                    <a class="btn btn-block btn-social btn-twitter" href="{{ route('social.login', ['twitter']) }}">
+                                                        <span class="fa fa-twitter"></span> Twitter
+                                                    </a>
+                                                </div>
+                                                <div class="col-md-6 social_but">
+                                                   <a class="btn btn-block btn-social btn-google" href="{{ route('social.login', ['google']) }}">
+                                                       <span class="fa fa-google-plus"></span> Google
+                                                   </a>
+                                                </div>
+                                                <div class="col-md-6 social_but">
+                                                    <a class="btn btn-block btn-social btn-linkedin" href="{{ route('social.login', ['linkedin']) }}">
+                                                        <span class="fa fa-linkedin"></span> LinkedIn
+                                                    </a>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                <div class="tagline" style="margin:44px 0 20px 0;"><span>OR</span></div>
                                                 <form id="home-register-modal-form" class="kode-loginform" onsubmit="SJ.USER.registerValidation(this.id);return false;">
                                                         <p><span>First Name</span> <input name="firstname" type="text" placeholder="First Name"></p>
                                                         <p><span>Last Name</span> <input name="lastname" type="text" placeholder="Last Name"></p>

@@ -69,5 +69,4 @@
         </section>
         <!--// Page Content //--> 
         </div>
-        <div class="kd-divider divider4"><span></span></div>
 @endsection

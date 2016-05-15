@@ -2,7 +2,8 @@
 @media (min-width: 768px) and (max-width: 990px) {
 	/* Header */
 	.kd-headbar { text-align: center; }
-	.logo,.navbar-default {display:block; }
+	.logo,.navbar-default {display:block;float:none; }
+        .navbar-default {position:relative;top:10px;}
 	.logo { margin-bottom: 0px; }
 	.kode-topbar:after { display: none; }
 	.kode-topbar:before { width: 52%; }
@@ -60,7 +61,7 @@
 		display:none;
 	}
 	.navbar-nav > li > a, .kf_sticky .navbar-nav > li > a{
-		font-size:12px;
+		font-size:11px;
 		padding:10px 10px;
 	}
 	.header-8{
@@ -170,12 +171,17 @@
 	.kode-topbar,.kode-header-three .kd-headbar { text-align: center; }
 	.kode-barinfo,.kode-userinfo,.kode-header-three .logo,.kode-header-three .kode-rightsection { float: none; display: inline-block; width: auto; }
 	.kode-topbar:after,.kode-topbar:before,.navbar-nav > li > a:before,.navbar-nav > li > a:after,
-	.kode-time-zoon:before,.kode-caption { display: none; }
+	.kode-time-zoon:before{ display: none; }
+        div#home-slider-login-btns a {width:34%}
+.kode-caption h2 {
+    font-size: 2.7em;
+    margin-bottom: 0.7em;
+}
 	.kode-userinfo li { border: none; }
 	.logo { width: auto; }
 	/* Navigation */
 	.navbar-nav > li > a { padding: 12px 18px;}
-	.navbar-toggle { background-color: #fff; margin:12px 18px; border:none;}
+	.navbar-toggle { background-color: #fff; margin:2px 18px; border:none;}
 	.navbar-collapse { z-index: 99; position: absolute; right: 0px; top: 100%; width: 320px; background-color: #333333; }
 	.navbar-nav .children { float: left; width: 100%; margin: 0px; position: static; visibility: visible; opacity: 1; -webkit-transform: none; -moz-transform: none; -ms-transform: none; -o-transform: none; transform: none; }
 	.navbar-nav { margin: 0px; }
@@ -529,4 +535,51 @@
 		padding:10px 7px;		
 	}
 	
+}
+
+@media screen and (min-width: 768px) and (max-width: 991px) {
+    .kode-caption h2
+    {
+        font-size:2.2em;
+    }
+    div#home-slider-login-btns a {
+        width:30%;
+    }
+}
+@media (max-width: 767px) {
+    div#home-slider-login-btns a {
+        width: 30%;
+        font-size: 1em;
+        padding: 0.1em;
+        border-width: 5px;
+    }
+    .kode-caption h2 {
+        font-size: 1.5em;
+        margin-bottom: 0;
+        padding-top: 0;
+    }
+}
+@media (max-width: 420px) {
+    div#home-slider-login-btns a {
+        width: 30%;
+        font-size: 1em;
+        padding: 0.1em;
+        border-width: 5px;
+    }
+    .kode-caption h2 {
+        font-size: 1.3em;
+        margin-bottom: 0;
+        padding-top: 0;
+    }
+}
+@media (max-width: 320px) {
+div#home-slider-login-btns a {    width: 30%;
+    padding: 0;
+    font-size: .9em;
+    border-width: 4px;}
+.kode-caption h2 {
+    font-size: 1.1em;
+    margin-bottom: 0.5em;
+    line-height: 1.2em;
+}
 }
