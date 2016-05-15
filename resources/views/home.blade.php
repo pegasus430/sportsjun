@@ -7,18 +7,14 @@
                                         <ul class="slides">
                                                 <li>
                                                         <img src="{{ asset('/home/extra-images/slide1.jpg') }}" alt="" />
-                                                        <div class="container">
-                                                                <div class="kode-caption">       
-                                                                        <h2>Your Path to Sports <span>Career</span> and <span>Fame</span></h2>
-                                                                        <div class="clearfix"></div>
-                                                                        <div id="home-btn-fb">
-                                                                                <a class="btn-continue-fb" href="{{ route('social.login', ['facebook']) }}"></a>
-                                                                        </div>
-                                                                      <!--<p>You. Your team.<br>
-                                                    Your sports organization.<br>
-                                                    One product.<br>
-                                                    Everything you need.</p>-->
-                                                                        <div class="clearfix"></div>
+                                                        <div class="kode-caption">       
+                                                                <h2>Your Path to Sports <span>Career</span> and <span>Fame</span></h2>
+                                                                <div class="clearfix"></div>
+                                                                <div id="home-btn-fb">
+                                                                        <a class="btn-continue-fb" href="{{ route('social.login', ['facebook']) }}"></a>
+                                                                </div>
+                                                                <div class="clearfix"></div>
+                                                                <div id="home-slider-login-btns">
                                                                         <a class="kode-modren-btn thbg-colortwo" href="javascript:void(0);" data-toggle="modal" data-target="#home-login-modal">Login</a>&nbsp;&nbsp;<span class="or_text">OR</span>&nbsp;&nbsp;
                                                                         <a class="kode-modren-btn thbg-colortwo" href="javascript:void(0);" data-toggle="modal" data-target="#home-register-modal">Register</a>
                                                                 </div>
@@ -154,5 +150,4 @@
                                         </div>
                                 </section>
                                 <!--// Page Content //-->
-                                <div class="kd-divider divider4"><span></span></div>
 @endsection

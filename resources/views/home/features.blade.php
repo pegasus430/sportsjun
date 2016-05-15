@@ -172,5 +172,4 @@
                     </div>
                 </div>
       </section>
-        <div class="kd-divider divider4"><span></span></div>
 @endsection
