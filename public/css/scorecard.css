@@ -1057,12 +1057,10 @@ li.active span#edit_first_innings,li.active span#edit_second_innings {
     display:inline;
 }
 .sj-ico {
-    // http://www.cricbuzz.com/images/icon_sprite_v_1_3_5.png
-    //background: url("") no-repeat scroll;
+    background: url(/images/share-sprite.png) no-repeat scroll;
     display: inline-block;
 }
 div.share-scorecard {
-    display: none;
     position: absolute;
     bottom: 15%;
     left: 4%;
@@ -1073,6 +1071,7 @@ div.share-scorecard {
 .sj-social-td {
     width: 75px;
     font-weight: normal;
+    border:0;
 }
 .sj-social-ancr-fb {
     background: #325A97;
@@ -1086,7 +1085,7 @@ div.share-scorecard {
     display: block;
 }
 .sj-fb-share {
-    background-position: -85px -15px;
+    background-position: 4px 1px;
     height: 20px;
     width: 22px;
 }
@@ -1099,7 +1098,7 @@ div.share-scorecard {
     background: #00ACED;
 }
 .sj-twt-share {
-    background-position: -224px -12px;
+    background-position: -135px 2px;
     height: 20px;
     width: 22px;
 }
@@ -1107,7 +1106,7 @@ div.share-scorecard {
     background: #DD4B39;
 }
 .sj-gplus-share {
-    background-position: -103px -15px;
+    background-position: -14px 1px;
     height: 20px;
     width: 22px;
 }
@@ -1115,3 +1114,7 @@ div.share-scorecard {
     text-decoration: none;
     color: #fff;
 }
+
+/* public view specific css */
+.team_name a { color:#65C178; }
+.col_standard,.col_standard h1, .col_standard h2, .col_standard h3, .col_standard h4, .col_standard h5, .col_standard h6 { font-family: 'Roboto', Arial, Helvetica, sans-serif !important; }

@@ -77,6 +77,5 @@
 
       </div>
       <!--// Main Content //-->
-	<div class="kd-divider divider4"><span></span></div>
         <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyDn58PtJ191MRs6IVm_O13Ktkgt2Tj7AcU"></script>
 @endsection

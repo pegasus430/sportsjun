@@ -1098,7 +1098,7 @@ border-right: 3px solid #F57C00;
 
 /* Navbar Brand */
 .navbar {/* background: #1b926c; */}
-.sports_jun_navbrand {width: auto !important; height: auto !important; padding: 8px 12px; /*background: #1fa67a;*/}
+.sports_jun_navbrand {width: auto !important; height: auto !important; padding: 9px 12px; /*background: #1fa67a;*/}
 .sports_jun_navbrand img {width: 90%; height: auto;margin: 0 auto !important;}
 @media (min-width: 768px) {
 	.sports_jun_navbrand .logo img {width: 100%;}
