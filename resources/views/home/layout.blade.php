@@ -309,7 +309,7 @@
                                                     </a>
                                                 </div>
                                                 <div class="clearfix"></div>
-                                                <div class="tagline" style="margin:44px 0 20px 0;"><span>OR</span></div>
+                                                <div class="tagline" style="margin:40px auto 20px auto;width:95%;"><span>OR</span></div>
                                                 <form id="home-register-modal-form" class="kode-loginform" onsubmit="SJ.USER.registerValidation(this.id);return false;">
                                                         <p><span>First Name</span> <input name="firstname" type="text" placeholder="First Name"></p>
                                                         <p><span>Last Name</span> <input name="lastname" type="text" placeholder="Last Name"></p>
