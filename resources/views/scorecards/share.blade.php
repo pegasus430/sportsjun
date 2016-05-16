@@ -14,12 +14,7 @@ $team_share_desc_encoded = urlencode($team_share_desc);
 $fb_url = 'https://www.facebook.com/sharer.php?u=' . url('matchpublic/scorecard/view',$match_data[0]['id']) . '&amp;text=' . $team_share_desc_encoded;
 $tw_url = 'https://twitter.com/intent/tweet?url=' . url('matchpublic/scorecard/view',$match_data[0]['id']) . '&amp;text=' . $team_share_desc_encoded . '&amp;via=sj_sportsjun';
 $gp_url = 'https://plus.google.com/share?url=' . url('matchpublic/scorecard/view',$match_data[0]['id']);
-?>                      
-<meta property="og:url"           content="<?php echo url('matchpublic/scorecard/view',$match_data[0]['id']) ?>" />
-<meta property="og:type"          content="website" />
-<meta property="og:title"         content="<?php echo $team_share_title ?>" />
-<meta property="og:description"   content="<?php echo $team_share_desc ?>" />
-<meta property="og:image"         content="http://www.sportsjun.com/home/extra-images/slide1.jpg" />
+?>
 <div class="share-scorecard pull-left">
         <table class="sj-social">
                 <tbody>
