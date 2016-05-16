@@ -1,6 +1,8 @@
 <?php
 
 return [
+        'JS_VERSION'               => 6,
+        'CSS_VERSION'              => 6,
         'COUNTRY_INDIA'            => 101,
         'LIMIT'                    => 8,
         'SCHEDULE_LIMIT'           => 5,
@@ -211,7 +213,5 @@ return [
                 'ZIPCODE'            => 'regex:/^([0-9]{6})$/',
                 'PHONE'              => 'regex:/^([*\d\s\-\+\(\)]{8,15})$/',
                 'PHONEMP'            => 'regex:/^([0-9]{10})$/'
-        ],
-        'JS_VERSION'               => 5,
-        'CSS_VERSION'              => 5
+        ]
 ];
