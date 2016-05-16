@@ -31,11 +31,11 @@
                       <div>
                       <h2>SportsJun History</h2>
                       <p class="about_content">
-                      SportsJun evolved after looking into ammature talent which never gets published or captured in any of the platforms for future reference. SportsJun wants to create a difference in lives of individuals by giving much needed platform to create a Sports profile which can be linked to any number of sports. In addition to Sports Profile, platform gives ability to organize and manage teams and sports. It's a tool for building performance stats of players and teams by organizing sports teams online, for planning games and events, and for managing and promoting league’s. It's for people who are passionate about playing sports and staying active. With busy lives of parents, coaches, owners and other individuals who can not attend all games SportsJun plans to connect with real time performance tracking system to track the performance of near and dears right from their work places. Individuals, Schools, Colleges, Academies, Corporates, Government organization all can use the platform.</p>
-                      <p>We want to make a change in lives of all deserved Sports individuals. </p>
+                      	SportsJun evolved after looking into amateur talent which never gets published or captured in any of the platforms for future reference. SportsJun wants to create a difference in lives of individuals by giving much needed platform to create a Sports profile which can be linked to any number of sports. In addition to Sports Profile, platform gives ability to organize and manage teams and sports. It&#39;s a tool for building performance stats of players and teams by organizing sports teams online, for planning games and events, and for managing and promoting leagues. It&#39;s for people who are passionate about playing sports and staying active. With busy lives of parents, coaches, owners and other individuals who cannot attend all games SportsJun plans to connect with real time performance tracking system to track the performance of near and dear’s right from their work places. Individuals, Schools, Colleges, Academies, Corporates, Government organization all can use the platform.</p>
+                      <p>We want to make a change in lives of all deserved Sports individuals.</p>
                       </div>
                       
-                      <h2>Our Vission</h2>
+                      <h2>Our Vision</h2>
                       <p>SportsJun's vision is to provide an integrated system to Sporting community to build the world’s biggest organized sporting community which would create value to every single service involved in sports.</p>
                       
                       <h2>Our Values</h2>
@@ -69,5 +69,4 @@
         </section>
         <!--// Page Content //--> 
         </div>
-        <div class="kd-divider divider4"><span></span></div>
 @endsection

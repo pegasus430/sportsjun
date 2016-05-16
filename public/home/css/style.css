@@ -157,7 +157,7 @@ Sidebar heading:	'Oswald', sans-serif;
 
 /* Main Header Starts */
 .kode-header-absolute {
-	position: absolute;
+	position: static;
 	left: 0px;
 	top: 0px;
 	width: 100%;
@@ -350,7 +350,7 @@ Sidebar heading:	'Oswald', sans-serif;
 
 /* Modal Window Starts */
 
-.modal-dialog { width: 400px; }
+.modal-dialog { width:400px; }
 .modal-content { border-radius: 0px; }
 .modal-body {
 	display: inline-block;
@@ -471,18 +471,21 @@ Sidebar heading:	'Oswald', sans-serif;
 }
 .kode-caption {
 	position: absolute;
-	right: 0px;
-	bottom: 130px;
 	z-index: 999;
 	width: 100%;
+        height:50%;
 	text-align: center;
-	left:0px;
+	left:0;
+        right: 0;
+	bottom: 0;
+        top: 0;
 	margin:auto;
+        overflow:auto;
 }
 .kode-caption h2{
 	font-size:50px;
 	color:#333;
-	padding:10px 30px;
+	padding:10px 15px;
 	background-color:#F00;
 	display:inline-block;
 	text-transform:uppercase;
@@ -2470,7 +2473,10 @@ blockquote {
 
 }
 
-.header-8 .logo img{ max-width:100%;}
+.header-8 .logo img{ max-width:80%;}
+@media screen and (min-width : 1024px) {
+	.header-8 .logo img{ max-width:100%;}
+}
 .kode-navigation ul > li.last ul{
 	left:auto;
 	right:0px;
@@ -2510,12 +2516,17 @@ blockquote {
 }
 .kode-navigation ul li a{
 	display:block;
-	font-size:14px;
+	font-size:12px;
 	text-transform:uppercase;
 	color:#fff;
 	font-weight:bold;
 	text-decoration:none;
-	padding:15px 16px;
+	padding:15px 14px;
+}
+@media screen and (min-width : 1200px) {
+        .kode-navigation ul li a{
+            font-size:14px;
+        }
 }
 .kode-navigation ul li > a:hover{
 
@@ -2859,7 +2870,7 @@ blockquote {
 	float:left;
 	width:100%;
 }
-#footer1 .footer-medium h3{
+#footer1 .footer-medium h3, #footer-partners h3{
 	font-size:20px;
 	text-transform:uppercase;
 	font-weight:700;
@@ -3416,6 +3427,7 @@ section{
 .links_widget ul{}
 .links_widget ul li{}
 .links_widget ul li a{ cursor:pointer;}
+.links_widget ul li a:hover { text-decoration:underline; }
 .bg-squre-pattren{ /*background:url(extra-images/squre-bg.png) repeat;*/ background:#f8f8f8;}
 .how_text{ /*margin:20px 0;*/ position:relative; margin:20px 0px 0px 0px;}
 .how_text_head{ position:relative;}
@@ -3649,7 +3661,7 @@ div#home-btn-fb {
     padding-bottom: 8px;
     width: 100%;
     max-width: 320px;
-    display: inline-block;
+    display: none;
     border-bottom: 1px dotted #85A135;
 }
 
@@ -3724,11 +3736,13 @@ span.modal-title-right-msg {
     margin-top: 3px;
 }
 span.modal-title-right-msg a {
-    color: #333333;
+    color: #FFEB3B;
     margin-left: 5px;
+    border-bottom: 1px dotted #FFEB3B;
 }
 span.modal-title-right-msg a:hover {
-    text-decoration: underline;
+    color: #333;
+    border-bottom: 1px dotted #333;
 }
 .btn-home-login {
     width: 100%;
@@ -3803,3 +3817,17 @@ span.btn-home-forgot a:hover {
 .btn-linkedin:active,.btn-linkedin.active,.open>.dropdown-toggle.btn-linkedin{background-image:none}
 .btn-linkedin.disabled,.btn-linkedin[disabled],fieldset[disabled] .btn-linkedin,.btn-linkedin.disabled:hover,.btn-linkedin[disabled]:hover,fieldset[disabled] .btn-linkedin:hover,.btn-linkedin.disabled:focus,.btn-linkedin[disabled]:focus,fieldset[disabled] .btn-linkedin:focus,.btn-linkedin.disabled.focus,.btn-linkedin[disabled].focus,fieldset[disabled] .btn-linkedin.focus,.btn-linkedin.disabled:active,.btn-linkedin[disabled]:active,fieldset[disabled] .btn-linkedin:active,.btn-linkedin.disabled.active,.btn-linkedin[disabled].active,fieldset[disabled] .btn-linkedin.active{background-color:#007bb6;border-color:rgba(0,0,0,0.2)}
 .btn-linkedin .badge{color:#007bb6;background-color:#fff}
+
+div#footer-partners img { width:120px }
+div#footer-partners a {display: block;margin-top: 20px;}
+.kd-divider span {display:block;}
+@media (max-width: 420px) {
+    .or_text {font-size:14px;}
+    .modal-content { border:0; }
+    .modal-dialog { width:100%;margin:0 auto; }
+    span.modal-title-right-msg{float:none;display:block;}
+}
+
+@media (max-width: 320px) {
+body {width: 320px;}.modal,.modal-dialog{margin:0;width:320px}.modal form{padding:0 10px;}.modal-body{padding:0}.modal-content{border:0}div.about-widget ul.kode-form-list li p{width:235px}.header-8 .logo img{width:90%}
+}

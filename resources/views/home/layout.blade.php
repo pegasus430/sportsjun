@@ -24,6 +24,14 @@
                 <link href="{{ asset('/home/css/prettyphoto.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
                 <link href="{{ asset('/home/css/responsive.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
                 
+                <script src="{{ asset('/home/js/jquery.js') }}?v=<?php echo $js_version;?>"></script>
+                
+                <!-- public view css -->
+                <link href="{{ asset('/css/scorecard.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
+                <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,900' rel='stylesheet' type='text/css'>
+                <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet' type='text/css'>
+                <link href="{{ asset('/css/font-awesome.min.css') }}" rel="stylesheet">
+                
                 <link rel="apple-touch-icon" sizes="57x57" href="{{ asset('/images/favicon/apple-icon-57x57.png') }}">
                 <link rel="apple-touch-icon" sizes="60x60" href="{{ asset('/images/favicon/apple-icon-60x60.png') }}">
                 <link rel="apple-touch-icon" sizes="72x72" href="{{ asset('/images/favicon/apple-icon-72x72.png') }}">
@@ -91,7 +99,7 @@
                                                 <!--NAVIGATION END--> 
                                                 <!--LOGO START-->	
                                                 <div class="logo">
-                                                        <a href="/" class="logo"><img src="home/images/sportsjun.png"  alt=""></a>
+                                                        <a href="/" class="logo"><img src="{{ asset('/home/images/sportsjun.png') }}"  alt="SportsJun"></a>
                                                 </div>
                                                 <!--LOGO END-->	
                                                 <!--NAVIGATION START-->
@@ -132,22 +140,24 @@
                                 </div>
                         </header>
 @yield('content')
+                        <div class="kd-divider divider4"><span></span></div>
                         <footer id="footer1" class="kode-parallax kode-dark-overlay kode-bg-pattern">
                                 <!--Footer Medium-->
                                 <div class="footer-medium">
                                         <div class="container">
                                                 <div class="row">
                                                         <div id="aboutus" class="col-md-4">
-                                                                <div class="about-widget">
+                                                                <div class="widget about-widget">
                                                                         <h3>About SportsJun</h3>
                                                                         <ul class="kode-form-list">
                                                                                 <li><i class="fa fa-home"></i> <p><strong>Address:</strong> Gachibowli, Hyderabad, Telangana, India 500031.</p></li>
                                                                                 <li><i class="fa fa-envelope-o"></i> <p><strong>Email:</strong> contact@sportsjun.com</p></li>
                                                                         </ul>
+                                                                        <div class="clearfix"></div>
                                                                 </div>
                                                         </div>
 
-                                                        <div class="col-md-4">
+                                                        <div class="col-md-2">
                                                                 <div class="widget links_widget">
                                                                         <h3>Links</h3>
                                                                         <ul>
@@ -159,7 +169,7 @@
                                                                 </div>
                                                         </div>
                                                         <div class="col-md-4">
-                                                                <div class="contact-us-widget">
+                                                                <div class="widget contact-us-widget">
                                                                         <h3>Connect with us</h3>
                                                                         <p>Follow us to stay updated and connected – using your favorite social media.<br></p>
                                                                         <ul class="social-links1">
@@ -180,6 +190,12 @@
                                                                                 </li -->
 
                                                                         </ul>
+                                                                </div>
+                                                        </div>
+                                                        <div id="footer-partners" class="col-md-2">
+                                                                <div class="widget footer-partners">
+                                                                        <h3>Partner</h3>
+                                                                        <a target="_blank" href="https://msg91.com/startups/?utm_source=startup-banner"><img src="https://msg91.com/images/startups/msg91Badge.png" title="MSG91 - SMS for Startups" alt="Bulk SMS - MSG91"></a>
                                                                 </div>
                                                         </div>
                                                 </div>
@@ -268,9 +284,28 @@
                                                 <h4 class="modal-title">Register</h4>
                                         </div>
                                         <div class="modal-body">
-                                                <div id="register-btn-fb">
-                                                        <a class="btn-register-fb" href="{{ route('social.login', ['facebook']) }}"></a>
+                                                <div class="col-md-6 social_but">
+                                                   <a class="btn btn-block btn-social btn-facebook" href="{{ route('social.login', ['facebook']) }}">
+                                                       <span class="fa fa-facebook"></span> Facebook
+                                                   </a>
                                                 </div>
+                                                <div class="col-md-6 social_but">
+                                                    <a class="btn btn-block btn-social btn-twitter" href="{{ route('social.login', ['twitter']) }}">
+                                                        <span class="fa fa-twitter"></span> Twitter
+                                                    </a>
+                                                </div>
+                                                <div class="col-md-6 social_but">
+                                                   <a class="btn btn-block btn-social btn-google" href="{{ route('social.login', ['google']) }}">
+                                                       <span class="fa fa-google-plus"></span> Google
+                                                   </a>
+                                                </div>
+                                                <div class="col-md-6 social_but">
+                                                    <a class="btn btn-block btn-social btn-linkedin" href="{{ route('social.login', ['linkedin']) }}">
+                                                        <span class="fa fa-linkedin"></span> LinkedIn
+                                                    </a>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                <div class="tagline" style="margin:44px 0 20px 0;"><span>OR</span></div>
                                                 <form id="home-register-modal-form" class="kode-loginform" onsubmit="SJ.USER.registerValidation(this.id);return false;">
                                                         <p><span>First Name</span> <input name="firstname" type="text" placeholder="First Name"></p>
                                                         <p><span>Last Name</span> <input name="lastname" type="text" placeholder="Last Name"></p>
@@ -331,7 +366,6 @@
                 <!-- Modal -->
                 
                 <!-- jQuery (necessary for JavaScript plugins) -->
-                <script src="{{ asset('/home/js/jquery.js') }}?v=<?php echo $js_version;?>"></script>
                 <script src="{{ asset('/home/js/sj.global.js') }}?v=<?php echo $js_version;?>"></script>
                 <script src="{{ asset('/home/js/sj.user.js') }}?v=<?php echo $js_version;?>"></script>
                 <script src="{{ asset('/home/js/bootstrap.min.js') }}?v=<?php echo $js_version;?>"></script>
