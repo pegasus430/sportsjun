@@ -3829,5 +3829,5 @@ div#footer-partners a {display: block;margin-top: 20px;}
 }
 
 @media (max-width: 320px) {
-body {width: 320px;}.modal,.modal-dialog{margin:0;width:320px}.modal form{padding:0 10px;}.modal-body{padding:0}.modal-content{border:0}div.about-widget ul.kode-form-list li p{width:235px}.header-8 .logo img{width:90%}
+body {width: 320px;}.modal,.modal-dialog{margin:0;width:320px}.modal form{padding:0 10px;}.modal-body{padding:20px 0 0 0}.modal-content{border:0}div.about-widget ul.kode-form-list li p{width:235px}.header-8 .logo img{width:90%}
 }
