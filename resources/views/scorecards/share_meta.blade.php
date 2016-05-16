@@ -15,4 +15,4 @@ $team_share_desc_encoded = urlencode($team_share_desc);
 <meta property="og:type"          content="website" />
 <meta property="og:title"         content="<?php echo $team_share_title ?>" />
 <meta property="og:description"   content="<?php echo $team_share_desc ?>" />
-<meta property="og:image"         content="http://www.sportsjun.com/home/extra-images/slide1.jpg" />
+<meta property="og:image"         content="{{ asset('/images/sj_facebook_share.jpg') }}" />
