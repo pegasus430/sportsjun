@@ -24,6 +24,14 @@
                 <link href="{{ asset('/home/css/prettyphoto.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
                 <link href="{{ asset('/home/css/responsive.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
                 
+                <script src="{{ asset('/home/js/jquery.js') }}?v=<?php echo $js_version;?>"></script>
+                
+                <!-- public view css -->
+                <link href="{{ asset('/css/scorecard.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
+                <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,900' rel='stylesheet' type='text/css'>
+                <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet' type='text/css'>
+                <link href="{{ asset('/css/font-awesome.min.css') }}" rel="stylesheet">
+                
                 <link rel="apple-touch-icon" sizes="57x57" href="{{ asset('/images/favicon/apple-icon-57x57.png') }}">
                 <link rel="apple-touch-icon" sizes="60x60" href="{{ asset('/images/favicon/apple-icon-60x60.png') }}">
                 <link rel="apple-touch-icon" sizes="72x72" href="{{ asset('/images/favicon/apple-icon-72x72.png') }}">
@@ -91,7 +99,7 @@
                                                 <!--NAVIGATION END--> 
                                                 <!--LOGO START-->	
                                                 <div class="logo">
-                                                        <a href="/" class="logo"><img src="home/images/sportsjun.png"  alt=""></a>
+                                                        <a href="/" class="logo"><img src="{{ asset('/home/images/sportsjun.png') }}"  alt="SportsJun"></a>
                                                 </div>
                                                 <!--LOGO END-->	
                                                 <!--NAVIGATION START-->
@@ -358,7 +366,6 @@
                 <!-- Modal -->
                 
                 <!-- jQuery (necessary for JavaScript plugins) -->
-                <script src="{{ asset('/home/js/jquery.js') }}?v=<?php echo $js_version;?>"></script>
                 <script src="{{ asset('/home/js/sj.global.js') }}?v=<?php echo $js_version;?>"></script>
                 <script src="{{ asset('/home/js/sj.user.js') }}?v=<?php echo $js_version;?>"></script>
                 <script src="{{ asset('/home/js/bootstrap.min.js') }}?v=<?php echo $js_version;?>"></script>
