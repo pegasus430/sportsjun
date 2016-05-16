@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends(Auth::user() ? 'layouts.app' : 'home.layout')
 @section('content')
 
 <div class="col_standard table_tennis_scorcard">

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends(Auth::user() ? 'layouts.app' : 'home.layout')
 @section('content')
   		<?php $team_a_count = 'Red Card Count:'.$team_a_red_count.','.'Yellow Card Count:'.$team_a_yellow_count;?>
 		<?php $team_b_count = 'Red Card Count:'.$team_b_red_count.','.'Yellow Card Count:'.$team_b_yellow_count;?>  
