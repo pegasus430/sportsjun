@@ -25,6 +25,7 @@ Route::get('/', function () {
 });
  * 
  */
+Route::get('js_close',function(){ return  "<script type=\"text/javascript\">window.close();</script>"; });
 Route::get('testshare', array('as' => 'testshare', function()
 {
     return 'Hello World!!!';
