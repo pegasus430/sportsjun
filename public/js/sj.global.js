@@ -284,6 +284,30 @@ if (typeof SJ.GLOBAL === 'undefined')
                         toTitleCase: function(str)
                         {
                             return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+                        },
+                        popup : function( mylink, windowname, width, height )
+                        {
+                                if (!window.focus) return;
+                                var href;
+                                if (typeof(mylink) === 'string')
+                                        href=mylink;
+                                else
+                                        href=mylink.href;
+                                if (!windowname)
+                                        windowname='mywindow';
+                                if (!width)
+                                        width=600;
+                                if (!height)
+                                        height=350;
+                                window.open(href, windowname, 'resizable=yes,width='+width+',height='+height+',scrollbars=yes');
+                        },
+                        closePopup : function()
+                        {
+                                window.close();
+                        },
+                        share : function(url, channel)
+                        {
+                                this.popup(url, channel, 700, 400);
                         }
                 };
                 z.GLOBAL = o;
