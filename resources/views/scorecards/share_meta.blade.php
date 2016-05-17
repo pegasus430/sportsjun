@@ -9,7 +9,6 @@ if (isset($tournamentDetails['tournament_parent_name']) && !empty($tournamentDet
 {
         $team_share_desc = $tournamentDetails['tournament_parent_name'] . ': ' . $team_share_desc;
 }
-$team_share_desc_encoded = urlencode($team_share_desc);
 ?>                      
 <meta property="og:url"           content="<?php echo url('matchpublic/scorecard/view',$match_data[0]['id']) ?>" />
 <meta property="og:type"          content="website" />
