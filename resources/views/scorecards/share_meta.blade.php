@@ -4,7 +4,7 @@
 $team_a_name = isset($user_a_name) ? $user_a_name : $team_a_name;
 $team_b_name = isset($user_b_name) ? $user_b_name : $team_b_name;
 $team_share_title       = $sportsDetails[0]['sports_name'] . ' Scorecard for ' . $team_a_name . ' Vs ' . $team_b_name;                                                
-$team_share_desc        = $sportsDetails[0]['sports_name'] . ' Scorecard for ' . $team_a_name . ' Vs ' . $team_b_name . ' played at ' . (($match_data[0]['facility_name']!='') ? ' , '.$match_data[0]['facility_name']:'').(($match_data[0]['address']!='')?' , '.$match_data[0]['address']:'') . ' on ' . date('jS F , Y', strtotime($match_data[0]['match_start_date']));
+$team_share_desc        = $sportsDetails[0]['sports_name'] . ' Scorecard for ' . $team_a_name . ' Vs ' . $team_b_name . ' played at ' . ((!empty($match_data[0]['facility_name'])) ? $match_data[0]['facility_name']:'') . ((!empty($match_data[0]['address'])) ? ((!empty($match_data[0]['facility_name'])) ? ', ':'') . $match_data[0]['address'] : '') . ' on ' . date('jS F, Y', strtotime($match_data[0]['match_start_date']));
 if (isset($tournamentDetails['tournament_parent_name']) && !empty($tournamentDetails['tournament_parent_name']))
 {
         $team_share_desc = $tournamentDetails['tournament_parent_name'] . ': ' . $team_share_desc;
