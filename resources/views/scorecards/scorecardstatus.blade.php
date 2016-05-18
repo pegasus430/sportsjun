@@ -1,5 +1,3 @@
-<html lang="en">
-<head>
 <script type="text/javascript">
 $(document).ready(function(){
 	$('.launch-modal').click(function(){
@@ -9,8 +7,6 @@ $(document).ready(function(){
 	}); 
 });
 </script>
-</head>
-<body>
      <!-- Button HTML (to Trigger Modal) -->
     <a href="#" class="launch-modal"><i class="fa fa-info"></i> <b>Match Status</b></a><br/>
 	@if($match_data[0]['tournament_id']=='')
@@ -105,5 +101,3 @@ $(document).ready(function(){
             </div>
         </div>
     </div>
-</body>
-</html>

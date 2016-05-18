@@ -1116,5 +1116,6 @@ div.share-scorecard {
 }
 
 /* public view specific css */
+.match-status { float:none; width:auto; }
 .team_name a { color:#65C178; }
 .col_standard,.col_standard h1, .col_standard h2, .col_standard h3, .col_standard h4, .col_standard h5, .col_standard h6 { font-family: 'Roboto', Arial, Helvetica, sans-serif !important; }
