@@ -1102,8 +1102,9 @@ class ScoreCardController extends Controller {
 		->where('innings','first')
 		->where(function($q1){
                     $q1->where('totalruns','>',0)->orWhere('balls_played','>',0)->orWhere('fours','>',0)->orWhere('sixes','>',0)->orwhereNotNull('out_as');
-					})
-					->get();
+                })
+                ->orderBy('id', 'asc')
+                ->get();
 		if(count($team_a_fst_innings)>0)
 		{
 			$team_a_fst_ing_array = $team_a_fst_innings->toArray();
@@ -1166,13 +1167,14 @@ class ScoreCardController extends Controller {
 		{
 			//get team a details second innings
 			$team_a_second_innings = CricketPlayerMatchwiseStats::select()
-					->where('match_id',$match_data[0]['id'])
-					->where('team_id',$secondIngFstBatId)
-					->where('innings','second')
-					->where(function($q1){
-                    $q1->where('totalruns','>',0)->orWhere('balls_played','>',0)->orWhere('fours','>',0)->orWhere('sixes','>',0)->orwhereNotNull('out_as');
-					})
-					->get();
+                        ->where('match_id',$match_data[0]['id'])
+                        ->where('team_id',$secondIngFstBatId)
+                        ->where('innings','second')
+                        ->where(function($q1){
+                                        $q1->where('totalruns','>',0)->orWhere('balls_played','>',0)->orWhere('fours','>',0)->orWhere('sixes','>',0)->orwhereNotNull('out_as');
+				})
+                        ->orderBy('id', 'asc')
+			->get();
 			if(count($team_a_second_innings)>0)
 			{
 				$team_a_secnd_ing_array = $team_a_second_innings->toArray();
@@ -1402,9 +1404,20 @@ class ScoreCardController extends Controller {
                 $player_name_array[$user['id']] = $user['name']; //get team names
             }
 			
-			$enum_shortcuts = array('bowled' => 'b', 'caught' => 'c', 'handled_ball' => 'htb', 'hit_ball_twice' => 'htbt', 'hit_wicket' => 'hw', 'lbw' => 'lbw', 'obstructing_the_field' => 'otf' ,'retired' => 'r', 'run_out' => 'ro', 'stumped' => 's', 'timed_out'=>'to');
+                        $enum_shortcuts = [     'bowled'                => 'b',
+                                                'caught'                => 'c',
+                                                'handled_ball'          => 'htb',
+                                                'hit_ball_twice'        => 'htbt',
+                                                'hit_wicket'            => 'hw',
+                                                'lbw'                   => 'lbw',
+                                                'obstructing_the_field' => 'otf',
+                                                'retired'               => 'r',
+                                                'run_out'               => 'ro',
+                                                'stumped'               => 's',
+                                                'timed_out'             => 'to',
+                                                'not_out'               => 'no'];
 
-			return view('scorecards.cricketscorecardview',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'team_a'=>[''=>'Select Player']+$team_a,'team_b'=>[''=>'Select Player']+$team_b,'match_data'=>$match_data,'team_a_name'=>$team_a_name,'team_b_name'=>$team_b_name,'enum'=> ['' => 'Select Out As'] + $enum,'team_a_fst_ing_array'=>$team_a_fst_ing_array,'team_b_fst_ing_array'=>$team_b_fst_ing_array,'team_a_secnd_ing_array'=>$team_a_secnd_ing_array,'team_b_secnd_ing_array'=>$team_b_secnd_ing_array,'team_wise_match_details'=>$team_wise_match_details,'team_a_count'=>$team_a_count,'team_b_count'=>$team_b_count,'team_a_logo'=>$team_a_logo,'team_b_logo'=>$team_b_logo,'team_a_fst_ing_score'=>$team_a_fst_ing_score,'team_a_fst_ing_wkt'=>$team_a_fst_ing_wkt,'team_a_fst_ing_overs'=>$team_a_fst_ing_overs,'team_a_scnd_ing_score'=>$team_a_scnd_ing_score,'team_a_scnd_ing_wkt'=>$team_a_scnd_ing_wkt,'team_a_scnd_ing_overs'=>$team_a_scnd_ing_overs,'team_b_fst_ing_score'=>$team_b_fst_ing_score,'team_b_fst_ing_wkt'=>$team_b_fst_ing_wkt,'team_b_fst_ing_overs'=>$team_b_fst_ing_overs,'team_b_scnd_ing_score'=>$team_b_scnd_ing_score,'team_b_scnd_ing_wkt'=>$team_b_scnd_ing_wkt,'team_b_scnd_ing_overs'=>$team_b_scnd_ing_overs,'player_name_array'=>$player_name_array,'a_keyCount'=>$a_keyCount_fst_ing,'b_keyCount'=>$b_keyCount_fst_ing,'a_keycount_scnd_ing'=>$a_keycount_scnd_ing,'b_keycount_scnd_ing'=>$b_keycount_scnd_ing,'enum_shortcuts'=>$enum_shortcuts,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_scnd_ing_count'=>$team_a_scnd_ing_count,'team_b_scnd_ing_count'=>$team_b_scnd_ing_count,'team_a_scnd_ing'=>[''=>'Select Player']+$team_a_scnd_ing,'team_b_scnd_ing'=>[''=>'Select Player']+$team_b_scnd_ing,'team_a_fst_ing_bowling_array'=>$team_a_fst_ing_bowling_array,'team_b_fst_ing_bowling_array'=>$team_b_fst_ing_bowling_array,'team_a_scnd_ing_bowling_array'=>$team_a_scnd_ing_bowling_array,'team_b_scnd_ing_bowling_array'=>$team_b_scnd_ing_bowling_array,'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city));
+                        return view('scorecards.cricketscorecardview',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'team_a'=>[''=>'Select Player']+$team_a,'team_b'=>[''=>'Select Player']+$team_b,'match_data'=>$match_data,'team_a_name'=>$team_a_name,'team_b_name'=>$team_b_name,'enum'=> ['' => 'Select Out As'] + $enum,'team_a_fst_ing_array'=>$team_a_fst_ing_array,'team_b_fst_ing_array'=>$team_b_fst_ing_array,'team_a_secnd_ing_array'=>$team_a_secnd_ing_array,'team_b_secnd_ing_array'=>$team_b_secnd_ing_array,'team_wise_match_details'=>$team_wise_match_details,'team_a_count'=>$team_a_count,'team_b_count'=>$team_b_count,'team_a_logo'=>$team_a_logo,'team_b_logo'=>$team_b_logo,'team_a_fst_ing_score'=>$team_a_fst_ing_score,'team_a_fst_ing_wkt'=>$team_a_fst_ing_wkt,'team_a_fst_ing_overs'=>$team_a_fst_ing_overs,'team_a_scnd_ing_score'=>$team_a_scnd_ing_score,'team_a_scnd_ing_wkt'=>$team_a_scnd_ing_wkt,'team_a_scnd_ing_overs'=>$team_a_scnd_ing_overs,'team_b_fst_ing_score'=>$team_b_fst_ing_score,'team_b_fst_ing_wkt'=>$team_b_fst_ing_wkt,'team_b_fst_ing_overs'=>$team_b_fst_ing_overs,'team_b_scnd_ing_score'=>$team_b_scnd_ing_score,'team_b_scnd_ing_wkt'=>$team_b_scnd_ing_wkt,'team_b_scnd_ing_overs'=>$team_b_scnd_ing_overs,'player_name_array'=>$player_name_array,'a_keyCount'=>$a_keyCount_fst_ing,'b_keyCount'=>$b_keyCount_fst_ing,'a_keycount_scnd_ing'=>$a_keycount_scnd_ing,'b_keycount_scnd_ing'=>$b_keycount_scnd_ing,'enum_shortcuts'=>$enum_shortcuts,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_scnd_ing_count'=>$team_a_scnd_ing_count,'team_b_scnd_ing_count'=>$team_b_scnd_ing_count,'team_a_scnd_ing'=>[''=>'Select Player']+$team_a_scnd_ing,'team_b_scnd_ing'=>[''=>'Select Player']+$team_b_scnd_ing,'team_a_fst_ing_bowling_array'=>$team_a_fst_ing_bowling_array,'team_b_fst_ing_bowling_array'=>$team_b_fst_ing_bowling_array,'team_a_scnd_ing_bowling_array'=>$team_a_scnd_ing_bowling_array,'team_b_scnd_ing_bowling_array'=>$team_b_scnd_ing_bowling_array,'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city));
 		}
 		else //to view and edit cricket score card
 		{
@@ -1459,7 +1472,7 @@ class ScoreCardController extends Controller {
 			{
 				$fielder_id_a = Request::get('a_fielder_'.$i);
 			}
-			if($out_as_a=='handled_ball' || $out_as_a=='obstructing_the_field' || $out_as_a=='retired' || $out_as_a=='timed_out')
+			if($out_as_a=='handled_ball' || $out_as_a=='obstructing_the_field' || $out_as_a=='retired' || $out_as_a=='timed_out' || $out_as_a=='not_out')
 			{
 				$bowled_id_a = 0;
 			}
@@ -1546,7 +1559,7 @@ class ScoreCardController extends Controller {
 			{
 				$fielder_id_b = Request::get('a_fielder_'.$i);
 			}
-			if($out_as_b=='handled_ball' || $out_as_b=='obstructing_the_field' || $out_as_b=='retired' || $out_as_b=='timed_out')
+			if($out_as_b=='handled_ball' || $out_as_b=='obstructing_the_field' || $out_as_b=='retired' || $out_as_b=='timed_out' || $out_as_b=='not_out')
 			{
 				$bowled_id_b=0;
 			}
