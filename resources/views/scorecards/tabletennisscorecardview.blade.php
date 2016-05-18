@@ -110,8 +110,6 @@
         <p class="match-status">@include('scorecards.scorecardstatus')</p>
     </div>
 
-    <!--<a onclick="createnewset({{ $i=1 }});" style="float:right;">(Add More Sets)</a>-->
-    {!! Form::open(array('url' => 'match/insertTableTennisScoreCard', 'method' => 'POST')) !!}
     <div class="table-responsive">
     	<table class="table table-striped">
         <thead class="thead">
@@ -277,7 +275,6 @@
 	<textarea name="rej_note" id="rej_note" rows="4" cols="50" placeholder="Reject Note" style="margin:20px 0 10px 0;"></textarea>
     @endif
     </div>
-    {!!Form::close()!!}
    </div>
    </div>
   </div>
