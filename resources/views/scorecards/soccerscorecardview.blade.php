@@ -88,7 +88,6 @@
             </div>
         </div>
     </div>
-	{!! Form::open(array('url' => 'match/insertSoccerScoreCard', 'method' => 'POST')) !!}
     
     <div class="container pull-up">        
     
@@ -239,7 +238,7 @@
 	 
 </div>
 
-
+</div>
 <script>
 //Send Approve
 function scoreCardStatus(status)
