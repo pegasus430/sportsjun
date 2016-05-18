@@ -13,7 +13,7 @@ if (isset($tournamentDetails['tournament_parent_name']) && !empty($tournamentDet
 {
         $team_share_desc = $tournamentDetails['tournament_parent_name'] . ': ' . $team_share_desc;
 }
-$tw_team_share_desc = strlen($team_share_desc) > 100 ? substr($team_share_desc,0,100)."..." : $team_share_desc;
+$tw_team_share_desc = strlen($team_share_desc) > 60 ? substr($team_share_desc,0,60)."..." : $team_share_desc;
 $tw_team_share_desc_encoded = urlencode($tw_team_share_desc);
 
 $fb_url = 'https://www.facebook.com/dialog/share?app_id=' . env('FACEBOOK_APP_ID') . '&amp;display=popup&amp;href=' . url('matchpublic/scorecard/view',$match_data[0]['id']) . '&amp;redirect_uri=' . url('js_close');
