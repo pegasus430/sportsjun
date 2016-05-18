@@ -167,8 +167,16 @@ class ScoreCardController extends Controller {
 		
 		$score_a_array=array();
 		$score_b_array=array();
-		$loginUserId = Auth::user()->id;
-		$loginUserRole = Auth::user()->role;
+                
+                $loginUserId = '';
+		$loginUserRole = '';
+		
+		if(isset(Auth::user()->id))
+			$loginUserId = Auth::user()->id;		
+		
+		if(isset(Auth::user()->role))
+			$loginUserRole = Auth::user()->role;
+                
 		//!empty($matchScheduleDetails['tournament_id'])
 		//if($match_data[0]['match_status']=='scheduled')//match should be already scheduled
 		//{
@@ -301,11 +309,15 @@ class ScoreCardController extends Controller {
 			
 			
 			//is valid user for score card enter or edit
-			$isValidUser = Helper::isValidUserForScoreEnter($match_data);
-			
-			//is approval process exist
-			$isApproveRejectExist = Helper::isApprovalExist($match_data);
-			$isForApprovalExist = Helper::isApprovalExist($match_data,$isForApproval='yes');
+                        $isValidUser = 0;
+                        $isApproveRejectExist = 0;
+                        $isForApprovalExist = 0;
+                        if(isset(Auth::user()->id)){		
+                                $isValidUser = Helper::isValidUserForScoreEnter($match_data);		
+                                //is approval process exist
+                                $isApproveRejectExist = Helper::isApprovalExist($match_data);
+                                $isForApprovalExist = Helper::isApprovalExist($match_data,$isForApproval='yes');
+                        }
 
 			//ONLY FOR VIEW SCORE CARD
 			if($is_from_view==1 || (!empty($score_status_array['added_by']) && $score_status_array['added_by']!=$loginUserId && $match_data[0]['scoring_status']!='rejected') || $match_data[0]['match_status']=='completed' || $match_data[0]['scoring_status']=='approval_pending' || $match_data[0]['scoring_status']=='approved' || !$isValidUser) 
@@ -2017,8 +2029,15 @@ class ScoreCardController extends Controller {
 	// function to insert soccer score card
 	public function soccerScoreCard($match_data,$sportsDetails=[],$tournamentDetails=[],$is_from_view=0)
 	{
-		$loginUserId = Auth::user()->id;
-		$loginUserRole = Auth::user()->role;
+		$loginUserId = '';
+		$loginUserRole = '';
+		
+		if(isset(Auth::user()->id))
+			$loginUserId = Auth::user()->id;		
+		
+		if(isset(Auth::user()->role))
+			$loginUserRole = Auth::user()->role;
+                
 		$team_a_players = array();
 		$team_b_players = array();
 		$team_a_id = $match_data[0]['a_id'];
@@ -2153,12 +2172,17 @@ class ScoreCardController extends Controller {
 			}
 		}
 		$rej_note_str = trim($rej_note_str, ",");
+                
 		//is valid user for score card enter or edit
-		$isValidUser = Helper::isValidUserForScoreEnter($match_data);
-		
-		//is approval process exist
-		$isApproveRejectExist = Helper::isApprovalExist($match_data);
-		$isForApprovalExist = Helper::isApprovalExist($match_data,$isForApproval='yes');
+		$isValidUser = 0;
+		$isApproveRejectExist = 0;
+		$isForApprovalExist = 0;
+		if(isset(Auth::user()->id)){		
+			$isValidUser = Helper::isValidUserForScoreEnter($match_data);		
+			//is approval process exist
+			$isApproveRejectExist = Helper::isApprovalExist($match_data);
+			$isForApprovalExist = Helper::isApprovalExist($match_data,$isForApproval='yes');
+		}
 		
 		$team_a_city = Helper::getTeamCity($match_data[0]['a_id']);
 		$team_b_city = Helper::getTeamCity($match_data[0]['b_id']);
