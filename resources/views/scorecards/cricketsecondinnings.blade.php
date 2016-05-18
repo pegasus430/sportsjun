@@ -1215,7 +1215,7 @@ function deleteRow(team,status,id,value)
 		//delete wickets
 		team_a_out_as = $('#a_outas_second_ing_'+value).val();
 		out_count = $('#scnd_ing_a_wkts').val();
-		if(team_a_out_as!='')
+		if(team_a_out_as!='' && team_a_out_as!='not_out')
 		{
 			out_count--;
 		}
@@ -1255,7 +1255,7 @@ function deleteRow(team,status,id,value)
 		//delete wickets
 		team_b_out_as = $('#b_outas_second_ing_'+value).val();
 		out_count = $('#scnd_ing_b_wkts').val();
-		if(team_b_out_as!='')
+		if(team_b_out_as!='' && team_b_out_as!='not_out')
 		{
 			out_count--;
 		}
@@ -1361,7 +1361,7 @@ $('.team_a_scnd_ing_wkt').on('change',function(){
 	team_a_scnd_ing_wkt = 0;
 	isFielderDisplay = 1;
 $('.team_a_scnd_ing_wkt').each(function() {
-			if($(this).val()!='')
+			if($(this).val()!='' && $(this).val()!='not_out')
 			{
 				team_a_scnd_ing_wkt ++;
 			}
@@ -1380,7 +1380,7 @@ $('.team_b_scnd_ing_wkt').on('change',function(){
 	team_b_scnd_ing_wkt = 0;
 	isFielderDisplay = 1;
 $('.team_b_scnd_ing_wkt').each(function() {
-			if($(this).val()!='')
+			if($(this).val()!='' && $(this).val()!='not_out')
 			{
 				team_b_scnd_ing_wkt ++;
 			}
