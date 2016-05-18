@@ -28,7 +28,10 @@
 					</a>
 				</td>
 				
-				<td colspan="3">{{(!empty($enum_shortcuts[$a_batng_second_ing['out_as']]))?$enum_shortcuts[$a_batng_second_ing['out_as']]:''}} {{(!empty($player_name_array[$a_batng_second_ing['bowled_id']]))?$player_name_array[$a_batng_second_ing['bowled_id']]:''}} {{'b'}} {{(!empty($player_name_array[$a_batng_second_ing['fielder_id']]))?$player_name_array[$a_batng_second_ing['fielder_id']]:''}}
+				<td colspan="3">
+                                        {!! (!empty($enum_shortcuts[$a_batng_second_ing['out_as']]))?'<strong>' . strtoupper($enum_shortcuts[$a_batng_second_ing['out_as']]) . '</strong>':'' !!}
+                                        {{(!empty($player_name_array[$a_batng_second_ing['fielder_id']]))?$player_name_array[$a_batng_second_ing['fielder_id']]:''}}
+                                        {!! (!empty($player_name_array[$a_batng_second_ing['bowled_id']]))?(($enum_shortcuts[$a_batng_second_ing['out_as']] != 'b') ? '<strong>B</strong> ':'').$player_name_array[$a_batng_second_ing['bowled_id']]:'' !!}
 				</td>
 			
 				
@@ -189,9 +192,10 @@
 				<td><a href="{{ url('/showsportprofile',[$team_b_bat_scnd['user_id']]) }}">{{(!empty($player_name_array[$team_b_bat_scnd['user_id']]))?$player_name_array[$team_b_bat_scnd['user_id']]:''}}</a>
 				</td>
 				
-				<td colspan="3">{{(!empty($enum_shortcuts[$team_b_bat_scnd['out_as']]))?$enum_shortcuts[$team_b_bat_scnd['out_as']]:''}}     {{(!empty($player_name_array[$team_b_bat_scnd['bowled_id']]))?$player_name_array[$team_b_bat_scnd['bowled_id']]:''}} 
-				{{'b'}}
-				{{(!empty($player_name_array[$team_b_bat_scnd['fielder_id']]))?$player_name_array[$team_b_bat_scnd['fielder_id']]:''}}
+				<td colspan="3">
+                                {!! (!empty($enum_shortcuts[$team_b_bat_scnd['out_as']]))?'<strong>' . strtoupper($enum_shortcuts[$team_b_bat_scnd['out_as']]) . '</strong>':'' !!}
+                                {{(!empty($player_name_array[$team_b_bat_scnd['fielder_id']]))?$player_name_array[$team_b_bat_scnd['fielder_id']]:''}}
+                                {!! (!empty($player_name_array[$team_b_bat_scnd['bowled_id']]))?(($enum_shortcuts[$team_b_bat_scnd['out_as']] != 'b') ? '<strong>B</strong> ':'').$player_name_array[$team_b_bat_scnd['bowled_id']]:'' !!}
 				</td>
 		
 				
