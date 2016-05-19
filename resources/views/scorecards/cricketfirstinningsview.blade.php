@@ -29,7 +29,7 @@
 				<td colspan="3">
 				{!! (!empty($enum_shortcuts[$a_fst_inning['out_as']]) && $enum_shortcuts[$a_fst_inning['out_as']]!='Select Out As')?'<strong>' . strtoupper($enum_shortcuts[$a_fst_inning['out_as']]) . '</strong>':'' !!}
                                 {{ (!empty($player_name_array[$a_fst_inning['fielder_id']]))?$player_name_array[$a_fst_inning['fielder_id']]:'' }}
-				{!! (!empty($player_name_array[$a_fst_inning['bowled_id']]))?(($enum_shortcuts[$a_fst_inning['out_as']] != 'b') ? '<strong>B</strong> ':'').$player_name_array[$a_fst_inning['bowled_id']]:'' !!}
+				{!! (!empty($player_name_array[$a_fst_inning['bowled_id']]))?((!empty($enum_shortcuts[$a_fst_inning['out_as']]) && $enum_shortcuts[$a_fst_inning['out_as']] != 'b') ? '<strong>B</strong> ':'').$player_name_array[$a_fst_inning['bowled_id']]:'' !!}
 				</td>
 			
 				<td>{{(!empty($a_fst_inning['totalruns']))?$a_fst_inning['totalruns']:''}}</td>
@@ -189,7 +189,7 @@
 				<td colspan="3">
 				{!! (!empty($enum_shortcuts[$team_b_bat['out_as']]) && $enum_shortcuts[$team_b_bat['out_as']]!='Select Out As')?'<strong>' . strtoupper($enum_shortcuts[$team_b_bat['out_as']]) . '</strong>':'' !!}
                                 {{(!empty($player_name_array[$team_b_bat['fielder_id']]))?$player_name_array[$team_b_bat['fielder_id']]:''}}
-				{!! (!empty($player_name_array[$team_b_bat['bowled_id']]))?(($enum_shortcuts[$a_fst_inning['out_as']] != 'b') ? '<strong>B</strong> ':'').$player_name_array[$team_b_bat['bowled_id']]:'' !!}
+				{!! (!empty($player_name_array[$team_b_bat['bowled_id']]))?((!empty($enum_shortcuts[$team_b_bat['out_as']]) && $enum_shortcuts[$a_fst_inning['out_as']] != 'b') ? '<strong>B</strong> ':'').$player_name_array[$team_b_bat['bowled_id']]:'' !!}
 				</td>
 
 				
