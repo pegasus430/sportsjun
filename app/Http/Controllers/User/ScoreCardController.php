@@ -1563,12 +1563,11 @@ class ScoreCardController extends Controller {
 			$out_as_b = Request::get('b_outas_'.$k);
 			$strikerate_b = Request::get('b_strik_rate_'.$k);
 			$bowled_id_b = Request::get('b_bowled_'.$k);
-			$fielder_id_b = Request::get('b_fielder_'.$k);
 			$fielder_id_b=0;
 			
 			if($out_as_b=='caught' || $out_as_b=='run_out' || $out_as_b=='stumped')
 			{
-				$fielder_id_b = Request::get('a_fielder_'.$i);
+				$fielder_id_b = Request::get('b_fielder_'.$k);
 			}
 			if($out_as_b=='handled_ball' || $out_as_b=='obstructing_the_field' || $out_as_b=='retired' || $out_as_b=='timed_out' || $out_as_b=='not_out')
 			{
