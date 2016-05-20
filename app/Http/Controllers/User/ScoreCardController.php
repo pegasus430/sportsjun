@@ -1096,6 +1096,7 @@ class ScoreCardController extends Controller {
 		
 		//get team a details first innings
 		$team_a_fst_ing_array = array();
+                
 		$team_a_fst_innings = CricketPlayerMatchwiseStats::select()
 		->where('match_id',$match_data[0]['id'])
 		->where('team_id',$fstIngFstBatId)
@@ -1103,22 +1104,26 @@ class ScoreCardController extends Controller {
 		->where(function($q1){
                     $q1->where('totalruns','>',0)->orWhere('balls_played','>',0)->orWhere('fours','>',0)->orWhere('sixes','>',0)->orwhereNotNull('out_as');
                 })
-                ->orderBy('id', 'asc')
+                ->orderBy('sr_no_in_batting_team', 'asc')
                 ->get();
+                
 		if(count($team_a_fst_innings)>0)
 		{
 			$team_a_fst_ing_array = $team_a_fst_innings->toArray();
 		}
 		$team_a_fst_ing_bowling_array = array();
+                
+                
 		//get team a bowling Details
 		$team_a_fst_bowling = CricketPlayerMatchwiseStats::select()
 		->where('match_id',$match_data[0]['id'])
 		->where('team_id',$fstIngFstBatId)
 		->where('innings','first')
 		->where(function($q1){
-                    $q1->where('overs_bowled','>',0)->orWhere('overs_maiden','>',0)->orWhere('wickets','>',0)->orWhere('runs_conceded','>',0)->orWhere('wides_bowl','>',0)->orWhere('noballs_bowl','>',0)->orWhere('ecomony','>',0);
-					})
-					->get();
+                        $q1->where('overs_bowled','>',0)->orWhere('overs_maiden','>',0)->orWhere('wickets','>',0)->orWhere('runs_conceded','>',0)->orWhere('wides_bowl','>',0)->orWhere('noballs_bowl','>',0)->orWhere('ecomony','>',0);
+                })
+                ->orderBy('sr_no_in_bowling_team', 'asc')
+                ->get();
 					
 		if(count($team_a_fst_bowling)>0)
 		{
@@ -1129,14 +1134,17 @@ class ScoreCardController extends Controller {
 		
 		//get team a details first innings
 		$team_b_fst_ing_array = array();
+                
 		$team_b_fst_innings = CricketPlayerMatchwiseStats::select()
 		->where('match_id',$match_data[0]['id'])
 		->where('team_id',$fstIngsecondBatId)
 		->where('innings','first')
 		->where(function($q1){
-                    $q1->where('totalruns','>',0)->orWhere('balls_played','>',0)->orWhere('fours','>',0)->orWhere('sixes','>',0)->orwhereNotNull('out_as');
-					})
-					->get();
+                                $q1->where('totalruns','>',0)->orWhere('balls_played','>',0)->orWhere('fours','>',0)->orWhere('sixes','>',0)->orwhereNotNull('out_as');
+			})
+                ->orderBy('sr_no_in_batting_team', 'asc')
+		->get();
+                                        
 		if(count($team_b_fst_innings)>0)
 		{
 			$team_b_fst_ing_array = $team_b_fst_innings->toArray();
@@ -1149,9 +1157,10 @@ class ScoreCardController extends Controller {
 		->where('team_id',$fstIngsecondBatId)
 		->where('innings','first')
 		->where(function($q2){
-                    $q2->where('overs_bowled','>',0)->orWhere('overs_maiden','>',0)->orWhere('wickets','>',0)->orWhere('runs_conceded','>',0)->orWhere('wides_bowl','>',0)->orWhere('noballs_bowl','>',0)->orWhere('ecomony','>',0);
-					})
-					->get();
+                                $q2->where('overs_bowled','>',0)->orWhere('overs_maiden','>',0)->orWhere('wickets','>',0)->orWhere('runs_conceded','>',0)->orWhere('wides_bowl','>',0)->orWhere('noballs_bowl','>',0)->orWhere('ecomony','>',0);
+			})
+                ->orderBy('sr_no_in_bowling_team', 'asc')
+		->get();
 					
 		if(count($team_b_fst_bowling)>0)
 		{
@@ -1173,8 +1182,9 @@ class ScoreCardController extends Controller {
                         ->where(function($q1){
                                         $q1->where('totalruns','>',0)->orWhere('balls_played','>',0)->orWhere('fours','>',0)->orWhere('sixes','>',0)->orwhereNotNull('out_as');
 				})
-                        ->orderBy('id', 'asc')
+                        ->orderBy('sr_no_in_batting_team', 'asc')
 			->get();
+                                
 			if(count($team_a_second_innings)>0)
 			{
 				$team_a_secnd_ing_array = $team_a_second_innings->toArray();
@@ -1187,9 +1197,10 @@ class ScoreCardController extends Controller {
 			->where('team_id',$secondIngFstBatId)
 			->where('innings','second')
 			->where(function($q2){
-						$q2->where('overs_bowled','>',0)->orWhere('overs_maiden','>',0)->orWhere('wickets','>',0)->orWhere('runs_conceded','>',0)->orWhere('wides_bowl','>',0)->orWhere('noballs_bowl','>',0)->orWhere('ecomony','>',0);
-						})
-						->get();
+                                        $q2->where('overs_bowled','>',0)->orWhere('overs_maiden','>',0)->orWhere('wickets','>',0)->orWhere('runs_conceded','>',0)->orWhere('wides_bowl','>',0)->orWhere('noballs_bowl','>',0)->orWhere('ecomony','>',0);
+                                })
+                        ->orderBy('sr_no_in_bowling_team', 'asc')
+                        ->get();
 						
 			if(count($team_a_scnd_bowling)>0)
 			{
@@ -1199,15 +1210,14 @@ class ScoreCardController extends Controller {
 			
 			//get team b details second innings
 			$team_b_fst_innings = CricketPlayerMatchwiseStats::select()
-							->where('match_id',$match_data[0]['id'])
-							->where('team_id',$secondIngsecondBatId)
-							->where('innings','second')
-							->where(function($q3){
-										$q3->where('totalruns','>',0)->orWhere('balls_played','>',0)->orWhere('fours','>',0)->orWhere('sixes','>',0)->orwhereNotNull('out_as');
-								})
-							->get();
-			
-			
+                        ->where('match_id',$match_data[0]['id'])
+                        ->where('team_id',$secondIngsecondBatId)
+                        ->where('innings','second')
+                        ->where(function($q3){
+                                                $q3->where('totalruns','>',0)->orWhere('balls_played','>',0)->orWhere('fours','>',0)->orWhere('sixes','>',0)->orwhereNotNull('out_as');
+                                })
+                        ->orderBy('sr_no_in_batting_team', 'asc')
+                        ->get();
 			
 			if(count($team_b_fst_innings)>0)
 			{
@@ -1221,8 +1231,9 @@ class ScoreCardController extends Controller {
 			->where('innings','second')
 			->where(function($q2){
 						$q2->where('overs_bowled','>',0)->orWhere('overs_maiden','>',0)->orWhere('wickets','>',0)->orWhere('runs_conceded','>',0)->orWhere('wides_bowl','>',0)->orWhere('noballs_bowl','>',0)->orWhere('ecomony','>',0);
-						})
-						->get();
+			})
+                        ->orderBy('sr_no_in_bowling_team', 'asc')
+			->get();
 						
 			if(count($team_b_scnd_bowling)>0)
 			{
@@ -1497,11 +1508,11 @@ class ScoreCardController extends Controller {
 				if(count($is_player_exist)>0)// if player already exist
 				{
 					$update_id = $is_player_exist['id'];
-					CricketPlayerMatchwiseStats::where('id',$update_id)->update(['balls_played'=>$balls_played_a,'totalruns'=>$totalruns_a,'fours'=>$fours_a,'sixes'=>$sixes_a,'out_as'=>$out_as_a,'strikerate'=>$strikerate_a,'fielder_id'=>$fielder_id_a,'bowled_id'=>$bowled_id_a,'bat_status'=>$a_bat_status]);
+					CricketPlayerMatchwiseStats::where('id',$update_id)->update(['balls_played'=>$balls_played_a,'totalruns'=>$totalruns_a,'fours'=>$fours_a,'sixes'=>$sixes_a,'out_as'=>$out_as_a,'strikerate'=>$strikerate_a,'fielder_id'=>$fielder_id_a,'bowled_id'=>$bowled_id_a,'bat_status'=>$a_bat_status,'sr_no_in_batting_team'=>$i]);
 					
 				}else
 				{
-					$this->insertBatsmenScore($user_id_a,$tournament_id,$match_id,$team_a_id,$match_type,$balls_played_a,$totalruns_a,$fours_a,$sixes_a,$out_as_a,$strikerate_a,$team_a_name,$player_name,$inning,$fielder_id_a,$bowled_id_a,$a_bat_status);
+					$this->insertBatsmenScore($user_id_a,$tournament_id,$match_id,$team_a_id,$match_type,$balls_played_a,$totalruns_a,$fours_a,$sixes_a,$out_as_a,$strikerate_a,$team_a_name,$player_name,$inning,$fielder_id_a,$bowled_id_a,$a_bat_status,$i);
 				}
 				
 				
@@ -1529,11 +1540,11 @@ class ScoreCardController extends Controller {
 				if(count($is_bowler_exist)>0) // if player already exist
 				{
 					$bowler_id = $is_bowler_exist['id'];
-					CricketPlayerMatchwiseStats::where('id',$bowler_id)->update(['overs_bowled'=>$a_overs_bowled,'wickets'=>$a_wickets,'runs_conceded'=>$a_runs_conceded,'ecomony'=>$a_ecomony,'wides_bowl'=>$a_wide,'noballs_bowl'=>$a_noball,'overs_maiden'=>$a_maidens]);
+					CricketPlayerMatchwiseStats::where('id',$bowler_id)->update(['overs_bowled'=>$a_overs_bowled,'wickets'=>$a_wickets,'runs_conceded'=>$a_runs_conceded,'ecomony'=>$a_ecomony,'wides_bowl'=>$a_wide,'noballs_bowl'=>$a_noball,'overs_maiden'=>$a_maidens,'sr_no_in_bowling_team'=>$j]);
 					
 				}else
 				{
-					$this->insertBowlerScore($bowler_id_a,$tournament_id,$match_id,$team_a_id,$match_type,$a_overs_bowled,$a_wickets,$a_runs_conceded,$a_ecomony,$team_a_name,$bowler_name,$inning,$a_wide,$a_noball,$a_maidens);
+					$this->insertBowlerScore($bowler_id_a,$tournament_id,$match_id,$team_a_id,$match_type,$a_overs_bowled,$a_wickets,$a_runs_conceded,$a_ecomony,$team_a_name,$bowler_name,$inning,$a_wide,$a_noball,$a_maidens,$j);
 					
 				}
 				
@@ -1552,12 +1563,11 @@ class ScoreCardController extends Controller {
 			$out_as_b = Request::get('b_outas_'.$k);
 			$strikerate_b = Request::get('b_strik_rate_'.$k);
 			$bowled_id_b = Request::get('b_bowled_'.$k);
-			$fielder_id_b = Request::get('b_fielder_'.$k);
 			$fielder_id_b=0;
 			
 			if($out_as_b=='caught' || $out_as_b=='run_out' || $out_as_b=='stumped')
 			{
-				$fielder_id_b = Request::get('a_fielder_'.$i);
+				$fielder_id_b = Request::get('b_fielder_'.$k);
 			}
 			if($out_as_b=='handled_ball' || $out_as_b=='obstructing_the_field' || $out_as_b=='retired' || $out_as_b=='timed_out' || $out_as_b=='not_out')
 			{
@@ -1582,10 +1592,10 @@ class ScoreCardController extends Controller {
 				if(count($is_b_player_exist)>0)
 				{
 					$update_id = $is_b_player_exist['id'];
-					CricketPlayerMatchwiseStats::where('id',$update_id)->update(['balls_played'=>$balls_played_b,'totalruns'=>$totalruns_b,'fours'=>$fours_b,'sixes'=>$sixes_b,'out_as'=>$out_as_b,'strikerate'=>$strikerate_b,'fielder_id'=>$fielder_id_b,'bowled_id'=>$bowled_id_b,'bat_status'=>$b_bat_status]);
+					CricketPlayerMatchwiseStats::where('id',$update_id)->update(['balls_played'=>$balls_played_b,'totalruns'=>$totalruns_b,'fours'=>$fours_b,'sixes'=>$sixes_b,'out_as'=>$out_as_b,'strikerate'=>$strikerate_b,'fielder_id'=>$fielder_id_b,'bowled_id'=>$bowled_id_b,'bat_status'=>$b_bat_status,'sr_no_in_batting_team'=>$k]);
 				}else
 				{
-					$this->insertBatsmenScore($user_id_b,$tournament_id,$match_id,$team_b_id,$match_type,$balls_played_b,$totalruns_b,$fours_b,$sixes_b,$out_as_b,$strikerate_b,$team_b_name,$player_b_name,$inning,$fielder_id_b,$bowled_id_b,$b_bat_status);
+					$this->insertBatsmenScore($user_id_b,$tournament_id,$match_id,$team_b_id,$match_type,$balls_played_b,$totalruns_b,$fours_b,$sixes_b,$out_as_b,$strikerate_b,$team_b_name,$player_b_name,$inning,$fielder_id_b,$bowled_id_b,$b_bat_status,$k);
 				}
 				
 				
@@ -1613,11 +1623,11 @@ class ScoreCardController extends Controller {
 				if(count($is_bowler_b_exist)>0)
 				{
 					$bowler_id = $is_bowler_b_exist['id'];
-					CricketPlayerMatchwiseStats::where('id',$bowler_id)->update(['overs_bowled'=>$b_overs_bowled,'wickets'=>$b_wickets,'runs_conceded'=>$b_runs_conceded,'ecomony'=>$b_ecomony,'wides_bowl'=>$b_wide,'noballs_bowl'=>$b_noball,'overs_maiden'=>$b_maidens]);
+					CricketPlayerMatchwiseStats::where('id',$bowler_id)->update(['overs_bowled'=>$b_overs_bowled,'wickets'=>$b_wickets,'runs_conceded'=>$b_runs_conceded,'ecomony'=>$b_ecomony,'wides_bowl'=>$b_wide,'noballs_bowl'=>$b_noball,'overs_maiden'=>$b_maidens,'sr_no_in_bowling_team'=>$l]);
 					
 				}else
 				{
-					$this->insertBowlerScore($bowler_id_b,$tournament_id,$match_id,$team_b_id,$match_type,$b_overs_bowled,$b_wickets,$b_runs_conceded,$b_ecomony,$team_b_name,$bowler_b_name,$inning,$b_wide,$b_noball,$b_maidens);
+					$this->insertBowlerScore($bowler_id_b,$tournament_id,$match_id,$team_b_id,$match_type,$b_overs_bowled,$b_wickets,$b_runs_conceded,$b_ecomony,$team_b_name,$bowler_b_name,$inning,$b_wide,$b_noball,$b_maidens,$l);
 				}
 				
 				
@@ -1827,7 +1837,7 @@ class ScoreCardController extends Controller {
 		//return Response()->json( array('success' => trans('message.scorecard.scorecardmsg')) );
 	}
 	//function to insert batsmen score
-	public function insertBatsmenScore($user_id,$tournament_id,$match_id,$team_id,$match_type,$balls_played,$totalruns,$fours,$sixes,$out_as,$strikerate,$team_name,$player_name,$innings,$fielder_id,$bowled_id,$bat_status)
+	public function insertBatsmenScore($user_id,$tournament_id,$match_id,$team_id,$match_type,$balls_played,$totalruns,$fours,$sixes,$out_as,$strikerate,$team_name,$player_name,$innings,$fielder_id,$bowled_id,$bat_status,$sr_no_in_batting_team=0)
 	{
 		$model = new CricketPlayerMatchwiseStats();
 		$model->user_id = $user_id;
@@ -1847,11 +1857,12 @@ class ScoreCardController extends Controller {
 		$model->fielder_id = $fielder_id;
 		$model->bowled_id = $bowled_id;
 		$model->bat_status = $bat_status;
+                $model->sr_no_in_batting_team = $sr_no_in_batting_team;
 		$model->save();
 	}
 	
 	//insert bowler score
-	public function insertBowlerScore($bowler_id,$tournament_id,$match_id,$team_id,$match_type,$overs_bowled,$wickets,$runs_conceded,$ecomony,$team_name,$bowler_name,$inning,$wide,$noball,$maidens)
+	public function insertBowlerScore($bowler_id,$tournament_id,$match_id,$team_id,$match_type,$overs_bowled,$wickets,$runs_conceded,$ecomony,$team_name,$bowler_name,$inning,$wide,$noball,$maidens,$sr_no_in_bowling_team=0)
 	{
 		$bowler_model = new CricketPlayerMatchwiseStats();
 		$bowler_model->user_id = $bowler_id;
@@ -1869,6 +1880,7 @@ class ScoreCardController extends Controller {
 		$bowler_model->wides_bowl = $wide;
 		$bowler_model->noballs_bowl = $noball;
 		$bowler_model->overs_maiden = $maidens;
+                $bowler_model->sr_no_in_bowling_team = $sr_no_in_bowling_team;
 		$bowler_model->save();
 	}
 	
