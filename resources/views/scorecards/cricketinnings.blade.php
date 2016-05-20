@@ -1462,7 +1462,7 @@ function teamWickets(name,team)
 	team_a_wkts = 0;
 	isFielderDisplay = 1;
 	$('.'+name).each(function() {
-				if($(this).val()!='')
+				if($(this).val()!='' && $(this).val()!='not_out')
 				{
 					team_a_wkts ++;
 				}
