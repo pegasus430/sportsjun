@@ -1507,13 +1507,13 @@ function save(status)
 					});
 				}else
 				{
-					location.reload(true);
+					window.location.reload(true);
 				}
 				
 			}
 		});
 	}
-	location.reload(true);
+	window.location.reload(true);
 }
 var a_extra = 0;
 $('.a_extras').each(function() {

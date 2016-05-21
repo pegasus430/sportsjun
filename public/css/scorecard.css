@@ -1044,10 +1044,12 @@ span#edit_first_innings,span#edit_second_innings {
     position: absolute;
     top: 13px;
     z-index: 100;
-    background: #fff;
+    background: #84CD93;
+    color:#fff;
+    font-weight: bold;
     padding: 4px 10px;
     margin-left: 10px;
-    font-size: 12px;
+    font-size: 14px;
     border-radius: 3px;
     text-transform: uppercase;
     cursor: pointer;

@@ -216,8 +216,8 @@
                                                                                                             <label for="{{ $match_data[0]['a_id'] }}">{{ $team_a_name }}</label>
                                                                                                     </div>
                                                                                                     <div class="radio">
-                                                                                                            <input name="team" type="radio" value="toss" id="{{ $match_data[0]['b_id'] }} ">
-                                                                                                            <label for="{{ $match_data[0]['b_id'] }} ">{{ $team_b_name }}</label>
+                                                                                                            <input name="team" type="radio" value="toss" id="{{ $match_data[0]['b_id'] }}">
+                                                                                                            <label for="{{ $match_data[0]['b_id'] }}">{{ $team_b_name }}</label>
                                                                                                     </div>
                                                                                             </div>
                                                                                     </div>
@@ -269,8 +269,8 @@
                                                                                                             <label for="{{ $match_data[0]['a_id'] }}">{{ $team_a_name }}</label>
                                                                                                     </div>
                                                                                                     <div class="radio">
-                                                                                                            <input name="team" type="radio" value="toss" id="{{ $match_data[0]['b_id'] }} ">
-                                                                                                            <label for="{{ $match_data[0]['b_id'] }} ">{{ $team_b_name }}</label>
+                                                                                                            <input name="team" type="radio" value="toss" id="{{ $match_data[0]['b_id'] }}">
+                                                                                                            <label for="{{ $match_data[0]['b_id'] }}">{{ $team_b_name }}</label>
                                                                                                     </div>
                                                                                             </div>
                                                                                     </div>
@@ -315,14 +315,14 @@
                 <ul class="nav nav-tabs nav-justified">
                     <li class="active">
                             @if($first_inning_editable!=0)
-                            <span id="edit_first_innings" onclick="SJ.SCORECARD.firstInningsModal();">Edit</span>
+                            <span id="edit_first_innings" onclick="SJ.SCORECARD.firstInningsModal();">Change</span>
                             @endif
                             <a href="#first_innings" data-toggle="tab" aria-expanded="true">Ist Innings</a>
                     </li>
                     @if($match_data[0]['match_type']=='test')
                     <li class="">
                             @if($second_inning_editable != 0)
-                            <span id="edit_second_innings" onclick="SJ.SCORECARD.secondInningBattingOrderModal();">Edit</span>
+                            <span id="edit_second_innings" onclick="SJ.SCORECARD.secondInningBattingOrderModal();">Change</span>
                             @endif
                             <a href="#second_innings" data-toggle="tab" aria-expanded="false" onclick="SJ.SCORECARD.secondInningBattingOrderModal();">2nd Innings</a>
                     </li>
