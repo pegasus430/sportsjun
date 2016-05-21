@@ -55,16 +55,29 @@ if (typeof SJ.SCORECARD === 'undefined')
                                         $('#matchTossNote').html(toss_winning_team_name +' won the toss and chose to '+ choseTo + '.');
                                 }
                                 
-                                $('#tossModal').modal('hide');
+                                var first_batting_team_name = $('#tossWonBy select option[value='+toss_winning_team+']').html();
+                                var heading_team_a_batting = $('#team_a_batting').html().toLowerCase();
+                                if (heading_team_a_batting.indexOf(first_batting_team_name.toLowerCase()) > -1)
+                                {
+                                        $('#tossModal').modal('hide');
+                                }
                         },
                         done2ndInningModal: function() {
                                 var bat2ndInningTeam = parseInt($('#bat2ndInningBatting input[type=radio]:checked').attr('id'));
+                                
+                                var first_batting_team_name = $('#bat2ndInningBatting label[for='+ bat2ndInningTeam +']').html();
+                                
                                 bat2ndInningTeam = $('#bat2ndInning select[name=team]').find('option[data-status='+bat2ndInningTeam+']').attr('value');
                                 $('#bat2ndInning select[name=team]').val(bat2ndInningTeam);
                                 //$('#bat2ndInning .selectpicker').selectpicker('refresh');
                                 $('#bat2ndInning select[name=team]').change();
                                 $('a[href="#second_innings"]').removeAttr('onclick');
-                                $('#secondInningsBatModal').modal('hide');
+                                
+                                var heading_2nd_innings_team_a_batting = $('#second_team_a_batting').html().toLowerCase();
+                                if (heading_2nd_innings_team_a_batting.indexOf(first_batting_team_name.toLowerCase()) > -1)
+                                {
+                                        $('#secondInningsBatModal').modal('hide');
+                                }
                         },
                         secondInningBattingOrderModal: function()
                         {
