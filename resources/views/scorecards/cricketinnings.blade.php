@@ -22,7 +22,7 @@
 			<th></th>
 		</tr>
 	</thead>
-		<tbody id="player_tr_a" >
+		<tbody id="player_tr_a">
 		<?php $a_bat_fst_ing = 1; ?>
 		@if(!empty($team_a_fst_ing_array) && count($team_a_fst_ing_array)>0)
 
@@ -577,34 +577,33 @@
 	 <input type="hidden" name="a_fall_of_count" value="{{ $team_a_fall_wkts }}" id="a_fall_of_count">
 	 <input type="hidden" name="b_fall_of_count" value="{{ $team_b_fall_wkt }}" id="b_fall_of_count">
 	 <input type="hidden" name="tournament_id" value="{{ $match_data[0]['tournament_id'] }}" id="player_count">
-	 <input type="hidden" name="team_a_id" value="{{ $match_data[0]['a_id'] }}" id="team_a_id">
-	 <input type="hidden" name="team_b_id" value="{{ $match_data[0]['b_id'] }}" id="team_b_id">
+	 <input type="hidden" name="team_a_id" value="{{ $fstIngFstBatId }}" id="team_a_id">
+	 <input type="hidden" name="team_b_id" value="{{ $fstIngsecondBatId }}" id="team_b_id">
 	 <input type="hidden" name="match_id" value="{{ $match_data[0]['id'] }}" id="player_count">
 	 <input type="hidden" name="match_type" value="{{ $match_data[0]['match_type'] }}" id="player_count">
 	 <input type="hidden" name="team_b_name" value="{{ $team_b_name }}" id="team_b_name">
 	 <input type="hidden" name="team_a_name" value="{{ $team_a_name }}" id="team_a_name">
 	 <input type="hidden" name="inning" value="first" id="inning">
-	 <input type="hidden" name="toss_won_by" value="{{ $match_data[0]['a_id'] }}" id="toss_won_by">
+	 <input type="hidden" name="toss_won_by" value="{{ $toss_won_by }}" id="toss_won_by">
 	 <input type="hidden" name="toss_won_team_name" value="{{ $team_a_name }}" id="toss_won_team_name">
 	 <input type="hidden" id="winner_team_id" name="winner_team_id" class="winner_team_id" value="{{ !empty($match_data[0]['winner_id'])?$match_data[0]['winner_id']:''}}">
-
-	 <input type="hidden" class="fst_a_score" name="fst_a_score" value="">
-	 <input type="hidden" class="fst_a_wkt" name="fst_a_wkt" value="">
-	 <input type="hidden" class="fst_a_overs" name="fst_a_overs" value="">
-
-	<input type="hidden" class="scnd_a_score" name="scnd_a_score" value="">
-	 <input type="hidden" class="scnd_a_wkt" name="scnd_a_wkt" value="">
-	 <input type="hidden" class="scnd_a_overs" name="scnd_a_overs" value="">
-
-	<input type="hidden" class="fst_b_score" name="fst_b_score" value="">
-	 <input type="hidden" class="fst_b_wkt" name="fst_b_wkt" value="">
-	 <input type="hidden" class="fst_b_overs" name="fst_b_overs" value="">
-
-	<input type="hidden" class="scnd_b_score" name="scnd_b_score" value="">
-	 <input type="hidden" class="scnd_b_wkt" name="scnd_b_wkt" value="">
-	 <input type="hidden" class="scnd_b_overs" name="scnd_b_overs" value="">
-	 <input type="hidden" id="deleted_ids" name="deleted_ids" value="">
-	 <input type="hidden" id="hid_match_result" name="hid_match_result" value="">
+        
+        <?php 
+                foreach ([$fstIngFstBatId,$fstIngsecondBatId] as $teamStat_team_id)
+                {
+                        foreach (['first','second'] as $teamStat_innings_name)
+                        {
+                                foreach (['score','wickets','overs'] as $teamStat_inning_stat_name)
+                                {
+        ?>
+        <input type="hidden" class="form_team_stat_readonly" name="<?php echo $teamStat_innings_name ?>_inning[<?php echo $teamStat_team_id ?>][<?php echo $teamStat_inning_stat_name ?>]">
+        <?php                   }
+                        }
+                }
+        ?>
+        
+        <input type="hidden" id="deleted_ids" name="deleted_ids" value="">
+        <input type="hidden" id="hid_match_result" name="hid_match_result" value="">
 
 {!!Form::close()!!}
  <input type="hidden" name="i" value="{{ (!empty($team_a_fst_ing_array))?$a_bat_fst_ing:2 }}" id="i">
@@ -1160,7 +1159,6 @@ function fall_of_wkt(team,x)
 	}
 
 	var fall_of_cnt = "<tr class='team_"+team+"_fall_row'>"+
-
 				"<td><input type='text' class='allownumericwithdecimal runs_new'  name='"+team+"_wicket_"+x+"' /></td>"+
 				"<td><select  name='"+team+"_wkt_player_"+x+"' class='"+team+"_fal_wkt' id='"+team+"_wkt_player_"+x+"'><option value=''>Select Player</option></select></td>"+
 				"<td><input type='text' class='allownumericwithdecimal runs_new' name='"+team+"_at_runs_"+x+"' /></td>"+
@@ -1216,19 +1214,14 @@ function delete_row(team,status,id,value)
 	if(team=='a' && status=='bat')
 	{
 		row_count--;
-		//$('#a_player_count').val(row_count);
 		team_a_del_score = $('#a_runs_'+value).val();
-		fst_ing_score = $('#fst_ing_a_score').val();
-		$('#fst_ing_a_score').val(fst_ing_score - team_a_del_score);//deletes row run remove from total score runs
-
+		SJ.SCORECARD.adjustScore('first','a',team_a_del_score,'sub');
 		//delete wickets
 		team_a_out_as = $('#a_outas_'+value).val();
-		out_count = $('#fst_ing_a_wkts').val();
-		if(team_a_out_as!='' && team_a_out_as !='not_out')
+		if (team_a_out_as!='' && team_a_out_as !='not_out')
 		{
-			out_count--;
+			SJ.SCORECARD.adjustWicket('first','a',1,'sub');
 		}
-		$('#fst_ing_a_wkts').val(out_count);
 
 	}else if(team=='a' && status=='bowl')
 	{
@@ -1248,30 +1241,22 @@ function delete_row(team,status,id,value)
 		$('#team_b_tot_extras').val(a_extra);
 
 		team_a_del_overs = $('#a_bowler_overs_'+value).val();
-		fst_ing_b_over = $('#fst_ing_b_over').val();
-		$('#fst_ing_b_over').val(fst_ing_b_over - team_a_del_overs);//delete overs
-
+                SJ.SCORECARD.adjustOver('first','b',team_a_del_overs,'sub');
+                
 	}else if(team=='b' && status=='bat')
 	{
 		row_count--;
-		//$('#b_player_count').val(row_count);
 		team_b_del_score = $('#b_runs_'+value).val();
-		fst_ing_b_score = $('#fst_ing_b_score').val();
-		$('#fst_ing_b_score').val(fst_ing_b_score - team_b_del_score);//deletes row run remove from total score runs
-
+                SJ.SCORECARD.adjustScore('first','b',team_b_del_score,'sub');
 		//delete wickets
 		team_b_out_as = $('#b_outas_'+value).val();
-		out_count = $('#fst_ing_b_wkts').val();
-		if(team_b_out_as!='' && team_b_out_as !='not_out')
+		if (team_b_out_as!='' && team_b_out_as !='not_out')
 		{
-			out_count--;
+			SJ.SCORECARD.adjustWicket('first','b',1,'sub');
 		}
-		$('#fst_ing_b_wkts').val(out_count);
 	}else if(team=='b' && status=='bowl')
 	{
 		row_count--;
-		//$('#b_bowler_count').val(row_count);
-
 		team_b_noballs = $('#b_bowler_noball_'+value).val();
 		team_b_wides = $('#b_bowler_wide_'+value).val();
 		team_a_wide = $('#team_a_wide').val();
@@ -1286,8 +1271,7 @@ function delete_row(team,status,id,value)
 		$('#team_a_tot_extras').val(b_extra);
 
 		team_b_del_overs = $('#b_bowler_overs_'+value).val();
-		fst_ing_a_over = $('#fst_ing_a_over').val();
-		$('#fst_ing_a_over').val(fst_ing_a_over - team_b_del_overs);//delete overs
+                SJ.SCORECARD.adjustOver('first','a',team_b_del_overs,'sub');
 	}
 
 	deleted_ids = deleted_ids+id+',';
@@ -1305,12 +1289,12 @@ $('.team_a_score').keyup(function () {
 	team_a_score = 0;
 	extras = 0;
 	$('.team_a_score').each(function() {
-			team_a_score += Number($(this).val());
+		team_a_score += Number($(this).val());
 	});
 	$('.a_extras').each(function() {
-					extras += Number($(this).val());
-				});
-		$('#fst_ing_a_score').val(team_a_score + extras);
+                extras += Number($(this).val());
+        });
+        SJ.SCORECARD.adjustScore('first','a',extras,'add',team_a_score);
 });
 
 //team b score
@@ -1318,12 +1302,12 @@ $('.team_b_score').keyup(function () {
 	team_b_score = 0;
 	extras = 0;
 	$('.team_b_score').each(function() {
-			team_b_score += Number($(this).val());
-		});
-			$('.b_extras').each(function() {
-					extras += Number($(this).val());
-				});
-		$('#fst_ing_b_score').val(team_b_score + extras);
+                team_b_score += Number($(this).val());
+        });
+        $('.b_extras').each(function() {
+                extras += Number($(this).val());
+        });
+        SJ.SCORECARD.adjustScore('second','a',extras,'add',team_b_score);
 });
 
 //team b bowler overs
@@ -1331,15 +1315,15 @@ $('.team_b_overs').keyup(function () {
 	team_b_overs = 0;
 	before_decimal = 0;
 	after_decimal = 0;
-$('.team_b_overs').each(function() {
-			//team_b_overs += Number($(this).val());
-			before_decimal += Number(String($(this).val()).split('.')[0] || 0);
-			after_decimal += Number(String($(this).val()).split('.')[1] || 0);
-		});
-		beforeDecimal = parseInt(((before_decimal*6) + after_decimal)/6);
-		afterDecimal = ((before_decimal*6) + after_decimal)%6;
-		team_b_overs = beforeDecimal+'.'+afterDecimal;
-		$('#fst_ing_a_over').val(team_b_overs);
+        $('.team_b_overs').each(function() {
+                //team_b_overs += Number($(this).val());
+                before_decimal += Number(String($(this).val()).split('.')[0] || 0);
+                after_decimal += Number(String($(this).val()).split('.')[1] || 0);
+        });
+        beforeDecimal = parseInt(((before_decimal*6) + after_decimal)/6);
+        afterDecimal = ((before_decimal*6) + after_decimal)%6;
+        team_b_overs = beforeDecimal+'.'+afterDecimal;
+        SJ.SCORECARD.adjustOver('first','a',0,'add',team_b_overs);
 });
 
 //team a bowler overs
@@ -1347,15 +1331,15 @@ $('.team_a_overs').keyup(function () {
 	team_a_overs = 0;
 	before_decimal = 0;
 	after_decimal = 0;
-$('.team_a_overs').each(function() {
-			//team_b_overs += Number($(this).val());
-			before_decimal += Number(String($(this).val()).split('.')[0] || 0);
-			after_decimal += Number(String($(this).val()).split('.')[1] || 0);
-		});
-		beforeDecimal = parseInt(((before_decimal*6) + after_decimal)/6);
-		afterDecimal = ((before_decimal*6) + after_decimal)%6;
-		team_a_overs = beforeDecimal+'.'+afterDecimal;
-		$('#fst_ing_b_over').val(team_a_overs);
+        $('.team_a_overs').each(function() {
+                //team_b_overs += Number($(this).val());
+                before_decimal += Number(String($(this).val()).split('.')[0] || 0);
+                after_decimal += Number(String($(this).val()).split('.')[1] || 0);
+        });
+        beforeDecimal = parseInt(((before_decimal*6) + after_decimal)/6);
+        afterDecimal = ((before_decimal*6) + after_decimal)%6;
+        team_a_overs = beforeDecimal+'.'+afterDecimal;
+        SJ.SCORECARD.adjustOver('first','b',0,'add',team_a_overs);
 });
 isFielderDisplay=1;
 $('.team_a_wkt').each(function() {
@@ -1366,15 +1350,15 @@ $('.team_a_wkt').each(function() {
 $('.team_a_wkt').on('change',function(){
 	team_a_wkt = 0;
 	isFielderDisplay = 1;
-$('.team_a_wkt').each(function() {
-			if($(this).val()!='' && $(this).val()!='not_out')
-			{
-				team_a_wkt ++;
-			}
-			BowlerFielderDisplay('a',isFielderDisplay);
-			isFielderDisplay++;
-		});
-		$('#fst_ing_a_wkts').val(team_a_wkt);
+        $('.team_a_wkt').each(function() {
+                if($(this).val()!='' && $(this).val()!='not_out')
+                {
+                        team_a_wkt ++;
+                }
+                BowlerFielderDisplay('a',isFielderDisplay);
+                isFielderDisplay++;
+        });
+        SJ.SCORECARD.adjustWicket('first','a',0,'add',team_a_wkt);
 });
 isFielderDisplay=1;
 $('.team_b_wkt').each(function() {
@@ -1386,15 +1370,15 @@ $('.team_b_wkt').each(function() {
 $('.team_b_wkt').on('change',function(){
 	team_b_wkt = 0;
 	isFielderDisplay = 1;
-$('.team_b_wkt').each(function() {
-			if($(this).val()!='' && $(this).val()!='not_out')
-			{
-				team_b_wkt ++;
-			}
-			BowlerFielderDisplay('b',isFielderDisplay);
-			isFielderDisplay++;
-		});
-		$('#fst_ing_b_wkts').val(team_b_wkt);
+        $('.team_b_wkt').each(function() {
+                if ($(this).val()!='' && $(this).val()!='not_out')
+                {
+                        team_b_wkt ++;
+                }
+                BowlerFielderDisplay('b',isFielderDisplay);
+                isFielderDisplay++;
+        });
+        SJ.SCORECARD.adjustWicket('first','b',0,'add',team_b_wkt);
 });
 
 function BowlerFielderDisplay(team,isFielderDisplay)
@@ -1475,21 +1459,9 @@ function teamWickets(name,team)
 function save(status)
 {
 	var matchType = "{{$match_data[0]['match_type']}}";
-	$('.fst_a_score').val($('#fst_ing_a_score').val());
-	$('.fst_a_wkt').val($('#fst_ing_a_wkts').val());
-	$('.fst_a_overs').val($('#fst_ing_a_over').val());
-
-	$('.scnd_a_score').val($('#scnd_ing_a_score').val());
-	$('.scnd_a_wkt').val($('#scnd_ing_a_wkts').val());
-	$('.scnd_a_overs').val($('#scnd_ing_a_over').val());
-
-	$('.fst_b_score').val($('#fst_ing_b_score').val());
-	$('.fst_b_wkt').val($('#fst_ing_b_wkts').val());
-	$('.fst_b_overs').val($('#fst_ing_b_over').val());
-
-	$('.scnd_b_score').val($('#scnd_ing_b_score').val());
-	$('.scnd_b_wkt').val($('#scnd_ing_b_wkts').val());
-	$('.scnd_b_overs').val($('#scnd_ing_b_over').val());
+        
+	SJ.SCORECARD.initTeamStats();
+        
 	$('#hid_match_result').val($('#match_result').val());
 	
 	if(status=='fst_ing_click')
@@ -1498,6 +1470,7 @@ function save(status)
 			url: base_url+'/match/insertCricketScoreCard', 
 			type: 'post',
 			success: function(res) {
+                                console.log(res);
 				if(matchType=='test')
 				{
 					saveIng('');
@@ -1507,13 +1480,13 @@ function save(status)
 					});
 				}else
 				{
-					location.reload(true);
+					document.location.reload(true);
 				}
 				
 			}
 		});
 	}
-	location.reload(true);
+	document.location.reload(true);
 }
 var a_extra = 0;
 $('.a_extras').each(function() {
@@ -1521,38 +1494,38 @@ $('.a_extras').each(function() {
 	});
 $('#team_a_tot_extras').val(a_extra);
 //team extras
-	$('.a_extras').keyup(function () {
+$('.a_extras').keyup(function () {
 	extras = 0;
 	total = 0;
 	$('.a_extras').each(function() {
-					extras += Number($(this).val());
-			});
-		$('.team_a_score').each(function() {
-					total += Number($(this).val());
-			});
+		extras += Number($(this).val());
+	});
+        $('.team_a_score').each(function() {
+                total += Number($(this).val());
+        });
 
-			$('#team_a_tot_extras').val(extras);
-			$('#fst_ing_a_score').val(extras + total);
-	});
-	var b_extra = 0;
+        $('#team_a_tot_extras').val(extras);
+        SJ.SCORECARD.adjustScore('first','a',extras,'add',total);
+});
+var b_extra = 0;
 $('.b_extras').each(function() {
-		b_extra += Number($(this).val());
-	});
+        b_extra += Number($(this).val());
+});
 $('#team_b_tot_extras').val(b_extra);
 //team extras
-	$('.b_extras').keyup(function () {
+$('.b_extras').keyup(function () {
 	extras = 0;
 	total = 0;
 	$('.b_extras').each(function() {
-					extras += Number($(this).val());
-			});
-		$('.team_b_score').each(function() {
-					total += Number($(this).val());
-			});
+                extras += Number($(this).val());
+        });
+        $('.team_b_score').each(function() {
+                total += Number($(this).val());
+        });
 
-			$('#team_b_tot_extras').val(extras);
-			$('#fst_ing_b_score').val(extras + total);
-	});
+        $('#team_b_tot_extras').val(extras);
+        SJ.SCORECARD.adjustScore('first','b',extras,'add',total);
+});
 
 //team a wides
 $('.b_wides').keyup(function () {

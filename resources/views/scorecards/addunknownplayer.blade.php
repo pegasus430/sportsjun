@@ -144,21 +144,7 @@ var matchType = "{{$match_data[0]['match_type']}}";
 							var orgFormData = $('#cricketfirsting_form_data').val();
 							var newFormData = $('#firsting').serialize();
 							
-								$('.fst_a_score').val($('#fst_ing_a_score').val());
-								$('.fst_a_wkt').val($('#fst_ing_a_wkts').val());
-								$('.fst_a_overs').val($('#fst_ing_a_over').val());
-
-								$('.scnd_a_score').val($('#scnd_ing_a_score').val());
-								$('.scnd_a_wkt').val($('#scnd_ing_a_wkts').val());
-								$('.scnd_a_overs').val($('#scnd_ing_a_over').val());
-
-								$('.fst_b_score').val($('#fst_ing_b_score').val());
-								$('.fst_b_wkt').val($('#fst_ing_b_wkts').val());
-								$('.fst_b_overs').val($('#fst_ing_b_over').val());
-
-								$('.scnd_b_score').val($('#scnd_ing_b_score').val());
-								$('.scnd_b_wkt').val($('#scnd_ing_b_wkts').val());
-								$('.scnd_b_overs').val($('#scnd_ing_b_over').val());
+								SJ.SCORECARD.initTeamStats();
 								$('#hid_match_result').val($('#match_result').val());
 							
 							
