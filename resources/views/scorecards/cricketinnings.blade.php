@@ -1,6 +1,6 @@
 <!--Batting:<select name="team" id="team" onchange="getTeamName();">
-		<option value="{{ $match_data[0]['player_a_ids'] }}" data-status="{{ $match_data[0]['a_id'] }}" >{{ $team_a_name }}</option>
-		<option value="{{ $match_data[0]['player_b_ids'] }}" data-status="{{ $match_data[0]['b_id'] }}">{{ $team_b_name }}</option>
+		<option value="{{ $match_data[0]['player_a_ids'] }}" data-status="{{ $fstIngFstBatId }}" >{{ $team_a_name }}</option>
+		<option value="{{ $match_data[0]['player_b_ids'] }}" data-status="{{ $fstIngsecondBatId }}">{{ $team_b_name }}</option>
 		</select>
 		-->
 {!! Form::open(array('url' => 'match/insertCricketScoreCard', 'method' => 'POST','id'=>'firsting')) !!}
@@ -194,11 +194,11 @@
 		</tr>
 	</thead>
 	<tbody>
-		<td>{!! Form::text('team_a_wide', (!empty($team_wise_match_details[$match_data[0]['a_id']]['first']['wide']))?$team_wise_match_details[$match_data[0]['a_id']]['first']['wide']:'', array('class'=>'gui-input allownumericwithdecimal a_extras runs_new','id'=>'team_a_wide','readonly')) !!}</td>
-		<td>{!! Form::text('team_a_noball', (!empty($team_wise_match_details[$match_data[0]['a_id']]['first']['noball']))?$team_wise_match_details[$match_data[0]['a_id']]['first']['noball']:'', array('class'=>'gui-input allownumericwithdecimal a_extras runs_new','id'=>'team_a_noball','readonly')) !!}</td>
-		<td>{!! Form::text('team_a_legbye', (!empty($team_wise_match_details[$match_data[0]['a_id']]['first']['legbye']))?$team_wise_match_details[$match_data[0]['a_id']]['first']['legbye']:'', array('class'=>'gui-input allownumericwithdecimal a_extras runs_new','id'=>'team_a_legbye')) !!}</td>
-		<td>{!! Form::text('team_a_bye', (!empty($team_wise_match_details[$match_data[0]['a_id']]['first']['bye']))?$team_wise_match_details[$match_data[0]['a_id']]['first']['bye']:'', array('class'=>'gui-input allownumericwithdecimal a_extras runs_new','id'=>'team_a_bye')) !!}</td>
-		<td>{!! Form::text('team_a_others', (!empty($team_wise_match_details[$match_data[0]['a_id']]['first']['others']))?$team_wise_match_details[$match_data[0]['a_id']]['first']['others']:'', array('class'=>'gui-input allownumericwithdecimal a_extras runs_new','id'=>'team_a_others')) !!}</td>
+		<td>{!! Form::text('team_a_wide', (!empty($team_wise_match_details[$fstIngFstBatId]['first']['wide']))?$team_wise_match_details[$fstIngFstBatId]['first']['wide']:'', array('class'=>'gui-input allownumericwithdecimal a_extras runs_new','id'=>'team_a_wide','readonly')) !!}</td>
+		<td>{!! Form::text('team_a_noball', (!empty($team_wise_match_details[$fstIngFstBatId]['first']['noball']))?$team_wise_match_details[$fstIngFstBatId]['first']['noball']:'', array('class'=>'gui-input allownumericwithdecimal a_extras runs_new','id'=>'team_a_noball','readonly')) !!}</td>
+		<td>{!! Form::text('team_a_legbye', (!empty($team_wise_match_details[$fstIngFstBatId]['first']['legbye']))?$team_wise_match_details[$fstIngFstBatId]['first']['legbye']:'', array('class'=>'gui-input allownumericwithdecimal a_extras runs_new','id'=>'team_a_legbye')) !!}</td>
+		<td>{!! Form::text('team_a_bye', (!empty($team_wise_match_details[$fstIngFstBatId]['first']['bye']))?$team_wise_match_details[$fstIngFstBatId]['first']['bye']:'', array('class'=>'gui-input allownumericwithdecimal a_extras runs_new','id'=>'team_a_bye')) !!}</td>
+		<td>{!! Form::text('team_a_others', (!empty($team_wise_match_details[$fstIngFstBatId]['first']['others']))?$team_wise_match_details[$fstIngFstBatId]['first']['others']:'', array('class'=>'gui-input allownumericwithdecimal a_extras runs_new','id'=>'team_a_others')) !!}</td>
 		<td>{!! Form::text('team_a_tot_extras', '', array('class'=>'gui-input allownumericwithdecimal runs_new','readonly','id'=>'team_a_tot_extras')) !!}</td>
 		<td></td>
 		<td></td>
@@ -233,8 +233,8 @@
 		</thead>
 		<tbody id="fall_of_wkt_a">
 		<?php $team_a_fall_wkts=1;?>
-		@if(!empty($team_wise_match_details[$match_data[0]['a_id']]['first']) && count($team_wise_match_details[$match_data[0]['a_id']]['first'])>0 && $a_keyCount>0)
-			@foreach($team_wise_match_details[$match_data[0]['a_id']]['first'] as $a_key => $team_a_wkts)
+		@if(!empty($team_wise_match_details[$fstIngFstBatId]['first']) && count($team_wise_match_details[$fstIngFstBatId]['first'])>0 && $a_keyCount>0)
+			@foreach($team_wise_match_details[$fstIngFstBatId]['first'] as $a_key => $team_a_wkts)
 			@if(is_numeric($a_key))
 			<tr class="team_a_fall_row">
 				<td>{!! Form::text('a_wicket_'.$team_a_fall_wkts, (!empty($team_a_wkts['wicket']))?$team_a_wkts['wicket']:'', array('class'=>'gui-input allownumericwithdecimal','id'=>'a_wicket_'.$team_a_fall_wkts)) !!}</td>
@@ -471,11 +471,11 @@
 		</tr>
 	</thead>
 	<tbody>
-		<td>{!! Form::text('team_b_wide', (!empty($team_wise_match_details[$match_data[0]['b_id']]['first']['wide']))?$team_wise_match_details[$match_data[0]['b_id']]['first']['wide']:'', array('class'=>'gui-input allownumericwithdecimal b_extras runs_new','id'=>'team_b_wide','readonly')) !!}</td>
-		<td>{!! Form::text('team_b_noball', (!empty($team_wise_match_details[$match_data[0]['b_id']]['first']['noball']))?$team_wise_match_details[$match_data[0]['b_id']]['first']['noball']:'', array('class'=>'gui-input allownumericwithdecimal b_extras runs_new','id'=>'team_b_noball','readonly')) !!}</td>
-		<td>{!! Form::text('team_b_legbye', (!empty($team_wise_match_details[$match_data[0]['b_id']]['first']['legbye']))?$team_wise_match_details[$match_data[0]['b_id']]['first']['legbye']:'', array('class'=>'gui-input allownumericwithdecimal b_extras runs_new','id'=>'team_b_legbye')) !!}</td>
-		<td>{!! Form::text('team_b_bye', (!empty($team_wise_match_details[$match_data[0]['b_id']]['first']['bye']))?$team_wise_match_details[$match_data[0]['b_id']]['first']['bye']:'', array('class'=>'gui-input allownumericwithdecimal b_extras runs_new','id'=>'team_b_bye')) !!}</td>
-		<td>{!! Form::text('team_b_others', (!empty($team_wise_match_details[$match_data[0]['b_id']]['first']['others']))?$team_wise_match_details[$match_data[0]['b_id']]['first']['others']:'', array('class'=>'gui-input allownumericwithdecimal b_extras runs_new','id'=>'team_b_others')) !!}</td>
+		<td>{!! Form::text('team_b_wide', (!empty($team_wise_match_details[$fstIngsecondBatId]['first']['wide']))?$team_wise_match_details[$fstIngsecondBatId]['first']['wide']:'', array('class'=>'gui-input allownumericwithdecimal b_extras runs_new','id'=>'team_b_wide','readonly')) !!}</td>
+		<td>{!! Form::text('team_b_noball', (!empty($team_wise_match_details[$fstIngsecondBatId]['first']['noball']))?$team_wise_match_details[$fstIngsecondBatId]['first']['noball']:'', array('class'=>'gui-input allownumericwithdecimal b_extras runs_new','id'=>'team_b_noball','readonly')) !!}</td>
+		<td>{!! Form::text('team_b_legbye', (!empty($team_wise_match_details[$fstIngsecondBatId]['first']['legbye']))?$team_wise_match_details[$fstIngsecondBatId]['first']['legbye']:'', array('class'=>'gui-input allownumericwithdecimal b_extras runs_new','id'=>'team_b_legbye')) !!}</td>
+		<td>{!! Form::text('team_b_bye', (!empty($team_wise_match_details[$fstIngsecondBatId]['first']['bye']))?$team_wise_match_details[$fstIngsecondBatId]['first']['bye']:'', array('class'=>'gui-input allownumericwithdecimal b_extras runs_new','id'=>'team_b_bye')) !!}</td>
+		<td>{!! Form::text('team_b_others', (!empty($team_wise_match_details[$fstIngsecondBatId]['first']['others']))?$team_wise_match_details[$fstIngsecondBatId]['first']['others']:'', array('class'=>'gui-input allownumericwithdecimal b_extras runs_new','id'=>'team_b_others')) !!}</td>
 		<td>{!! Form::text('team_b_tot_extras', '', array('class'=>'gui-input allownumericwithdecimal runs_new','readonly','id'=>'team_b_tot_extras')) !!}</td>
 		<td></td>
 		<td></td>
@@ -509,9 +509,9 @@
 		</thead>
 		<tbody id="fall_of_wkt_b">
 		<?php $team_b_fall_wkt = 1;?>
-		@if(!empty($team_wise_match_details[$match_data[0]['b_id']]['first']) && count($team_wise_match_details[$match_data[0]['b_id']]['first'])>0 && $b_keyCount>0)
+		@if(!empty($team_wise_match_details[$fstIngsecondBatId]['first']) && count($team_wise_match_details[$fstIngsecondBatId]['first'])>0 && $b_keyCount>0)
 
-			@foreach($team_wise_match_details[$match_data[0]['b_id']]['first'] as $b_key => $team_b_fall)
+			@foreach($team_wise_match_details[$fstIngsecondBatId]['first'] as $b_key => $team_b_fall)
 			@if(is_numeric($b_key))
 			<tr class="team_b_fall_row">
 				<td>{!! Form::text('b_wicket_'.$team_b_fall_wkt, (!empty($team_b_fall['wicket']))?$team_b_fall['wicket']:'', array('class'=>'gui-input allownumericwithdecimal runs_new','id'=>'b_wicket_'.$team_b_fall_wkt)) !!}</td>
@@ -610,8 +610,8 @@
  <input type="hidden" name="j" value="{{ (!empty($team_a_fst_ing_bowling_array))?$team_a_bowl_fst_ing:2 }}" id="j">
  <input type="hidden" name="k" value="{{ (!empty($team_b_fst_ing_array))?$team_b_bat_fst_ing:2 }}" id="k">
  <input type="hidden" name="l" value="{{ (!empty($team_b_fst_ing_bowling_array))?$b_bowl_fst_ing:2 }}" id="l">
- <input type="hidden" name="x" value="{{ (!empty($team_wise_match_details[$match_data[0]['a_id']]['first']) && $a_keyCount>0)?$team_a_fall_wkts:2 }}" id="x">
- <input type="hidden" name="z" value="{{ (!empty($team_wise_match_details[$match_data[0]['b_id']]['first']) && $b_keyCount)?$team_b_fall_wkt:2 }}" id="z">
+ <input type="hidden" name="x" value="{{ (!empty($team_wise_match_details[$fstIngFstBatId]['first']) && $a_keyCount>0)?$team_a_fall_wkts:2 }}" id="x">
+ <input type="hidden" name="z" value="{{ (!empty($team_wise_match_details[$fstIngsecondBatId]['first']) && $b_keyCount)?$team_b_fall_wkt:2 }}" id="z">
 <script>
 checkDuplicatePlayers('a_player');
 checkDuplicatePlayers('b_bowler');
