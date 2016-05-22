@@ -96,6 +96,32 @@
 									@endif</h5>
                 
                 <div class="form-inline">
+<?php if (!empty($score_status_array['toss_won_by']))
+                                    { ?>
+                                                <div id="matchTossNote">
+                                                        <?php if ($match_data[0]['a_id'] == $score_status_array['toss_won_by'])
+                                                        { ?>
+                                                                {{ ucwords($team_a_name) }} 
+                                                        <?php }
+                                                        else
+                                                        { ?>
+                                                                {{ ucwords($team_b_name) }} 
+                                                        <?php } ?>
+                                                        won the toss 
+                                                        <?php if (!empty($score_status_array['fst_ing_batting']))
+                                                        { ?>
+                                                                and chose to 
+                                                                <?php if ($match_data[0]['a_id'] == $score_status_array['fst_ing_batting'])
+                                                                { ?>
+                                                                        Bat.
+                <?php }
+                else
+                { ?>
+                                                                        Bowl.
+                <?php } ?>
+        <?php } ?>
+                                                </div>
+<?php } ?>                        
                          @if($match_data[0]['winner_id']>0)
 
 							  <div class="form-group">
@@ -116,7 +142,25 @@
 					  <label>Winner is not updated.</label>
 							</div>
 					@endif	
-					@endif	
+					@endif
+                        
+                        <div class="form-group" id="bat1stInning" style="display:none;">
+                                <label for="team">Ist Ing Batting:</label>
+                                <select class="form-control selectpicker selectpicker_new_span" name="team" id="team" onchange="getTeamName();">
+                                        <option value="{{ $match_data[0]['player_a_ids'] }}" <?php if (!empty($score_status_array['fst_ing_batting']) && $match_data[0]['a_id'] == $score_status_array['fst_ing_batting']) echo 'selected'; ?> data-status="{{ $match_data[0]['a_id'] }}" >{{ $team_a_name }}</option>
+                                        <option value="{{ $match_data[0]['player_b_ids'] }}" <?php if (!empty($score_status_array['fst_ing_batting']) && $match_data[0]['b_id'] == $score_status_array['fst_ing_batting']) echo 'selected'; ?> data-status="{{ $match_data[0]['b_id'] }}">{{ $team_b_name }}</option>
+                                </select>
+                        </div>
+                        @if($match_data[0]['match_type']=='test')
+                        <div class="form-group" id="bat2ndInning" style="display:none;">
+                                <label for="team">II Ing Batting:</label>
+                                <select class="form-control selectpicker selectpicker_new_span" name="team" id="teams" onchange="getTeamNames();">
+                                        <option value="{{ $match_data[0]['player_a_ids'] }}" <?php if (!empty($score_status_array['scnd_ing_batting']) && $match_data[0]['a_id'] == $score_status_array['scnd_ing_batting']) echo 'selected'; ?> data-status="{{ $match_data[0]['a_id'] }}" >{{ $team_a_name }}</option>
+                                        <option value="{{ $match_data[0]['player_b_ids'] }}" <?php if (!empty($score_status_array['scnd_ing_batting']) && $match_data[0]['b_id'] == $score_status_array['scnd_ing_batting']) echo 'selected'; ?> data-status="{{ $match_data[0]['b_id'] }}" >{{ $team_b_name }}</option>
+                                </select>
+                        </div>
+                        @endif
+                                        
                         <p class="match-status mg"><a href="{{ url('user/album/show').'/match'.'/0'.'/'.$action_id }}"><span class="fa" style="float: left; margin-left: 8px;"><img src="{{ asset('/images/sc-gallery.png') }}" height="18" width="22"></span> <b>Media Gallery</b></a></p>
                         @include('scorecards.share')
                         <p class="match-status">@include('scorecards.scorecardstatus')</p>
@@ -167,6 +211,16 @@
 
 
 <script>
+var teamId = $('#team option:selected').data('status');
+var bating_team = $( "#team option:selected" ).text();
+var bowling_team = $('#team option:not(:selected)').text();
+$("#team_a_batting").text(bating_team+' Innings');
+$("#team_b_bowling").text(bowling_team+' Bowling');
+$("#team_b_batting").text(bowling_team+' Innings');
+$("#team_a_bowling").text(bating_team+' Bowling');
+$("#team_a_extras").text(bating_team+' Extras');
+$("#team_b_extras").text(bowling_team+' Extras');
+
 //Send Approve
 function scoreCardStatus(status)
 {
