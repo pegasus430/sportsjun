@@ -92,6 +92,44 @@ if (typeof SJ.SCORECARD === 'undefined')
                                 {
                                         $('#tossModal').modal();
                                 }
+                        },
+                        initTeamStats : function()
+                        {
+                                $('input.team_stat_readonly').each(function(){
+                                        var name = $(this).attr("data-id");
+                                        var value = $(this).val();
+                                        $("input.form_team_stat_readonly[name='"+ name +"']").val(value);
+                                });
+                        },
+                        adjustScore : function(inningName,teamVar,score,operation,currentScore)
+                        {
+                                var team_id             = (inningName === 'first') ? ($('#team_' + teamVar + '_id').val()) : ($('#team_' + teamVar + '_ids').val());
+                                var $form_score         = $("input.form_team_stat_readonly[name='"+ inningName +"_inning[" + team_id + "][score]']");
+                                var $heading_score      = $("input.team_stat_readonly[data-id='"+ inningName +"_inning[" + team_id + "][score]']");
+                                currentScore            = (typeof currentScore !== 'undefined') ? parseInt(currentScore) : parseInt($form_score.val());
+                                currentScore            = (operation === 'add') ? (currentScore + score) : (currentScore - score);
+                                $form_score.val(currentScore);
+                                $heading_score.val(currentScore);
+                        },
+                        adjustWicket : function(inningName,teamVar,wicketsCount,operation,currentWickets)
+                        {
+                                var team_id             = (inningName === 'first') ? ($('#team_' + teamVar + '_id').val()) : ($('#team_' + teamVar + '_ids').val());
+                                var $form_wickets       = $("input.form_team_stat_readonly[name='"+ inningName +"_inning[" + team_id + "][wickets]']");
+                                var $heading_wickets    = $("input.team_stat_readonly[data-id='"+ inningName +"_inning[" + team_id + "][wickets]']");
+                                currentWickets          = (typeof currentWickets !== 'undefined') ? parseInt(currentWickets) : parseInt($form_wickets.val());
+                                currentWickets          = (operation === 'add') ? (currentWickets + wicketsCount) : (currentWickets - wicketsCount);
+                                $form_wickets.val(currentWickets);
+                                $heading_wickets.val(currentWickets);
+                        },
+                        adjustOver : function(inningName,teamVar,oversCount,operation,currentOvers)
+                        {
+                                var team_id             = (inningName === 'first') ? ($('#team_' + teamVar + '_id').val()) : ($('#team_' + teamVar + '_ids').val());
+                                var $form_overs         = $("input.form_team_stat_readonly[name='"+ inningName +"_inning[" + team_id + "][overs]']");
+                                var $heading_overs      = $("input.team_stat_readonly[data-id='"+ inningName +"_inning[" + team_id + "][overs]']");
+                                currentOvers            = (typeof currentOvers !== 'undefined') ? parseInt(currentOvers) : parseInt($form_overs.val());
+                                currentOvers            = (operation === 'add') ? (currentOvers + oversCount) : (currentOvers - oversCount);
+                                $form_overs.val(currentOvers);
+                                $heading_overs.val(currentOvers);
                         }
                 };
                 z.SCORECARD = o;
