@@ -1453,13 +1453,14 @@ function saveIng(status)
 				save('');
 				$("#firsting").ajaxSubmit({
 					url: base_url+'/match/insertCricketScoreCard', 
-					type: 'post'
+					type: 'post',
+                                        success: function(res2) {
+                                                SJ.GLOBAL.reload();
+                                        }
 				});
-				
 			}
 		});
 	}
-	SJ.GLOBAL.reload();
 }
 var a_extra = 0;
 $('.a_scnd_ing_extras').each(function() {
