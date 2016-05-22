@@ -1459,7 +1459,7 @@ function saveIng(status)
 			}
 		});
 	}
-	document.location.reload(true);
+	SJ.GLOBAL.reload();
 }
 var a_extra = 0;
 $('.a_scnd_ing_extras').each(function() {

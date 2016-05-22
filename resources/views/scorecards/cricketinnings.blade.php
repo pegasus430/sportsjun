@@ -870,9 +870,9 @@ function getBowlerTr(j)
 	{
 		//alert('Players Exceeded.');
 		$.alert({
-            title: 'Alert!',
-            content: 'Players Exceeded.'
-        });
+                        title: 'Alert!',
+                        content: 'Players Exceeded.'
+                });
 		return false;
 	}
 	get_a_bowler_count++;
@@ -1285,7 +1285,7 @@ function delete_row(team,status,id,value)
 }
 
 //team a score
-$('.team_a_score').keyup(function () {
+$( "#player_tr_a" ).on( "keyup", ".team_a_score", function() {
 	team_a_score = 0;
 	extras = 0;
 	$('.team_a_score').each(function() {
@@ -1298,7 +1298,7 @@ $('.team_a_score').keyup(function () {
 });
 
 //team b score
-$('.team_b_score').keyup(function () {
+$( "#player_tr_b" ).on( "keyup", ".team_b_score", function() {
 	team_b_score = 0;
 	extras = 0;
 	$('.team_b_score').each(function() {
@@ -1307,11 +1307,11 @@ $('.team_b_score').keyup(function () {
         $('.b_extras').each(function() {
                 extras += Number($(this).val());
         });
-        SJ.SCORECARD.adjustScore('second','a',extras,'add',team_b_score);
+        SJ.SCORECARD.adjustScore('first','b',extras,'add',team_b_score);
 });
 
 //team b bowler overs
-$('.team_b_overs').keyup(function () {
+$( "#bowler_tr_b" ).on( "keyup", ".team_b_overs", function() {
 	team_b_overs = 0;
 	before_decimal = 0;
 	after_decimal = 0;
@@ -1327,7 +1327,7 @@ $('.team_b_overs').keyup(function () {
 });
 
 //team a bowler overs
-$('.team_a_overs').keyup(function () {
+$( "#bowler_tr_a" ).on( "keyup", ".team_a_overs", function() {
 	team_a_overs = 0;
 	before_decimal = 0;
 	after_decimal = 0;
@@ -1341,13 +1341,17 @@ $('.team_a_overs').keyup(function () {
         team_a_overs = beforeDecimal+'.'+afterDecimal;
         SJ.SCORECARD.adjustOver('first','b',0,'add',team_a_overs);
 });
+
+
 isFielderDisplay=1;
 $('.team_a_wkt').each(function() {
 	BowlerFielderDisplay('a',isFielderDisplay);
 	isFielderDisplay++;
 });
+
+
 //team a wkt
-$('.team_a_wkt').on('change',function(){
+$( "#player_tr_a" ).on( "change", ".team_a_wkt", function() {
 	team_a_wkt = 0;
 	isFielderDisplay = 1;
         $('.team_a_wkt').each(function() {
@@ -1360,14 +1364,16 @@ $('.team_a_wkt').on('change',function(){
         });
         SJ.SCORECARD.adjustWicket('first','a',0,'add',team_a_wkt);
 });
+
+
 isFielderDisplay=1;
 $('.team_b_wkt').each(function() {
-			BowlerFielderDisplay('b',isFielderDisplay);
-			isFielderDisplay++;
-		});
+        BowlerFielderDisplay('b',isFielderDisplay);
+        isFielderDisplay++;
+});
 
 //team b wkt
-$('.team_b_wkt').on('change',function(){
+$( "#player_tr_b" ).on( "change", ".team_b_wkt", function() {
 	team_b_wkt = 0;
 	isFielderDisplay = 1;
         $('.team_b_wkt').each(function() {
@@ -1480,19 +1486,20 @@ function save(status)
 					});
 				}else
 				{
-					document.location.reload(true);
+					SJ.GLOBAL.reload();
 				}
 				
 			}
 		});
 	}
-	document.location.reload(true);
+	SJ.GLOBAL.reload();
 }
 var a_extra = 0;
 $('.a_extras').each(function() {
 					a_extra += Number($(this).val());
 	});
 $('#team_a_tot_extras').val(a_extra);
+
 //team extras
 $('.a_extras').keyup(function () {
 	extras = 0;
@@ -1530,64 +1537,64 @@ $('.b_extras').keyup(function () {
 //team a wides
 $('.b_wides').keyup(function () {
 	b_wides = 0;
-$('.b_wides').each(function() {
-			b_wides += Number($(this).val());
-		});
-		$('#team_a_wide').val(b_wides);
+        $('.b_wides').each(function() {
+                b_wides += Number($(this).val());
+        });
+        $('#team_a_wide').val(b_wides);
 
-		var a_extra = 0;
-		$('.a_extras').each(function() {
-			a_extra += Number($(this).val());
-		});
-$('#team_a_tot_extras').val(a_extra);
-total_score('team_a_tot_extras','team_a_score','a');
+        var a_extra = 0;
+        $('.a_extras').each(function() {
+                a_extra += Number($(this).val());
+        });
+        $('#team_a_tot_extras').val(a_extra);
+        total_score('team_a_tot_extras','team_a_score','a');
 });
 
 //team b wides
 $('.a_wides').keyup(function () {
 	a_wides = 0;
-$('.a_wides').each(function() {
-			a_wides += Number($(this).val());
-		});
-		$('#team_b_wide').val(a_wides);
-			var b_extra = 0;
-		$('.b_extras').each(function() {
-				b_extra += Number($(this).val());
-		});
-		$('#team_b_tot_extras').val(b_extra);
-		total_score('team_b_tot_extras','team_b_score','b');
+        $('.a_wides').each(function() {
+                a_wides += Number($(this).val());
+        });
+        $('#team_b_wide').val(a_wides);
+                var b_extra = 0;
+        $('.b_extras').each(function() {
+                        b_extra += Number($(this).val());
+        });
+        $('#team_b_tot_extras').val(b_extra);
+        total_score('team_b_tot_extras','team_b_score','b');
 });
 
 
 //team a no balls
 $('.b_no_balls').keyup(function () {
 	b_no_balls = 0;
-$('.b_no_balls').each(function() {
-			b_no_balls += Number($(this).val());
-		});
-		$('#team_a_noball').val(b_no_balls);
+        $('.b_no_balls').each(function() {
+                b_no_balls += Number($(this).val());
+        });
+        $('#team_a_noball').val(b_no_balls);
 
-				var a_extra = 0;
-		$('.a_extras').each(function() {
-			a_extra += Number($(this).val());
-		});
-$('#team_a_tot_extras').val(a_extra);
-total_score('team_a_tot_extras','team_a_score','a');
+                        var a_extra = 0;
+        $('.a_extras').each(function() {
+                a_extra += Number($(this).val());
+        });
+        $('#team_a_tot_extras').val(a_extra);
+        total_score('team_a_tot_extras','team_a_score','a');
 });
 
 //team b no balls
 $('.a_no_balls').keyup(function () {
 	a_no_balls = 0;
-$('.a_no_balls').each(function() {
-			a_no_balls += Number($(this).val());
-		});
-		$('#team_b_noball').val(a_no_balls);
-					var b_extra = 0;
-		$('.b_extras').each(function() {
-				b_extra += Number($(this).val());
-		});
-		$('#team_b_tot_extras').val(b_extra);
-		total_score('team_b_tot_extras','team_b_score','b');
+        $('.a_no_balls').each(function() {
+                a_no_balls += Number($(this).val());
+        });
+        $('#team_b_noball').val(a_no_balls);
+                                var b_extra = 0;
+        $('.b_extras').each(function() {
+                        b_extra += Number($(this).val());
+        });
+        $('#team_b_tot_extras').val(b_extra);
+        total_score('team_b_tot_extras','team_b_score','b');
 });
 function wides(classname,team)
 {
