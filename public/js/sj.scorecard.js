@@ -126,7 +126,7 @@ if (typeof SJ.SCORECARD === 'undefined')
                                 var team_id             = (inningName === 'first') ? ($('#team_' + teamVar + '_id').val()) : ($('#team_' + teamVar + '_ids').val());
                                 var $form_overs         = $("input.form_team_stat_readonly[name='"+ inningName +"_inning[" + team_id + "][overs]']");
                                 var $heading_overs      = $("input.team_stat_readonly[data-id='"+ inningName +"_inning[" + team_id + "][overs]']");
-                                currentOvers            = (typeof currentOvers !== 'undefined') ? parseInt(currentOvers) : parseInt($form_overs.val());
+                                currentOvers            = (typeof currentOvers !== 'undefined') ? parseFloat(currentOvers) : parseFloat($form_overs.val());
                                 currentOvers            = (operation === 'add') ? (currentOvers + oversCount) : (currentOvers - oversCount);
                                 $form_overs.val(currentOvers);
                                 $heading_overs.val(currentOvers);

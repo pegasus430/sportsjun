@@ -1476,15 +1476,15 @@ function save(status)
 			url: base_url+'/match/insertCricketScoreCard', 
 			type: 'post',
 			success: function(res) {
-                                console.log(res);
-				if(matchType=='test')
+				if (matchType=='test')
 				{
 					saveIng('');
 					$("#secondting").ajaxSubmit({
 						url: base_url+'/match/insertCricketScoreCard', 
 						type: 'post'
 					});
-				}else
+				}
+                                else
 				{
 					SJ.GLOBAL.reload();
 				}
@@ -1492,7 +1492,6 @@ function save(status)
 			}
 		});
 	}
-	SJ.GLOBAL.reload();
 }
 var a_extra = 0;
 $('.a_extras').each(function() {
