@@ -1066,21 +1066,28 @@ class ScoreCardController extends Controller {
 		//out_as enum 
 		$enum = config('constants.ENUM.SCORE_CARD.OUT_AS'); 
 		
-		
-		
-		
 		$fstIngFstBatId = $team_a_id;
 		$fstIngsecondBatId = $team_b_id;
 		$secondIngFstBatId = $team_a_id;
 		$secondIngsecondBatId = $team_b_id;
-		
-		if(!empty($score_status_array['fst_ing_batting']))
+		$toss_won_by = !empty($score_status_array['toss_won_by']) ? $score_status_array['toss_won_by'] : $team_a_id;
+                
+                $first_innings_team_variable['first']   = 'a';
+                $first_innings_team_variable['second']  = 'b';
+                $second_innings_team_variable['first']  = 'a';
+                $second_innings_team_variable['second'] = 'b';
+
+                if(!empty($score_status_array['fst_ing_batting']))
 		{
 			$fstIngFstBatId = $score_status_array['fst_ing_batting'];
 			if($fstIngFstBatId==$team_a_id)
 				$fstIngsecondBatId = $team_b_id;
 			else
-				$fstIngsecondBatId = $team_a_id;
+                        {
+                                $first_innings_team_variable['first']  = 'b';
+                                $first_innings_team_variable['second'] = 'a';
+                                $fstIngsecondBatId = $team_a_id;
+                        }				
 		}
 		
 		if(!empty($score_status_array['scnd_ing_batting']))
@@ -1089,7 +1096,11 @@ class ScoreCardController extends Controller {
 			if($secondIngFstBatId==$team_a_id)
 				$secondIngsecondBatId = $team_b_id;
 			else
-				$secondIngsecondBatId = $team_a_id;
+                        {
+                                $second_innings_team_variable['first']  = 'b';
+                                $second_innings_team_variable['second'] = 'a';
+                                $secondIngsecondBatId = $team_a_id;
+                        }
 		}
 			
 		
@@ -1315,31 +1326,31 @@ class ScoreCardController extends Controller {
 		$team_a_scnd_ing_wkt='';
 		$team_a_scnd_ing_overs='';
 		//team_a_total_score fst ing
-		if(!empty($team_wise_match_details[$match_data[0]['a_id']]['fst_ing_score']) && $team_wise_match_details[$match_data[0]['a_id']]['fst_ing_score']!=null)
+		if(!empty($team_wise_match_details[$fstIngFstBatId]['fst_ing_score']) && $team_wise_match_details[$fstIngFstBatId]['fst_ing_score']!=null)
 		{
-			$team_a_fst_ing_score = $team_wise_match_details[$match_data[0]['a_id']]['fst_ing_score'];
+			$team_a_fst_ing_score = $team_wise_match_details[$fstIngFstBatId]['fst_ing_score'];
 		}
-		if(!empty($team_wise_match_details[$match_data[0]['a_id']]['fst_ing_score']) && $team_wise_match_details[$match_data[0]['a_id']]['fst_ing_score']!=null)
+		if(!empty($team_wise_match_details[$fstIngFstBatId]['fst_ing_score']) && $team_wise_match_details[$fstIngFstBatId]['fst_ing_score']!=null)
 		{
-			$team_a_fst_ing_wkt = $team_wise_match_details[$match_data[0]['a_id']]['fst_ing_wkt'];
+			$team_a_fst_ing_wkt = $team_wise_match_details[$fstIngFstBatId]['fst_ing_wkt'];
 		}
-		if(!empty($team_wise_match_details[$match_data[0]['a_id']]['fst_ing_score']) && $team_wise_match_details[$match_data[0]['a_id']]['fst_ing_score']!=null)
+		if(!empty($team_wise_match_details[$fstIngFstBatId]['fst_ing_score']) && $team_wise_match_details[$fstIngFstBatId]['fst_ing_score']!=null)
 		{
-			$team_a_fst_ing_overs = $team_wise_match_details[$match_data[0]['a_id']]['fst_ing_overs'];
+			$team_a_fst_ing_overs = $team_wise_match_details[$fstIngFstBatId]['fst_ing_overs'];
 		}
 
 		//team_a_total_score scnd ing
-		if(!empty($team_wise_match_details[$match_data[0]['a_id']]['scnd_ing_score']) && $team_wise_match_details[$match_data[0]['a_id']]['scnd_ing_score']!=null)
+		if(!empty($team_wise_match_details[$secondIngFstBatId]['scnd_ing_score']) && $team_wise_match_details[$secondIngFstBatId]['scnd_ing_score']!=null)
 		{
-			$team_a_scnd_ing_score = $team_wise_match_details[$match_data[0]['a_id']]['scnd_ing_score'];
+			$team_a_scnd_ing_score = $team_wise_match_details[$secondIngFstBatId]['scnd_ing_score'];
 		}
-		if(!empty($team_wise_match_details[$match_data[0]['a_id']]['scnd_ing_wkt']) && $team_wise_match_details[$match_data[0]['a_id']]['scnd_ing_wkt']!=null)
+		if(!empty($team_wise_match_details[$secondIngFstBatId]['scnd_ing_wkt']) && $team_wise_match_details[$secondIngFstBatId]['scnd_ing_wkt']!=null)
 		{
-			$team_a_scnd_ing_wkt = $team_wise_match_details[$match_data[0]['a_id']]['scnd_ing_wkt'];
+			$team_a_scnd_ing_wkt = $team_wise_match_details[$secondIngFstBatId]['scnd_ing_wkt'];
 		}
-		if(!empty($team_wise_match_details[$match_data[0]['a_id']]['scnd_ing_overs']) && $team_wise_match_details[$match_data[0]['a_id']]['scnd_ing_overs']!=null)
+		if(!empty($team_wise_match_details[$secondIngFstBatId]['scnd_ing_overs']) && $team_wise_match_details[$secondIngFstBatId]['scnd_ing_overs']!=null)
 		{
-			$team_a_scnd_ing_overs = $team_wise_match_details[$match_data[0]['a_id']]['scnd_ing_overs'];
+			$team_a_scnd_ing_overs = $team_wise_match_details[$secondIngFstBatId]['scnd_ing_overs'];
 		}
 		
 		$team_b_fst_ing_score='';
@@ -1349,31 +1360,31 @@ class ScoreCardController extends Controller {
 		$team_b_scnd_ing_wkt='';
 		$team_b_scnd_ing_overs='';
 		//team_b_total_score
-		if(!empty($team_wise_match_details[$match_data[0]['b_id']]['fst_ing_score']) && $team_wise_match_details[$match_data[0]['b_id']]['fst_ing_score']!=null)
+		if(!empty($team_wise_match_details[$fstIngsecondBatId]['fst_ing_score']) && $team_wise_match_details[$fstIngsecondBatId]['fst_ing_score']!=null)
 		{
-			$team_b_fst_ing_score = $team_wise_match_details[$match_data[0]['b_id']]['fst_ing_score'];
+			$team_b_fst_ing_score = $team_wise_match_details[$fstIngsecondBatId]['fst_ing_score'];
 		}
-		if(!empty($team_wise_match_details[$match_data[0]['b_id']]['fst_ing_wkt']) && $team_wise_match_details[$match_data[0]['b_id']]['fst_ing_wkt']!=null)
+		if(!empty($team_wise_match_details[$fstIngsecondBatId]['fst_ing_wkt']) && $team_wise_match_details[$fstIngsecondBatId]['fst_ing_wkt']!=null)
 		{
-			$team_b_fst_ing_wkt = $team_wise_match_details[$match_data[0]['b_id']]['fst_ing_wkt'];
+			$team_b_fst_ing_wkt = $team_wise_match_details[$fstIngsecondBatId]['fst_ing_wkt'];
 		}
-		if(!empty($team_wise_match_details[$match_data[0]['b_id']]['fst_ing_overs']) && $team_wise_match_details[$match_data[0]['b_id']]['fst_ing_overs']!=null)
+		if(!empty($team_wise_match_details[$fstIngsecondBatId]['fst_ing_overs']) && $team_wise_match_details[$fstIngsecondBatId]['fst_ing_overs']!=null)
 		{
-			$team_b_fst_ing_overs = $team_wise_match_details[$match_data[0]['b_id']]['fst_ing_overs'];
+			$team_b_fst_ing_overs = $team_wise_match_details[$fstIngsecondBatId]['fst_ing_overs'];
 		}
 		
 		//team_b_total_score scnd ing
-		if(!empty($team_wise_match_details[$match_data[0]['b_id']]['scnd_ing_score']) && $team_wise_match_details[$match_data[0]['b_id']]['scnd_ing_score']!=null)
+		if(!empty($team_wise_match_details[$secondIngsecondBatId]['scnd_ing_score']) && $team_wise_match_details[$secondIngsecondBatId]['scnd_ing_score']!=null)
 		{
-			$team_b_scnd_ing_score = $team_wise_match_details[$match_data[0]['b_id']]['scnd_ing_score'];
+			$team_b_scnd_ing_score = $team_wise_match_details[$secondIngsecondBatId]['scnd_ing_score'];
 		}
-		if(!empty($team_wise_match_details[$match_data[0]['b_id']]['scnd_ing_wkt']) && $team_wise_match_details[$match_data[0]['b_id']]['scnd_ing_wkt']!=null)
+		if(!empty($team_wise_match_details[$secondIngsecondBatId]['scnd_ing_wkt']) && $team_wise_match_details[$secondIngsecondBatId]['scnd_ing_wkt']!=null)
 		{
-			$team_b_scnd_ing_wkt = $team_wise_match_details[$match_data[0]['b_id']]['scnd_ing_wkt'];
+			$team_b_scnd_ing_wkt = $team_wise_match_details[$secondIngsecondBatId]['scnd_ing_wkt'];
 		}
-		if(!empty($team_wise_match_details[$match_data[0]['b_id']]['scnd_ing_overs']) && $team_wise_match_details[$match_data[0]['b_id']]['scnd_ing_overs']!=null)
+		if(!empty($team_wise_match_details[$secondIngsecondBatId]['scnd_ing_overs']) && $team_wise_match_details[$secondIngsecondBatId]['scnd_ing_overs']!=null)
 		{
-			$team_b_scnd_ing_overs = $team_wise_match_details[$match_data[0]['b_id']]['scnd_ing_overs'];
+			$team_b_scnd_ing_overs = $team_wise_match_details[$secondIngsecondBatId]['scnd_ing_overs'];
 		}
 		
 
@@ -1427,15 +1438,84 @@ class ScoreCardController extends Controller {
                                                 'stumped'               => 's',
                                                 'timed_out'             => 'to',
                                                 'not_out'               => 'no'];
-
-                        return view('scorecards.cricketscorecardview',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'team_a'=>[''=>'Select Player']+$team_a,'team_b'=>[''=>'Select Player']+$team_b,'match_data'=>$match_data,'team_a_name'=>$team_a_name,'team_b_name'=>$team_b_name,'enum'=> ['' => 'Select Out As'] + $enum,'team_a_fst_ing_array'=>$team_a_fst_ing_array,'team_b_fst_ing_array'=>$team_b_fst_ing_array,'team_a_secnd_ing_array'=>$team_a_secnd_ing_array,'team_b_secnd_ing_array'=>$team_b_secnd_ing_array,'team_wise_match_details'=>$team_wise_match_details,'team_a_count'=>$team_a_count,'team_b_count'=>$team_b_count,'team_a_logo'=>$team_a_logo,'team_b_logo'=>$team_b_logo,'team_a_fst_ing_score'=>$team_a_fst_ing_score,'team_a_fst_ing_wkt'=>$team_a_fst_ing_wkt,'team_a_fst_ing_overs'=>$team_a_fst_ing_overs,'team_a_scnd_ing_score'=>$team_a_scnd_ing_score,'team_a_scnd_ing_wkt'=>$team_a_scnd_ing_wkt,'team_a_scnd_ing_overs'=>$team_a_scnd_ing_overs,'team_b_fst_ing_score'=>$team_b_fst_ing_score,'team_b_fst_ing_wkt'=>$team_b_fst_ing_wkt,'team_b_fst_ing_overs'=>$team_b_fst_ing_overs,'team_b_scnd_ing_score'=>$team_b_scnd_ing_score,'team_b_scnd_ing_wkt'=>$team_b_scnd_ing_wkt,'team_b_scnd_ing_overs'=>$team_b_scnd_ing_overs,'player_name_array'=>$player_name_array,'a_keyCount'=>$a_keyCount_fst_ing,'b_keyCount'=>$b_keyCount_fst_ing,'a_keycount_scnd_ing'=>$a_keycount_scnd_ing,'b_keycount_scnd_ing'=>$b_keycount_scnd_ing,'enum_shortcuts'=>$enum_shortcuts,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_scnd_ing_count'=>$team_a_scnd_ing_count,'team_b_scnd_ing_count'=>$team_b_scnd_ing_count,'team_a_scnd_ing'=>[''=>'Select Player']+$team_a_scnd_ing,'team_b_scnd_ing'=>[''=>'Select Player']+$team_b_scnd_ing,'team_a_fst_ing_bowling_array'=>$team_a_fst_ing_bowling_array,'team_b_fst_ing_bowling_array'=>$team_b_fst_ing_bowling_array,'team_a_scnd_ing_bowling_array'=>$team_a_scnd_ing_bowling_array,'team_b_scnd_ing_bowling_array'=>$team_b_scnd_ing_bowling_array,'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city));
-		}
+                        
+                        return view('scorecards.cricketscorecardview', array(
+                                'first_innings_team_variable'   => $first_innings_team_variable,
+                                'second_innings_team_variable'  => $second_innings_team_variable,
+                                'toss_won_by'                   => $toss_won_by,
+                                'fstIngFstBatId'                => $fstIngFstBatId,
+                                'fstIngsecondBatId'             => $fstIngsecondBatId,
+                                'secondIngFstBatId'             => $secondIngFstBatId,
+                                'secondIngsecondBatId'          => $secondIngsecondBatId,
+                                'tournamentDetails'             => $tournamentDetails,
+                                'sportsDetails'                 => $sportsDetails,
+                                'team_a'                        => ['' => 'Select Player'] + $team_a,
+                                'team_b'                        => ['' => 'Select Player'] + $team_b,
+                                'match_data'                    => $match_data,
+                                'team_a_name'                   => $team_a_name,
+                                'team_b_name'                   => $team_b_name,
+                                'enum'                          => ['' => 'Select Out As'] + $enum,
+                                'team_a_fst_ing_array'          => $team_a_fst_ing_array,
+                                'team_b_fst_ing_array'          => $team_b_fst_ing_array,
+                                'team_a_secnd_ing_array'        => $team_a_secnd_ing_array,
+                                'team_b_secnd_ing_array'        => $team_b_secnd_ing_array,
+                                'team_wise_match_details'       => $team_wise_match_details,
+                                'team_a_count'                  => $team_a_count,
+                                'team_b_count'                  => $team_b_count,
+                                'team_a_logo'                   => $team_a_logo,
+                                'team_b_logo'                   => $team_b_logo,
+                                'team_a_fst_ing_score'          => $team_a_fst_ing_score,
+                                'team_a_fst_ing_wkt'            => $team_a_fst_ing_wkt,
+                                'team_a_fst_ing_overs'          => $team_a_fst_ing_overs,
+                                'team_a_scnd_ing_score'         => $team_a_scnd_ing_score,
+                                'team_a_scnd_ing_wkt'           => $team_a_scnd_ing_wkt,
+                                'team_a_scnd_ing_overs'         => $team_a_scnd_ing_overs,
+                                'team_b_fst_ing_score'          => $team_b_fst_ing_score,
+                                'team_b_fst_ing_wkt'            => $team_b_fst_ing_wkt,
+                                'team_b_fst_ing_overs'          => $team_b_fst_ing_overs,
+                                'team_b_scnd_ing_score'         => $team_b_scnd_ing_score,
+                                'team_b_scnd_ing_wkt'           => $team_b_scnd_ing_wkt,
+                                'team_b_scnd_ing_overs'         => $team_b_scnd_ing_overs,
+                                'player_name_array'             => $player_name_array,
+                                'a_keyCount'                    => $a_keyCount_fst_ing,
+                                'b_keyCount'                    => $b_keyCount_fst_ing,
+                                'a_keycount_scnd_ing'           => $a_keycount_scnd_ing,
+                                'b_keycount_scnd_ing'           => $b_keycount_scnd_ing,
+                                'enum_shortcuts'                => $enum_shortcuts,
+                                'score_status_array'            => $score_status_array,
+                                'loginUserId'                   => $loginUserId,
+                                'rej_note_str'                  => $rej_note_str,
+                                'loginUserRole'                 => $loginUserRole,
+                                'isValidUser'                   => $isValidUser,
+                                'isApproveRejectExist'          => $isApproveRejectExist,
+                                'isForApprovalExist'            => $isForApprovalExist,
+                                'action_id'                     => $match_data[0]['id'],
+                                'team_a_scnd_ing_count'         => $team_a_scnd_ing_count,
+                                'team_b_scnd_ing_count'         => $team_b_scnd_ing_count,
+                                'team_a_scnd_ing'               => ['' => 'Select Player'] + $team_a_scnd_ing,
+                                'team_b_scnd_ing'               => ['' => 'Select Player'] + $team_b_scnd_ing,
+                                'team_a_fst_ing_bowling_array'  => $team_a_fst_ing_bowling_array,
+                                'team_b_fst_ing_bowling_array'  => $team_b_fst_ing_bowling_array,
+                                'team_a_scnd_ing_bowling_array' => $team_a_scnd_ing_bowling_array,
+                                'team_b_scnd_ing_bowling_array' => $team_b_scnd_ing_bowling_array,
+                                'team_a_city'                   => $team_a_city,
+                                'team_b_city'                   => $team_b_city));
+                }
 		else //to view and edit cricket score card
 		{
-			return view('scorecards.cricketscorecard',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'team_a'=>[''=>'Select Player']+$team_a,'team_b'=>[''=>'Select Player']+$team_b,'match_data'=>$match_data,'team_a_name'=>$team_a_name,'team_b_name'=>$team_b_name,'enum'=> ['' => 'Select Out As'] + $enum,'team_a_fst_ing_array'=>$team_a_fst_ing_array,'team_b_fst_ing_array'=>$team_b_fst_ing_array,'team_a_secnd_ing_array'=>$team_a_secnd_ing_array,'team_b_secnd_ing_array'=>$team_b_secnd_ing_array,'team_wise_match_details'=>$team_wise_match_details,'team_a_count'=>$team_a_count,'team_b_count'=>$team_b_count,'team_a_logo'=>$team_a_logo,'team_b_logo'=>$team_b_logo,'team_a_fst_ing_score'=>$team_a_fst_ing_score,'team_a_fst_ing_wkt'=>$team_a_fst_ing_wkt,'team_a_fst_ing_overs'=>$team_a_fst_ing_overs,'team_a_scnd_ing_score'=>$team_a_scnd_ing_score,'team_a_scnd_ing_wkt'=>$team_a_scnd_ing_wkt,'team_a_scnd_ing_overs'=>$team_a_scnd_ing_overs,'team_b_fst_ing_score'=>$team_b_fst_ing_score,'team_b_fst_ing_wkt'=>$team_b_fst_ing_wkt,'team_b_fst_ing_overs'=>$team_b_fst_ing_overs,'team_b_scnd_ing_score'=>$team_b_scnd_ing_score,'team_b_scnd_ing_wkt'=>$team_b_scnd_ing_wkt,'team_b_scnd_ing_overs'=>$team_b_scnd_ing_overs,'a_keyCount'=>$a_keyCount_fst_ing,'b_keyCount'=>$b_keyCount_fst_ing,'a_keycount_scnd_ing'=>$a_keycount_scnd_ing,'b_keycount_scnd_ing'=>$b_keycount_scnd_ing,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_scnd_ing_count'=>$team_a_scnd_ing_count,'team_b_scnd_ing_count'=>$team_b_scnd_ing_count,'team_a_scnd_ing'=>[''=>'Select Player']+$team_a_scnd_ing,'team_b_scnd_ing'=>[''=>'Select Player']+$team_b_scnd_ing,'team_a_fst_ing_bowling_array'=>$team_a_fst_ing_bowling_array,'team_b_fst_ing_bowling_array'=>$team_b_fst_ing_bowling_array,'team_a_scnd_ing_bowling_array'=>$team_a_scnd_ing_bowling_array,'team_b_scnd_ing_bowling_array'=>$team_b_scnd_ing_bowling_array,'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city));
+			return view('scorecards.cricketscorecard', array(
+                                'first_innings_team_variable'   => $first_innings_team_variable,
+                                'second_innings_team_variable'  => $second_innings_team_variable,
+                                'toss_won_by'                   => $toss_won_by,
+                                'fstIngFstBatId'                => $fstIngFstBatId,
+                                'fstIngsecondBatId'             => $fstIngsecondBatId,
+                                'secondIngFstBatId'             => $secondIngFstBatId,
+                                'secondIngsecondBatId'          => $secondIngsecondBatId,
+                                'tournamentDetails'             => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'team_a'=>[''=>'Select Player']+$team_a,'team_b'=>[''=>'Select Player']+$team_b,'match_data'=>$match_data,'team_a_name'=>$team_a_name,'team_b_name'=>$team_b_name,'enum'=> ['' => 'Select Out As'] + $enum,'team_a_fst_ing_array'=>$team_a_fst_ing_array,'team_b_fst_ing_array'=>$team_b_fst_ing_array,'team_a_secnd_ing_array'=>$team_a_secnd_ing_array,'team_b_secnd_ing_array'=>$team_b_secnd_ing_array,'team_wise_match_details'=>$team_wise_match_details,'team_a_count'=>$team_a_count,'team_b_count'=>$team_b_count,'team_a_logo'=>$team_a_logo,'team_b_logo'=>$team_b_logo,'team_a_fst_ing_score'=>$team_a_fst_ing_score,'team_a_fst_ing_wkt'=>$team_a_fst_ing_wkt,'team_a_fst_ing_overs'=>$team_a_fst_ing_overs,'team_a_scnd_ing_score'=>$team_a_scnd_ing_score,'team_a_scnd_ing_wkt'=>$team_a_scnd_ing_wkt,'team_a_scnd_ing_overs'=>$team_a_scnd_ing_overs,'team_b_fst_ing_score'=>$team_b_fst_ing_score,'team_b_fst_ing_wkt'=>$team_b_fst_ing_wkt,'team_b_fst_ing_overs'=>$team_b_fst_ing_overs,'team_b_scnd_ing_score'=>$team_b_scnd_ing_score,'team_b_scnd_ing_wkt'=>$team_b_scnd_ing_wkt,'team_b_scnd_ing_overs'=>$team_b_scnd_ing_overs,'a_keyCount'=>$a_keyCount_fst_ing,'b_keyCount'=>$b_keyCount_fst_ing,'a_keycount_scnd_ing'=>$a_keycount_scnd_ing,'b_keycount_scnd_ing'=>$b_keycount_scnd_ing,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_scnd_ing_count'=>$team_a_scnd_ing_count,'team_b_scnd_ing_count'=>$team_b_scnd_ing_count,'team_a_scnd_ing'=>[''=>'Select Player']+$team_a_scnd_ing,'team_b_scnd_ing'=>[''=>'Select Player']+$team_b_scnd_ing,'team_a_fst_ing_bowling_array'=>$team_a_fst_ing_bowling_array,'team_b_fst_ing_bowling_array'=>$team_b_fst_ing_bowling_array,'team_a_scnd_ing_bowling_array'=>$team_a_scnd_ing_bowling_array,'team_b_scnd_ing_bowling_array'=>$team_b_scnd_ing_bowling_array,'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city));
 		}
 		
 	}
+        
 	public function insertCricketScoreCard()
 	{
 		$loginUserId = Auth::user()->id;
@@ -1659,29 +1739,40 @@ class ScoreCardController extends Controller {
 		$team_a_bye = !empty(Request::get('team_a_bye'))?Request::get('team_a_bye'):0;
 		$team_a_others = !empty(Request::get('team_a_others'))?Request::get('team_a_others'):0;
 		$team_a_extras_array = array('wide'=>$team_a_wide,'noball'=>$team_a_noball,'legbye'=>$team_a_legbye,'bye'=>$team_a_bye,'others'=>$team_a_others);
-
+                
+                $team_level_stats = [];
+                
 		//team a scores
-		$team_a_fst_ing_score = !empty(Request::get('fst_a_score'))?Request::get('fst_a_score'):NULL;
-		$team_a_fst_ing_wkt = !empty(Request::get('fst_a_wkt'))?Request::get('fst_a_wkt'):NULL;
-		$team_a_fst_ing_overs = !empty(Request::get('fst_a_overs'))?Request::get('fst_a_overs'):NULL;
-		$team_a_scnd_ing_score = !empty(Request::get('scnd_a_score'))?Request::get('scnd_a_score'):NULL;
-		$team_a_scnd_ing_wkt = !empty(Request::get('scnd_a_wkt'))?Request::get('scnd_a_wkt'):NULL;
-		$team_a_scnd_ing_overs = !empty(Request::get('scnd_a_overs'))?Request::get('scnd_a_overs'):NULL;
-		
-		
-		$team_a_score = array('fst_ing_score'=>$team_a_fst_ing_score,'scnd_ing_score'=>$team_a_scnd_ing_score,'fst_ing_wkt'=>$team_a_fst_ing_wkt,'scnd_ing_wkt'=>$team_a_scnd_ing_wkt,'fst_ing_overs'=>$team_a_fst_ing_overs,'scnd_ing_overs'=>$team_a_scnd_ing_overs);
-		
-		
+                foreach ([$team_a_id,$team_b_id] as $teamStat_team_id)
+                {
+                        foreach (['first','second'] as $teamStat_innings_name)
+                        {
+                                foreach (['score','wickets','overs'] as $teamStat_inning_stat_name)
+                                {
+                                        $value = $request[$teamStat_innings_name . '_inning'][$teamStat_team_id][$teamStat_inning_stat_name];
+                                        $team_level_stats[$teamStat_team_id][$teamStat_innings_name][$teamStat_inning_stat_name] = (!empty($value) && $value > 0) ? $value : NULL;
+                                }
+                        }
+                }
+                
+		$team_a_fst_ing_score  = $team_level_stats[$team_a_id]['first']['score'];
+                $team_a_fst_ing_wkt    = $team_level_stats[$team_a_id]['first']['wickets'];
+                $team_a_fst_ing_overs  = $team_level_stats[$team_a_id]['first']['overs'];
+                $team_a_scnd_ing_score = $team_level_stats[$team_a_id]['second']['score'];
+                $team_a_scnd_ing_wkt   = $team_level_stats[$team_a_id]['second']['wickets'];
+                $team_a_scnd_ing_overs = $team_level_stats[$team_a_id]['second']['overs'];
+
+                $team_a_score = array('fst_ing_score'=>$team_a_fst_ing_score,'scnd_ing_score'=>$team_a_scnd_ing_score,'fst_ing_wkt'=>$team_a_fst_ing_wkt,'scnd_ing_wkt'=>$team_a_scnd_ing_wkt,'fst_ing_overs'=>$team_a_fst_ing_overs,'scnd_ing_overs'=>$team_a_scnd_ing_overs);
+
 		//team b scores
-		$team_b_fst_ing_score = !empty(Request::get('fst_b_score'))?Request::get('fst_b_score'):NULL;
-		$team_b_fst_ing_wkt = !empty(Request::get('fst_b_wkt'))?Request::get('fst_b_wkt'):NULL;
-		$team_b_fst_ing_overs = !empty(Request::get('fst_b_overs'))?Request::get('fst_b_overs'):NULL;
-		$team_b_scnd_ing_score = !empty(Request::get('scnd_b_score'))?Request::get('scnd_b_score'):NULL;
-		$team_b_scnd_ing_wkt = !empty(Request::get('scnd_b_wkt'))?Request::get('scnd_b_wkt'):NULL;
-		$team_b_scnd_ing_overs = !empty(Request::get('scnd_b_overs'))?Request::get('scnd_b_overs'):NULL;
-		
-		
-		//team b extras
+		$team_b_fst_ing_score  = $team_level_stats[$team_b_id]['first']['score'];
+                $team_b_fst_ing_wkt    = $team_level_stats[$team_b_id]['first']['wickets'];
+                $team_b_fst_ing_overs  = $team_level_stats[$team_b_id]['first']['overs'];
+                $team_b_scnd_ing_score = $team_level_stats[$team_b_id]['second']['score'];
+                $team_b_scnd_ing_wkt   = $team_level_stats[$team_b_id]['second']['wickets'];
+                $team_b_scnd_ing_overs = $team_level_stats[$team_b_id]['second']['overs'];
+
+                //team b extras
 		$team_b_wide = !empty(Request::get('team_b_wide'))?Request::get('team_b_wide'):0;
 		$team_b_noball = !empty(Request::get('team_b_noball'))?Request::get('team_b_noball'):0;
 		$team_b_legbye = !empty(Request::get('team_b_legbye'))?Request::get('team_b_legbye'):0;
