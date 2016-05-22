@@ -582,8 +582,8 @@ $team_b_count = $team_b_scnd_ing_count; //team b player count
 	 <input type="hidden" name="b_player_count" value="{{ (count($team_b_secnd_ing_array)>0)?count($team_b_secnd_ing_array):1 }}" id="b_player_count_ing">
 	 <input type="hidden" name="b_bowler_count" value="{{ (count($team_b_scnd_ing_bowling_array)>0)?count($team_b_scnd_ing_bowling_array):1 }}" id="b_bowler_count_ing">
 	 <input type="hidden" name="tournament_id" value="{{ $match_data[0]['tournament_id'] }}" id="player_count">
-	 <input type="hidden" name="team_a_id" value="{{ $match_data[0]['a_id'] }}" id="team_a_ids">
-	 <input type="hidden" name="team_b_id" value="{{ $match_data[0]['b_id'] }}" id="team_b_ids">
+	 <input type="hidden" name="team_a_id" value="{{ $secondIngFstBatId }}" id="team_a_ids">
+	 <input type="hidden" name="team_b_id" value="{{ $secondIngsecondBatId }}" id="team_b_ids">
 	 <input type="hidden" name="match_id" value="{{ $match_data[0]['id'] }}" id="player_count">
 	 <input type="hidden" name="match_type" value="{{ $match_data[0]['match_type'] }}" id="player_count">
 	 <input type="hidden" name="team_b_name" value="{{ $team_b_name }}" id="team_b_names">
@@ -593,21 +593,20 @@ $team_b_count = $team_b_scnd_ing_count; //team b player count
 	 <input type="hidden" name="b_fall_of_count" value="{{ $team_b_fall_wkt_ing }}" id="b_fall_of_count_ing">
 	 <input type="hidden" id="winner_team_id" name="winner_team_id" class="winner_team_id" value="">
 
-	 	 <input type="hidden" class="fst_a_score" name="fst_a_score" value="">
-	 <input type="hidden" class="fst_a_wkt" name="fst_a_wkt" value="">
-	 <input type="hidden" class="fst_a_overs" name="fst_a_overs" value="">
-
-	<input type="hidden" class="scnd_a_score" name="scnd_a_score" value="">
-	 <input type="hidden" class="scnd_a_wkt" name="scnd_a_wkt" value="">
-	 <input type="hidden" class="scnd_a_overs" name="scnd_a_overs" value="">
-
-	<input type="hidden" class="fst_b_score" name="fst_b_score" value="">
-	 <input type="hidden" class="fst_b_wkt" name="fst_b_wkt" value="">
-	 <input type="hidden" class="fst_b_overs" name="fst_b_overs" value="">
-
-	<input type="hidden" class="scnd_b_score" name="scnd_b_score" value="">
-	 <input type="hidden" class="scnd_b_wkt" name="scnd_b_wkt" value="">
-	 <input type="hidden" class="scnd_b_overs" name="scnd_b_overs" value="">
+        <?php 
+                foreach ([$secondIngFstBatId,$secondIngsecondBatId] as $teamStat_team_id)
+                {
+                        foreach (['first','second'] as $teamStat_innings_name)
+                        {
+                                foreach (['score','wickets','overs'] as $teamStat_inning_stat_name)
+                                {
+        ?>
+        <input type="hidden" class="form_team_stat_readonly" name="<?php echo $teamStat_innings_name ?>_inning[<?php echo $teamStat_team_id ?>][<?php echo $teamStat_inning_stat_name ?>]">
+        <?php                   }
+                        }
+                }
+        ?>
+                
 	 <input type="hidden" id="str_deleted_ids" name="deleted_ids" value="">
 	 <input type="hidden" id="hidden_match_result" name="hid_match_result" value="">
 {!!Form::close()!!}
@@ -1442,21 +1441,7 @@ function teamSecondWickets(name,team)
 }
 function saveIng(status)
 {
-	$('.fst_a_score').val($('#fst_ing_a_score').val());
-	$('.fst_a_wkt').val($('#fst_ing_a_wkts').val());
-	$('.fst_a_overs').val($('#fst_ing_a_over').val());
-
-	$('.scnd_a_score').val($('#scnd_ing_a_score').val());
-	$('.scnd_a_wkt').val($('#scnd_ing_a_wkts').val());
-	$('.scnd_a_overs').val($('#scnd_ing_a_over').val());
-
-	$('.fst_b_score').val($('#fst_ing_b_score').val());
-	$('.fst_b_wkt').val($('#fst_ing_b_wkts').val());
-	$('.fst_b_overs').val($('#fst_ing_b_over').val());
-
-	$('.scnd_b_score').val($('#scnd_ing_b_score').val());
-	$('.scnd_b_wkt').val($('#scnd_ing_b_wkts').val());
-	$('.scnd_b_overs').val($('#scnd_ing_b_over').val());
+	SJ.SCORECARD.initTeamStats();
 	$('#hidden_match_result').val($('#match_result').val());
 	
 	if(status=='scnd_ing_click')
@@ -1474,7 +1459,7 @@ function saveIng(status)
 			}
 		});
 	}
-	location.reload(true);
+	document.location.reload(true);
 }
 var a_extra = 0;
 $('.a_scnd_ing_extras').each(function() {
