@@ -111,7 +111,7 @@
                                                         <?php if (!empty($score_status_array['fst_ing_batting']))
                                                         { ?>
                                                                 and chose to 
-                                                                <?php if ($match_data[0]['a_id'] == $score_status_array['fst_ing_batting'])
+                                                                <?php if ($score_status_array['toss_won_by'] == $score_status_array['fst_ing_batting'])
                                                                 { ?>
                                                                         Bat.
                 <?php }
