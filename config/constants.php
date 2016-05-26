@@ -1,8 +1,8 @@
 <?php
 
 return [
-        'JS_VERSION'               => 6,
-        'CSS_VERSION'              => 6,
+        'JS_VERSION'               => 7,
+        'CSS_VERSION'              => 7,
         'COUNTRY_INDIA'            => 101,
         'LIMIT'                    => 8,
         'SCHEDULE_LIMIT'           => 5,
