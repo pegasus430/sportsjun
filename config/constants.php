@@ -121,7 +121,8 @@ return [
                 'team'        => 'Team',
                 'tournament'  => 'Tournament',
                 'user'        => 'Player',
-                'marketplace' => 'Market Place'
+                'marketplace' => 'Market Place',
+                'organization'=> 'Organization'
         ],
         'STATISTICS'               => [
                 'MATCH_TYPE' => 'MATCH TYPE',
