@@ -325,6 +325,7 @@
 .col_standard .team_bowl {background: #67a1ea;}
 .col_standard .team_fall {background: #636363;}
 .col_standard .team_extra {background: #455469;}
+.col_standard .brown1 {background: #795548;}
 
  .col_standard .table_head {
 	 padding: 10px 8px;
@@ -1121,3 +1122,11 @@ div.share-scorecard {
 .match-status { float:none; width:auto; }
 .team_name a { color:#65C178; }
 .col_standard,.col_standard h1, .col_standard h2, .col_standard h3, .col_standard h4, .col_standard h5, .col_standard h6 { font-family: 'Roboto', Arial, Helvetica, sans-serif !important; }
+
+/* summernote css fixes (which have arised due to overriding of native bootstrap selectors) */
+.note-editor .note-editing-area .note-editable{
+    margin-top: auto;
+}
+.col_standard .table > thead > tr > th, .col_standard .table > tbody > tr > th, .col_standard .table > tfoot > tr > th, .col_standard .table > thead > tr > td, .col_standard .table > tbody > tr > td, .col_standard .table > tfoot > tr > td, .table thead.scr_thead_green > tr > th{
+    border:1px solid #ddd;
+}

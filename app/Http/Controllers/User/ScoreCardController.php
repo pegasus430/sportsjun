@@ -1523,26 +1523,28 @@ class ScoreCardController extends Controller {
         
 	public function insertCricketScoreCard()
 	{
-		$loginUserId = Auth::user()->id;
-		$request = Request::all();
-		//team a details
-		$team_a_player_count = Request::get('a_player_count');
-		$team_b_player_count = Request::get('b_player_count');
-		$a_bowler_count = Request::get('a_bowler_count');
-		$b_bowler_count = Request::get('b_bowler_count');
-		$team_a_name = Request::get('team_a_name');
-		$team_b_name = Request::get('team_b_name');
-		$winner_team_id = !empty(Request::get('winner_team_id'))?Request::get('winner_team_id'):NULL;//winner team id
-		$match_result = !empty(Request::get('hid_match_result'))?Request::get('hid_match_result'):NULL;//winner team id
-		
-		$team_a_id = !empty(Request::get('team_a_id'))?Request::get('team_a_id'):NULL;
-		$team_b_id = !empty(Request::get('team_b_id'))?Request::get('team_b_id'):NULL;
-		$tournament_id = !empty(Request::get('tournament_id'))?Request::get('tournament_id'):NULL;
-		$match_type = !empty(Request::get('match_type'))?Request::get('match_type'):NULL;
-		$inning = !empty(Request::get('inning'))?Request::get('inning'):'first';
-		$match_id = Request::get('match_id');
-		
-		//toss won by
+		$loginUserId         = Auth::user()->id;
+                $request             = Request::all();
+                
+                //team a details
+                $team_a_player_count = Request::get('a_player_count');
+                $team_b_player_count = Request::get('b_player_count');
+                $a_bowler_count      = Request::get('a_bowler_count');
+                $b_bowler_count      = Request::get('b_bowler_count');
+                $team_a_name         = Request::get('team_a_name');
+                $team_b_name         = Request::get('team_b_name');
+                $winner_team_id      = !empty(Request::get('winner_team_id')) ? Request::get('winner_team_id') : NULL; //winner team id
+                $match_result        = !empty(Request::get('hid_match_result')) ? Request::get('hid_match_result') : NULL; //winner team id
+
+                $team_a_id     = !empty(Request::get('team_a_id')) ? Request::get('team_a_id') : NULL;
+                $team_b_id     = !empty(Request::get('team_b_id')) ? Request::get('team_b_id') : NULL;
+                $tournament_id = !empty(Request::get('tournament_id')) ? Request::get('tournament_id') : NULL;
+                $match_type    = !empty(Request::get('match_type')) ? Request::get('match_type') : NULL;
+                $inning        = !empty(Request::get('inning')) ? Request::get('inning') : 'first';
+                $match_id      = Request::get('match_id');
+                $match_report  = !empty(Request::get('match_report')) ? Request::get('match_report') : NULL;
+
+                //toss won by
 		$tossWonBy = !empty(Request::get('toss_won_by'))?Request::get('toss_won_by'):NULL; //toss won by team id
 		$toss_won_team_name = !empty(Request::get('toss_won_team_name'))?Request::get('toss_won_team_name'):NULL; //toss won by team id
 		
@@ -1754,7 +1756,11 @@ class ScoreCardController extends Controller {
                         {
                                 foreach (['score','wickets','overs'] as $teamStat_inning_stat_name)
                                 {
-                                        $value = $request[$teamStat_innings_name . '_inning'][$teamStat_team_id][$teamStat_inning_stat_name];
+                                        $value = '';
+                                        if (isset($request[$teamStat_innings_name . '_inning'][$teamStat_team_id][$teamStat_inning_stat_name]))
+                                        {
+                                                $value = $request[$teamStat_innings_name . '_inning'][$teamStat_team_id][$teamStat_inning_stat_name];
+                                        }
                                         $team_level_stats[$teamStat_team_id][$teamStat_innings_name][$teamStat_inning_stat_name] = (!empty($value) && $value > 0) ? $value : NULL;
                                 }
                         }
@@ -1875,55 +1881,72 @@ class ScoreCardController extends Controller {
                         
                     }
                     
-                    if(!empty($matchScheduleDetails['tournament_id'])) {
+                        if (!empty($matchScheduleDetails['tournament_id']))
+                        {
 //                        dd($winner_team_id.'<>'.$looser_team_id);
-                            $tournamentDetails = Tournaments::where('id', '=', $matchScheduleDetails['tournament_id'])->first();
-                            if(Helper::isTournamentOwner($tournamentDetails['manager_id'],$tournamentDetails['tournament_parent_id'])) {
-								if($is_tie==1 && !empty($matchScheduleDetails['tournament_group_id'])) {
-									$match_status = 'completed';
-								}
-							    MatchSchedule::where('id',$match_id)->update(['match_details'=>$json_match_details_array,'match_status'=>$match_status,
-                                                    'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
-                                                    'is_tied'=>$is_tie,'score_added_by'=>$json_score_status]);
+                                $tournamentDetails = Tournaments::where('id', '=', $matchScheduleDetails['tournament_id'])->first();
+                                if (Helper::isTournamentOwner($tournamentDetails['manager_id'], $tournamentDetails['tournament_parent_id']))
+                                {
+                                        if ($is_tie == 1 && !empty($matchScheduleDetails['tournament_group_id']))
+                                        {
+                                                $match_status = 'completed';
+                                        }
+                                        MatchSchedule::where('id', $match_id)->update([
+                                                'match_details'  => $json_match_details_array,
+                                                'match_status'   => $match_status,
+                                                'winner_id'      => $winner_team_id,
+                                                'looser_id'      => $looser_team_id,
+                                                'is_tied'        => $is_tie,
+                                                'score_added_by' => $json_score_status,
+                                                'match_report'   => $match_report]);
 //                                Helper::printQueries();
-                                
-                                if(!empty($matchScheduleDetails['tournament_round_number'])) {
-                                        $this->updateBracketDetails($matchScheduleDetails,$tournamentDetails,$winner_team_id);
-                                }
-								if($match_status=='completed')
-								{
-									 $sportName = Sport::where('id',$matchScheduleDetails['sports_id'])->pluck('sports_name');
-									$this->insertPlayerStatistics($sportName,$match_id);
-									
-									//notification code
-									
-								}
-                               
-                            }
 
-                    }else if(Auth::user()->role=='admin')
-					{
-						if($is_tie==1) {
-							$match_status = 'completed'; 
-							$approved = 'approved';
-						}
-						 
-						 MatchSchedule::where('id',$match_id)->update(['match_details'=>$json_match_details_array,'match_status'=>$match_status,
-                                                    'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
-                                                    'is_tied'=>$is_tie,'score_added_by'=>$json_score_status,'scoring_status'=>$approved]);
-							if($match_status=='completed')
-							{
-								 $sportName = Sport::where('id',$matchScheduleDetails['sports_id'])->pluck('sports_name');
-								$this->insertPlayerStatistics($sportName,$match_id);
-								
-								//notification code
-								
-							}						
-															
-					}else
-					{
-                        MatchSchedule::where('id',$match_id)->update(['match_details'=>$json_match_details_array,'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,'is_tied'=>$is_tie,'score_added_by'=>$json_score_status]);
-                    } 
+                                        if (!empty($matchScheduleDetails['tournament_round_number']))
+                                        {
+                                                $this->updateBracketDetails($matchScheduleDetails, $tournamentDetails, $winner_team_id);
+                                        }
+                                        if ($match_status == 'completed')
+                                        {
+                                                $sportName = Sport::where('id', $matchScheduleDetails['sports_id'])->pluck('sports_name');
+                                                $this->insertPlayerStatistics($sportName, $match_id);
+
+                                                //notification code
+                                        }
+                                }
+                        }
+                        else if (Auth::user()->role == 'admin')
+                        {
+                                if ($is_tie == 1)
+                                {
+                                        $match_status = 'completed';
+                                        $approved     = 'approved';
+                                }
+
+                                MatchSchedule::where('id', $match_id)->update([
+                                        'match_details'  => $json_match_details_array,
+                                        'match_status'   => $match_status,
+                                        'winner_id'      => $winner_team_id, 'looser_id'      => $looser_team_id,
+                                        'is_tied'        => $is_tie, 'score_added_by' => $json_score_status,
+                                        'scoring_status' => $approved,
+                                        'match_report'   => $match_report]);
+                                if ($match_status == 'completed')
+                                {
+                                        $sportName = Sport::where('id', $matchScheduleDetails['sports_id'])->pluck('sports_name');
+                                        $this->insertPlayerStatistics($sportName, $match_id);
+
+                                        //notification code
+                                }
+                        }
+                        else
+                        {
+                                MatchSchedule::where('id', $match_id)->update([
+                                        'match_details'  => $json_match_details_array,
+                                        'winner_id'      => $winner_team_id,
+                                        'looser_id'      => $looser_team_id,
+                                        'is_tied'        => $is_tie,
+                                        'score_added_by' => $json_score_status,
+                                        'match_report'   => $match_report]);
+                        }
                 }
 		
 		//if($match_result!='')

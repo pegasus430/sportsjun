@@ -20,6 +20,29 @@ if (typeof SJ.SCORECARD === 'undefined')
                 var g = SJ.SCORECARD;
                 var o = {
                         init: function () {
+                                if ($("#match_report").length > 0)
+                                {
+                                        $("#match_report").summernote({
+                                                height: 200,
+                                                callbacks: {
+                                                        onChange: function() {
+                                                                $('#match_report').html($('#match_report').summernote('code'));
+                                                        }
+                                                },
+                                                toolbar: [
+                                                        ['style', ['style']],
+                                                        ['style', ['bold', 'italic', 'underline', 'clear']],
+                                                        ['font', ['strikethrough', 'superscript', 'subscript']],
+                                                        ['fontsize', ['fontsize']],
+                                                        ['color', ['color']],
+                                                        ['para', ['ul', 'ol', 'paragraph']],
+                                                        ['height', ['height']],
+                                                        ['table', ['table']],
+                                                        ['insert', ['link', 'hr']],
+                                                        ['view', ['fullscreen', 'codeview']]
+                                                ]
+                                        });
+                                }
                                 if ($('#tossModal').length > 0)
                                 {
                                         $('#tossModal').modal('show');
