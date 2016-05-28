@@ -20,6 +20,10 @@ if (typeof SJ.SCORECARD === 'undefined')
                 var g = SJ.SCORECARD;
                 var o = {
                         init: function () {
+                                if ($("#match_report").length > 0)
+                                {
+                                        $("#match_report").summernote({height: 300});
+                                }
                                 if ($('#tossModal').length > 0)
                                 {
                                         $('#tossModal').modal('show');
