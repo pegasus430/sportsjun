@@ -39,7 +39,7 @@ $('.glyphicon-calendar').parent().siblings('input:text').attr('readonly','readon
     $('.bootstrap-switch-handle-off').html('No');
     $('textarea').attr('maxLength',textAreaLength);
     $('#edit-form [name="about"]').attr('maxLength',500);
-    $("textarea").each(function(){
+    $("textarea:not(.summernote)").each(function(){
         $(this).after('<div class="characterLeft"><span class="characterLefts">'+($(this).attr('maxLength')-$(this).val().length)+' </span> characters left</div>');
     });    
     $('a').each(function() {

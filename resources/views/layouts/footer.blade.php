@@ -22,6 +22,9 @@
 <script src="{{ asset('/js/sj.team.js') }}?v=<?php echo $js_version;?>"></script>
 <script src="{{ asset('/js/sj.tournament.js') }}?v=<?php echo $js_version;?>"></script>
 <script src="{{ asset('/js/sj.scorecard.js') }}?v=<?php echo $js_version;?>"></script>
+
+<link rel="stylesheet" href="{{ asset('/js/summernote/dist/summernote.css') }}?v=<?php echo $css_version;?>">
+<script src="{{ asset('/js/summernote/dist/summernote.min.js') }}?v=<?php echo $js_version;?>"></script>
 <script>
 var resizeId;
 $(function () {
