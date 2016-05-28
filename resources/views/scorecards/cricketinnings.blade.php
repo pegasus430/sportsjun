@@ -559,6 +559,13 @@
 <!--********* TEAM B  End **************!-->
 
 
+<!--********* MATCH REPORT Start **************!-->
+<div id="match_report">
+        <textarea name="match_report" id="match_report" cols="30" rows="10"></textarea>
+</div>
+<!--********* MATCH REPORT End **************!-->
+
+
 	 	 <div class="clearfix"></div>
 
      <center>

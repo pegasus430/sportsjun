@@ -55,7 +55,7 @@ return [
         'mysql' => [
             'driver'    => 'mysql',
             'host'      => 'localhost',
-            'database'  => 'sportsjun_prod',
+            'database'  => 'sportsjun_temp',
             'username'  => 'sportsjun_prod',
             'password'  => 'Xedu_h6thEsw',
             'charset'   => 'utf8',
