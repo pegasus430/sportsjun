@@ -1124,9 +1124,27 @@ div.share-scorecard {
 .col_standard,.col_standard h1, .col_standard h2, .col_standard h3, .col_standard h4, .col_standard h5, .col_standard h6 { font-family: 'Roboto', Arial, Helvetica, sans-serif !important; }
 
 /* summernote css fixes (which have arised due to overriding of native bootstrap selectors) */
-.note-editor .note-editing-area .note-editable{
+.summernote_wrapper .note-editor .note-editing-area .note-editable{
     margin-top: auto;
 }
-.col_standard .table > thead > tr > th, .col_standard .table > tbody > tr > th, .col_standard .table > tfoot > tr > th, .col_standard .table > thead > tr > td, .col_standard .table > tbody > tr > td, .col_standard .table > tfoot > tr > td, .table thead.scr_thead_green > tr > th{
+.summernote_wrapper .col_standard .table > thead > tr > th,
+.summernote_wrapper .col_standard .table > tbody > tr > th,
+.summernote_wrapper .col_standard .table > tfoot > tr > th,
+.summernote_wrapper .col_standard .table > thead > tr > td,
+.summernote_wrapper .col_standard .table > tbody > tr > td,
+.summernote_wrapper .col_standard .table > tfoot > tr > td,
+.summernote_wrapper .table thead.scr_thead_green > tr > th{
     border:1px solid #ddd;
+}
+
+div#match_report_view {
+    margin-top: -2px;
+    margin-bottom: 40px;
+}
+
+div#match_report_view_inner {
+    padding: 15px;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
 }

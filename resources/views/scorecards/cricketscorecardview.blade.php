@@ -192,6 +192,14 @@
                     </div>
                     @endif
                     <!-- /.panel-body -->
+                        
+                        <div class="clearfix"></div>
+                        <div id="match_report_view" class="summernote_wrapper tab-content">
+                                <h3 class="brown1 table_head">Match Report</h3>
+                                <div id="match_report_view_inner">
+                                {!! $match_data[0]['match_report'] !!}
+                                </div>
+                        </div>
                 </div>
 	<input type="hidden" name="match_id" id="match_id" value="{{$match_data[0]['id']}}">
 	@if($isValidUser && $isApproveRejectExist)	
