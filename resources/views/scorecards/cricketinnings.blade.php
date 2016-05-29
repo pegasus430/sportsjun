@@ -560,7 +560,7 @@
 
 <div class="clearfix"></div>
 <!--********* MATCH REPORT Start **************!-->
-<div class="form-group">
+<div class="summernote_wrapper form-group">
         <h3 class="brown1 table_head">Match Report</h3>
         <textarea id="match_report" class="summernote" name="match_report" title="Match Report">{{ $match_data[0]['match_report'] }}</textarea>
 </div>
