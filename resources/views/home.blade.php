@@ -173,7 +173,7 @@
                                                         $('#home-ipl-popup .modal-dialog').css('width','95%');
                                                 }
                                                 $('#home-ipl-popup').modal('show');
-                                                setTimeout(function(){ $('#home-ipl-popup').modal('hide'); }, 5000);
+                                                setTimeout(function(){ $('#home-ipl-popup').modal('hide'); }, 10000);
                                         });
                                 </script>
 @endsection
