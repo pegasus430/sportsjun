@@ -150,4 +150,30 @@
                                         </div>
                                 </section>
                                 <!--// Page Content //-->
+                                <div class="modal fade" id="home-ipl-popup" tabindex="-1" role="dialog" aria-hidden="true">
+                                        <div class="modal-dialog" style="width:728px;margin:10% auto 0 auto;">
+                                                <div class="modal-content">
+                                                        <div class="modal-header thbg-color" style="background-color:#fec413">
+                                                                <button style="margin-top:-13px" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                        </div>
+                                                        <div class="modal-body" style="padding:0">
+                                                                <img width="100%" src="/images/promo/sportsjun-ipl-win-popup.png" style="margin-top:-1px" />
+                                                        </div>
+                                                </div>
+                                        </div>
+                                </div>
+                                <script type="text/javascript">
+                                        $(function(){
+                                                $(window).resize(function() {
+                                                        if ($(window).width() < 728) {
+                                                                $('#home-ipl-popup .modal-dialog').css('width','95%');
+                                                        }
+                                                });
+                                                if ($(window).width() < 728) {
+                                                        $('#home-ipl-popup .modal-dialog').css('width','95%');
+                                                }
+                                                $('#home-ipl-popup').modal('show');
+                                                setTimeout(function(){ $('#home-ipl-popup').modal('hide'); }, 10000);
+                                        });
+                                </script>
 @endsection
