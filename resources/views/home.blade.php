@@ -162,18 +162,19 @@
                                                 </div>
                                         </div>
                                 </div>
-                                <script type="text/javascript">
-                                        $(function(){
-                                                $(window).resize(function() {
-                                                        if ($(window).width() < 728) {
-                                                                $('#home-ipl-popup .modal-dialog').css('width','95%');
-                                                        }
-                                                });
+                        </div>
+                        <script type="text/javascript">
+                                $(function(){
+                                        $(window).resize(function() {
                                                 if ($(window).width() < 728) {
                                                         $('#home-ipl-popup .modal-dialog').css('width','95%');
                                                 }
-                                                $('#home-ipl-popup').modal('show');
-                                                setTimeout(function(){ $('#home-ipl-popup').modal('hide'); }, 10000);
                                         });
-                                </script>
+                                        if ($(window).width() < 728) {
+                                                $('#home-ipl-popup .modal-dialog').css('width','95%');
+                                        }
+                                        $('#home-ipl-popup').modal('show');
+                                        setTimeout(function(){ $('#home-ipl-popup').modal('hide'); }, 10000);
+                                });
+                        </script>
 @endsection

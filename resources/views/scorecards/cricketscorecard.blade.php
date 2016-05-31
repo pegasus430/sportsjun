@@ -2,7 +2,6 @@
 @section('content')
 <style type="text/css">
         .alert{display: none;}
-        .show_teams{display: none;}
 </style>
 <div class="col_standard cricket_scorcard">
 
@@ -166,9 +165,9 @@
                                                 <label>Match Result : {{ 'Tie' }}</label>
                                         </div>   
                                         @else
-                                        <div class="form-group">
+                                        <div class="form-group" style="display:none;">
                                                 <label for="match_result">Match Result:</label>
-                                                <select class="form-control selectpicker selectpicker_new_span" name="match_result" id="match_result" onchange="getTeam();" autocomplete="off">
+                                                <select class="form-control selectpicker selectpicker_new_span" name="match_result" id="match_result" autocomplete="off">
                                                         <option value="" >Select</option>
 <?php if (empty($match_data[0]['tournament_round_number']))
 { ?>
@@ -177,9 +176,9 @@
                                                         <option <?php if ($match_data[0]['is_tied'] == 0 && $match_data[0]['winner_id'] > 0) echo " selected"; ?> value="win">Win</option>
                                                 </select>
                                         </div>
-                                        <div class="form-group" style="margin-top:15px;">
+                                        <div class="form-group" style="margin-top:15px;display:none;">
                                                 <label class="show_teams">Select Winner:</label>
-                                                <select name="winner_id" id="winner_id" class="show_teams form-control selectpicker selectpicker_new_span" onchange="selectWinner();" autocomplete="off">
+                                                <select name="winner_id" id="winner_id" class="show_teams form-control selectpicker selectpicker_new_span" autocomplete="off">
                                                         <option <?php if (isset($match_data[0]['winner_id']) && $match_data[0]['winner_id'] == $match_data[0]['a_id']) echo ' selected'; ?> value="{{ $match_data[0]['a_id'] }}" >{{ $team_a_name }}</option>
                                                         <option <?php if (isset($match_data[0]['winner_id']) && $match_data[0]['winner_id'] == $match_data[0]['b_id']) echo ' selected'; ?> value="{{ $match_data[0]['b_id'] }}">{{ $team_b_name }}</option>
                                                 </select>
@@ -394,40 +393,11 @@ if ($match_data[0]['match_type'] == 'test')
 <script>
         $('#hid_match_result').val($('#match_result').val());
         $(document).ready(function () {
-                getTeam();
                 SJ.SCORECARD.initTeamStats();
                 $(".team_stat_readonly").keyup(function () {
                         SJ.SCORECARD.initTeamStats();
                 });
         })
-        function getTeam()
-        {
-                var value = $("#match_result").val();
-                if (value == 'win')
-                {
-                        //$( ".show_teams" ).show();
-
-                        $("label.show_teams").show();
-                        $('#winner_id').selectpicker('show');
-
-                        selectWinner();
-                } else
-                {
-                        $("label.show_teams").hide();
-                        $('#winner_id').selectpicker('hide');
-                        $('.winner_team_id').val('');
-                }
-        }
-        function selectWinner()
-        {
-                $('.winner_team_id').val($('#winner_id').val());
-                $("#winner_id").hide();
-        }
-        
-        
-        
-        
-        
         
 //Send Approval
         function forApproval()

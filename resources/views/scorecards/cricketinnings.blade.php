@@ -567,12 +567,16 @@
 <!--********* MATCH REPORT End **************!-->
 <div class="clearfix"></div>
 
+@if($isValidUser)
+@include('scorecards.cricket_end_match')
+@endif
+
      <center>
      	<ul class="list-inline sportsjun-forms">
             <li>
-			@if($isValidUser)
-                <button type="submit" class="button btn-primary" onclick="save('fst_ing_click');"><i class="fa fa-floppy-o"></i> Save</button>
-			@endif
+                @if($isValidUser)
+                <button type="submit" id="save_first_inning" class="button btn-primary" onclick="save('fst_ing_click');"><i class="fa fa-floppy-o"></i> Save</button>
+                @endif
             </li>
 	<input type="hidden" id="cricketfirsting_form_data" value="">		
 			
