@@ -121,7 +121,7 @@
                 <?php } ?>
         <?php } ?>
                                                 </div>
-<?php } ?>                        
+<?php } ?>        
                          @if($match_data[0]['winner_id']>0)
 
 							  <div class="form-group">
@@ -131,18 +131,22 @@
 							  </div>
 						
 					@else
-					@if($match_data[0]['is_tied']>0)
-							<div class="form-group">
-								<label>Match Result</label>
-                                <h3 class="win_team">{{ 'Tie' }}</h3>
+                                                @if($match_data[0]['is_tied']>0)
+                                                                <div class="form-group">
+                                                                        <label>Match Result</label>
+                                        <h3 class="win_team">{{ 'Tie' }}</h3>
 
-						  </div>   
-					@else
-                          <div class="form-group">
-					  <label>Winner is not updated.</label>
-							</div>
-					@endif	
+                                                          </div>   
+                                                @else
+                                  <div class="form-group">
+                                                  <label>Winner is not updated.</label>
+                                                                </div>
+                                                @endif	
 					@endif
+                                        
+                        @if($match_data[0]['player_of_the_match']>0)
+                        <div id="playerOfTheMatchNote">PLAYER OF THE MATCH - {{(!empty($player_name_array[$match_data[0]['player_of_the_match']]))?$player_name_array[$match_data[0]['player_of_the_match']]:''}}</div>
+                        @endif
                         
                         <div class="form-group" id="bat1stInning" style="display:none;">
                                 <label for="team">Ist Ing Batting:</label>
@@ -194,12 +198,14 @@
                     <!-- /.panel-body -->
                         
                         <div class="clearfix"></div>
+                        @if(!empty($match_data[0]['match_report']))
                         <div id="match_report_view" class="summernote_wrapper tab-content">
                                 <h3 class="brown1 table_head">Match Report</h3>
                                 <div id="match_report_view_inner">
                                 {!! $match_data[0]['match_report'] !!}
                                 </div>
                         </div>
+                        @endif
                 </div>
 	<input type="hidden" name="match_id" id="match_id" value="{{$match_data[0]['id']}}">
 	@if($isValidUser && $isApproveRejectExist)	
