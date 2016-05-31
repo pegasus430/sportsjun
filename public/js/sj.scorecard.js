@@ -50,6 +50,7 @@ if (typeof SJ.SCORECARD === 'undefined')
                                 if ($('#endMatchModal').length > 0)
                                 {
                                         $('#match_result').val('win').change();
+                                        $('.winner_team_id').val($('#winner_id').val());
                                         $(document).on('ifChecked','#matchResultRadio input', function(){
                                                 if (this.value == 'tie')
                                                 {
