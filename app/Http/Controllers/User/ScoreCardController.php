@@ -1543,14 +1543,15 @@ class ScoreCardController extends Controller {
                 $inning        = !empty(Request::get('inning')) ? Request::get('inning') : 'first';
                 $match_id      = Request::get('match_id');
                 $match_report  = !empty(Request::get('match_report')) ? Request::get('match_report') : NULL;
-
+                $player_of_the_match  = !empty(Request::get('player_of_the_match')) ? Request::get('player_of_the_match') : NULL;
+                
                 //toss won by
 		$tossWonBy = !empty(Request::get('toss_won_by'))?Request::get('toss_won_by'):NULL; //toss won by team id
 		$toss_won_team_name = !empty(Request::get('toss_won_team_name'))?Request::get('toss_won_team_name'):NULL; //toss won by team id
 		
 		//delete all records before insert or update score card
 		$match_score = CricketPlayerMatchwiseStats::select()->where('match_id',$match_id)->where('innings',$inning)->get();
-		if(count($match_score)>0)
+		if (count($match_score)>0)
 		{
 			CricketPlayerMatchwiseStats::where('match_id',$match_id)->where('innings',$inning)->update(['deleted_at'=>Carbon::now()]);
 		}
@@ -1898,7 +1899,8 @@ class ScoreCardController extends Controller {
                                                 'looser_id'      => $looser_team_id,
                                                 'is_tied'        => $is_tie,
                                                 'score_added_by' => $json_score_status,
-                                                'match_report'   => $match_report]);
+                                                'match_report'   => $match_report,
+                                                'player_of_the_match'   => $player_of_the_match]);
 //                                Helper::printQueries();
 
                                         if (!empty($matchScheduleDetails['tournament_round_number']))
@@ -1928,7 +1930,8 @@ class ScoreCardController extends Controller {
                                         'winner_id'      => $winner_team_id, 'looser_id'      => $looser_team_id,
                                         'is_tied'        => $is_tie, 'score_added_by' => $json_score_status,
                                         'scoring_status' => $approved,
-                                        'match_report'   => $match_report]);
+                                        'match_report'   => $match_report,
+                                        'player_of_the_match'   => $player_of_the_match]);
                                 if ($match_status == 'completed')
                                 {
                                         $sportName = Sport::where('id', $matchScheduleDetails['sports_id'])->pluck('sports_name');
@@ -1945,7 +1948,8 @@ class ScoreCardController extends Controller {
                                         'looser_id'      => $looser_team_id,
                                         'is_tied'        => $is_tie,
                                         'score_added_by' => $json_score_status,
-                                        'match_report'   => $match_report]);
+                                        'match_report'   => $match_report,
+                                        'player_of_the_match'   => $player_of_the_match]);
                         }
                 }
 		

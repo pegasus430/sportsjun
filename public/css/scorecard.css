@@ -1127,12 +1127,12 @@ div.share-scorecard {
 .summernote_wrapper .note-editor .note-editing-area .note-editable{
     margin-top: auto;
 }
-.summernote_wrapper .col_standard .table > thead > tr > th,
-.summernote_wrapper .col_standard .table > tbody > tr > th,
-.summernote_wrapper .col_standard .table > tfoot > tr > th,
-.summernote_wrapper .col_standard .table > thead > tr > td,
-.summernote_wrapper .col_standard .table > tbody > tr > td,
-.summernote_wrapper .col_standard .table > tfoot > tr > td,
+.summernote_wrapper .table > thead > tr > th,
+.summernote_wrapper .table > tbody > tr > th,
+.summernote_wrapper .table > tfoot > tr > th,
+.summernote_wrapper .table > thead > tr > td,
+.summernote_wrapper .table > tbody > tr > td,
+.summernote_wrapper .table > tfoot > tr > td,
 .summernote_wrapper .table thead.scr_thead_green > tr > th{
     border:1px solid #ddd;
 }
@@ -1147,4 +1147,41 @@ div#match_report_view_inner {
     border-left: 1px solid #ddd;
     border-right: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
+}
+
+.game-assets-list{
+  text-transform: uppercase;
+  display: table;
+  width: 100%;
+  margin:15px 0 20px 0;
+}
+.game-assets-list > li{text-align: center; color: #777777;display: table-cell;}
+.game-assets-list > li:hover {cursor:pointer}
+.game-assets-list > li:hover a {color: #333333;text-decoration:none;border-bottom:1px solid}
+.game-assets-list a{color: inherit; transition: all 0.2s ease-in-out;}
+.circle-icon{
+  background-color: #5cb85c;
+  padding: 18px;
+  margin-bottom: 7px;
+  border-radius: 100%;
+  display: block;
+  transition: all 0.2s ease-in-out;
+}
+.game-assets-list .circle-icon{
+  height: 80px;
+  width: 80px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.game-assets-list > li:hover .circle-icon{
+  background-color: #449d44;
+}
+i[class^="icon-"] { background-image: url(../images/sprite-img.png); background-repeat: no-repeat; display: inline-block; vertical-align: middle; }
+.icon-wicket, .icon-extra, .icon-dot-ball, .icon-delete-ball, .icon-add-ball, .icon-end-over, .icon-end-inning, .icon-end-match{width: 42px; height: 42px;}
+.icon-end-match{background-position: -350px -800px;}
+
+#playerOfTheMatch {margin-top:10px}
+div#playerOfTheMatchNote {
+    margin-top: 12px;
+    font-weight: bold;
 }
