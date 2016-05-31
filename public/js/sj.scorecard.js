@@ -49,6 +49,7 @@ if (typeof SJ.SCORECARD === 'undefined')
                                 }
                                 if ($('#endMatchModal').length > 0)
                                 {
+                                        $('#match_result').val('win').change();
                                         $(document).on('ifChecked','#matchResultRadio input', function(){
                                                 if (this.value == 'tie')
                                                 {
