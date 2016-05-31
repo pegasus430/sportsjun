@@ -47,6 +47,27 @@ if (typeof SJ.SCORECARD === 'undefined')
                                 {
                                         $('#tossModal').modal('show');
                                 }
+                                if ($('#endMatchModal').length > 0)
+                                {
+                                        $(document).on('ifChecked','#matchResultRadio input', function(){
+                                                if (this.value == 'tie')
+                                                {
+                                                        $('#matchWinnerRadio').slideUp();
+                                                        $('.winner_team_id').val('');
+                                                }
+                                                else
+                                                {
+                                                        $('#matchWinnerRadio').slideDown();
+                                                        $('.winner_team_id').val($('#winner_id').val());
+                                                }
+                                                $('#match_result').val(this.value).change();
+                                        });
+                                        
+                                        $(document).on('ifChecked','#matchWinnerRadio input', function(){
+                                                $('#winner_id').val(this.value).change();
+                                                $('.winner_team_id').val(this.value);
+                                        });
+                                }
                         },
                         doneTossModal: function() {
                                 var toss_winning_team = parseInt($('#tossWonByRadio input[type=radio]:checked').attr('id'));
@@ -153,6 +174,17 @@ if (typeof SJ.SCORECARD === 'undefined')
                                 currentOvers            = (operation === 'add') ? (currentOvers + oversCount) : (currentOvers - oversCount);
                                 $form_overs.val(currentOvers);
                                 $heading_overs.val(currentOvers);
+                        },
+                        endMatchModal : function()
+                        {
+                                if ($('#endMatchModal').length > 0)
+                                {
+                                        $('#endMatchModal').modal('show');
+                                }
+                        },
+                        endMatch : function()
+                        {
+                                $('#save_first_inning').trigger('click');
                         }
                 };
                 z.SCORECARD = o;
