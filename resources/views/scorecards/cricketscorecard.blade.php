@@ -202,7 +202,7 @@ if ($match_data[0]['match_type'] == 'test')
         $second_inning_editable = !(!empty($team_a_secnd_ing_array) || !empty($team_b_secnd_ing_array) || !empty($team_a_scnd_ing_bowling_array) || !empty($team_b_scnd_ing_bowling_array)) ? 1 : 0;
 }
 ?>
-                                        @if($first_inning_editable!=0)
+                                        @if(empty($score_status_array['toss_won_by']))
                                         <!-- Toss won by modal start -->
                                         <div class="modal fade in tossDetail" tabindex="-1" role="modal" aria-labelledby="tossDetail" id="tossModal" style="display: block;">
                                                 <div class="vertical-alignment-helper">
@@ -321,7 +321,7 @@ if ($match_data[0]['match_type'] == 'test')
                                 <!-- Nav tabs -->
                                 <ul class="nav nav-tabs nav-justified">
                                         <li class="active">
-                                                @if($first_inning_editable!=0)
+                                                @if(empty($score_status_array['toss_won_by']))
                                                 <span id="edit_first_innings" onclick="SJ.SCORECARD.firstInningsModal();">Change</span>
                                                 @endif
                                                 <a href="#first_innings" data-toggle="tab" aria-expanded="true">Ist Innings</a>

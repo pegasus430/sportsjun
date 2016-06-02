@@ -105,6 +105,7 @@ if (typeof SJ.SCORECARD === 'undefined')
                                 {
                                         $('#tossModal').modal('hide');
                                 }
+                                $('#save_first_inning').trigger('click');
                         },
                         done2ndInningModal: function() {
                                 var bat2ndInningTeam = parseInt($('#bat2ndInningBatting input[type=radio]:checked').attr('id'));
