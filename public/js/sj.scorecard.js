@@ -49,8 +49,6 @@ if (typeof SJ.SCORECARD === 'undefined')
                                 }
                                 if ($('#endMatchModal').length > 0)
                                 {
-                                        $('#match_result').val('win').change();
-                                        $('.winner_team_id').val($('#winner_id').val());
                                         $(document).on('ifChecked','#matchResultRadio input', function(){
                                                 if (this.value == 'tie')
                                                 {
@@ -107,6 +105,7 @@ if (typeof SJ.SCORECARD === 'undefined')
                                 {
                                         $('#tossModal').modal('hide');
                                 }
+                                $('#save_first_inning').trigger('click');
                         },
                         done2ndInningModal: function() {
                                 var bat2ndInningTeam = parseInt($('#bat2ndInningBatting input[type=radio]:checked').attr('id'));
@@ -181,7 +180,9 @@ if (typeof SJ.SCORECARD === 'undefined')
                         {
                                 if ($('#endMatchModal').length > 0)
                                 {
-                                        $('#endMatchModal').modal('show');
+                                    $('#match_result').val('win').change();
+                                    $('.winner_team_id').val($('#winner_id').val());
+                                    $('#endMatchModal').modal('show');
                                 }
                         },
                         endMatch : function()
