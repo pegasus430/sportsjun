@@ -567,7 +567,7 @@
 <!--********* MATCH REPORT End **************!-->
 <div class="clearfix"></div>
 
-@if($isValidUser)
+@if($isValidUser && !($match_data[0]['winner_id']>0 || $match_data[0]['is_tied']>0))
 @include('scorecards.cricket_end_match')
 @endif
 
