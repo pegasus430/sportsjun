@@ -14,7 +14,7 @@ $(document).ready(function(){
 </head>
 <body>
     <!-- Button HTML (to Trigger Modal) -->
-    <input type="button" class="button btn-tertiary launch-modaal" value="{{ trans('message.scorecard.fields.addplayer') }}">
+    <input id="addPlayerBtn" type="button" class="button btn-tertiary launch-modaal" value="{{ trans('message.scorecard.fields.addplayer') }}">
     <p class="help-block" id="Response"></p> 
     <!-- Modal HTML -->
     <div id="myModaal" class="modal fade">
