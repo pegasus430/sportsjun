@@ -19,6 +19,8 @@ if (typeof SJ.SCORECARD === 'undefined')
         (function (z, $) {
                 var g = SJ.SCORECARD;
                 var o = {
+                        matchResult: ($('#match_result').val()  !== "undefined") ? $('#match_result').val() : "",
+                        matchWinner: ($('#winner_id').val()     !== "undefined") ? $('#winner_id').val()    : "",
                         init: function () {
                                 if ($("#match_report").length > 0)
                                 {
@@ -50,22 +52,12 @@ if (typeof SJ.SCORECARD === 'undefined')
                                 if ($('#endMatchModal').length > 0)
                                 {
                                         $(document).on('ifChecked','#matchResultRadio input', function(){
-                                                if (this.value == 'tie')
-                                                {
-                                                        $('#matchWinnerRadio').slideUp();
-                                                        $('.winner_team_id').val('');
-                                                }
-                                                else
-                                                {
-                                                        $('#matchWinnerRadio').slideDown();
-                                                        $('.winner_team_id').val($('#winner_id').val());
-                                                }
-                                                $('#match_result').val(this.value).change();
+                                                SJ.SCORECARD.matchResult = this.value;
+                                                (this.value == 'tie') ? $('#matchWinnerRadio').slideUp() : $('#matchWinnerRadio').slideDown();
                                         });
                                         
                                         $(document).on('ifChecked','#matchWinnerRadio input', function(){
-                                                $('#winner_id').val(this.value).change();
-                                                $('.winner_team_id').val(this.value);
+                                                SJ.SCORECARD.matchWinner = this.value;
                                         });
                                 }
                         },
@@ -180,13 +172,26 @@ if (typeof SJ.SCORECARD === 'undefined')
                         {
                                 if ($('#endMatchModal').length > 0)
                                 {
-                                    $('#match_result').val('win').change();
-                                    $('.winner_team_id').val($('#winner_id').val());
-                                    $('#endMatchModal').modal('show');
+                                        if (SJ.SCORECARD.matchResult === "tie")
+                                        {
+                                                $("#matchWinnerRadio").hide();
+                                        }
+                                        $('#endMatchModal').modal('show');
                                 }
                         },
                         endMatch : function()
                         {
+                                $('#match_result').val(SJ.SCORECARD.matchResult).change();
+                                if (SJ.SCORECARD.matchResult === "tie")
+                                {
+                                        $('#winner_id').val("").change();
+                                        $('.winner_team_id').val('');
+                                }
+                                else
+                                {
+                                        $('#winner_id').val(SJ.SCORECARD.matchWinner).change();
+                                        $('.winner_team_id').val(SJ.SCORECARD.matchWinner);
+                                }
                                 $('#save_first_inning').trigger('click');
                         }
                 };
