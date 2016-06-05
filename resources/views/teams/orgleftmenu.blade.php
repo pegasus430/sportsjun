@@ -5,9 +5,11 @@
 						{!! Helper::Images(!empty($photo['url'])?$photo['url']:'','organization',array('height'=>100,'width'=>100) )!!}
 						<h1>{{  !empty($orgInfo[0]['name'])?$orgInfo[0]['name']:""}}</h1>
 					
+                                        @if(isset($userId) && ($userId == $orgInfo[0]['user_id']))
 					<a href="{{url('/organization/'.(!empty($id)?$id:0).'/edit')}}" class="tvp_edit">
 					  <span class="fa fa-pencil" title="Edit"></span>
 					</a>
+                                        @endif
 		        <div class="locations">
 				  <i class="fa fa-map-marker"></i>&nbsp;<span style="word-wrap: break-word;">{{ !empty($orgInfo[0]['location'])?$orgInfo[0]['location']:'Location' }}</span>
 				 </div>
