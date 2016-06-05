@@ -23,7 +23,7 @@
                             <a href="{{ url('/team/members').'/'.(!empty($t->id)?$t->id:0) }}">{{ !empty($t->teamname)?$t->teamname:'' }}</a>
                             <p class="t_by">By <a target="_blank" href="{{ url('/editsportprofile/'.(!empty($t->team_owner_id)?$t->team_owner_id:0))}}">{{  !empty($t->name)?$t->name:'' }}</a></p>
                         </div>
-                        @if(isset($userId) && ($userId == Auth::user()->id))
+                        @if(isset($userId) && ($userId == $t->team_owner_id))
                         <div class="pull-right ed-btn">
                             <a href="{{ url('/team/edit/'.(!empty($t->id)?$t->id:0))}}" class="edit"><i class="fa fa-pencil"></i></a>
                             
