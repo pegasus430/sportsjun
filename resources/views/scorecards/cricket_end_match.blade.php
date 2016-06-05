@@ -29,26 +29,26 @@
                                                                 <span class="head">MATCH RESULT</span>
                                                                 <div class="radio-box">
                                                                         <div class="radio">
-                                                                                <input name="matchResultRadio" type="radio" value="win" id="matchResultRadioWin" checked="">
+                                                                                <input name="matchResultRadio" type="radio" value="win" id="matchResultRadioWin" <?php if ($match_data[0]['is_tied'] == 0 && $match_data[0]['winner_id'] > 0 || !($match_data[0]['is_tied'] > 0)) { echo "checked=\"\""; } ?>>
                                                                                 <label for="matchResultRadioWin">WIN</label>
                                                                         </div>
                                                                         <div class="radio">
-                                                                                <input name="matchResultRadio" type="radio" value="tie" id="matchResultRadioTie">
+                                                                                <input name="matchResultRadio" type="radio" value="tie" id="matchResultRadioTie" <?php if ($match_data[0]['is_tied'] > 0) { echo "checked=\"\""; } ?>>
                                                                                 <label for="matchResultRadioTie">TIE</label>
                                                                         </div>
                                                                 </div>
                                                         </div>
                                                 </div>
-                                                <div id="matchWinnerRadio" class="form-group">
+                                                <div id="matchWinnerRadio" class="form-group" <?php if ($match_data[0]['is_tied'] > 0) { echo "style=\"display:none;\""; } ?>>
                                                         <div class="toss-detail">
                                                                 <span class="head">WINNER</span>
                                                                 <div class="radio-box">
                                                                         <div class="radio">
-                                                                                <input name="matchWinnerRadio" type="radio" value="{{ $match_data[0]['a_id'] }}" id="{{ $match_data[0]['a_id'] }}" checked="">
+                                                                                <input name="matchWinnerRadio" type="radio" value="{{ $match_data[0]['a_id'] }}" id="{{ $match_data[0]['a_id'] }}" <?php if ((isset($match_data[0]['winner_id']) && $match_data[0]['winner_id'] == $match_data[0]['a_id']) || empty($match_data[0]['winner_id']) ) { echo "checked=\"\""; } ?>>
                                                                                 <label for="{{ $match_data[0]['a_id'] }}">{{ $team_a_name }}</label>
                                                                         </div>
                                                                         <div class="radio">
-                                                                                <input name="matchWinnerRadio" type="radio" value="{{ $match_data[0]['b_id'] }}" id="{{ $match_data[0]['b_id'] }}">
+                                                                                <input name="matchWinnerRadio" type="radio" value="{{ $match_data[0]['b_id'] }}" id="{{ $match_data[0]['b_id'] }}" <?php if (isset($match_data[0]['winner_id']) && $match_data[0]['winner_id'] == $match_data[0]['b_id']) { echo "checked=\"\""; } ?>>
                                                                                 <label for="{{ $match_data[0]['b_id'] }}">{{ $team_b_name }}</label>
                                                                         </div>
                                                                 </div>
@@ -60,13 +60,13 @@
                                                                 <select name="player_of_the_match" class="form-control" id="playerOfTheMatch">
                                                                         @if(!empty($team_a) && count($team_a)>0)
                                                                                 @foreach($team_a as $a_key => $a_val)
-                                                                                <option value="{{$a_key}}">{{ $a_val }}</option>
+                                                                                <option value="{{$a_key}}" <?php if (!empty($match_data[0]['player_of_the_match']) && $a_key == $match_data[0]['player_of_the_match']) { echo "selected"; } ?>>{{ $a_val }}</option>
                                                                                 @endforeach
                                                                         @endif
                                                                         @if(!empty($team_b) && count($team_b)>0)
                                                                                 @foreach($team_b as $b_key => $b_val)
                                                                                 <?php if (empty($b_key)) continue; ?>
-                                                                                <option value="{{$b_key}}">{{ $b_val }}</option>
+                                                                                <option value="{{$b_key}}" <?php if (!empty($match_data[0]['player_of_the_match']) && $b_key == $match_data[0]['player_of_the_match']) { echo "selected"; } ?>>{{ $b_val }}</option>
                                                                                 @endforeach
                                                                         @endif
                                                                 </select>

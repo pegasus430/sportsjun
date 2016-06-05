@@ -293,7 +293,28 @@ if ($match_data[0]['match_type'] == 'test')
                                                 </div>
                                         </div>
                                         @endif
-
+                                        
+                                        @if($match_data[0]['winner_id']>0)
+                                        <div class="form-group">
+                                                <label class="win_head">Winner</label>
+                                                <h3 class="win_team">{{ ($match_data[0]['a_id']==$match_data[0]['winner_id'])?$team_a_name:$team_b_name }}</h3>
+                                        </div>
+                                        @else
+                                                @if($match_data[0]['is_tied']>0)
+                                                <div class="form-group">
+                                                        <label>Match Result</label>
+                                                        <h3 class="win_team">{{ 'Tie' }}</h3>
+                                                </div>
+                                                @else
+                                                <div class="form-group">
+                                                        <label>Winner is not updated.</label>
+                                                </div>
+                                                @endif
+                                        @endif
+                                        
+                                        @if($match_data[0]['player_of_the_match']>0)
+                                        <div id="playerOfTheMatchNote">PLAYER OF THE MATCH - {{(isset($team_a[$match_data[0]['player_of_the_match']]))?$team_a[$match_data[0]['player_of_the_match']]:$team_b[$match_data[0]['player_of_the_match']]}}</div>
+                                        @endif
 
                                         <div class="form-group" id="bat1stInning" style="display:none;">
                                                 <label for="team">Ist Ing Batting:</label>
@@ -340,7 +361,7 @@ if ($match_data[0]['match_type'] == 'test')
 
                                                 <!-- /.panel-heading -->
                                                 @include('scorecards.cricketinnings')
-                                                @if($isValidUser && $isForApprovalExist)
+                                                @if($isValidUser && $isForApprovalExist && ($match_data[0]['winner_id']>0 || $match_data[0]['is_tied']>0))
 
                                                 <li><button style="text-align:center;" type="button" onclick="forApproval();" class="btn btn-green">Send Score for Approval</button></li>
 
