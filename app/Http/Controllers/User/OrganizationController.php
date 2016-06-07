@@ -34,10 +34,11 @@ class OrganizationController extends Controller {
      */
     public function create() {
         $type = config('constants.ENUM.ORGANIZATION.ORGANIZATION_TYPE');  
-        $states = State::where('country_id', config('constants.COUNTRY_INDIA'))->orderBy('state_name')->lists('state_name', 'id')->all();
+        $countries = Country::orderBy('country_name')->lists('country_name', 'id')->all();
         $teams = Team::where('team_owner_id', Auth::user()->id)->orderBy('name')->lists('name', 'id')->all();
+        $states = [];
 		$cities=[];
-        return view('organization.create', array('states' => ['' => 'Select State'] + $states, 'cities' => ['' => 'Select City'] + $cities, 'type' => ['' => 'Select Organization Type'] +$type, 'id' => '', 'roletype' => 'user', 'teams' =>['' => 'Select Team'] + $teams, 'selectedTeams' => ''));
+        return view('organization.create', array('countries' =>  [''=>'Select Country']+$countries, 'states' => ['' => 'Select State'] + $states, 'cities' => ['' => 'Select City'] + $cities, 'type' => ['' => 'Select Organization Type'] +$type, 'id' => '', 'roletype' => 'user', 'teams' =>['' => 'Select Team'] + $teams, 'selectedTeams' => ''));
     }
 
     /**
@@ -49,8 +50,7 @@ class OrganizationController extends Controller {
     public function store(Requests\CreateOrganizatonRequest $request) {
 		 	
         $request['user_id'] = Auth::user()->id;
-        $request['country_id'] = config('constants.COUNTRY_INDIA');
-        $request['country'] = Country::where('id', config('constants.COUNTRY_INDIA'))->first()->country_name;
+        $request['country'] = !empty($request['country_id']) ? Country::where('id', $request['country_id'])->first()->country_name : 'null';
         $request['state'] = !empty($request['state_id']) ? State::where('id', $request['state_id'])->first()->state_name : 'null';
         $request['city'] = !empty($request['city_id']) ? City::where('id', $request['city_id'])->first()->city_name : 'null';
 		$location=Helper::address($request['address'],$request['city'],$request['state'],$request['country']);
@@ -105,7 +105,8 @@ class OrganizationController extends Controller {
         $request['user_id'] = Auth::user()->id;
         $organization = Organization::findOrFail($id);
         $type = config('constants.ENUM.ORGANIZATION.ORGANIZATION_TYPE');  
-        $states = State::where('country_id', config('constants.COUNTRY_INDIA'))->orderBy('state_name')->lists('state_name', 'id')->all();
+        $countries = Country::orderBy('country_name')->lists('country_name', 'id')->all();
+        $states = State::where('country_id', $organization->country_id)->orderBy('state_name')->lists('state_name', 'id')->all();
         $cities = City::where('state_id', $organization->state_id)->orderBy('city_name')->lists('city_name', 'id')->all();
         $teams = Team::where('team_owner_id', Auth::user()->id)->orderBy('name')->lists('name', 'id')->all();
         $selectedTeams = Team::where('team_owner_id', Auth::user()->id)->where('organization_id', $id)->get(['id']);
@@ -122,7 +123,7 @@ class OrganizationController extends Controller {
 			$selectedTeams = $selectedTeamsIds[1];
 		}
 
-        return view('organization.edit', compact('organization'))->with(array('id' => $id,'states' => ['' => 'Select State'] + $states, 'cities' => ['' => 'Select City'] + $cities, 'type' => ['' => 'Select Organization Type'] + $type, 'roletype' => 'user', 'organization' => $organization, 'teams' =>['' => 'Select Teams'] + $teams, 'selectedTeams' =>  $selectedTeams));
+        return view('organization.edit', compact('organization'))->with(array('id' => $id,'countries' => ['' => 'Select Country'] + $countries,'states' => ['' => 'Select State'] + $states, 'cities' => ['' => 'Select City'] + $cities, 'type' => ['' => 'Select Organization Type'] + $type, 'roletype' => 'user', 'organization' => $organization, 'teams' =>['' => 'Select Teams'] + $teams, 'selectedTeams' =>  $selectedTeams));
     }
 
     /**
@@ -135,9 +136,8 @@ class OrganizationController extends Controller {
     public function update(Requests\CreateOrganizatonRequest $request, $id) {
         $request['city'] = !empty($request['city_id']) ? City::where('id', $request['city_id'])->first()->city_name : 'null';
         $request['state'] = !empty($request['state_id']) ? State::where('id', $request['state_id'])->first()->state_name : 'null';
-        $request['country_id'] = config('constants.COUNTRY_INDIA');
-        $request['country'] = Country::where('id', config('constants.COUNTRY_INDIA'))->first()->country_name;
-		$location=Helper::address($request['address'],$request['city'],$request['state'],$request['country']);
+        $request['country'] = !empty($request['country_id']) ? Country::where('id', $request['country_id'])->first()->country_name : 'null';
+        $location=Helper::address($request['address'],$request['city'],$request['state'],$request['country']);
 	    $request['location']=trim($location,",");
         Organization::whereId($id)->update($request->except(['_method', '_token', 'files', 'filelist_photos', 'team','filelist_gallery','jfiler-items-exclude-files-0']));
         if (count($request->team)) {

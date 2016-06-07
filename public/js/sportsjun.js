@@ -980,6 +980,38 @@ function displayStates(a) {
         }
     });
 }
+
+function displayCountries(a) {
+    if (!a) {
+        $("#country_id").html("<option value=''>Select Country</option>");
+        return false;
+    }
+    $.ajax({
+        url: base_url + "/getstates",
+        type: "GET",
+        data: {
+            id: a
+        },
+        dataType: "json",
+        beforeSend: function() {
+            $.blockUI({
+                width: "50px",
+                message: $("#spinner").html()
+            });
+        },
+        success: function(a) {
+            $.unblockUI();
+            var b = "<option value=''>Select State</option>";
+            $.each(a, function(a, c) {
+                b += "<option value='" + c["id"] + "'>" + c["state_name"] + "</option>";
+            });
+            $(".states").each(function() {
+                $(this).html(b);
+            });
+        }
+    });
+}
+
 function subTournamentEdit(id)
 {
 	 $.ajax({
@@ -1177,6 +1209,7 @@ function autofillsubtournamentdetails(tournamentDetails) {
         $(".modal-body #player_type").prop("disabled", true);
         $(".modal-body #match_type").prop("disabled", true);
         displayStates(tournamentDetails['state_id']);
+        displayCountries(tournamentDetails['country_id']);
 
         if(scheduletype === "team")
         {

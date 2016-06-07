@@ -1459,6 +1459,12 @@ class ScheduleController extends Controller {
         // print_r($states->toArray());
         return Response::json(['states'=>$states]);
     }
+
+    public function getcountries()
+    {
+        $countries = Country::get();
+        return Response::json(['countries'=>$countries]);
+    }
     //function to get managing teams
     public function getmymanagingteams()
     {

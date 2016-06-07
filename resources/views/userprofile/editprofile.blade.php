@@ -180,8 +180,11 @@ if(empty($userDetails['email'])) {
 </div>
 <script type="text/javascript">
 	$(function () {
-		@if (!empty(old('state_id')))
-		displayStates({{old('state_id')}});
+        @if (!empty(old('country_id')))
+		displayCountries({{old('country_id')}});
+        @endif
+        @if (!empty(old('state_id')))
+        displayStates({{old('state_id')}});
 		@endif
                 
                 $("#dob_date_format").datepicker({ format: 'dd/mm/yyyy' ,startDate: '-120y',defaultDate:new Date(2000, 0, 1),autoclose: true,endDate: '+0d'});

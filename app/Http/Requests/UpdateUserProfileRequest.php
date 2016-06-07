@@ -38,6 +38,7 @@ class UpdateUserProfileRequest extends Request {
             'firstname' => 'required|max:50|'.config('constants.VALIDATION.CHARACTERSANDSPACE'),
 			'lastname' => 'required|max:50|'.config('constants.VALIDATION.CHARACTERSANDSPACE'),
 			//'role' => 'required',
+			'country_id' => 'required',
 			'state_id' => 'required',
 			'city_id' => 'required',
 			 'zip' => ['required', config('constants.VALIDATION.ZIPCODE')],
