@@ -162,7 +162,7 @@
         </div>            
         </div>
 
-            @include ('common.address',['mandatory'=>'','states'=>array(),'cities'=>array(),])
+            @include ('common.address',['mandatory'=>'','countries'=>array(),'states'=>array(),'cities'=>array(),])
 
           </div>
         </div>
@@ -191,16 +191,18 @@
 
       //for getting states
       @if(isset(Auth::user()->id) && Auth::user()->profile_updated!=0)
-        $.get(base_url+"/schedule/getstates", function(data, status){
+        $.get(base_url+"/schedule/getcountries", function(data, status){
+          country_html_str = "<option value=''>Select Country</option>";
           state_html_str = "<option value=''>Select State</option>";
           city_html_str = "<option value=''>Select City</option>";
           // console.log(data);
-          if(status == 'success' && data.states.length > 0)
+          if(status == 'success' && data.countries.length > 0)
           {
-            $.each(data.states, function( index, value ){
-              state_html_str += "<option value='"+value.id+"'>"+value.state_name+"</option>";
+            $.each(data.countries, function( index, value ){
+              country_html_str += "<option value='"+value.id+"'>"+value.country_name+"</option>";
             });
           }
+          $("#country_id").html(country_html_str);
           $("#state_id").html(state_html_str);
           $("#city_id").html(city_html_str);
         });

@@ -176,9 +176,12 @@ if(isset($is_from_admin) && $is_from_admin>0)
 <script type="text/javascript">
     $(function () {
     $("#dob").datepicker({startDate: '-120y'});
-            @if (!empty(old('state_id')))
-            displayStates({{old('state_id')}});
+            @if (!empty(old('country_id')))
+            displayCountries({{old('country_id')}});
             @endif
+         @if (!empty(old('state_id')))
+            displayStates({{old('state_id')}});
+        @endif
 
     });
 

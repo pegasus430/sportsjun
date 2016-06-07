@@ -720,10 +720,11 @@ class TournamentsController extends Controller
 			}
 				
 			
-	       $states = State::where('country_id', config('constants.COUNTRY_INDIA'))->orderBy('state_name')->lists('state_name', 'id')->all();
+	       $countries = Country::orderBy('country_name')->lists('country_name', 'id')->all();
+	       $states = State::where('country_id', $tournament->country_id)->orderBy('state_name')->lists('state_name', 'id')->all();
 	       $cities = City::where('state_id',  $tournament->state_id)->orderBy('city_name')->lists('city_name', 'id')->all();
 		   
-	       return view('tournaments.tournamentsedit',compact('tournament'))->with(array('sports'=> [''=>'Select Sport']+$sports,'id'=>$id,'states' =>  [''=>'Select State']+$states,'cities' =>  [''=>'Select City']+$cities,'enum'=>['' => 'Tournament Type'] + $enum,'tournament'=>$tournament,'type'=>'create','roletype'=>'user','schedule_type_enum'=>$schedule_type_enum,'subTournamentArray'=>$sub_tour_details,'parent_id'=>$id,'tournament_name'=>$tournament['name'],'logo'=>$tournament['logo'],'parent_manager_name'=>$manager_name,'player_types'=>['' => 'Select Player Type'] +$player_types,'match_types'=>['' => 'Select Match Type'] +$match_types,'isOwner'=>$isOwner,'loginUserId'=> $loginUserId));
+	       return view('tournaments.tournamentsedit',compact('tournament'))->with(array('sports'=> [''=>'Select Sport']+$sports,'id'=>$id,'countries' =>  [''=>'Select Country']+$countries,'states' =>  [''=>'Select State']+$states,'cities' =>  [''=>'Select City']+$cities,'enum'=>['' => 'Tournament Type'] + $enum,'tournament'=>$tournament,'type'=>'create','roletype'=>'user','schedule_type_enum'=>$schedule_type_enum,'subTournamentArray'=>$sub_tour_details,'parent_id'=>$id,'tournament_name'=>$tournament['name'],'logo'=>$tournament['logo'],'parent_manager_name'=>$manager_name,'player_types'=>['' => 'Select Player Type'] +$player_types,'match_types'=>['' => 'Select Match Type'] +$match_types,'isOwner'=>$isOwner,'loginUserId'=> $loginUserId));
     }
 	public function subTournamentEdit()
 	{
@@ -782,11 +783,12 @@ class TournamentsController extends Controller
             foreach (config('constants.ENUM.SCHEDULE.PLAYER_TYPE') as $key => $val) {
                 $player_types[$key] = $val;
             }
-			
-		   
-	       $states = State::where('country_id', config('constants.COUNTRY_INDIA'))->orderBy('state_name')->lists('state_name', 'id')->all();
+
+
+		$countries = Country::orderBy('country_name')->lists('country_name', 'id')->all();
+		$states = State::where('country_id', $tournament->country_id)->orderBy('state_name')->lists('state_name', 'id')->all();
 	       $cities = City::where('state_id',  $tournament->state_id)->orderBy('city_name')->lists('city_name', 'id')->all();
-	       return view('tournaments.edit',compact('tournament'))->with(array('sports'=> [''=>'Select Sport']+$sports,'id'=>$id,'states' =>  [''=>'Select State']+$states,'cities' =>  [''=>'Select City']+$cities,'enum'=>['' => 'Tournament Type'] + $enum,'tournament'=>$tournament,'type'=>'edit','roletype'=>'user','schedule_type_enum'=>$schedule_type_enum,'parent_id'=>$id,'tournament_name'=>$tournament['name'],'logo'=>$tournament['logo'],'manager_name'=>$manager_name,'matchTypes'=>$matchTypes,'playerTypes'=>$playerTypes,'match_types'=>['' => 'Select Match Type'] +$match_types,'player_types'=>['' => 'Select Player Type'] +$player_types,'matchScheduleCount'=>$matchScheduleCount,'tournamentGroupCount'=>$tournamentGroupCount));
+	       return view('tournaments.edit',compact('tournament'))->with(array('sports'=> [''=>'Select Sport']+$sports,'id'=>$id,'countries' =>  [''=>'Select Country']+$countries,'states' =>  [''=>'Select State']+$states,'cities' =>  [''=>'Select City']+$cities,'enum'=>['' => 'Tournament Type'] + $enum,'tournament'=>$tournament,'type'=>'edit','roletype'=>'user','schedule_type_enum'=>$schedule_type_enum,'parent_id'=>$id,'tournament_name'=>$tournament['name'],'logo'=>$tournament['logo'],'manager_name'=>$manager_name,'matchTypes'=>$matchTypes,'playerTypes'=>$playerTypes,'match_types'=>['' => 'Select Match Type'] +$match_types,'player_types'=>['' => 'Select Player Type'] +$player_types,'matchScheduleCount'=>$matchScheduleCount,'tournamentGroupCount'=>$tournamentGroupCount));
 	}
 	//function to display tournament groups
 	public function groups($tournament_id,$type='') {
