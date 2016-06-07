@@ -298,8 +298,11 @@ Route::post('tempphoto/store', 'TempphotoController@store1');
 //	});
 	Route::get('schedule/getstates', [
     'as' => 'schedule/getstates', 'uses' => 'User\ScheduleController@getstates'
-	]);	
-	Route::get('facilities', [
+	]);
+	Route::get('schedule/getcountries', [
+		'as' => 'schedule/getcountries', 'uses' => 'User\ScheduleController@getcountries'
+	]);
+Route::get('facilities', [
     'as' => 'facilities', 'uses' => 'User\ScheduleController@getfacilities'
 	]);		
 	//to get my team details
@@ -476,6 +479,10 @@ Route::resource('user', 'User\UserController');
 
 
 //Others
+Route::get('getstates', [
+	'as' => 'getstates', 'uses' => 'User\UserController@getStates'
+]);
+
 Route::get('getcities', [
     'as' => 'getcities', 'uses' => 'User\UserController@getCities'
 ]);

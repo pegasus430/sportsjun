@@ -385,6 +385,7 @@ return [
 		'fields' => [
 		'address' =>'Address',
 		'state' =>'State',
+		'country' =>'Country',
 		'city' =>'City',
 		'zip' =>'Zip code',
 		'image' => 'Images',

@@ -2,27 +2,26 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Requests;
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
-use App\User;
-use App\Model\Photo;
-use App\Model\Country;
-use App\Model\State;
-use App\Model\UserStatistic;
+use App\Http\Requests;
 use App\Model\City;
+use App\Model\Country;
+use App\Model\Photo;
+use App\Model\State;
 use App\Model\Team;
 use App\Model\UserProvider;
-use Request;
-use Session;
-use Hash;
+use App\Model\UserStatistic;
+use App\User;
 use Auth;
-use Socialite;
-use Carbon\Carbon;
-use Response;
 use DB;
-use App\Helpers\Helper;
+use Hash;
 use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Support\Facades\Validator;
+use Request;
+use Response;
+use Session;
+use Socialite;
 
 class UserController extends Controller {
 
@@ -77,7 +76,16 @@ class UserController extends Controller {
         $enum = config('constants.ENUM.USERS.ROLES'); 
         unset($enum['superadmin']);
         if (!empty($userDetails)) {
-            $states = State::where('country_id', config('constants.COUNTRY_INDIA'))->orderBy('state_name')->lists('state_name', 'id')->all();
+            $countries = Country::orderBy('country_name')
+                                ->lists('country_name', 'id')
+                                ->all();
+            $states = [];
+            if ($userDetails->country_id) {
+                $states = State::where('country_id', $userDetails->country_id)
+                               ->orderBy('state_name')
+                               ->lists('state_name', 'id')
+                               ->all();
+            }
             $cities = [];
             if ($userDetails->state_id) {
                 $cities = City::where('state_id', $userDetails->state_id)->orderBy('city_name')->lists('city_name', 'id')->all();
@@ -95,12 +103,14 @@ class UserController extends Controller {
               
             }
             //echo $userDetails->dob;dd($userDetails->dob);
-            return view('userprofile.editprofile')->with('userDetails',$userDetails->toArray())
-                            ->with('states', ['' => 'Select State'] + $states)
-                            ->with('cities', ['' => 'Select City'] + $cities)
-                            ->with('enum',['' => 'Select Role'] + $enum)
-                            ->with('edit_user_id', Auth::user()->id)
-							->with( 'userDetails', $userDetails  );
+            return view('userprofile.editprofile')
+                ->with('userDetails', $userDetails->toArray())
+                ->with('countries', $countries)
+                ->with('states', ['' => 'Select State'] + $states)
+                ->with('cities', ['' => 'Select City'] + $cities)
+                ->with('enum', ['' => 'Select Role'] + $enum)
+                ->with('edit_user_id', Auth::user()->id)
+                ->with('userDetails', $userDetails);
         }
     }
 
@@ -181,8 +191,7 @@ class UserController extends Controller {
       }
         $request['city'] = !empty($request['city_id']) ? City::where('id', $request['city_id'])->first()->city_name : 'null';
         $request['state'] = !empty($request['state_id']) ? State::where('id', $request['state_id'])->first()->state_name : 'null';
-        $request['country_id'] = config('constants.COUNTRY_INDIA');
-        $request['country'] = Country::where('id', config('constants.COUNTRY_INDIA'))->first()->country_name;
+        $request['country'] = !empty($request['country_id']) ? Country::where('id', $request['country_id'])->first()->country_name : 'null';
         $location=Helper::address($request['address'],$request['city'],$request['state'],$request['country']);
 	    $request['location']=trim($location,",");
         $request['profile_updated'] = 1;    
@@ -327,6 +336,15 @@ class UserController extends Controller {
 
         return Response::json(!empty($cities) ? $cities : []);
     }
+
+    public function getStates() {
+        $countryId = Request::get('id');
+        if ($countryId)
+            $states = State::where('country_id', $countryId)->orderBy('state_name')->get(['id', 'state_name'])->toArray();
+
+        return Response::json(!empty($states) ? $states : []);
+    }
+
 	//function to view user profile
 	public function info($id='')
 	{
