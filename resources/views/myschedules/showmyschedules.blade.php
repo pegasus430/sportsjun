@@ -2,9 +2,9 @@
 @section('content')
 @include ('album._leftmenu')
 <script src="{{ asset('/js/fullcalendar.js') }}"></script>
-<script src="{{ asset('/js/jquery.qtip.min.js') }}"></script>   
+<script src="{{ asset('/js/jquery.qtip.min.js') }}"></script>
 <link href="{{ asset('/css/jquery.qtip.min.css') }}" rel="stylesheet">
-<link href="{{ asset('/css/fullcalendar.css') }}" rel="stylesheet">	
+<link href="{{ asset('/css/fullcalendar.css') }}" rel="stylesheet">
 <style type="text/css">
 .alert{display: none;}
 </style>
@@ -15,9 +15,9 @@
                 <form class="row">
                     <div class="col-sm-5 col-xs-12">
                         {!! Form::select('sportsId',$sportArray,$selectedSport,['id' => 'sportsId','class' => 'field selectpicker']) !!}
-                        <span id="submitButtonDiv"> 
+                        <span id="submitButtonDiv">
                         <input type="submit" value="GO" class="btn" />
-                        </span> 
+                        </span>
                     </div>
 
                     <div class="col-sm-7 col-xs-12 text-right">
@@ -28,7 +28,7 @@
                             {{ trans('message.schedule.fields.schedulematch') }}
                             </div>
                          @endif
-                    </div>    
+                    </div>
                 </form>
             </div>
 			<div class="clearfix"></div>
@@ -151,7 +151,7 @@
 //                fullCalendar();
                 listView('normal');
                 });
-            </script>  
+            </script>
             <div id="calendar"></div>
         </div>
         <div class="col-sm-3 col-xs-12" id="sidebar-right">
@@ -170,10 +170,10 @@ $("#submitButtonDiv").click(function(){
     if($("#sportsId").val() != ''){
 
         suggestedWidget("teams", '{{ Auth::user()->id }}', $("#sportsId").val(), "player_to_team",'');
-        suggestedWidget("tournaments", '{{ Auth::user()->id }}', $("#sportsId").val(), ($("#sportsId").val() == 1 || $("#sportsId").val() == 4)?"team_to_tournament":"player_to_tournament",''); 
+        suggestedWidget("tournaments", '{{ Auth::user()->id }}', $("#sportsId").val(), ($("#sportsId").val() == 1 || $("#sportsId").val() == 4)?"team_to_tournament":"player_to_tournament",'');
     }else{
         suggestedWidget("teams", '{{ Auth::user()->id }}', '1', "player_to_team",'');
-        suggestedWidget("tournaments", '{{ Auth::user()->id }}', '1', "team_to_tournament",'');        
+        suggestedWidget("tournaments", '{{ Auth::user()->id }}', '1', "team_to_tournament",'');
     }
 });
 </script>

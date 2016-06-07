@@ -133,7 +133,16 @@ class MarketplaceController extends Controller
 		$userDetails = User::where('id', Auth::user()->id)->first();
 		if(!empty($userDetails))
 		{
-		    $states = State::where('country_id', config('constants.COUNTRY_INDIA'))->orderBy('state_name')->lists('state_name', 'id')->all();
+            $countries = Country::orderBy('country_name')
+                                ->lists('country_name', 'id')
+                                ->all();
+            $states = [];
+            if ($userDetails->country_id) {
+                $states = State::where('country_id', $userDetails->country_id)
+                               ->orderBy('state_name')
+                               ->lists('state_name', 'id')
+                               ->all();
+            }
             $cities = [];
             if ($userDetails->state_id) {
                 $cities = City::where('state_id', $userDetails->state_id)->orderBy('city_name')->lists('city_name', 'id')->all();
@@ -141,13 +150,14 @@ class MarketplaceController extends Controller
 		}
 		else
 		{
-		    $states = State::where('country_id', config('constants.COUNTRY_INDIA'))->orderBy('state_name')->lists('state_name', 'id')->all();
+            $countries = Country::orderBy('country_name')->lists('country_name', 'id')->all();
+            $states = [];
             $cities =[];
 		}
 		$marketplace =new MarketPlace();
         $enum = config('constants.ENUM.MARKETPLACE.ITEMTYPE');
         Helper::setMenuToSelect(7,0);
-        return view('marketplace.create')->with(array( 'marketPlaceCategories' => ['' => 'Select Category'] + $marketPlaceCategories,'enum'=> ['' => 'Select Item Type'] +$enum,'states' =>  ['' => 'Select State'] +$states,'cities' =>  ['' => 'Select City'] + $cities));
+        return view('marketplace.create')->with(array( 'marketPlaceCategories' => ['' => 'Select Category'] + $marketPlaceCategories,'enum'=> ['' => 'Select Item Type'] +$enum,'countries' =>  ['' => 'Select Country'] +$countries,'states' =>  ['' => 'Select State'] +$states,'cities' =>  ['' => 'Select City'] + $cities));
     }
 
     /**
@@ -161,8 +171,7 @@ class MarketplaceController extends Controller
     public function store(Requests\CreateMarketPlaceRequest $request)
     {
         //Log::error($request->filelist);
-		$request['country_id'] = config('constants.COUNTRY_INDIA');
-		$request['country'] = Country::where('id', config('constants.COUNTRY_INDIA'))->first()->country_name;
+        $request['country'] = !empty($request['country_id']) ? Country::where('id', $request['country_id'])->first()->country_name : 'null';
         $request['state'] = !empty($request['state_id']) ? State::where('id', $request['state_id'])->first()->state_name : 'null';
 		$request['city'] = !empty($request['city_id']) ? City::where('id', $request['city_id'])->first()->city_name : 'null';
         $request['user_id'] = Auth::user()->id;
@@ -215,11 +224,12 @@ class MarketplaceController extends Controller
         $marketplace = MarketPlace::findOrFail($id);
         $a = $marketplace->photos;
         Helper::setMenuToSelect(7,0);
-	    $states = State::where('country_id', config('constants.COUNTRY_INDIA'))->orderBy('state_name')->lists('state_name', 'id')->all();
+        $countries = Country::orderBy('country_name')->lists('country_name', 'id')->all();
+        $states = State::where('country_id', $marketplace->country_id)->orderBy('state_name')->lists('state_name', 'id')->all();
 	    $cities = City::where('state_id',    $marketplace->state_id)->orderBy('city_name')->lists('city_name', 'id')->all();
 		$location=Helper::address($request['address'],$request['city'],$request['state'],$request['country']);
 	    $request['location']=trim($location,",");
-        return view('marketplace.edit')->with(array('marketPlaceCategories'=>['' => 'Select Category'] + $marketPlaceCategories,'states' =>  ['' => 'Select State'] +$states,'cities' =>  ['' => 'Select City'] + $cities,'enum'=>['' => 'Select Item type']+$enum,'id'=>$id,'marketplace'=>$marketplace));
+        return view('marketplace.edit')->with(array('marketPlaceCategories'=>['' => 'Select Category'] + $marketPlaceCategories,'countries' =>  ['' => 'Select Country'] +$countries,'states' =>  ['' => 'Select State'] +$states,'cities' =>  ['' => 'Select City'] + $cities,'enum'=>['' => 'Select Item type']+$enum,'id'=>$id,'marketplace'=>$marketplace));
     }
 
     /**
@@ -234,8 +244,7 @@ class MarketplaceController extends Controller
 	 //update item
     public function update(Requests\CreateMarketPlaceRequest $request, $id)
     {
-		$request['country_id'] = config('constants.COUNTRY_INDIA');
-		$request['country'] = Country::where('id', config('constants.COUNTRY_INDIA'))->first()->country_name;
+        $request['country'] = !empty($request['country_id']) ? Country::where('id', $request['country_id'])->first()->country_name : 'null';
         $request['state'] = !empty($request['state_id']) ? State::where('id', $request['state_id'])->first()->state_name : 'null';
 		$request['city'] = !empty($request['city_id']) ? City::where('id', $request['city_id'])->first()->city_name : 'null';
 		$location=Helper::address($request['address'],$request['city'],$request['state'],$request['country']);

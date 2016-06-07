@@ -53,7 +53,7 @@ class Authenticate
                 {
                         // dd(Route::getCurrentRoute()->getPath());
                         $allowedRoutesBeforeProfileUpdate = ['user/{user}/edit',
-                                'user/{user}', 'getcities', 'tempphoto/store'];
+                                'user/{user}', 'getcities','getstates', 'tempphoto/store'];
                         
                         if ($this->auth->user()->profile_updated == 0 && !in_array(Route::getCurrentRoute()->getPath(), $allowedRoutesBeforeProfileUpdate))
                         {
