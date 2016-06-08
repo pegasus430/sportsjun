@@ -879,7 +879,8 @@ class TournamentsController extends Controller
             Helper::setMenuToSelect(4, 1);
             $lef_menu_condition = 'display_gallery';
             //getting states
-            $states = State::where('country_id', config('constants.COUNTRY_INDIA'))->orderBy('state_name')->lists('state_name', 'id')->all();
+		$countries = Country::orderBy('country_name')->lists('country_name', 'id')->all();
+		$states = State::where('country_id', config('constants.COUNTRY_INDIA'))->orderBy('state_name')->lists('state_name', 'id')->all();
 
             $match_types = array();
             $player_types = array();
@@ -1113,6 +1114,7 @@ class TournamentsController extends Controller
                             ->with('player_types', ['' => 'Select Player Type'] + $player_types)
                             ->with('requestedTeams', ['' => 'Select Team'] + $requestedTeams)
                             ->with('requestedFinalTeams', ['' => 'Select Team'] + $requestedFinalTeams)
+                            ->with('countries', ['' => 'Select Country'] + $countries)
                             ->with('states', ['' => 'Select State'] + $states)
                             ->with('cities', ['' => 'Select City'] + array())
                             ->with('byeArray', $byeArray)
