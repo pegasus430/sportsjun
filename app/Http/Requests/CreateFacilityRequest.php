@@ -35,7 +35,7 @@ class CreateFacilityRequest extends Request
 			'state_id' => 'required',
 			'city_id' => 'required',
 			 //'zip' => 'required|numeric',
-            'zip' => ['required', config('constants.VALIDATION.ZIPCODE')],
+           'zip' => 'required|alpha_num|max:12',
 			
 		 
 			

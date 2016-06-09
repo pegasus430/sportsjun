@@ -41,7 +41,7 @@ class UpdateUserProfileRequest extends Request {
 			'country_id' => 'required',
 			'state_id' => 'required',
 			'city_id' => 'required',
-			 'zip' => ['required', config('constants.VALIDATION.ZIPCODE')],
+			'zip' => 'required|alpha_num|max:12',
 //            'dob' => 'date',
             'dob' => 'date_format:'.config('constants.DATE_FORMAT.VALIDATION_DATE_FORMAT'),
             'image' => 'mimes:png,gif,jpeg,jpg',
