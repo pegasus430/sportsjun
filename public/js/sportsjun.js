@@ -55,7 +55,8 @@ $('.glyphicon-calendar').parent().siblings('input:text').attr('readonly','readon
 
     if($("input[name=search_city]").length > 0){
     $("input[name=search_city]").autocomplete({
-        source: cities,
+        source: "/search_cities",
+        minLength: 2,
         select: function( event, ui ) {
         $( "input[name=search_city]" ).val( ui.item.label );
           $( "input[name=search_city_id]" ).val( ui.item.key );

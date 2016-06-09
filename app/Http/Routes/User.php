@@ -487,6 +487,10 @@ Route::get('getcities', [
     'as' => 'getcities', 'uses' => 'User\UserController@getCities'
 ]);
 
+Route::get('search_cities', [
+	'as' => 'search_cities', 'uses' => 'User\SearchCitiesController@search'
+]);
+
 
 
 Route::resource('sport', 'User\SportController');

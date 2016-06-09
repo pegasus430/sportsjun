@@ -31,7 +31,7 @@ class CreateTeamRequest extends Request
 			//'organization_id' => 'required',
             'state_id' => 'required',
 			'city_id' => 'required',
-			'zip' => ['required', 'regex:/^([0-9\s\-\+\(\)]{3,10})$/'],
+            'zip' => 'required|alpha_num|max:12',
             'gender'=>'required',
         ];
     }
