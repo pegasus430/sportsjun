@@ -37,7 +37,7 @@ class CreateMarketPlaceRequest extends Request
 			'base_price' => 'numeric',    
             'state_id' => 'required',
 			'city_id' => 'required',
-			 'zip' => ['required', config('constants.VALIDATION.ZIPCODE')],	
+            'zip' => 'required|alpha_num|max:12',
             // 'files[]'=>'required',
            // 'filelist_photos'=>'required',		   
         ];
