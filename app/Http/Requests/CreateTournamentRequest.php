@@ -45,7 +45,7 @@ class CreateTournamentRequest extends Request
 				  'groups_teams'=>'required|numeric|min:2',
 				   'state_id' => 'required',			
 				  'city_id' => 'required',
-				  'zip' => ['required', config('constants.VALIDATION.ZIPCODE')],
+				  'zip' => 'required|alpha_num|max:12',
 				   'address' => 'required',	
 				 // 'status' => 'required',	
 				  'type'=>'required',

@@ -39,8 +39,8 @@ class AddMainSchedulesRequest extends Request {
       'main_venue' => 'required|max:100',			
       'address' => 'max:100',     
       'state_id' => 'required|numeric',     
-      'city_id' => 'required|numeric',    
-      'zip' => ['required', config('constants.VALIDATION.ZIPCODE')],
+      'city_id' => 'required|numeric',
+      'zip' => 'required|alpha_num|max:12',
       'main_player_type' => 'required',
       'main_match_type' => 'required'
         ];
