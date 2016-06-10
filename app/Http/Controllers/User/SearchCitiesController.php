@@ -17,15 +17,11 @@ class SearchCitiesController extends Controller
      */
     public function search(Request $request)
     {
-        $user = Auth::user();
         $term = $request->input('term');
 
-        if (is_null($user->state_id)) {
-            return null;
-        }
-
-        $cities = City::where('state_id', $user->state_id)
-                      ->where('city_name', 'LIKE', "%{$term}%")->take(15)->get();
+        $cities = City::where('city_name', 'LIKE', "%{$term}%")
+                      ->take(15)
+                      ->get();
 
         return response()->json($this->transformCities($cities));
 
