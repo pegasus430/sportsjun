@@ -375,17 +375,8 @@ function checkIscityEmpty()
  {
        $( "#search_city_id" ).val('');
         $( "#search_city" ).val('');
-          return true;
- }else{
-    var found = false;
-    for (index in cities) {
-        if(cities[index].label == name){
-            found = true;
-            continue;              
-        }            
-    }
  }
- if(!found) return false;
+          return true;
 }
 
 function showDetails() {
