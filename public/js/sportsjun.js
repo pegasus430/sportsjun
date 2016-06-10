@@ -59,7 +59,7 @@ $('.glyphicon-calendar').parent().siblings('input:text').attr('readonly','readon
         minLength: 2,
         select: function( event, ui ) {
         $( "input[name=search_city]" ).val( ui.item.label );
-          $( "input[name=search_city_id]" ).val( ui.item.key );
+          $( "input[name=search_city_id]" ).val( ui.item.id );
         return false;
       }
     }).data("ui-autocomplete")._renderItem = function(ul, item) {
