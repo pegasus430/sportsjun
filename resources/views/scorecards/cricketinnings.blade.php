@@ -1658,6 +1658,6 @@ function total_score(idname,classname,team)
 	$('.'+classname).each(function() {
 			score += Number($(this).val());
 		});
-	$('#fst_ing_'+team+'_score').val(extras+parseInt(score));
+    SJ.SCORECARD.adjustScore('first',team,extras,'add',score);
 }
 </script>
