@@ -1744,4 +1744,24 @@ $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids
         DB::setFetchMode(PDO::FETCH_CLASS);
         return $tournaments;
     }
+        
+        /**
+         * sortMultiDimArrayNumeric() - returns the sorted array based on the values of the provided key
+         * 
+         * @param string $key
+         * @return mixed comparison result
+         * 
+         * @author Anoop Naik <anoopnaik2016@gmail.com>
+         */
+        public static function sortMultiDimArrayNumeric($key)
+        {
+                return function ($teamA, $teamB) use ($key) {
+                        if ($teamA[$key] == $teamB[$key])
+                        {
+                                return 0;
+                        }
+                        return ($teamA[$key] < $teamB[$key]) ? 1 : -1;
+                };
+        }
+
 }

@@ -73,6 +73,7 @@
                                     <th>Won</th>
                                     <th>Lost</th>
                                     <th>Points</th>
+                                    <th>Net Run Rate</th>
                                     <th></th>
                                     </tr>
                                     </thead>
@@ -86,12 +87,10 @@
                                     <td>{{ !empty($team['won'])?$team['won']:0 }}</td>
                                     <td>{{ !empty($team['lost'])?$team['lost']:0 }}</td>
                                     <td>{{ !empty($team['points'])?$team['points']:0 }}</td>
+                                    <td>{{ !empty($net_run_rate[$team['team_id']])?$net_run_rate[$team['team_id']]:"--" }}</td>
                                     <td><a href="#" class="btn btn-danger btn-circle btn-sm" onclick="deleteTeam({{$tournament_id}},{{$team['tournament_group_id']}},{{$team['id']}},{{$team['team_id']}});"><i class="fa fa-remove"></i></a></td>
                                     </tr>	
-                                    @endforeach	
-                                    
-                                    
-                                
+                                    @endforeach
                                 @else
                                     <tr id="no_teams_{{$group->id}}"><td colspan="6">{{trans('message.tournament.empty_teams') }}</td></tr>
                                 @endif

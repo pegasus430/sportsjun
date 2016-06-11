@@ -24,18 +24,18 @@
 <!-- end section --> 
 
 <div class="row">
+@if(isset($countries))
 <div class="col-sm-4">
     <div class="section">
         <label class="form_label">{{ trans('message.common.fields.country') }}	<span  class='required'>*</span></label>
         <label class="field select">
-
             {!! Form::select('country_id',$countries, null, array('required','id'=>'country_id','class'=>'form-control','onchange'=>'displayCountries(this.value)','autocomplete'=>'off','placeholder'=>trans('message.common.fields.country'))) !!}
             @if ($errors->has('country_id')) <p class="help-block">{{ $errors->first('country_id') }}</p> @endif
             <i class="arrow double"></i>
         </label>
-        </label>
     </div>
 </div>
+@endif
 
 <div class="col-sm-4">
     <div class="section">
