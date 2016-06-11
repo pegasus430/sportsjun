@@ -26,7 +26,7 @@
                         @if(isset($lis['winnerName']))
                         <div class="m-y-10 red search-results-tournament-winner">Winner: <span>{{ $lis['winnerName'] }}</span></div>
                         @endif
-                        <div class="m-y-10 {{ $lis['statusColor'] }}">{{ Helper::displayDate($lis['start_date']) }} to {{ Helper::displayDate($lis['end_date']) }}</div>
+                        <div class="m-y-10 {{ $lis['statusColor'] }}">{{ Helper::displayDate($lis['start_date'],1) }} to {{ Helper::displayDate($lis['end_date'],1) }}</div>
                         <ul class="t_tags">
                             <li>
                                 Status: <span class="green">{{ $lis['status'] }}</span>
