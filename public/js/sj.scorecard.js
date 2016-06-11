@@ -22,6 +22,27 @@ if (typeof SJ.SCORECARD === 'undefined')
                         matchResult: ($('#match_result').val()  !== "undefined") ? $('#match_result').val() : "",
                         matchWinner: ($('#winner_id').val()     !== "undefined") ? $('#winner_id').val()    : "",
                         init: function () {
+                                
+                                $(".team_a_overs,.team_b_overs,.out_at_over").on("keypress keyup blur",function (e) {
+                                        var overs_bowled = $(this).val();
+                                            if (overs_bowled.indexOf('.') !== -1)
+                                            {
+                                                var oversArr = overs_bowled.split('.');
+                                                var balls = parseInt(oversArr[1]);
+                                                if (balls > 0)
+                                                {
+                                                    overs_bowled = parseInt(oversArr[0]) + (balls / 6);
+                                                    if (overs_bowled.toString().indexOf('.') === -1)
+                                                    {
+                                                        $(this).val(overs_bowled);
+                                                    }
+                                                }
+                                            }
+                                        if (!o.isValidOversInput($(this), e)) 
+                                        {
+                                                e.preventDefault();
+                                        }
+                                });
                                 if ($("#match_report").length > 0)
                                 {
                                         $("#match_report").summernote({
@@ -193,6 +214,20 @@ if (typeof SJ.SCORECARD === 'undefined')
                                         $('.winner_team_id').val(SJ.SCORECARD.matchWinner);
                                 }
                                 $('#save_first_inning').trigger('click');
+                        },
+                        isValidOversInput: function(t,e)
+                        {
+                                var keyCode = e.which;
+                                var overs = t.val();
+                                if (overs.indexOf('.') !== -1)
+                                {
+                                        var oversArr = overs.split('.');
+                                        if (oversArr[1] !== "" || keyCode < 48 || keyCode > 54)
+                                        {
+                                                return false;
+                                        }
+                                }
+                                return true;
                         }
                 };
                 z.SCORECARD = o;

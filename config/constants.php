@@ -194,7 +194,7 @@ return [
                 'VALIDATION_TIME_FORMAT'         => 'g:i A',
                 'DISPLAY_TIME_FORMAT'            => 'm/d/Y',
                 'JQUERY_DISPLAY_DATE_FORMAT'     => 'dd/mm/yyyy',
-                'PHP_DISPLAY_DATE_FORMAT'        => 'd/m/Y',
+                'PHP_DISPLAY_DATE_FORMAT'        => 'jS F, Y',
                 'JQUERY_DISPLAY_DATETIME_FORMAT' => 'dd/mm/yyyy H:i:s',
                 'DB_STORE_TIME_FORMAT'           => 'Y-m-d H:i:s',
                 'DB_STORE_DATE_FORMAT'           => 'Y-m-d',
