@@ -3,7 +3,7 @@
 <div class="col-sm-2">
 <div class="sports_jun_navbrand col-sm-3">
           <button class="sidebar-toggle"><i class="fa fa-bars"></i></button>    
-          <a href="#" class="logo">{!! HTML::image('images/SportsJun_Logo.png')!!}</a>
+          <a href="/" class="logo">{!! HTML::image('images/SportsJun_Logo.png')!!}</a>
           <div class="mobile_notification">
                     <div class="notfication_bubble">{{Helper::getNotificationsCount()}}</div>
                     <div class="notification_menu_right">

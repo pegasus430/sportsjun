@@ -2,36 +2,31 @@
 
 namespace App\Http\Controllers\User;
 
-use Request;
-use Response;
-use App\Http\Requests;
+use App\Helpers\AllRequests;
+use App\Helpers\Helper;
+use App\Helpers\SendMail;
 use App\Http\Controllers\Controller;
-use App\Model\Country;
-use App\Model\State;
+use App\Http\Requests;
 use App\Model\City;
+use App\Model\Country;
+use App\Model\MatchSchedule;
+use App\Model\Notifications;
+use App\Model\Organization;
+use App\Model\Photo;
+use App\Model\Requestsmodel;
 use App\Model\Sport;
+use App\Model\State;
 use App\Model\Team;
 use App\Model\TeamPlayers;
 use App\Model\UserStatistic;
-use App\Model\Facilityprofile;
-use App\Model\Organization;
-use App\Model\Notifications;
-use App\Model\Requestsmodel;
-use App\Model\Tournaments;
-use App\Model\Followers;
 use App\User;
 use Auth;
-use URL;
-use App\Model\Photo;
-use Zofe\Rapyd\RapydServiceProvider;
-use DB;
-use PDO;
 use Carbon\Carbon;
-use App\Helpers\Helper;
-use App\Helpers\SendMail;
-use App\Helpers\AllRequests;
+use DB;
+use Request;
+use Response;
+use URL;
 use View;
-use App\Model\MatchSchedule;
 
 class TeamController extends Controller
 {
@@ -51,11 +46,15 @@ class TeamController extends Controller
     public function create()
     {
 		$sports = Helper::getDevelopedSport(1,1);
-		$enum = config('constants.ENUM.TEAMS.TEAM_LEVEL');    
-		$states = State::where('country_id', config('constants.COUNTRY_INDIA'))->orderBy('state_name')->lists('state_name', 'id')->all();
+		$enum = config('constants.ENUM.TEAMS.TEAM_LEVEL');
+		$countries = Country::orderBy('country_name')
+							->lists('country_name', 'id')
+							->all();
+		$states = [];
                 $organization = Organization::orderBy('name')->where('user_id', Auth::user()->id)->lists('name', 'id')->all();
                 $cities = array();
 		return view('teams.createteam')->with(array('sports'=>['' => 'Select Sport'] + $sports))
+										->with('countries', ['' => 'Select Country'] + $countries)
 										->with('states', ['' => 'Select State'] + $states)
 										->with('cities', ['' => 'Select City'] + $cities)
                                         ->with('organization', ['' => 'Select Organization'] + $organization)
@@ -72,10 +71,9 @@ class TeamController extends Controller
     {
 		//getting team owner id from session logged in user id
         $request['team_owner_id'] = Auth::user()->id;
-        $request['country_id'] = config('constants.COUNTRY_INDIA');
 		$request['city'] = !empty(Request::get('city_id')) ? City::where('id',Request::get('city_id'))->first()->city_name : 'null';
 		$request['state'] = !empty(Request::get('state_id')) ? State::where('id', Request::get('state_id'))->first()->state_name : 'null';
-		$request['country'] = Country::where('id', config('constants.COUNTRY_INDIA'))->first()->country_name;
+		$request['country'] = !empty($request['country_id']) ? Country::where('id', $request['country_id'])->first()->country_name : 'null';
 		$location=Helper::address($request['address'],$request['city'],$request['state'],$request['country']);
 	    $request['location']=trim($location,",");
 		//model call to save the data
@@ -182,20 +180,23 @@ class TeamController extends Controller
     {
 //		$sports = Sport::orderBy('sports_name')->lists('sports_name', 'id')->all();
                 $sports = Helper::getDevelopedSport(1,1);
-		$states = State::where('country_id', config('constants.COUNTRY_INDIA'))->orderBy('state_name')->lists('state_name', 'id')->all();
 		$cities = array();
 		$teams = Team::findOrFail($id);
-		$enum = config('constants.ENUM.TEAMS.TEAM_LEVEL');  
+		$countries = Country::orderBy('country_name')->lists('country_name', 'id')->all();
+		$states = State::where('country_id', $teams->country_id)->orderBy('state_name')->lists('state_name', 'id')->all();
+		$enum = config('constants.ENUM.TEAMS.TEAM_LEVEL');
 		if(!empty($teams->state_id))
 		{
 			$cities = City::where('state_id', $teams->state_id)->orderBy('city_name')->lists('city_name', 'id')->all();
 		}
-		return view('teams.editteam')->with('teams',$teams->toArray())
-										->with('sports', ['' => 'Select Sport'] + $sports)
-										->with('states', ['' => 'Select State'] + $states)
-										->with('cities', ['' => 'Select City'] + $cities)
-										->with('id', $id)
-									   ->with('enum',$enum);
+
+		return view('teams.editteam')->with('teams', $teams->toArray())
+									 ->with('sports', ['' => 'Select Sport'] + $sports)
+									 ->with('countries', ['' => 'Select Country'] + $countries)
+									 ->with('states', ['' => 'Select State'] + $states)
+									 ->with('cities', ['' => 'Select City'] + $cities)
+									 ->with('id', $id)
+									 ->with('enum', $enum);
     }
 
     /**
@@ -486,12 +487,12 @@ class TeamController extends Controller
 	
 	function getorgDetails($id)
 	{
-		
+		$user_id = Auth::user()->id;
 	    $teams = Team::select('id','name')->where('organization_id',$id)->get()->toArray();
 		$photo= Photo::select('url')->where('imageable_id', '=', $id)->where('imageable_type', '=', config('constants.PHOTO.TEAM_PHOTO'))->where('user_id', Auth::user()->id)->get()->toArray();
 		$orgInfo= Organization::select()->where('id',$id)->get()->toArray();
 	
-		return view('teams.teams')->with(array( 'teams'=>$teams,'photo'=>$photo,'orgInfo'=>$orgInfo,'id'=>$id ));
+		return view('teams.teams')->with(array( 'teams'=>$teams,'photo'=>$photo,'orgInfo'=>$orgInfo,'id'=>$id, 'userId' => $user_id ));
 	}
 	function organizationTeamlist($id)
 	{
@@ -794,16 +795,18 @@ class TeamController extends Controller
 		{
 			$teamdetails = Team::where('id',$edit_id)->first();
 		}
-		$states = State::where('country_id', config('constants.COUNTRY_INDIA'))->orderBy('state_name')->lists('state_name', 'id')->all();
         $organization = Organization::orderBy('name')->where('user_id', Auth::user()->id)->lists('name', 'id')->all();
+		$countries = Country::orderBy('country_name')->lists('country_name', 'id')->all();
+		$states = State::where('country_id', $teamdetails->country_id)->orderBy('state_name')->lists('state_name', 'id')->all();
 		if (isset($teamdetails->state_id) && is_numeric($teamdetails->state_id)) {
 			$cities = City::where('state_id', $teamdetails->state_id)->orderBy('city_name')->lists('city_name', 'id')->all();
 		}
 //		$sports = Sport::orderBy('sports_name')->lists('sports_name', 'id')->all();
                 $sports = Helper::getDevelopedSport(1,1);
 		return view('teams.editteam')->with(array('sports'=>['' => 'Select Sport'] + $sports))
+										->with('countries', ['' => 'Select Country'] + $countries)
 										->with('states', ['' => 'Select State'] + $states)
-										->with('cities', ['' => 'Select City'] + $cities)			
+										->with('cities', ['' => 'Select City'] + $cities)
 										->with('teamdetails' , $teamdetails)
                                         ->with('organization', ['' => 'Select Organization'] + $organization)                              
 										->with('id' , $edit_id)

@@ -720,10 +720,11 @@ class TournamentsController extends Controller
 			}
 				
 			
-	       $states = State::where('country_id', config('constants.COUNTRY_INDIA'))->orderBy('state_name')->lists('state_name', 'id')->all();
+	       $countries = Country::orderBy('country_name')->lists('country_name', 'id')->all();
+	       $states = State::where('country_id', $tournament->country_id)->orderBy('state_name')->lists('state_name', 'id')->all();
 	       $cities = City::where('state_id',  $tournament->state_id)->orderBy('city_name')->lists('city_name', 'id')->all();
 		   
-	       return view('tournaments.tournamentsedit',compact('tournament'))->with(array('sports'=> [''=>'Select Sport']+$sports,'id'=>$id,'states' =>  [''=>'Select State']+$states,'cities' =>  [''=>'Select City']+$cities,'enum'=>['' => 'Tournament Type'] + $enum,'tournament'=>$tournament,'type'=>'create','roletype'=>'user','schedule_type_enum'=>$schedule_type_enum,'subTournamentArray'=>$sub_tour_details,'parent_id'=>$id,'tournament_name'=>$tournament['name'],'logo'=>$tournament['logo'],'parent_manager_name'=>$manager_name,'player_types'=>['' => 'Select Player Type'] +$player_types,'match_types'=>['' => 'Select Match Type'] +$match_types,'isOwner'=>$isOwner,'loginUserId'=> $loginUserId));
+	       return view('tournaments.tournamentsedit',compact('tournament'))->with(array('sports'=> [''=>'Select Sport']+$sports,'id'=>$id,'countries' =>  [''=>'Select Country']+$countries,'states' =>  [''=>'Select State']+$states,'cities' =>  [''=>'Select City']+$cities,'enum'=>['' => 'Tournament Type'] + $enum,'tournament'=>$tournament,'type'=>'create','roletype'=>'user','schedule_type_enum'=>$schedule_type_enum,'subTournamentArray'=>$sub_tour_details,'parent_id'=>$id,'tournament_name'=>$tournament['name'],'logo'=>$tournament['logo'],'parent_manager_name'=>$manager_name,'player_types'=>['' => 'Select Player Type'] +$player_types,'match_types'=>['' => 'Select Match Type'] +$match_types,'isOwner'=>$isOwner,'loginUserId'=> $loginUserId));
     }
 	public function subTournamentEdit()
 	{
@@ -782,343 +783,473 @@ class TournamentsController extends Controller
             foreach (config('constants.ENUM.SCHEDULE.PLAYER_TYPE') as $key => $val) {
                 $player_types[$key] = $val;
             }
-			
-		   
-	       $states = State::where('country_id', config('constants.COUNTRY_INDIA'))->orderBy('state_name')->lists('state_name', 'id')->all();
+
+
+		$countries = Country::orderBy('country_name')->lists('country_name', 'id')->all();
+		$states = State::where('country_id', $tournament->country_id)->orderBy('state_name')->lists('state_name', 'id')->all();
 	       $cities = City::where('state_id',  $tournament->state_id)->orderBy('city_name')->lists('city_name', 'id')->all();
-	       return view('tournaments.edit',compact('tournament'))->with(array('sports'=> [''=>'Select Sport']+$sports,'id'=>$id,'states' =>  [''=>'Select State']+$states,'cities' =>  [''=>'Select City']+$cities,'enum'=>['' => 'Tournament Type'] + $enum,'tournament'=>$tournament,'type'=>'edit','roletype'=>'user','schedule_type_enum'=>$schedule_type_enum,'parent_id'=>$id,'tournament_name'=>$tournament['name'],'logo'=>$tournament['logo'],'manager_name'=>$manager_name,'matchTypes'=>$matchTypes,'playerTypes'=>$playerTypes,'match_types'=>['' => 'Select Match Type'] +$match_types,'player_types'=>['' => 'Select Player Type'] +$player_types,'matchScheduleCount'=>$matchScheduleCount,'tournamentGroupCount'=>$tournamentGroupCount));
+	       return view('tournaments.edit',compact('tournament'))->with(array('sports'=> [''=>'Select Sport']+$sports,'id'=>$id,'countries' =>  [''=>'Select Country']+$countries,'states' =>  [''=>'Select State']+$states,'cities' =>  [''=>'Select City']+$cities,'enum'=>['' => 'Tournament Type'] + $enum,'tournament'=>$tournament,'type'=>'edit','roletype'=>'user','schedule_type_enum'=>$schedule_type_enum,'parent_id'=>$id,'tournament_name'=>$tournament['name'],'logo'=>$tournament['logo'],'manager_name'=>$manager_name,'matchTypes'=>$matchTypes,'playerTypes'=>$playerTypes,'match_types'=>['' => 'Select Match Type'] +$match_types,'player_types'=>['' => 'Select Player Type'] +$player_types,'matchScheduleCount'=>$matchScheduleCount,'tournamentGroupCount'=>$tournamentGroupCount));
 	}
 	//function to display tournament groups
 	public function groups($tournament_id,$type='') {
-            $tournaments = Tournaments::with('groups')->where('id', '=', $tournament_id)->get(); //get tournaments which having the type as league
-            $tournament_type = $tournaments[0]['type'];
-            $team_details = array();
-            $match_details = array();
-			$add_score_link = array();
-			$match_startdate_array = array();
-			$match_count = array();
-            foreach ($tournaments as $tournament) {
-                foreach ($tournament->groups as $groups) {
-                    $group_id = $groups->id;
-                    $teamDetails = TournamentGroupTeams::select()->where('tournament_group_id', $group_id)->get();
+                $tournaments           = Tournaments::with('groups')->where('id', '=', $tournament_id)->get(); //get tournaments which having the type as league
+                $tournament_type       = $tournaments[0]['type'];
+                $team_details          = array();
+                $match_details         = array();
+                $add_score_link        = array();
+                $match_startdate_array = array();
+                $match_count           = array();
+                foreach ($tournaments as $tournament)
+                {
+                        foreach ($tournament->groups as $groups)
+                        {
+                                $group_id    = $groups->id;
+                                $teamDetails = TournamentGroupTeams::select()->where('tournament_group_id', $group_id)->orderBy('points', 'desc')->get();
 
-                     if (count((array)$teamDetails) > 0)
-                        $team_details[$group_id] = $teamDetails->toArray(); //get tournament group teams
-					
-					//get team match count
-					if(!empty($team_details[$group_id]))
-					{
-						foreach($team_details[$group_id] as $scheduled_teams)
-						{
-							$teamId = $scheduled_teams['team_id'];
-							$match_count[$group_id][$teamId] = MatchSchedule::where('tournament_id', $tournament_id)->where('tournament_group_id',$group_id)
-									->where('match_status','completed')->where(function($query) use ($teamId) {
-											$query->where('a_id', $teamId)->orWhere('b_id', $teamId);
-										})->count();
-						}
-					}
-					
+                                if (count((array) $teamDetails) > 0)
+                                        $team_details[$group_id] = $teamDetails->toArray(); //get tournament group teams
 
-                    $matchDetails = MatchSchedule::select()->where('tournament_id', $tournament_id)->where('tournament_group_id', $group_id)->orderby('match_start_date', 'desc')->orderby('match_start_time', 'desc')->get();
-                    if (count($matchDetails) > 0)
-					{
-						$match_details[$group_id] = $matchDetails->toArray(); //get tournament group teams match schedules
-						//add score link conditions
-						if(!empty($match_details[$group_id]))
-						{
-							foreach($match_details[$group_id] as $matchdata)
-							{
-								$scheduledMatchStartDate = Carbon::createFromFormat('Y-m-d', $matchdata['match_start_date']);
-								if ($matchdata['match_status']=='completed') {
-									$add_score_link[$matchdata['id']] = trans('message.schedule.viewscore');
-								} else if (Carbon::now()->gte($scheduledMatchStartDate)) {
-										$matchScheduleDetails = MatchSchedule::where('id',$matchdata['id'])->get();
-										$scoreOwner = Helper::isValidUserForScoreEnter($matchScheduleDetails->toArray());
-										if ($scoreOwner) {
-											$matchScheduleData['score_added_by'] = $matchScheduleDetails[0]['score_added_by'];
-											$matchScheduleData['scoring_status'] = $matchScheduleDetails[0]['scoring_status'];
-											//$add_score_link[$matchdata['id']] = trans('message.schedule.addscore');
-											$add_score_link[$matchdata['id']] = Helper::getCurrentScoringStatus($matchScheduleData);
-										}else
-										{
-											$add_score_link[$matchdata['id']] = trans('message.schedule.viewscore');
-										}
-								}
-								$schedule['match_start_date'] = $matchdata['match_start_date'];
-								$schedule['match_start_time'] = $matchdata['match_start_time'];
-								$match_startdate_array[$matchdata['id']] = Helper::getFormattedTimeStamp($schedule);
-							}
-						}
-						
-					}
-                      
-                }
-            }
-			
-            $sport_id = $tournaments[0]['sports_id']; //sport id
-            $schedule_type = !empty($tournaments[0]['schedule_type']) ? $tournaments[0]['schedule_type'] : 'team'; //schedule type 
-            $team_name_array = array();
-            $team_logo = array();
-            $user_name = array();
-            $user_profile = array();
-            if ($schedule_type == 'team') {
-                $teams = Team::select('id', 'name')->where('sports_id', $sport_id)->get()->toArray(); //get teams
-                foreach ($teams as $team) {
-                    $team_name_array[$team['id']] = $team['name']; //get team names
-                    $team_logo[$team['id']] = Photo::select()->where('imageable_id', $team['id'])->where('imageable_type', config('constants.PHOTO.TEAM_PHOTO'))->orderBy('id', 'desc')->first(); //get team logo
-                }
-            } else {
-                $users = User::select('id', 'name')->get()->toArray(); //if scheduled type is player
-                foreach ($users as $user) {
-                    $user_name[$user['id']] = $user['name']; //get team names
-                    $user_profile[$user['id']] = Photo::select()->where('imageable_id', $user['id'])->where('imageable_type', config('constants.PHOTO.USER_PHOTO'))->orderBy('id', 'desc')->first(); //get team logo
-                }
-            }
-            Helper::setMenuToSelect(4, 1);
-            $lef_menu_condition = 'display_gallery';
-            //getting states
-            $states = State::where('country_id', config('constants.COUNTRY_INDIA'))->orderBy('state_name')->lists('state_name', 'id')->all();
+                                        
+                                //get team match count
+                                if (!empty($team_details[$group_id]))
+                                {
+                                        foreach ($team_details[$group_id] as $scheduled_teams)
+                                        {
+                                                $teamId                          = $scheduled_teams['team_id'];
+                                                $match_count[$group_id][$teamId] = MatchSchedule::where('tournament_id', $tournament_id)->where('tournament_group_id', $group_id)
+                                                                ->where('match_status', 'completed')->where(function($query) use ($teamId) {
+                                                                $query->where('a_id', $teamId)->orWhere('b_id', $teamId);
+                                                        })->count();
+                                        }
+                                }
 
-            $match_types = array();
-            $player_types = array();
-
-            //get sport name
-            $sport_name = Sport::where('id', $sport_id)->pluck('sports_name');
-            // if($isOwner)
-            // {
-            //building match types array
-            $sport_name = !empty($sport_name) ? $sport_name : '';
-            $match_types = Helper::getMatchTypes(strtoupper($sport_name));
-            //building player types array
-            foreach (config('constants.ENUM.SCHEDULE.PLAYER_TYPE') as $key => $val) {
-                $player_types[$key] = $val;
-            }
-            // }
-            //Start - Logic for final stage teams
-            $isOwner=0;
-            $lastRoundWinner=0;
-            $firstRoundBracket=0;
-            $maxRoundNumber=1;
-            $linkUrl = '';
-			if(Helper::isTournamentOwner($tournaments[0]['manager_id'],$tournaments[0]['tournament_parent_id'])) {
-                    $isOwner=1;
-            }
-			
-            if (count($tournaments[0]['final_stage_teams'])) {
-                if($schedule_type == 'team') {
-                        $scheduleTypeOne = 'scheduleteamone';
-                        $scheduleTypeTwo = 'scheduleteamtwo';
-                        $linkUrl = '/team/members';
-                }else {
-                        $scheduleTypeOne = 'scheduleuserone';
-                        $scheduleTypeTwo = 'scheduleusertwo';    
-                        $linkUrl = '/showsportprofile';
+                                $team_stats   = [];   // team stats array containing team wise stats needed for its calculation
+                                $net_run_rate = [];   // net run rate array
+                                $matchDetails = MatchSchedule::select()->where('tournament_id', $tournament_id)->where('tournament_group_id', $group_id)->orderby('match_start_date', 'desc')->orderby('match_start_time', 'desc')->get();
+                                if (count($matchDetails) > 0)
+                                {
+                                        $match_details[$group_id] = $matchDetails->toArray(); //get tournament group teams match schedules
+                                        //add score link conditions
+                                        if (!empty($match_details[$group_id]))
+                                        {
+                                                foreach ($match_details[$group_id] as $matchdata)
+                                                {
+                                                        // net run rate changes - start
+                                                        if (!empty($matchdata['match_details']))
+                                                        {
+                                                                $match_stats = json_decode($matchdata['match_details'], true);
+                                                                
+                                                                $team_ids = array_keys($match_stats);
+                                                                
+                                                                foreach ($match_stats as $team_id => $team_stat)
+                                                                {
+                                                                        $team_stats[$team_id] = [];
+                                                                        if (empty($team_stats[$team_id]))
+                                                                        {
+                                                                                $team_stats[$team_id]['total_runs_scored'] = $team_stats[$team_id]['total_runs_conceded'] = 0;
+                                                                                $team_stats[$team_id]['total_overs_faced'] = $team_stats[$team_id]['total_overs_bowled'] = 0;
+                                                                        }
+                                                                        $team_stats[$team_id]['total_runs_scored']      += (int) $team_stat['fst_ing_score'] + (int) $team_stat['scnd_ing_score'];
+                                                                        $team_stats[$team_id]['total_overs_faced']      += (float) $team_stat['fst_ing_overs'] + (float) $team_stat['scnd_ing_overs'];
+                                                                        $team_stats[$team_id]['total_runs_conceded']    += ($team_ids[0] == $team_id) ? ((int) $match_stats[$team_ids[1]]['fst_ing_score'] + (int) $match_stats[$team_ids[1]]['scnd_ing_score']) : ((int) $match_stats[$team_ids[0]]['fst_ing_score'] + (int) $match_stats[$team_ids[0]]['scnd_ing_score']);
+                                                                        $team_stats[$team_id]['total_overs_bowled']     += ($team_ids[0] == $team_id) ? ((float) $match_stats[$team_ids[1]]['fst_ing_overs'] + (float) $match_stats[$team_ids[1]]['scnd_ing_overs']) : ((float) $match_stats[$team_ids[0]]['fst_ing_overs'] + (float) $match_stats[$team_ids[0]]['scnd_ing_overs']);
+                                                                }
+                                                        }
+                                                        // net run rate changes - end
+                                                                
+                                                        $scheduledMatchStartDate = Carbon::createFromFormat('Y-m-d', $matchdata['match_start_date']);
+                                                        if ($matchdata['match_status'] == 'completed')
+                                                        {
+                                                                $add_score_link[$matchdata['id']] = trans('message.schedule.viewscore');
+                                                        }
+                                                        else if (Carbon::now()->gte($scheduledMatchStartDate))
+                                                        {
+                                                                $matchScheduleDetails = MatchSchedule::where('id', $matchdata['id'])->get();
+                                                                $scoreOwner           = Helper::isValidUserForScoreEnter($matchScheduleDetails->toArray());
+                                                                if ($scoreOwner)
+                                                                {
+                                                                        $matchScheduleData['score_added_by'] = $matchScheduleDetails[0]['score_added_by'];
+                                                                        $matchScheduleData['scoring_status'] = $matchScheduleDetails[0]['scoring_status'];
+                                                                        //$add_score_link[$matchdata['id']] = trans('message.schedule.addscore');
+                                                                        $add_score_link[$matchdata['id']]    = Helper::getCurrentScoringStatus($matchScheduleData);
+                                                                }
+                                                                else
+                                                                {
+                                                                        $add_score_link[$matchdata['id']] = trans('message.schedule.viewscore');
+                                                                }
+                                                        }
+                                                        $schedule['match_start_date']            = $matchdata['match_start_date'];
+                                                        $schedule['match_start_time']            = $matchdata['match_start_time'];
+                                                        $match_startdate_array[$matchdata['id']] = Helper::getFormattedTimeStamp($schedule);
+                                                }
+                                        }
+                                }
+                                
+                                if (!empty($team_stats))
+                                {
+                                        foreach ($team_stats as $team_id => $team_stat)
+                                        {
+                                                if ($team_stats[$team_id]['total_overs_faced'] > 0 
+                                                 && $team_stats[$team_id]['total_overs_bowled'] > 0)
+                                                {
+                                                        $net_run_rate[$team_id] = ($team_stats[$team_id]['total_runs_scored'] / $team_stats[$team_id]['total_overs_faced']);
+                                                        $net_run_rate[$team_id] -= ($team_stats[$team_id]['total_runs_conceded'] / $team_stats[$team_id]['total_overs_bowled']);
+                                                        $net_run_rate[$team_id] = round($net_run_rate[$team_id], 2);
+                                                }
+                                        }
+                                        unset($match_stats,$team_stats);
+                                }
+                        }
                 }
 
-                $matchScheduleData = MatchSchedule::with(array($scheduleTypeOne => function($q1) {
-                        $q1->select('id', 'name');
-                    },
-                            $scheduleTypeTwo => function($q2) {
-                        $q2->select('id', 'name');
-                    }, $scheduleTypeOne.'.photos', $scheduleTypeTwo.'.photos'))
-                        ->where('tournament_id', $tournament_id)->whereNull('tournament_group_id')
-                        ->orderBy('tournament_round_number')
-                        ->get(['id', 'tournament_id', 'tournament_round_number', 'tournament_match_number', 'a_id', 'b_id', 'match_start_date', 'winner_id','match_invite_status','looser_id', 'match_status','match_type']);
-
-               
-                
-                
-                
-                $lastRoundWinner = intval(ceil(log($tournaments[0]['final_stage_teams'], 2)));
-                $firstRoundBracket = intval(ceil($tournaments[0]['final_stage_teams']/2));
-                for($j=1;$j<=$firstRoundBracket;$j++) {
-
-                    $firstRoundBracketArray[$j]='';
+                $sport_id        = $tournaments[0]['sports_id']; //sport id
+                $schedule_type   = !empty($tournaments[0]['schedule_type']) ? $tournaments[0]['schedule_type'] : 'team'; //schedule type 
+                $team_name_array = array();
+                $team_logo       = array();
+                $user_name       = array();
+                $user_profile    = array();
+                if ($schedule_type == 'team')
+                {
+                        $teams = Team::select('id', 'name')->where('sports_id', $sport_id)->get()->toArray(); //get teams
+                        foreach ($teams as $team)
+                        {
+                                $team_name_array[$team['id']] = $team['name']; //get team names
+                                $team_logo[$team['id']]       = Photo::select()->where('imageable_id', $team['id'])->where('imageable_type', config('constants.PHOTO.TEAM_PHOTO'))->orderBy('id', 'desc')->first(); //get team logo
+                        }
                 }
-                
-                if (count($matchScheduleData)) {
-                    foreach ($matchScheduleData->toArray() as $key => $schedule) {
-                        if ($schedule['tournament_round_number'] == 1) {
-                            if (count($schedule[$scheduleTypeOne]['photos'])) {
-                                $teamOneUrl = array_collapse($schedule[$scheduleTypeOne]['photos']);
-                                $matchScheduleData[$key][$scheduleTypeOne]['url'] = $teamOneUrl['url'];
-                            } else {
-                                $teamOneUrl = $matchScheduleData[$key][$scheduleTypeOne];
-                                $teamOneUrl['url'] = '';
-                            }
+                else
+                {
+                        $users = User::select('id', 'name')->get()->toArray(); //if scheduled type is player
+                        foreach ($users as $user)
+                        {
+                                $user_name[$user['id']]    = $user['name']; //get team names
+                                $user_profile[$user['id']] = Photo::select()->where('imageable_id', $user['id'])->where('imageable_type', config('constants.PHOTO.USER_PHOTO'))->orderBy('id', 'desc')->first(); //get team logo
+                        }
+                }
+                Helper::setMenuToSelect(4, 1);
+                $lef_menu_condition = 'display_gallery';
+                //getting states
+                $countries          = Country::orderBy('country_name')->lists('country_name', 'id')->all();
+                $states             = State::where('country_id', config('constants.COUNTRY_INDIA'))->orderBy('state_name')->lists('state_name', 'id')->all();
 
-                            if (count($schedule[$scheduleTypeTwo]['photos'])) {
-                                $teamTwoUrl = array_collapse($schedule[$scheduleTypeTwo]['photos']);
-                                $matchScheduleData[$key][$scheduleTypeTwo]['url'] = $teamTwoUrl['url'];
-                            } else {
-                                $teamTwoUrl = $matchScheduleData[$key][$scheduleTypeTwo];
-                                $teamTwoUrl['url'] = '';
-                            }
+                $match_types  = array();
+                $player_types = array();
 
-                            $matchStartDate = Carbon::createFromFormat('Y-m-d', $schedule['match_start_date']);
-                            if (!empty($schedule['winner_id']) && $schedule['match_status']=='completed') {
-                                $matchScheduleData[$key]['winner_text'] = trans('message.schedule.matchstats');
-                            } 
+                //get sport name
+                $sport_name  = Sport::where('id', $sport_id)->pluck('sports_name');
+                // if($isOwner)
+                // {
+                //building match types array
+                $sport_name  = !empty($sport_name) ? $sport_name : '';
+                $match_types = Helper::getMatchTypes(strtoupper($sport_name));
+                //building player types array
+                foreach (config('constants.ENUM.SCHEDULE.PLAYER_TYPE') as $key => $val)
+                {
+                        $player_types[$key] = $val;
+                }
+                // }
+                //Start - Logic for final stage teams
+                $isOwner           = 0;
+                $lastRoundWinner   = 0;
+                $firstRoundBracket = 0;
+                $maxRoundNumber    = 1;
+                $linkUrl           = '';
+                if (Helper::isTournamentOwner($tournaments[0]['manager_id'], $tournaments[0]['tournament_parent_id']))
+                {
+                        $isOwner = 1;
+                }
+
+                if (count($tournaments[0]['final_stage_teams']))
+                {
+                        if ($schedule_type == 'team')
+                        {
+                                $scheduleTypeOne = 'scheduleteamone';
+                                $scheduleTypeTwo = 'scheduleteamtwo';
+                                $linkUrl         = '/team/members';
+                        }
+                        else
+                        {
+                                $scheduleTypeOne = 'scheduleuserone';
+                                $scheduleTypeTwo = 'scheduleusertwo';
+                                $linkUrl         = '/showsportprofile';
+                        }
+
+                        $matchScheduleData = MatchSchedule::with(array($scheduleTypeOne => function($q1) {
+                                                $q1->select('id', 'name');
+                                        },
+                                        $scheduleTypeTwo   => function($q2) {
+                                                $q2->select('id', 'name');
+                                        }, $scheduleTypeOne . '.photos', $scheduleTypeTwo . '.photos'))
+                                ->where('tournament_id', $tournament_id)->whereNull('tournament_group_id')
+                                ->orderBy('tournament_round_number')
+                                ->get(['id', 'tournament_id', 'tournament_round_number',
+                                'tournament_match_number', 'a_id', 'b_id', 'match_start_date',
+                                'winner_id', 'match_invite_status', 'looser_id',
+                                'match_status', 'match_type']);
+
+
+
+
+
+                        $lastRoundWinner   = intval(ceil(log($tournaments[0]['final_stage_teams'], 2)));
+                        $firstRoundBracket = intval(ceil($tournaments[0]['final_stage_teams'] / 2));
+                        for ($j = 1; $j <= $firstRoundBracket; $j++)
+                        {
+
+                                $firstRoundBracketArray[$j] = '';
+                        }
+
+                        if (count($matchScheduleData))
+                        {
+                                foreach ($matchScheduleData->toArray() as $key => $schedule)
+                                {
+                                        if ($schedule['tournament_round_number'] == 1)
+                                        {
+                                                if (count($schedule[$scheduleTypeOne]['photos']))
+                                                {
+                                                        $teamOneUrl                                       = array_collapse($schedule[$scheduleTypeOne]['photos']);
+                                                        $matchScheduleData[$key][$scheduleTypeOne]['url'] = $teamOneUrl['url'];
+                                                }
+                                                else
+                                                {
+                                                        $teamOneUrl        = $matchScheduleData[$key][$scheduleTypeOne];
+                                                        $teamOneUrl['url'] = '';
+                                                }
+
+                                                if (count($schedule[$scheduleTypeTwo]['photos']))
+                                                {
+                                                        $teamTwoUrl                                       = array_collapse($schedule[$scheduleTypeTwo]['photos']);
+                                                        $matchScheduleData[$key][$scheduleTypeTwo]['url'] = $teamTwoUrl['url'];
+                                                }
+                                                else
+                                                {
+                                                        $teamTwoUrl        = $matchScheduleData[$key][$scheduleTypeTwo];
+                                                        $teamTwoUrl['url'] = '';
+                                                }
+
+                                                $matchStartDate = Carbon::createFromFormat('Y-m-d', $schedule['match_start_date']);
+                                                if (!empty($schedule['winner_id']) && $schedule['match_status'] == 'completed')
+                                                {
+                                                        $matchScheduleData[$key]['winner_text'] = trans('message.schedule.matchstats');
+                                                }
 //                            else if (Carbon::now()->gte($matchStartDate) && $schedule['match_invite_status']=='accepted') {
-                            else if (Carbon::now()->gte($matchStartDate)) {
-                                if ($isOwner) {
-                                    $matchScheduleData[$key]['winner_text'] = trans('message.schedule.addscore');
-                                }
-                            }
+                                                else if (Carbon::now()->gte($matchStartDate))
+                                                {
+                                                        if ($isOwner)
+                                                        {
+                                                                $matchScheduleData[$key]['winner_text'] = trans('message.schedule.addscore');
+                                                        }
+                                                }
 //                            $matchScheduleData[$key]['match_start_date'] = $matchStartDate->toDayDateTimeString();
-                            $matchScheduleData[$key]['match_start_date'] = Helper::getFormattedTimeStamp($schedule);
-                            if($schedule['match_type']!='other')
-                            {    
-                                $matchScheduleData[$key]['match_type'] = $schedule['match_type']=='odi'?'('.strtoupper($schedule['match_type']).')':'('.ucfirst($schedule['match_type']).')';
-                            }else
-                            {
-                                $matchScheduleData[$key]['match_type'] = '';
-                            }
-                        }
-                    }
-
-                    $maxRoundNumber = $matchScheduleData->max('tournament_round_number');
-                    for ($i = 1; $i <= $maxRoundNumber; $i++) {
-                        $roundArray[$i] = $i;
-                    }
-                    
-                    
-                        for($i=1;$i<=$firstRoundBracket;$i++) {
-                            foreach($matchScheduleData->toArray() as $roundKey => $matchschedule) {
-                                if($matchschedule['tournament_match_number']==$i && $matchschedule['tournament_round_number']==1) {
-                                    $firstRoundBracketArray[$i]=$matchschedule;
+                                                $matchScheduleData[$key]['match_start_date'] = Helper::getFormattedTimeStamp($schedule);
+                                                if ($schedule['match_type'] != 'other')
+                                                {
+                                                        $matchScheduleData[$key]['match_type'] = $schedule['match_type'] == 'odi' ? '(' . strtoupper($schedule['match_type']) . ')' : '(' . ucfirst($schedule['match_type']) . ')';
+                                                }
+                                                else
+                                                {
+                                                        $matchScheduleData[$key]['match_type'] = '';
+                                                }
+                                        }
                                 }
-                            }
-                        }
-                    
+
+                                $maxRoundNumber = $matchScheduleData->max('tournament_round_number');
+                                for ($i = 1; $i <= $maxRoundNumber; $i++)
+                                {
+                                        $roundArray[$i] = $i;
+                                }
+
+
+                                for ($i = 1; $i <= $firstRoundBracket; $i++)
+                                {
+                                        foreach ($matchScheduleData->toArray() as $roundKey => $matchschedule)
+                                        {
+                                                if ($matchschedule['tournament_match_number'] == $i && $matchschedule['tournament_round_number'] == 1)
+                                                {
+                                                        $firstRoundBracketArray[$i] = $matchschedule;
+                                                }
+                                        }
+                                }
+
 //                    dd($firstRoundBracketArray);
+                                //                        $maxRoundNumberArray = MatchSchedule::where('tournament_id',$tournament_id)
+                                //                                                 ->whereNull('tournament_group_id')
+                                //                                                 ->orderBy('id','desc')->take(1)->first(['id','tournament_round_number']);
+                                //                        $maxRoundNumber = 1;
+                                //                        if(count($maxRoundNumberArray)) {
+                                //                            $maxRoundNumber = $maxRoundNumberArray['tournament_round_number'];
+                                //                            for($i=1;$i<=$maxRoundNumberArray['tournament_round_number'];$i++) {
+                                //                                $roundArray[$i]=$i;
+                                //                            }
+                                //                        }
 
-    //                        $maxRoundNumberArray = MatchSchedule::where('tournament_id',$tournament_id)
-    //                                                 ->whereNull('tournament_group_id')
-    //                                                 ->orderBy('id','desc')->take(1)->first(['id','tournament_round_number']);
-    //                        $maxRoundNumber = 1;
-    //                        if(count($maxRoundNumberArray)) {
-    //                            $maxRoundNumber = $maxRoundNumberArray['tournament_round_number'];
-    //                            for($i=1;$i<=$maxRoundNumberArray['tournament_round_number'];$i++) {
-    //                                $roundArray[$i]=$i;
-    //                            }
-    //                        }
+                                $bracketTeamArray = $this->getBracketTeams($tournament_id, $maxRoundNumber, $schedule_type, $isOwner);
 
-                    $bracketTeamArray = $this->getBracketTeams($tournament_id, $maxRoundNumber, $schedule_type,$isOwner);
-                   
-                    if (!empty($bracketTeamArray)) {
-                        foreach ($bracketTeamArray as $bracketkey => $bracketTeam) {
-                            foreach ($bracketTeam as $team => $bracket) {
-                                if ($team == 'start_date' && $team !== 0) {
-                                    unset($bracketTeamArray[$bracketkey][$team]);
+                                if (!empty($bracketTeamArray))
+                                {
+                                        foreach ($bracketTeamArray as $bracketkey => $bracketTeam)
+                                        {
+                                                foreach ($bracketTeam as $team => $bracket)
+                                                {
+                                                        if ($team == 'start_date' && $team !== 0)
+                                                        {
+                                                                unset($bracketTeamArray[$bracketkey][$team]);
+                                                        }
+                                                }
+                                        }
                                 }
-                            }
                         }
-                    }
-
-                }
 //                 dd($bracketTeamArray); 
-                $selectetdFinalStageTeams = explode(',',$tournaments[0]['final_stage_teams_ids']);
-            } 
-            
-            
-            $requestedFinalTeams=[];
-            // For displaying the teams added for final stage teams as well as the requested teams
-            if($tournament_type=='knockout') {
-                $tournamentFinalTeams = $this->getFinalStageAddedTeams($tournament_id, $schedule_type);
+                        $selectetdFinalStageTeams = explode(',', $tournaments[0]['final_stage_teams_ids']);
+                }
+
+
+                $requestedFinalTeams = [];
+                // For displaying the teams added for final stage teams as well as the requested teams
+                if ($tournament_type == 'knockout')
+                {
+                        $tournamentFinalTeams = $this->getFinalStageAddedTeams($tournament_id, $schedule_type);
 //                dd($tournamentFinalTeams);
-                $tournamentTeams = $tournamentFinalTeams['requestedWithPhotos'];
-                $requestedFinalTeams = $this->getFinalStageRequests($tournament_id, $schedule_type,$tournamentFinalTeams['tournamentKnockoutTeamsIds']);
-            } else {
-                
-                $tournamentTeamIds = $this->getTournamentTeams($tournament_id,$schedule_type);
-                if (count($tournamentTeamIds)) {
-                    $teamIDs = explode(',', trim($tournamentTeamIds, ','));
-                    if($schedule_type == 'team') {
-                        if($isOwner) {
-                            $tournamentTeams = Team::whereIn('id', $teamIDs)->orderBy('name')->lists('name', 'id')->all();
-                        }else{    
-                            $tournamentTeams = Team::whereIn('id', $teamIDs)->orderBy('name')->get(['id','name','logo']);
-                        }    
-                    }else{
-                        if($isOwner) {
-                            $tournamentTeams = User::whereIn('id', $teamIDs)->orderBy('name')->lists('name', 'id')->all();
-                        }else{     
-                            $tournamentTeams = User::whereIn('id', $teamIDs)->orderBy('name')->get(['id','name','logo']);
-                        }    
-                    }    
+                        $tournamentTeams      = $tournamentFinalTeams['requestedWithPhotos'];
+                        $requestedFinalTeams  = $this->getFinalStageRequests($tournament_id, $schedule_type, $tournamentFinalTeams['tournamentKnockoutTeamsIds']);
                 }
-            }
+                else
+                {
+
+                        $tournamentTeamIds = $this->getTournamentTeams($tournament_id, $schedule_type);
+                        if (count($tournamentTeamIds))
+                        {
+                                $teamIDs = explode(',', trim($tournamentTeamIds, ','));
+                                if ($schedule_type == 'team')
+                                {
+                                        if ($isOwner)
+                                        {
+                                                $tournamentTeams = Team::whereIn('id', $teamIDs)->orderBy('name')->lists('name', 'id')->all();
+                                        }
+                                        else
+                                        {
+                                                $tournamentTeams = Team::whereIn('id', $teamIDs)->orderBy('name')->get(['id',
+                                                        'name', 'logo']);
+                                        }
+                                }
+                                else
+                                {
+                                        if ($isOwner)
+                                        {
+                                                $tournamentTeams = User::whereIn('id', $teamIDs)->orderBy('name')->lists('name', 'id')->all();
+                                        }
+                                        else
+                                        {
+                                                $tournamentTeams = User::whereIn('id', $teamIDs)->orderBy('name')->get(['id',
+                                                        'name', 'logo']);
+                                        }
+                                }
+                        }
+                }
                 //get requested teams
-                $requestedTeams = $this->getTeamorUsers($tournament_id,$schedule_type);
-                        
-                        
+                $requestedTeams = $this->getTeamorUsers($tournament_id, $schedule_type);
+
+
 //                        dd($requestedFinalTeams);
+                // End - Logic for final stage teams
 
-            // End - Logic for final stage teams
-                
-            $byeArray = [1=>'Match',2=>'Bye'];    
-            $dispViewFlag = 'group';
-            
-            if($tournament_type=='league' || $tournament_type=='multistage') {
+                $byeArray     = [1 => 'Match', 2 => 'Bye'];
                 $dispViewFlag = 'group';
-            }
-            
-            if($tournament_type=='knockout' || count($tournaments[0]['final_stage_teams'])) {
-                $dispViewFlag = 'final';
-            }
-            
-            if($type=='group') {
-                $dispViewFlag = 'group';
-            }elseif($type=='final') {
-                $dispViewFlag = 'final';
-            }
-            
-            if (!$isOwner && $dispViewFlag=='final') {
-                if (!empty($tournaments[0]['final_stage_teams_ids'])) {
-                    $teamIDs = explode(',', trim($tournaments[0]['final_stage_teams_ids'], ','));
-                    if($schedule_type == 'team') {
-                        $tournamentTeams = Team::whereIn('id', $teamIDs)->orderBy('name')->get(['id','name','logo']);
-                    }else{
-                        $tournamentTeams = User::whereIn('id', $teamIDs)->orderBy('name')->get(['id','name','logo']);
-                    }    
+
+                if ($tournament_type == 'league' || $tournament_type == 'multistage')
+                {
+                        $dispViewFlag = 'group';
                 }
-            }
-			
-			
-			//left menu
-			$parent_tournamet_id = $tournaments[0]['tournament_parent_id'];
-			$tournamentManagerId = $tournaments[0]['manager_id'];
-			$left_menu_data = Helper::getLeftMenuData($parent_tournamet_id,$tournamentManagerId,$tournaments);
-                        
-		  $follow_unfollow = Helper::checkFollowUnfollow(Auth::user()->id,'TOURNAMENT',$tournament_id);
-		
-            
-//            dd($tournament_id);
-            return view('tournaments.groups', array('tournament' => $tournaments, 'team_details' => $team_details, 'tournament_id' => $tournament_id,
-                                'lef_menu_condition' => $lef_menu_condition, 'action_id' => $tournament_id, 'match_details' => $match_details, 'team_name_array' => $team_name_array,
-                                'team_logo' => $team_logo, 'user_name' => $user_name, 'user_profile' => $user_profile, 'schedule_type' => $schedule_type,
-                                'tournament_type' => $tournament_type, 'tournamentDetails' => $tournaments->toArray(), 'team_name' => '',
-                                'tournamentTeams' => !empty($tournamentTeams) ? $tournamentTeams : [], 'sports_id' => $sport_id, 
-                                'roundArray' => !empty($roundArray) ? $roundArray : [],
-                                'scheduleTypeOne' => !empty($scheduleTypeOne)?$scheduleTypeOne:'','scheduleTypeTwo' => !empty($scheduleTypeTwo)?$scheduleTypeTwo:'',
-                                'bracketTeamArray' => !empty($bracketTeamArray) ? $bracketTeamArray : [],'isOwner'=>$isOwner,'lastRoundWinner'=>$lastRoundWinner,
-                                'firstRoundBracket'=>$firstRoundBracket,'firstRoundBracketArray'=>!empty($firstRoundBracketArray)?$firstRoundBracketArray:[],
-                                'selectetdFinalStageTeams'=>!empty($selectetdFinalStageTeams)?$selectetdFinalStageTeams:[], 'maxRoundNumber'=>$maxRoundNumber,
-                                'dispViewFlag'=>$dispViewFlag,'linkUrl'=>$linkUrl,'left_menu_data'=>$left_menu_data,'add_score_link'=>$add_score_link,'sport_name'=>$sport_name,'match_startdate_array'=>$match_startdate_array,'match_count'=>$match_count
-                                ))
-                            ->with('match_types', ['' => 'Select Match Type'] + $match_types)
-                            ->with('player_types', ['' => 'Select Player Type'] + $player_types)
-                            ->with('requestedTeams', ['' => 'Select Team'] + $requestedTeams)
-                            ->with('requestedFinalTeams', ['' => 'Select Team'] + $requestedFinalTeams)
-                            ->with('states', ['' => 'Select State'] + $states)
-                            ->with('cities', ['' => 'Select City'] + array())
-                            ->with('byeArray', $byeArray)
-                            ->with('follow_unfollow', $follow_unfollow)
-                            ->with('matchScheduleData', !empty($matchScheduleData) ? $matchScheduleData : []);
-    }
 
-    function getBracketTeams($tournament_id, $maxRoundNumber, $scheduleType, $isOwner) {
+                if ($tournament_type == 'knockout' || count($tournaments[0]['final_stage_teams']))
+                {
+                        $dispViewFlag = 'final';
+                }
+
+                if ($type == 'group')
+                {
+                        $dispViewFlag = 'group';
+                }
+                elseif ($type == 'final')
+                {
+                        $dispViewFlag = 'final';
+                }
+
+                if (!$isOwner && $dispViewFlag == 'final')
+                {
+                        if (!empty($tournaments[0]['final_stage_teams_ids']))
+                        {
+                                $teamIDs = explode(',', trim($tournaments[0]['final_stage_teams_ids'], ','));
+                                if ($schedule_type == 'team')
+                                {
+                                        $tournamentTeams = Team::whereIn('id', $teamIDs)->orderBy('name')->get(['id',
+                                                'name', 'logo']);
+                                }
+                                else
+                                {
+                                        $tournamentTeams = User::whereIn('id', $teamIDs)->orderBy('name')->get(['id',
+                                                'name', 'logo']);
+                                }
+                        }
+                }
+
+
+                //left menu
+                $parent_tournamet_id = $tournaments[0]['tournament_parent_id'];
+                $tournamentManagerId = $tournaments[0]['manager_id'];
+                $left_menu_data      = Helper::getLeftMenuData($parent_tournamet_id, $tournamentManagerId, $tournaments);
+
+                $follow_unfollow = Helper::checkFollowUnfollow(Auth::user()->id, 'TOURNAMENT', $tournament_id);
+
+
+//            dd($tournament_id);
+                return view('tournaments.groups', array(
+                                        'tournament'               => $tournaments,
+                                        'team_details'             => $team_details,
+                                        'net_run_rate'             => $net_run_rate,
+                                        'tournament_id'            => $tournament_id,
+                                        'lef_menu_condition'       => $lef_menu_condition,
+                                        'action_id'                => $tournament_id,
+                                        'match_details'            => $match_details,
+                                        'team_name_array'          => $team_name_array,
+                                        'team_logo'                => $team_logo,
+                                        'user_name'                => $user_name,
+                                        'user_profile'             => $user_profile,
+                                        'schedule_type'            => $schedule_type,
+                                        'tournament_type'          => $tournament_type,
+                                        'tournamentDetails'        => $tournaments->toArray(),
+                                        'team_name'                => '',
+                                        'tournamentTeams'          => !empty($tournamentTeams) ? $tournamentTeams : [],
+                                        'sports_id'                => $sport_id,
+                                        'roundArray'               => !empty($roundArray) ? $roundArray : [],
+                                        'scheduleTypeOne'          => !empty($scheduleTypeOne) ? $scheduleTypeOne : '',
+                                        'scheduleTypeTwo'          => !empty($scheduleTypeTwo) ? $scheduleTypeTwo : '',
+                                        'bracketTeamArray'         => !empty($bracketTeamArray) ? $bracketTeamArray : [],
+                                        'isOwner'                  => $isOwner, 'lastRoundWinner'          => $lastRoundWinner,
+                                        'firstRoundBracket'        => $firstRoundBracket,
+                                        'firstRoundBracketArray'   => !empty($firstRoundBracketArray) ? $firstRoundBracketArray : [],
+                                        'selectetdFinalStageTeams' => !empty($selectetdFinalStageTeams) ? $selectetdFinalStageTeams : [],
+                                        'maxRoundNumber'           => $maxRoundNumber,
+                                        'dispViewFlag'             => $dispViewFlag,
+                                        'linkUrl'                  => $linkUrl, 'left_menu_data'           => $left_menu_data,
+                                        'add_score_link'           => $add_score_link,
+                                        'sport_name'               => $sport_name,
+                                        'match_startdate_array'    => $match_startdate_array,
+                                        'match_count'              => $match_count
+                                ))
+                                ->with('match_types', ['' => 'Select Match Type'] + $match_types)
+                                ->with('player_types', ['' => 'Select Player Type'] + $player_types)
+                                ->with('requestedTeams', ['' => 'Select Team'] + $requestedTeams)
+                                ->with('requestedFinalTeams', ['' => 'Select Team'] + $requestedFinalTeams)
+                                ->with('countries', ['' => 'Select Country'] + $countries)
+                                ->with('states', ['' => 'Select State'] + $states)
+                                ->with('cities', ['' => 'Select City'] + array())
+                                ->with('byeArray', $byeArray)
+                                ->with('follow_unfollow', $follow_unfollow)
+                                ->with('matchScheduleData', !empty($matchScheduleData) ? $matchScheduleData : []);
+        }
+
+        function getBracketTeams($tournament_id, $maxRoundNumber, $scheduleType, $isOwner) {
         $bracketTeamArray = [];
         $k = 0;
         if ($maxRoundNumber > 1) {

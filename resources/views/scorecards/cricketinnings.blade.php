@@ -246,7 +246,7 @@
 				</select>
 				</td>
 				<td>{!! Form::text('a_at_runs_'.$team_a_fall_wkts, (!empty($team_a_wkts['score']))?$team_a_wkts['score']:'', array('class'=>'gui-input allownumericwithdecimal runs_new','id'=>'a_at_runs_'.$team_a_fall_wkts)) !!}</td>
-				<td>{!! Form::text('a_at_over_'.$team_a_fall_wkts, (!empty($team_a_wkts['over']))?$team_a_wkts['over']:'', array('class'=>'gui-input allownumericwithdecimal runs_new','id'=>'a_at_over_'.$team_a_fall_wkts)) !!}</td>
+				<td>{!! Form::text('a_at_over_'.$team_a_fall_wkts, (!empty($team_a_wkts['over']))?$team_a_wkts['over']:'', array('class'=>'gui-input allownumericwithdecimal out_at_over','id'=>'a_at_over_'.$team_a_fall_wkts)) !!}</td>
 				<td></td>
 				 <td></td>
                 <td></td>
@@ -264,7 +264,7 @@
 				<td>{!! Form::text('a_wicket_1', null, array('class'=>'gui-input allownumericwithdecimal runs_new','id'=>'a_wicket_1')) !!}</td>
 				<td>{!! Form::select('a_wkt_player_1',$team_a,null,array('class'=>'gui-input a_fal_wkt','id'=>'a_wkt_player_1')) !!}</td>
 				<td>{!! Form::text('a_at_runs_1', null, array('class'=>'gui-input allownumericwithdecimal runs_new','id'=>'a_at_runs_1')) !!}</td>
-				<td>{!! Form::text('a_at_over_1', null, array('class'=>'gui-input allownumericwithdecimal runs_new','id'=>'a_at_over_1')) !!}</td>
+				<td>{!! Form::text('a_at_over_1', null, array('class'=>'gui-input allownumericwithdecimal out_at_over','id'=>'a_at_over_1')) !!}</td>
 				<td></td>
                 <td></td>
                 <td></td>
@@ -523,7 +523,7 @@
 				</select>
 				</td>
 				<td>{!! Form::text('b_at_runs_'.$team_b_fall_wkt, (!empty($team_b_fall['score']))?$team_b_fall['score']:'', array('class'=>'gui-input allownumericwithdecimal runs_new','id'=>'b_at_runs_'.$team_b_fall_wkt)) !!}</td>
-				<td>{!! Form::text('b_at_over_'.$team_b_fall_wkt, (!empty($team_b_fall['over']))?$team_b_fall['over']:'', array('class'=>'gui-input allownumericwithdecimal runs_new','id'=>'b_at_over_'.$team_b_fall_wkt)) !!}</td>
+				<td>{!! Form::text('b_at_over_'.$team_b_fall_wkt, (!empty($team_b_fall['over']))?$team_b_fall['over']:'', array('class'=>'gui-input allownumericwithdecimal out_at_over','id'=>'b_at_over_'.$team_b_fall_wkt)) !!}</td>
 				<td></td>
 				<td></td>
                 <td></td>
@@ -540,7 +540,7 @@
 				<td>{!! Form::text('b_wicket_1', null, array('class'=>'gui-input allownumericwithdecimal runs_new','id'=>'b_wicket_1')) !!}</td>
 				<td>{!! Form::select('b_wkt_player_1',$team_b,null,array('class'=>'gui-input b_fal_wkt','id'=>'b_wkt_player_1')) !!}</td>
 				<td>{!! Form::text('b_at_runs_1', null, array('class'=>'gui-input allownumericwithdecimal runs_new','id'=>'b_at_runs_1')) !!}</td>
-				<td>{!! Form::text('b_at_over_1', null, array('class'=>'gui-input allownumericwithdecimal runs_new','id'=>'b_at_over_1')) !!}</td>
+				<td>{!! Form::text('b_at_over_1', null, array('class'=>'gui-input allownumericwithdecimal out_at_over','id'=>'b_at_over_1')) !!}</td>
 				<td></td>
                 <td></td>
                 <td></td>
@@ -647,11 +647,23 @@ function strikeratecalculator(runs,balls,strikerate)
 }
 function economycalculator(runs_conceded,overs,economy)
 {
-	
 	var given_runs = $('#'+runs_conceded).val();
 	var overs_bowled = $('#'+overs).val();
-	var eco = parseInt(given_runs) / parseInt(overs_bowled);//strike rate calculation
-	if(parseInt(overs_bowled)>0)
+    if (overs_bowled.indexOf('.') !== -1)
+    {
+        var oversArr = overs_bowled.split('.');
+        var balls = parseInt(oversArr[1]);
+        if (balls > 0)
+        {
+            overs_bowled = parseInt(oversArr[0]) + (balls / 6);
+            if (overs_bowled.toString().indexOf('.') === -1)
+            {
+                $('#'+overs).val(overs_bowled);
+            }
+        }
+    }
+	var eco = parseInt(given_runs) / parseFloat(overs_bowled);//strike rate calculation
+	if(parseFloat(overs_bowled)>0)
 	{
 		if (!isNaN(eco)) {
 			$('#'+economy).val(eco.toFixed(2));
@@ -1646,6 +1658,6 @@ function total_score(idname,classname,team)
 	$('.'+classname).each(function() {
 			score += Number($(this).val());
 		});
-	$('#fst_ing_'+team+'_score').val(extras+parseInt(score));
+    SJ.SCORECARD.adjustScore('first',team,extras,'add',score);
 }
 </script>

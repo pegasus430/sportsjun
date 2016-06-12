@@ -9,6 +9,8 @@ use App\Helpers\Helper;
 use App\User;
 use App\Model\MarketPlace;
 use App\Model\Sport;
+use App\Model\MatchSchedule;
+use App\Model\Team;
 use Response;
 use View;
 use PDO;
@@ -278,6 +280,30 @@ class SearchController extends Controller
                                         if ($model == 'User')
                                         {
                                                 $checkArray.= $teamdet->user_id . ",";
+                                        }
+                                        elseif ($model == 'Tournaments') {
+                                            $currentTimestamp   = time();
+                                            $startDateTimestamp = strtotime($teamdet->start_date);
+                                            $endDateTimestamp   = strtotime($teamdet->end_date);
+                                            if ($endDateTimestamp <= $currentTimestamp)
+                                            {
+                                                $teamdet->status = "Completed";
+                                                $teamdet->statusColor = "black";
+                                                $tournament_winner_details = self::getTournamentWinner($teamdet, ["name"]);
+                                                if (!empty($tournament_winner_details))
+                                                {
+                                                    $teamdet->winnerName = $tournament_winner_details["name"];
+                                                }
+                                            }
+                                            else if ($startDateTimestamp > $currentTimestamp){
+                                                $teamdet->status = "Not started";
+                                                $teamdet->statusColor = "green";
+                                            }
+                                            else if ($currentTimestamp >= $startDateTimestamp)
+                                            {
+                                                $teamdet->status = "In progress";
+                                                $teamdet->statusColor = "black";
+                                            }
                                         }
                                         else
                                         {
@@ -877,5 +903,21 @@ class SearchController extends Controller
                 }
                 return Response::json(['status' => $result]);
         }
-
+        
+        static function getTournamentWinner($tournamentDetails, $returnable = [])
+        {
+            $winner_id = MatchSchedule::select('winner_id')
+                ->where('tournament_id', $tournamentDetails->id)
+                ->whereNotNull('tournament_match_number')
+                ->whereNotNull('winner_id')
+                ->orderBy('id','desc')
+                ->first();
+            
+            if (isset($winner_id['winner_id']) && !empty($winner_id['winner_id']))
+            {
+                return Team::where('id', $winner_id['winner_id'])->first($returnable);
+            }
+            
+            return false;
+        }
 }

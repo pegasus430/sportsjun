@@ -24,12 +24,25 @@
 <!-- end section --> 
 
 <div class="row">
-<div class="col-sm-6">
+@if(isset($countries))
+<div class="col-sm-4">
+    <div class="section">
+        <label class="form_label">{{ trans('message.common.fields.country') }}	<span  class='required'>*</span></label>
+        <label class="field select">
+            {!! Form::select('country_id',$countries, null, array('required','id'=>'country_id','class'=>'form-control','onchange'=>'displayCountries(this.value)','autocomplete'=>'off','placeholder'=>trans('message.common.fields.country'))) !!}
+            @if ($errors->has('country_id')) <p class="help-block">{{ $errors->first('country_id') }}</p> @endif
+            <i class="arrow double"></i>
+        </label>
+    </div>
+</div>
+@endif
+
+<div class="col-sm-4">
     <div class="section">
     <label class="form_label">{{ trans('message.common.fields.state') }}	<span  class='required'>*</span></label>
         <label class="field select">
     
-            {!! Form::select('state_id',$states, null, array('required','id'=>'state_id','class'=>'form-control','onchange'=>'displayStates(this.value)','autocomplete'=>'off','placeholder'=>trans('message.common.fields.state'))) !!}
+            {!! Form::select('state_id',$states, null, array('required','id'=>'state_id','class'=>'form-control states','onchange'=>'displayStates(this.value)','autocomplete'=>'off','placeholder'=>trans('message.common.fields.state'))) !!}
                @if ($errors->has('state_id')) <p class="help-block">{{ $errors->first('state_id') }}</p> @endif
             <i class="arrow double"></i>                    
         </label>  
@@ -37,7 +50,7 @@
     </div>
 </div>
 <!-- end section -->  
-<div class="col-sm-6">
+<div class="col-sm-4">
     <div class="section">
     <label class="form_label">{{ trans('message.common.fields.city') }}	<span  class='required'>*</span> </label>
         <label class="field select">
@@ -74,6 +87,10 @@
 <script type="text/javascript">
 // Function to display city for states               
 $(document).ready(function(){
+    @if (!empty(old('state_id')))
+        $("#state_id").val({{old('state_id')}}); ;
+    @endif
+
     @if (!empty(old('city_id')))
         $("#city_id").val({{old('city_id')}}); ;
     @endif

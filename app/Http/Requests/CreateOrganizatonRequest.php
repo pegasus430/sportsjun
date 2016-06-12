@@ -32,7 +32,7 @@ class CreateOrganizatonRequest extends Request
 			'contact_name' => 'required',
 			'state_id' => 'required',			
 			'city_id' => 'required',
-			'zip' => ['required', config('constants.VALIDATION.ZIPCODE')],
+            'zip' => 'required|alpha_num|max:12',
 		    'organization_type' => 'required',	
         ];
     }

@@ -1,8 +1,8 @@
 <?php
 
 return [
-        'JS_VERSION'               => 7,
-        'CSS_VERSION'              => 7,
+        'JS_VERSION'               => 8,
+        'CSS_VERSION'              => 8,
         'COUNTRY_INDIA'            => 101,
         'LIMIT'                    => 8,
         'SCHEDULE_LIMIT'           => 5,
@@ -149,7 +149,7 @@ return [
                         'RUNS CONCEDED'       => 'RUNS CONCEDED',
                         'AVERAGE'             => 'AVERAGE',
                         'ECONOMY'             => 'ECONOMY',
-                        'BOWLLING_STATISTICS' => 'BOWLLING',
+                        'BOWLLING_STATISTICS' => 'BOWLING',
                 ],
                 'MATCH_TYPE'     => 'MATCH TYPE',
                 'MATCHES'        => 'MATCHES',
@@ -198,6 +198,7 @@ return [
                 'JQUERY_DISPLAY_DATETIME_FORMAT' => 'dd/mm/yyyy H:i:s',
                 'DB_STORE_TIME_FORMAT'           => 'Y-m-d H:i:s',
                 'DB_STORE_DATE_FORMAT'           => 'Y-m-d',
+                'DISPLAY_DATE_FORMAT'            => 'jS F, Y'
         ],
         'REQUEST_TYPE'             => [
                 'PLAYER_TO_TEAM'       => 1,

@@ -1592,15 +1592,41 @@ class ScoreCardController extends Controller {
 				{
 					$a_bat_status = 'dnb';
 				}
+                
+                // 50's and 100's - start
+                $fifties = $hundreds = 0;
+                    
+                if ((int) $totalruns_a > 50)
+                {
+                    $fifties = (int) ($totalruns_a / 50);
+                }
+
+                if ((int) $totalruns_a > 100)
+                {
+                    $hundreds = (int) ($totalruns_a / 100);
+                }
 				
-				if(count($is_player_exist)>0)// if player already exist
+				if (count($is_player_exist)>0)// if player already exist
 				{
-					$update_id = $is_player_exist['id'];
-					CricketPlayerMatchwiseStats::where('id',$update_id)->update(['balls_played'=>$balls_played_a,'totalruns'=>$totalruns_a,'fours'=>$fours_a,'sixes'=>$sixes_a,'out_as'=>$out_as_a,'strikerate'=>$strikerate_a,'fielder_id'=>$fielder_id_a,'bowled_id'=>$bowled_id_a,'bat_status'=>$a_bat_status,'sr_no_in_batting_team'=>$i]);
-					
-				}else
+                    $update_id = $is_player_exist['id'];
+					CricketPlayerMatchwiseStats::where('id', $update_id)
+                        ->update([
+                            'balls_played'          => $balls_played_a,
+                            'totalruns'             => $totalruns_a,
+                            'fours'                 => $fours_a,
+                            'sixes'                 => $sixes_a,
+                            'out_as'                => $out_as_a,
+                            'strikerate'            => $strikerate_a,
+                            'fielder_id'            => $fielder_id_a,
+                            'bowled_id'             => $bowled_id_a,
+                            'bat_status'            => $a_bat_status,
+                            'sr_no_in_batting_team' => $i,
+                            'fifties'               => $fifties,
+                            'hundreds'              => $hundreds
+                        ]);
+                }else
 				{
-					$this->insertBatsmenScore($user_id_a,$tournament_id,$match_id,$team_a_id,$match_type,$balls_played_a,$totalruns_a,$fours_a,$sixes_a,$out_as_a,$strikerate_a,$team_a_name,$player_name,$inning,$fielder_id_a,$bowled_id_a,$a_bat_status,$i);
+					$this->insertBatsmenScore($user_id_a,$tournament_id,$match_id,$team_a_id,$match_type,$balls_played_a,$totalruns_a,$fours_a,$sixes_a,$out_as_a,$strikerate_a,$team_a_name,$player_name,$inning,$fielder_id_a,$bowled_id_a,$a_bat_status,$i,$fifties,$hundreds);
 				}
 				
 				
@@ -1676,14 +1702,41 @@ class ScoreCardController extends Controller {
 				{
 					$b_bat_status = 'dnb';
 				}
+                
+                // 50's and 100's - start
+                $fifties = $hundreds = 0;
+                    
+                if ((int) $totalruns_b > 50)
+                {
+                    $fifties = (int) ($totalruns_b / 50);
+                }
+
+                if ((int) $totalruns_b > 100)
+                {
+                    $hundreds = (int) ($totalruns_b / 100);
+                }
 				
 				if(count($is_b_player_exist)>0)
 				{
 					$update_id = $is_b_player_exist['id'];
-					CricketPlayerMatchwiseStats::where('id',$update_id)->update(['balls_played'=>$balls_played_b,'totalruns'=>$totalruns_b,'fours'=>$fours_b,'sixes'=>$sixes_b,'out_as'=>$out_as_b,'strikerate'=>$strikerate_b,'fielder_id'=>$fielder_id_b,'bowled_id'=>$bowled_id_b,'bat_status'=>$b_bat_status,'sr_no_in_batting_team'=>$k]);
+					CricketPlayerMatchwiseStats::where('id',$update_id)
+                        ->update([
+                            'balls_played'          => $balls_played_b,
+                            'totalruns'             => $totalruns_b,
+                            'fours'                 => $fours_b,
+                            'sixes'                 => $sixes_b,
+                            'out_as'                => $out_as_b,
+                            'strikerate'            => $strikerate_b,
+                            'fielder_id'            => $fielder_id_b,
+                            'bowled_id'             => $bowled_id_b,
+                            'bat_status'            => $b_bat_status,
+                            'sr_no_in_batting_team' => $k,
+                            'fifties'               => $fifties,
+                            'hundreds'              => $hundreds
+                        ]);
 				}else
 				{
-					$this->insertBatsmenScore($user_id_b,$tournament_id,$match_id,$team_b_id,$match_type,$balls_played_b,$totalruns_b,$fours_b,$sixes_b,$out_as_b,$strikerate_b,$team_b_name,$player_b_name,$inning,$fielder_id_b,$bowled_id_b,$b_bat_status,$k);
+					$this->insertBatsmenScore($user_id_b,$tournament_id,$match_id,$team_b_id,$match_type,$balls_played_b,$totalruns_b,$fours_b,$sixes_b,$out_as_b,$strikerate_b,$team_b_name,$player_b_name,$inning,$fielder_id_b,$bowled_id_b,$b_bat_status,$k,$fifties,$hundreds);
 				}
 				
 				
@@ -1960,28 +2013,30 @@ class ScoreCardController extends Controller {
 		//return Response()->json( array('success' => trans('message.scorecard.scorecardmsg')) );
 	}
 	//function to insert batsmen score
-	public function insertBatsmenScore($user_id,$tournament_id,$match_id,$team_id,$match_type,$balls_played,$totalruns,$fours,$sixes,$out_as,$strikerate,$team_name,$player_name,$innings,$fielder_id,$bowled_id,$bat_status,$sr_no_in_batting_team=0)
+	public function insertBatsmenScore($user_id,$tournament_id,$match_id,$team_id,$match_type,$balls_played,$totalruns,$fours,$sixes,$out_as,$strikerate,$team_name,$player_name,$innings,$fielder_id,$bowled_id,$bat_status,$sr_no_in_batting_team=0,$fifties=0,$hundreds=0)
 	{
-		$model = new CricketPlayerMatchwiseStats();
-		$model->user_id = $user_id;
-		$model->tournament_id = $tournament_id;
-		$model->match_id = $match_id;
-		$model->team_id = $team_id;
-		$model->match_type = $match_type;
-		$model->balls_played = $balls_played;
-		$model->totalruns = $totalruns;
-		$model->fours = $fours;
-		$model->sixes = $sixes;
-		$model->out_as = $out_as;
-		$model->strikerate = $strikerate;
-		$model->team_name = $team_name;
-		$model->player_name = $player_name;
-		$model->innings = $innings;
-		$model->fielder_id = $fielder_id;
-		$model->bowled_id = $bowled_id;
-		$model->bat_status = $bat_status;
-                $model->sr_no_in_batting_team = $sr_no_in_batting_team;
-		$model->save();
+		$model                        = new CricketPlayerMatchwiseStats();
+        $model->user_id               = $user_id;
+        $model->tournament_id         = $tournament_id;
+        $model->match_id              = $match_id;
+        $model->team_id               = $team_id;
+        $model->match_type            = $match_type;
+        $model->balls_played          = $balls_played;
+        $model->totalruns             = $totalruns;
+        $model->fours                 = $fours;
+        $model->sixes                 = $sixes;
+        $model->out_as                = $out_as;
+        $model->strikerate            = $strikerate;
+        $model->team_name             = $team_name;
+        $model->player_name           = $player_name;
+        $model->innings               = $innings;
+        $model->fielder_id            = $fielder_id;
+        $model->bowled_id             = $bowled_id;
+        $model->bat_status            = $bat_status;
+        $model->sr_no_in_batting_team = $sr_no_in_batting_team;
+        $model->fifties               = $fifties;
+        $model->hundreds              = $hundreds;
+        $model->save();
 	}
 	
 	//insert bowler score
@@ -2014,16 +2069,33 @@ class ScoreCardController extends Controller {
 		$cricket_statistics_array = array();
 		$cricket_statistics = CricketStatistic::select()->where('user_id',$user_id)->where('match_type',$match_type)->where('innings',$inning)->get();
 		
-		$batsman_detais = CricketPlayerMatchwiseStats::selectRaw('count(DISTINCT(match_id)) as match_count')->selectRaw('count(innings) as inningscount')->selectRaw('sum(totalruns) as totalruns')->selectRaw('sum(balls_played) as balls_played')->selectRaw('sum(fifties) as fifties')->selectRaw('sum(hundreds) as hundreds')->selectRaw('sum(fours) as fours')->selectRaw('sum(sixes) as sixes')->where('user_id',$user_id)->where('match_type',$match_type)->where('innings',$inning)->groupBy('user_id')->get();
+		$batsman_detais = CricketPlayerMatchwiseStats::selectRaw('count(DISTINCT(match_id)) as match_count')
+            ->selectRaw('count(innings) as inningscount')
+            ->selectRaw('sum(totalruns) as totalruns')
+            ->selectRaw('sum(balls_played) as balls_played')
+            ->selectRaw('sum(fifties) as fifties')
+            ->selectRaw('sum(hundreds) as hundreds')
+            ->selectRaw('sum(fours) as fours')
+            ->selectRaw('sum(sixes) as sixes')
+            ->selectRaw('sum(IF(bat_status="notout", 1, 0)) as notouts')
+            ->selectRaw('max(totalruns) as highscore')
+            ->where('user_id',$user_id)
+            ->where('match_type',$match_type)
+            ->where('innings',$inning)
+            ->groupBy('user_id')->get();
 		
-		$innings_bat = (!empty($batsman_detais[0]['inningscount']))?$batsman_detais[0]['inningscount']:0;
-		$totalruns = (!empty($batsman_detais[0]['totalruns']))?$batsman_detais[0]['totalruns']:0;
-		$totalballs = (!empty($batsman_detais[0]['balls_played']))?$batsman_detais[0]['balls_played']:0;
-		$fours = (!empty($batsman_detais[0]['fours']))?$batsman_detais[0]['fours']:0;
-		$sixes = (!empty($batsman_detais[0]['sixes']))?$batsman_detais[0]['sixes']:0;
-		$match_count = (!empty($batsman_detais[0]['match_count']))?$batsman_detais[0]['match_count']:0;
-		
-		if(count($cricket_statistics)>0)
+		$innings_bat = (!empty($batsman_detais[0]['inningscount'])) ? $batsman_detais[0]['inningscount'] : 0;
+        $totalruns   = (!empty($batsman_detais[0]['totalruns'])) ? $batsman_detais[0]['totalruns'] : 0;
+        $totalballs  = (!empty($batsman_detais[0]['balls_played'])) ? $batsman_detais[0]['balls_played'] : 0;
+        $fours       = (!empty($batsman_detais[0]['fours'])) ? $batsman_detais[0]['fours'] : 0;
+        $sixes       = (!empty($batsman_detais[0]['sixes'])) ? $batsman_detais[0]['sixes'] : 0;
+        $match_count = (!empty($batsman_detais[0]['match_count'])) ? $batsman_detais[0]['match_count'] : 0;
+        $fifties     = (!empty($batsman_detais[0]['fifties'])) ? $batsman_detais[0]['fifties'] : 0;
+        $hundreds    = (!empty($batsman_detais[0]['hundreds'])) ? $batsman_detais[0]['hundreds'] : 0;
+        $notouts     = (!empty($batsman_detais[0]['notouts'])) ? $batsman_detais[0]['notouts'] : 0;
+        $highscore   = (!empty($batsman_detais[0]['highscore'])) ? $batsman_detais[0]['highscore'] : 0;
+
+        if(count($cricket_statistics)>0)
 		{
 			$average_bat='';
 			if($totalruns>0 && $innings_bat>0)
@@ -2036,29 +2108,48 @@ class ScoreCardController extends Controller {
 			{
 				$strikerate = ($totalruns/$totalballs)*100;//strikerate calculation [total runs/total ball*100]
 			}
-			CricketStatistic::where('user_id',$user_id)->where('match_type',$match_type)->update(['matches'=>$match_count,'innings_bat'=>$innings_bat,'totalruns'=>$totalruns,'totalballs'=>$totalballs,'fours'=>$fours,'sixes'=>$sixes,'strikerate'=>$strikerate,'average_bat'=>$average_bat]);
+			CricketStatistic::where('user_id',$user_id)
+                ->where('match_type',$match_type)
+                ->update([
+                    'matches'     => $match_count,
+                    'innings_bat' => $innings_bat,
+                    'totalruns'   => $totalruns,
+                    'totalballs'  => $totalballs,
+                    'fours'       => $fours,
+                    'sixes'       => $sixes,
+                    'strikerate'  => $strikerate,
+                    'average_bat' => $average_bat,
+                    'fifties'     => $fifties,
+                    'hundreds'    => $hundreds,
+                    'notouts'     => $notouts,
+                    'highscore'   => $highscore
+                ]);
 		}
 		else
 		{
-			$matchcount = (!empty($batsman_detais[0]['match_count']))?$batsman_detais[0]['match_count']:0;
-			$innings_bat = (!empty($batsman_detais[0]['inningscount']))?$batsman_detais[0]['inningscount']:0;
-			$objStatistics = new CricketStatistic();
-			$objStatistics->user_id = $user_id;
-			$objStatistics->match_type = $match_type;
-			$objStatistics->matches = $matchcount;
-			$objStatistics->innings_bat = $innings_bat;
-			$objStatistics->totalruns = $totalruns;
-			$objStatistics->totalballs = $totalballs;
-			$objStatistics->fours = $fours;
-			$objStatistics->sixes = $sixes;
-			$objStatistics->innings = $inning;
-			$strikerate='';
-			if($totalballs>0)
+			$matchcount                 = (!empty($batsman_detais[0]['match_count'])) ? $batsman_detais[0]['match_count'] : 0;
+            $innings_bat                = (!empty($batsman_detais[0]['inningscount'])) ? $batsman_detais[0]['inningscount'] : 0;
+            $objStatistics              = new CricketStatistic();
+            $objStatistics->user_id     = $user_id;
+            $objStatistics->match_type  = $match_type;
+            $objStatistics->matches     = $matchcount;
+            $objStatistics->innings_bat = $innings_bat;
+            $objStatistics->totalruns   = $totalruns;
+            $objStatistics->totalballs  = $totalballs;
+            $objStatistics->fours       = $fours;
+            $objStatistics->sixes       = $sixes;
+            $objStatistics->innings     = $inning;
+            $objStatistics->fifties     = $fifties;
+            $objStatistics->hundreds    = $hundreds;
+            $objStatistics->notouts     = $notouts;
+            $objStatistics->highscore   = $highscore;
+            $strikerate                 = "";
+			if ($totalballs > 0)
 			{
-				$strikerate = ($totalruns/$totalballs)*100;//strikerate calculation [total runs/total ball*100]
+				$strikerate             = ($totalruns/$totalballs)*100;//strikerate calculation [total runs/total ball*100]
 			}
-			$average_bat = $totalruns; //total runs / innings bat
-			$objStatistics->strikerate = $strikerate;
+			$average_bat                = $totalruns; //total runs / innings bat
+			$objStatistics->strikerate  = $strikerate;
 			$objStatistics->save();
 		}
 	}	
