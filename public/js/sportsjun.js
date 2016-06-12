@@ -63,7 +63,7 @@ $('.glyphicon-calendar').parent().siblings('input:text').attr('readonly','readon
         return false;
       }
     }).data("ui-autocomplete")._renderItem = function(ul, item) {
-        return $("<li>").data("item.autocomplete", item).append("<a>" + item.label + "</a>").appendTo(ul);
+        return $("<li>").data("item.autocomplete", item).append("<a>" + item.label + "<br><strong>" + item.desc + "</strong></a>").appendTo(ul);
     };
     }    
 });

@@ -19,9 +19,10 @@ class SearchCitiesController extends Controller
     {
         $term = $request->input('term');
 
-        $cities = City::where('city_name', 'LIKE', "%{$term}%")
-                      ->take(15)
-                      ->get();
+        $cities =
+            City::with('state.country')->where('city_name', 'LIKE', "{$term}%")
+                ->take(15)
+                ->get();
 
         return response()->json($this->transformCities($cities));
 
@@ -53,6 +54,7 @@ class SearchCitiesController extends Controller
         return [
             'id'    => $city->id,
             'label' => $city->city_name,
+            'desc'  => "{$city->state->state_name}, {$city->state->country->country_name}",
         ];
     }
 }
