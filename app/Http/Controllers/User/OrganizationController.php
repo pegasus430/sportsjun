@@ -13,6 +13,9 @@ use App\Model\Team;
 use App\Helpers\Helper;
 use Auth;
 use App\Model\Photo;
+use App\Model\Sport;
+use App\Http\Controllers\User\SearchController;
+use DB;
 
 //use Helper;
 
@@ -230,5 +233,80 @@ class OrganizationController extends Controller {
 			return redirect()->back()->with('error_msg', trans('message.organization.updatefail'))->with('div_sel_org','active');
 		}
 	}
+    
+    public function organizationTournaments($id)
+    {
+        $offset         = !empty(Request::get('offset')) ? Request::get('offset') : 0;
+        $limit          = !empty(Request::get('limit')) ? Request::get('limit') : config('constants.LIMIT');
+        $sports_array   = $exist_array = $follow_array = [];
+        
+        $user_id    = Auth::user()->id;
+        $query      = DB::table('tournament_parent')
+            ->join('tournaments', 'tournaments.tournament_parent_id', '=', 'tournament_parent.id')
+            ->select('tournament_parent.logo',
+                'tournaments.id',
+                'tournaments.name',
+                'tournaments.location',
+                'tournaments.start_date',
+                'tournaments.end_date',
+                'tournaments.sports_id',
+                'tournaments.enrollment_fee',
+                'tournaments.description',
+                'tournaments.schedule_type')
+            ->where('tournaments.isactive', 1)
+            ->whereNull('tournaments.deleted_at')
+            ->where('tournament_parent.organization_id', $id);
+        
+        $totalresult = $query->get();
+        $total       = count($totalresult);
+        $tournaments = $query->limit($limit)->offset($offset)->orderBy('tournaments.updated_at', 'desc')->get();
+        $orgInfo     = Organization::select()->where('id', $id)->get()->toArray();
+        
+        if (!empty($tournaments))
+        {
+            foreach ($tournaments as $teamdet)
+            {
+                $currentTimestamp   = time();
+                $startDateTimestamp = strtotime($teamdet->start_date);
+                $endDateTimestamp   = strtotime($teamdet->end_date);
+                if ($endDateTimestamp <= $currentTimestamp)
+                {
+                    $teamdet->status = "Completed";
+                    $teamdet->statusColor = "black";
+                    $tournament_winner_details = SearchController::getTournamentWinner($teamdet, ["name"]);
+                    if (!empty($tournament_winner_details))
+                    {
+                        $teamdet->winnerName = $tournament_winner_details["name"];
+                    }
+                }
+                else if ($startDateTimestamp > $currentTimestamp){
+                    $teamdet->status = "Not started";
+                    $teamdet->statusColor = "green";
+                }
+                else if ($currentTimestamp >= $startDateTimestamp)
+                {
+                    $teamdet->status = "In progress";
+                    $teamdet->statusColor = "black";
+                }
+            }
+            
+            $sports       = Sport::get();
+            foreach ($sports as $sport)
+            {
+                $sports_array[$sport->id] = $sport->sports_name;
+            }
+        }
+        
+        return view('organization.tournaments')->with([
+                'tournaments'      => $tournaments,
+                'id'               => $id,
+                'orgInfo'          => $orgInfo,
+                'userId'           => $user_id,
+                'totalTournaments' => $total,
+                'sports_array'     => $sports_array,
+                'exist_array'      => $exist_array,
+                'follow_array'     => $follow_array
+        ]);
+    }
 
 }

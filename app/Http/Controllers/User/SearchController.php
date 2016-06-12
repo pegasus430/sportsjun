@@ -289,7 +289,7 @@ class SearchController extends Controller
                                             {
                                                 $teamdet->status = "Completed";
                                                 $teamdet->statusColor = "black";
-                                                $tournament_winner_details = $this->getTournamentWinner($teamdet, ["name"]);
+                                                $tournament_winner_details = self::getTournamentWinner($teamdet, ["name"]);
                                                 if (!empty($tournament_winner_details))
                                                 {
                                                     $teamdet->winnerName = $tournament_winner_details["name"];
@@ -904,7 +904,7 @@ class SearchController extends Controller
                 return Response::json(['status' => $result]);
         }
         
-        function getTournamentWinner($tournamentDetails, $returnable = [])
+        static function getTournamentWinner($tournamentDetails, $returnable = [])
         {
             $winner_id = MatchSchedule::select('winner_id')
                 ->where('tournament_id', $tournamentDetails->id)
