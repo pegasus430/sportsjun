@@ -25,6 +25,7 @@
                                     <th>Won</th>
                                     <th>Lost</th>
                                     <th>Points</th>
+                                    <th>Net Run Rate</th>
                                 </tr>
                             </thead>
 							<tbody>
@@ -35,7 +36,7 @@
                                     <td>{{ !empty($team['won'])?$team['won']:0 }}</td>
                                     <td>{{ !empty($team['lost'])?$team['lost']:0 }}</td>
                                     <td>{{ !empty($team['points'])?$team['points']:0 }}</td>
-    
+                                    <td>{{ !empty($net_run_rate[$team['team_id']])?$net_run_rate[$team['team_id']]:"--" }}</td>
                                 </tr>
 							@endforeach
 							</tbody>
