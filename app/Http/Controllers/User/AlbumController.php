@@ -14,6 +14,7 @@ use App\Model\City;
 use App\Model\Team;
 use App\Model\Tournaments;
 use App\Model\UserProvider;
+use App\Model\Organization;
 use Illuminate\Http\Request;
 use Session;
 use Hash;
@@ -212,6 +213,7 @@ class AlbumController extends Controller {
 			$id="";
 			$loginUserId= "";
 			$orgalbumcreate="";
+            $orgInfo = [];
 			if($action=='team')
 			{
 			
@@ -255,7 +257,7 @@ class AlbumController extends Controller {
 				$loginUserId= Auth::user()->id;
 				//to create album permissions
 				$orgalbumcreate = DB::select("SELECT * FROM `organization` tp WHERE `user_id` = $loginUserId AND `id`=$action_id AND tp.deleted_at is NULL");
-			
+                $orgInfo= Organization::select()->where('id',$action_id)->get()->toArray();
 				 $album_array = Album::select('id','title','user_id')->where('imageable_type',$imageable_type_album)->where('imageable_id',$action_id)->get()->toArray();//albums related to users
 				 
 				
@@ -408,7 +410,31 @@ class AlbumController extends Controller {
 			// }
 			// else
 			// {
-				return view('album.viewalbum',array('album_array'=>$album_array,'album_photo_count'=>$album_photo_count,'user_profile_album'=>$user_profile_album,'action'=>$action,'action_id'=>$action_id,'action'=>$action,'lef_menu_condition'=>$lef_menu_condition,'photo_arrayy' =>$photo_arrayy,'user_profile_albums'=>$user_profile_albums,'userId' => $user_id,  'albumcreate'=>  $albumcreate,	'result'=>	$result,'id'=>$id,'tournamentresult'=> $tournamentresult,'flag'=>$flag, 'matchalbumcreate'=>  $matchalbumcreate,'tournament_type'=>$tournament_type,'left_menu_data'=>$left_menu_data,'tournament_id'=>$action_id,'tournament_profile_albums'=>$tournament_profile_albums,'loginUserId'=>$loginUserId,'orgalbumcreate'=>$orgalbumcreate,'organization_profile_albums'=>$organization_profile_albums ));
+				return view('album.viewalbum',array(
+                    'album_array'                 => $album_array,
+                    'album_photo_count'           => $album_photo_count,
+                    'user_profile_album'          => $user_profile_album,
+                    'action'                      => $action,
+                    'action_id'                   => $action_id,
+                    'lef_menu_condition'          => $lef_menu_condition,
+                    'photo_arrayy'                => $photo_arrayy,
+                    'user_profile_albums'         => $user_profile_albums,
+                    'userId'                      => $user_id,
+                    'albumcreate'                 => $albumcreate,
+                    'result'                      => $result,
+                    'id'                          => $id,
+                    'tournamentresult'            => $tournamentresult,
+                    'flag'                        => $flag,
+                    'matchalbumcreate'            => $matchalbumcreate,
+                    'tournament_type'             => $tournament_type,
+                    'left_menu_data'              => $left_menu_data,
+                    'tournament_id'               => $action_id,
+                    'tournament_profile_albums'   => $tournament_profile_albums,
+                    'loginUserId'                 => $loginUserId,
+                    'orgalbumcreate'              => $orgalbumcreate,
+                    'organization_profile_albums' => $organization_profile_albums,
+                    'orgInfo'                     => $orgInfo
+                ));
              
 			// }
 						
