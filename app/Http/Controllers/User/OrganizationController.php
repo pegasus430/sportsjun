@@ -13,6 +13,9 @@ use App\Model\Team;
 use App\Helpers\Helper;
 use Auth;
 use App\Model\Photo;
+use App\Model\Sport;
+use App\Http\Controllers\User\SearchController;
+use DB;
 
 //use Helper;
 
@@ -34,10 +37,11 @@ class OrganizationController extends Controller {
      */
     public function create() {
         $type = config('constants.ENUM.ORGANIZATION.ORGANIZATION_TYPE');  
-        $states = State::where('country_id', config('constants.COUNTRY_INDIA'))->orderBy('state_name')->lists('state_name', 'id')->all();
+        $countries = Country::orderBy('country_name')->lists('country_name', 'id')->all();
         $teams = Team::where('team_owner_id', Auth::user()->id)->orderBy('name')->lists('name', 'id')->all();
+        $states = [];
 		$cities=[];
-        return view('organization.create', array('states' => ['' => 'Select State'] + $states, 'cities' => ['' => 'Select City'] + $cities, 'type' => ['' => 'Select Organization Type'] +$type, 'id' => '', 'roletype' => 'user', 'teams' =>['' => 'Select Team'] + $teams, 'selectedTeams' => ''));
+        return view('organization.create', array('countries' =>  [''=>'Select Country']+$countries, 'states' => ['' => 'Select State'] + $states, 'cities' => ['' => 'Select City'] + $cities, 'type' => ['' => 'Select Organization Type'] +$type, 'id' => '', 'roletype' => 'user', 'teams' =>['' => 'Select Team'] + $teams, 'selectedTeams' => ''));
     }
 
     /**
@@ -49,8 +53,7 @@ class OrganizationController extends Controller {
     public function store(Requests\CreateOrganizatonRequest $request) {
 		 	
         $request['user_id'] = Auth::user()->id;
-        $request['country_id'] = config('constants.COUNTRY_INDIA');
-        $request['country'] = Country::where('id', config('constants.COUNTRY_INDIA'))->first()->country_name;
+        $request['country'] = !empty($request['country_id']) ? Country::where('id', $request['country_id'])->first()->country_name : 'null';
         $request['state'] = !empty($request['state_id']) ? State::where('id', $request['state_id'])->first()->state_name : 'null';
         $request['city'] = !empty($request['city_id']) ? City::where('id', $request['city_id'])->first()->city_name : 'null';
 		$location=Helper::address($request['address'],$request['city'],$request['state'],$request['country']);
@@ -105,7 +108,8 @@ class OrganizationController extends Controller {
         $request['user_id'] = Auth::user()->id;
         $organization = Organization::findOrFail($id);
         $type = config('constants.ENUM.ORGANIZATION.ORGANIZATION_TYPE');  
-        $states = State::where('country_id', config('constants.COUNTRY_INDIA'))->orderBy('state_name')->lists('state_name', 'id')->all();
+        $countries = Country::orderBy('country_name')->lists('country_name', 'id')->all();
+        $states = State::where('country_id', $organization->country_id)->orderBy('state_name')->lists('state_name', 'id')->all();
         $cities = City::where('state_id', $organization->state_id)->orderBy('city_name')->lists('city_name', 'id')->all();
         $teams = Team::where('team_owner_id', Auth::user()->id)->orderBy('name')->lists('name', 'id')->all();
         $selectedTeams = Team::where('team_owner_id', Auth::user()->id)->where('organization_id', $id)->get(['id']);
@@ -122,7 +126,7 @@ class OrganizationController extends Controller {
 			$selectedTeams = $selectedTeamsIds[1];
 		}
 
-        return view('organization.edit', compact('organization'))->with(array('id' => $id,'states' => ['' => 'Select State'] + $states, 'cities' => ['' => 'Select City'] + $cities, 'type' => ['' => 'Select Organization Type'] + $type, 'roletype' => 'user', 'organization' => $organization, 'teams' =>['' => 'Select Teams'] + $teams, 'selectedTeams' =>  $selectedTeams));
+        return view('organization.edit', compact('organization'))->with(array('id' => $id,'countries' => ['' => 'Select Country'] + $countries,'states' => ['' => 'Select State'] + $states, 'cities' => ['' => 'Select City'] + $cities, 'type' => ['' => 'Select Organization Type'] + $type, 'roletype' => 'user', 'organization' => $organization, 'teams' =>['' => 'Select Teams'] + $teams, 'selectedTeams' =>  $selectedTeams));
     }
 
     /**
@@ -135,9 +139,8 @@ class OrganizationController extends Controller {
     public function update(Requests\CreateOrganizatonRequest $request, $id) {
         $request['city'] = !empty($request['city_id']) ? City::where('id', $request['city_id'])->first()->city_name : 'null';
         $request['state'] = !empty($request['state_id']) ? State::where('id', $request['state_id'])->first()->state_name : 'null';
-        $request['country_id'] = config('constants.COUNTRY_INDIA');
-        $request['country'] = Country::where('id', config('constants.COUNTRY_INDIA'))->first()->country_name;
-		$location=Helper::address($request['address'],$request['city'],$request['state'],$request['country']);
+        $request['country'] = !empty($request['country_id']) ? Country::where('id', $request['country_id'])->first()->country_name : 'null';
+        $location=Helper::address($request['address'],$request['city'],$request['state'],$request['country']);
 	    $request['location']=trim($location,",");
         Organization::whereId($id)->update($request->except(['_method', '_token', 'files', 'filelist_photos', 'team','filelist_gallery','jfiler-items-exclude-files-0']));
         if (count($request->team)) {
@@ -230,5 +233,80 @@ class OrganizationController extends Controller {
 			return redirect()->back()->with('error_msg', trans('message.organization.updatefail'))->with('div_sel_org','active');
 		}
 	}
+    
+    public function organizationTournaments($id)
+    {
+        $offset         = !empty(Request::get('offset')) ? Request::get('offset') : 0;
+        $limit          = !empty(Request::get('limit')) ? Request::get('limit') : config('constants.LIMIT');
+        $sports_array   = $exist_array = $follow_array = [];
+        
+        $user_id    = Auth::user()->id;
+        $query      = DB::table('tournament_parent')
+            ->join('tournaments', 'tournaments.tournament_parent_id', '=', 'tournament_parent.id')
+            ->select('tournament_parent.logo',
+                'tournaments.id',
+                'tournaments.name',
+                'tournaments.location',
+                'tournaments.start_date',
+                'tournaments.end_date',
+                'tournaments.sports_id',
+                'tournaments.enrollment_fee',
+                'tournaments.description',
+                'tournaments.schedule_type')
+            ->where('tournaments.isactive', 1)
+            ->whereNull('tournaments.deleted_at')
+            ->where('tournament_parent.organization_id', $id);
+        
+        $totalresult = $query->get();
+        $total       = count($totalresult);
+        $tournaments = $query->limit($limit)->offset($offset)->orderBy('tournaments.updated_at', 'desc')->get();
+        $orgInfo     = Organization::select()->where('id', $id)->get()->toArray();
+        
+        if (!empty($tournaments))
+        {
+            foreach ($tournaments as $teamdet)
+            {
+                $currentTimestamp   = time();
+                $startDateTimestamp = strtotime($teamdet->start_date);
+                $endDateTimestamp   = strtotime($teamdet->end_date);
+                if ($endDateTimestamp <= $currentTimestamp)
+                {
+                    $teamdet->status = "Completed";
+                    $teamdet->statusColor = "black";
+                    $tournament_winner_details = SearchController::getTournamentWinner($teamdet, ["name"]);
+                    if (!empty($tournament_winner_details))
+                    {
+                        $teamdet->winnerName = $tournament_winner_details["name"];
+                    }
+                }
+                else if ($startDateTimestamp > $currentTimestamp){
+                    $teamdet->status = "Not started";
+                    $teamdet->statusColor = "green";
+                }
+                else if ($currentTimestamp >= $startDateTimestamp)
+                {
+                    $teamdet->status = "In progress";
+                    $teamdet->statusColor = "black";
+                }
+            }
+            
+            $sports       = Sport::get();
+            foreach ($sports as $sport)
+            {
+                $sports_array[$sport->id] = $sport->sports_name;
+            }
+        }
+        
+        return view('organization.tournaments')->with([
+                'tournaments'      => $tournaments,
+                'id'               => $id,
+                'orgInfo'          => $orgInfo,
+                'userId'           => $user_id,
+                'totalTournaments' => $total,
+                'sports_array'     => $sports_array,
+                'exist_array'      => $exist_array,
+                'follow_array'     => $follow_array
+        ]);
+    }
 
 }

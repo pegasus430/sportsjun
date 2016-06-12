@@ -252,7 +252,7 @@ $team_b_count = $team_b_scnd_ing_count; //team b player count
 				</select>
 				</td>
 				<td>{!! Form::text('a_at_runs_'.$fall_of_a_second_ing, (!empty($team_a_wkts_ing['score']))?$team_a_wkts_ing['score']:'', array('class'=>'gui-input allownumericwithdecimal','id'=>'a_at_runs_fst_ing_'.$fall_of_a_second_ing)) !!}</td>
-				<td>{!! Form::text('a_at_over_'.$fall_of_a_second_ing, (!empty($team_a_wkts_ing['over']))?$team_a_wkts_ing['over']:'', array('class'=>'gui-input allownumericwithdecimal','id'=>'a_at_over_fst_ing_'.$fall_of_a_second_ing)) !!}</td>
+				<td>{!! Form::text('a_at_over_'.$fall_of_a_second_ing, (!empty($team_a_wkts_ing['over']))?$team_a_wkts_ing['over']:'', array('class'=>'gui-input allownumericwithdecimal out_at_over','id'=>'a_at_over_fst_ing_'.$fall_of_a_second_ing)) !!}</td>
 				<td></td>
 				<td></td>
                 <td></td>
@@ -269,7 +269,7 @@ $team_b_count = $team_b_scnd_ing_count; //team b player count
 				<td>{!! Form::text('a_wicket_1', null, array('class'=>'gui-input allownumericwithdecimal','id'=>'a_wicket_fst_ing_1')) !!}</td>
 				<td>{!! Form::select('a_wkt_player_1',$team_a,null,array('class'=>'gui-input a_scnd_fal_wkt','id'=>'a_wkt_player_fst_ing_1')) !!}</td>
 				<td>{!! Form::text('a_at_runs_1', null, array('class'=>'gui-input allownumericwithdecimal','id'=>'a_at_runs_fst_ing_1')) !!}</td>
-				<td>{!! Form::text('a_at_over_1', null, array('class'=>'gui-input allownumericwithdecimal','id'=>'a_at_over_fst_ing_1')) !!}</td>
+				<td>{!! Form::text('a_at_over_1', null, array('class'=>'gui-input allownumericwithdecimal out_at_over','id'=>'a_at_over_fst_ing_1')) !!}</td>
 				 <td></td>
                 <td></td>
                 <td></td>
@@ -529,7 +529,7 @@ $team_b_count = $team_b_scnd_ing_count; //team b player count
 				</select>
 				</td>
 				<td>{!! Form::text('b_at_runs_'.$team_b_fall_wkt_ing, (!empty($team_b_fall_ing['score']))?$team_b_fall_ing['score']:'', array('class'=>'gui-input allownumericwithdecimal','id'=>'b_at_runs_'.$team_b_fall_wkt_ing)) !!}</td>
-				<td>{!! Form::text('b_at_over_'.$team_b_fall_wkt_ing, (!empty($team_b_fall_ing['over']))?$team_b_fall_ing['over']:'', array('class'=>'gui-input allownumericwithdecimal','id'=>'b_at_over_'.$team_b_fall_wkt_ing)) !!}</td>
+				<td>{!! Form::text('b_at_over_'.$team_b_fall_wkt_ing, (!empty($team_b_fall_ing['over']))?$team_b_fall_ing['over']:'', array('class'=>'gui-input allownumericwithdecimal out_at_over','id'=>'b_at_over_'.$team_b_fall_wkt_ing)) !!}</td>
 				<td></td>
 				<td></td>
                 <td></td>
@@ -546,7 +546,7 @@ $team_b_count = $team_b_scnd_ing_count; //team b player count
 				<td>{!! Form::text('b_wicket_1', null, array('class'=>'gui-input allownumericwithdecimal','id'=>'b_wicket_1')) !!}</td>
 				<td>{!! Form::select('b_wkt_player_1',$team_b,null,array('class'=>'gui-input b_scnd_fal_wkt','id'=>'b_wkt_player_second_ing_1')) !!}</td>
 				<td>{!! Form::text('b_at_runs_1', null, array('class'=>'gui-input allownumericwithdecimal','id'=>'b_at_runs_1')) !!}</td>
-				<td>{!! Form::text('b_at_over_1', null, array('class'=>'gui-input allownumericwithdecimal','id'=>'b_at_over_1')) !!}</td>
+				<td>{!! Form::text('b_at_over_1', null, array('class'=>'gui-input allownumericwithdecimal out_at_over','id'=>'b_at_over_1')) !!}</td>
 				<td></td>
                 <td></td>
                 <td></td>

@@ -1658,9 +1658,9 @@ $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids
 		
 	 }	 
 
-    public static function displayDate($date){
-        //echo strtotime($date);die;
-        return date(config('constants.DATE_FORMAT.PHP_DISPLAY_DATE_FORMAT'), strtotime($date));
+    public static function displayDate($date, $format = 0){
+        $format = ($format == 1) ? 'DISPLAY_DATE_FORMAT' : 'PHP_DISPLAY_DATE_FORMAT';
+        return date(config('constants.DATE_FORMAT.' . $format), strtotime($date));
     }
 
     public static function displayDateTime($date){
@@ -1744,4 +1744,24 @@ $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids
         DB::setFetchMode(PDO::FETCH_CLASS);
         return $tournaments;
     }
+        
+        /**
+         * sortMultiDimArrayNumeric() - returns the sorted array based on the values of the provided key
+         * 
+         * @param string $key
+         * @return mixed comparison result
+         * 
+         * @author Anoop Naik <anoopnaik2016@gmail.com>
+         */
+        public static function sortMultiDimArrayNumeric($key)
+        {
+                return function ($teamA, $teamB) use ($key) {
+                        if ($teamA[$key] == $teamB[$key])
+                        {
+                                return 0;
+                        }
+                        return ($teamA[$key] < $teamB[$key]) ? 1 : -1;
+                };
+        }
+
 }

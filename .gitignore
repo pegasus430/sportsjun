@@ -3,3 +3,4 @@ public/uploads
 config
 .env
 vendor
+.idea/

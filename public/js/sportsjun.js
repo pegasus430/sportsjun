@@ -55,14 +55,15 @@ $('.glyphicon-calendar').parent().siblings('input:text').attr('readonly','readon
 
     if($("input[name=search_city]").length > 0){
     $("input[name=search_city]").autocomplete({
-        source: cities,
+        source: "/search_cities",
+        minLength: 2,
         select: function( event, ui ) {
         $( "input[name=search_city]" ).val( ui.item.label );
-          $( "input[name=search_city_id]" ).val( ui.item.key );
+          $( "input[name=search_city_id]" ).val( ui.item.id );
         return false;
       }
     }).data("ui-autocomplete")._renderItem = function(ul, item) {
-        return $("<li>").data("item.autocomplete", item).append("<a>" + item.label + "</a>").appendTo(ul);
+        return $("<li>").data("item.autocomplete", item).append("<a>" + item.label + "<br><strong>" + item.desc + "</strong></a>").appendTo(ul);
     };
     }    
 });
@@ -374,17 +375,8 @@ function checkIscityEmpty()
  {
        $( "#search_city_id" ).val('');
         $( "#search_city" ).val('');
-          return true;
- }else{
-    var found = false;
-    for (index in cities) {
-        if(cities[index].label == name){
-            found = true;
-            continue;              
-        }            
-    }
  }
- if(!found) return false;
+          return true;
 }
 
 function showDetails() {
@@ -980,6 +972,38 @@ function displayStates(a) {
         }
     });
 }
+
+function displayCountries(a) {
+    if (!a) {
+        $("#country_id").html("<option value=''>Select Country</option>");
+        return false;
+    }
+    $.ajax({
+        url: base_url + "/getstates",
+        type: "GET",
+        data: {
+            id: a
+        },
+        dataType: "json",
+        beforeSend: function() {
+            $.blockUI({
+                width: "50px",
+                message: $("#spinner").html()
+            });
+        },
+        success: function(a) {
+            $.unblockUI();
+            var b = "<option value=''>Select State</option>";
+            $.each(a, function(a, c) {
+                b += "<option value='" + c["id"] + "'>" + c["state_name"] + "</option>";
+            });
+            $(".states").each(function() {
+                $(this).html(b);
+            });
+        }
+    });
+}
+
 function subTournamentEdit(id)
 {
 	 $.ajax({
@@ -1177,6 +1201,7 @@ function autofillsubtournamentdetails(tournamentDetails) {
         $(".modal-body #player_type").prop("disabled", true);
         $(".modal-body #match_type").prop("disabled", true);
         displayStates(tournamentDetails['state_id']);
+        displayCountries(tournamentDetails['country_id']);
 
         if(scheduletype === "team")
         {

@@ -976,6 +976,7 @@ button:focus {
 .lt-grey {color: #929292;}
 .grey {color: #96A1A1;}
 .black {color:#575757;}
+.red {color: #F44336;}
 
 
 /* Page Tournament */
@@ -2864,3 +2865,10 @@ border-top-color:#DCEEF5 !important;
 .btn_schedule_match a{ background:#65c178; color:#FFFFFF; border-radius: 40px; color: #ffffff !important; display: inline-block; font-size: 12px; margin: 2px 0 5px; padding: 2px 8px; text-decoration: none !important;}
 .btn_schedule_match a i{ font-size: 11px; padding: 0 4px 0 0;}
 div.sportsjun_actions div.col-sm-2.col-xs-12 { display:none; }
+
+.m-a-0 {margin:0}
+.m-t-10 {margin-top:10px}
+.m-y-10 {margin-top:10px;margin-bottom:10px}
+
+.search-results-tournament-winner { font-weight:500; }
+.search-results-tournament-winner span { font-weight:400; }
