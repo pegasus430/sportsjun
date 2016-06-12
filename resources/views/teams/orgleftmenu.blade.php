@@ -3,17 +3,17 @@
 	<div class="row">
 			<div class="team_view">
 						{!! Helper::Images(!empty($photo['url'])?$photo['url']:'','organization',array('height'=>100,'width'=>100) )!!}
-						<h1>{{  !empty($orgInfo[0]['name'])?$orgInfo[0]['name']:""}}</h1>
+						<h1>{{ $orgInfo[0]['name'] or "" }}</h1>
 					
-                                        @if(isset($userId) && ($userId == $orgInfo[0]['user_id']))
+                                        @if(isset($userId) && isset($orgInfo) && ($userId == $orgInfo[0]['user_id']))
 					<a href="{{url('/organization/'.(!empty($id)?$id:0).'/edit')}}" class="tvp_edit">
 					  <span class="fa fa-pencil" title="Edit"></span>
 					</a>
                                         @endif
 		        <div class="locations">
-				  <i class="fa fa-map-marker"></i>&nbsp;<span style="word-wrap: break-word;">{{ !empty($orgInfo[0]['location'])?$orgInfo[0]['location']:'Location' }}</span>
+				  <i class="fa fa-map-marker"></i>&nbsp;<span style="word-wrap: break-word;">{{ $orgInfo[0]['location'] or "Location" }}</span>
 				 </div>
-		            <div class="more desc">{{$orgInfo[0]['about']  or 'Description' }}</div>
+		            <div class="more desc">{{ $orgInfo[0]['about']  or 'Description' }}</div>
 	          </div>
 	<ul class="nav sidemenu_nav leftmenu-icon" id="side-menu">
         <li><a class="sidemenu_1" href="{{ url('getorgteamdetails/'.$id) }}"><span class="ico ico-info"></span> Info</a></li>

@@ -487,12 +487,12 @@ class TeamController extends Controller
 	
 	function getorgDetails($id)
 	{
-		
+		$user_id = Auth::user()->id;
 	    $teams = Team::select('id','name')->where('organization_id',$id)->get()->toArray();
 		$photo= Photo::select('url')->where('imageable_id', '=', $id)->where('imageable_type', '=', config('constants.PHOTO.TEAM_PHOTO'))->where('user_id', Auth::user()->id)->get()->toArray();
 		$orgInfo= Organization::select()->where('id',$id)->get()->toArray();
 	
-		return view('teams.teams')->with(array( 'teams'=>$teams,'photo'=>$photo,'orgInfo'=>$orgInfo,'id'=>$id ));
+		return view('teams.teams')->with(array( 'teams'=>$teams,'photo'=>$photo,'orgInfo'=>$orgInfo,'id'=>$id, 'userId' => $user_id ));
 	}
 	function organizationTeamlist($id)
 	{
