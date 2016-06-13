@@ -49,6 +49,8 @@ abstract class Field extends Widget
     public $model_relations;
     public $insert_value = null;
     public $update_value = null;
+    public $insert_description = null;
+    public $update_description = null;
     public $show_value = null; //default value in visualization
     public $edited = false;
     public $options = array();
@@ -238,10 +240,10 @@ abstract class Field extends Widget
         return $this;
     }
 
-    public function insertValue($insert_value)
+    public function insertValue($insert_value, $insert_description = null)
     {
         $this->insert_value = $insert_value;
-
+        $this->insert_description = $insert_description;
         return $this;
     }
 
@@ -252,10 +254,10 @@ abstract class Field extends Widget
         return $this;
     }
 
-    public function updateValue($update_value)
+    public function updateValue($update_value, $update_description = null)
     {
         $this->update_value = $update_value;
-
+        $this->update_description = $update_description;
         return $this;
     }
 
@@ -311,8 +313,14 @@ abstract class Field extends Widget
 
         } elseif (($this->status == "create") && ($this->insert_value != null)) {
             $this->value = $this->insert_value;
+            if ($this->insert_description != null) {
+                $this->description = $this->insert_description;
+            }
         } elseif (($this->status == "modify") && ($this->update_value != null)) {
             $this->value = $this->update_value;
+            if ($this->update_description != null) {
+                $this->description = $this->update_description;
+            }
         } elseif (($this->status == "show") && ($this->show_value != null)) {
             $this->value = $this->show_value;
         } elseif (isset($this->model) && $this->relation != null) {
@@ -505,19 +513,27 @@ abstract class Field extends Widget
             if (
                 !(Schema::connection($this->model->getConnectionName())->hasColumn($this->model->getTable(), $this->db_name)
                 || $this->model->hasSetMutator($this->db_name))
-                || is_a($this->relation, 'Illuminate\Database\Eloquent\Relations\HasOne')
+                || is_a($this->relation, 'Illuminate\Database\Eloquent\Relations\Relation') //Relation
                 ) {
 
-                $self = $this; //fix old 5.3 you can't pass this in a closure
+                //belongsTo relation 
+                if (is_a($this->relation, 'Illuminate\Database\Eloquent\Relations\BelongsTo')) {
+                    $this->model->setAttribute($this->db_name, $this->new_value);
+                    return true;
+                }
+                //other kind of relations are postponed
+                $self = $this; 
                 $this->model->saved(function () use ($self) {
                     $self->updateRelations();
                 });
-
+                
                 //check for relation then exit
                 return true;
             }
+            if (!is_a($this->relation, 'Illuminate\Database\Eloquent\Relations\Relation')) {
+                $this->model->setAttribute($this->db_name, $this->new_value);
+            }
             
-            $this->model->setAttribute($this->db_name, $this->new_value);
             if ($save) {
                 return $this->model->save();
             }
@@ -528,7 +544,6 @@ abstract class Field extends Widget
 
     public function updateRelations()
     {
-
         if (isset($this->new_value)) {
             $data = $this->new_value;
         } else {
@@ -536,6 +551,8 @@ abstract class Field extends Widget
         }
         if ($this->relation != null) {
 
+            //dd($this->relation, get_class($this->relation));
+            
             $methodClass = get_class($this->relation);
             switch ($methodClass) {
                 case 'Illuminate\Database\Eloquent\Relations\BelongsToMany':
@@ -571,6 +588,7 @@ abstract class Field extends Widget
                     $relation->{$this->rel_field} = $data;
                     $this->relation->save( $relation );
                     break;
+                
                 case 'Illuminate\Database\Eloquent\Relations\HasOneOrMany':
 
                 case 'Illuminate\Database\Eloquent\Relations\HasMany':
