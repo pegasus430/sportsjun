@@ -13,22 +13,22 @@ abstract class AbstractProvider implements ProviderContract
     /**
      * The HTTP request instance.
      *
-     * @var Request
+     * @var \Illuminate\Http\Request
      */
     protected $request;
 
     /**
      * The OAuth server implementation.
      *
-     * @var Server
+     * @var \League\OAuth1\Client\Server\Server
      */
     protected $server;
 
     /**
      * Create a new provider instance.
      *
-     * @param  Request  $request
-     * @param  Server  $server
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \League\OAuth1\Client\Server\Server  $server
      * @return void
      */
     public function __construct(Request $request, Server $server)
@@ -40,7 +40,7 @@ abstract class AbstractProvider implements ProviderContract
     /**
      * Redirect the user to the authentication page for the provider.
      *
-     * @return RedirectResponse
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function redirect()
     {
@@ -54,6 +54,7 @@ abstract class AbstractProvider implements ProviderContract
     /**
      * Get the User instance for the authenticated user.
      *
+     * @throws \InvalidArgumentException
      * @return \Laravel\Socialite\One\User
      */
     public function user()
@@ -100,7 +101,7 @@ abstract class AbstractProvider implements ProviderContract
     /**
      * Set the request instance.
      *
-     * @param  Request  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return $this
      */
     public function setRequest(Request $request)
