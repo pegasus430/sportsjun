@@ -15,17 +15,17 @@ class CreateOrganizationStaffsTable extends Migration
         Schema::create('organization_staffs', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->unsignedInteger('user_id');
+            $table->integer('user_id');
             $table->foreign('user_id')
                   ->references('id')
                   ->on('users')
                   ->onUpdate('CASCADE')
                   ->onDelete('CASCADE');
 
-            $table->unsignedInteger('organization_id');
+            $table->integer('organization_id');
             $table->foreign('organization_id')
                   ->references('id')
-                  ->on('organizations')
+                  ->on('organization')
                   ->onUpdate('CASCADE')
                   ->onDelete('CASCADE');
 
@@ -35,6 +35,8 @@ class CreateOrganizationStaffsTable extends Migration
                   ->on('organization_roles')
                   ->onUpdate('CASCADE')
                   ->onDelete('CASCADE');
+
+            $table->boolean('status')->default(false);
 
             $table->timestamps();
 

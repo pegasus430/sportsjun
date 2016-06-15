@@ -19,6 +19,17 @@ Route::post('tempphoto/store', 'TempphotoController@store1');
 	 Route::get('organizationTeamlist/{id}', [
 	    'as' => 'organizationTeamlist', 'uses' => 'User\TeamController@organizationTeamlist'
 	]);
+
+Route::get('organizationTeamlist/{id}/staff', [
+    'as'   => 'organization.staff',
+    'uses' => 'User\OrganizationStaffController@index',
+]);
+
+Route::post('organizationTeamlist/{id}/staff', [
+	'as'   => 'organization.staff',
+	'uses' => 'User\OrganizationStaffController@store',
+]);
+
 	Route::get('getteamdetails', [
 	  'as' => 'getteamdetails', 'uses' => 'user\TournamentsController@getteamdetails'
 	]);

@@ -496,4 +496,18 @@ return [
 
         'view_more'=>'View More',
         'bye'=>'BYE',
+	'staff' => [
+        'modal' => [
+            'title' => 'Add Staff'
+        ],
+
+        'fields' => [
+            'email' => 'Email',
+            'role' => 'Staff Role'
+        ],
+
+		'invite_subject' => 'SportsJun Staff Invite.',
+        'added_message' => 'Staff Invited Successfully!',
+        'already_exists_message' => 'Staff Already exists!',
+    ]
 ];

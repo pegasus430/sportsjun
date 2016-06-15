@@ -5,9 +5,9 @@
 	<div class="row">
 	<div class="col-sm-9">
 				@if (session('status'))
-				<div class="alert alert-success">
-					{{ session('status') }}
-				</div>
+                <div class="alert alert-success">
+                    {{ session('status') }}
+                </div>
 				@elseif (session('error_msg'))
 				<div class="alert alert-danger">
 					{{ session('error_msg') }}
@@ -134,7 +134,7 @@
 					<p class="lead label label-default">No players.</p>
 					<br />
 					<br />
-					
+
 				</div>
 			@endif
 			<div class="addTeamPlayer">
@@ -154,7 +154,7 @@
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane fade active in" id="addplayer">
-						
+
                             @include('widgets.teamplayer')
                         </div>
                         <div class="tab-pane fade" id="inviteplayer">
@@ -168,7 +168,7 @@
         <div id="suggested_players"> </div>
         <br/>
         <div id="suggested_tournaments"></div>
-        
+
 	</div>
 	<?php } ?>
 	</div>

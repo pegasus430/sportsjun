@@ -147,7 +147,7 @@ $(document).ready(function(){
         </li>
 		@endif	
 @endif
-<?php //echo $userId;exit;?>
+
 @if($action=='user' && $userId==$id)
 	
     	<li class="col-xs-6 col-sm-4 col-md-3">
@@ -184,7 +184,7 @@ $(document).ready(function(){
 
 
         @if(isset($album_array)	&& count($album_array)>0 )
- <?php //echo "<pre>";print_r($photo_arrayy);exit;?>
+
 		@foreach($album_array as $album)
 	
 		@if(isset($photo_arrayy[$album['id']][0]['url']))
@@ -341,7 +341,7 @@ $(document).ready(function(){
 </div>
 
 
- <?php //echo "<pre>";print_r($album);exit;	?>	
+
     <!-- Modal HTML -->
     <div id="myModalCreate" class="modal fade">
         <div class="modal-dialog sj_modal sportsjun-forms">

@@ -25,8 +25,6 @@ use Carbon\Carbon;
 use DB;
 use Request;
 use Response;
-use URL;
-use View;
 
 class TeamController extends Controller
 {
@@ -431,9 +429,16 @@ class TeamController extends Controller
 			}
 			$managedOrgArray1=$this->getorgdeatils( $id);			
 		}
-		
-		return view('teams.teamslist',array('joinTeamArray'=>$joinTeamArray,'followingTeamArray'=>$followingTeamArray,'manageTeamArray'=>$manageTeamArray,'managedOrgArray'=>$managedOrgArray1,'id'=>Auth::user()->id,'userId'=>$user_id));
-    }
+
+		return view('teams.teamslist', [
+			'joinTeamArray' => $joinTeamArray,
+			'followingTeamArray' => $followingTeamArray,
+			'manageTeamArray' => $manageTeamArray,
+			'managedOrgArray' => $managedOrgArray1,
+			'id' => Auth::user()->id,
+			'userId' => $user_id,
+		]);
+	}
 	function getorgdeatils($org_array='')
 	{
 		$result = array();
