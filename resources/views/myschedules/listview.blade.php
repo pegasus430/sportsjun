@@ -174,8 +174,17 @@
         </div>
         @endforeach
         @else
-        <div class="col-xs-6 col-centered">
-            {{ trans('message.schedule.noschedule')}}
+        <div class="col-xs-12 col-centered">
+            <div class="message_new_for_team">Get Started, Create your Team(s), Search and Schedule matches with other teams.</div>
+            <div class="intro_list_container">
+                    <ul class="intro_list_on_empty_pages">
+                            <span class="steps_to_follow">Steps to follow:</span>
+                            <li>If you already own / manage teams, Click on <span class="bold">Create +</span> button on the top left side, and select <span class="bold">Match Schedule</span> to schedule a match. You can schedule a match between your own teams or with others teams.</li>
+                            <li>Once scheduled, the other party will get a notification and an email, once they accept it, you will see <span class="bold">Add Score</span> link on the match day.</li>
+                            <li>If you don't own any teams, please create teams using <span class="bold">Create +</span> button on the top left side, and select <span class="bold">Team</span>, give required details and you are done. You can see all your own / managed teams under <span class="bold">Managed Teams</span> tab in <span class="bold">My Teams</span> page.</li>
+                            <li>You can search for Teams / Tournaments / Players (in your locality too) using Search.</li>
+                    </ul>
+            </div>
         </div>
         @endif
     </div>
