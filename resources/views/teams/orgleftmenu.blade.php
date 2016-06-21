@@ -26,6 +26,8 @@
                 <span class = "ico ico-members"></span> Staff
             </a>
         </li>
+        
+		<li><a class="sidemenu_4" href="{{ url('/organizationTournaments/'.$id) }}"><span class="ico ico-tournament"></span> Tournaments</a></li>
 
 	</ul>
     </div>

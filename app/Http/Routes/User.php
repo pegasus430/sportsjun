@@ -130,6 +130,9 @@ Route::post('organizationTeamlist/{id}/staff', [
 	Route::get('organization/delete/{id}/{flag}', [
 	    'as' => 'organization/delete', 'uses' => 'User\OrganizationController@deleteorganization'
 	]);
+    Route::get('organizationTournaments/{id}', [
+	    'as' => 'organizationTournaments', 'uses' => 'User\OrganizationController@organizationTournaments'
+	]);
 	Route::resource('organization', 'user\OrganizationController');
 //End Organizations
 

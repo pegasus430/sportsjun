@@ -360,7 +360,15 @@
 				{
 					 var trHTML = '';
 					 $.each(response, function (i, item) {
-						 trHTML = '<tr id="row_'+item.id+'"><td>' + item.name + '</td><td>' + item.match_id + '</td><td>' + item.won + '</td><td>' + item.lost + '</td><td>' + item.points + '</td><td><a href="#" class="btn btn-danger btn-circle btn-sm" onclick="deleteTeam('+tournament_id+','+item.tournament_group_id+','+item.id+','+item.team_id+');"><i class="fa fa-remove"></i></a></td></tr>';
+						 trHTML = '<tr id="row_'+item.id+'">'+
+                                 '<td>' + item.name + '</td>'+
+                                 '<td>' + item.match_id + '</td>'+
+                                 '<td>' + item.won + '</td>'+
+                                 '<td>' + item.lost + '</td>'+
+                                 '<td>' + item.points + '</td>'+
+                                 '<td></td>'+
+                                 '<td><a href="#" class="btn btn-danger btn-circle btn-sm" onclick="deleteTeam('+tournament_id+','+item.tournament_group_id+','+item.id+','+item.team_id+');"><i class="fa fa-remove"></i></a></td>'+
+                                 '</tr>';
 						 $('#records_table_'+group_id).append(trHTML);
 					});
 					//$('#records_table_'+group_id).append(trHTML);
