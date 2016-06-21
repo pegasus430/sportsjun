@@ -498,7 +498,7 @@ return [
         'bye'=>'BYE',
 	'staff' => [
         'modal' => [
-            'title' => 'Add Staff'
+            'title' => 'Invite Staff'
         ],
 
         'fields' => [
