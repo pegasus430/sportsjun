@@ -837,23 +837,28 @@ class TournamentsController extends Controller
                                                         // net run rate changes - start
                                                         if (!empty($matchdata['match_details']))
                                                         {
-                                                                $match_stats = json_decode($matchdata['match_details'], true);
-                                                                
-                                                                $team_ids = array_keys($match_stats);
-                                                                
-                                                                foreach ($match_stats as $team_id => $team_stat)
+                                                            if ($matchdata['match_type'] == "t20")
+                                                            {
+                                                                $maxOverCount = 20;
+                                                            }
+                                                            $match_stats = json_decode($matchdata['match_details'], true);
+
+                                                            $team_ids = array_keys($match_stats);
+
+                                                            foreach ($match_stats as $team_id => $team_stat)
+                                                            {
+                                                                if (empty($team_stats[$team_id]))
                                                                 {
-                                                                        $team_stats[$team_id] = [];
-                                                                        if (empty($team_stats[$team_id]))
-                                                                        {
-                                                                                $team_stats[$team_id]['total_runs_scored'] = $team_stats[$team_id]['total_runs_conceded'] = 0;
-                                                                                $team_stats[$team_id]['total_overs_faced'] = $team_stats[$team_id]['total_overs_bowled'] = 0;
-                                                                        }
-                                                                        $team_stats[$team_id]['total_runs_scored']      += (int) $team_stat['fst_ing_score'] + (int) $team_stat['scnd_ing_score'];
-                                                                        $team_stats[$team_id]['total_overs_faced']      += (float) $team_stat['fst_ing_overs'] + (float) $team_stat['scnd_ing_overs'];
-                                                                        $team_stats[$team_id]['total_runs_conceded']    += ($team_ids[0] == $team_id) ? ((int) $match_stats[$team_ids[1]]['fst_ing_score'] + (int) $match_stats[$team_ids[1]]['scnd_ing_score']) : ((int) $match_stats[$team_ids[0]]['fst_ing_score'] + (int) $match_stats[$team_ids[0]]['scnd_ing_score']);
-                                                                        $team_stats[$team_id]['total_overs_bowled']     += ($team_ids[0] == $team_id) ? ((float) $match_stats[$team_ids[1]]['fst_ing_overs'] + (float) $match_stats[$team_ids[1]]['scnd_ing_overs']) : ((float) $match_stats[$team_ids[0]]['fst_ing_overs'] + (float) $match_stats[$team_ids[0]]['scnd_ing_overs']);
+                                                                    $team_stats[$team_id] = [];
+                                                                    $team_stats[$team_id]['total_runs_scored'] = $team_stats[$team_id]['total_runs_conceded'] = 0;
+                                                                    $team_stats[$team_id]['total_overs_faced'] = $team_stats[$team_id]['total_overs_bowled'] = 0;
                                                                 }
+                                                                $team_stats[$team_id]['total_runs_scored']      += (int) $team_stat['fst_ing_score'] + (int) $team_stat['scnd_ing_score'];
+                                                                $team_stats[$team_id]['total_overs_faced']      += ( ( (int) $team_stat['fst_ing_wkt'] == 10 ) ? (float) $maxOverCount : (float) $team_stat['fst_ing_overs'] ) + ( ( (int) $team_stat['scnd_ing_wkt'] == 10 ) ? (float) $maxOverCount : (float) $team_stat['scnd_ing_overs'] );
+                                                                $other_team_id                                  = ($team_ids[0] == $team_id) ? $team_ids[1] : $team_ids[0];
+                                                                $team_stats[$team_id]['total_runs_conceded']    += (int) $match_stats[$other_team_id]['fst_ing_score'] + (int) $match_stats[$other_team_id]['scnd_ing_score'];
+                                                                $team_stats[$team_id]['total_overs_bowled']     += ( ( (int) $match_stats[$other_team_id]['fst_ing_wkt'] == 10 ) ? (float) $maxOverCount : (float) $match_stats[$other_team_id]['fst_ing_overs'] ) + ( ( (int) $match_stats[$other_team_id]['scnd_ing_wkt'] == 10 ) ? (float) $maxOverCount : (float) $match_stats[$other_team_id]['scnd_ing_overs'] );
+                                                            }
                                                         }
                                                         // net run rate changes - end
                                                                 
@@ -894,7 +899,7 @@ class TournamentsController extends Controller
                                                 {
                                                         $net_run_rate[$team_id] = ($team_stats[$team_id]['total_runs_scored'] / $team_stats[$team_id]['total_overs_faced']);
                                                         $net_run_rate[$team_id] -= ($team_stats[$team_id]['total_runs_conceded'] / $team_stats[$team_id]['total_overs_bowled']);
-                                                        $net_run_rate[$team_id] = round($net_run_rate[$team_id], 2);
+                                                        $net_run_rate[$team_id] = round($net_run_rate[$team_id], 3);
                                                 }
                                         }
                                         unset($match_stats,$team_stats);
