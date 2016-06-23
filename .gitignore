@@ -2,7 +2,6 @@ nbproject
 public/uploads
 config
 .env
-vendor
 .idea/
 _ide_helper.php
 _ide_helper_models.php
