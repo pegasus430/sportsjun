@@ -841,6 +841,14 @@ class TournamentsController extends Controller
                                                             {
                                                                 $maxOverCount = 20;
                                                             }
+                                                            else if ($matchdata['match_type'] == "odi")
+                                                            {
+                                                                $maxOverCount = 50;
+                                                            }
+                                                            else if ($matchdata['match_type'] == "test")
+                                                            {
+                                                                $maxOverCount = 90;
+                                                            }
                                                             $match_stats = json_decode($matchdata['match_details'], true);
 
                                                             $team_ids = array_keys($match_stats);
