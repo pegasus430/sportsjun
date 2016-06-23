@@ -1,4 +1,3 @@
-<?php //echo $id;exit;?>
 <div class="col-sm-2" id="sidebar-left">
 	<div class="row">
 			<div class="team_view">
@@ -21,7 +20,15 @@
         <li><a class="sidemenu_2" href="{{ url('/organizationTeamlist/'.$id) }}"><span class="ico ico-teams"></span> Teams</a></li>
       	
 		<li><a class="sidemenu_3" href="{{ url('user/album/show').'/organization'.'/0'.'/'.$id }}"><span class="ico ico-media-gallery"></span> Media Gallery</a></li>
+        <li>
+            <a class = "sidemenu_4"
+               href = "{{ route('organization.staff', [$id]) }}">
+                <span class = "ico ico-members"></span> Staff
+            </a>
+        </li>
+
 		<li><a class="sidemenu_4" href="{{ url('/organizationTournaments/'.$id) }}"><span class="ico ico-tournament"></span> Tournaments</a></li>
+
 	</ul>
     </div>
 </div>

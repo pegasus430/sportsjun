@@ -2,8 +2,6 @@
 
 namespace Laravel\Socialite\Two;
 
-use GuzzleHttp\ClientInterface;
-
 class GoogleProvider extends AbstractProvider implements ProviderInterface
 {
     /**
@@ -19,9 +17,9 @@ class GoogleProvider extends AbstractProvider implements ProviderInterface
      * @var array
      */
     protected $scopes = [
-        'https://www.googleapis.com/auth/plus.me',
-        'https://www.googleapis.com/auth/plus.login',
-        'https://www.googleapis.com/auth/plus.profile.emails.read',
+        'openid',
+        'profile',
+        'email',
     ];
 
     /**
@@ -38,23 +36,6 @@ class GoogleProvider extends AbstractProvider implements ProviderInterface
     protected function getTokenUrl()
     {
         return 'https://accounts.google.com/o/oauth2/token';
-    }
-
-    /**
-     * Get the access token for the given code.
-     *
-     * @param  string  $code
-     * @return string
-     */
-    public function getAccessToken($code)
-    {
-        $postKey = (version_compare(ClientInterface::VERSION, '6') === 1) ? 'form_params' : 'body';
-
-        $response = $this->getHttpClient()->post($this->getTokenUrl(), [
-            $postKey => $this->getTokenFields($code),
-        ]);
-
-        return $this->parseAccessToken($response->getBody());
     }
 
     /**
