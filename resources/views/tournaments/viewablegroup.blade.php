@@ -25,7 +25,9 @@
                                     <th>Won</th>
                                     <th>Lost</th>
                                     <th>Points</th>
+                                    @if ( $tour['sports_id'] == 1 )
                                     <th>Net Run Rate</th>
+                                    @endif
                                 </tr>
                             </thead>
 							<tbody>
@@ -36,7 +38,9 @@
                                     <td>{{ !empty($team['won'])?$team['won']:0 }}</td>
                                     <td>{{ !empty($team['lost'])?$team['lost']:0 }}</td>
                                     <td>{{ !empty($team['points'])?$team['points']:0 }}</td>
+                                    @if ( $tour['sports_id'] == 1 )
                                     <td>{{ !empty($net_run_rate[$team['team_id']])?$net_run_rate[$team['team_id']]:"--" }}</td>
+                                    @endif
                                 </tr>
 							@endforeach
 							</tbody>
