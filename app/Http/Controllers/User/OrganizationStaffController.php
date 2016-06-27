@@ -63,6 +63,8 @@ class OrganizationStaffController extends Controller
             return $redirect->with('alert',
                 trans('message.staff.already_exists_message'));
         }
+
+        return $redirect;
     }
 
 
