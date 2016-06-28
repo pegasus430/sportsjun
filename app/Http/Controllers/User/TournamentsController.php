@@ -799,6 +799,9 @@ class TournamentsController extends Controller
                 $add_score_link        = array();
                 $match_startdate_array = array();
                 $match_count           = array();
+                $team_stats   = [];   // team stats array containing team wise stats needed for its calculation
+                $net_run_rate = [];   // net run rate array
+                
                 foreach ($tournaments as $tournament)
                 {
                         foreach ($tournament->groups as $groups)
@@ -823,8 +826,6 @@ class TournamentsController extends Controller
                                         }
                                 }
 
-                                $team_stats   = [];   // team stats array containing team wise stats needed for its calculation
-                                $net_run_rate = [];   // net run rate array
                                 $matchDetails = MatchSchedule::select()->where('tournament_id', $tournament_id)->where('tournament_group_id', $group_id)->orderby('match_start_date', 'desc')->orderby('match_start_time', 'desc')->get();
                                 if (count($matchDetails) > 0)
                                 {
