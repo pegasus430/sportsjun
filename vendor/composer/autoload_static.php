@@ -462,6 +462,7 @@ class ComposerStaticInit426b571aa1fb5691aa728df7555c373e
     );
 
     public static $classMap = array (
+        'CreateOrganizationGroupTeamsTable' => __DIR__ . '/../..' . '/database/migrations/2016_07_01_160320_create_organization_group_teams_table.php',
         'CreateOrganizationGroupsTable' => __DIR__ . '/../..' . '/database/migrations/2016_06_27_173441_create_organization_groups_table.php',
         'CreateOrganizationRolesTable' => __DIR__ . '/../..' . '/database/migrations/2016_06_13_192341_create_organization_roles_table.php',
         'CreateOrganizationStaffsTable' => __DIR__ . '/../..' . '/database/migrations/2016_06_13_194652_create_organization_staffs_table.php',

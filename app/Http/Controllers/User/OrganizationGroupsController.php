@@ -25,10 +25,10 @@ class OrganizationGroupsController extends Controller
         $staffList = $organization->staff->pluck('email', 'id');
 
         $groups = $organization->groups;
-        $groups->load('manager');
+        $groups->load('manager', 'teams');
 
         return view('organization.groups.list',
-            compact('id', 'staffList', 'groups'));
+            compact('id', 'staffList', 'groups', 'organization'));
     }
 
     /**

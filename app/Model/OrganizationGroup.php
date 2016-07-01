@@ -49,4 +49,13 @@ class OrganizationGroup extends Model
     {
         return $this->belongsTo(User::class, 'manager_id', 'id');
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function teams()
+    {
+        return $this->belongsToMany(Team::class,
+            'organization_group_teams', 'organization_group_id', 'team_id');
+    }
 }

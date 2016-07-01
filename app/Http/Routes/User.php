@@ -640,6 +640,11 @@ Route::get('search_cities', [
     'uses' => 'User\SearchCitiesController@search',
 ]);
 
+Route::get('get_org_groups_list', [
+    'as'   => 'organization.groups.get_list',
+    'uses' => 'User\SearchOrgGroupsController@getGroupsList',
+]);
+
 
 Route::resource('sport', 'User\SportController');
 Route::resource('team', 'User\TeamController');

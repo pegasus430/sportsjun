@@ -12,7 +12,7 @@
                             <ul>
                                 <li>
                                     <label>No of teams:</label>
-                                    <span>6</span>
+                                    <span>{{ $group->teams->count() }}</span>
                                 </li>
                                 <li>
                                     <label>Manager:</label>
