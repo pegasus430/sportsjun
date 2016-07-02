@@ -112,6 +112,7 @@ class User extends Model implements AuthenticatableContract,
         return $this->belongsToMany(OrganizationRole::class,
             'organization_staffs', 'user_id', 'organization_role_id');
 	}
+    
 
 	/**
 	 *

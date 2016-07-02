@@ -25,16 +25,25 @@ class Organization extends Model
                 'country', 'zip', 'alternate_contact_number', 'contact_name', 'logo');
         protected $morphClass        = 'organization';
 
-        /**
-         * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-         */
-        public function staff()
-        {
-            return $this->belongsToMany(User::class, 'organization_staffs',
-                'organization_id', 'user_id')
-                        ->withPivot('organization_role_id', 'status')
-                        ->withTimestamps();
-        }
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function staff()
+    {
+        return $this->belongsToMany(User::class, 'organization_staffs',
+            'organization_id', 'user_id')
+                    ->withPivot('organization_role_id', 'status')
+                    ->withTimestamps();
+    }
+
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function groups()
+    {
+        return $this->hasMany(OrganizationGroup::class, 'organization_id', 'id');
+    }
 
         public function photos()
         {

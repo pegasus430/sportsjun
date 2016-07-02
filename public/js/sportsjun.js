@@ -1004,6 +1004,37 @@ function displayCountries(a) {
     });
 }
 
+function displayOrgGroups(a) {
+    if (!a) {
+        $("#organization_group_id").html("<option value=''>Select Group</option>");
+        return false;
+    }
+    $.ajax({
+        url: base_url + "/get_org_groups_list",
+        type: "GET",
+        data: {
+            orgId: a
+        },
+        dataType: "json",
+        beforeSend: function() {
+            $.blockUI({
+                width: "50px",
+                message: $("#spinner").html()
+            });
+        },
+        success: function(a) {
+            $.unblockUI();
+            var b = "<option value=''>Select Group</option>";
+            $.each(a, function(a, c) {
+                b += "<option value='" + c["id"] + "'>" + c["name"] + "</option>";
+            });
+            $(".org-groups").each(function() {
+                $(this).html(b);
+            });
+        }
+    });
+}
+
 function subTournamentEdit(id)
 {
 	 $.ajax({
