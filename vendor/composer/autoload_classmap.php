@@ -10,6 +10,7 @@ return array(
     'CreateOrganizationGroupsTable' => $baseDir . '/database/migrations/2016_06_27_173441_create_organization_groups_table.php',
     'CreateOrganizationRolesTable' => $baseDir . '/database/migrations/2016_06_13_192341_create_organization_roles_table.php',
     'CreateOrganizationStaffsTable' => $baseDir . '/database/migrations/2016_06_13_194652_create_organization_staffs_table.php',
+    'CreateTournamentOrgGroupsTable' => $baseDir . '/database/migrations/2016_07_05_192222_create_tournament_org_groups_table.php',
     'DatabaseSeeder' => $baseDir . '/database/seeds/DatabaseSeeder.php',
     'File_Iterator' => $vendorDir . '/phpunit/php-file-iterator/src/Iterator.php',
     'File_Iterator_Facade' => $vendorDir . '/phpunit/php-file-iterator/src/Facade.php',

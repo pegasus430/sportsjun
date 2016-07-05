@@ -27,8 +27,10 @@ class OrganizationGroupsController extends Controller
         $groups = $organization->groups;
         $groups->load('manager', 'teams');
 
+        $orgInfo= Organization::select()->where('id',$id)->get()->toArray();
+
         return view('organization.groups.list',
-            compact('id', 'staffList', 'groups', 'organization'));
+            compact('id', 'staffList', 'groups', 'organization', 'orgInfo'));
     }
 
     /**

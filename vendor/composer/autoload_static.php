@@ -466,6 +466,7 @@ class ComposerStaticInit426b571aa1fb5691aa728df7555c373e
         'CreateOrganizationGroupsTable' => __DIR__ . '/../..' . '/database/migrations/2016_06_27_173441_create_organization_groups_table.php',
         'CreateOrganizationRolesTable' => __DIR__ . '/../..' . '/database/migrations/2016_06_13_192341_create_organization_roles_table.php',
         'CreateOrganizationStaffsTable' => __DIR__ . '/../..' . '/database/migrations/2016_06_13_194652_create_organization_staffs_table.php',
+        'CreateTournamentOrgGroupsTable' => __DIR__ . '/../..' . '/database/migrations/2016_07_05_192222_create_tournament_org_groups_table.php',
         'DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeds/DatabaseSeeder.php',
         'File_Iterator' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Iterator.php',
         'File_Iterator_Facade' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Facade.php',

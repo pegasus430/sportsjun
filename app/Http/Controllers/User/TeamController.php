@@ -809,6 +809,23 @@ class TeamController extends Controller
 		{
 			$teamdetails = Team::where('id',$edit_id)->first();
 		}
+        $groupsList = [];
+        $groupId = null;
+        if ($teamdetails->organization_id) {
+            $groupsList =
+                OrganizationGroup::whereOrganizationId($teamdetails->organization_id)
+                                 ->lists('name', 'id');
+
+            $teamGroup = $teamdetails->organizationGroups()
+                                     ->where('organization_id',
+                                         $teamdetails->organization_id)
+                                     ->first();
+
+            if ($teamGroup) {
+                $groupId = $teamGroup->id;
+            }
+        }
+        
         $organization = Organization::orderBy('name')->where('user_id', Auth::user()->id)->lists('name', 'id')->all();
 		$countries = Country::orderBy('country_name')->lists('country_name', 'id')->all();
 		$states = State::where('country_id', $teamdetails->country_id)->orderBy('state_name')->lists('state_name', 'id')->all();
@@ -824,7 +841,9 @@ class TeamController extends Controller
 										->with('teamdetails' , $teamdetails)
                                         ->with('organization', ['' => 'Select Organization'] + $organization)
 										->with('id' , $edit_id)
-										 ->with('enum', ['' => 'Team Level'] + $enum);
+										 ->with('enum', ['' => 'Team Level'] + $enum)
+										 ->with('groupId', $groupId)
+										 ->with('groupsList', $groupsList);
 	}
 	//function to delete the team
 	public function deleteteam($team_id,$flag)

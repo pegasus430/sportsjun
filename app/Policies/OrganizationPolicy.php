@@ -42,4 +42,15 @@ class OrganizationPolicy
     {
         return $organization->user->id == $user->id;
     }
+
+    /**
+     * @param \App\User $user
+     * @param \App\Model\Organization $organization
+     *
+     * @return bool
+     */
+    public function createTournament(User $user, Organization $organization)
+    {
+        return $organization->user->id == $user->id;
+    }
 }
