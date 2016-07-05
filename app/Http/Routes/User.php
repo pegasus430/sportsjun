@@ -48,7 +48,7 @@ Route::group(['prefix' => 'organization/{id}'], function () {
 
 Route::get('getteamdetails', [
     'as'   => 'getteamdetails',
-    'uses' => 'user\TournamentsController@getteamdetails',
+    'uses' => 'U    ser\TournamentsController@getteamdetails',
 ]);
 Route::get('team/members/{team_id}/{status?}', [
     'as'   => 'team/members',
@@ -210,77 +210,77 @@ Route::resource('user/album', 'User\AlbumController');
 //Tournamets
 Route::get('tournaments/groups/{id}/{type?}', [
     'as'   => 'groups',
-    'uses' => 'user\TournamentsController@groups',
+    'uses' => 'User\TournamentsController@groups',
 ]);
 Route::get('tournaments/getSportTeams/{sport_id}/{tournament_id}/{schedule_type}',
     [
         'as'   => 'getSportTeams',
-        'uses' => 'user\TournamentsController@getSportTeams',
+        'uses' => 'User\TournamentsController@getSportTeams',
     ]);
 Route::post('tournaments/addteamtotournament', [
     'as'   => 'addteamtotournament',
-    'uses' => 'user\TournamentsController@addteamtotournament',
+    'uses' => 'User\TournamentsController@addteamtotournament',
 ]);
 Route::post('tournaments/insertTournamentGroup', [
     'as'   => 'insertTournamentGroup',
-    'uses' => 'user\TournamentsController@insertTournamentGroup',
+    'uses' => 'User\TournamentsController@insertTournamentGroup',
 ]);
 Route::get('tournament/team/delete/{id}', [
     'as'   => 'deleteteam',
-    'uses' => 'user\TournamentsController@deleteteam',
+    'uses' => 'User\TournamentsController@deleteteam',
 ]);
 Route::get('tournament/schedule/delete', [
     'as'   => 'deleteTournamentSchedule',
-    'uses' => 'user\TournamentsController@deleteTournamentSchedule',
+    'uses' => 'User\TournamentsController@deleteTournamentSchedule',
 ]);
 Route::get('tournament/deleteGroupTeams', [
     'as'   => 'deleteGroupTeams',
-    'uses' => 'user\TournamentsController@deleteGroupTeams',
+    'uses' => 'User\TournamentsController@deleteGroupTeams',
 ]);
 
 Route::get('tournament/groupedit/{param}/{id}', [
     'as'   => 'editgroup',
-    'uses' => 'user\TournamentsController@editgroup',
+    'uses' => 'User\TournamentsController@editgroup',
 ]);
 Route::post('tournament/updatefinalstageteams', [
     'as'   => 'updatefinalstageteams',
-    'uses' => 'user\TournamentsController@updateFinalStageTeams',
+    'uses' => 'User\TournamentsController@updateFinalStageTeams',
 ]);
 Route::post('tournament/deletefinalstageteams', [
     'as'   => 'deletefinalstageteams',
-    'uses' => 'user\TournamentsController@deleteFinalStageTeams',
+    'uses' => 'User\TournamentsController@deleteFinalStageTeams',
 ]);
 Route::post('tournament/addfinalstageteams', [
     'as'   => 'addfinalstageteams',
-    'uses' => 'user\TournamentsController@addFinalStageTeams',
+    'uses' => 'User\TournamentsController@addFinalStageTeams',
 ]);
 Route::get('tournaments/getfinalstageteams/{tournament_id}', [
     'as'   => 'getfinalstageteams',
-    'uses' => 'user\TournamentsController@getFinalStageTeams',
+    'uses' => 'User\TournamentsController@getFinalStageTeams',
 ]);
 Route::get('tournament/getroundteams', [
     'as'   => 'getroundteams',
-    'uses' => 'user\TournamentsController@getRoundTeams',
+    'uses' => 'User\TournamentsController@getRoundTeams',
 ]);
 Route::get('tournaments/getUsers', [
     'as'   => 'getUsers',
-    'uses' => 'user\TournamentsController@getUsers',
+    'uses' => 'User\TournamentsController@getUsers',
 ]);
 Route::get('tournaments/subTournamentEdit', [
     'as'   => 'subTournamentEdit',
-    'uses' => 'user\TournamentsController@subTournamentEdit',
+    'uses' => 'User\TournamentsController@subTournamentEdit',
 ]);
 Route::get('tournaments/getRequestedTeams', [
     'as'   => 'getRequestedTeams',
-    'uses' => 'user\TournamentsController@getRequestedTeams',
+    'uses' => 'User\TournamentsController@getRequestedTeams',
 ]);
 Route::get('tournament/getsubtournamentdetails/{tournamentid}', [
     'as'   => 'getsubtournamentdetails',
-    'uses' => 'user\TournamentsController@getSubTournamentDetails',
+    'uses' => 'User\TournamentsController@getSubTournamentDetails',
 ]);
 
 
-Route::resource('tournaments', 'user\TournamentsController');
+Route::resource('tournaments', 'User\TournamentsController');
 //End Tournamets
 
 
