@@ -96,7 +96,7 @@ class User extends Model implements AuthenticatableContract,
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
 	 */
-	public function staff_of_organizations()
+	public function staffOfOrganizations()
 	{
 		return $this->belongsToMany(Organization::class, 'organization_staffs',
 			'user_id', 'organization_id')
@@ -111,6 +111,14 @@ class User extends Model implements AuthenticatableContract,
 	{
         return $this->belongsToMany(OrganizationRole::class,
             'organization_staffs', 'user_id', 'organization_role_id');
+	}
+
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
+	public function organizations()
+	{
+		return $this->hasMany(Organization::class, 'user_id', 'id');
 	}
     
 

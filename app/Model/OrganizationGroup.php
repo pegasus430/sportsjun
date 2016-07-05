@@ -58,4 +58,14 @@ class OrganizationGroup extends Model
         return $this->belongsToMany(Team::class,
             'organization_group_teams', 'organization_group_id', 'team_id');
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function tournaments()
+    {
+        return $this->belongsToMany(TournamentParent::class,
+            'tournament_org_groups',
+            'organization_group_id', 'tournament_parent_id');
+    }
 }

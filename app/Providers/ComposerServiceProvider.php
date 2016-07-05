@@ -33,6 +33,7 @@ class ComposerServiceProvider extends ServiceProvider
         View::composer([
             'teams.orgleftmenu',
             'teams.orgteams',
+            'organization.staff.list'
         ], OrgLeftMenuComposer::class);
     }
 }

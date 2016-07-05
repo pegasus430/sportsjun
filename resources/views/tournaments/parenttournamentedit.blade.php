@@ -29,7 +29,17 @@
                 </div>					
                 {!! Form::close() !!}
 					{!! JsValidator::formRequest('App\Http\Requests\CreateTournamentRequest', '#my-tournaments'); !!}
-				@endif	
-					
-      				 
+				@endif
 
+
+
+                @if(isset($tournament) AND $tournament->organization_id)
+                    <script>
+                        $(function () {
+                            $('#organization-groups').show();
+                            displayOrgGroups({{ $tournament->organization_id }});
+                            $('[name=organization_group_id]').val({{ $orgGroupIds }});
+                            $('[name=organization_group_id]').multiselect('refresh');
+                        });
+                    </script>
+                @endif

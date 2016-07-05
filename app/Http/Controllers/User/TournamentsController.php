@@ -328,8 +328,19 @@ class TournamentsController extends Controller
                 $sports = Helper::getDevelopedSport(1,1);
 		$cities = array();
 		$states = State::where('country_id', config('constants.COUNTRY_INDIA'))->orderBy('state_name')->lists('state_name', 'id')->all();
-        return view("tournaments.tournamentscreate",array('sports'=> [''=>'Select Sport']+$sports,'states' =>  [''=>'Select State']+$states,'cities' =>  [''=>'Select City']+$cities ,'enum'=>['' => 'Tournament Type'] + $enum,'type'=>'create','roletype'=>'user','schedule_type_enum'=>$schedule_type_enum));
-    }
+		$organizations = Auth::user()->organizations()->lists('name', 'id')->all();
+
+		return view("tournaments.tournamentscreate", [
+            'sports'             => ['' => 'Select Sport'] + $sports,
+            'states'             => ['' => 'Select State'] + $states,
+            'cities'             => ['' => 'Select City'] + $cities,
+            'enum'               => ['' => 'Tournament Type'] + $enum,
+            'type'               => 'create',
+            'roletype'           => 'user',
+            'schedule_type_enum' => $schedule_type_enum,
+            'organization'      => ['' => 'Select Organization'] + $organizations,
+		]);
+	}
 	
 
     /**
@@ -385,7 +396,8 @@ class TournamentsController extends Controller
 		$request['facility_id'] = $request->input('facility_response');
 		$request['facility_name'] =$request->input('facility_response_name');
 		}*/
-	    
+
+        /** @var Tournaments $Tournaments */
 		$Tournaments = Tournaments::create($request->all());
 		$last_inserted_sport_id = 0;   
 		$id= $Tournaments->id ;
@@ -453,7 +465,10 @@ class TournamentsController extends Controller
 		$request['description'] = !empty($request['description'])?$request['description']:'';
 		$request['manager_id'] = !empty($request['managerId'])?$request['managerId']:'';
 		$TournamentParent = TournamentParent::create($request->all());
-		
+        if (Request::has('organization_group_id')) {
+            $TournamentParent->orgGroups()
+                        ->attach(Request::input('organization_group_id'));
+        }
 		
 		$last_inserted_sport_id = 0; 
 	    $last_inserted_sport_id = $TournamentParent->id;
@@ -655,6 +670,7 @@ class TournamentsController extends Controller
 			$schedule_type_enum = config('constants.ENUM.TOURNAMENTS.SCHEDULE_TYPE'); 
 //		   $sports = Sport::where('isactive','=',1)->lists('sports_name', 'id')->all();
                    $sports = Helper::getDevelopedSport(1,1);
+        /** @var TournamentParent $tournament */
 	       $tournament = TournamentParent::findOrFail($id);
 		   
 		   $loginUserId = Auth::user()->id;
@@ -723,8 +739,33 @@ class TournamentsController extends Controller
 	       $countries = Country::orderBy('country_name')->lists('country_name', 'id')->all();
 	       $states = State::where('country_id', $tournament->country_id)->orderBy('state_name')->lists('state_name', 'id')->all();
 	       $cities = City::where('state_id',  $tournament->state_id)->orderBy('city_name')->lists('city_name', 'id')->all();
-		   
-	       return view('tournaments.tournamentsedit',compact('tournament'))->with(array('sports'=> [''=>'Select Sport']+$sports,'id'=>$id,'countries' =>  [''=>'Select Country']+$countries,'states' =>  [''=>'Select State']+$states,'cities' =>  [''=>'Select City']+$cities,'enum'=>['' => 'Tournament Type'] + $enum,'tournament'=>$tournament,'type'=>'create','roletype'=>'user','schedule_type_enum'=>$schedule_type_enum,'subTournamentArray'=>$sub_tour_details,'parent_id'=>$id,'tournament_name'=>$tournament['name'],'logo'=>$tournament['logo'],'parent_manager_name'=>$manager_name,'player_types'=>['' => 'Select Player Type'] +$player_types,'match_types'=>['' => 'Select Match Type'] +$match_types,'isOwner'=>$isOwner,'loginUserId'=> $loginUserId));
+        $organizations = Auth::user()->organizations()->lists('name', 'id')->all();
+        $orgGroupIds = $tournament->orgGroups->lists('id')->toJson();
+
+        return view('tournaments.tournamentsedit',
+            compact('tournament'))->with([
+            'sports'              => ['' => 'Select Sport'] + $sports,
+            'id'                  => $id,
+            'countries'           => ['' => 'Select Country'] + $countries,
+            'states'              => ['' => 'Select State'] + $states,
+            'cities'              => ['' => 'Select City'] + $cities,
+            'enum'                => ['' => 'Tournament Type'] + $enum,
+            'tournament'          => $tournament,
+            'type'                => 'create',
+            'roletype'            => 'user',
+            'schedule_type_enum'  => $schedule_type_enum,
+            'subTournamentArray'  => $sub_tour_details,
+            'parent_id'           => $id,
+            'tournament_name'     => $tournament['name'],
+            'logo'                => $tournament['logo'],
+            'parent_manager_name' => $manager_name,
+            'player_types'        => ['' => 'Select Player Type'] + $player_types,
+            'match_types'         => ['' => 'Select Match Type'] + $match_types,
+            'isOwner'             => $isOwner,
+            'loginUserId'         => $loginUserId,
+            'organization'        => ['' => 'Select Organization'] + $organizations,
+            'orgGroupIds'         => $orgGroupIds,
+        ]);
     }
 	public function subTournamentEdit()
 	{
