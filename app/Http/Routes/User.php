@@ -169,7 +169,7 @@ Route::get('organizationTournaments/{id}', [
     'as'   => 'organizationTournaments',
     'uses' => 'User\OrganizationController@organizationTournaments',
 ]);
-Route::resource('organization', 'user\OrganizationController');
+Route::resource('organization', 'User\OrganizationController');
 //End Organizations
 
 //Gallery
