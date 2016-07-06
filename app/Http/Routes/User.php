@@ -350,7 +350,7 @@ Route::post('search/follow_unfollow', [
 //End Search
 
 //Facilities
-Route::resource('facility', 'user\FacilityController');
+Route::resource('facility', 'User\FacilityController');
 //End Facilities
 
 //Contactus
@@ -619,7 +619,7 @@ Route::get('user/team/{id?}', 'User\UserController@team');
 Route::get('user/notifications', 'User\UserController@getNotifications');
 Route::get('user/viewmorenotifications',
     'User\UserController@getViewMoreNotifications');
-Route::resource('user/inviteplayer', 'user\InvitePlayerController');
+Route::resource('user/inviteplayer', 'User\InvitePlayerController');
 Route::resource('user', 'User\UserController');
 //End Users
 
