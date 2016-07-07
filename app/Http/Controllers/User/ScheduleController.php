@@ -117,8 +117,7 @@ class ScheduleController extends Controller {
         // Helper::setMenuToSelect(2,5);
         Helper::leftMenuVariables($teamId);
         $teamdetails = Team::where('id', $teamId)->first();
-        $countries = Country::orderBy('country_name')->lists('country_name', 'id')->all();
-        $states = [];
+        $states = State::where('country_id', config('constants.COUNTRY_INDIA'))->orderBy('state_name')->lists('state_name', 'id')->all();
         $match_types = array();
         $player_types = array();
         //get sport name
@@ -134,13 +133,11 @@ class ScheduleController extends Controller {
         }
         $sport_type = Sport::where('id', $sportsId)->pluck('sports_type');
         $team_name_level = (!empty($teamdetails['name']) && !empty($teamdetails['team_level'])) ? ($teamdetails['name'].' ('.$teamdetails['team_level'].')') : 'NA';
-
         return view('schedules.showschedules', ['currentMonth' => $currentMonth, 'currentYear' => $currentYear, 'sportsId' => $sportsId, 
                     'teamId' => $teamId, 'isOwner' => $isOwner, 'team_name' => $team_name_level, 
                     'sport_type' => $sport_type, 'nextyears'=>$nextYears, 'prevYears'=>$prevYears])
                         ->with('match_types', ['' => 'Select Match Type'] + $match_types)
                         ->with('player_types', ['' => 'Select Player Type'] + $player_types)
-                        ->with('countries', ['' => 'Select Country'] + $countries)
                         ->with('states', ['' => 'Select State'] + $states)
                         ->with('cities', ['' => 'Select City'] + array());
     }
@@ -1087,8 +1084,8 @@ class ScheduleController extends Controller {
         $tournament_round_number = !empty(Request::get('tournament_round_number')) ? Request::get('tournament_round_number') : NULL;
         $tournament_match_number = !empty(Request::get('tournament_match_number')) ? Request::get('tournament_match_number') : NULL;
         $is_tournament = !empty(Request::get('is_tournament')) ? Request::get('is_tournament') : NULL;
-        $country_id = !empty(Request::get('country_id')) ? Request::get('country_id') : NULL;
-        $country = !empty(Request::get('country_id')) ? Country::where('id', Request::get('country_id'))->first()->country_name : NULL;
+        $country_id = config('constants.COUNTRY_INDIA');
+        $country = Country::where('id', config('constants.COUNTRY_INDIA'))->first()->country_name;
         $match_location = rtrim($country . ', ' . $state . ', ' . $city, ', ');
         $player_a_ids = $a_id;
         $player_b_ids = !empty($b_id)?$b_id:'';

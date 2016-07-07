@@ -212,7 +212,7 @@ class FollowController extends Controller
                                 ->whereIn('users.id', $following_player_array)
                                 ->whereNull('users.deleted_at')
                                 ->get();
-
+                        
                         $sports = Sport::get();
                         foreach($sports as $sport){
                                 $sports_array[$sport->id] = $sport->sports_name;
@@ -242,7 +242,7 @@ class FollowController extends Controller
                         //print_r($follow_array);exit;
                         //$followingPlayersArray->toArray();
                 }
-
+                
 
                 return view('userprofile.following', array(
                         'followingTournaments' => $followingTournamentsArray,
