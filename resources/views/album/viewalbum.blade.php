@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends(Auth::user() ? 'layouts.app' : 'home.layout')
 @section('content')
 @if($action=='tournaments')
 	@include ('tournaments._leftmenu')

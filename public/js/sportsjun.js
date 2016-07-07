@@ -460,7 +460,7 @@ function appendTabElement(a, b, c, d) {
 function displaySportQuestions(a, b, c, d) {
     if (!b) return false;
     $.ajax({
-        url: base_url + "/getquestions",
+        url: base_url + "/viewpublic/getquestions",
         type: "GET",
         data: {
             flag: a,

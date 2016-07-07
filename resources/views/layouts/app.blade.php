@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="_token" content="{{csrf_token()}}" />
     <title>SportsJun - Connecting Sports People</title>
-    <!--<link href="{{ asset('/css/app.css') }}" rel="stylesheet">-->
-	<?php $js_version = config('constants.JS_VERSION');$css_version = config('constants.CSS_VERSION'); ?>
+<!--<link href="{{ asset('/css/app.css') }}" rel="stylesheet">-->
+    <?php $js_version = config('constants.JS_VERSION');$css_version = config('constants.CSS_VERSION'); ?>
     <link href="{{ asset('/css/bootstrap.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
     <link href="{{ asset('/css/sportsjun.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
     <link href="{{ asset('/css/bootstrap-datepicker.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
@@ -25,12 +25,12 @@
     <link href="{{ asset('/css/green.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
     <link href="{{ asset('/css/_all.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
     <link href="{{ asset('/css/sinister.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
-    <link href="{{ asset('/css/bootstrap-select.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">    
+    <link href="{{ asset('/css/bootstrap-select.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ asset('/css/sidebar-menu.css') }}?v=<?php echo $css_version;?>" />
     <link rel="stylesheet" href="{{ asset('/css/select-multiple.css') }}?v=<?php echo $css_version;?>" />
-    
-    <!-- Fonts --> 
+
+    <!-- Fonts -->
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,900' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet' type='text/css'>
     <link href="{{ asset('/css/font-awesome.min.css') }}" rel="stylesheet">
@@ -55,9 +55,9 @@
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
-                <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-                <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-        <![endif]-->
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
     <meta property="fb:app_id" content="{{ env('FACEBOOK_APP_ID') }}" />
     <script src="{{ asset('/js/jquery-2.1.1.min.js') }}?v=<?php echo $js_version;?>"></script>
     <script src="{{ asset('/js/jquery-ui.js') }}?v=<?php echo $js_version;?>"></script>
@@ -65,25 +65,25 @@
     <script src="{{ asset('/js/bootstrap-switch.js') }}?v=<?php echo $js_version;?>"></script>
     <script type="text/javascript" src="{{ asset('/js/jquery-form.js')}}?v=<?php echo $js_version;?>"></script>
     <script src="{{ asset('/js/sinister.js') }}?v=<?php echo $js_version;?>" type="text/javascript"></script>
-    
-    
-   	<script src="{{ asset('/js/sidebar-menu.js') }}?v=<?php echo $js_version;?>"></script>
+
+
+    <script src="{{ asset('/js/sidebar-menu.js') }}?v=<?php echo $js_version;?>"></script>
 
     <script type="text/javascript">
         var base_url = "{{URL::to('/')}}";
         var CSRF_TOKEN = $('meta[name="_token"]').attr('content');
-        var global_record_count = 0;    
-    	$(window).load(function() {
-			// Animate loader off screen
-			$(".page-load").fadeOut("slow");;
-		});
+        var global_record_count = 0;
+        $(window).load(function() {
+            // Animate loader off screen
+            $(".page-load").fadeOut("slow");;
+        });
     </script>
 
 </head>
 
 <body>
 <div class="app-wrap">
-	<div class="page-load"></div>
+    <div class="page-load"></div>
     <div class="showbox" id="spinner" style="display:none;">
         <div class="loader">
             <svg class="circular" viewBox="25 25 50 50">
@@ -98,7 +98,11 @@
         </div>
     </div>
     @include ('layouts.footer')
-    </div>
+</div>
 </body>
+
+
+<script src="{{ asset('/js/dom-to-png.js') }}?v=<?php echo $js_version;?>"></script>
+<script src="{{ asset('/js/socialshare.js') }}?v=<?php echo $js_version;?>"></script>
 
 </html>
