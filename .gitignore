@@ -1,6 +1,7 @@
 nbproject/
 public/uploads/
-config/
+vendor/
+#config/
 .env
 .idea/
 _ide_helper.php
