@@ -80,10 +80,10 @@ $css_version    = config('constants.CSS_VERSION');
                 @include("album.share_meta")
         @endif
 
-        @if(isset($tournamentInfo))
+        @if(isset($tournamentInfo[0]['id']))
                 @include("tournaments.share_meta")
         @endif
-        @if(isset($tournamentDetails))
+        @if(isset($tournamentDetails[0]['id']))
                 @include("tournaments.share_groups_meta")
         @endif
         @if(isset($sports) && isset($userId))

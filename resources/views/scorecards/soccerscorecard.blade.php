@@ -39,6 +39,16 @@
 		.fa-reply{
 			color:red;
 		}
+		.btn-penalty{
+            opacity: .2;
+        }
+        .btn-green-card{
+            background: #1B926C;
+        }
+        .btn-penalty-chosen{
+        	opacity: 1;
+        }
+
 
 
 	</style>
@@ -88,9 +98,11 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 									<div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['a_id'] }}">{{ $team_a_name }}</a></div>
 									<div class="team_city">{{ $team_a_city }}</div>
 									<div class="team_score" id="team_a_score">{{$team_a_goals}} <span><i class="fa fa-info-circle soccer_info" data-toggle="tooltip" title="<?php echo $team_a_count;?>"></i></span></div>
-									@if(isset($penalties['team_a']['players']) && count($penalties['team_a']['players'])>0 )
-										<div class='team_city'>  Penalties:    {{$penalties['team_a']['goals']}}</div>
-									@endif
+									<div class='team_city' id='penalty_a'>
+								@if(isset($penalties['team_a']['players']) && count($penalties['team_a']['players'])>0 )
+										  Penalties:    {{$penalties['team_a']['goals']}}
+								@endif
+									</div>
 
 								</div>
 							</div>
@@ -106,9 +118,11 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 									<div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['b_id'] }}">{{ $team_b_name }}</a></div>
 									<div class="team_city">{{ $team_b_city }}</div>
 									<div class="team_score" id="team_b_score">{{$team_b_goals}} <span><i class="fa fa-info-circle soccer_info" data-toggle="tooltip" title="<?php echo $team_b_count;?>"></i></span></div>
-									@if(isset($penalties['team_b']['players']) && count($penalties['team_b']['players'])>0 )
-										<div class='team_city'>  Penalties:    {{$penalties['team_b']['goals']}}</div>
-									@endif
+									<div class='team_city' id='penalty_b'>
+							@if(isset($penalties['team_b']['players']) && count($penalties['team_b']['players'])>0 )
+								  Penalties:    {{$penalties['team_b']['goals']}}
+							@endif
+									</div>
 								</div>
 							</div>
 							<div class="col-md-4 col-sm-12">
@@ -585,7 +599,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 
 
 				<!-- Team B Goals Start-->
-
+				<div class='row'>
 				<div class="col-sm-10 col-sm-offset-1">
 					<h3 id='team_b' class="team_bowl table_head">MATCH DETAILS</h3>
 					<div class="table-responsive">
@@ -683,31 +697,38 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 							@endif
 
 							</tbody>
-						</table></div>
+						</table>
+						</div>
+					</div>
+					</div>
 
 
 					@if(isset($penalties['team_a']['players']) && count($penalties['team_a']['players'])>0 )
-
+						<div class='row'>
 						<div class='col-sm-10 col-sm-offset-1'>
+						<h3 class='team_bat table_head'  ><center >Penalties</center></h3>
 							<thead class="thead">
 							<tr>
-								<th class='team_bat'  ><center >Penalties</center></th>
+								
 							</tr>
 							</thead>
 							<div class='col-sm-6 ' >
 								<div class="table-responsive">
 									<table class="table table-striped">
-
+									<tbody>
 										@foreach($penalties['team_a']['players'] as $i=>$player)
 											<tr>
-												<td colspan=2>{{$player['name']}}</td><td> 0 <input type='radio' value='0' name='penalty_goal_a_{{$i}}' readonly="readonly">   1 <input type='radio' value='1'  name='penalty_goal_a_{{$i}}' {{$player['goal']=='1'?'checked':''}} readonly="readonly"> </td>
-												<input type='hidden' name='penalty_goal_player_a_{{$i}}' value="{{$player['stat_id']}}">
-												</td>
+												<td colspan=2>{{$player['name']}}</td><td> 
+
+						0 <button class="btn-red-card btn-card btn-circle btn-penalty btn_team_a_{{$i}} {{$player['goal']=='0'?'btn-penalty-chosen':''}} "  value='0'  index='{{$i}}' team_type='team_a'  team_id='{{$team_a_id}}' onclick='return scorePenalty(this); return false' > </button>
+
+	  					1 <button class="btn-green-card btn-card btn-circle btn-penalty btn_team_a_{{$i}} {{$player['goal']=='1'?'btn-penalty-chosen':''}} "  value='1'  index='{{$i}}' team_id='{{$team_a_id}}' team_type='team_a'  onclick='return scorePenalty(this); return false' > </button> 
+
+						</td>
+											
 											</tr>
 										@endforeach
-										@if(isset($i))
-											<input type='hidden' value='{{$i}}' name='penalty_goal_index_a'>
-											@endif
+										
 											</tbody>
 									</table>
 
@@ -721,15 +742,16 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 										<tbody  >
 										@foreach($penalties['team_b']['players'] as $i=>$player)
 											<tr>
-												<td colspan=2>{{$player['name']}}</td><td> 0 <input type='radio' value='0' name='penalty_goal_b_{{$i}}'>   1 <input type='radio' value='1'  name='penalty_goal_b_{{$i}}' {{$player['goal']=='1'?'checked':''}}  >
+												<td colspan=2>{{$player['name']}}</td><td> 
 
-													<input type='hidden' name='penalty_goal_player_b_{{$i}}' value="{{$player['stat_id']}}">
+						0 <button class="btn-red-card btn-card btn-circle btn-penalty btn_team_b_{{$i}} {{$player['goal']=='0'?'btn-penalty-chosen':''}} "  value='0'  index='{{$i}}' team_type='team_b'  team_id='{{$team_b_id}}' onclick='return scorePenalty(this); return false' > </button>
+
+	  					1 <button class="btn-green-card btn-card btn-circle btn-penalty btn_team_b_{{$i}} {{$player['goal']=='1'?'btn-penalty-chosen':''}}"  value='1'  index='{{$i}}' team_id='{{$team_b_id}}' team_type='team_b'  onclick='return scorePenalty(this); return false' > </button> 
+
 												</td>
 											</tr>
 										@endforeach
-										@if(isset($i))
-											<input type='hidden' value='{{$i}}' name='penalty_goal_index_b'>
-										@endif
+										
 										</tbody>
 									</table>
 
@@ -1551,8 +1573,8 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 					var message=response.message;
 					var response_a=response.response_a;
 					var response_b=response.response_b;
-					$('#penalty_players_a').html(response_a);
-					$('#penalty_players_b').html(response_b);
+					$('#penalty_players_a').append(response_a);
+					$('#penalty_players_b').append(response_b);
 					$('#soccerPenaltiesModal').modal('hide');
 
 				},
@@ -1569,6 +1591,40 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 			if($(that).val()>100) return false;
 			var val=$(that).val();
 			$('#updateBallValue').val(100-val);
+		}
+
+		function scorePenalty(that){
+				var team_type 	=	$(that).attr('team_type');
+				var index 	 	=	$(that).attr('index');
+				var val 		= 	$(that).attr('value')
+			var data={
+					match_id:$('#match_id').val(),
+					team_type:team_type,
+					index:index,
+					value:val,
+				}
+			$('.btn_'+team_type+'_'+index).removeClass('btn-penalty-chosen');
+
+			$.ajax({
+				url:base_url+'/match/scorePenalty',
+				type:'post',
+				data:data,
+				dataType:'json',
+				success:function(response){
+					$(that).addClass('btn-penalty-chosen');
+					$('.btn_'+team_type+'_'+index).attr('disabled', true);
+					var match_details=response;
+					var penalties=match_details.penalties;
+
+					$('#penalty_a').html('Penalties : '+penalties.team_a.goals);
+					$('#penalty_b').html('Penalties : '+penalties.team_b.goals);
+					return false;
+				}, 
+				error:function(){
+					return false;
+				}
+			})
+			return false;
 		}
 
 

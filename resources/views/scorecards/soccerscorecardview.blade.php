@@ -44,6 +44,17 @@
             color: green;
         }
 
+        .btn-penalty{
+            opacity: .2;
+        }
+        .btn-green-card{
+            background: #1B926C;
+        }
+        .btn-penalty-chosen{
+            opacity: 1;
+        }
+
+
 
     </style>
     <div class="col_standard soccer_scorecard">
@@ -111,7 +122,7 @@
                                             </td>
                                     @endif
                                 @else
-                                    <!--	<img  class="img-responsive img-circle" width="110" height="110" src="{{ asset('/images/no_logo.png') }}">	-->
+                                    <!--    <img  class="img-responsive img-circle" width="110" height="110" src="{{ asset('/images/no_logo.png') }}">  -->
                                         {!! Helper::Images('no_logo.png','images',array('class'=>'img-responsive img-circle','height'=>110,'width'=>110) )!!}
 
                                     @endif
@@ -455,28 +466,25 @@
 
             </div>
             @if(isset($penalties['team_a']['players']) && count($penalties['team_a']['players'])>0)
-
+                <div class="row">
                 <div class='col-sm-10 col-sm-offset-1'>
 
-                    <h3 class='team_a team_title_head'  ><center ><b>Penalties</center></b><h3>
+                    <h3 class='team_bowl table_head'  ><center >Penalties</center><h3>
 
                             <div class='col-sm-6 ' >
                                 <div class="table-responsive">
                                     <table class="table table-striped">
 
-                                        @foreach($penalties['team_a']['players'] as $penalty_player)
+                                        @foreach($penalties['team_a']['players'] as $i=>$penalty_player)
                                             <tr>
                                                 <td colspan=2>{{$penalty_player['name']}}</td>
-                                                @if($penalty_player['goal']!='1')
-                                                    <td>
-                                                        <button class='btn-red-card btn-card btn-circle' disabled='' >&nbsp;</button >
-                                                    </td>
-                                                @else
-                                                    <td>
+                                                <td> 
 
-                                                        <button class='btn-green-card btn-card btn-circle' disabled=''>&nbsp;</button >
-                                                    </td>
-                                                @endif
+                        0 <button class="btn-red-card btn-card btn-circle btn-penalty btn_team_a_{{$i}} {{$penalty_player['goal']=='0'?'btn-penalty-chosen':''}} " disabled > </button>
+
+                        1 <button class="btn-green-card btn-card btn-circle btn-penalty btn_team_a_{{$i}} {{$penalty_player['goal']=='1'?'btn-penalty-chosen':''}} "  disabled=""   > </button> 
+
+                        </td>
                                             </tr>
                                             @endforeach
 
@@ -491,19 +499,17 @@
                                 <div class="table-responsive">
                                     <table class="table table-striped">
                                         <tbody  >
-                                        @foreach($penalties['team_b']['players'] as $penalty_player)
+                                        @foreach($penalties['team_b']['players'] as $i=>$penalty_player)
                                             <tr>
                                                 <td colspan=2>{{$penalty_player['name']}}</td>
-                                                @if($penalty_player['goal']!='1')
-                                                    <td>
-                                                        <button class='btn-red-card btn-card btn-circle' disabled='' >&nbsp;</button >
-                                                    </td>
-                                                @else
-                                                    <td>
-                                                        <button class='btn-green-card btn-card btn-circle' disabled=''>&nbsp;</button >
-                                                    </td>
-                                                @endif
+                                                <td> 
 
+                        0 <button class="btn-red-card btn-card btn-circle btn-penalty btn_team_b_{{$i}} {{$penalty_player['goal']=='0'?'btn-penalty-chosen':''}} " disabled=""  > </button>
+
+                        1 <button class="btn-green-card btn-card btn-circle btn-penalty btn_team_b_{{$i}} {{$penalty_player['goal']=='1'?'btn-penalty-chosen':''}}" disabled=""  > </button> 
+
+                                                    
+                                                </td>
                                             </tr>
                                         @endforeach
 
@@ -541,9 +547,6 @@
     <div class="sportsjun-forms text-center scorecards-buttons">
         <input type="hidden" name="match_id" id="match_id" value="{{$match_data[0]['id']}}">
         @if($isValidUser && $isApproveRejectExist)
-
-
-
 
             <button style="text-align:center;" type="button" onclick="scoreCardStatus('approved');" class="button green">Approve</button>
             <button style="text-align:center;" type="button" onclick="scoreCardStatus('rejected');" class="button black">Reject</button><br />

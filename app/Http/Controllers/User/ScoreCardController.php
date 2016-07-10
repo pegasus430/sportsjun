@@ -2840,35 +2840,8 @@ class ScoreCardController extends Controller {
 		}
 
 
-		if(isset($request['set_penalty'])){
-			$index_a=$request['penalty_goal_index_a'];
-			$index_b=$request['penalty_goal_index_b'];
-			$match_details['penalties']=json_decode(json_encode($match_details['penalties']), true);
-
-			for($i=0; $i<$index_a; $i++){
-				if(isset($request["penalty_goal_b_$i"]) && $request["penalty_goal_a_$i"]=='1'){
-
-					$match_details['penalties']['team_a']['players'][$i]['goal']=1;
-					$match_details['penalties']['team_a']['goals']++;
-				}
-			}
-
-			for($i=0; $i<$index_b; $i++){
-				if(isset($request["penalty_goal_b_$i"]) && $request["penalty_goal_b_$i"]=='1'){
-					$match_details['penalties']['team_b']['players'][$i]['goal']=1;
-					$match_details['penalties']['team_b']['goals']++;
-				}
-			}
-
-			$match_details['penalties']['score']=$match_details['penalties']['team_a']['goals']. '-' .$match_details['penalties']['team_b']['goals'];
-
-		}
-
-
 		$match_data->match_details=json_encode($match_details);
 		$match_data->save();
-
-
 
 
 		//get previous scorecard status data
@@ -3572,15 +3545,18 @@ class ScoreCardController extends Controller {
 				'team_a'=>[
 					'players'=>[],
 					'goals'=>0,
+					'players_ids'=>[]
 				],
 				'team_b'=>[
 					'players'=>[],
 					'goals'=>0,
+					'players_ids'=>[]
 				]
 			]
 		];
 
 		$match_model=json_encode($match_details);
+		$match_model->save();
 	}
 
 
@@ -3634,24 +3610,22 @@ class ScoreCardController extends Controller {
 		$match_id=$request['match_id'];
 
 		$match_model=matchSchedule::find($match_id);
-		$match_details=(array)json_decode($match_model['match_details']);
+		$match_details=json_decode($match_model['match_details'],true);
 
-		$penalties=[
-			'score'=>'',
-			'team_a'=>[
-				'players'=>[],
-				'goals'=>0,
-			],
-			'team_b'=>[
-				'players'=>[],
-				'goals'=>0,
-			]
-		];
+if(!isset($match_details['penalties']['team_a']['players_ids']))$match_details['penalties']['team_a']['players_ids']=[];
+if(!isset($match_details['penalties']['team_b']['players_ids']))$match_details['penalties']['team_b']['players_ids']=[];
+
+		$penalties=$match_details['penalties'];			
 
 		$response_a="";
 		$response_b="";
 		for($i=0; $i<$index_a; $i++){
-			if(isset($request['penalty_player_a_'.$i]) ){
+
+		  if(isset($request['penalty_player_a_'.$i]) ){
+
+			 if(!in_array($request['penalty_player_user_id_a_'.$i], $penalties['team_a']['players_ids'])){
+				array_push($penalties['team_a']['players_ids'], $request['penalty_player_user_id_a_'.$i]);
+				
 				$player_id=$request['penalty_player_id_a_'.$i];
 				$matchwise_model=SoccerPlayerMatchwiseStats::find($player_id);
 				$matchwise_model->penalty=1;
@@ -3659,22 +3633,29 @@ class ScoreCardController extends Controller {
 				$player=[
 					'name'=>$request['penalty_player_name_a_'.$i],
 					'stat_id'=>$request['penalty_player_id_a_'.$i],
-					'goal'=>0,
+					'goal'=>'',
 					'user_id'=>$request['penalty_player_user_id_a_'.$i],
 				];
 				array_push($penalties['team_a']['players'], $player);
 
 				$response_a.="
 	  					<tr>
-	  					<td colspan=2>{$player['name']}</td><td> 0 <input type='radio' value='0' checked name='penalty_goal_a_$i'>   1 <input type='radio' value='1'  name='penalty_goal_a_$i'>  
-	  					<input type='hidden' name='penalty_goal_player_a_$i' value='$player_id'>
+	  					<td colspan=2>{$player['name']}</td><td> 
+	  					0 <button class='btn-red-card btn-card btn-circle btn-penalty btn_team_a_$i' value='0' name='penalty_goal_a_$i' index='$i' team_id='$team_a_id' team_type='team_a' onclick='return scorePenalty(this)' > </button> 
+	  					1 <button class='btn-green-card btn-card btn-circle btn-penalty btn_team_a_$i' value='1' name='penalty_goal_a_$i' index='$i' team_id='$team_a_id' team_type='team_a' onclick='return scorePenalty(this)' >  
+	  					<input type='hidden' name='penalty_goal_player_a_$i' value='$player_id' > </button>
 	  					<tr>
 	  				";
+				}
 			}
 		}
 
 		for($i=0; $i<$index_b; $i++){
 			if(isset($request['penalty_player_b_'.$i])){
+			 if(!in_array($request['penalty_player_user_id_b_'.$i], $penalties['team_b']['players_ids'])){
+
+				array_push($penalties['team_b']['players_ids'], $request['penalty_player_user_id_b_'.$i]);
+				
 				$player_id=$request['penalty_player_id_b_'.$i];
 				$matchwise_model=SoccerPlayerMatchwiseStats::find($player_id);
 				$matchwise_model->penalty=1;
@@ -3682,19 +3663,20 @@ class ScoreCardController extends Controller {
 				$player=[
 					'name'=>$request['penalty_player_name_b_'.$i],
 					'stat_id'=>$request['penalty_player_id_b_'.$i],
-					'goal'=>0,
+					'goal'=>'',
 					'user_id'=>$request['penalty_player_user_id_b_'.$i],
 				];
 				array_push($penalties['team_b']['players'], $player);
 
 				$response_b.="
 	  					<tr>
-	  					<td colspan=2>{$player['name']}</td><td> 0 <input type='radio' value='0' checked name='penalty_goal_b_$i'>   1 <input type='radio' value='1'  name='penalty_goal_b_$i'>  
+	  					<td colspan=2>{$player['name']}</td><td> 
+	  					0 <button class='btn-red-card btn-card btn-circle btn-penalty btn_team_b_$i'  value='0' name='penalty_goal_b_$i' index='$i' team_type='team_b'  team_id='$team_b_id' onclick='return scorePenalty(this)'> </button>
+	  					1 <button class='btn-green-card btn-card btn-circle btn-penalty btn_team_b_$i'  value='1'  name='penalty_goal_b_$i' index='$i' team_id='$team_b_id' team_type='team_b'  onclick='return scorePenalty(this)'> </button> 
 	  					<input type='hidden' name='penalty_goal_player_b_$i' value='$player_id'>
-
 	  					<tr>
 	  				";
-
+	  			}
 			}
 		}
 
@@ -3713,6 +3695,32 @@ class ScoreCardController extends Controller {
 			"response_b"=>$response_b
 		];
 
+	}
+
+	public function scorePenalty(){
+			$request=Request::all();
+			$match_id=$request['match_id'];
+			$team_type=$request['team_type'];
+			$index=$request['index'];
+			$value=$request['value'];
+
+			$match_model=MatchSchedule::find($match_id);
+			$match_details=json_decode($match_model->match_details, true);
+
+			$match_details['penalties'][$team_type]['players'][$index]['goal']=$value;
+
+			$team_a_penalty_goals=0;
+			$team_b_penalty_goals=0;
+
+			foreach ($match_details['penalties'][$team_type]['players'] as $key => $value) {
+					${$team_type.'_penalty_goals'}+=$value['goal'];					
+			}
+
+			$match_details['penalties'][$team_type]['goals']=${$team_type.'_penalty_goals'};
+			$match_details=json_encode($match_details);
+			$match_model->match_details=$match_details;
+			$match_model->save();
+			return $match_details;
 	}
 }
 ?>
