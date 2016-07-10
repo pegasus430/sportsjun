@@ -17,6 +17,10 @@
 <meta property="og:title"         content="<?php echo $data_title ?>" />
 <meta property="og:description"   content="<?php echo $data_text?>" />
 
+@if(isset($sharingKit->providers))
+<meta property="og:image"   content="{{$sharingKit->providers->first->avatar}}" />
+@endif
+
 
 <meta property="og:image"   content="{{$data_image}}" />
 <meta property="og:image"         content="{{ asset('/images/sj_facebook_share.jpg') }}" />

@@ -10,6 +10,9 @@ switch ($action) {
 	case 'organization':
 		$sharingKit=Helper::getOrganisationDetails($action_id);
 		break;
+	case 'user':
+		$sharingKit=Helper::getUserDetails($action_id);
+		break;
 	default:
 		$sharingKit=(object)['sharingString'=>'','logo'=>'', 'name'=>''];
 		break;

@@ -10,7 +10,7 @@ $tw_url = 'https://twitter.com/intent/tweet?url=' . $t_url. '&amp;text=' . $t_te
 $gp_url = 'https://plus.google.com/share?url=' . $t_url;
 ?>
 
-<div class="ssk-group col-md-10 col-md-offset-1 " >
+<div class=" col-md-4 col-md-offset-6 " >
 
     <div class="">
         <table class="sj-social">
@@ -39,5 +39,5 @@ $gp_url = 'https://plus.google.com/share?url=' . $t_url;
         </table>
     </div>
 
-    <hr class="im_hr">
+
 </div>

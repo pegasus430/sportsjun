@@ -313,7 +313,7 @@
                             </thead>
                             
                                 <tbody>
-                            @if(isset($match_details->first_half))
+                            @if(count(first_half)>0)
                                 <tr>
                                     <td colspan="2">{{$match_details->first_half->{"team_{$team_a_id}_goals"} }}</td>
                                     <td class="td_type">Half Time (<i class='fa fa-futbol-o'></i>) </td>
@@ -360,7 +360,6 @@
                             </tr>
                             </thead>
                             <tbody id="displayGoalsFirstHalf" >
-                            @if(isset($match_details->first_half))
                                 @if(count($first_half) < 1 )
                                     <tr><td colspan="9">No Records</td></tr>
                                 @else
@@ -445,7 +444,7 @@
                                     </tr>
                                 @endforeach
                             @endif
-                            @endif
+                           
                             </tbody>
                         </table>
                     </div>
@@ -584,7 +583,7 @@
             });
         }
 
-        $("input[type='radio']").attr('readonly',true);
+    
     </script>
 
 

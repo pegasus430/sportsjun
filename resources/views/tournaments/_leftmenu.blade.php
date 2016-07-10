@@ -21,7 +21,7 @@ else $check_user='';
                     <span><i class="fa fa-check"></i>Join Tournament</span>
                 </a>
             </div>
-            <?php } ?>
+            <?php //} ?>
             <?php $follow_unfollow = Helper::checkFollowUnfollow(isset(Auth::user()->id)?Auth::user()->id:0,'TOURNAMENT',$action_id);?>
             <div class="follow_unfollow_tournament" id="follow_unfollow_tournament_{{$action_id}}" uid="{{$action_id}}" val="TOURNAMENT" flag="{{ !empty($follow_unfollow)?0:1 }}">
                 <a href="javascript:void(0);" id="follow_unfollow_tournament_a_{{$action_id}}" class="{{ !empty($follow_unfollow)?'sj_unfollow':'sj_follow' }}">

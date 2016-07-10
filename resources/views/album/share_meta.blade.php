@@ -20,7 +20,7 @@ switch ($action) {
 $data_url=url("/viewpublic/user/album/show/$action/$action_id");
 $data_text=$sharingKit->gallery_sharing;
 $data_title="Photo Album of $sharingKit->name";
-$data_image=url("/uploads/$action/$sharingKit->logo");
+$data_image=url("/uploads/$action/".!empty($left_menu_data['logo'])?$left_menu_data['logo']:'');
 
 ?>
 

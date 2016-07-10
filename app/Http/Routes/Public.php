@@ -15,7 +15,7 @@ Route::group(['prefix'=>'viewpublic'], function(){
 	Route::get('createphoto/{album_id}/{user_id}/{is_user?}/{action?}/{team_id?}/{page?}','User\AlbumController@createphotopublic');
 	Route::get('user/album/show/{test?}/{id?}/{team_id?}/{page?}', 'User\AlbumController@show');
 	Route::get('gettournamentdetails/{id}', 'User\TournamentsController@getTournamentDetails');
-	Route::get('tournaments/groups/{id}/{type?}','user\TournamentsController@groups');
+	Route::get('tournaments/groups/{id}/{type?}','User\TournamentsController@groups');
 	Route::get('editsportprofile/{userId}', 'User\SportController@editSportProfile');
 	Route::get('showsportprofile/{userId}','User\SportController@showSportProfile');
 

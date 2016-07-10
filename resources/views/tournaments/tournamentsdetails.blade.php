@@ -3,12 +3,11 @@
 	@include ('tournaments._leftmenu')
 
 	<div id="content" class="col-sm-10 tournament_profile">
-
-		<div class="col-md-10 col-md-offset-1 mrg_top">
-			{!! Helper::Images(!empty($left_menu_data['logo'])?$left_menu_data['logo']:'',!empty($left_menu_data['path'])?$left_menu_data['path']:'',array('height'=>'','width'=>'','class'=>'img_tbl') )!!}
+		@include('tournaments.share')
+		<div class="col-md-8 col-md-offset-2 mrg_top">
+			{!! Helper::Images(!empty($left_menu_data['logo'])?$left_menu_data['logo']:'',!empty($left_menu_data['path'])?$left_menu_data['path']:'',array('height'=>'','width'=>'','class'=>'img_tbl img-responsive') )!!}
 		</div>
 
-		@include('tournaments.share')
 		<div class="col-md-8 col-md-offset-2 captureImage">
 			<div class="group_no clearfix">
 				<h4 class="stage_head">{{ trans('message.tournament.fields.tournamentdetails') }}</h4>

@@ -3,7 +3,7 @@
 $t_url=url("/viewpublic/tournaments/groups/{$tournamentDetails[0]['id']}/group");
 $t_text="{$tournamentDetails[0]['name']} is a match tournament with {$tournamentDetails[0]['prize_money']} worth. {$tournamentDetails[0]['name']} starts from {$tournamentDetails[0]['start_date']} to {$tournamentDetails[0]['end_date']} at {$tournamentDetails[0]['location']}  {$tournamentDetails[0]['description']}";
 
-$t_title="Tournament Details for {$tournamentDetails[0]['name']}";
+$t_title="Tournament Group Details for {$tournamentDetails[0]['name']}";
 
 $fb_url = 'https://www.facebook.com/dialog/share?app_id=' . env('FACEBOOK_APP_ID') . '&amp;display=popup&amp;href=' .$t_url. '&amp;redirect_uri=' . url('js_close');
 $tw_url = 'https://twitter.com/intent/tweet?url=' . $t_url. '&amp;text=' . $t_text . '&amp;title=' . $t_title . '&amp;via=sj_sportsjun';
