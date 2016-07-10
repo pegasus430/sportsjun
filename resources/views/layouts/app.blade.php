@@ -100,9 +100,4 @@
     @include ('layouts.footer')
 </div>
 </body>
-
-
-<script src="{{ asset('/js/dom-to-png.js') }}?v=<?php echo $js_version;?>"></script>
-<script src="{{ asset('/js/socialshare.js') }}?v=<?php echo $js_version;?>"></script>
-
 </html>

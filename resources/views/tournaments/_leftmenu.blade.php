@@ -1,3 +1,8 @@
+<?php
+
+if(!Auth::user())$check_user='viewpublic';          //if user is public, redirects to the public link
+else $check_user='';
+?>
 <div class="col-sm-2">
     <div class="row">
         <div class="team_view">
@@ -26,15 +31,15 @@
         </div>
         <ul class="nav sidemenu_nav leftmenu-icon" id="side-menu">
         <!--<li><a class="sidemenu_1" href="{{ url('tournaments') }}"><span class="ico ico-info"></span> Info</a></li>-->
-            <li><a class="sidemenu_1" href="{{ url($testpublic.'/gettournamentdetails/'.$tournament_id) }}"><span class="ico ico-info"></span> Info</a></li>
+            <li><a class="sidemenu_1" href="{{ url($check_user.'/gettournamentdetails/'.$tournament_id) }}"><span class="ico ico-info"></span> Info</a></li>
             @if($lef_menu_condition=='display_gallery')
-                <li><a class="sidemenu_2" href="{{ url($testpublic.'/user/album/show').'/tournaments'.'/0'.'/'.$action_id }}"><span class="ico ico-media-gallery"></span> Media Gallery</a></li>
+                <li><a class="sidemenu_2" href="{{ url($check_user.'/user/album/show').'/tournaments'.'/0'.'/'.$action_id }}"><span class="ico ico-media-gallery"></span> Media Gallery</a></li>
             @endif
             @if($tournament_type=='league' || $tournament_type=='multistage')
-                <li><a class="sidemenu_3" href="{{ url($testpublic.'/tournaments/groups').'/'.$action_id.'/group'}}"><span class="ico ico-group-stage"></span> Group Stage</a></li>
+                <li><a class="sidemenu_3" href="{{ url($check_user.'/tournaments/groups').'/'.$action_id.'/group'}}"><span class="ico ico-group-stage"></span> Group Stage</a></li>
             @endif
             @if($tournament_type=='knockout' || $tournament_type=='multistage')
-                <li><a class="sidemenu_4" href="{{ url($testpublic.'/tournaments/groups').'/'.$action_id.'/final'}}"><span class="ico ico-final-stage"></span> Final Stage</a></li>
+                <li><a class="sidemenu_4" href="{{ url($check_user.'/tournaments/groups').'/'.$action_id.'/final'}}"><span class="ico ico-final-stage"></span> Final Stage</a></li>
             @endif
         </ul>
     </div>

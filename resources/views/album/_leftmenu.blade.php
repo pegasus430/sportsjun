@@ -4,7 +4,7 @@
 
             <?php
             if(Auth::user()) $check_user='';
-            else $check_user='/viewpublic';
+            else $check_user='/viewpublic';   //if user is not auth, redirects to the public page.
             ?>
 
 

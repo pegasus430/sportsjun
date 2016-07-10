@@ -1,23 +1,26 @@
 <?php
 
-	switch ($action) {
-		case 'tournaments':	
-			$sharingKit=Helper::getTournamentDetails($action_id);		
+switch ($action) {
+	case 'tournaments':
+		$sharingKit=Helper::getTournamentDetails($action_id);
 		break;
-		case 'team':
-			$sharingKit=Helper::getTeamDetails($action_id);
+	case 'team':
+		$sharingKit=Helper::getTeamDetails($action_id);
 		break;
-		case 'organization':
-			$sharingKit=Helper::getOrganisationDetails($action_id);
+	case 'organization':
+		$sharingKit=Helper::getOrganisationDetails($action_id);
 		break;
-		default:
-			$sharingKit=(object)['gallery_sharing'=>'','logo'=>'', 'name'=>''];
+	case 'user':
+		$sharingKit=Helper::getUserDetails($action_id);
 		break;
-	}
-  $data_url=url("/viewpublic/user/album/show/$action/$action_id");
-  $data_text=$sharingKit->gallery_sharing;
-  $data_title="Photo Album of $action $sharingKit->name";
-  $data_image=url("/uploads/$action/$sharingKit->logo");
+	default:
+		$sharingKit=(object)['gallery_sharing'=>'','logo'=>'', 'name'=>''];
+		break;
+}
+$data_url=url("/viewpublic/user/album/show/$action/$action_id");
+$data_text=$sharingKit->gallery_sharing;
+$data_title="Photo Album of $sharingKit->name";
+$data_image=url("/uploads/$action/$sharingKit->logo");
 
 ?>
 
@@ -27,13 +30,13 @@
 <meta property="og:description"   content="<?php echo $data_text?>" />
 
 @if(isset($photo_array))
- @foreach($photo_array as $album)
- 	<?php $a_image=url("uploads/gallery/gallery_$action/$action_id/{$album['url']}");?>
-<meta property="og:image"   content="{{$a_image}}"}} />
- @endforeach
+	@foreach($photo_array as $album)
+		<?php $a_image=url("uploads/gallery/gallery_$action/$action_id/{$album['url']}");?>
+		<meta property="og:image"   content="{{$a_image}}"}} />
+	@endforeach
 
- @else
-<meta property="og:image"   content="{{$data_image}}" />
-<meta property="og:image"         content="{{ asset('/images/sj_facebook_share.jpg') }}" />
+@else
+	<meta property="og:image"   content="{{$data_image}}" />
+	<meta property="og:image"         content="{{ asset('/images/sj_facebook_share.jpg') }}" />
 
- @endif
+@endif

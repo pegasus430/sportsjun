@@ -32,7 +32,6 @@ use App\Helpers\Helper;
 use DateTime;
 use App\Helpers\AllRequests;
 use Session;
-
 class ScoreCardController extends Controller {
 	/**
 	 * Display a listing of the resource.
@@ -2679,7 +2678,7 @@ class ScoreCardController extends Controller {
 	}
 
 
-	public function insertSoccerScore($user_id,$tournament_id,$match_id,$team_id,$player_name,$team_name,$yellow_card_count,$red_card_count,$goal_count, $playing_status='P')
+	public function insertSoccerScore($user_id,$tournament_id,$match_id,$team_id,$player_name,$team_name,$yellow_card_count,$red_card_count,$goal_count, $playing_status='S')
 	{
 		$soccer_model = new SoccerPlayerMatchwiseStats();
 		$soccer_model->user_id 			= $user_id;
@@ -2774,8 +2773,13 @@ class ScoreCardController extends Controller {
 			];
 			$match_details=(array)json_decode(json_encode($match_details));
 		}
-		else $match_details=(array)json_decode($match_details);
+		else $match_details=json_decode($match_details);
 
+		//set ball percentage statistics
+		$match_details->{$team_a_id}->ball_percentage=$request['ball_percentage_'.$team_a_id];
+		$match_details->{$team_b_id}->ball_percentage=$request['ball_percentage_'.$team_b_id];
+
+		$match_details=(array)$match_details;
 
 		for($i=1; $i<=$last_index; $i++){
 			if(!in_array($i, $deleted_ids)){
@@ -2804,8 +2808,7 @@ class ScoreCardController extends Controller {
 				$match_details=(object)$match_details;		//temporally convert to object to get numeric property
 				$match_details->$team_id->{$record_type_count} +=1;
 				$score=$match_details->{$team_a_id}->goals. '-'. $match_details->{$team_b_id}->goals;
-				$match_details->{$team_a_id}->ball_percentage=$request['ball_percentage_'.$team_a_id];
-				$match_details->{$team_b_id}->ball_percentage=$request['ball_percentage_'.$team_b_id];
+
 				$match_details=(array)$match_details;
 				$record_type_details=[
 					'player_id'=>$user_id,
@@ -2817,6 +2820,12 @@ class ScoreCardController extends Controller {
 					'team_type'=>$team_type,
 
 				];
+				//if players has 2 yellow cards -> 1 red card
+				if($record_type_count=='yellow_card_count'){
+					if($yellow_card_count>0 && $red_card_count==0){
+						$soccer_model->red_cards=1;
+					}
+				}
 
 				$match_details[$half_time][$record_type_count]+=1;
 				$match_details[$half_time]['team_'.$team_id.'_'.$record_type_count]+=1;		//increments value for goal or yellow card or red card for team in specified halftime
@@ -2826,8 +2835,8 @@ class ScoreCardController extends Controller {
 				$soccer_model->save();
 
 				$this->updateSoccerScore($user_id,$match_id,$team_id,$player_name,$yellow_card_count,$red_card_count,$goals_count);
+				$this->soccerStatistics($user_id);
 			}
-			$this->soccerStatistics($user_id);
 		}
 
 
@@ -3479,34 +3488,41 @@ class ScoreCardController extends Controller {
 		$team_a_id 		=$request['team_a_id'];
 		$team_b_id 		=$request['team_b_id'];
 
-		$thisMatchDetails=MatchSchedule::find($match_id);
-		$thisMatchDetails->hasSetupSquad=1;
-		$thisMatchDetails->save();
+		$match_model=MatchSchedule::find($match_id);
+		$match_model->hasSetupSquad=1;
+		$match_model->save();
 
 		$team_a_name=$request['team_a_name'];
 		$team_b_name=$request['team_b_name'];
 		$team_a_playing_players=isset($request['team_a']['playing'])?$request['team_a']['playing']:[];
-		$team_a_substitute_players=isset($request['team_a']['substitute'])?$request['team_a']['substitute']:[];
 		$team_b_playing_players=isset($request['team_b']['playing'])?$request['team_b']['playing']:[];
-		$team_b_substitute_players=isset($request['team_b']['substitute'])?$request['team_b']['substitute']:[];
 
+		$team_a_substitute_players=explode(',', $match_model->player_a_ids);
+		$team_b_substitute_players=explode(',', $match_model->player_b_ids);
 
 		foreach($team_a_playing_players as $p){
 			$player_name=User::find($p)->name;
 			$this->insertSoccerScore($p, $tournament_id, $match_id, $team_a_id,$player_name, $team_a_name,0,0,0,'P');
 		}
 		foreach($team_a_substitute_players as $p){
-
-			$player_name=User::find($p)->name;
-			$this->insertSoccerScore($p, $tournament_id, $match_id, $team_a_id,$player_name, $team_a_name,0,0,0,'S');
+			if(!in_array($p, $team_a_playing_players)){
+				if(isset(User::find($p)->name)){
+					$player_name=User::find($p)->name;
+					$this->insertSoccerScore($p, $tournament_id, $match_id, $team_a_id,$player_name, $team_a_name,0,0,0,'S');
+				}
+			}
 		}
 		foreach($team_b_playing_players as $p){
 			$player_name=User::find($p)->name;
 			$this->insertSoccerScore($p, $tournament_id, $match_id, $team_b_id,$player_name, $team_b_name,0,0,0,'P');
 		}
 		foreach($team_b_substitute_players as $p){
-			$player_name=User::find($p)->name;
-			$this->insertSoccerScore($p, $tournament_id, $match_id, $team_b_id,$player_name, $team_b_name,0,0,0,'S');
+			if(!in_array($p, $team_a_playing_players)){
+				if(isset(User::find($p)->name)){
+					$player_name=User::find($p)->name;
+					$this->insertSoccerScore($p, $tournament_id, $match_id, $team_b_id,$player_name, $team_b_name,0,0,0,'S');
+				}
+			}
 		}
 
 		$match_model=MatchSchedule::find($match_id);
@@ -3577,6 +3593,7 @@ class ScoreCardController extends Controller {
 		$request=Request::all();
 		$match_id=$request['match_id'];
 		$team_id=$request['team_id'];
+		$time_substituted=$request['time_substituted'];
 		$soccer_model=SoccerPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_id)->get();
 
 		foreach ($soccer_model as $sm ){
@@ -3588,9 +3605,12 @@ class ScoreCardController extends Controller {
 					$sm->playing_status='S';
 				}
 				else $sm->playing_status='P';
-				$sm->save();
 
 				$sm->has_substituted=1;
+				$sm->time_substituted=1;
+				$sm->save();
+
+
 			}
 
 		}

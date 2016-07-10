@@ -1,23 +1,23 @@
-<?php 
+<?php
 
-	switch ($action) {
-		case 'tournaments':	
-			$sharingKit=Helper::getTournamentDetails($action_id);		
+switch ($action) {
+	case 'tournaments':
+		$sharingKit=Helper::getTournamentDetails($action_id);
 		break;
-		case 'team':
-			$sharingKit=Helper::getTeamDetails($action_id);
+	case 'team':
+		$sharingKit=Helper::getTeamDetails($action_id);
 		break;
-		case 'organization':
-			$sharingKit=Helper::getOrganisationDetails($action_id);
+	case 'organization':
+		$sharingKit=Helper::getOrganisationDetails($action_id);
 		break;
-		default:
-			$sharingKit=(object)['sharingString'=>'','logo'=>'', 'name'=>''];
+	default:
+		$sharingKit=(object)['sharingString'=>'','logo'=>'', 'name'=>''];
 		break;
-	}
-  $data_url='';
-  $data_text=$sharingKit->sharingString;
-  $data_title="Photo Album of $action $sharingKit->name - Add a new photo";
-  $data_image=url("/uploads/gallery_$action/$action_id/$sharingKit->logo");
+}
+$data_url='';
+$data_text=$sharingKit->sharingString;
+$data_title="Photo Album of $action $sharingKit->name - Add a new photo";
+$data_image=url("/uploads/gallery_$action/$action_id/$sharingKit->logo");
 
 
 $t_url=url("/viewpublic/user/album/show/$action/$action_id");
@@ -32,8 +32,32 @@ $gp_url = 'https://plus.google.com/share?url=' . $t_url;
 ?>
 
 <ul class="ssk-group col-md-10 col-md-offset-1 dropdown-menu ">
-	
-							<a class="ssk ssk-facebook f_b " href="#" role="presentation"><i class="fa fa-facebook"></i></a>
-							<a class="ssk ssk-twitter tw_r" href="#" role="presentation"><i class="fa fa-twitter"></i></a>
-							<a class="ssk ssk-google-plus gp_l" href="#" role="presentation" ><i class="fa fa-google-plus"></i></a>
-        						</ul>
+
+
+	<div class="">
+		<table class="sj-social">
+			<tbody>
+			<tr>
+				<td class="sj-social-td">
+					<a href="javascript:void(0);" onclick="SJ.GLOBAL.share('{{$fb_url}}', 'sjfb');" class="sj-social-ancr sj-social-ancr-fb" rel="noreferrer">
+						<span class="sj-ico sj-fb-share "></span>
+						<span class="sj-font-12">Share</span>
+					</a>
+				</td>
+				<td class="sj-social-td">
+					<a href="javascript:void(0);" onclick="SJ.GLOBAL.share('{{$tw_url}}', 'sjtw');" class="sj-social-ancr sj-social-ancr-twt" rel="noreferrer">
+						<span class="sj-ico sj-twt-share"></span>
+						<span class="sj-font-12">Tweet</span>
+					</a>
+				</td>
+				<td class="sj-social-td">
+					<a href="javascript:void(0);" onclick="SJ.GLOBAL.share('{{$gp_url}}', 'sjgp');" class="sj-social-ancr sj-social-ancr-gplus" rel="noreferrer">
+						<span class="sj-ico sj-gplus-share"></span>
+						<span class="sj-font-12">Share</span>
+					</a>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+</ul>

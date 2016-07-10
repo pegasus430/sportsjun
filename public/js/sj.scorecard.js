@@ -231,9 +231,9 @@ if (typeof SJ.SCORECARD === 'undefined')
                         },
 
                         soccerSetTimes:function(that){
-                                $('.soccer_buttons_disabled').attr('disabled', true);
+                                //$('.soccer_buttons_disabled').attr('disabled', true);
                                 $('#new_records_match').show();
-                                $('#end_match').show();
+                                $('#end_match').modal('show');
                                 return false;
 
                         },
@@ -295,18 +295,18 @@ if (typeof SJ.SCORECARD === 'undefined')
 
                                 if(team_type=='team_b'){
                                         if(half_time=='first_half'){
-                                                $('#displayGoalsFirstHalfTemporal').append("<tr class='records'><td colspan=3><td><input type='number' name='time_"+index+"' class='gui-input input_first_half' min='0' max='49' required></td><td>"+record_type_name+"</td> <td colspan=2>"+player_name+"</td><td><a href='#' onclick='deleteRow(this, "+index+")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a></td></tr>");
+                                                $('#displayGoalsFirstHalfTemporal').append("<tr class='records'><td colspan=3><td><input type='number' name='time_"+index+"' class='gui-input   input_first_half' min='0' max='49' required></td><td>"+record_type_name+"</td> <td colspan=2>"+player_name+"</td><td><a href='#' onclick='deleteRow(this, "+index+")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><a class='btn btn-success btn-circle btn-sm saveMatchForm' href='javascript:void(0);' index='"+index+"'><i class='fa fa-check'></i></a></td></tr>");
                                         }
                                         else{
-                                                $('#displayGoalsSecondHalfTemporal').append("<tr class='records'><td colspan=3><td><input type='number' name='time_"+index+"' class='gui-input input_first_half' min='45' max='95' required></td><td>"+record_type_name+"</td> <td colspan=2>"+player_name+"</td><td><a href='#' onclick='deleteRow(this, "+index+")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a></tr></td></tr>");
+                                                $('#displayGoalsSecondHalfTemporal').append("<tr class='records'><td colspan=3><td><input type='number' name='time_"+index+"' class='gui-input   input_first_half' min='45' max='95' required></td><td>"+record_type_name+"</td> <td colspan=2>"+player_name+"</td><td><a href='#' onclick='deleteRow(this, "+index+")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><a class='btn btn-success btn-circle btn-sm saveMatchForm' href='javascript:void(0);' index='"+index+"'><i class='fa fa-check'></i></a></tr></td></tr>");
                                         }
                                 }
                                 else{
                                         if(half_time=='first_half'){
-                                                $('#displayGoalsFirstHalfTemporal').append("<tr class='records'><td colspan=2>"+player_name+"</td><td>"+record_type_name+"</td><td><input type='number' class='input_second_half' min='0' max='48' name='time_"+index+"' required></td><td colspan=3></td><td><a href='#' onclick='deleteRow(this, "+index+")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a></td></tr>");
+                                                $('#displayGoalsFirstHalfTemporal').append("<tr class='records'><td colspan=2>"+player_name+"</td><td>"+record_type_name+"</td><td><input type='number' class='  input_second_half' min='0' max='48' name='time_"+index+"' required></td><td colspan=3></td><td><a href='#' onclick='deleteRow(this, "+index+")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><a class='btn btn-success btn-circle btn-sm saveMatchForm' href='javascript:void(0);' index='"+index+"'><i class='fa fa-check'></i></a></td></tr>");
                                         }
                                         else{
-                                                $('#displayGoalsSecondHalfTemporal').append("<tr class='records'><td colspan=2>"+player_name+"</td><td>"+record_type_name+"</td><td><input type='number' class='input_second_half' min='45' max='95' name='time_"+index+"' required></td><td colspan=3></td><td><a href='#' onclick='deleteRow(this, "+index+")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a></tr></td></tr>");
+                                                $('#displayGoalsSecondHalfTemporal').append("<tr class='records'><td colspan=2>"+player_name+"</td><td>"+record_type_name+"</td><td><input type='number' class='  input_second_half' min='45' max='95' name='time_"+index+"' required></td><td colspan=3></td><td><a href='#' onclick='deleteRow(this, "+index+")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><a class='btn btn-success btn-circle btn-sm saveMatchForm' href='javascript:void(0);' index='"+index+"'><i class='fa fa-check'></i></a></tr></td></tr>");
                                         }
                                 }
                                 $('#displayGoalsFirstHalfTemporal').append("<input type='hidden' name='player_"+index+"' value='"+player_id+"'>");
@@ -319,6 +319,20 @@ if (typeof SJ.SCORECARD === 'undefined')
 
 
                                 $('#last_index').val(index);
+
+                                $('.saveMatchForm').click(function(){
+                                        $.confirm({
+                                                title:"Alert",
+                                                content:"Add record?",
+                                                confirm:function(){
+                                                        saveMatchDetails();
+                                                        $(this).hide();
+                                                },
+
+                                        })
+
+                                })
+
 
                         },
 

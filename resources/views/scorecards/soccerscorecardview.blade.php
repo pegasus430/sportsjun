@@ -5,6 +5,15 @@
     $team_a_id = $match_data[0]['a_id']; $team_b_id= $match_data[0]['b_id'] ;
     $player_of_the_match=$player_of_the_match==NULL? 0 : $player_of_the_match;?>
 
+    <?php
+    $match_details=json_decode($match_data[0]['match_details']);
+    $first_half=isset($match_details->first_half)?$match_details->first_half:[];
+    $second_half=isset($match_details->second_half)?$match_details->second_half:[];
+    $penalties=isset($match_details->penalties)?json_decode(json_encode($match_details->penalties), true):[];
+    $ball_percentage_a=isset($match_details->{$team_a_id}->ball_percentage)?$match_details->{$team_a_id}->ball_percentage:50;
+    $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_details->{$team_b_id}->ball_percentage:50;
+    ?>
+
     <style type="text/css">
         .alert{display: none;}
         .show_teams{display: none;}
@@ -13,19 +22,26 @@
             background-color: red;
         }
         .btn-yellow-card{
-            background: orange;
+            background: #f4cd73;
             border: none;
         }
         .btn-red-card{
-            background: darkred;
+            background: #f42d23;
+        }
+        .btn-green-card{
+            background: #84cd93;
         }
         .btn-card{
             border: none;
         }
-        .td_type{
-            font: bolder;
-            font-size: 23px;
-
+        .lose_goal{
+            opacity: .2;
+        }
+        .fa-share{
+            color: red;
+        }
+        .fa-reply{
+            color: green;
         }
 
 
@@ -60,6 +76,10 @@
                                     <div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['a_id'] }}">{{ $team_a_name }}</a></div>
                                     <div class="team_city">{{ $team_a_city }}</div>
                                     <div class="team_score" id="team_a_score">{{$team_a_goals}} <span><i class="fa fa-info-circle soccer_info" data-toggle="tooltip" title="<?php echo $team_a_count;?>"></i></span></div>
+
+                                    @if(isset($penalties['team_a']['players']) && count($penalties['team_a']['players'])>0 )
+                                        <div class='team_city'>  Penalties:  {{$penalties['team_a']['goals']}}</div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -74,6 +94,9 @@
                                     <div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['b_id'] }}">{{ $team_b_name }}</a></div>
                                     <div class="team_city">{{ $team_b_city }}</div>
                                     <div class="team_score" id="team_b_score">{{$team_b_goals}} <span><i class="fa fa-info-circle soccer_info" data-toggle="tooltip" title="<?php echo $team_b_count;?>"></i></span></div>
+                                    @if(isset($penalties['team_b']['players']) && count($penalties['team_b']['players'])>0 )
+                                        <div class='team_city'>  Penalties:    {{$penalties['team_b']['goals']}}</div>
+                                    @endif
                                 </div>
                             </div>
                             <div class="col-md-4 col-sm-12">
@@ -100,6 +123,8 @@
                                     <div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['b_id'] }}">{{ $team_b_name }}</a></div>
                                     <div class="team_city">{{ $team_b_city }}</div>
                                     <div class="team_score" id="team_b_score">{{$team_b_goals}} <span><i class="fa fa-info-circle soccer_info" data-toggle="tooltip" title="<?php echo $team_b_count;?>"></i></span></div>
+
+
                                 </div>
                             </div>
                         </div>
@@ -170,10 +195,10 @@
 
                                     <tbody id="team_tr_a" >
                                     @foreach($team_a_soccer_scores_array  as $player_a)
-                                        @if($player_a['playing_status']=='P')
+                                        @if($player_a['playing_status']=='P' && $player_a['red_cards']==0)
                                             <tr class="team_a_playing_row " >
                                                 <td>
-                                                    {{ $player_a['player_name']   }}
+                                                    {{ $player_a['player_name']   }} {!!$player_a['has_substituted']?" <i class='fa fa-reply'></i> {$player_a['has_substituted']}\"":''!!}
                                                 </td>
                                                 <td>{!!$player_a['goals_scored']>0?" {$player_a['goals_scored']} <i class='fa fa-futbol-o'></i> ":'' !!}</td>
                                                 <td>   {!!$player_a['yellow_cards']>0?" {$player_a['yellow_cards']} <button class='btn-yellow-card btn-card' disabled=''>&nbsp;</button> ":'' !!}</td>
@@ -195,11 +220,11 @@
 
                                     <tbody id="team_tr_b" >
                                     @foreach($team_b_soccer_scores_array  as $player_b)
-                                        @if($player_b['playing_status']=='P')
+                                        @if($player_b['playing_status']=='P' && $player_b['red_cards']==0)
                                             <tr class="team_b_playing_row ">
 
                                                 <td>
-                                                    {{ $player_b['player_name']   }}
+                                                    {{ $player_b['player_name']   }} {!!$player_b['has_substituted']?"<i class='fa fa-reply'></i> {$player_b['has_substituted']}\"":''!!}
                                                 </td>
                                                 <td>{!!$player_b['goals_scored']>0?" {$player_b['goals_scored']} <i class='fa fa-futbol-o'></i> ":'' !!}</td>
                                                 <td>   {!!$player_b['yellow_cards']>0?" {$player_b['yellow_cards']} <button class='btn-yellow-card btn-card' disabled=''>&nbsp;</button> ":'' !!}</td>
@@ -227,10 +252,10 @@
 
                                     <tbody id="team_tr_a" >
                                     @foreach($team_a_soccer_scores_array  as $player_a)
-                                        @if($player_a['playing_status']=='S')
+                                        @if($player_a['playing_status']=='S' || $player_a['red_cards']>0)
                                             <tr class="team_a_playing_row  ">
                                                 <td>
-                                                    {{ $player_a['player_name']   }}
+                                                    {{ $player_a['player_name']   }}  {!! $player_a['has_substituted']?"<i class='fa fa-share'></i> {$player_a['time_substituted']}\"":''!!}
                                                 </td>
                                                 <td>{!!$player_a['goals_scored']>0?" {$player_a['goals_scored']} <i class='fa fa-futbol-o'></i> ":'' !!}</td>
                                                 <td>   {!!$player_a['yellow_cards']>0?" {$player_a['yellow_cards']} <button class='btn-yellow-card btn-card' disabled=''>&nbsp;</button> ":'' !!}</td>
@@ -253,10 +278,10 @@
 
                                     <tbody id="team_tr_b" >
                                     @foreach($team_b_soccer_scores_array  as $player_b)
-                                        @if($player_b['playing_status']=='S')
+                                        @if($player_b['playing_status']=='S' || $player_b['red_cards']>0)
                                             <tr class="team_a_playing_row">
                                                 <td>
-                                                    {{ $player_b['player_name']   }}
+                                                    {{ $player_b['player_name']   }} {!!$player_b['has_substituted']?"<i class='fa fa-share'></i> {$player_b['has_substituted']}\"":''!!}
                                                 </td>
                                                 <td>{!!$player_b['goals_scored']>0?" {$player_b['goals_scored']} <i class='fa fa-futbol-o'></i> ":'' !!}</td>
                                                 <td>   {!!$player_b['yellow_cards']>0?" {$player_b['yellow_cards']} <button class='btn-yellow-card btn-card' disabled=''>&nbsp;</button> ":'' !!}</td>
@@ -276,14 +301,7 @@
             </div>
 
             <div class="row">
-                <?php
-                $match_details=json_decode($match_data[0]['match_details']);
-                $first_half=isset($match_details->first_half)?$match_details->first_half:[];
-                $second_half=isset($match_details->second_half)?$match_details->second_half:[];
-                $penalties=isset($match_details->penalties)?json_decode(json_encode($match_details->penalties), true):[];
-                $ball_percentage_a=isset($match_details->{$team_a_id}->ball_percentage)?$match_details->{$team_a_id}->ball_percentage:50;
-                $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_details->{$team_b_id}->ball_percentage:50;
-                ?>
+
                 <div class="col-sm-10 col-sm-offset-1">
                     <h3 id='team_b' class="team_bowl table_head">MATCH STATITICS</h3>
                     <div class="table-responsive">
@@ -293,31 +311,36 @@
                                 <th colspan="5"></th>
                             </tr>
                             </thead>
+                            @if(isset($match_details->first_half))
+                                <tbody>
+                                <tr>
+                                    <td colspan="2">{{$match_details->first_half->{"team_{$team_a_id}_goals"} }}</td>
+                                    <td class="td_type">Half Time (<i class='fa fa-futbol-o'></i>) </td>
+                                    <td colspan="2">{{$match_details->first_half->{"team_{$team_b_id}_goals"} }}</td>
+                                <tr>
+                                <tr>
+                                    <td colspan="2">{{$match_details->{$team_a_id}->goals }}</td>
+                                    <td class="td_type">Full Time (<i class='fa fa-futbol-o'></i>) </td>
+                                    <td colspan="2">{{$match_details->{$team_b_id}->goals }}</td>
+                                <tr>
+                                <tr>
+                                    <td colspan="2">{{$match_details->{$team_a_id}->red_card_count }}</td>
+                                    <td class='td_type'>Red Cards <button class='btn-red-card btn-card' disabled=''>&nbsp;</button>  </td>
+                                    <td colspan="2">{{$match_details->{$team_b_id}->red_card_count }}</td>
+                                <tr>
+                                <tr>
+                                    <td colspan="2">{{$match_details->{$team_a_id}->yellow_card_count }}</td>
+                                    <td class='td_type'>Yellow Cards <button class='btn-yellow-card btn-card' disabled=''>&nbsp;</button>  </td>
+                                    <td colspan="2">{{$match_details->{$team_b_id}->yellow_card_count }}</td>
+                                <tr>
+                                <tr>
+                                    <td colspan="2">{{$ball_percentage_a }} %</td>
+                                    <td class='td_type'>Ball Percentage  % </td>
+                                    <td colspan="2">{{$ball_percentage_b }} %</td>
+                                <tr>
 
-                            <tbody>
-                            <tr>
-                                <td colspan="2">{{$match_details->{$team_a_id}->goals }}</td>
-                                <td class="td_type">Goals (<i class='fa fa-futbol-o'></i>) </td>
-                                <td colspan="2">{{$match_details->{$team_b_id}->goals }}</td>
-                            <tr>
-                            <tr>
-                                <td colspan="2">{{$match_details->{$team_a_id}->red_card_count }}</td>
-                                <td class='td_type'>Red Cards <button class='btn-red-card btn-card' disabled=''>&nbsp;</button>  </td>
-                                <td colspan="2">{{$match_details->{$team_b_id}->red_card_count }}</td>
-                            <tr>
-                            <tr>
-                                <td colspan="2">{{$match_details->{$team_a_id}->yellow_card_count }}</td>
-                                <td class='td_type'>Yellow Cards <button class='btn-yellow-card btn-card' disabled=''>&nbsp;</button>  </td>
-                                <td colspan="2">{{$match_details->{$team_b_id}->yellow_card_count }}</td>
-                            <tr>
-                            <tr>
-                                <td colspan="2">{{$ball_percentage_a }} %</td>
-                                <td class='td_type'>Ball Percentage  % </td>
-                                <td colspan="2">{{$ball_percentage_b }} %</td>
-                            <tr>
-
-                            </tbody>
-
+                                </tbody>
+                            @endif
                         </table>
                     </div>
 
@@ -336,45 +359,45 @@
                             </tr>
                             </thead>
                             <tbody id="displayGoalsFirstHalf" >
+                            @if(isset($match_details->first_half))
+                                @if(count($first_half) < 1 )
+                                    <tr><td colspan="9">No Records</td></tr>
+                                @else
+                                    <!-- Goals Display -->
+                                    @foreach($first_half->goals_details as $fh)
 
-                            @if(count($first_half) < 1 )
-                                <tr><td colspan="9">No Records</td></tr>
-                            @else
-                                <!-- Goals Display -->
-                                @foreach($first_half->goals_details as $fh)
+                                        <tr>
+                                            @if(isset($fh->team_type) && $fh->team_type=='team_a')
+                                                <td colspan="2">{{$fh->player_name}}</td><td>{{$fh->time}}"</td><td><i class='fa fa-futbol-o'></i></td><td>{{$fh->current_score}}</td><td colspan="4">&nbsp;</td>
+                                            @else
+                                                <td colspan="4">&nbsp;</td><td>{{$fh->current_score}}</td><td><i class='fa fa-futbol-o'></i></td><td>{{$fh->time}}"</td><td colspan="2">{{$fh->player_name}}</td>
+                                            @endif
+                                        </tr>
+                                    @endforeach
+                                    <!-- Yellow Cards -->
+                                    @foreach($first_half->yellow_card_details as $fh)
 
-                                    <tr>
-                                        @if(isset($fh->team_type) && $fh->team_type=='team_a')
-                                            <td colspan="2">{{$fh->player_name}}</td><td>{{$fh->time}}"</td><td><i class='fa fa-futbol-o'></i></td><td>{{$fh->current_score}}</td><td colspan="4">&nbsp;</td>
-                                        @else
-                                            <td colspan="4">&nbsp;</td><td>{{$fh->current_score}}</td><td><i class='fa fa-futbol-o'></i></td><td>{{$fh->time}}"</td><td colspan="2">{{$fh->player_name}}</td>
-                                        @endif
-                                    </tr>
-                                @endforeach
-                                <!-- Yellow Cards -->
-                                @foreach($first_half->yellow_card_details as $fh)
+                                        <tr>
+                                            @if(isset($fh->team_type) && $fh->team_type=='team_a')
+                                                <td colspan="2">{{$fh->player_name}}</td><td>{{$fh->time}}"</td><td><button class='btn-yellow-card btn-card' disabled="">&nbsp;</button></td><td></td><td colspan="4">&nbsp;</td>
+                                            @else
+                                                <td colspan="4">&nbsp;</td><td></td><td><button class='btn-yellow-card btn-card' disabled="">&nbsp;</button><td>{{$fh->time}}"</td><td colspan="2">{{$fh->player_name}}</td>
+                                            @endif
+                                        </tr>
+                                    @endforeach
+                                    <!-- Red Cards -->
+                                    @foreach($first_half->red_card_details as $fh)
 
-                                    <tr>
-                                        @if(isset($fh->team_type) && $fh->team_type=='team_a')
-                                            <td colspan="2">{{$fh->player_name}}</td><td>{{$fh->time}}"</td><td><button class='btn-yellow-card btn-card' disabled="">&nbsp;</button></td><td></td><td colspan="4">&nbsp;</td>
-                                        @else
-                                            <td colspan="4">&nbsp;</td><td></td><td><button class='btn-yellow-card btn-card' disabled="">&nbsp;</button><td>{{$fh->time}}"</td><td colspan="2">{{$fh->player_name}}</td>
-                                        @endif
-                                    </tr>
-                                @endforeach
-                                <!-- Red Cards -->
-                                @foreach($first_half->red_card_details as $fh)
+                                        <tr>
+                                            @if(isset($fh->team_type) && $fh->team_type=='team_a')
+                                                <td colspan="2">{{$fh->player_name}}</td><td>{{$fh->time}}"</td><td><button class='btn-red-card btn-card ' disabled="">&nbsp;</button></td><td></td><td colspan="4">&nbsp;</td>
+                                            @else
+                                                <td colspan="4">&nbsp;</td><td></td><td><button class='btn-red-card btn-card ' disabled="">&nbsp;</button><td>{{$fh->time}}"</td><td colspan="2">{{$fh->player_name}}</td>
+                                            @endif
+                                        </tr>
+                                    @endforeach
 
-                                    <tr>
-                                        @if(isset($fh->team_type) && $fh->team_type=='team_a')
-                                            <td colspan="2">{{$fh->player_name}}</td><td>{{$fh->time}}"</td><td><button class='btn-red-card btn-card ' disabled="">&nbsp;</button></td><td></td><td colspan="4">&nbsp;</td>
-                                        @else
-                                            <td colspan="4">&nbsp;</td><td></td><td><button class='btn-red-card btn-card ' disabled="">&nbsp;</button><td>{{$fh->time}}"</td><td colspan="2">{{$fh->player_name}}</td>
-                                        @endif
-                                    </tr>
-                                @endforeach
-
-                            @endif
+                                @endif
 
                             </tbody>
 
@@ -421,7 +444,7 @@
                                     </tr>
                                 @endforeach
                             @endif
-
+                            @endif
                             </tbody>
                         </table>
                     </div>
@@ -429,7 +452,7 @@
                 </div>
 
             </div>
-            @if(count($penalties)>0)
+            @if(isset($penalties['team_a']['players']) && count($penalties['team_a']['players'])>0)
 
                 <div class='col-sm-10 col-sm-offset-1'>
 
@@ -439,15 +462,23 @@
                                 <div class="table-responsive">
                                     <table class="table table-striped">
 
-                                        @foreach($penalties['team_a']['players'] as $i=>$player)
+                                        @foreach($penalties['team_a']['players'] as $penalty_player)
                                             <tr>
-                                                <td colspan=2>{{$player['name']}}</td><td> 0 <input type='radio' value='0' name='penalty_goal_a_{{$i}}'>   1 <input type='radio' readonly value='1'  name='penalty_goal_a_{{$i}}' {{$player['goal']=='1'?'checked':''}} > </td>
-                                                <input type='hidden' name='penalty_goal_player_a_{{$i}}' readonly="" value="{{$player['stat_id']}}" disabled="" ">
-                                                </td>
+                                                <td colspan=2>{{$penalty_player['name']}}</td>
+                                                @if($penalty_player['goal']!='1')
+                                                    <td>
+                                                        <button class='btn-red-card btn-card btn-circle' disabled='' >&nbsp;</button >
+                                                    </td>
+                                                @else
+                                                    <td>
+
+                                                        <button class='btn-green-card btn-card btn-circle' disabled=''>&nbsp;</button >
+                                                    </td>
+                                                @endif
                                             </tr>
-                                        @endforeach
-                                        <input type='hidden' value='{{$i}}' name='penalty_goal_index_a'>
-                                        </tbody>
+                                            @endforeach
+
+                                            </tbody>
                                     </table>
 
                                 </div>
@@ -458,15 +489,22 @@
                                 <div class="table-responsive">
                                     <table class="table table-striped">
                                         <tbody  >
-                                        @foreach($penalties['team_b']['players'] as $i=>$player)
+                                        @foreach($penalties['team_b']['players'] as $penalty_player)
                                             <tr>
-                                                <td colspan=2>{{$player['name']}}</td><td> 0 <input type='radio' value='0' name='penalty_goal_b_{{$i}}' readonly="readonly">   1 <input type='radio' value='1'  name='penalty_goal_b_{{$i}}' {{$player['goal']=='1'?'checked':''}}  readonly="readonly">
+                                                <td colspan=2>{{$penalty_player['name']}}</td>
+                                                @if($penalty_player['goal']!='1')
+                                                    <td>
+                                                        <button class='btn-red-card btn-card btn-circle' disabled='' >&nbsp;</button >
+                                                    </td>
+                                                @else
+                                                    <td>
+                                                        <button class='btn-green-card btn-card btn-circle' disabled=''>&nbsp;</button >
+                                                    </td>
+                                                @endif
 
-                                                    <input type='hidden' name='penalty_goal_player_b_{{$i}}' value="{{$player['stat_id']}}">
-                                                </td>
                                             </tr>
                                         @endforeach
-                                        <input type='hidden' value='{{$i}}' name='penalty_goal_index_b'>
+
                                         </tbody>
                                     </table>
 
