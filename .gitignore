@@ -9,3 +9,5 @@ _ide_helper_models.php
 .DS_Store
 Thumbs.db
 vendor/barryvdh/laravel-ide-helper/
+public/mailoutput/*
+public/home/js/sj.global.js

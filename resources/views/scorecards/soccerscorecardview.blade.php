@@ -313,6 +313,7 @@
                             </thead>
                             
                                 <tbody>
+
                             @if(count($first_half)>0)
                                 <tr>
                                     <td colspan="2">{{$match_details->first_half->{"team_{$team_a_id}_goals"} }}</td>
@@ -320,6 +321,7 @@
                                     <td colspan="2">{{$match_details->first_half->{"team_{$team_b_id}_goals"} }}</td>
                                 <tr>
                             @endif
+                            @if(isset($match_details->{$team_a_id}))
                                 <tr>
                                     <td colspan="2">{{$match_details->{$team_a_id}->goals }}</td>
                                     <td class="td_type">Full Time (<i class='fa fa-futbol-o'></i>) </td>
@@ -340,7 +342,7 @@
                                     <td class='td_type'>Ball Percentage  % </td>
                                     <td colspan="2">{{$ball_percentage_b }} %</td>
                                 <tr>
-
+                            @endif
                                 </tbody>                           
                         </table>
                     </div>

@@ -2771,7 +2771,7 @@ class ScoreCardController extends Controller {
 					]
 				]
 			];
-			$match_details=json_decode($match_details);
+			$match_details=json_decode(json_encode($match_details));
 		}
 		else $match_details=json_decode($match_details);
 
