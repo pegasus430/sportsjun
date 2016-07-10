@@ -313,7 +313,7 @@
                             </thead>
                             
                                 <tbody>
-                            @if(count(first_half)>0)
+                            @if(count($first_half)>0)
                                 <tr>
                                     <td colspan="2">{{$match_details->first_half->{"team_{$team_a_id}_goals"} }}</td>
                                     <td class="td_type">Half Time (<i class='fa fa-futbol-o'></i>) </td>

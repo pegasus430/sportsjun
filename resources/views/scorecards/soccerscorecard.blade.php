@@ -56,6 +56,9 @@
 	$first_half=isset($match_details->first_half)?$match_details->first_half:[];
 	$second_half=isset($match_details->second_half)?$match_details->second_half:[];
 	$penalties=isset($match_details->penalties)?json_decode(json_encode($match_details->penalties), true):[];
+
+$ball_percentage_a=isset($match_details->{$team_a_id}->ball_percentage)?$match_details->{$team_a_id}->ball_percentage:50;
+$ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_details->{$team_b_id}->ball_percentage:50;
 	?>
 
 	<div class="col_standard soccer_scorecard">
@@ -555,12 +558,12 @@
 									<div class="form-inline" style="border:none">
 										<div class='form-group'>
 											<label> {{$team_a_name}} Ball Percentage </label>
-											<input type='number' class='gui-input ' name='ball_percentage_{{$team_a_id}}' value="{{json_decode($match_data[0]['match_details'])->{$team_a_id}->ball_percentage}}" max="100" onchange="updateBallPercentage(event,this)" >
+											<input type='number' class='gui-input ' name='ball_percentage_{{$team_a_id}}' value="{{$ball_percentage_a}}" max="100" onchange="updateBallPercentage(event,this)" >
 										</div>
 										<div class='form-group'>
 
 											<label>{{$team_b_name}} Ball Percentage  </label>
-											<input type='number' id='updateBallValue' readonly class='gui-input' name='ball_percentage_{{$team_b_id}}' value="{{json_decode($match_data[0]['match_details'])->{$team_b_id}->ball_percentage}}" max="100">
+											<input type='number' id='updateBallValue' readonly class='gui-input' name='ball_percentage_{{$team_b_id}}' value="{{$ball_percentage_b}}" max="100">
 										</div>
 										<br>
 									</div>
