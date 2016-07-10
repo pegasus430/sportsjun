@@ -17,7 +17,7 @@ else $check_user='';
             <div class="more desc">{{ $left_menu_data['description'] or 'Description' }}</div>
             <?php if(!in_array($tournament_id,$left_menu_data['exist_array']) && (!empty($left_menu_data['sub_tournament_details']['end_date'] && $left_menu_data['sub_tournament_details']['end_date']!='0000-00-00')?strtotime($left_menu_data['sub_tournament_details']['end_date']) >= strtotime(date(config('constants.DATE_FORMAT.DB_STORE_DATE_FORMAT'))):strtotime($left_menu_data['sub_tournament_details']['start_date']) >= strtotime(date(config('constants.DATE_FORMAT.DB_STORE_DATE_FORMAT'))))) {?>
             <div class="sb_join_tournament_main">
-                <a href="javascript:void(0);" onclick="SJ.TOURNAMENT.joinTournament({{isset(Auth::user()->id)?Auth::user()->id:0},{{$left_menu_data['sub_tournament_details']['id']}},{{$left_menu_data['sub_tournament_details']['sports_id']}},'{{!empty($left_menu_data['sub_tournament_details']['schedule_type'])?(($left_menu_data['sub_tournament_details']['schedule_type']=='individual')?'PLAYER_TO_TOURNAMENT':'TEAM_TO_TOURNAMENT'):''}}');" class="sj_add_but">
+                <a href="javascript:void(0);" onclick="SJ.TOURNAMENT.joinTournament({{isset(Auth::user()->id)?Auth::user()->id:0}},{{$left_menu_data['sub_tournament_details']['id']}},{{$left_menu_data['sub_tournament_details']['sports_id']}},'{{!empty($left_menu_data['sub_tournament_details']['schedule_type'])?(($left_menu_data['sub_tournament_details']['schedule_type']=='individual')?'PLAYER_TO_TOURNAMENT':'TEAM_TO_TOURNAMENT'):''}}');" class="sj_add_but">
                     <span><i class="fa fa-check"></i>Join Tournament</span>
                 </a>
             </div>
