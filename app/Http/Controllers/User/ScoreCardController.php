@@ -2771,7 +2771,7 @@ class ScoreCardController extends Controller {
 					]
 				]
 			];
-			$match_details=(array)json_decode(json_encode($match_details));
+			$match_details=json_decode($match_details);
 		}
 		else $match_details=json_decode($match_details);
 
@@ -3607,7 +3607,7 @@ class ScoreCardController extends Controller {
 				else $sm->playing_status='P';
 
 				$sm->has_substituted=1;
-				$sm->time_substituted=1;
+				$sm->time_substituted=$time_substituted;
 				$sm->save();
 
 

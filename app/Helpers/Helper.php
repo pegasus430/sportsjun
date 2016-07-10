@@ -1784,7 +1784,7 @@ class Helper {
     public static function getUserDetails($user_id){
         $model=User::find($user_id);
         $model->gallery_title="Photo Album of $model->name";
-        $model->gallery_sharing="$model->name";
+        $model->gallery_sharing="$model->name is $model->gender sport player. $model->name leaves at $model->location.  Click here to view his full gallery.";
         $model->gallery_url="/uploads/gallery/users/$model->logo";
         return $model;
     }

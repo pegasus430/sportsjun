@@ -34,9 +34,8 @@ $data_image=url("/uploads/$action/$sharingKit->logo");
 		<?php $a_image=url("uploads/gallery/gallery_$action/$action_id/{$album['url']}");?>
 		<meta property="og:image"   content="{{$a_image}}"}} />
 	@endforeach
-
-@else
+@endif
 	<meta property="og:image"   content="{{$data_image}}" />
 	<meta property="og:image"         content="{{ asset('/images/sj_facebook_share.jpg') }}" />
 
-@endif
+

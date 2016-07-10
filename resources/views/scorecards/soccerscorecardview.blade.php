@@ -198,7 +198,7 @@
                                         @if($player_a['playing_status']=='P' && $player_a['red_cards']==0)
                                             <tr class="team_a_playing_row " >
                                                 <td>
-                                                    {{ $player_a['player_name']   }} {!!$player_a['has_substituted']?" <i class='fa fa-reply'></i> {$player_a['has_substituted']}\"":''!!}
+                                                    {{ $player_a['player_name']   }} {!!$player_a['has_substituted']?" <i class='fa fa-reply'></i> {$player_a['time_substituted']}\"":''!!}
                                                 </td>
                                                 <td>{!!$player_a['goals_scored']>0?" {$player_a['goals_scored']} <i class='fa fa-futbol-o'></i> ":'' !!}</td>
                                                 <td>   {!!$player_a['yellow_cards']>0?" {$player_a['yellow_cards']} <button class='btn-yellow-card btn-card' disabled=''>&nbsp;</button> ":'' !!}</td>
@@ -224,7 +224,7 @@
                                             <tr class="team_b_playing_row ">
 
                                                 <td>
-                                                    {{ $player_b['player_name']   }} {!!$player_b['has_substituted']?"<i class='fa fa-reply'></i> {$player_b['has_substituted']}\"":''!!}
+                                                    {{ $player_b['player_name']   }} {!!$player_b['has_substituted']?"<i class='fa fa-reply'></i> {$player_b['time_substituted']}\"":''!!}
                                                 </td>
                                                 <td>{!!$player_b['goals_scored']>0?" {$player_b['goals_scored']} <i class='fa fa-futbol-o'></i> ":'' !!}</td>
                                                 <td>   {!!$player_b['yellow_cards']>0?" {$player_b['yellow_cards']} <button class='btn-yellow-card btn-card' disabled=''>&nbsp;</button> ":'' !!}</td>
@@ -281,7 +281,7 @@
                                         @if($player_b['playing_status']=='S' || $player_b['red_cards']>0)
                                             <tr class="team_a_playing_row">
                                                 <td>
-                                                    {{ $player_b['player_name']   }} {!!$player_b['has_substituted']?"<i class='fa fa-share'></i> {$player_b['has_substituted']}\"":''!!}
+                                                    {{ $player_b['player_name']   }} {!!$player_b['has_substituted']?"<i class='fa fa-share'></i> {$player_b['time_substituted']}\"":''!!}
                                                 </td>
                                                 <td>{!!$player_b['goals_scored']>0?" {$player_b['goals_scored']} <i class='fa fa-futbol-o'></i> ":'' !!}</td>
                                                 <td>   {!!$player_b['yellow_cards']>0?" {$player_b['yellow_cards']} <button class='btn-yellow-card btn-card' disabled=''>&nbsp;</button> ":'' !!}</td>
@@ -311,13 +311,15 @@
                                 <th colspan="5"></th>
                             </tr>
                             </thead>
-                            @if(isset($match_details->first_half))
+                            
                                 <tbody>
+                            @if(isset($match_details->first_half))
                                 <tr>
                                     <td colspan="2">{{$match_details->first_half->{"team_{$team_a_id}_goals"} }}</td>
                                     <td class="td_type">Half Time (<i class='fa fa-futbol-o'></i>) </td>
                                     <td colspan="2">{{$match_details->first_half->{"team_{$team_b_id}_goals"} }}</td>
                                 <tr>
+                            @endif
                                 <tr>
                                     <td colspan="2">{{$match_details->{$team_a_id}->goals }}</td>
                                     <td class="td_type">Full Time (<i class='fa fa-futbol-o'></i>) </td>
@@ -339,8 +341,7 @@
                                     <td colspan="2">{{$ball_percentage_b }} %</td>
                                 <tr>
 
-                                </tbody>
-                            @endif
+                                </tbody>                           
                         </table>
                     </div>
 
