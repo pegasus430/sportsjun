@@ -196,7 +196,20 @@ if (typeof SJ.GLOBAL === 'undefined')
                         share : function(url, channel)
                         {
                                 this.popup(url, channel, 700, 400);
-                        }
+                        },
+                        shareFacebook : function(url,title, picture,details )
+                        {
+                                FB.ui(
+                                        {
+                                        method: 'feed',
+                                        name: title,
+                                        link: url,
+                                        picture: picture,
+                                        caption: title,
+                                        description: details,
+                                        message: ""
+                                        });
+                        },
                 };
                 z.GLOBAL = o;
         })(SJ, $);

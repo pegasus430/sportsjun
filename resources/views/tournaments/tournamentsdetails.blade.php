@@ -4,8 +4,11 @@
 
 	<div id="content" class="col-sm-10 tournament_profile">
 		@include('tournaments.share')
-		<div class="col-md-8 col-md-offset-2 mrg_top">
-			{!! Helper::Images(!empty($left_menu_data['logo'])?$left_menu_data['logo']:'',!empty($left_menu_data['path'])?$left_menu_data['path']:'',array('height'=>'','width'=>'','class'=>'img_tbl img-responsive') )!!}
+		<br>
+		<div class="row">
+		<div class="col-md-8 col-md-offset-2 ">
+			{!! Helper::Images(!empty($left_menu_data['logo'])?$left_menu_data['logo']:'',!empty($left_menu_data['path'])?$left_menu_data['path']:'',array('height'=>'','width'=>'100%','class'=>'img_tbl img-responsive') )!!}
+		</div>
 		</div>
 
 		<div class="col-md-8 col-md-offset-2 captureImage">

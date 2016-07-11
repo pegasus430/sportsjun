@@ -20,8 +20,8 @@ switch ($action) {
 $data_url='';
 $data_text=$sharingKit->sharingString;
 $data_title="Photo Album of $action $sharingKit->name";
-$data_image=url("/uploads/gallery_$action/$action_id/".$sharingKit->logo);
-
+$data_image=url("/uploads/gallery/gallery_$action/$action_id/".$sharingKit->logo);
+$data_image=url("/uploads/$action/".$sharingKit->logo);
 
 $t_url=url('/viewpublic/createphoto/'.$album_id.'/'.$user_id.'/0/'.$action.'/'.$action_id);
 $t_text="$data_text";
@@ -29,7 +29,7 @@ $t_text="$data_text";
 $t_title="$data_title";
 
 $fb_url = 'https://www.facebook.com/dialog/share?app_id=' . env('FACEBOOK_APP_ID') . '&amp;display=popup&amp;href=' .$t_url. '&amp;redirect_uri=' . url('js_close');
-$tw_url = 'https://twitter.com/intent/tweet?url=' . $t_url. '&amp;text=' . $t_text . '&amp;title=' . $t_title . '&amp;via=sj_sportsjun';
+$tw_url = 'https://twitter.com/intent/tweet?url=' . $t_url. '&amp;text=' . str_limit($t_text,80) . '&amp;title=' . $t_title . '&amp;via=sj_sportsjun';
 $gp_url = 'https://plus.google.com/share?url=' . $t_url;
 ?>
 
@@ -42,7 +42,7 @@ $gp_url = 'https://plus.google.com/share?url=' . $t_url;
 				<tbody>
 				<tr>
 					<td class="sj-social-td">
-						<a href="javascript:void(0);" onclick="SJ.GLOBAL.share('{{$fb_url}}', 'sjfb');" class="sj-social-ancr sj-social-ancr-fb" rel="noreferrer">
+						<a href="javascript:void(0);" onclick="SJ.GLOBAL.shareFacebook('{{$t_url}}','{{$t_title}}','{{$data_image}}', '{{$data_text}}');" class="sj-social-ancr sj-social-ancr-fb" rel="noreferrer">
 							<span class="sj-ico sj-fb-share "></span>
 							<span class="sj-font-12">Share</span>
 						</a>

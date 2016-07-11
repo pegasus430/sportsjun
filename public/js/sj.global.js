@@ -309,6 +309,19 @@ if (typeof SJ.GLOBAL === 'undefined')
                         {
                                 this.popup(url, channel, 700, 400);
                         },
+                        shareFacebook : function(url,title, picture,details )
+                        {
+                        		FB.ui(
+										{
+										method: 'feed',
+										name: title,
+										link: url,
+										picture: picture,
+										caption: title,
+										description: details,
+										message: ""
+										});
+                        },
                         replaceQueryString : function( uri, key, value ) {
 				var re = new RegExp( "([?|&])" + key + "=.*?(&|$)", "i" );
 				var separator = uri.indexOf('?') !== -1 ? "&" : "?";
