@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
-use App\Model\Photo;
+use App\Model\Followers;
 use App\Model\MatchSchedule;
+use App\Model\Photo;
 use App\Model\Sport;
 use App\Model\Team;
-use App\Model\Tournaments;
-use App\User;
-use Request;
-use Carbon\Carbon;
-use Response;
-use Auth;
-use App\Helpers\Helper;
-use App\Model\Followers;
-use DB;
-use PDO;
 use App\Model\TournamentGroups;
 use App\Model\TournamentGroupTeams;
+use App\Model\Tournaments;
+use App\User;
+use Auth;
+use DB;
+use PDO;
+use Response;
 
 class FollowController extends Controller
 {
@@ -56,10 +54,21 @@ class FollowController extends Controller
 
                 if (count($following_team_array) > 0)
                 {
-                        $followingTournamentDetails = Tournaments::with('photos')
-                                ->whereIn('id', $following_team_array)
-                                ->get(['id', 'name', 'created_by', 'sports_id', 'type',
-                                'final_stage_teams', 'description', 'end_date', 'schedule_type']);
+                    $followingTournamentDetails =
+                        Tournaments::with('photos', 'tournamentParent')
+                                   ->whereIn('id', $following_team_array)
+                                   ->get([
+                                       'id',
+                                       'name',
+                                       'created_by',
+                                       'sports_id',
+                                       'type',
+                                       'tournament_parent_id',
+                                       'final_stage_teams',
+                                       'description',
+                                       'end_date',
+                                       'schedule_type',
+                                   ]);
                 }
                 
                 $existing_tournament_ids = [];
@@ -71,7 +80,7 @@ class FollowController extends Controller
                                 $followingTournamentDetails[$followKey]['end_date'] = $followedTournament['end_date'];
                                 $followingTournamentDetails[$followKey]['schedule_type'] = $followedTournament['schedule_type'];
                                 
-                                $sportsName                                            = Sport::where('id', $followedTournament['sports_id'])->first(['sports_name']);
+                                $sportsName = Sport::where('id', $followedTournament['sports_id'])->first(['sports_name']);
                                 if (count($sportsName))
                                         $followingTournamentDetails[$followKey]['sports_name'] = $sportsName->sports_name;
                                 else
@@ -84,7 +93,6 @@ class FollowController extends Controller
                                         $followingTournamentDetails[$followKey]['user_name'] = '';
                                 if (count($followedTournament['photos']))
                                 {
-                                        $photoUrl                                      = array_collapse($followedTournament['photos']);
                                         $followingTournamentDetails[$followKey]['url'] = $photoUrl['url'];
                                 }
                                 else
