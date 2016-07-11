@@ -18,7 +18,9 @@
 <meta property="og:description"   content="<?php echo $data_text?>" />
 
 @if(isset($sharingKit->providers) && count($sharingKit->providers)>0 )
-<meta property="og:image"   content="{{$sharingKit->providers->first->avatar}}" />
+	@foreach($sharingKit->providers as $sp)
+<meta property="og:image"   content="{{$sp->avatar}}" />
+	@endforeach
 @endif
 
 

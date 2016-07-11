@@ -12,7 +12,12 @@ $tw_url = 'https://twitter.com/intent/tweet?url=' . $t_url. '&amp;text=' . $t_te
 $gp_url = 'https://plus.google.com/share?url=' . $t_url;
 
   $data_image=url("/uploads/user_profile/$userD->logo");
-  if(isset($userD->providers) && count($userD->providers)>0) $data_image=$userD->providers->first->avatar;
+  if(isset($userD->providers) && count($userD->providers)>0){
+        foreach ($userD->providers as $key => $sp) {
+            # code...
+            $data_image=$sp->avatar;
+        }
+  } 
 
 ?>
 
