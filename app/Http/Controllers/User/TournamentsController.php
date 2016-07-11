@@ -3,34 +3,34 @@
 namespace App\Http\Controllers\User;
 
 //use Illuminate\Http\Request;
-use Request;
-use App\Http\Requests;
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
-use App\Model\Country;
-use App\Model\State;
+use App\Http\Requests;
 use App\Model\City;
+use App\Model\Country;
+use App\Model\Facilityprofile;
+use App\Model\Followers;
+use App\Model\MatchSchedule;
+use App\Model\Photo;
+use App\Model\Requestsmodel;
 use App\Model\Sport;
-use App\Model\Tournaments;
+use App\Model\State;
 use App\Model\Team;
+use App\Model\TournamentFinalTeams;
 use App\Model\TournamentGroups;
 use App\Model\TournamentGroupTeams;
-use App\Model\TournamentFinalTeams;
-use App\Model\Facilityprofile;
-use Auth;
-use Illuminate\Support\Facades\DB;
-use Response;
-use App\Helpers\Helper;
-use App\Model\Photo;
-use Carbon\Carbon;
+use App\Model\TournamentParent;
+use App\Model\Tournaments;
 use App\Model\UserStatistic;
 use App\User;
-use App\Model\MatchSchedule;
-use App\Model\TournamentParent;
-use App\Model\Requestsmodel;
-use App\Model\Followers;
-use View;
-use Session;
+use Auth;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use PDO;
+use Request;
+use Response;
+use Session;
+use View;
 
 class TournamentsController extends Controller
 {
@@ -533,7 +533,7 @@ class TournamentsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Requests\CreateTournamentRequest $request, $id)
-    {	
+    {
 		if(!empty($request['isParent']) && $request['isParent']=='yes')
 		{
 			return $this->updateParentTournament($request,$id);
@@ -615,7 +615,11 @@ class TournamentsController extends Controller
 		//$request = Request::all();
 		$request['manager_id'] = !empty($request['managerId'])?$request['managerId']:$manager_id;
 
-		TournamentParent::whereId($id)->update(($request->except(['_method','_token','files','filelist_photos','isParent','manager_name','managerId','filelist_gallery','jfiler-items-exclude-files-0'])));
+        /** @var TournamentParent $tournamentParent */
+        $tournamentParent = TournamentParent::findOrFail($id);
+
+		$tournamentParent->update(($request->except(['_method','_token','files','filelist_photos','isParent','manager_name','managerId','filelist_gallery','jfiler-items-exclude-files-0', 'organization_group_id'])));
+        $tournamentParent->orgGroups()->sync($request->input('organization_group_id'));
 		if (!empty($request['filelist_photos'])) {
 			Photo::where(['imageable_id'=>$id, 'imageable_type' => config('constants.PHOTO.TOURNAMENT_LOGO')])->update(['is_album_cover' => 0]);
 			 //Upload Photos
@@ -740,7 +744,15 @@ class TournamentsController extends Controller
 	       $states = State::where('country_id', $tournament->country_id)->orderBy('state_name')->lists('state_name', 'id')->all();
 	       $cities = City::where('state_id',  $tournament->state_id)->orderBy('city_name')->lists('city_name', 'id')->all();
         $organizations = Auth::user()->organizations()->lists('name', 'id')->all();
-        $orgGroupIds = $tournament->orgGroups->lists('id')->toJson();
+
+        $orgGroups = [];
+        if ($tournament->organization) {
+            $orgGroups =
+                $tournament->organization->groups->lists('name', 'id')->all();
+        }
+
+        $orgGroupIds = $tournament->orgGroups->lists('id')->all();
+
 
         return view('tournaments.tournamentsedit',
             compact('tournament'))->with([
@@ -764,7 +776,8 @@ class TournamentsController extends Controller
             'isOwner'             => $isOwner,
             'loginUserId'         => $loginUserId,
             'organization'        => ['' => 'Select Organization'] + $organizations,
-            'orgGroupIds'         => $orgGroupIds,
+            'groupsList'         => ['' => 'Select Team name'] + $orgGroups,
+            'groupId'         => $orgGroupIds,
         ]);
     }
 	public function subTournamentEdit()
