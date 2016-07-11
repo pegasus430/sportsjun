@@ -799,7 +799,10 @@ class TournamentsController extends Controller
                 $add_score_link        = array();
                 $match_startdate_array = array();
                 $match_count           = array();
-                foreach ($tournaments as $tournament)
+        $net_run_rate = [];   // net run rate array
+
+
+        foreach ($tournaments as $tournament)
                 {
                         foreach ($tournament->groups as $groups)
                         {
