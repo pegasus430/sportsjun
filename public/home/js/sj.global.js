@@ -205,8 +205,8 @@ if (typeof SJ.GLOBAL === 'undefined')
                                         name: title,
                                         link: url,
                                         picture: picture,
-                                        caption: title,
-                                        description: details,
+                                        caption: title + "BY SPORTSJUN",
+                                        description: details ,
                                         message: ""
                                         });
                         },
