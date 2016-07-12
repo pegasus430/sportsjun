@@ -868,6 +868,10 @@ class AlbumController extends Controller {
 
 		}
 
+		if(!isset($photo_array)){
+			$photo_array=[];
+		}
+
 		return 	view('album.viewalbumphoto',array('photo_array'=>$photo_array,'create_photo'=>$create_photo,'album_id'=>$album_id,'action'=>$action,'action_id'=>$action_id,'lef_menu_condition'=>$lef_menu_condition,'userId'=> $userid, 'album_array' =>$album_array,'uploadimage'=>$uploadimage,'result'=>	$result,'upload'=>$upload,'loginid'=>$loginid,'user_id'=>$user_id,'flag'=>$flag,'tournament_type'=>$tournament_type,'id'=>$action_id,'left_menu_data'=>$left_menu_data,'tournament_id'=>$action_id,'orgphotocreate'=>$orgphotocreate ));
 
 
