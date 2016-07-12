@@ -34,4 +34,4 @@
 <meta name="twitter:image" content="{{$data_image }}" />
 <meta name="twitter:url" content="{{$data_url}}" />
 <meta name="twitter:title" content="{{$data_title}}" />
-<meta property="twitter:image"         content="{{ asset('/images/sj_facebook_share.jpg') }}" />
+
