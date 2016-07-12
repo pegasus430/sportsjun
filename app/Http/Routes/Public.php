@@ -18,6 +18,7 @@ Route::group(['prefix'=>'viewpublic'], function(){
 	Route::get('tournaments/groups/{id}/{type?}','User\TournamentsController@groups');
 	Route::get('editsportprofile/{userId}', 'User\SportController@editSportProfile');
 	Route::get('showsportprofile/{userId}','User\SportController@showSportProfile');
+	Route::get('team/members/{team_id}/{status?}','User\TeamController@myteam');
 
 	Route::get('getquestions', 'User\SportController@getQuestions');
 

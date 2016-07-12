@@ -165,6 +165,12 @@
                             <div class="form-group">
                                 <label class="win_head">Winner</label>
                                 <h3 class="win_team">{{ ($match_data[0]['a_id']==$match_data[0]['winner_id'])?$team_a_name:$team_b_name }}</h3>
+                            </div>
+                            <BR>
+
+                            <div class="form-group">
+                                <label class="" style="color:red">Player of the Match</label>
+                                <h4 class="win_team">{{ Helper::getUserDetails($match_data[0]['player_of_the_match'])->name }}</h4>
 
                             </div>
 

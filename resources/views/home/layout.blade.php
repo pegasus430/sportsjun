@@ -90,6 +90,9 @@ $css_version    = config('constants.CSS_VERSION');
         @if(isset($sports) && isset($userId))
                 @include("sportprofile.share_meta")
         @endif
+        @if(isset($team_id) && isset($team_players))
+                @include("teams.share_meta")
+        @endif
 </head>
 <div id="fb-root"></div>
 <script>
