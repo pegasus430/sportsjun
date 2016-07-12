@@ -256,6 +256,13 @@ if (typeof SJ.SCORECARD === 'undefined')
                                 var index=$('#last_index').val();
                                 if(player_id){
                                         $('#new_records_match').show();
+                                        $('#new_records_match').show();
+                                         var player_content=$('#team_a_row_'+player_id)
+                                         if(player_content.is("[goals]") && Number(player_content.attr('goals'))>0){
+                                                //if user has a yellow card return false
+                                                return false;
+                                        }
+                                        $('#team_a_row_'+player_id).attr('goals',1);
                                         SJ.SCORECARD.soccerAddField(player_id,'goals', 'Goal');
                                 }
                                 return false;
@@ -316,23 +323,23 @@ if (typeof SJ.SCORECARD === 'undefined')
                                         else var displayField='#displayGoalsSecondHalfTemporal';
 
                                 //create a new form for content
-                                $(displayField).append("<form id='form_record_"+index+"' onsubmit='return saveRecord("+index+", \""+record_type+"\", \""+player_id+"\")' class='table-responsive'>");
+                                $(displayField).append("<form id='form_record_"+index+"' onsubmit='return saveRecord("+index+", \'"+record_type+"\', \'' "+player_id+"\')' class='col-sm-12'>");
                                 var displayFormContent=$('#form_record_'+index);
 
                                 if(team_type=='team_b'){
                                         if(half_time=='first_half'){
-                                                displayFormContent.append("<td colspan=3><td><input type='number' placeholder='time e.g 20' name='time_"+index+"' class='gui-input   input_first_half' min='0' max='49' required></td><td>"+record_type_name+"</td> <td colspan=2>"+player_name+"</td><td><a href='#' onclick='deleteRow(this, "+index+")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></td></tr>");
+                                                displayFormContent.append("<div  class='records row'><div  class='col-sm-5'></div><div  class='col-sm-1'><input type='number' placeholder='time e.g 20' name='time_"+index+"' class='class='gui-input col-sm-12'  input_first_half' min='0' max='49' required></div><div  class='col-sm-2'>"+record_type_name+"</div> <div  class='col-sm-2'>"+player_name+"</div><div  class='col-sm-2'><a href='#' onclick='deleteRow(this, "+index+", "+player_id+",\""+record_type+"\")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></div></div>");
                                         }
                                         else{
-                                                displayFormContent.append("<tr class='records'><td colspan=3><td><input type='number' placeholder='time e.g 20' name='time_"+index+"' class='gui-input   input_first_half' min='45' max='95' required></td><td>"+record_type_name+"</td> <td colspan=2>"+player_name+"</td><td><a href='#' onclick='deleteRow(this, "+index+")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></tr></td></tr>");
+                                                displayFormContent.append("<div  class='records row'><div  class='col-sm-5'></div><div  class='col-sm-1'><input type='number' placeholder='time e.g 20' name='time_"+index+"' class='class='gui-input col-sm-12'  input_first_half' min='45' max='95' required></div><div  class='col-sm-2'>"+record_type_name+"</div> <div  class='col-sm-2'>"+player_name+"</div><div  class='col-sm-2'><a href='#' onclick='deleteRow(this, "+index+", "+player_id+",\""+record_type+"\")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></div></div>");
                                         }
                                 }
                                 else{
                                         if(half_time=='first_half'){
-                                                displayFormContent.append("<tr class='records'><td colspan=2>"+player_name+"</td><td>"+record_type_name+"</td><td><input type='number' placeholder='time e.g 20' class='  input_second_half' min='0' max='48' name='time_"+index+"' required></td><td colspan=3></td><td><a href='#' onclick='deleteRow(this, "+index+")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></td></tr>");
+                                                displayFormContent.append("<div  class='records row'><div  class='col-sm-3'>"+player_name+"</div><div  class='col-sm-2'>"+record_type_name+"</div><div  class='col-sm-1'><input type='number' placeholder='time e.g 20' class='class='gui-input row' input_second_half' min='0' max='48' name='time_"+index+"' required></div><div  class='col-sm-4'></div><div  class='col-sm-2'><a href='#' onclick='deleteRow(this, "+index+", "+player_id+",\""+record_type+"\")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></div></div>");
                                         }
                                         else{
-                                                displayFormContent.append("<tr class='records'><td colspan=2>"+player_name+"</td><td>"+record_type_name+"</td><td><input type='number' placeholder='time e.g 20' class='  input_second_half' min='45' max='95' name='time_"+index+"' required></td><td colspan=3></td><td><a href='#' onclick='deleteRow(this, "+index+")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></tr></td></tr>");
+                                                displayFormContent.append("<div  class='records row'><div  class='col-sm-3'>"+player_name+"</div><div  class='col-sm-2'>"+record_type_name+"</div><div  class='col-sm-1'><input type='number' placeholder='time e.g 20' class='class='gui-input row' input_second_half' min='45' max='95' name='time_"+index+"' required></div><div  class='col-sm-4'></div><div  class='col-sm-2'><a href='#' onclick='deleteRow(this, "+index+", "+player_id+",\""+record_type+"\")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></div></div>");
                                         }
                                 }
                                 displayFormContent.append("<input type='hidden' name='player_"+index+"' value='"+player_id+"'>");

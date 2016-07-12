@@ -354,7 +354,8 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 												{{$team_a_soccer['yellow_cards']}} class="team_a_goal_row player_select" player_id="{{$team_a_soccer['id']}} " player_name="{{$team_a_soccer['player_name']}}" team_id="{{$team_a_id}}" team_type='team_a' user_id="{{$team_a_soccer['user_id']}}">
 													<td colspan="3" id="player_lineup_{{$team_a_soccer['id']}}">
 														{{$team_a_soccer['player_name']}}
-													</td>
+														{!! $team_a_soccer['yellow_cards']>0?"<button class='btn-yellow-card btn-card' disabled=''>&nbsp;</button> ":'' !!}
+                                                </td>
 											@endif
 										@endforeach
 										</tbody>
@@ -380,6 +381,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 												{{$team_b_soccer['yellow_cards']}}>
 													<td colspan="3">
 														{{$team_b_soccer['player_name']}}
+														{!! $team_b_soccer['yellow_cards']>0?"<button class='btn-yellow-card btn-card' disabled=''>&nbsp;</button> ":'' !!}
 													</td>
 												</tr>
 											@endif
@@ -478,54 +480,39 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 					<div class="col-sm-10 col-sm-offset-1 " id='new_records_match'>
 						<h3 id='team_b' class="team_bowl table_head">New Records</h3>
 						<div class="table-responsive">
-							<table class="table table-striped">
+							<div class='row table-stripped'>
+							<h3 class='team_bat team_title_head'  ><center>First Half</center></h3>
+								
+								<div class="col-sm-12">
+									<h5 class="col-sm-3 team_a">Player</h5>
+									<h5 class="col-sm-2 team_a">Type</h5>
+									<h5 class="col-sm-1 team_a">Time</h5>
+									<h5 class="col-sm-2 team_a">Type</h5>
+									<h5 class="col-sm-2 team_a">Player</h5>
+									<h5 class="col-sm-2 team_a">Action</h5>
+								</div>
+								
+								<div id="displayGoalsFirstHalfTemporal" class="row" >
+								
+								</div>
 
-								<thead class="thead">
-								<tr>
-									<th class='team_bat' colspan="8" ><center>First Half</center></th>
-								</tr>
-								<tr>
-									<th colspan="2">Player</th>
-									<th>Type</th>
-									<th>Time</th>
-									<th>Type</th>
-									<th colspan="2">Player</th>
-									<th>Action</th>
-								</tr>
-								</thead>
-								<tbody id="displayGoalsFirstHalfTemporal" >
-								<tr>
-									<td colspan="8"></td>
-								</tr>
-
-
-								</tbody>
-
-								<thead class="thead">
-								<tr>
-									<th class='team_bat' colspan="8" ><center>Second Half</center></th>
-								</tr>
-								<tr>
-									<th colspan="2">Player</th>
-									<th>Type</th>
-									<th>Time</th>
-									<th>Type</th>
-									<th colspan="2">Player</th>
-									<th>Action</th>
-								</tr>
-								</thead>
-								<tbody id="displayGoalsSecondHalfTemporal" >
+							<h3 class='team_fall team_title_head'  ><center>Second Half</center></h3>
+								
+								<div class="col-sm-12">
+									<h5 class="col-sm-2 team_a">Player</h5>
+									<h5 class="col-sm-2 team_a">Type</h5>
+									<h5 class="col-sm-1 team_a">Time</h5>
+									<h5 class="col-sm-2 team_a">Type</h5>
+									<h5 class="col-sm-3 team_a">Player</h5>
+									<h5 class="col-sm-2 team_a">Action</h5>
+								</div>
+								
+								<div id="displayGoalsSecondHalfTemporal" class="row" >
 
 
-								</tbody>
-								<tbody>
-								<tr><td colspan="8">
-
-									</td>
-								</tr>
-								</tbody>
-								</tbody>
-							</table>
+								</div>
+							</div>
+							
 						</div>
 
 					</div>
@@ -1308,15 +1295,15 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 
 		//delete row
 		var deleted_ids = ',';
-		function deleteRow(that, del_id, player_id)
+		function deleteRow(that, del_id, player_id, record_type)
 		{
 			$.confirm({
 				title: 'Confirmation',
 				content: "Are you sure you want to delete this Record?",
 				confirm: function() {
 					$('#delted_ids').val($('#delted_ids').val() + ","+ del_id);
-					$(that).closest('tr').remove();					
-
+					$('#form_record_'+del_id).remove();
+					$('#team_a_row_'+player_id).attr(record_type, '0');
 				},
 				cancel: function() {
 					// nothing to do
@@ -1530,6 +1517,10 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 					if(record_type=='red_card'){
 						$('#team_a_row_'+player_id).hide();
 						$('.player_details_'+player_id).hide();
+						$('#selected_player_id_value').val(0);
+					}
+					if(record_type=='goals'){
+						 var player_content=$('#team_a_row_'+player_id).attr('goals', 0);                              
 					}
 				
 				form.remove();				
@@ -1538,7 +1529,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 
 				}
 
-			})
+			});
 			return false;
 		}
 

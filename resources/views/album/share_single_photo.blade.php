@@ -23,7 +23,7 @@ $data_title="Photo Album of $action $sharingKit->name - Add a new photo";
 $data_image=url("/uploads/gallery_$action/$action_id/$sharingKit->logo");
 
 
-$t_url=url("/viewpublic/user/album/show/$action/$action_id");
+$t_url=url('/viewpublic/createphoto/'.$album_id.'/'.$user_id.'/0/'.$action.'/'.$action_id);
 $t_text="$data_text";
 
 $t_title="$data_title";

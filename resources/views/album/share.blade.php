@@ -26,9 +26,6 @@ $data_image=url("/uploads/$action/".$sharingKit->logo);
 if(isset($photo_array)){	
 		 $data_image=url("uploads/gallery/gallery_$action/$action_id/{$photo_array[0]['url']}");		
 	}
-}
-
-
 
 
 $t_url=url('/viewpublic/createphoto/'.$album_id.'/'.$user_id.'/0/'.$action.'/'.$action_id);

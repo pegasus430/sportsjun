@@ -29,12 +29,12 @@ $data_image=url("/uploads/$action/".$sharingKit->logo);
 <meta property="og:title"         content="<?php echo $data_title ?>" />
 <meta property="og:description"   content="<?php echo $data_text?>" />
 
-<?$i=-1;?>
+<?php $i=-1;?>
 @if(isset($photo_array))
 	@foreach($photo_array as $i=>$album)
-		<?php $a_image=url("uploads/gallery/gallery_$action/$action_id/{$album['url']}");?>
-		<meta property="og:image"   content="{{$a_image}}"}} />
-		<meta property="twitter:image{{$i}}"   content="{{$a_image}}"}} />
+		<?php $a_image=url("uploads/gallery/gallery_$action/$action_id/".$album['url']); ?>
+		<meta property="og:image"   content="{{$a_image}}" />
+		<meta property="twitter:image{{$i}}"   content="{{$a_image}}" />
 	@endforeach
 @endif
 	<meta property="og:image"   content="{{$data_image}}" />
@@ -45,7 +45,7 @@ $data_image=url("/uploads/$action/".$sharingKit->logo);
 <meta name="twitter:site" content="@sj_sportsjun" />
 <meta name="twitter:creator" content="@sj_sportsjun" />
 <meta name="twitter:description" content="{{$data_text}}" />
-<meta name="twitter:image" content="{{$data_img }}" />
+<meta name="twitter:image" content="{{$data_image }}" />
 <meta name="twitter:url" content="{{$data_url}}" />
 <meta name="twitter:title" content="{{$data_title}}" />
 <meta property="twitter:image{{$i+1}}"         content="{{ asset('/images/sj_facebook_share.jpg') }}" />

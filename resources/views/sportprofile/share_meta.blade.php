@@ -31,7 +31,7 @@
 <meta name="twitter:card" content="photo" />
 <meta name="twitter:site" content="@sj_sportsjun" />
 <meta name="twitter:description" content="{{$data_text}}" />
-<meta name="twitter:image" content="{{$data_img }}" />
+<meta name="twitter:image" content="{{$data_image }}" />
 <meta name="twitter:url" content="{{$data_url}}" />
 <meta name="twitter:title" content="{{$data_title}}" />
 <meta property="twitter:image"         content="{{ asset('/images/sj_facebook_share.jpg') }}" />
