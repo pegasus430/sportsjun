@@ -8,7 +8,8 @@ $t_title="Tournament Group Details for {$tournamentDetails[0]['name']}";
 $fb_url = 'https://www.facebook.com/dialog/share?app_id=' . env('FACEBOOK_APP_ID') . '&amp;display=popup&amp;href=' .$t_url. '&amp;redirect_uri=' . url('js_close');
 $tw_url = 'https://twitter.com/intent/tweet?url=' . $t_url. '&amp;text=' . str_limit($t_text,80) . '&amp;title=' . $t_title . '&amp;via=sj_sportsjun';
 $gp_url = 'https://plus.google.com/share?url=' . $t_url;
-$data_image=url("/uploads/tournaments/".!empty($left_menu_data['logo'])?$left_menu_data['logo']:'');
+$t_img_path=!empty($left_menu_data['logo'])?$left_menu_data['logo']:'';
+$data_image=url("/uploads/tournaments/$t_img_path");
 
 ?>
 

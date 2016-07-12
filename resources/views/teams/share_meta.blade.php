@@ -3,7 +3,7 @@
 $t_url=url("/viewpublic/team/members/$team_id");
 $t_text="$team_name is sport team at $location.Click here to see the complete team details";
 $t_title="View Members of $team_name";
-$t_img=url($photo_path);
+$t_img=url('/uploads/'.$photo_path);
 ?>
 <meta property="og:url"           content="{{$t_url}}" />
 <meta property="og:type"          content="website" />

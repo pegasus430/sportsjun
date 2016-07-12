@@ -9,7 +9,7 @@ $fb_url = 'https://www.facebook.com/dialog/share?app_id=' . env('FACEBOOK_APP_ID
 $tw_url = 'https://twitter.com/intent/tweet?url=' . $t_url. '&amp;text=' . $t_text . '&amp;title=' . $t_title . '&amp;via=sj_sportsjun';
 $gp_url = 'https://plus.google.com/share?url=' . $t_url;
 
-  $data_image=url($photo_path); 
+  $data_image=url('/uploads/'.$photo_path); 
 
 ?>
 
