@@ -323,7 +323,7 @@ if (typeof SJ.SCORECARD === 'undefined')
                                         else var displayField='#displayGoalsSecondHalfTemporal';
 
                                 //create a new form for content
-                                $(displayField).append("<form id='form_record_"+index+"' onsubmit='return saveRecord("+index+", \'"+record_type+"\', \'' "+player_id+"\')' class='col-sm-12'>");
+                                $(displayField).append("<form id='form_record_"+index+"' onsubmit='return saveRecord("+index+", \'"+record_type+"\', "+player_id+")' class='col-sm-12'>");
                                 var displayFormContent=$('#form_record_'+index);
 
                                 if(team_type=='team_b'){
