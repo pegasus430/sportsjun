@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>Sportsjun - Connecting Sports Community</title>
 <?php
@@ -24,7 +24,7 @@ $css_version    = config('constants.CSS_VERSION');
         <link href="{{ asset('/home/css/prettyphoto.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
         <link href="{{ asset('/home/css/responsive.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
 
-
+        <link href="{{ asset('/css/jquery-ui.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
         <link href="{{ asset('/css/sportsjun.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
         <link href="{{ asset('/css/album-popup.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
         <link href="{{ asset('/css/marketplace-showdetails.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
@@ -41,6 +41,7 @@ $css_version    = config('constants.CSS_VERSION');
         <link rel="stylesheet" href="{{ asset('/css/select-multiple.css') }}?v=<?php echo $css_version;?>" />
 
         <script src="{{ asset('/home/js/jquery.js') }}?v=<?php echo $js_version;?>"></script>
+        <script src="{{ asset('/js/jquery-ui.js') }}?v=<?php echo $js_version;?>"></script>
 
         <!-- public view css -->
         <link href="{{ asset('/css/scorecard.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
@@ -435,5 +436,6 @@ $css_version    = config('constants.CSS_VERSION');
 <script src="{{ asset('/home/js/jquery.prettyphoto.js') }}?v=<?php echo $js_version;?>"></script>
 <script src="{{ asset('/home/js/kode_pp.js') }}?v=<?php echo $js_version;?>"></script>
 <script src="{{ asset('/home/js/functions.js') }}?v=<?php echo $js_version;?>"></script>
+
 </body>
 </html>

@@ -20,9 +20,18 @@
 @if(isset($sharingKit->providers) && count($sharingKit->providers)>0 )
 	@foreach($sharingKit->providers as $sp)
 <meta property="og:image"   content="{{$sp->avatar}}" />
+<meta property="twitter:image"         content="{{$sp->avatar}}" />
 	@endforeach
 @endif
 
 
 <meta property="og:image"   content="{{$data_image}}" />
 <meta property="og:image"         content="{{ asset('/images/sj_facebook_share.jpg') }}" />
+
+<meta name="twitter:card" content="photo" />
+<meta name="twitter:site" content="@sj_sportsjun" />
+<meta name="twitter:description" content="{{$data_text}}" />
+<meta name="twitter:image" content="{{$data_img }}" />
+<meta name="twitter:url" content="{{$data_url}}" />
+<meta name="twitter:title" content="{{$data_title}}" />
+<meta property="twitter:image"         content="{{ asset('/images/sj_facebook_share.jpg') }}" />
