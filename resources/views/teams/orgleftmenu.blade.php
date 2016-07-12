@@ -15,11 +15,13 @@
 		            <div class="more desc">{{ $orgInfo[0]['about']  or 'Description' }}</div>
 	          </div>
 	<ul class="nav sidemenu_nav leftmenu-icon" id="side-menu">
-        <li><a class="sidemenu_1" href="{{ url('getorgteamdetails/'.$id) }}"><span class="ico ico-info"></span> Info</a></li>
-        <!--<li><a class="sidemenu_2" href="{{ url('/team/matches') }}">Matches</a></li>-->
-        <li><a class="sidemenu_2" href="{{ url('/organizationTeamlist/'.$id) }}"><span class="ico ico-teams"></span> Teams</a></li>
-
-		<li><a class="sidemenu_3" href="{{ url('user/album/show').'/organization'.'/0'.'/'.$id }}"><span class="ico ico-media-gallery"></span> Media Gallery</a></li>
+        <li>
+            <a class = "sidemenu_1"
+               href = "{{ url('getorgteamdetails/'.$id) }}">
+                <span class = "ico ico-info"></span>
+                Info
+            </a>
+        </li>
 
         <li>
             <a class = "sidemenu_4"
@@ -31,11 +33,34 @@
         <li>
             <a class = "sidemenu_4"
                href = "{{ route('organization.groups.list', [$id]) }}">
-                <span class = "ico ico-members"></span> Groups
+                <span class = "ico ico-members"></span> Team Names
             </a>
         </li>
 
-		<li><a class="sidemenu_4" href="{{ url('/organizationTournaments/'.$id) }}"><span class="ico ico-tournament"></span> Tournaments</a></li>
+        <!--<li><a class="sidemenu_2" href="{{ url('/team/matches') }}">Matches</a></li>-->
+        <li>
+            <a class = "sidemenu_2"
+               href = "{{ url('/organizationTeamlist/'.$id) }}">
+                <span class = "ico ico-teams"></span>
+                Team Listings
+            </a>
+        </li>
+
+        <li>
+            <a class = "sidemenu_4"
+               href = "{{ url('/organizationTournaments/'.$id) }}">
+                <span class = "ico ico-tournament"></span>
+                Tournaments
+            </a>
+        </li>
+
+        <li>
+            <a class = "sidemenu_3"
+               href = "{{ url('user/album/show').'/organization'.'/0'.'/'.$id }}">
+                <span class = "ico ico-media-gallery"></span>
+                Media Gallery
+            </a>
+        </li>
 
 	</ul>
     </div>

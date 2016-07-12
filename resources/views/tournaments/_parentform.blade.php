@@ -104,7 +104,7 @@
     </div>
 
     <div class = "col-sm-12">
-        <div class = "section" id="organization-groups" style="display: none">
+        <div class = "section" id="organization-groups" @if(!isset($groupsList)) style="display: none" @endif>
             <label class = "form_label">{{   trans('message.team.fields.organization_groups') }} </label>
             <p class = "help-block">Select groups only if it is an internal tournament.</p>
             <label class = "field select">
