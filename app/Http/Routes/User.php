@@ -48,7 +48,7 @@ Route::group(['prefix' => 'organization/{id}'], function () {
 
 Route::get('getteamdetails', [
     'as'   => 'getteamdetails',
-    'uses' => 'U    ser\TournamentsController@getteamdetails',
+    'uses' => 'User\TournamentsController@getteamdetails',
 ]);
 Route::get('team/members/{team_id}/{status?}', [
     'as'   => 'team/members',
