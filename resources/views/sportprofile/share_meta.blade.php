@@ -22,6 +22,9 @@
 <meta property="og:image"   content="{{$sp->avatar}}" />
 <meta property="twitter:image"         content="{{$sp->avatar}}" />
 	@endforeach
+
+@else
+<meta name="twitter:image" content="{{$data_image }}" />
 @endif
 
 
@@ -31,7 +34,7 @@
 <meta name="twitter:card" content="photo" />
 <meta name="twitter:site" content="@sj_sportsjun" />
 <meta name="twitter:description" content="{{$data_text}}" />
-<meta name="twitter:image" content="{{$data_image }}" />
+
 <meta name="twitter:url" content="{{$data_url}}" />
 <meta name="twitter:title" content="{{$data_title}}" />
 

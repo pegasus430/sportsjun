@@ -25,6 +25,22 @@
 			color: white;
 			background: #ff4f5f;
 		}
+		.btn-yellow-card-select{
+			color: white;
+			background: orange;
+		}
+		.btn-yellow-card-select:hover{
+			color: white;
+			background: orange;
+		}
+		.btn-goal-card-select{
+			color: white;
+			background: #aaa;
+		}
+		.btn-goal-card-select:hover{
+			color: white;
+			background: #aaa;
+		}
 		.icon-check{
 			color:green;
 			border: 1px double #999;
@@ -47,6 +63,10 @@
         }
         .btn-penalty-chosen{
         	opacity: 1;
+        }
+
+        .btn-secondary-link{
+        	background: #ddd;
         }
 
 
@@ -396,7 +416,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 
 
 						<center class=" sportsjun-forms " >
-							<a href="javascript:void(0);" data-toggle="modal" data-target="#soccerSubstituteModalA" class='btn-link btn-secondary-link btn-secondary request pull-left' onclick="return false">Substitute A</a>
+							<button href="javascript:void(0);" data-toggle="modal" data-target="#soccerSubstituteModalA" class='btn-link btn-other btn-secondary-link  request pull-left' onclick="return false">Substitute A</button>
 
 							<label class="col-sm-3 col-xs-5">
 								<select name='select_half_time' class='form-control ' data-style="" onclick="return SJ.SCORECARD.soccerChooseTime(this)">
@@ -406,15 +426,15 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 							</label>
 
 
-							<button class="btn-link btn-primary-link btn-primary  soccer_buttons_disabled" id='soccerAddGoalId'  onclick="return SJ.SCORECARD.soccerAddGoal(this)">Goal</button>
+							<button class="btn-link  btn-goal-card-select  soccer_buttons_disabled" id='soccerAddGoalId'  onclick="return SJ.SCORECARD.soccerAddGoal(this)">Goal</button>
 
-							<button class="btn-link btn-tertiary btn-tertiary-link soccer_buttons_disabled" id='soccerYellowCarId'  onclick="return SJ.SCORECARD.soccerYellowCard()">Yellow Card</button>
+							<button class="btn-link btn-yellow-card-select soccer_buttons_disabled" id='soccerYellowCarId'  onclick="return SJ.SCORECARD.soccerYellowCard()">Card</button>
 
-							<button  class="btn-link btn-secondary-link request btn-red-card-select  soccer_buttons_disabled" id='soccerRedCardId'  onclick="return SJ.SCORECARD.soccerRedCard()"> Red Card</button>
+							<button  class="btn-link request btn-red-card-select  soccer_buttons_disabled" id='soccerRedCardId'  onclick="return SJ.SCORECARD.soccerRedCard()">Card</button>
 
-							<a href="javascript:void(0);" class="btn-link btn-secondary-link request btn-secondary  soccer_buttons_disabled" onclick="return false;" data-toggle="modal" data-target="#soccerPenaltiesModal">Penalties</a>
+							<button class="btn-link btn-secondary-link request   soccer_buttons_disabled" onclick="return false;" data-toggle="modal" data-target="#soccerPenaltiesModal">Penalties</button>
 
-							<a href="javascript:void(0);" data-toggle="modal" data-target="#soccerSubstituteModalB" class='btn-link btn-secondary-link btn-secondary request pull-right' onclick="return false">Substitute  B</a>
+							<button data-toggle="modal" data-target="#soccerSubstituteModalB" class='btn-link btn-secondary-link  request pull-right' onclick="return false">Substitute  B</button>
 						</center>
 						<div class='row'>
 							<p><br>
@@ -483,13 +503,13 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 							<div class='row table-stripped'>
 							<h3 class='team_bat team_title_head'  ><center>First Half</center></h3>
 								
-								<div class="col-sm-12">
-									<h5 class="col-sm-3 team_a">Player</h5>
-									<h5 class="col-sm-2 team_a">Type</h5>
-									<h5 class="col-sm-1 team_a">Time</h5>
-									<h5 class="col-sm-2 team_a">Type</h5>
-									<h5 class="col-sm-2 team_a">Player</h5>
-									<h5 class="col-sm-2 team_a">Action</h5>
+								<div class="col-lg-12 col-sm-12 visible-md visible-sm visible-lg not-visible-xs">
+									<h5 class="col-sm-2 team_a ">Player</h5>
+									<h5 class="col-sm-2 team_a ">Type</h5>
+									<h5 class="col-sm-2 team_a ">Time</h5>
+									<h5 class="col-sm-2 team_a ">Type</h5>
+									<h5 class="col-sm-2 team_a ">Player</h5>
+									<h5 class="col-sm-2 team_a ">Action</h5>
 								</div>
 								
 								<div id="displayGoalsFirstHalfTemporal" class="row" >
@@ -498,12 +518,12 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 
 							<h3 class='team_fall team_title_head'  ><center>Second Half</center></h3>
 								
-								<div class="col-sm-12">
+								<div class="col-lg-12 col-sm-12 visible-md visible-sm visible-lg not-visible-xs">
 									<h5 class="col-sm-2 team_a">Player</h5>
 									<h5 class="col-sm-2 team_a">Type</h5>
-									<h5 class="col-sm-1 team_a">Time</h5>
+									<h5 class="col-sm-2 team_a">Time</h5>
 									<h5 class="col-sm-2 team_a">Type</h5>
-									<h5 class="col-sm-3 team_a">Player</h5>
+									<h5 class="col-sm-2 team_a">Player</h5>
 									<h5 class="col-sm-2 team_a">Action</h5>
 								</div>
 								
@@ -594,7 +614,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 
 				<!-- Team B Goals Start-->
 				<div class='row' id='match_details'>
-				<div class="col-sm-10 col-sm-offset-1">
+				<div class="col-sm-10 col-sm-offset-1 col-xs-12">
 					<h3 id='team_b' class="team_bowl table_head">MATCH DETAILS</h3>
 					<div class="table-responsive">
 						<table class="table table-striped">
@@ -1024,7 +1044,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 													<td colspan="3" class='select_left' class="team_a_goal_row player_select" player_id="{{$team_a_soccer['id']}} "  player_name="{{$team_a_soccer['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_soccer['player_name']}}
 													</td>
 													<td colspan="1" >
-														<input type='checkbox' name="penalty_player_a_{{$p_index_a}}"  >
+														<input type='checkbox' name="penalty_player_a_{{$p_index_a}}" {{$team_a_soccer['penalty']==1?'checked':''}}  >
 														<input type='hidden' name="penalty_player_id_a_{{$p_index_a}}" value="{{$team_a_soccer['id']}}" >
 														<input type='hidden' name="penalty_player_user_id_a_{{$p_index_a}}" value="{{$team_a_soccer['user_id']}}" >
 														<input type='hidden' name='penalty_player_name_a_{{$p_index_a}}' value="{{$team_a_soccer['player_name']}}">
@@ -1054,7 +1074,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 													<td colspan="3" class='select_left' class="team_a_goal_row player_select" player_id="{{$team_a_soccer['id']}} "  player_name="{{$team_a_soccer['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_soccer['player_name']}}
 													</td>
 													<td colspan="1" >
-														<input type='checkbox' name="penalty_player_b_{{$p_index_b}}"  >
+														<input type='checkbox' name="penalty_player_b_{{$p_index_b}}" {{$team_b_soccer['penalty']==1?'checked':''}}   >
 														<input type='hidden' name="penalty_player_id_b_{{$p_index_b}}" value="{{$team_a_soccer['id']}}" >
 														<input type='hidden' name="penalty_player_user_id_b_{{$p_index_b}}" value="{{$team_a_soccer['user_id']}}" >
 														<input type='hidden' name='penalty_player_score_b_{{$p_index_b}}' >

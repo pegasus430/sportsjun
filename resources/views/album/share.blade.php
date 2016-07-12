@@ -23,7 +23,7 @@ $data_title="Photo Album of $action $sharingKit->name";
 $data_image=url("/uploads/gallery/gallery_$action/$action_id/".$sharingKit->logo);
 $data_image=url("/uploads/$action/".$sharingKit->logo);
 
-if(isset($photo_array)){	
+if(isset($photo_array) && count($photo_array)>0){	
 		 $data_image=url("uploads/gallery/gallery_$action/$action_id/{$photo_array[0]['url']}");		
 	}
 
