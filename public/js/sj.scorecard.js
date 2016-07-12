@@ -266,15 +266,27 @@ if (typeof SJ.SCORECARD === 'undefined')
                                 var index=$('#last_index').val();
                                 if(player_id){
                                         $('#new_records_match').show();
+                                         var player_content=$('#team_a_row_'+player_id)
+                                         if(player_content.is("[red_card]") && Number(player_content.attr('red_card'))>0){
+                                                //if user has a yellow card return false
+                                                return false;
+                                        }
+                                        $('#team_a_row_'+player_id).attr('red_card',1);
                                         SJ.SCORECARD.soccerAddField(player_id,'red_card', 'Red Card');
                                 }
                                 return false;
                         },
                         soccerYellowCard:function(){
                                 var player_id=SJ.SCORECARD.getSelectedPlayerId();
-                                if(player_id){
+                                if(player_id){ 
                                         $('#new_records_match').show();
-                                        SJ.SCORECARD.soccerAddField(player_id,'yellow_card', 'Yellow Card');
+                                        var player_content=$('#team_a_row_'+player_id)
+                                        if(player_content.is("[yellow_card]") && Number(player_content.attr('yellow_card'))>0){
+                                                //if user has a yellow card return false
+                                                return false;
+                                        }
+                                        $('#team_a_row_'+player_id).attr('yellow_card',1);
+                                        SJ.SCORECARD.soccerAddField(player_id,'yellow_card', 'Yellow Card');                                        
                                 }
                                 return false;
                         },
@@ -283,55 +295,62 @@ if (typeof SJ.SCORECARD === 'undefined')
                         },
 
                         soccerAddField:function(player_id, record_type,record_type_name){
-                                var player_content=$('#team_a_row_'+player_id);
+
+                                var player_content=$('#team_a_row_'+player_id);                                
                                 var user_id= player_content.attr('user_id')
                                 var player_name=player_content.attr('player_name');
                                 var team_type=player_content.attr('team_type');
                                 var team_id=player_content.attr('team_id');
                                 var half_time=$('#half_time').val();
+                                var match_id=$('#match_id').val();
+                                var tournament_id=$('#tournament_id').val();
+                                var team_a_id=$('#team_a_id').val();
+                                var team_b_id=$('#team_b_id').val();
+                               
                                 var index=Number($('#last_index').val());
                                 index++;
+
                                 $('#last_index').val(index);
+
+                                        if(half_time=='first_half') var displayField='#displayGoalsFirstHalfTemporal';
+                                        else var displayField='#displayGoalsSecondHalfTemporal';
+
+                                //create a new form for content
+                                $(displayField).append("<form id='form_record_"+index+"' onsubmit='return saveRecord("+index+", \""+record_type+"\", \""+player_id+"\")'><tbody>");
+                                var displayFormContent=$('#form_record_'+index);
 
                                 if(team_type=='team_b'){
                                         if(half_time=='first_half'){
-                                                $('#displayGoalsFirstHalfTemporal').append("<tr class='records'><td colspan=3><td><input type='number' name='time_"+index+"' class='gui-input   input_first_half' min='0' max='49' required></td><td>"+record_type_name+"</td> <td colspan=2>"+player_name+"</td><td><a href='#' onclick='deleteRow(this, "+index+")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><a class='btn btn-success btn-circle btn-sm saveMatchForm' href='javascript:void(0);' index='"+index+"'><i class='fa fa-check'></i></a></td></tr>");
+                                                displayFormContent.append("<td colspan=3><td><input type='number' name='time_"+index+"' class='gui-input   input_first_half' min='0' max='49' required></td><td>"+record_type_name+"</td> <td colspan=2>"+player_name+"</td><td><a href='#' onclick='deleteRow(this, "+index+")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></td></tr>");
                                         }
                                         else{
-                                                $('#displayGoalsSecondHalfTemporal').append("<tr class='records'><td colspan=3><td><input type='number' name='time_"+index+"' class='gui-input   input_first_half' min='45' max='95' required></td><td>"+record_type_name+"</td> <td colspan=2>"+player_name+"</td><td><a href='#' onclick='deleteRow(this, "+index+")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><a class='btn btn-success btn-circle btn-sm saveMatchForm' href='javascript:void(0);' index='"+index+"'><i class='fa fa-check'></i></a></tr></td></tr>");
+                                                displayFormContent.append("<tr class='records'><td colspan=3><td><input type='number' name='time_"+index+"' class='gui-input   input_first_half' min='45' max='95' required></td><td>"+record_type_name+"</td> <td colspan=2>"+player_name+"</td><td><a href='#' onclick='deleteRow(this, "+index+")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='button' index='"+index+"'><i class='fa fa-check'></i></button></tr></td></tr>");
                                         }
                                 }
                                 else{
                                         if(half_time=='first_half'){
-                                                $('#displayGoalsFirstHalfTemporal').append("<tr class='records'><td colspan=2>"+player_name+"</td><td>"+record_type_name+"</td><td><input type='number' class='  input_second_half' min='0' max='48' name='time_"+index+"' required></td><td colspan=3></td><td><a href='#' onclick='deleteRow(this, "+index+")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><a class='btn btn-success btn-circle btn-sm saveMatchForm' href='javascript:void(0);' index='"+index+"'><i class='fa fa-check'></i></a></td></tr>");
+                                                displayFormContent.append("<tr class='records'><td colspan=2>"+player_name+"</td><td>"+record_type_name+"</td><td><input type='number' class='  input_second_half' min='0' max='48' name='time_"+index+"' required></td><td colspan=3></td><td><a href='#' onclick='deleteRow(this, "+index+")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></td></tr>");
                                         }
                                         else{
-                                                $('#displayGoalsSecondHalfTemporal').append("<tr class='records'><td colspan=2>"+player_name+"</td><td>"+record_type_name+"</td><td><input type='number' class='  input_second_half' min='45' max='95' name='time_"+index+"' required></td><td colspan=3></td><td><a href='#' onclick='deleteRow(this, "+index+")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><a class='btn btn-success btn-circle btn-sm saveMatchForm' href='javascript:void(0);' index='"+index+"'><i class='fa fa-check'></i></a></tr></td></tr>");
+                                                displayFormContent.append("<tr class='records'><td colspan=2>"+player_name+"</td><td>"+record_type_name+"</td><td><input type='number' class='  input_second_half' min='45' max='95' name='time_"+index+"' required></td><td colspan=3></td><td><a href='#' onclick='deleteRow(this, "+index+")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='button' index='"+index+"'><i class='fa fa-check'></i></button></tr></td></tr>");
                                         }
                                 }
-                                $('#displayGoalsFirstHalfTemporal').append("<input type='hidden' name='player_"+index+"' value='"+player_id+"'>");
-                                $('#displayGoalsFirstHalfTemporal').append("<input type='hidden' name='record_type_"+index+"' value='"+record_type+"'>");
-                                $('#displayGoalsFirstHalfTemporal').append("<input type='hidden' name='user_"+index+"' value='"+user_id+"'>");
-                                $('#displayGoalsFirstHalfTemporal').append("<input type='hidden' name='team_"+index+"' value='"+team_id+"'>");
-                                $('#displayGoalsFirstHalfTemporal').append("<input type='hidden' name='half_time_"+index+"' value='"+half_time+"'>");
-                                $('#displayGoalsFirstHalfTemporal').append("<input type='hidden' name='team_type_"+index+"' value='"+team_type+"'>");
-                                $('#displayGoalsFirstHalfTemporal').append("<input type='hidden' name='player_name_"+index+"' value='"+player_name+"'>");
+                                displayFormContent.append("<input type='hidden' name='player_"+index+"' value='"+player_id+"'>");
+                                displayFormContent.append("<input type='hidden' name='record_type_"+index+"' value='"+record_type+"'>");
+                                displayFormContent.append("<input type='hidden' name='user_"+index+"' value='"+user_id+"'>");
+                                displayFormContent.append("<input type='hidden' name='team_"+index+"' value='"+team_id+"'>");
+                                displayFormContent.append("<input type='hidden' name='half_time_"+index+"' value='"+half_time+"'>");
+                                displayFormContent.append("<input type='hidden' name='team_type_"+index+"' value='"+team_type+"'>");
+                                displayFormContent.append("<input type='hidden' name='player_name_"+index+"' value='"+player_name+"'>");
+
+                                displayFormContent.append("<input type='hidden' name='match_id' value='"+match_id+"'>");
+                                displayFormContent.append("<input type='hidden' name='tournament_id' value='"+tournament_id+"'>");
+                                displayFormContent.append("<input type='hidden' name='team_a_id' value='"+team_a_id+"'>");
+                                displayFormContent.append("<input type='hidden' name='team_b_id' value='"+team_b_id+"'>");
+                                displayFormContent.append("<input type='hidden' name='index' value='"+index+"'>");
+                        
 
 
-                                $('#last_index').val(index);
-
-                                $('.saveMatchForm').click(function(){
-                                        $.confirm({
-                                                title:"Alert",
-                                                content:"Add record?",
-                                                confirm:function(){
-                                                        saveMatchDetails();
-                                                        $(this).hide();
-                                                },
-
-                                        })
-
-                                })
 
 
                         },

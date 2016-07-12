@@ -97,7 +97,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 								<div class="team_detail">
 									<div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['a_id'] }}">{{ $team_a_name }}</a></div>
 									<div class="team_city">{{ $team_a_city }}</div>
-									<div class="team_score" id="team_a_score">{{$team_a_goals}} <span><i class="fa fa-info-circle soccer_info" data-toggle="tooltip" title="<?php echo $team_a_count;?>"></i></span></div>
+									<div class="team_score" id="team_a_score">{{$team_a_goals}} <span ><i class="fa fa-info-circle soccer_info" id='team_a_count' data-toggle="tooltip" title="<?php echo $team_a_count;?>"></i></span></div>
 									<div class='team_city' id='penalty_a'>
 								@if(isset($penalties['team_a']['players']) && count($penalties['team_a']['players'])>0 )
 										  Penalties:    {{$penalties['team_a']['goals']}}
@@ -117,7 +117,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 								<div class="team_detail">
 									<div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['b_id'] }}">{{ $team_b_name }}</a></div>
 									<div class="team_city">{{ $team_b_city }}</div>
-									<div class="team_score" id="team_b_score">{{$team_b_goals}} <span><i class="fa fa-info-circle soccer_info" data-toggle="tooltip" title="<?php echo $team_b_count;?>"></i></span></div>
+									<div class="team_score" id="team_b_score">{{$team_b_goals}} <span ><i class="fa fa-info-circle soccer_info" id='team_b_count' data-toggle="tooltip" title="<?php echo $team_b_count;?>"></i></span></div>
 									<div class='team_city' id='penalty_b'>
 							@if(isset($penalties['team_b']['players']) && count($penalties['team_b']['players'])>0 )
 								  Penalties:    {{$penalties['team_b']['goals']}}
@@ -193,6 +193,11 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 								@if($match_data[0]['hasSetupSquad'])
 									<button class="btn btn-danger soccer_buttons_disabled" onclick="return SJ.SCORECARD.soccerSetTimes(this)"></i>End Match</button>
 								@endif
+				@if($isValidUser && $isForApprovalExist)
+
+					<button style="text-align:center;" type="button" onclick="forApproval();" class="btn btn-primary">Send Score for Approval</button>
+
+				@endif
 
 							@endif
 						@endif
@@ -246,7 +251,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 										</thead>
 										<tbody id="team_tr_b" >
 										@foreach($team_b_players as $player_b)
-											<tr class="team_b_playing_row playing_b_{{$player_b['id']}}">
+											<tr class="team_b_playing_row playing_b_{{$player_b['id']}} player_details_{{$player_b['id']}}">
 												<td class="option block select_player_squad" player_type='playing' team_type="team_b" player_id="{{$player_b['id']}}">
 
 													{{ $player_b['name']   }}
@@ -278,7 +283,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 										</thead>
 										<tbody id="team_tr_a" >
 										@foreach($team_a_players as $player_a)
-											<tr class="team_a_playing_row  substitute_a_{{$player_a['id']}}">
+											<tr class="team_a_playing_row  substitute_a_{{$player_a['id']}} player_details_{{$player_a['id']}} ">
 												<td class="option block select_player_squad" player_type='substitute' team_type="team_a" player_id="{{$player_a['id']}}">
 
 													{{ $player_a['name']   }}
@@ -345,7 +350,8 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 										@foreach($team_a_soccer_scores_array as $team_a_soccer)
 
 											@if($team_a_soccer['playing_status']=="P" && $team_a_soccer['red_cards']==0 )
-												<tr id="team_a_row_{{$team_a_soccer['id']}}" class="team_a_goal_row player_select" player_id="{{$team_a_soccer['id']}} " player_name="{{$team_a_soccer['player_name']}}" team_id="{{$team_a_id}}" team_type='team_a' user_id="{{$team_a_soccer['user_id']}}">
+												<tr id="team_a_row_{{$team_a_soccer['id']}}" yellow_card=
+												{{$team_a_soccer['yellow_cards']}} class="team_a_goal_row player_select" player_id="{{$team_a_soccer['id']}} " player_name="{{$team_a_soccer['player_name']}}" team_id="{{$team_a_id}}" team_type='team_a' user_id="{{$team_a_soccer['user_id']}}">
 													<td colspan="3" id="player_lineup_{{$team_a_soccer['id']}}">
 														{{$team_a_soccer['player_name']}}
 													</td>
@@ -370,7 +376,8 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 										<tbody id="team_tr_a" >
 										@foreach($team_b_soccer_scores_array as $team_b_soccer)
 											@if($team_b_soccer['playing_status']=="P" && $team_b_soccer['red_cards']==0)
-												<tr id="team_a_row_{{$team_b_soccer['id']}}" class="team_a_goal_row player_select" player_id="{{$team_b_soccer['id']}} "  player_name="{{$team_b_soccer['player_name']}}" team_id="{{$team_b_id}}" team_type='team_b' user_id="{{$team_b_soccer['user_id']}}">
+												<tr id="team_a_row_{{$team_b_soccer['id']}}" class="team_a_goal_row player_select" player_id="{{$team_b_soccer['id']}} "  player_name="{{$team_b_soccer['player_name']}}" team_id="{{$team_b_id}}" team_type='team_b' user_id="{{$team_b_soccer['user_id']}}" yellow_card=
+												{{$team_b_soccer['yellow_cards']}}>
 													<td colspan="3">
 														{{$team_b_soccer['player_name']}}
 													</td>
@@ -550,10 +557,10 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 												<option <?php if (isset($match_data[0]['winner_id']) && $match_data[0]['winner_id']==$match_data[0]['b_id']) echo ' selected';?> value="{{ $match_data[0]['b_id'] }}">{{ $team_b_name }}</option>
 											</select>
 										</div>
-										<div class="form-group" style="margin-top:15px;">
+										<div class="form-group">
 
-											<label class="show_teams">Select Player of Match:</label>
-											<select name="player_of_the_match" id="player_of_the_match" class="show_teams form-control selectpicker" onchange="">
+											<label class="">Select Player of Match:</label>
+											<select name="player_of_the_match" id="player_of_the_match" class=" form-control selectpicker" onchange="">
 												<option value="0" disabled="">Team A</option>
 												@foreach($team_a_soccer_scores_array as $tm_player)
 													<option value="{{$tm_player['user_id']}}" @if($match_data[0]['player_of_the_match']==$tm_player['user_id'])?'selected':'' @endif >{{$tm_player['player_name']}}</option>
@@ -813,11 +820,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 					</li>
 				@endif
 
-				@if($isValidUser && $isForApprovalExist)
-
-					<button style="text-align:center;" type="button" onclick="forApproval();" class="button btn-primary">Send Score for Approval</button>
-
-				@endif
+				
 
 
 				{!!Form::close()!!}
@@ -859,9 +862,9 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 										</tr>
 										<tbody id="">
 										@foreach($team_a_soccer_scores_array as $key=>$team_a_soccer)
-											@if($team_a_soccer['playing_status']=="P")
-												<tr>
-													<td colspan="3" class='select_left' class="team_a_goal_row player_select" player_id="{{$team_a_soccer['id']}} "  player_name="{{$team_a_soccer['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_soccer['player_name']}}
+											@if($team_a_soccer['playing_status']=="P" && $team_a_soccer['red_cards']==0)
+												<tr class="player_details_{{$team_a_soccer['id']}}">
+													<td colspan="3" class='select_left' class="team_a_goal_row player_select " player_id="{{$team_a_soccer['id']}} "  player_name="{{$team_a_soccer['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_soccer['player_name']}}
 														{!! $team_a_soccer['has_substituted']==1?"<i class='fa fa-share'></i>":''!!}
 													</td>
 													<td colspan="1" >
@@ -884,8 +887,8 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 										</tr>
 										<tbody id="">
 										@foreach($team_a_soccer_scores_array as $key=>$team_a_soccer)
-											@if($team_a_soccer['playing_status']=="S")
-												<tr>
+											@if($team_a_soccer['playing_status']=="S" && $team_a_soccer['red_cards']==0)
+												<tr class="player_details_{{$team_a_soccer['id']}}">
 													<td colspan="3" class='select_left' class="team_a_goal_row player_select" player_id="{{$team_a_soccer['id']}} "  player_name="{{$team_a_soccer['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_soccer['player_name']}}
 														{!!$team_a_soccer['has_substituted']==1?"<i class='fa fa-reply'></i> {$team_a_soccer['time_substituted']} \"":'' !!}
 													</td>
@@ -943,8 +946,8 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 										</tr>
 										<tbody id="">
 										@foreach($team_b_soccer_scores_array as $team_a_soccer)
-											@if($team_a_soccer['playing_status']=="P")
-												<tr>
+											@if($team_a_soccer['playing_status']=="P" && $team_a_soccer['red_cards']==0)
+												<tr class="player_details_{{$team_a_soccer['id']}}">
 													<td colspan="3" class='select_left' class="team_a_goal_row player_select" player_id="{{$team_a_soccer['id']}} "  player_name="{{$team_a_soccer['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_soccer['player_name']}}
 														{!! $team_a_soccer['has_substituted']==1?"<i class='fa fa-share'></i> {$team_a_soccer['time_substituted']}\"":'' !!}
 													</td>
@@ -968,8 +971,8 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 										</tr>
 										<tbody id="">
 										@foreach($team_b_soccer_scores_array as $team_a_soccer)
-											@if($team_a_soccer['playing_status']=="S")
-												<tr>
+											@if($team_a_soccer['playing_status']=="S" && $team_a_soccer['red_cards']==0)
+												<tr class="player_details_{{$team_a_soccer['id']}}">
 													<td colspan="3" class='select_left' class="team_a_goal_row player_select" player_id="{{$team_a_soccer['id']}} "  player_name="{{$team_a_soccer['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_soccer['player_name']}}
 														{!! $team_a_soccer['has_substituted']==1?"<i class='fa fa-reply'></i>":'' !!}
 													</td>
@@ -1030,7 +1033,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 										@foreach($team_a_soccer_scores_array as $team_a_soccer)
 											@if($team_a_soccer['playing_status']=="P" && $team_a_soccer['red_cards']==0)
 
-												<tr>
+												<tr class="player_details_{{$team_a_soccer['id']}}">
 													<td colspan="3" class='select_left' class="team_a_goal_row player_select" player_id="{{$team_a_soccer['id']}} "  player_name="{{$team_a_soccer['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_soccer['player_name']}}
 													</td>
 													<td colspan="1" >
@@ -1060,7 +1063,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 										<?php $p_index_b=0;?>
 										@foreach($team_b_soccer_scores_array as $team_a_soccer)
 											@if($team_a_soccer['playing_status']=="P" && $team_a_soccer['red_cards']==0)
-												<tr>
+												<tr class="player_details_{{$team_a_soccer['id']}}">
 													<td colspan="3" class='select_left' class="team_a_goal_row player_select" player_id="{{$team_a_soccer['id']}} "  player_name="{{$team_a_soccer['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_soccer['player_name']}}
 													</td>
 													<td colspan="1" >
@@ -1113,13 +1116,12 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 			{
 				$("label.show_teams").show();
 				$('#winner_id').selectpicker('show');
-				$('#player_of_the_match').selectpicker('show');
-				selectWinner();
+					selectWinner();
 			}else
 			{
 				$("label.show_teams").hide();
 				$('#winner_id').selectpicker('hide');
-				$('#player_of_the_match').selectpicker('hide');
+				
 				$('#winner_team_id').val('');
 			}
 		}
@@ -1306,14 +1308,15 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 
 		//delete row
 		var deleted_ids = ',';
-		function deleteRow(that, del_id)
+		function deleteRow(that, del_id, player_id)
 		{
 			$.confirm({
 				title: 'Confirmation',
 				content: "Are you sure you want to delete this Record?",
 				confirm: function() {
 					$('#delted_ids').val($('#delted_ids').val() + ","+ del_id);
-					$(that).closest('tr').remove();
+					$(that).closest('tr').remove();					
+
 				},
 				cancel: function() {
 					// nothing to do
@@ -1422,6 +1425,10 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 						tempSquadData[team_type].playing.push(player_id);
 						tempSquadData[team_type].substitute.remove(player_id);
 					}
+					else{
+						tempSquadData[team_type].playing.remove(player_id);
+						tempSquadData[team_type].substitute.push(player_id);
+					}
 				}
 				else{
 					$(this).removeClass('choosen')
@@ -1464,8 +1471,6 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 						type:'post',
 						success:function(response){
 							window.location=window.location;
-							return false;
-
 						},
 						error:function(x,y,z){
 							$(this).attr('disabled', false);
@@ -1490,6 +1495,42 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 				method:'post',
 				success:function(response){
 					window.location=window.location.pathname;
+				},
+				error:function(x,y,z){
+
+				}
+
+			})
+			return false;
+		}
+
+		function saveRecord(i, record_type,player_id){
+			
+			var form=$('#form_record_'+i);
+			var data=form.serializeArray();	
+			var team_a_id={{$team_a_id}}
+			var team_b_id={{$team_b_id}}
+
+			$.ajax({
+				url:base_url+'/match/saveMatchRecord',
+				data:data,
+				method:'post',
+				dataType:'json',
+				success:function(response){
+					var tem_a=response[team_a_id];
+					var tem_b=response[team_b_id];
+
+					$('#team_a_score').html(tem_a.goals)
+					$('#team_b_score').html(tem_b.goals)
+
+					$('#team_a_count').attr('title','Red Card Count:'+tem_a.red_card_count+','+'Yellow Card Count:'+tem_a.yellow_card_count);
+					$('#team_b_count').attr('title', 'Red Card Count:'+tem_b.red_card_count+','+'Yellow Card Count:'+tem_b.yellow_card_count);
+
+					if(record_type=='red_card'){
+						$('#team_a_row_'+player_id).hide();
+						$('.player_details_'+player_id).hide();
+					}
+				form.remove();
 				},
 				error:function(x,y,z){
 

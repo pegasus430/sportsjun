@@ -22,7 +22,6 @@ $data_image=url("/uploads/tournaments/".!empty($left_menu_data['logo'])?$left_me
                 <tr>
                     <td class="sj-social-td">
                         <a href="javascript:void(0);" onclick="SJ.GLOBAL.shareFacebook('{{$t_url}}','{{$t_title}}','{{$data_image}}', '{{$t_text}}');" class="sj-social-ancr sj-social-ancr-fb" rel="noreferrer">
-                        <span class="sj-ico sj-fb-share" class="sj-social-ancr sj-social-ancr-fb" rel="noreferrer">
                             <span class="sj-ico sj-fb-share "></span>
                             <span class="sj-font-12">Share</span>
                         </a>

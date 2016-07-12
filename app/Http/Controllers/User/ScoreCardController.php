@@ -2779,69 +2779,10 @@ class ScoreCardController extends Controller {
 		$match_details->{$team_a_id}->ball_percentage=$request['ball_percentage_'.$team_a_id];
 		$match_details->{$team_b_id}->ball_percentage=$request['ball_percentage_'.$team_b_id];
 
-		$match_details=(array)$match_details;
-
-		for($i=1; $i<=$last_index; $i++){
-			if(!in_array($i, $deleted_ids)){
-				$half_time=$request['half_time_'.$i];
-				$team_id=$request['team_'.$i];
-				$player_stat_id=$request['player_'.$i];
-				$user_id=$request['user_'.$i];
-				$record_type=$request['record_type_'.$i];
-				$time=$request['time_'.$i];
-				$player_name=$request['player_name_'.$i];
-				$team_type=$request['team_type_'.$i];
-
-				$record_type_count=$record_type=='goals'?$record_type:$record_type.'_count';
-
-
-				$match_details[$half_time]=(array)$match_details[$half_time];
-				$match_details[$half_time][$record_type.'_details']=(array)$match_details[$half_time][$record_type.'_details'];
-
-
-				$soccer_model=SoccerPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_id)->whereUserId($user_id)->first();
-				$goals_count=$soccer_model['goals_scored'];
-				$yellow_card_count=$soccer_model['yellow_cards'];
-				$red_card_count=$soccer_model['red_cards'];
-
-				${$record_type.'_count'}++;
-				$match_details=(object)$match_details;		//temporally convert to object to get numeric property
-				$match_details->$team_id->{$record_type_count} +=1;
-				$score=$match_details->{$team_a_id}->goals. '-'. $match_details->{$team_b_id}->goals;
-
-				$match_details=(array)$match_details;
-				$record_type_details=[
-					'player_id'=>$user_id,
-					'player_name'=>$player_name,
-					'time'=>$time,
-					'team_id'=>$team_id,
-					'current_score'=>$score,
-					'number'=>1,
-					'team_type'=>$team_type,
-
-				];
-				//if players has 2 yellow cards -> 1 red card
-				if($record_type_count=='yellow_card_count'){
-					if($yellow_card_count>0 && $red_card_count==0){
-						$soccer_model->red_cards=1;
-					}
-				}
-
-				$match_details[$half_time][$record_type_count]+=1;
-				$match_details[$half_time]['team_'.$team_id.'_'.$record_type_count]+=1;		//increments value for goal or yellow card or red card for team in specified halftime
-
-				array_push($match_details[$half_time][$record_type.'_details'], $record_type_details);
-
-				$soccer_model->save();
-
-				$this->updateSoccerScore($user_id,$match_id,$team_id,$player_name,$yellow_card_count,$red_card_count,$goals_count);
-				$this->soccerStatistics($user_id);
-			}
-		}
-
-
 		$match_data->match_details=json_encode($match_details);
 		$match_data->save();
+
+
 
 
 		//get previous scorecard status data
@@ -2939,10 +2880,89 @@ class ScoreCardController extends Controller {
 					'is_tied'=>$is_tied,'score_added_by'=>$json_score_status]);
 			}
 		}
-		return redirect()->back();
+		return $match_data->match_details;
+	}
 
+	public function soccerStoreRecord(){
+			$request=Request::all();
+			$match_id=$request['match_id'];
+		$first_half=isset($request['first_half'])?$request['first_half']:[];
+		$second_half=isset($request['second_half'])?$request['second_half']:[];
+		$team_a_id=$request['team_a_id'];
+		$team_b_id=$request['team_b_id'];
+		$i=$request['index'];
+		$match_data=matchSchedule::find($match_id);
+		$match_details=json_decode($match_data['match_details']);
+		$soccer_player=SoccerPlayerMatchwiseStats::whereMatchId($match_id)->first();
+
+		$match_details=(array)$match_details;
+
+				$half_time=$request['half_time_'.$i];
+				$team_id=$request['team_'.$i];
+				$player_stat_id=$request['player_'.$i];
+				$user_id=$request['user_'.$i];
+				$record_type=$request['record_type_'.$i];
+				$time=$request['time_'.$i];
+				$player_name=$request['player_name_'.$i];
+				$team_type=$request['team_type_'.$i];
+
+				$record_type_count=$record_type=='goals'?$record_type:$record_type.'_count';
+
+
+				$match_details[$half_time]=(array)$match_details[$half_time];
+				$match_details[$half_time][$record_type.'_details']=(array)$match_details[$half_time][$record_type.'_details'];
+
+
+				$soccer_model=SoccerPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_id)->whereUserId($user_id)->first();
+				$goals_count=$soccer_model['goals_scored'];
+				$yellow_card_count=$soccer_model['yellow_cards'];
+				$red_card_count=$soccer_model['red_cards'];
+
+				${$record_type.'_count'}++;
+				$match_details=(object)$match_details;		//temporally convert to object to get numeric property
+				$match_details->$team_id->{$record_type_count} +=1;
+				$score=$match_details->{$team_a_id}->goals. '-'. $match_details->{$team_b_id}->goals;
+
+				$match_details=(array)$match_details;
+				$record_type_details=[
+					'player_id'=>$user_id,
+					'player_name'=>$player_name,
+					'time'=>$time,
+					'team_id'=>$team_id,
+					'current_score'=>$score,
+					'number'=>1,
+					'team_type'=>$team_type,
+
+				];
+				//if players has 2 yellow cards -> 1 red card
+				if($record_type_count=='yellow_card_count'){
+					if($yellow_card_count>0 && $red_card_count==0){
+						$soccer_model->red_cards=1;
+					}
+				}
+
+				$match_details[$half_time][$record_type_count]+=1;
+				$match_details[$half_time]['team_'.$team_id.'_'.$record_type_count]+=1;		//increments value for goal or yellow card or red card for team in specified halftime
+
+				array_push($match_details[$half_time][$record_type.'_details'], $record_type_details);
+
+				$soccer_model->save();
+
+				$this->updateSoccerScore($user_id,$match_id,$team_id,$player_name,$yellow_card_count,$red_card_count,$goals_count);
+				$this->soccerStatistics($user_id);			
+
+
+		$match_data->match_details=json_encode($match_details);
+		$match_data->save();
+			return $match_data->match_details;
 
 	}
+
+	public function loadSoccerDetails(){
+
+	}
+
+
 	//function to update player scores if already exist
 	public function updateSoccerScore($user_id,$match_id,$team_id,$player_name,$yellow_card_count,$red_card_count,$goal_count, $goals_details=[])
 	{
@@ -3470,33 +3490,28 @@ class ScoreCardController extends Controller {
 		$team_a_playing_players=isset($request['team_a']['playing'])?$request['team_a']['playing']:[];
 		$team_b_playing_players=isset($request['team_b']['playing'])?$request['team_b']['playing']:[];
 
-		$team_a_substitute_players=explode(',', $match_model->player_a_ids);
-		$team_b_substitute_players=explode(',', $match_model->player_b_ids);
+		$team_a_substitute_players=isset($request['team_a']['substitute'])?$request['team_a']['substitute']:[];
+		$team_b_substitute_players=isset($request['team_b']['substitute'])?$request['team_b']['substitute']:[];
 
 		foreach($team_a_playing_players as $p){
 			$player_name=User::find($p)->name;
 			$this->insertSoccerScore($p, $tournament_id, $match_id, $team_a_id,$player_name, $team_a_name,0,0,0,'P');
 		}
 		foreach($team_a_substitute_players as $p){
-			if(!in_array($p, $team_a_playing_players)){
-				if(isset(User::find($p)->name)){
-					$player_name=User::find($p)->name;
-					$this->insertSoccerScore($p, $tournament_id, $match_id, $team_a_id,$player_name, $team_a_name,0,0,0,'S');
-				}
-			}
+			$player_name=User::find($p)->name;
+			$this->insertSoccerScore($p, $tournament_id, $match_id, $team_a_id,$player_name, $team_a_name,0,0,0,'S');
+				
 		}
 		foreach($team_b_playing_players as $p){
 			$player_name=User::find($p)->name;
 			$this->insertSoccerScore($p, $tournament_id, $match_id, $team_b_id,$player_name, $team_b_name,0,0,0,'P');
 		}
-		foreach($team_b_substitute_players as $p){
-			if(!in_array($p, $team_a_playing_players)){
-				if(isset(User::find($p)->name)){
-					$player_name=User::find($p)->name;
-					$this->insertSoccerScore($p, $tournament_id, $match_id, $team_b_id,$player_name, $team_b_name,0,0,0,'S');
-				}
-			}
+		foreach($team_b_substitute_players as $p){			
+			$player_name=User::find($p)->name;
+			$this->insertSoccerScore($p, $tournament_id, $match_id, $team_b_id,$player_name, $team_b_name,0,0,0,'S');
+				
 		}
+		
 
 		$match_model=MatchSchedule::find($match_id);
 		$match_details=[
@@ -3555,7 +3570,7 @@ class ScoreCardController extends Controller {
 			]
 		];
 
-		$match_model=json_encode($match_details);
+		$match_model->match_details=json_encode($match_details);
 		$match_model->save();
 	}
 
