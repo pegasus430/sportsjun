@@ -1792,7 +1792,7 @@ class Helper {
     public static function getOrganisationDetails($organization_id){
         $model=Organization::find($organization_id);
         $model->gallery_title="Photo Album of $model->name";
-        $model->gallery_sharing="$model->name is a sport organization with ...";
+        $model->gallery_sharing="$model->name is a sport organization with ... Click here to see its full gallery";
         $model->gallery_url="/uploads/gallery/organisations/$model->logo";
         return $model;
     }

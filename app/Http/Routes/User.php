@@ -546,6 +546,7 @@ Route::group(['prefix'=>'match'], function(){
     Route::post('choosePenaltyPlayers', ['as'=>'match/choosePenaltyPlayers', 'uses'=>'User\ScoreCardController@choosePenaltyPlayers']);
     Route::post('scorePenalty', ['as'=>'match/scorePenalty', 'uses'=>'User\ScoreCardController@scorePenalty']);
     post('/saveMatchRecord', 'User\ScoreCardController@soccerStoreRecord');
+    get('/getSoccerDetails', 'User\ScoreCardController@getSoccerDetails');
 });
 
 //End Matches

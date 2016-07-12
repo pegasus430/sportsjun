@@ -324,7 +324,7 @@ if (typeof SJ.SCORECARD === 'undefined')
                                                 displayFormContent.append("<td colspan=3><td><input type='number' name='time_"+index+"' class='gui-input   input_first_half' min='0' max='49' required></td><td>"+record_type_name+"</td> <td colspan=2>"+player_name+"</td><td><a href='#' onclick='deleteRow(this, "+index+")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></td></tr>");
                                         }
                                         else{
-                                                displayFormContent.append("<tr class='records'><td colspan=3><td><input type='number' name='time_"+index+"' class='gui-input   input_first_half' min='45' max='95' required></td><td>"+record_type_name+"</td> <td colspan=2>"+player_name+"</td><td><a href='#' onclick='deleteRow(this, "+index+")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='button' index='"+index+"'><i class='fa fa-check'></i></button></tr></td></tr>");
+                                                displayFormContent.append("<tr class='records'><td colspan=3><td><input type='number' name='time_"+index+"' class='gui-input   input_first_half' min='45' max='95' required></td><td>"+record_type_name+"</td> <td colspan=2>"+player_name+"</td><td><a href='#' onclick='deleteRow(this, "+index+")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></tr></td></tr>");
                                         }
                                 }
                                 else{
@@ -332,7 +332,7 @@ if (typeof SJ.SCORECARD === 'undefined')
                                                 displayFormContent.append("<tr class='records'><td colspan=2>"+player_name+"</td><td>"+record_type_name+"</td><td><input type='number' class='  input_second_half' min='0' max='48' name='time_"+index+"' required></td><td colspan=3></td><td><a href='#' onclick='deleteRow(this, "+index+")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></td></tr>");
                                         }
                                         else{
-                                                displayFormContent.append("<tr class='records'><td colspan=2>"+player_name+"</td><td>"+record_type_name+"</td><td><input type='number' class='  input_second_half' min='45' max='95' name='time_"+index+"' required></td><td colspan=3></td><td><a href='#' onclick='deleteRow(this, "+index+")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='button' index='"+index+"'><i class='fa fa-check'></i></button></tr></td></tr>");
+                                                displayFormContent.append("<tr class='records'><td colspan=2>"+player_name+"</td><td>"+record_type_name+"</td><td><input type='number' class='  input_second_half' min='45' max='95' name='time_"+index+"' required></td><td colspan=3></td><td><a href='#' onclick='deleteRow(this, "+index+")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></tr></td></tr>");
                                         }
                                 }
                                 displayFormContent.append("<input type='hidden' name='player_"+index+"' value='"+player_id+"'>");
@@ -349,9 +349,6 @@ if (typeof SJ.SCORECARD === 'undefined')
                                 displayFormContent.append("<input type='hidden' name='team_b_id' value='"+team_b_id+"'>");
                                 displayFormContent.append("<input type='hidden' name='index' value='"+index+"'>");
                         
-
-
-
 
                         },
 

@@ -606,7 +606,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 
 
 				<!-- Team B Goals Start-->
-				<div class='row'>
+				<div class='row' id='match_details'>
 				<div class="col-sm-10 col-sm-offset-1">
 					<h3 id='team_b' class="team_bowl table_head">MATCH DETAILS</h3>
 					<div class="table-responsive">
@@ -1334,7 +1334,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 			{
 				$.alert({
 					title: 'Alert!',
-					content: 'Select Match Result & Save.'
+					content: 'Please Click on End Match Save Match Result then Send.'
 				});
 				return false;
 			}
@@ -1517,6 +1517,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 				method:'post',
 				dataType:'json',
 				success:function(response){
+					setTimeout(getSoccerDetails,2000);
 					var tem_a=response[team_a_id];
 					var tem_b=response[team_b_id];
 
@@ -1530,7 +1531,8 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 						$('#team_a_row_'+player_id).hide();
 						$('.player_details_'+player_id).hide();
 					}
-				form.remove();
+				
+				form.remove();				
 				},
 				error:function(x,y,z){
 
@@ -1540,7 +1542,25 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 			return false;
 		}
 
+		function getSoccerDetails(){
+			//load details
+				var data={
+					match_id:$('#match_id').val(),
+					team_a_id:{{$team_a_id}},
+					team_b_id:{{$team_b_id}}
+				}
 
+					$.ajax({
+						url:base_url+'/match/getSoccerDetails',
+						method:'get',
+						data:data,
+						success:function(response){
+							$('#match_details').html(response);
+						}
+					})
+		}
+
+		
 		function soccerSwapPlayers(ser_id){
 			var data=$('#'+ser_id).serialize();
 			$.ajax({
