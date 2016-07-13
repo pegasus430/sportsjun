@@ -9,3 +9,4 @@ _ide_helper_models.php
 *.sublime-*
 .DS_Store
 Thumbs.db
+.gitignore

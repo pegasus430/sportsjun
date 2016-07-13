@@ -51,7 +51,7 @@ class TeamController extends Controller
 							->all();
         $organization_id = Request::input('organization_id');
 		$states = [];
-                $organization = Organization::orderBy('name')->where('user_id', Auth::user()->id)->lists('name', 'id')->all();
+                $organization = Organization::orderBy('name')->where('user_id', (isset(Auth::user()->id)?Auth::user()->id:0))->lists('name', 'id')->all();
                 $cities = array();
 		return view('teams.createteam')->with(array('sports'=>['' => 'Select Sport'] + $sports))
 										->with('countries', ['' => 'Select Country'] + $countries)
@@ -71,7 +71,7 @@ class TeamController extends Controller
     public function store(Requests\CreateTeamRequest $request)
     {
 		//getting team owner id from session logged in user id
-        $request['team_owner_id'] = Auth::user()->id;
+        $request['team_owner_id'] = (isset(Auth::user()->id)?Auth::user()->id:0);
 		$request['city'] = !empty(Request::get('city_id')) ? City::where('id',Request::get('city_id'))->first()->city_name : 'null';
 		$request['state'] = !empty(Request::get('state_id')) ? State::where('id', Request::get('state_id'))->first()->state_name : 'null';
 		$request['country'] = !empty($request['country_id']) ? Country::where('id', $request['country_id'])->first()->country_name : 'null';
@@ -89,9 +89,9 @@ class TeamController extends Controller
 		{
 			$team_id = isset($team_details['id'])?$team_details['id']:0;
                         if(count($request['filelist_logo'])) {
-                            Helper::uploadPhotos($request['filelist_logo'],config('constants.PHOTO_PATH.TEAMS_FOLDER_PATH'),$team_id,1,1,config('constants.PHOTO.TEAM_PHOTO'),Auth::user()->id);
+                            Helper::uploadPhotos($request['filelist_logo'],config('constants.PHOTO_PATH.TEAMS_FOLDER_PATH'),$team_id,1,1,config('constants.PHOTO.TEAM_PHOTO'),(isset(Auth::user()->id)?Auth::user()->id:0));
                         }
-        $logo=Photo::select('url')->where('imageable_type',config('constants.PHOTO.TEAM_PHOTO'))->where('imageable_id',  $team_details['id'])->where('user_id', Auth::user()->id)->where('is_album_cover',1)->get()->toArray();
+        $logo=Photo::select('url')->where('imageable_type',config('constants.PHOTO.TEAM_PHOTO'))->where('imageable_id',  $team_details['id'])->where('user_id', (isset(Auth::user()->id)?Auth::user()->id:0))->where('is_album_cover',1)->get()->toArray();
 		if(!empty($logo))
 		{
 			foreach($logo as $l)
@@ -106,7 +106,7 @@ class TeamController extends Controller
 				//insert into team players table
                 $teamplayer_details = array(
 					'team_id' => $team_id,
-					'user_id' => Auth::user()->id,
+					'user_id' => (isset(Auth::user()->id)?Auth::user()->id:0),
 					'role' => 'owner',
 					'status' => 'accepted',
                     'created_at' => Carbon::now(),
@@ -116,7 +116,7 @@ class TeamController extends Controller
 					//insert into user statistics table
 					//check if there is any manager existing with that team
 					//if exist insert else update
-					$existing_user_details = UserStatistic::where('user_id', Auth::user()->id)->first();
+					$existing_user_details = UserStatistic::where('user_id', (isset(Auth::user()->id)?Auth::user()->id:0))->first();
 					if(count($existing_user_details))
 					{
 						if(!$this->isExist($existing_user_details['following_sports'],$request['sports_id']))
@@ -140,7 +140,7 @@ class TeamController extends Controller
 					else
 					{
 						$user_statistic_details = array(
-						'user_id' => Auth::user()->id,
+						'user_id' => (isset(Auth::user()->id)?Auth::user()->id:0),
 						'following_sports' => ','.$request['sports_id'].',',
 						//'following_teams' => ','.$team_id.',',
 						'managing_teams' => ','.$team_id.',',
@@ -246,9 +246,9 @@ class TeamController extends Controller
 					Photo::where('imageable_id', '=', $id)->where('imageable_type', '=', config('constants.PHOTO.TEAM_PHOTO'))->update(['is_album_cover'=>0,'updated_at'=>Carbon::now()]);
 					//update new photo
 
-					Helper::uploadPhotos($request['filelist_logo'],config('constants.PHOTO_PATH.TEAMS_FOLDER_PATH'),$id,1,1,config('constants.PHOTO.TEAM_PHOTO'),Auth::user()->id);
+					Helper::uploadPhotos($request['filelist_logo'],config('constants.PHOTO_PATH.TEAMS_FOLDER_PATH'),$id,1,1,config('constants.PHOTO.TEAM_PHOTO'),(isset(Auth::user()->id)?Auth::user()->id:0));
 				}
-				$logo=Photo::select('url')->where('is_album_cover','=','1')->where('imageable_type',config('constants.PHOTO.TEAM_PHOTO'))->where('imageable_id',  $id )->where('user_id', Auth::user()->id)->get()->toArray();
+				$logo=Photo::select('url')->where('is_album_cover','=','1')->where('imageable_type',config('constants.PHOTO.TEAM_PHOTO'))->where('imageable_id',  $id )->where('user_id', (isset(Auth::user()->id)?Auth::user()->id:0))->get()->toArray();
 					if(!empty($logo))
 					{
 						foreach($logo as $l)
@@ -305,12 +305,12 @@ class TeamController extends Controller
 				$q3->select();
 			}
 		));
-		$managingTeamIds = Helper::getManagingTeamIds(Auth::user()->id);
+		$managingTeamIds = Helper::getManagingTeamIds((isset(Auth::user()->id)?Auth::user()->id:0));
 		$managing_team_ids = explode(',', trim($managingTeamIds,','));
 		//if the team id is in managing team ids, then add owner conditioin
 		if(in_array($team_id, $managing_team_ids))
 		{
-			$teams_query->where('team_owner_id',Auth::user()->id);
+			$teams_query->where('team_owner_id',(isset(Auth::user()->id)?Auth::user()->id:0));
 		}
 		$teams = $teams_query->where('id',$team_id)->get();
 		$teams = $teams->toarray();
@@ -346,7 +346,7 @@ class TeamController extends Controller
 			}
 		}
 		//get following sports
-		$userId = Auth::user()->id;
+		$userId = (isset(Auth::user()->id)?Auth::user()->id:0);
 		$following_sportids = UserStatistic::where('user_id', $userId)->pluck('following_sports');
 		// Helper::setMenuToSelect(2,1);
 		$sport = !empty($teams[0]['sports_id']) ? Sport::where('id', $teams[0]['sports_id'])->pluck('sports_name') : '';
@@ -379,7 +379,7 @@ class TeamController extends Controller
 
     	if($user_id == '')
     	{
-    		$user_id = Auth::user()->id;
+    		$user_id = (isset(Auth::user()->id)?Auth::user()->id:0);
     	}
 		else
 		{
@@ -444,7 +444,7 @@ class TeamController extends Controller
 			'followingTeamArray' => $followingTeamArray,
 			'manageTeamArray' => $manageTeamArray,
 			'managedOrgArray' => $managedOrgArray1,
-			'id' => Auth::user()->id,
+			'id' => (isset(Auth::user()->id)?Auth::user()->id:0),
 			'userId' => $user_id,
 		]);
 	}
@@ -501,9 +501,9 @@ class TeamController extends Controller
 
 	function getorgDetails($id)
 	{
-		$user_id = Auth::user()->id;
+		$user_id = (isset(Auth::user()->id)?Auth::user()->id:0);
 	    $teams = Team::select('id','name')->where('organization_id',$id)->get()->toArray();
-		$photo= Photo::select('url')->where('imageable_id', '=', $id)->where('imageable_type', '=', config('constants.PHOTO.TEAM_PHOTO'))->where('user_id', Auth::user()->id)->get()->toArray();
+		$photo= Photo::select('url')->where('imageable_id', '=', $id)->where('imageable_type', '=', config('constants.PHOTO.TEAM_PHOTO'))->where('user_id', (isset(Auth::user()->id)?Auth::user()->id:0))->get()->toArray();
 		$orgInfo= Organization::select()->where('id',$id)->get()->toArray();
 
 		return view('teams.teams')->with(array( 'teams'=>$teams,'photo'=>$photo,'orgInfo'=>$orgInfo,'id'=>$id, 'userId' => $user_id ));
@@ -512,13 +512,13 @@ class TeamController extends Controller
 	{
 
 		   // $teams = Team::select('id','name','logo','description')->where('organization_id',$id)->get()->toArray();
-    	$user_id = Auth::user()->id;
+    	$user_id = (isset(Auth::user()->id)?Auth::user()->id:0);
 		   $teams = DB::table('teams')
             ->join('users', 'users.id', '=', 'teams.team_owner_id')
             ->select('teams.id','teams.name as teamname','teams.team_owner_id','teams.logo','teams.description','users.name','teams.isactive')
 			->where('organization_id',$id)
             ->orderBy('isactive','desc')->get();
-		// $photo= Photo::select('url')->where('imageable_id', '=', $id)->where('imageable_type', '=', config('constants.PHOTO.TEAM_PHOTO'))->where('user_id', Auth::user()->id)->get()->toArray();
+		// $photo= Photo::select('url')->where('imageable_id', '=', $id)->where('imageable_type', '=', config('constants.PHOTO.TEAM_PHOTO'))->where('user_id', (isset(Auth::user()->id)?Auth::user()->id:0))->get()->toArray();
 		$orgInfo= Organization::select()->where('id',$id)->get()->toArray();
 		return view('teams.orgteams')->with(array( 'teams'=>$teams,'id'=>$id,'orgInfo'=>$orgInfo,'userId'=>$user_id));
 	}
@@ -826,7 +826,7 @@ class TeamController extends Controller
             }
         }
         
-        $organization = Organization::orderBy('name')->where('user_id', Auth::user()->id)->lists('name', 'id')->all();
+        $organization = Organization::orderBy('name')->where('user_id', (isset(Auth::user()->id)?Auth::user()->id:0))->lists('name', 'id')->all();
 		$countries = Country::orderBy('country_name')->lists('country_name', 'id')->all();
 		$states = State::where('country_id', $teamdetails->country_id)->orderBy('state_name')->lists('state_name', 'id')->all();
 		if (isset($teamdetails->state_id) && is_numeric($teamdetails->state_id)) {
@@ -1063,7 +1063,7 @@ class TeamController extends Controller
 		$sport_type = Sport::where('id',$sport_id)->pluck('sports_type');
 		$request_type = !empty($request['req_type'])?$request['req_type']:NULL;
 		$player_tournament_id = !empty($request['player_tournament_id'])?$request['player_tournament_id']:0;
-		$user_id =  Auth::user()->id;
+		$user_id =  (isset(Auth::user()->id)?Auth::user()->id:0);
 		$teams = array();
 		if($request_type  == 'TEAM_TO_TOURNAMENT' || $request_type  == 'TEAM_TO_PLAYER')
 		{
@@ -1146,7 +1146,7 @@ class TeamController extends Controller
 				'teamplayers.user.photos'=>function($q3){
 					$q3->select();
 				}
-			))->where('team_owner_id',Auth::user()->id)->where('id',$team_id)->get();
+			))->where('team_owner_id',(isset(Auth::user()->id)?Auth::user()->id:0))->where('id',$team_id)->get();
 			$teams = $teams->toarray();
 			$team_owners_managers = array();
 			$team_players = array();
@@ -1180,7 +1180,7 @@ class TeamController extends Controller
 				}
 			}
 			//get following sports
-			$userId = Auth::user()->id;
+			$userId = (isset(Auth::user()->id)?Auth::user()->id:0);
 			$following_sportids = UserStatistic::where('user_id', $userId)->pluck('following_sports');
 			// Helper::setMenuToSelect(2,1);
 			$sport = !empty($teams[0]['sports_id']) ? Sport::where('id', $teams[0]['sports_id'])->pluck('sports_name') : '';
@@ -1229,12 +1229,12 @@ class TeamController extends Controller
 				$q3->select();
 			}
 		));
-		$managingTeamIds = Helper::getManagingTeamIds(Auth::user()->id);
+		$managingTeamIds = Helper::getManagingTeamIds((isset(Auth::user()->id)?Auth::user()->id:0));
 		$managing_team_ids = explode(',', trim($managingTeamIds,','));
 		//if the team id is in managing team ids, then add owner conditioin
 		if(in_array($team_id, $managing_team_ids))
 		{
-			$teams_query->where('team_owner_id',Auth::user()->id);
+			$teams_query->where('team_owner_id',(isset(Auth::user()->id)?Auth::user()->id:0));
 		}
 		$teams = $teams_query->where('id',$team_id)->get();
 		$teams = $teams->toarray();
@@ -1272,7 +1272,7 @@ class TeamController extends Controller
 			}
 		}
 		//get following sports
-		$userId = Auth::user()->id;
+		$userId = (isset(Auth::user()->id)?Auth::user()->id:0);
 		$following_sportids = UserStatistic::where('user_id', $userId)->pluck('following_sports');
 		// Helper::setMenuToSelect(2,1);
 		$sport = !empty($teams[0]['sports_id']) ? Sport::where('id', $teams[0]['sports_id'])->pluck('sports_name') : '';

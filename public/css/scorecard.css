@@ -1190,3 +1190,8 @@ div#playerOfTheMatchNote {
 #addUnknownPlayerBtn,#addPlayerBtn{display:none;}
 #firsting{margin-bottom:60px}
 #firsting td {padding:8px 7px;}
+
+.player_select{
+	cursor: pointer;
+	background: none;
+}
