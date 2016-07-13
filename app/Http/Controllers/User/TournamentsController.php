@@ -737,7 +737,7 @@ class TournamentsController extends Controller
 			if(Helper::isTournamentOwner($subTournaments[0]['manager_id'],$subTournaments[0]['tournament_parent_id'])) {
 				$isOwner=1;
 			}
-				
+        }		
 			
 	       $countries = Country::orderBy('country_name')->lists('country_name', 'id')->all();
 	       $states = State::where('country_id', $tournament->country_id)->orderBy('state_name')->lists('state_name', 'id')->all();
