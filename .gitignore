@@ -1,6 +1,7 @@
 nbproject/
 public/uploads/
-config/
+vendor/
+config/database.php
 .env
 .idea/
 _ide_helper.php
@@ -8,3 +9,4 @@ _ide_helper_models.php
 *.sublime-*
 .DS_Store
 Thumbs.db
+.gitignore

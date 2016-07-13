@@ -17,7 +17,8 @@
         "nesbot/carbon": "~1.14",
         "proengsoft/laravel-jsvalidation": "~1.1",
         "mews/captcha": "^2.1",
-        "sofa/eloquence": "~5.1@dev"
+        "sofa/eloquence": "~5.1@dev",
+        "barryvdh/laravel-ide-helper": "^2.2"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -25,7 +26,6 @@
         "phpunit/phpunit": "~4.0",
         "phpspec/phpspec": "~2.1",
         "zofe/rapyd": "2.1.*",
-        "barryvdh/laravel-ide-helper": "~2.0",
         "skagarwal/generators": "~1.0.1",
         "doctrine/dbal": "^2.5"
     },

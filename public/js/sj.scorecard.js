@@ -22,23 +22,23 @@ if (typeof SJ.SCORECARD === 'undefined')
                         matchResult: ($('#match_result').val()  !== "undefined") ? $('#match_result').val() : "",
                         matchWinner: ($('#winner_id').val()     !== "undefined") ? $('#winner_id').val()    : "",
                         init: function () {
-                                
+
                                 $(".team_a_overs,.team_b_overs,.out_at_over").on("keypress keyup blur",function (e) {
                                         var overs_bowled = $(this).val();
-                                            if (overs_bowled.indexOf('.') !== -1)
-                                            {
+                                        if (overs_bowled.indexOf('.') !== -1)
+                                        {
                                                 var oversArr = overs_bowled.split('.');
                                                 var balls = parseInt(oversArr[1]);
                                                 if (balls > 0)
                                                 {
-                                                    overs_bowled = parseInt(oversArr[0]) + (balls / 6);
-                                                    if (overs_bowled.toString().indexOf('.') === -1)
-                                                    {
-                                                        $(this).val(overs_bowled);
-                                                    }
+                                                        overs_bowled = parseInt(oversArr[0]) + (balls / 6);
+                                                        if (overs_bowled.toString().indexOf('.') === -1)
+                                                        {
+                                                                $(this).val(overs_bowled);
+                                                        }
                                                 }
-                                            }
-                                        if (!o.isValidOversInput($(this), e)) 
+                                        }
+                                        if (!o.isValidOversInput($(this), e))
                                         {
                                                 e.preventDefault();
                                         }
@@ -76,7 +76,7 @@ if (typeof SJ.SCORECARD === 'undefined')
                                                 SJ.SCORECARD.matchResult = this.value;
                                                 (this.value == 'tie') ? $('#matchWinnerRadio').slideUp() : $('#matchWinnerRadio').slideDown();
                                         });
-                                        
+
                                         $(document).on('ifChecked','#matchWinnerRadio input', function(){
                                                 SJ.SCORECARD.matchWinner = this.value;
                                         });
@@ -102,7 +102,7 @@ if (typeof SJ.SCORECARD === 'undefined')
                                 $('#bat1stInning select[name=team]').change();
                                 $('#tossWonBy').hide();
                                 $('#bat1stInning').hide();
-                                
+
                                 if ($('#matchTossNote').length == 0)
                                 {
                                         $('#tossWonBy').parent().prepend('<div id="matchTossNote">'+ toss_winning_team_name +' won the toss and chose to '+ choseTo +'.</div>');
@@ -111,7 +111,7 @@ if (typeof SJ.SCORECARD === 'undefined')
                                 {
                                         $('#matchTossNote').html(toss_winning_team_name +' won the toss and chose to '+ choseTo + '.');
                                 }
-                                
+
                                 var first_batting_team_name = $('#tossWonBy select option[value='+toss_winning_team+']').html();
                                 var heading_team_a_batting = $('#team_a_batting').html().toLowerCase();
                                 if (heading_team_a_batting.indexOf(first_batting_team_name.toLowerCase()) > -1)
@@ -122,15 +122,15 @@ if (typeof SJ.SCORECARD === 'undefined')
                         },
                         done2ndInningModal: function() {
                                 var bat2ndInningTeam = parseInt($('#bat2ndInningBatting input[type=radio]:checked').attr('id'));
-                                
+
                                 var first_batting_team_name = $('#bat2ndInningBatting label[for='+ bat2ndInningTeam +']').html();
-                                
+
                                 bat2ndInningTeam = $('#bat2ndInning select[name=team]').find('option[data-status='+bat2ndInningTeam+']').attr('value');
                                 $('#bat2ndInning select[name=team]').val(bat2ndInningTeam);
                                 //$('#bat2ndInning .selectpicker').selectpicker('refresh');
                                 $('#bat2ndInning select[name=team]').change();
                                 $('a[href="#second_innings"]').removeAttr('onclick');
-                                
+
                                 var heading_2nd_innings_team_a_batting = $('#second_team_a_batting').html().toLowerCase();
                                 if (heading_2nd_innings_team_a_batting.indexOf(first_batting_team_name.toLowerCase()) > -1)
                                 {
@@ -228,7 +228,142 @@ if (typeof SJ.SCORECARD === 'undefined')
                                         }
                                 }
                                 return true;
-                        }
+                        },
+
+                        soccerSetTimes:function(that){
+                                //$('.soccer_buttons_disabled').attr('disabled', true);
+                                $('#new_records_match').show();
+                                $('#end_match').modal('show');
+                                return false;
+
+                        },
+                        soccerChooseTime:function(that){
+                                $('#half_time').val($(that).val());
+                        },
+
+                        getSelectedPlayerId:function(){
+                                var player_id=$('#selected_player_id_value').val();
+                                if(player_id==0){
+                                        SJ.SCORECARD.showAlert('Alert!', 'Please select a player from the lineup. ');
+                                        return false;
+                                }
+                                else return player_id;
+                        },
+                        soccerAddGoal:function(player_id){
+
+                                var player_id=SJ.SCORECARD.getSelectedPlayerId();
+
+                                var index=$('#last_index').val();
+                                if(player_id){
+                                        $('#new_records_match').show();
+                                        $('#new_records_match').show();
+                                         var player_content=$('#team_a_row_'+player_id)
+                                         if(player_content.is("[goals]") && Number(player_content.attr('goals'))>0){
+                                                //if user has a yellow card return false
+                                                return false;
+                                        }
+                                        $('#team_a_row_'+player_id).attr('goals',1);
+                                        SJ.SCORECARD.soccerAddField(player_id,'goals', 'Goal');
+                                }
+                                return false;
+                        },
+
+                        soccerRedCard:function(){
+                                var player_id=SJ.SCORECARD.getSelectedPlayerId();
+                                var index=$('#last_index').val();
+                                if(player_id){
+                                        $('#new_records_match').show();
+                                         var player_content=$('#team_a_row_'+player_id)
+                                         if(player_content.is("[red_card]") && Number(player_content.attr('red_card'))>0){
+                                                //if user has a yellow card return false
+                                                return false;
+                                        }
+                                        $('#team_a_row_'+player_id).attr('red_card',1);
+                                        SJ.SCORECARD.soccerAddField(player_id,'red_card', 'Red Card');
+                                }
+                                return false;
+                        },
+                        soccerYellowCard:function(){
+                                var player_id=SJ.SCORECARD.getSelectedPlayerId();
+                                if(player_id){ 
+                                        $('#new_records_match').show();
+                                        var player_content=$('#team_a_row_'+player_id)
+                                        if(player_content.is("[yellow_card]") && Number(player_content.attr('yellow_card'))>0){
+                                                //if user has a yellow card return false
+                                                return false;
+                                        }
+                                        $('#team_a_row_'+player_id).attr('yellow_card',1);
+                                        SJ.SCORECARD.soccerAddField(player_id,'yellow_card', 'Yellow Card');                                        
+                                }
+                                return false;
+                        },
+                        soccerPenalties:function(){
+
+                        },
+
+                        soccerAddField:function(player_id, record_type,record_type_name){
+
+                                var player_content=$('#team_a_row_'+player_id);                                
+                                var user_id= player_content.attr('user_id')
+                                var player_name=player_content.attr('player_name');
+                                var team_type=player_content.attr('team_type');
+                                var team_id=player_content.attr('team_id');
+                                var half_time=$('#half_time').val();
+                                var match_id=$('#match_id').val();
+                                var tournament_id=$('#tournament_id').val();
+                                var team_a_id=$('#team_a_id').val();
+                                var team_b_id=$('#team_b_id').val();
+                               
+                                var index=Number($('#last_index').val());
+                                index++;
+
+                                $('#last_index').val(index);
+
+                                        if(half_time=='first_half') var displayField='#displayGoalsFirstHalfTemporal';
+                                        else var displayField='#displayGoalsSecondHalfTemporal';
+
+                                //create a new form for content
+                                $(displayField).append("<form id='form_record_"+index+"' onsubmit='return saveRecord("+index+", \""+record_type+"\", "+player_id+")' class='col-sm-12 col-xs-12'>");
+                                var displayFormContent=$('#form_record_'+index);
+
+                                if(team_type=='team_b'){
+                                        if(half_time=='first_half'){
+                                                displayFormContent.append("<div  class='records col-sm-12 '><div  class='col-sm-4 not-visible-xs'></div><div  class='col-sm-2 col-xs-6'><input type='number' placeholder='time e.g 20' name='time_"+index+"' class='gui-input col-sm-12 col-xs-12   input_first_half'  required></div><div  class='col-sm-2 col-xs-6'>"+record_type_name+"</div> <div  class='col-sm-2 col-xs-6'>"+player_name+"</div><div  class='col-sm-2 col-xs-6'><a href='#' onclick='deleteRow(this, "+index+", "+player_id+",\""+record_type+"\")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></div></div>");
+                                        }
+                                        else{
+                                                displayFormContent.append("<div  class='records col-sm-12 '><div  class='col-sm-4 not-visible-xs'></div><div  class='col-sm-2 col-xs-6'><input type='number' placeholder='time e.g 20' name='time_"+index+"' class='gui-input col-sm-12 col-xs-12 input_first_half'  required></div><div  class='col-sm-2 col-xs-6'>"+record_type_name+"</div> <div  class='col-sm-2 col-xs-6'>"+player_name+"</div><div  class='col-sm-2 col-xs-6'><a href='#' onclick='deleteRow(this, "+index+", "+player_id+",\""+record_type+"\")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></div></div>");
+                                        }
+                                }
+                                else{
+                                        if(half_time=='first_half'){
+                                                displayFormContent.append("<div  class='records col-sm-12 '><div  class='col-sm-2 col-xs-6'>"+player_name+"</div><div  class='col-sm-2 col-xs-6'>"+record_type_name+"</div><div  class='col-sm-2 col-xs-6'><input type='number' placeholder='time e.g 20' class=' col-sm-12 col-xs-12  input_second_half'  name='time_"+index+"' required></div><div  class='col-sm-4 not-visible-xs'></div><div  class='col-sm-2 col-xs-6'><a href='#' onclick='deleteRow(this, "+index+", "+player_id+",\""+record_type+"\")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></div></div>");
+                                        }
+                                        else{
+                                                displayFormContent.append("<div  class='records col-sm-12 '><div  class='col-sm-2 col-xs-6'>"+player_name+"</div><div  class='col-sm-2 col-xs-6'>"+record_type_name+"</div><div  class='col-sm-2 col-xs-6'><input type='number' placeholder='time e.g 20' class=' col-sm-12 col-xs-12 input_second_half'  name='time_"+index+"' required></div><div  class='col-sm-4 not-visible-xs'></div><div  class='col-sm-2 col-xs-6'><a href='#' onclick='deleteRow(this, "+index+", "+player_id+",\""+record_type+"\")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></div></div>");
+                                        }
+                                }
+                                displayFormContent.append("<input type='hidden' name='player_"+index+"' value='"+player_id+"'>");
+                                displayFormContent.append("<input type='hidden' name='record_type_"+index+"' value='"+record_type+"'>");
+                                displayFormContent.append("<input type='hidden' name='user_"+index+"' value='"+user_id+"'>");
+                                displayFormContent.append("<input type='hidden' name='team_"+index+"' value='"+team_id+"'>");
+                                displayFormContent.append("<input type='hidden' name='half_time_"+index+"' value='"+half_time+"'>");
+                                displayFormContent.append("<input type='hidden' name='team_type_"+index+"' value='"+team_type+"'>");
+                                displayFormContent.append("<input type='hidden' name='player_name_"+index+"' value='"+player_name+"'>");
+
+                                displayFormContent.append("<input type='hidden' name='match_id' value='"+match_id+"'>");
+                                displayFormContent.append("<input type='hidden' name='tournament_id' value='"+tournament_id+"'>");
+                                displayFormContent.append("<input type='hidden' name='team_a_id' value='"+team_a_id+"'>");
+                                displayFormContent.append("<input type='hidden' name='team_b_id' value='"+team_b_id+"'>");
+                                displayFormContent.append("<input type='hidden' name='index' value='"+index+"'>");
+                        
+
+                        },
+
+                        showAlert:function (title, content){
+                                $.alert({ title: title, content: content });
+                        },
+                        tempData:{},
+
                 };
                 z.SCORECARD = o;
         })(SJ, $);

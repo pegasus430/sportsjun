@@ -460,7 +460,7 @@ function appendTabElement(a, b, c, d) {
 function displaySportQuestions(a, b, c, d) {
     if (!b) return false;
     $.ajax({
-        url: base_url + "/getquestions",
+        url: base_url + "/viewpublic/getquestions",
         type: "GET",
         data: {
             flag: a,
@@ -1024,7 +1024,7 @@ function displayOrgGroups(a) {
         },
         success: function(a) {
             $.unblockUI();
-            var b = "<option value=''>Select Group</option>";
+            var b = "<option value=''>Select Team Name</option>";
             $.each(a, function(a, c) {
                 b += "<option value='" + c["id"] + "'>" + c["name"] + "</option>";
             });

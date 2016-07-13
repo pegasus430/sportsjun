@@ -48,7 +48,7 @@ Route::group(['prefix' => 'organization/{id}'], function () {
 
 Route::get('getteamdetails', [
     'as'   => 'getteamdetails',
-    'uses' => 'U    ser\TournamentsController@getteamdetails',
+    'uses' => 'User\TournamentsController@getteamdetails',
 ]);
 Route::get('team/members/{team_id}/{status?}', [
     'as'   => 'team/members',
@@ -524,9 +524,9 @@ Route::post('match/addPlayertoTeam', [
     'as'   => 'match/addPlayertoTeam',
     'uses' => 'User\ScoreCardController@addPlayertoTeam',
 ]);
-Route::post('match/insertSoccerScoreCard', [
-    'as'   => 'match/insertSoccerScoreCard',
-    'uses' => 'User\ScoreCardController@insertSoccerScoreCard',
+Route::post('match/insertAndUpdateSoccerCard', [
+    'as' 	=> 'match/insertAndUpdateSoccerCard',
+    'uses' 	=> 'User\ScoreCardController@insertAndUpdateSoccerScoreCard'
 ]);
 
 Route::post('match/scoreCardStatus', [
@@ -539,6 +539,15 @@ Route::post('match/checkScoreEnterd', [
     'uses' => 'User\ScoreCardController@checkScoreEnterd',
 ]);
 
+//new routes for soccer match
+Route::group(['prefix'=>'match'], function(){
+    Route::post('confirmSquad', 	 	['as'=>'match/confirmSquad', 'uses'=>'User\ScoreCardController@confirmSquad']);
+    Route::post('soccerSwapPlayers', 	['as'=>'match/soccerSwapPlayers', 'uses'=>'User\ScoreCardController@soccerSwapPlayers']);
+    Route::post('choosePenaltyPlayers', ['as'=>'match/choosePenaltyPlayers', 'uses'=>'User\ScoreCardController@choosePenaltyPlayers']);
+    Route::post('scorePenalty', ['as'=>'match/scorePenalty', 'uses'=>'User\ScoreCardController@scorePenalty']);
+    post('/saveMatchRecord', 'User\ScoreCardController@soccerStoreRecord');
+    get('/getSoccerDetails', 'User\ScoreCardController@getSoccerDetails');
+});
 
 //End Matches
 
