@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends(Auth::user() ? 'layouts.app' : 'home.layout')
 @section('content')
 @include ('teams._leftmenu')
 <div id="content-team" class="col-sm-10">
@@ -10,12 +10,16 @@
                 </div>
 				@elseif (session('error_msg'))
 				<div class="alert alert-danger">
-					{{ session('error_msg') }}
+					{{ session('error_msg')  }}
+
 				</div>
 				@endif
+				
 				<div class="row">
 					<div class="team_managers_row clearfix">
 						<div class="col-md-12">
+
+						@include('teams.share')
 							<div class="row players_row">
 								<div class="col-lg-12">
 									<div class="pull-left"><h4>Members</h4></div>
@@ -141,7 +145,7 @@
 			</div>
 		</div>
 	</div>
-	<?php $role = Helper::isTeamOwnerorcaptain((!empty(Request::segment(3))?Request::segment(3):0),Auth::user()->id);
+	<?php $role = Helper::isTeamOwnerorcaptain((!empty(Request::segment(3))?Request::segment(3):0),(isset(Auth::user()->id)?Auth::user()->id:0));
         if($role) { ?>
 	<div class="col-sm-3 col-xs-12" id="sidebar-right">
 
@@ -178,7 +182,7 @@
 	$(window).ready(function(){
 		$("#hid_flag").val('');
 		$("#hid_val").val('');
-		<?php $role = Helper::isTeamOwnerorcaptain((!empty(Request::segment(3))?Request::segment(3):0),Auth::user()->id);
+		<?php $role = Helper::isTeamOwnerorcaptain((!empty(Request::segment(3))?Request::segment(3):0),(isset(Auth::user()->id)?Auth::user()->id:0));
         if($role) { ?>
 		suggestedWidget('players','{{ !empty(Request::segment(3))?Request::segment(3):'' }}','{{ !empty($sport_id)?$sport_id:'' }}','team_to_player','');
 		suggestedWidget('tournaments','{{ !empty(Request::segment(3))?Request::segment(3):'' }}','{{ !empty($sport_id)?$sport_id:'' }}','team_to_tournament','');
