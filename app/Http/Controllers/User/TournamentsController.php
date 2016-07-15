@@ -775,7 +775,7 @@ class TournamentsController extends Controller
             'isOwner'             => $isOwner,
             'loginUserId'         => $loginUserId,
             'organization'        => ['' => 'Select Organization'] + $organizations,
-            'groupsList'         => ['' => 'Select Team name'] + $orgGroups,
+            'groupsList'         => ['' => 'Select Team Group'] + $orgGroups,
             'groupId'         => $orgGroupIds,
         ]);
     }
