@@ -1024,7 +1024,7 @@ function displayOrgGroups(a) {
         },
         success: function(a) {
             $.unblockUI();
-            var b = "<option value=''>Select Team Name</option>";
+            var b = "<option value=''>Select Team Group</option>";
             $.each(a, function(a, c) {
                 b += "<option value='" + c["id"] + "'>" + c["name"] + "</option>";
             });

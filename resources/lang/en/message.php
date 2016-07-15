@@ -333,7 +333,7 @@ return [
 		'isavailable' => 'Available For Players',
 		'teamavailable' => 'Available For Teams',
 	    'organization' => 'Select Organization',
-	    'organization_groups' => 'Select Team Name',
+	    'organization_groups' => 'Select Team Group',
 		'level'=>     'Select Level of Team',
 		'owner'=>     'Owner',
 		],

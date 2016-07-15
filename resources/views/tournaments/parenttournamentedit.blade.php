@@ -28,5 +28,6 @@
 
                 </div>					
                 {!! Form::close() !!}
-					{!! JsValidator::formRequest('App\Http\Requests\CreateTournamentRequest', '#my-tournaments'); !!}
+					{!! JsValidator::formRequest('App\Http\Requests\CreateTournamentRequest', '#my-tournaments') !!}
 				@endif
+                
