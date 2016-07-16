@@ -215,6 +215,12 @@ class TeamController extends Controller
      */
     public function updateteam(Requests\CreateTeamRequest $request,$id)
     {
+        $router = route('team/teams');
+        
+        if ($request->has('organization_id')) {
+            $router = route('organizationTeamlist', [$request->input('organization_id')]);
+        }
+        
 		$request = Request::all();
 		if(is_numeric($id))
 		{
@@ -257,16 +263,16 @@ class TeamController extends Controller
 						}
 
 					}
-				return redirect()->route('team/teams')->with('status', trans('message.team.update'))->with('div_sel_mgt','active');
+				return redirect($router)->with('status', trans('message.team.update'))->with('div_sel_mgt','active');
 			}
 			else
 			{
-				return redirect()->route('team/teams')->withErrors('alert', trans('message.team.updatefail'))->with('div_sel_mgt','active');
+				return redirect($router)->withErrors('alert', trans('message.team.updatefail'))->with('div_sel_mgt','active');
 			}
 		}
 		else
 		{
-			return redirect()->route('team/teams')->withErrors('alert', trans('message.team.updatefail'))->with('div_sel_mgt','active');
+			return redirect($router)->withErrors('alert', trans('message.team.updatefail'))->with('div_sel_mgt','active');
 		}
     }
 
