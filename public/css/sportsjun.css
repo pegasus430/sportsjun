@@ -2949,3 +2949,16 @@ div#my_groups_container > .row > .col-xs-4 .single_group {
 .single_group_fields > ul > li > label {
     color: #666;
 }
+
+div#tournament_details {
+    top: 100px;
+    position: absolute;
+    background: rgba(255,255,255,0.6);
+    border-radius: 10px;
+}
+
+div#tournament_details_cover img {
+    width:100%;
+    border-radius: 5px;
+    margin-top: 5px;
+}
