@@ -30,7 +30,7 @@
                                                                                         <div class="col-xs-2 text-center">
                                                                                           <!--<img class="img-circle img-border" src="http://localhost/sportsjun/public/images/sunrisers_hyd.png" style="width: 90%;height:90%;">-->
                                                                                           <!--  <img class="img-circle img-border" src="{{ asset('/uploads/'.config('constants.PHOTO_PATH.TOURNAMENT').'/'.$followedTeam['url']) }}" onerror="this.onerror=null;this.src='{{ asset('/images/default-profile-pic.jpg') }}';" style="width: 90%;height:90%;">-->
-                                                                                                {!! Helper::Images($followedTeam['url'],config('constants.PHOTO_PATH.TOURNAMENT'),array('height'=>90,'width'=>90,'class'=>'img-circle img-border img-scale-down img-responsive') )!!}
+                                                                                                {!! Helper::Images($followedTeam['tournament_parent']['logo'],config('constants.PHOTO_PATH.TOURNAMENT'),array('height'=>90,'width'=>90,'class'=>'img-circle img-border img-scale-down img-responsive') )!!}
 
                                                                                         </div>
                                                                                         <div class="col-xs-10">
@@ -141,8 +141,8 @@
                                                                 <td>
                                                                         @if(count($followingPlayers))
                                                                         @foreach($followingPlayers as $player)
-                                                                        <div class="t_details">   
-                                                                                <div class="row main_tour">	
+                                                                        <div class="t_details">
+                                                                                <div class="row main_tour">
                                                                                         <div class="search_thumbnail right-caption">
                                                                                                 <div class="col-md-2 col-sm-3 col-xs-12 text-center">
                                                                                                         @if(!empty($player->logo))
@@ -161,19 +161,19 @@
                                                                                                         <ul class="t_tags">
                                                                                                                 <li>Sports:
                                                                                                                 <?php $sport_ids = explode(",", trim($player->following_sports,","));
-                                                                                                                                        ?>													   
+                                                                                                                                        ?>
                                                                                                                 <span class="green">
                                                                                                                     <?php $sport_names = ''; ?>
                                                                                                                     @foreach($sport_ids as $key=>$val)
-                                                                                                                    <?php 							
-                                                                                                                        $sport_names .= ", ".$sports_array[$val];					   
+                                                                                                                    <?php
+                                                                                                                        $sport_names .= ", ".$sports_array[$val];
                                                                                                                     ?>
-                                                                                                                    @endforeach													   
+                                                                                                                    @endforeach
                                                                                                                     <?php $sport_names = trim($sport_names,",");?>
                                                                                                                     {{$sport_names}}
                                                                                                                 </span>
                                                                                                             </li>
-                                                                                                        </ul>                      
+                                                                                                        </ul>
                                                                                                 </div>
                                                                                                 @if(!$selfProfile || ($selfProfile && in_array($player->user_id,$follow_array)))
                                                                                                 <div class="sj_actions_new">
@@ -191,7 +191,7 @@
                                                                                 </div>
                                                                         </div>
                                                                         @endforeach
-                                                                        
+
                                                                         @else
                                                                         <div class="message_new_for_team">Search for Players and Follow easily.</div>
                                                                         @endif

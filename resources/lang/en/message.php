@@ -333,6 +333,7 @@ return [
 		'isavailable' => 'Available For Players',
 		'teamavailable' => 'Available For Teams',
 	    'organization' => 'Select Organization',
+	    'organization_groups' => 'Select Team Group',
 		'level'=>     'Select Level of Team',
 		'owner'=>     'Owner',
 		],
@@ -496,4 +497,18 @@ return [
 
         'view_more'=>'View More',
         'bye'=>'BYE',
+	'staff' => [
+        'modal' => [
+            'title' => 'Invite Staff'
+        ],
+
+        'fields' => [
+            'email' => 'Email',
+            'role' => 'Staff Role'
+        ],
+
+		'invite_subject' => 'SportsJun Staff Invite.',
+        'added_message' => 'Staff Invited Successfully!',
+        'already_exists_message' => 'Staff Already exists!',
+    ]
 ];

@@ -20,7 +20,7 @@ use Zofe\Rapyd\DataForm\Field\Numberrange;
 use Zofe\Rapyd\DataForm\Field\Text;
 use Zofe\Rapyd\DataForm\Field\Textarea;
 use Zofe\Rapyd\Widget;
-use Illuminate\Html\FormFacade as Form;
+use Collective\Html\FormFacade as Form;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
@@ -183,7 +183,7 @@ class DataForm extends Widget
      */
     public function submit($name, $position = "BL", $options = array())
     {
-        $options = array_merge(array("class" => "button btn-primary"), $options);
+        $options = array_merge(array("class" => "btn btn-primary"), $options);
         $this->button_container[$position][] = Form::submit($name, $options);
 
         return $this;
@@ -452,7 +452,7 @@ class DataForm extends Widget
         }
         // Set the form open and close
         if ($this->status == 'show') {
-            $this->open = '<div class="form">';
+            $this->open = '<div class="'.(isset($form_attr['class']) ? $form_attr['class'] : 'form' ).'">';
             $this->close = '</div>';
         } else {
 

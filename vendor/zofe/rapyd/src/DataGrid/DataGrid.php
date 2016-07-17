@@ -42,6 +42,7 @@ class DataGrid extends DataSet
     //todo: like "field" for DataForm, should be nice to work with "cell" as instance and "row" as collection of cells
     public function build($view = '')
     {
+        if ($this->output != '') return;
         ($view == '') and $view = 'rapyd::datagrid';
         parent::build();
 
@@ -72,8 +73,8 @@ class DataGrid extends DataSet
             }
             $this->rows[] = $row;
         }
-
-        return \View::make($view, array('dg' => $this, 'buttons'=>$this->button_container, 'label'=>$this->label));
+        $this->output = \View::make($view, array('dg' => $this, 'buttons'=>$this->button_container, 'label'=>$this->label))->render();
+        return $this->output;
     }
 
     public function buildCSV($file = '', $timestamp = '', $sanitize = true,$del = array())
@@ -122,6 +123,14 @@ class DataGrid extends DataSet
 
                 $cell = new Cell($column->name);
                 $value =  str_replace('"', '""',str_replace(PHP_EOL, '', strip_tags($this->getCellValue($column, $tablerow, $sanitize))));
+
+                // Excel for Mac is pretty stupid, and will break a cell containing \r, such as user input typed on a
+                // old Mac.
+                // On the other hand, PHP will not deal with the issue for use, see for instance:
+                // http://stackoverflow.com/questions/12498337/php-preg-replace-replacing-line-break
+                // We need to normalize \r and \r\n into \n, otherwise the CSV will break on Macs
+                $value = preg_replace('/\r\n|\n\r|\n|\r/', "\n", $value);
+
                 $cell->value($value);
                 $row->add($cell);
             }
@@ -214,7 +223,7 @@ class DataGrid extends DataSet
 
     public function getGrid($view = '')
     {
-        $this->output = $this->build($view)->render();
+        $this->build($view);
 
         return $this->output;
     }

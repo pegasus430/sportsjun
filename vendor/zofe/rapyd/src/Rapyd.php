@@ -1,7 +1,7 @@
 <?php namespace Zofe\Rapyd;
 
 use Illuminate\Container\Container;
-use Illuminate\Html\HtmlFacade as HTML;
+use Collective\Html\HtmlFacade as HTML;
 use Illuminate\Support\Facades\Input;
 
 class Rapyd
@@ -109,6 +109,8 @@ class Rapyd
         if (count(self::$styles)) {
             $buffer .= sprintf("<style type=\"text/css\">\n%s\n</style>", implode("\n", self::$styles));
         }
+
+        $buffer .= HTML::style('packages/zofe/rapyd/assets/rapyd.css');
 
         return $buffer;
     }
