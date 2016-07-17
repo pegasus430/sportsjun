@@ -40,7 +40,18 @@
 				
 			</tr>
 			@endforeach
-			<td colspan="9">Extras(W {{(!empty($team_wise_match_details[$fstIngFstBatId]['first']['wide']))?$team_wise_match_details[$fstIngFstBatId]['first']['wide']:''}} ,NB {{(!empty($team_wise_match_details[$fstIngFstBatId]['first']['noball']))?$team_wise_match_details[$fstIngFstBatId]['first']['noball']:''}}, Lb {{(!empty($team_wise_match_details[$fstIngFstBatId]['first']['legbye']))?$team_wise_match_details[$fstIngFstBatId]['first']['legbye']:''}}, b {{(!empty($team_wise_match_details[$fstIngFstBatId]['first']['bye']))?$team_wise_match_details[$fstIngFstBatId]['first']['bye']:''}} others {{(!empty($team_wise_match_details[$fstIngFstBatId]['first']['others']))?$team_wise_match_details[$fstIngFstBatId]['first']['others']:''}} ) {{((!empty($team_wise_match_details[$fstIngFstBatId]['first']['wide']))?$team_wise_match_details[$fstIngFstBatId]['first']['wide']:'')+((!empty($team_wise_match_details[$fstIngFstBatId]['first']['noball']))?$team_wise_match_details[$fstIngFstBatId]['first']['noball']:'')+((!empty($team_wise_match_details[$fstIngFstBatId]['first']['legbye']))?$team_wise_match_details[$fstIngFstBatId]['first']['legbye']:'')+((!empty($team_wise_match_details[$fstIngFstBatId]['first']['bye']))?$team_wise_match_details[$fstIngFstBatId]['first']['bye']:'')+((!empty($team_wise_match_details[$fstIngFstBatId]['first']['others']))?$team_wise_match_details[$fstIngFstBatId]['first']['others']:'')}}</td>
+			<td colspan="9">Extras 
+                (W {{ ( !empty($team_wise_match_details[$fstIngFstBatId]['first']['wide']) ) ? $team_wise_match_details[$fstIngFstBatId]['first']['wide'] : 0 }}, 
+                NB {{ ( !empty($team_wise_match_details[$fstIngFstBatId]['first']['noball']) ) ? $team_wise_match_details[$fstIngFstBatId]['first']['noball'] : 0 }}, 
+                Lb {{ ( !empty($team_wise_match_details[$fstIngFstBatId]['first']['legbye']) ) ? $team_wise_match_details[$fstIngFstBatId]['first']['legbye'] : 0 }}, 
+                b {{ ( !empty($team_wise_match_details[$fstIngFstBatId]['first']['bye']) ) ? $team_wise_match_details[$fstIngFstBatId]['first']['bye'] : 0 }}, 
+                others {{ ( !empty($team_wise_match_details[$fstIngFstBatId]['first']['others']) ) ? $team_wise_match_details[$fstIngFstBatId]['first']['others'] : 0 }})
+                {{ ( !empty($team_wise_match_details[$fstIngFstBatId]['first']['wide']) ? $team_wise_match_details[$fstIngFstBatId]['first']['wide'] : 0 ) + 
+                   ( !empty($team_wise_match_details[$fstIngFstBatId]['first']['noball']) ? $team_wise_match_details[$fstIngFstBatId]['first']['noball'] : 0 ) + 
+                   ( !empty($team_wise_match_details[$fstIngFstBatId]['first']['legbye']) ? $team_wise_match_details[$fstIngFstBatId]['first']['legbye'] : 0 ) + 
+                   ( !empty($team_wise_match_details[$fstIngFstBatId]['first']['bye']) ? $team_wise_match_details[$fstIngFstBatId]['first']['bye']:0 ) + 
+                   ( !empty($team_wise_match_details[$fstIngFstBatId]['first']['others']) ? $team_wise_match_details[$fstIngFstBatId]['first']['others']:0 ) }}
+            </td>
 		@else
 			<tr>
 			<td colspan="11">{{ 'No Records. '}}</td>
@@ -201,7 +212,18 @@
 				
 				@endforeach
 			</tr>
-			<td colspan="9">Extras(W {{(!empty($team_wise_match_details[$fstIngsecondBatId]['first']['wide']))?$team_wise_match_details[$fstIngsecondBatId]['first']['wide']:''}} ,NB {{(!empty($team_wise_match_details[$fstIngsecondBatId]['first']['noball']))?$team_wise_match_details[$fstIngsecondBatId]['first']['noball']:''}}, Lb {{(!empty($team_wise_match_details[$fstIngsecondBatId]['first']['legbye']))?$team_wise_match_details[$fstIngsecondBatId]['first']['legbye']:''}}, b {{(!empty($team_wise_match_details[$fstIngsecondBatId]['first']['bye']))?$team_wise_match_details[$fstIngsecondBatId]['first']['bye']:''}} others {{(!empty($team_wise_match_details[$fstIngsecondBatId]['first']['others']))?$team_wise_match_details[$fstIngsecondBatId]['first']['others']:''}} ) {{((!empty($team_wise_match_details[$fstIngsecondBatId]['first']['wide']))?$team_wise_match_details[$fstIngsecondBatId]['first']['wide']:'')+((!empty($team_wise_match_details[$fstIngsecondBatId]['first']['noball']))?$team_wise_match_details[$fstIngsecondBatId]['first']['noball']:'')+((!empty($team_wise_match_details[$fstIngsecondBatId]['first']['legbye']))?$team_wise_match_details[$fstIngsecondBatId]['first']['legbye']:'')+((!empty($team_wise_match_details[$fstIngsecondBatId]['first']['bye']))?$team_wise_match_details[$fstIngsecondBatId]['first']['bye']:'')+((!empty($team_wise_match_details[$fstIngsecondBatId]['first']['others']))?$team_wise_match_details[$fstIngsecondBatId]['first']['others']:'')}}</td>
+			<td colspan="9">Extras 
+                (W {{ ( !empty($team_wise_match_details[$fstIngsecondBatId]['first']['wide']) ) ? $team_wise_match_details[$fstIngsecondBatId]['first']['wide'] : 0 }}, 
+                NB {{ ( !empty($team_wise_match_details[$fstIngsecondBatId]['first']['noball']) ) ? $team_wise_match_details[$fstIngsecondBatId]['first']['noball'] : 0 }}, 
+                Lb {{ ( !empty($team_wise_match_details[$fstIngsecondBatId]['first']['legbye']) ) ? $team_wise_match_details[$fstIngsecondBatId]['first']['legbye'] : 0 }}, 
+                b {{ ( !empty($team_wise_match_details[$fstIngsecondBatId]['first']['bye']) ) ? $team_wise_match_details[$fstIngsecondBatId]['first']['bye'] : 0 }}, 
+                others {{ ( !empty($team_wise_match_details[$fstIngsecondBatId]['first']['others']) ) ? $team_wise_match_details[$fstIngsecondBatId]['first']['others'] : 0 }})
+                {{ ( !empty($team_wise_match_details[$fstIngsecondBatId]['first']['wide']) ? $team_wise_match_details[$fstIngsecondBatId]['first']['wide'] : 0 ) + 
+                   ( !empty($team_wise_match_details[$fstIngsecondBatId]['first']['noball']) ? $team_wise_match_details[$fstIngsecondBatId]['first']['noball'] : 0 ) + 
+                   ( !empty($team_wise_match_details[$fstIngsecondBatId]['first']['legbye']) ? $team_wise_match_details[$fstIngsecondBatId]['first']['legbye'] : 0 ) + 
+                   ( !empty($team_wise_match_details[$fstIngsecondBatId]['first']['bye']) ? $team_wise_match_details[$fstIngsecondBatId]['first']['bye']:0 ) + 
+                   ( !empty($team_wise_match_details[$fstIngsecondBatId]['first']['others']) ? $team_wise_match_details[$fstIngsecondBatId]['first']['others']:0 ) }}
+            </td>
 			@else
 			<tr>
 			<td colspan="11">{{ 'No Records. '}}</td>
