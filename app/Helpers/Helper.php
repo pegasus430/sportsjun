@@ -23,48 +23,48 @@ use PDO;
 class Helper {
 
     public static function full_name($first_name,$last_name) {
-        return $first_name . ', '. $last_name;   
+        return $first_name . ', '. $last_name;
     }
 
     public static function uploadPhotos($photoList,$photoType,$id,$albumID='',$coverPic='',$imageableType, $user_id='', $action='', $action_id='',$image_type=''){
-    	//echo $photolist.','.$phototype.','.$id;
-    	// Resize the files
-    	// Upload to specified folder (File storage or CDN)
-    	$photos = array_filter(explode(',', $photoList));
-    	$oldFilePath = 'uploads/temp/';
-    	$newFilePath = 'uploads/'.$photoType.'/';
-		if($action!='' && $action_id!='')//changed for gallery page
-		{
-			$newFilePath = public_path().'/uploads/'.$photoType.'/'.$image_type.'/'.$action_id.'/';
-			if (!file_exists($newFilePath)) {
-				File::makeDirectory($newFilePath, $mode = 0777, true, true);
-			}
-		}
-			$insertedphotoids=array();
-    	// echo"<pre>";print_r($photos);
-    	foreach ($photos as $key => $value) {
-    		//rename($value, $photoType.'/image1.jpg');
-                $filename = explode('####SPORTSJUN####',$value);
-                $title = $filename[0];
-                $url = $filename[1];
-			
-    		if (File::move($oldFilePath.$value, $newFilePath.$url)){
-    			//die("Couldn't rename file");                
+        //echo $photolist.','.$phototype.','.$id;
+        // Resize the files
+        // Upload to specified folder (File storage or CDN)
+        $photos = array_filter(explode(',', $photoList));
+        $oldFilePath = 'uploads/temp/';
+        $newFilePath = 'uploads/'.$photoType.'/';
+        if($action!='' && $action_id!='')//changed for gallery page
+        {
+            $newFilePath = public_path().'/uploads/'.$photoType.'/'.$image_type.'/'.$action_id.'/';
+            if (!file_exists($newFilePath)) {
+                File::makeDirectory($newFilePath, $mode = 0777, true, true);
+            }
+        }
+        $insertedphotoids=array();
+        // echo"<pre>";print_r($photos);
+        foreach ($photos as $key => $value) {
+            //rename($value, $photoType.'/image1.jpg');
+            $filename = explode('####SPORTSJUN####',$value);
+            $title = $filename[0];
+            $url = $filename[1];
+
+            if (File::move($oldFilePath.$value, $newFilePath.$url)){
+                //die("Couldn't rename file");
                 $photosArray = array(
-                                        'user_id' => $user_id,
-                                        'album_id' => $albumID,
-                                        'title' => $title,
-                                        'url' => $url,
-                                        'is_album_cover' => $coverPic,
-                                        'imageable_id' => $id,
-                                        'imageable_type' => $imageableType
-                                    );
-				
-				$photo=Photo::create($photosArray);   
-               	$insertedphotoids[]=$photo->id;				
-			}
-    	}
-		return 	$insertedphotoids;
+                    'user_id' => $user_id,
+                    'album_id' => $albumID,
+                    'title' => $title,
+                    'url' => $url,
+                    'is_album_cover' => $coverPic,
+                    'imageable_id' => $id,
+                    'imageable_type' => $imageableType
+                );
+
+                $photo=Photo::create($photosArray);
+                $insertedphotoids[]=$photo->id;
+            }
+        }
+        return 	$insertedphotoids;
     }
 
     public static function printQueries(){
@@ -75,42 +75,42 @@ class Helper {
     public static function setMenuToSelect($top,$left,$marketPlaceCategories=''){
         View::share('top', $top);
         View::share('left', $left);
-		View::share('marketPlaceCategories', $marketPlaceCategories);
+        View::share('marketPlaceCategories', $marketPlaceCategories);
     }
-	
-	public static function getAllSports(){
-		$sports = Sport::get();
-		return $sports;
-	}
-	
+
+    public static function getAllSports(){
+        $sports = Sport::get();
+        return $sports;
+    }
+
     //function to send left menu variables
     public static function leftMenuVariables($team_id) {
         $teams = Team::with('sports', 'photos')->where('id', $team_id)->first();
         $location = Helper::addressInfo($teams['city'],$teams['state'],$teams['country']);
-        $userId = Auth::user()->id;
+        $userId = isset(Auth::user()->id)?Auth::user()->id:0;      //user or guest
         $managing_teams = Helper::getManagingTeamIds($userId);
         $managing_team_ids = array();
         //follow/unfollow
-        $follow_unfollow = Helper::checkFollowUnfollow(Auth::user()->id,'TEAM',$team_id);
+        $follow_unfollow = Helper::checkFollowUnfollow(isset(Auth::user()->id)?Auth::user()->id:0,'TEAM',$team_id);
         if(!empty($managing_teams))
         {
             $managing_team_ids = explode(',', trim($managing_teams,','));
         }
-        
+
         // check if user already exists in team
         DB::setFetchMode(PDO::FETCH_ASSOC);
         $exist_array = DB::select("SELECT count(*) as count
                 FROM `team_players` tp  
                 WHERE tp.user_id = $userId "
-                . "AND tp.team_id IN ($team_id) "
-                . "AND `status` != 'rejected' "
-                . "AND tp.deleted_at IS NULL ");
+            . "AND tp.team_id IN ($team_id) "
+            . "AND `status` != 'rejected' "
+            . "AND tp.deleted_at IS NULL ");
         DB::setFetchMode(PDO::FETCH_CLASS);
         $user_in_team = ($exist_array[0]['count'] > 0) ? true : false;
-        
+
         if (!$user_in_team)     // if the user already doesn't exist in team
         {
-                $player_available_in_team = DB::table('teams')
+            $player_available_in_team = DB::table('teams')
                 ->select('teams.player_available')
                 ->where('teams.player_available',1)
                 ->whereNull('teams.deleted_at')
@@ -128,14 +128,14 @@ class Helper {
         if (!$userId)
             return false;
         $user = User::where('id', $userId)->first();
-		$name='';
-		$dob='';
-		$location='';
+        $name='';
+        $dob='';
+        $location='';
         if (count($user)) {
             if (count($user->dob) && $user->dob!='0000-00-00') {
 //                $age = Carbon::createFromFormat('Y-m-d', $user->dob)->diff(Carbon::now())->format('%y years, %m months and %d days');
                 $age = Carbon::createFromFormat('Y-m-d', $user->dob)->diff(Carbon::now())->format('%y years');
-            }    
+            }
             $name = $user->name;
             $dob = !empty($age) ? $age : '';
             $location = Helper::addressInfo($user->city,$user->state,$user->country);
@@ -144,101 +144,101 @@ class Helper {
         return $content;
     }
     public static function addressInfo($city,$state,$country)
-	{
-		if($city!='null'&&$city!='')
-		{
-			$city=$city;
-		}
-		else
-		{
-			$city='';
-		}
-                
-		if($state!='null'&&$state!='')
-		{
-			$state=', '.$state;
-		}
-         else
-		{
-			$state='';
-		}
-                
-		if($country!='null'&&$country!='')
-		{
-			$country=', '.$country;
-		}
-		$location= trim($city.$state.$country,',');
-                return $location;
-	}
-	public static function getTeamCity($team_id)
-	{
-		$getTeamAddress = Team::where('id', $team_id)->get(array('city','state','country'));
-		$address = Helper::addressInfo($getTeamAddress[0]['city'],$getTeamAddress[0]['state'],$getTeamAddress[0]['country']);
-		return $address;
-	}
-	public static function getUserCity($user_id)
-	{
-		$getTeamAddress = User::where('id', $user_id)->get(array('city','state','country','dob'));
-		$dob = $getTeamAddress[0]['dob'];
-		$age=0;
-		if($dob!='')
-			$age = Carbon::createFromFormat('Y-m-d', $dob)->diff(Carbon::now())->format('%y years');
-		$address = Helper::addressInfo($getTeamAddress[0]['city'],$getTeamAddress[0]['state'],$getTeamAddress[0]['country']);
-		return nl2br($address." \n Age:".$age);
-	}
-	public static function address($address,$city,$state,$country)
-	{
-		if($address!='null'&&$address!='')
-		{
-			$address=$address;
-		}
-		else
-		{
-			$address='';
-		}
-		if($city!='null'&&$city!='')
-		{
-			$city=','.$city;
-		}
-		else
-		{
-			$city='';
-		}
-		if($state!='null'&&$state!='')
-		{
-			$state=','.$state;
-		}
-	     else
-		{
-			$state='';
-		}
-		if($country!='null'&&$country!='')
-		{
-			$country=','.$country;
-		}
-		$location= $address.$city.$state.$country;
-		//View::share( location => $location);
-		return $location;
-	}
-        
-        //function to get the match types
-	public static function getMatchTypes($sportName)
-	{
-		$existingSports = array('CRICKET','TENNIS','TABLE TENNIS','FOOTBALL','OTHERS');
-		$matchTypes = array();
-		if(!empty($sportName))
-		{
-			$finalSportName = in_array($sportName, $existingSports)?$sportName:'OTHERS';
-			//building match types array
-			foreach(config('constants.ENUM.SCHEDULE.MATCH_TYPE.'.$finalSportName) as $key=>$val)
-			{
-				$matchTypes[$key] = $val;
-			}
-		}
-		return $matchTypes;
-	}
-        
-    public static function convert_number_to_words($number) 
+    {
+        if($city!='null'&&$city!='')
+        {
+            $city=$city;
+        }
+        else
+        {
+            $city='';
+        }
+
+        if($state!='null'&&$state!='')
+        {
+            $state=', '.$state;
+        }
+        else
+        {
+            $state='';
+        }
+
+        if($country!='null'&&$country!='')
+        {
+            $country=', '.$country;
+        }
+        $location= trim($city.$state.$country,',');
+        return $location;
+    }
+    public static function getTeamCity($team_id)
+    {
+        $getTeamAddress = Team::where('id', $team_id)->get(array('city','state','country'));
+        $address = Helper::addressInfo($getTeamAddress[0]['city'],$getTeamAddress[0]['state'],$getTeamAddress[0]['country']);
+        return $address;
+    }
+    public static function getUserCity($user_id)
+    {
+        $getTeamAddress = User::where('id', $user_id)->get(array('city','state','country','dob'));
+        $dob = $getTeamAddress[0]['dob'];
+        $age=0;
+        if($dob!='')
+            $age = Carbon::createFromFormat('Y-m-d', $dob)->diff(Carbon::now())->format('%y years');
+        $address = Helper::addressInfo($getTeamAddress[0]['city'],$getTeamAddress[0]['state'],$getTeamAddress[0]['country']);
+        return nl2br($address." \n Age:".$age);
+    }
+    public static function address($address,$city,$state,$country)
+    {
+        if($address!='null'&&$address!='')
+        {
+            $address=$address;
+        }
+        else
+        {
+            $address='';
+        }
+        if($city!='null'&&$city!='')
+        {
+            $city=','.$city;
+        }
+        else
+        {
+            $city='';
+        }
+        if($state!='null'&&$state!='')
+        {
+            $state=','.$state;
+        }
+        else
+        {
+            $state='';
+        }
+        if($country!='null'&&$country!='')
+        {
+            $country=','.$country;
+        }
+        $location= $address.$city.$state.$country;
+        //View::share( location => $location);
+        return $location;
+    }
+
+    //function to get the match types
+    public static function getMatchTypes($sportName)
+    {
+        $existingSports = array('CRICKET','TENNIS','TABLE TENNIS','FOOTBALL','OTHERS');
+        $matchTypes = array();
+        if(!empty($sportName))
+        {
+            $finalSportName = in_array($sportName, $existingSports)?$sportName:'OTHERS';
+            //building match types array
+            foreach(config('constants.ENUM.SCHEDULE.MATCH_TYPE.'.$finalSportName) as $key=>$val)
+            {
+                $matchTypes[$key] = $val;
+            }
+        }
+        return $matchTypes;
+    }
+
+    public static function convert_number_to_words($number)
     {
         $hyphen      = '-';
         $conjunction = ' and ';
@@ -349,8 +349,8 @@ class Helper {
 
         return $string;
     }
-	//check given string is exists in given array or not
-	public static function isExist($existing_ids_str,$new_id)
+    //check given string is exists in given array or not
+    public static function isExist($existing_ids_str,$new_id)
     {
         $existing_ids_str = trim($existing_ids_str,',');
         $existing_ids = explode(',',$existing_ids_str);
@@ -384,11 +384,11 @@ class Helper {
                     $managingTeamIds = $managingTeamsIds[0]->team_ids;
                 }
             }
-            
+
         }
         return $managingTeamIds;
     }
-    
+
     //function to get following sports
     public static function getFollowingSportIds($userId)
     {
@@ -404,7 +404,7 @@ class Helper {
     public static function getManagingTeams($userId,$sportId=0)
     {
         // die('uid '.$userId.' sid '.$sportId);
-        $managingTeamIds = Helper::getManagingTeamIds($userId);        
+        $managingTeamIds = Helper::getManagingTeamIds($userId);
         $managingTeams = array();
         if(!empty($managingTeamIds))
         {
@@ -419,7 +419,7 @@ class Helper {
             }
         }
         return $managingTeams;
-    }    
+    }
 
     //function to get managing teams for popup
     public static function getManagingTeamsForPopUp($userId,$sportId,$request_type,$player_tournament_id)
@@ -436,28 +436,28 @@ class Helper {
         }
         elseif($request_type == 'TEAM_TO_TOURNAMENT')
         {
-            /*$query = "select tp.team_id as id,tm.name 
-                        from team_players tp 
+            /*$query = "select tp.team_id as id,tm.name
+                        from team_players tp
                         inner join teams tm on tp.team_id=tm.id
-                        where tp.user_id=$userId and tp.deleted_at is null and tp.role in ('owner','manager') and tm.sports_id=$sportId and tm.isactive=1  
-                        and tp.team_id not in 
+                        where tp.user_id=$userId and tp.deleted_at is null and tp.role in ('owner','manager') and tm.sports_id=$sportId and tm.isactive=1
+                        and tp.team_id not in
                         (
                             select team_id from (
-                            
-                                select distinct tg.team_id 
-                                from tournaments t 
+
+                                select distinct tg.team_id
+                                from tournaments t
                                 inner join tournament_group_teams tg on t.id=tg.tournament_id and tg.deleted_at is null
                                 where t.id = $player_tournament_id and t.schedule_type='team' and t.deleted_at is null  and tg.team_id in
                                 (select team_id from team_players where user_id=$userId and role in ('owner','manager') and deleted_at is null)
-                                
-                                union 
-                                
-                                select distinct tg.team_id 
-                                from tournaments t 
+
+                                union
+
+                                select distinct tg.team_id
+                                from tournaments t
                                 inner join tournament_final_teams tg on t.id=tg.tournament_id and tg.deleted_at is null
                                 where t.id = $player_tournament_id and t.schedule_type='team' and t.deleted_at is null  and tg.team_id in
-                                    (select team_id from team_players where user_id=$userId and role in ('owner','manager') and deleted_at is null)       
-                                
+                                    (select team_id from team_players where user_id=$userId and role in ('owner','manager') and deleted_at is null)
+
                             )
                             as x
                             order by x.team_id
@@ -486,12 +486,12 @@ class Helper {
             $teams_result = DB::select(DB::raw($teams_query));
             $team_ids = $teams_result[0]->team_ids;
 
-$query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids."'),1,0) AS team_status
+            $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids."'),1,0) AS team_status
                         from team_players tp 
                         inner join teams tm on tp.team_id=tm.id
                         where tp.user_id=$userId and tp.deleted_at is null and tp.role in ('owner','manager') and tm.sports_id=$sportId and tm.isactive=1;
         ";
-            //dd($teams_result[0]->team_ids);                        
+            //dd($teams_result[0]->team_ids);
         }
         $teams = DB::select(DB::raw("$query"));
         return $teams;
@@ -503,37 +503,37 @@ $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids
         $managingteamsfinal = array();
         if(count($managingteams))
         {
-            foreach ($managingteams as $teams) 
+            foreach ($managingteams as $teams)
             {
                 if(!empty($teams['id']) && !empty($teams['name']) && !empty($teams['team_level']))
                 {
                     array_push($managingteamsfinal, array('id'=>$teams['id'],'name'=>($teams['name'].' ('.$teams['team_level'].')')));
                 }
-            }          
+            }
         }
         return $managingteamsfinal;
     }
-	
-	//function to display user following sports
-	public static function getUserFollowingSportNames($following_sports)
-	{
-		$following_sports_ids = explode(',', trim($following_sports,','));
-		$following_sport_names = '';
-		if(count($following_sports_ids))
-		{
-			foreach($following_sports_ids as $sportId)
-			{
-				 $sport_name  = Sport::where('id',$sportId)->pluck('sports_name');
-				$following_sport_names .= $sport_name.' ,';
-			}
-		}
-		return trim($following_sport_names,','); 
-	}
+
+    //function to display user following sports
+    public static function getUserFollowingSportNames($following_sports)
+    {
+        $following_sports_ids = explode(',', trim($following_sports,','));
+        $following_sport_names = '';
+        if(count($following_sports_ids))
+        {
+            foreach($following_sports_ids as $sportId)
+            {
+                $sport_name  = Sport::where('id',$sportId)->pluck('sports_name');
+                $following_sport_names .= $sport_name.' ,';
+            }
+        }
+        return trim($following_sport_names,',');
+    }
 
     //function to get notifications
     public static function getNotifications($limit=0,$offset=0)
     {
-        $userId = Auth::user()->id;
+        $userId = isset(Auth::user()->id)?Auth::user()->id:0;      //user or guest
         $limitString = '';
         if(!empty($limit))
         {
@@ -541,7 +541,7 @@ $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids
         }
         $queryString = "";
         /*$notifications = DB::select(DB::raw("select id,request_id,type,message,url,is_read,
-                        case 
+                        case
                             WHEN (TIMESTAMPDIFF(HOUR,created_at,now()) = 0) THEN concat(TIMESTAMPDIFF(MINUTE,created_at,now()),' minute(s) ago')
                             WHEN (TIMESTAMPDIFF(HOUR,created_at,now()) > 0 && TIMESTAMPDIFF(HOUR,created_at,now()) < 24 ) THEN concat(TIMESTAMPDIFF(HOUR,created_at,now()),' hour(s) ago')
                             WHEN (TIMESTAMPDIFF(HOUR,created_at,now()) >= 24 ) THEN concat(TIMESTAMPDIFF(DAY,created_at,now()),' day(s) ago')
@@ -576,13 +576,13 @@ $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids
                         from notifications n 
                         left join request r on n.request_id=r.id and r.deleted_at is null 
                         where n.user_id=$userId and n.is_read=0 order by n.id desc $limitString"));
-                    return $notifications;
+        return $notifications;
     }
 
     //public function get notficaitons count
     public static function getNotificationsCount()
     {
-        $userId = Auth::user()->id;
+        $userId = isset(Auth::user()->id)?Auth::user()->id:0;      //user or guest
         // $notifications = Notifications::where('user_id',$userId)->where('is_read',0)->count();
         $notifications = DB::select(DB::raw("select sum(x.notification_count) as notifications_count
                             from
@@ -597,8 +597,8 @@ $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids
             $notifications_count = $notifications[0]->notifications_count;
         }
         return $notifications_count;
-    }   
-    
+    }
+
     public static function getCricketStats($teamStats,$teamId) {
         $winCountOdi = 0;
         $looseCountOdi = 0;
@@ -648,24 +648,24 @@ $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids
             $odiWinPercentage = number_format(($winCountOdi / ($odiTotalMatches)) * 100, 2);
         }
         $odiStatsArray = ['totalMatches' => $odiTotalMatches, 'winCount' => $winCountOdi, 'looseCount' => $looseCountOdi, 'isTied' => $isTiedOdi, 'wonPercentage' => $odiWinPercentage];
-        
+
         $tTwentyTotalMatches = $winCountTtewnty + $looseCounttTtewnty + $isTiedTtewnty;
         if($tTwentyTotalMatches) {
             $tTwentyWinPercentage = number_format(($winCountTtewnty / ($tTwentyTotalMatches)) * 100, 2);
         }
         $tTwentyStatsArray = ['totalMatches' => $tTwentyTotalMatches, 'winCount' => $winCountTtewnty, 'looseCount' => $looseCounttTtewnty, 'isTied' => $isTiedTtewnty, 'wonPercentage' => $tTwentyWinPercentage];
-        
+
         $testTotalMatches = $winCountTest + $looseCountTest + $isTiedTest;
         if($testTotalMatches) {
             $testWinPercentage = number_format(($winCountTest / ($testTotalMatches)) * 100, 2);
         }
         $testStatsArray = ['totalMatches' => $testTotalMatches, 'winCount' => $winCountTest, 'looseCount' => $looseCountTest, 'isTied' => $isTiedTest, 'wonPercentage' => $testWinPercentage];
-        
+
         $finalArray = ['odiStatsArray'=>$odiStatsArray, 'tTwentyStatsArray'=>$tTwentyStatsArray, 'testStatsArray'=>$testStatsArray];
-        
+
         return $finalArray;
     }
-    
+
     public static function getTennisTableTennisStats($teamStats,$teamId) {
         $winCountSingles = 0;
         $looseCountSingles = 0;
@@ -715,30 +715,30 @@ $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids
             $singlesWinPercentage = number_format(($winCountSingles / ($singlesTotalMatches)) * 100, 2);
         }
         $singlesStatsArray = ['totalMatches' => $singlesTotalMatches, 'winCount' => $winCountSingles, 'looseCount' => $looseCountSingles, 'isTied' => $isTiedSingles, 'wonPercentage' => $singlesWinPercentage];
-        
+
         $doublesTotalMatches = $winCountDoubles + $looseCountDoubles + $isTiedDoubles;
         if($doublesTotalMatches) {
             $doublesWinPercentage = number_format(($winCountDoubles / ($doublesTotalMatches)) * 100, 2);
         }
         $doublesStatsArray = ['totalMatches' => $doublesTotalMatches, 'winCount' => $winCountDoubles, 'looseCount' => $looseCountDoubles, 'isTied' => $isTiedDoubles, 'wonPercentage' => $doublesWinPercentage];
-        
+
         $mixedTotalMatches = $winCountMixed + $looseCountMixed + $isTiedmixed;
         if($mixedTotalMatches) {
             $mixedWinPercentage = number_format(($winCountMixed / ($mixedTotalMatches)) * 100, 2);
         }
         $mixedStatsArray = ['totalMatches' => $mixedTotalMatches, 'winCount' => $winCountMixed, 'looseCount' => $looseCountMixed, 'isTied' => $isTiedmixed, 'wonPercentage' => $mixedWinPercentage];
-        
+
         $finalArray = ['singlesStatsArray'=>$singlesStatsArray, 'doublesStatsArray'=>$doublesStatsArray, 'mixedStatsArray'=>$mixedStatsArray];
-        
+
         return $finalArray;
     }
-    
+
     public static function getSoccerStats($teamStats,$teamId) {
         $winCountOthers = 0;
         $looseCountOthers = 0;
         $isTiedothers = 0;
         $othersWinPercentage = 0;
-        
+
         if (count($teamStats)) {
             foreach ($teamStats as $stats) {
                 if($stats['match_type']=='other') {
@@ -757,13 +757,13 @@ $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids
             $othersWinPercentage = number_format(($winCountOthers / ($othersTotalMatches)) * 100, 2);
         }
         $othersStatsArray = ['totalMatches' => $othersTotalMatches, 'winCount' => $winCountOthers, 'looseCount' => $looseCountOthers, 'isTied' => $isTiedothers, 'wonPercentage' => $othersWinPercentage];
-        
+
         $finalArray = ['othersStatsArray'=>$othersStatsArray];
-        
+
         return $finalArray;
     }
 
-	
+
 
     //function to get sport name
     public static function getSportName($sports_id)
@@ -771,334 +771,334 @@ $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids
         $sportName = null;
         if(is_numeric($sports_id))
         {
-            $sportName = Sport::where('id',$sports_id)->pluck('sports_name');    
+            $sportName = Sport::where('id',$sports_id)->pluck('sports_name');
         }
         return $sportName;
     }
-   public static function Images($imgsrc,$imgtype,$details='')
-	{
- 
-    $img='';
-    $id='';
-	$uploads='uploads';
-    $globalurl = url(); 
-	//$globalurl = 'http://localhost/sportsjun/public/'; 
-	if(isset($details['width']))
-	{
-		$width=$details['width'];
-	}
-	else
-	{
-		$width='';
-	}
-	if(isset($details['height']))
-	{
-		$height=$details['height'];
-	}
-	else{
-		$height='';
-	}
-	if(isset($details['class']))
-	{
-		$class=$details['class'];
-	}
-	else{
-		$class='';
-	}
-	if(isset($details['title']))
-	{
-		$title=$details['title'];
-	}
-	else{
-		$title='';
-	}
+    public static function Images($imgsrc,$imgtype,$details='')
+    {
 
-	  switch ($imgtype) {
+        $img='';
+        $id='';
+        $uploads='uploads';
+        $globalurl = url();
+        //$globalurl = 'http://localhost/sportsjun/public/';
+        if(isset($details['width']))
+        {
+            $width=$details['width'];
+        }
+        else
+        {
+            $width='';
+        }
+        if(isset($details['height']))
+        {
+            $height=$details['height'];
+        }
+        else{
+            $height='';
+        }
+        if(isset($details['class']))
+        {
+            $class=$details['class'];
+        }
+        else{
+            $class='';
+        }
+        if(isset($details['title']))
+        {
+            $title=$details['title'];
+        }
+        else{
+            $title='';
+        }
+
+        switch ($imgtype) {
             case 'tournaments':
-               
-			   if($imgsrc=='')
-				 {
-				 $url=$globalurl.'/images/default-profile-pic.jpg';
-				 }
-				else
-				{
-                 $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$imgsrc;
-				 //onerror=this.onerror=null;this.src='$globalurl/images/default-profile-pic.jpg'
-				}
-	
-                break;
-          
-		    case 'teams':
-               
-			   
-				 if($imgsrc=='')
-				 {
-				  $url=$globalurl.'/images/default-profile-pic.jpg';
-				 }
-				else
-				{
-				 $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$imgsrc;
-				}
-				  
-                 break;				
-        
-		    case  'organization':
-              
-			  	  if($imgsrc=='')
-				 {
-					 $url=$globalurl.'/images/default-profile-pic.jpg';
-				  }
-				else
-				{
-					 $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$imgsrc;
-				}
-				
-                break;
-	  	
-		    case 'facility':
-                  
-				 if($imgsrc=='')
-				 {
-					  $url=$globalurl.'/images/default-profile-pic.jpg';
-			     }
-				 else
-				 {
-				   $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$imgsrc;
-				 }
-				 
-                break;
-		
-		    case  'marketplace':
-             
-			 	 if($imgsrc=='')
-				 {
-				 $url=$globalurl.'/images/default-profile-pic.jpg';
-				
-			     }
-				 else
-				 {
-				   $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$imgsrc;
-				 }
-				
-                break;
-		
-		    case  'form_gallery_tournaments':
-                 
-				 if($imgsrc=='')
-				 {
-					  $url=$globalurl.'/images/default-profile-pic.jpg';
-					
-			     }
-				 else
-				 {
-				   $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$imgsrc;
-				 }
-				 
-                break;
-		
-		    case 'form_gallery_facility':
-               
-			    if($imgsrc=='')
-				 {
-					  $url=$globalurl.'/images/default-profile-pic.jpg';
-					
-			     }
-				 else
-				 {
-					 $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$imgsrc;
-				 }
-				   
-             				  
-                break;
-		    case  'form_gallery_organization':
-             
-			    if($imgsrc=='')
-				 {
-					 $url=$globalurl.'/images/default-profile-pic.jpg';
-			     }
-				 else{  
-				 $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$imgsrc;
-				 }
-				
-				
-                break;
-		
-		
-		    case 'user_profile':
-              
-			  
-			    if($imgsrc=='')
-				 {
-					   $url=$globalurl.'/images/default-profile-pic.jpg';
-			     }
-				 else{
-				   $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$imgsrc;
-				 }
-				
-                break;
-		
-		    case 'gallery/gallery_user':
-			
-				 if(isset($details['id']))
-				 {
-					 $id=$details['id'];
-				 }
-		          if($imgsrc=='')
-				 {
-					  $url=$globalurl.'/images/default-profile-pic.jpg';
-					
-			     }
-				 else
-				 {
-				   $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$id.'/'.$imgsrc;
-				 }
-                
-                break;
-		
 
-		    case  'gallery/gallery_team':
-			
-				 if(isset($details['id']))
-				 {
-					 $id=$details['id'];
-				 }
-		         if($imgsrc=='')
-				 {
-					  $url=$globalurl.'/images/default-profile-pic.jpg';
-					 
-			     }
-				 else
-				 {
-				 $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$id.'/'.$imgsrc;}
-		     
-                break;
-		
+                if($imgsrc=='')
+                {
+                    $url=$globalurl.'/images/default-profile-pic.jpg';
+                }
+                else
+                {
+                    $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$imgsrc;
+                    //onerror=this.onerror=null;this.src='$globalurl/images/default-profile-pic.jpg'
+                }
 
-		    case  'gallery/gallery_tournaments':
-			
-				 if(isset($details['id']))
-				{
-						 $id=$details['id'];
-				}
-		          if($imgsrc=='')
-				 {
-					  $url=$globalurl.'/images/default-profile-pic.jpg';
-					
-			     }
-				 else
-				 {
-				 $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$id.'/'.$imgsrc;}
-		    
                 break;
-		
-		     case 'gallery/gallery_facility':
-                 
-					 if(isset($details['id']))
-					 {
-						 $id=$details['id'];
-					 }
-		         if($imgsrc=='')
-				 {
-					   $url=$globalurl.'/images/default-profile-pic.jpg';
-					
-			     }
-				 else
-				 {
-		        $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$id.'/'.$imgsrc;
-				 }
-		   
+
+            case 'teams':
+
+
+                if($imgsrc=='')
+                {
+                    $url=$globalurl.'/images/default-profile-pic.jpg';
+                }
+                else
+                {
+                    $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$imgsrc;
+                }
+
                 break;
-		
-		    case  'gallery/gallery_organization':
-			
-				 if(isset($details['id']))
-				 {
-					 $id=$details['id'];
-				 }
-			    if($imgsrc=='')
-				 {
-				  $url=$globalurl.'/images/default-profile-pic.jpg';
-			     }
-				   else
-				   {
-					$url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$id.'/'.$imgsrc;
-				   }
-		  
+
+            case  'organization':
+
+                if($imgsrc=='')
+                {
+                    $url=$globalurl.'/images/default-profile-pic.jpg';
+                }
+                else
+                {
+                    $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$imgsrc;
+                }
+
                 break;
-		  case  'gallery/gallery_match':
-		
-			 if(isset($details['id']))
-			 {
-				 $id=$details['id'];
-			 }
-			if($imgsrc=='')
-			 {
-			  $url=$globalurl.'/images/default-profile-pic.jpg';
-			 }
-			   else
-			   {
-				$url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$id.'/'.$imgsrc;
-			   }
-	  
-			break;
-		
-		    case  'user_profile':
-             
-			     if(isset($details['id']))
-				 {
-						 $id=$details['id'];
-				 }
-		      	 if($imgsrc=='')
-				 {
-					   $url=$globalurl.'/images/default-profile-pic.jpg';
-			     }
-				 else
-				 {
-		          $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$id.'/'.$imgsrc;
-				 }
-		    
+
+            case 'facility':
+
+                if($imgsrc=='')
+                {
+                    $url=$globalurl.'/images/default-profile-pic.jpg';
+                }
+                else
+                {
+                    $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$imgsrc;
+                }
+
                 break;
-				
-			case  'images':
-           
-			   $url=$globalurl.'/'.$imgtype.'/'.$imgsrc;
-				  
+
+            case  'marketplace':
+
+                if($imgsrc=='')
+                {
+                    $url=$globalurl.'/images/default-profile-pic.jpg';
+
+                }
+                else
+                {
+                    $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$imgsrc;
+                }
+
                 break;
-      
-	        default:
-                  $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$imgsrc;
+
+            case  'form_gallery_tournaments':
+
+                if($imgsrc=='')
+                {
+                    $url=$globalurl.'/images/default-profile-pic.jpg';
+
+                }
+                else
+                {
+                    $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$imgsrc;
+                }
+
+                break;
+
+            case 'form_gallery_facility':
+
+                if($imgsrc=='')
+                {
+                    $url=$globalurl.'/images/default-profile-pic.jpg';
+
+                }
+                else
+                {
+                    $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$imgsrc;
+                }
+
+
+                break;
+            case  'form_gallery_organization':
+
+                if($imgsrc=='')
+                {
+                    $url=$globalurl.'/images/default-profile-pic.jpg';
+                }
+                else{
+                    $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$imgsrc;
+                }
+
+
+                break;
+
+
+            case 'user_profile':
+
+
+                if($imgsrc=='')
+                {
+                    $url=$globalurl.'/images/default-profile-pic.jpg';
+                }
+                else{
+                    $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$imgsrc;
+                }
+
+                break;
+
+            case 'gallery/gallery_user':
+
+                if(isset($details['id']))
+                {
+                    $id=$details['id'];
+                }
+                if($imgsrc=='')
+                {
+                    $url=$globalurl.'/images/default-profile-pic.jpg';
+
+                }
+                else
+                {
+                    $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$id.'/'.$imgsrc;
+                }
+
+                break;
+
+
+            case  'gallery/gallery_team':
+
+                if(isset($details['id']))
+                {
+                    $id=$details['id'];
+                }
+                if($imgsrc=='')
+                {
+                    $url=$globalurl.'/images/default-profile-pic.jpg';
+
+                }
+                else
+                {
+                    $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$id.'/'.$imgsrc;}
+
+                break;
+
+
+            case  'gallery/gallery_tournaments':
+
+                if(isset($details['id']))
+                {
+                    $id=$details['id'];
+                }
+                if($imgsrc=='')
+                {
+                    $url=$globalurl.'/images/default-profile-pic.jpg';
+
+                }
+                else
+                {
+                    $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$id.'/'.$imgsrc;}
+
+                break;
+
+            case 'gallery/gallery_facility':
+
+                if(isset($details['id']))
+                {
+                    $id=$details['id'];
+                }
+                if($imgsrc=='')
+                {
+                    $url=$globalurl.'/images/default-profile-pic.jpg';
+
+                }
+                else
+                {
+                    $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$id.'/'.$imgsrc;
+                }
+
+                break;
+
+            case  'gallery/gallery_organization':
+
+                if(isset($details['id']))
+                {
+                    $id=$details['id'];
+                }
+                if($imgsrc=='')
+                {
+                    $url=$globalurl.'/images/default-profile-pic.jpg';
+                }
+                else
+                {
+                    $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$id.'/'.$imgsrc;
+                }
+
+                break;
+            case  'gallery/gallery_match':
+
+                if(isset($details['id']))
+                {
+                    $id=$details['id'];
+                }
+                if($imgsrc=='')
+                {
+                    $url=$globalurl.'/images/default-profile-pic.jpg';
+                }
+                else
+                {
+                    $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$id.'/'.$imgsrc;
+                }
+
+                break;
+
+            case  'user_profile':
+
+                if(isset($details['id']))
+                {
+                    $id=$details['id'];
+                }
+                if($imgsrc=='')
+                {
+                    $url=$globalurl.'/images/default-profile-pic.jpg';
+                }
+                else
+                {
+                    $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$id.'/'.$imgsrc;
+                }
+
+                break;
+
+            case  'images':
+
+                $url=$globalurl.'/'.$imgtype.'/'.$imgsrc;
+
+                break;
+
+            default:
+                $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$imgsrc;
                 break;
         }
 
 
-    $img ="<img data-original='$url' src='$url' title='$title' onerror=this.onerror=null;this.src=\"$globalurl/images/default-profile-pic.jpg\" height=$height  width=$width   class='$class lazy' >";	 
-	
+        $img ="<img data-original='$url' src='$url' title='$title' onerror=this.onerror=null;this.src=\"$globalurl/images/default-profile-pic.jpg\" height=$height  width=$width   class='$class lazy' >";
 
-	 return  $img ;
 
-	}
+        return  $img ;
+
+    }
     //getting the current route
     public static function getcurrentroute()
     {
         //getting the route
         $routeName = Route::currentRouteAction();
         list($controller, $method) = explode('@', $routeName);
-        $controller = preg_replace('/.*\\\/', '', $controller); 
+        $controller = preg_replace('/.*\\\/', '', $controller);
         return array('controller_name'=>$controller,'function_name'=>$method);
     }
-    
-    public static function buildMyMatchScheduleData($searchArray) { 
+
+    public static function buildMyMatchScheduleData($searchArray) {
         $teamIds = '';
         $playerIds = '';
         $teamLogoArray = [];
         $playerLogoArray = [];
         $teamNameArray = [];
         $playerNameArray = [];
-//        $userId = Auth::user()->id;
+//        $userId = isset(Auth::user()->id)?Auth::user()->id:0;      //user or guest
         $userId = $searchArray['userId'];
         $matchSchedules = MatchSchedule::with(array('sport' => function($q3) {
-                $q3->select('id', 'sports_name', 'sports_type');
-            }))->where(function($query) use ($userId) {
+            $q3->select('id', 'sports_name', 'sports_type');
+        }))->where(function($query) use ($userId) {
             $query->where('player_a_ids', 'LIKE', '%' . $userId . '%')->orWhere('player_b_ids', 'LIKE', '%' . $userId . '%');
         })->whereNotNull('match_start_date');
         if (!empty($searchArray['fromDate']) && !empty($searchArray['toDate'])) {
@@ -1138,9 +1138,9 @@ $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids
         if (!empty($teamIds)) {
             $teamIdArray = explode(',', rtrim($teamIds, ','));
             $teamLogos = Photo::whereIn('imageable_id', $teamIdArray)
-                    ->where('imageable_type', config('constants.PHOTO.TEAM_PHOTO'))
-                    ->where('is_album_cover', 1)
-                    ->get(['url', 'imageable_id']);
+                ->where('imageable_type', config('constants.PHOTO.TEAM_PHOTO'))
+                ->where('is_album_cover', 1)
+                ->get(['url', 'imageable_id']);
             $teamNames = Team::whereIn('id', $teamIdArray)->get(['id', 'team_owner_id', 'sports_id', 'name']);
 
             if (count($teamLogos)) {
@@ -1159,9 +1159,9 @@ $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids
         if (!empty($playerIds)) {
             $playerIdArray = explode(',', rtrim($playerIds, ','));
             $playerLogos = Photo::whereIn('user_id', $playerIdArray)
-                    ->where('imageable_type', config('constants.PHOTO.USER_PHOTO'))
-                    ->where('is_album_cover', 1)
-                    ->get(['url', 'imageable_id', 'user_id']);
+                ->where('imageable_type', config('constants.PHOTO.USER_PHOTO'))
+                ->where('is_album_cover', 1)
+                ->get(['url', 'imageable_id', 'user_id']);
 
             $playerNames = User::whereIn('id', $playerIdArray)->get(['id', 'name']);
 
@@ -1221,7 +1221,7 @@ $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids
         return $matchScheduleData;
 
     }
-    
+
     //function to check if the logged in user is owner or manager for a team
     public static function checkIfOwnerOrManger($schedule){
         $ownerOneId = AllRequests::getempidonroles($schedule['a_id'],'owner');
@@ -1230,18 +1230,18 @@ $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids
                 return true;
             }
         }
-        
+
         $managerOneId = AllRequests::getempidonroles($schedule['a_id'],'manager');
         if(count($managerOneId)) {
             if($schedule['created_by']==$managerOneId) {
                 return true;
             }
         }
-        
+
         if(empty($schedule['b_id'])) {
             return false;
         }
-        
+
         $ownerTwoId = AllRequests::getempidonroles($schedule['b_id'],'owner');
         if(count($ownerTwoId)) {
             if($schedule['created_by']==$ownerTwoId) {
@@ -1256,7 +1256,7 @@ $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids
         }
         return false;
     }
-    
+
     public static function buildMyListViewData($matchScheduleData, $userId) {
         $managingTeams = Helper::getManagingTeamIds($userId);
         $managingTeamsArray = explode(',', (trim($managingTeams, ',')));
@@ -1272,7 +1272,7 @@ $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids
                     $isOwner = 1;
                 }
             }
-            
+
             $matchStartDate = Carbon::createFromFormat('Y-m-d', $schedule['match_start_date']);
 
 //            if (!empty($schedule['winner_id']) && $schedule['match_status']=='completed') {
@@ -1281,7 +1281,7 @@ $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids
                     $matchScheduleData[$key]['winner_text'] = trans('message.schedule.scorecardapproval');
                 }else{
                     $matchScheduleData[$key]['winner_text'] = trans('message.schedule.fullscoreboard');
-                }    
+                }
             } else if (Carbon::now()->gte($matchStartDate)) {
                 $match_details = MatchSchedule::where('id',$schedule['id'])->get();
                 $scoreOwner = Helper::isValidUserForScoreEnter($match_details->toArray());
@@ -1289,7 +1289,7 @@ $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids
                     if($schedule['match_invite_status'] == 'accepted') {
 //                        $matchScheduleData[$key]['winner_text'] = trans('message.schedule.addscore');
                         $matchScheduleData[$key]['winner_text'] = Helper::getCurrentScoringStatus($schedule);
-                    }    
+                    }
                     else if($schedule['match_invite_status'] == 'pending')
                         $matchScheduleData[$key]['winner_text'] = trans('message.schedule.pending');
                     else
@@ -1306,15 +1306,15 @@ $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids
         }
         return $matchScheduleData;
     }
-    
+
     public static function isTournamentOwner($tournamentManagerId,$tournamentParentId) {
-        $userId = Auth::user()->id;
+        $userId = isset(Auth::user()->id)?Auth::user()->id:0;
         $tournamentOwner = TournamentParent::where('id',$tournamentParentId)->first(['owner_id','name','manager_id']);
         if($userId==$tournamentManagerId || $userId==$tournamentOwner->owner_id || $userId==$tournamentOwner->manager_id) {
             return true;
         }
         return false;
-        
+
     }
 
     public static function getImageModel($params)
@@ -1343,157 +1343,157 @@ $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids
     public static function getAllMarketPlaceCategories(){
         $categories = \App\Model\MarketPlaceCategories::get();
         return $categories;
-    }  
-		
-	public static function isApprovalExist($matchData,$isForApproval='')
-	{
-		$loginUserId = Auth::user()->id;
-		$loginUserRole = Auth::user()->role;
-                $team_a_id = $matchData[0]['a_id'];
-		$team_b_id = $matchData[0]['b_id'];
-		$score_status_array = json_decode($matchData[0]['score_added_by'],true);
-		if($loginUserRole=='admin') // if admin login
-		{
-			if($matchData[0]['scoring_status']=='approval_pending')
-				return true;
-			else
-				return false;
-			
-		}else if(!empty($matchData[0]['tournament_id'])) // if match has tournament
-		{
-			return false;
-		}else
-		{
-			if($isForApproval=='yes')
-			{
-				if(!empty($score_status_array['added_by']) && ($matchData[0]['scoring_status']=='rejected' || $matchData[0]['scoring_status']=='') && ($matchData[0]['winner_id']!='' || $matchData[0]['is_tied']>0))
-				{
-					return true;
-				}else
-				{
-					return false;
-				}
-				
-			}else{
-                                if ($matchData[0]['schedule_type'] == 'player')
-                                {
-                                        $valid_user_for_approve = ($score_status_array['active_user']!=$loginUserId);
-                                }
-                                else
-                                {
-                                        $valid_user_for_approve = (self::isTeamOwnerorcaptain($team_a_id, $loginUserId) && self::isTeamOwnerorcaptain($team_b_id, $loginUserId));
-                                        if (!$valid_user_for_approve)
-                                        {
-                                                $valid_user_for_approve = ($score_status_array['active_user']!=$loginUserId);
-                                        }
-                                }
-                                
-				if(!empty($score_status_array['added_by']) 
-                                        && $valid_user_for_approve
-                                        && $matchData[0]['scoring_status']=='approval_pending')
-				{
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-			}
-			
-		}
-		
-	}
-	public static function isTeamOwner($teamId)
-	{
-		$managingTeamsArray = array();
-		$userStatistic = UserStatistic::where('user_id', Auth::user()->id)->first();
-		if(!empty($userStatistic))
-			$managingTeamsArray = explode(',', trim($userStatistic->managing_teams, ','));
-		if (count($managingTeamsArray) && in_array($teamId, $managingTeamsArray)) {
-			return true;
-		}
-		return false;
-	}
-	public static function isTeamOwnerorcaptain($team_id,$loginUserId)
-	{
-		$user_role = TeamPlayers::where('user_id',$loginUserId)->where('team_id',$team_id)->pluck('role');
-		if($user_role=='owner' || $user_role=='captain' || $user_role=='manager')
-		{
-			return true;
-		}
-		return false;
-	}
-	            
-	public static function isValidUserForScoreEnter($matchData)
-	{
-		$loginUserId = Auth::user()->id;
-		$loginUserRole = Auth::user()->role;
-		$team_a_id = $matchData[0]['a_id'];
-		$team_b_id = $matchData[0]['b_id'];
-		if($loginUserRole=='admin')// if admin login
-		{
-			return true;
-		}else if(!empty($matchData[0]['tournament_id']))// if match has tournament
-		{
-			$tournamentDetails = Tournaments::where('id', '=', $matchData[0]['tournament_id'])->first();
-			$tournamentManagerId = $tournamentDetails['manager_id'];
-			$tournamentOwner = TournamentParent::where('id',$tournamentDetails['tournament_parent_id'])->first(['owner_id','name','manager_id']);
-			if($loginUserId==$tournamentManagerId || $loginUserId==$tournamentOwner->owner_id || $loginUserId==$tournamentOwner->manager_id) {
-				return true;
-			}
-			return false;
-		}else
-		{
-			
-			//if schedule type is player
-			$schedule_type = $matchData[0]['schedule_type']; // if schedule type is player
-			if($schedule_type=='player')
-			{
-				if($team_a_id==$loginUserId || $team_b_id==$loginUserId)
-					return true;
-				else
-					return false;
-			}
-			else
-			{
-				$is_team_a_valid = Helper::isTeamOwnerorcaptain($team_a_id,$loginUserId);
-				$is_team_b_valid = Helper::isTeamOwnerorcaptain($team_b_id,$loginUserId);
-				if($is_team_a_valid || $is_team_b_valid)
-				{
-					return true;
-				}else
-				{
-					return false;
-				}
-			}
-			
-		}
-	}
-	public static function isValidUserForTournamentGallery($tournamentid,$loginUserId)
-	{
-		    $tournamentDetails = Tournaments::where('id', '=', $tournamentid)->first();
-			$tournamentManagerId = $tournamentDetails['manager_id'];
-			$tournamentOwner = TournamentParent::where('id',$tournamentDetails['tournament_parent_id'])->first(['owner_id','name','manager_id']);
-			if($loginUserId==$tournamentManagerId || $loginUserId==$tournamentOwner->owner_id || $loginUserId==$tournamentOwner->manager_id) {
-				return true;
-			}
-			else{
-			return false;
-			}
-		
-	}
-        
-        public static function get_first_letters($string)
+    }
+
+    public static function isApprovalExist($matchData,$isForApproval='')
+    {
+        $loginUserId = Auth::user()->id;
+        $loginUserRole = Auth::user()->role;
+        $team_a_id = $matchData[0]['a_id'];
+        $team_b_id = $matchData[0]['b_id'];
+        $score_status_array = json_decode($matchData[0]['score_added_by'],true);
+        if($loginUserRole=='admin') // if admin login
         {
-            return strtoupper(preg_replace('/(\B.|\s+)/','',$string));
+            if($matchData[0]['scoring_status']=='approval_pending')
+                return true;
+            else
+                return false;
+
+        }else if(!empty($matchData[0]['tournament_id'])) // if match has tournament
+        {
+            return false;
+        }else
+        {
+            if($isForApproval=='yes')
+            {
+                if(!empty($score_status_array['added_by']) && ($matchData[0]['scoring_status']=='rejected' || $matchData[0]['scoring_status']=='') && ($matchData[0]['winner_id']!='' || $matchData[0]['is_tied']>0))
+                {
+                    return true;
+                }else
+                {
+                    return false;
+                }
+
+            }else{
+                if ($matchData[0]['schedule_type'] == 'player')
+                {
+                    $valid_user_for_approve = ($score_status_array['active_user']!=$loginUserId);
+                }
+                else
+                {
+                    $valid_user_for_approve = (self::isTeamOwnerorcaptain($team_a_id, $loginUserId) && self::isTeamOwnerorcaptain($team_b_id, $loginUserId));
+                    if (!$valid_user_for_approve)
+                    {
+                        $valid_user_for_approve = ($score_status_array['active_user']!=$loginUserId);
+                    }
+                }
+
+                if(!empty($score_status_array['added_by'])
+                    && $valid_user_for_approve
+                    && $matchData[0]['scoring_status']=='approval_pending')
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
         }
-		
-	//tournament left menu
-	public static function getLeftMenuData($parent_tournament_id,$manager_id,$sub_tournament_details)
-	{
-                $userId = Auth::user()->id;
-                DB::setFetchMode(PDO::FETCH_ASSOC);
-                $exist_array = DB::select("SELECT DISTINCT t.id as item
+
+    }
+    public static function isTeamOwner($teamId)
+    {
+        $managingTeamsArray = array();
+        $userStatistic = UserStatistic::where('user_id', Auth::user()->id)->first();
+        if(!empty($userStatistic))
+            $managingTeamsArray = explode(',', trim($userStatistic->managing_teams, ','));
+        if (count($managingTeamsArray) && in_array($teamId, $managingTeamsArray)) {
+            return true;
+        }
+        return false;
+    }
+    public static function isTeamOwnerorcaptain($team_id,$loginUserId)
+    {
+        $user_role = TeamPlayers::where('user_id',$loginUserId)->where('team_id',$team_id)->pluck('role');
+        if($user_role=='owner' || $user_role=='captain' || $user_role=='manager')
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public static function isValidUserForScoreEnter($matchData)
+    {
+        $loginUserId = isset(Auth::user()->id)?Auth::user()->id:0;
+        $loginUserRole = Auth::user()->role;
+        $team_a_id = $matchData[0]['a_id'];
+        $team_b_id = $matchData[0]['b_id'];
+        if($loginUserRole=='admin')// if admin login
+        {
+            return true;
+        }else if(!empty($matchData[0]['tournament_id']))// if match has tournament
+        {
+            $tournamentDetails = Tournaments::where('id', '=', $matchData[0]['tournament_id'])->first();
+            $tournamentManagerId = $tournamentDetails['manager_id'];
+            $tournamentOwner = TournamentParent::where('id',$tournamentDetails['tournament_parent_id'])->first(['owner_id','name','manager_id']);
+            if($loginUserId==$tournamentManagerId || $loginUserId==$tournamentOwner->owner_id || $loginUserId==$tournamentOwner->manager_id) {
+                return true;
+            }
+            return false;
+        }else
+        {
+
+            //if schedule type is player
+            $schedule_type = $matchData[0]['schedule_type']; // if schedule type is player
+            if($schedule_type=='player')
+            {
+                if($team_a_id==$loginUserId || $team_b_id==$loginUserId)
+                    return true;
+                else
+                    return false;
+            }
+            else
+            {
+                $is_team_a_valid = Helper::isTeamOwnerorcaptain($team_a_id,$loginUserId);
+                $is_team_b_valid = Helper::isTeamOwnerorcaptain($team_b_id,$loginUserId);
+                if($is_team_a_valid || $is_team_b_valid)
+                {
+                    return true;
+                }else
+                {
+                    return false;
+                }
+            }
+
+        }
+    }
+    public static function isValidUserForTournamentGallery($tournamentid,$loginUserId)
+    {
+        $tournamentDetails = Tournaments::where('id', '=', $tournamentid)->first();
+        $tournamentManagerId = $tournamentDetails['manager_id'];
+        $tournamentOwner = TournamentParent::where('id',$tournamentDetails['tournament_parent_id'])->first(['owner_id','name','manager_id']);
+        if($loginUserId==$tournamentManagerId || $loginUserId==$tournamentOwner->owner_id || $loginUserId==$tournamentOwner->manager_id) {
+            return true;
+        }
+        else{
+            return false;
+        }
+
+    }
+
+    public static function get_first_letters($string)
+    {
+        return strtoupper(preg_replace('/(\B.|\s+)/','',$string));
+    }
+
+    //tournament left menu
+    public static function getLeftMenuData($parent_tournament_id,$manager_id,$sub_tournament_details)
+    {
+        $userId = isset(Auth::user()->id)?Auth::user()->id:1;
+        DB::setFetchMode(PDO::FETCH_ASSOC);
+        $exist_array = DB::select("SELECT DISTINCT t.id as item
                         FROM `tournaments` t
                         INNER JOIN `tournament_final_teams` f ON f.tournament_id = t.id AND f.team_id = $userId
                         WHERE t.schedule_type = 'individual' AND t.id IN ($parent_tournament_id) AND t.type != 'league'  
@@ -1502,72 +1502,72 @@ $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids
                         FROM `tournaments` t
                         INNER JOIN `tournament_group_teams` g ON g.tournament_id = t.id AND g.team_id = $userId
                         WHERE t.schedule_type = 'individual' AND t.id IN ($parent_tournament_id) AND t.type != 'knockout' ");
-                DB::setFetchMode(PDO::FETCH_CLASS);
-                
-		$parent_tournament_details = TournamentParent::where('id',$parent_tournament_id)->get();
-                
-		$menu_details = array();
-                $sub_tournament_name = $sub_tournament_details[0]['name'];
-                $sport_name = Sport::where('id', $sub_tournament_details[0]['sports_id'])->pluck('sports_name');
-                $match_type = $sub_tournament_details[0]['match_type'];
-                if($match_type!='other')
-                {    
-                    $match_type = $match_type=='odi'?'('.strtoupper($match_type).')':'('.ucfirst($match_type).')';
-                }
-		if(!empty($parent_tournament_details))
-		{
-			$menu_details['logo'] = $parent_tournament_details[0]['logo'];
-			$menu_details['name'] = $parent_tournament_details[0]['name'].' '.$sub_tournament_name;
-			$menu_details['location'] = '';
-			$menu_details['description'] = $parent_tournament_details[0]['description'];
-			$menu_details['is_owner'] = Helper::isTournamentOwner($manager_id,$parent_tournament_id);
-			$menu_details['path'] = config('constants.PHOTO_PATH.TOURNAMENT');
-			$menu_details['id'] = $parent_tournament_id;
-			$menu_details['sports_matchtype'] = $sport_name.' '.$match_type;
-                        $menu_details['exist_array'] = $exist_array;
-                        $menu_details['sub_tournament_details'] = $sub_tournament_details[0];
-		}
-		return $menu_details;
-	}
-        //get the sports based on requirement
-	public static function getDevelopedSport($is_schedule_available,$is_scorecard_available)
-	{
-            $sports = Sport::where('is_schedule_available',$is_schedule_available)->where('is_scorecard_available',$is_scorecard_available)->orderBy('id')->lists('sports_name', 'id')->all();
-            return $sports;
-	}
+        DB::setFetchMode(PDO::FETCH_CLASS);
 
-	//insert in match schedules when player is added to team
-	public static function insertTeamPlayersInSchedules($team_id,$user_id)
-	{
-		//get schedule data with team a
-		$matchDetailArray = array();
-		$matchDetails = MatchSchedule::where('a_id',$team_id)->where('match_status','scheduled')->get(['player_a_ids','id']);
-		if(!empty($matchDetails))
-		{
-			$matchDetailArray = $matchDetails->toArray();
-			foreach($matchDetailArray as $matchId)
-			{
-				$get_a_player_ids = $matchId['player_a_ids'].$user_id.',';
-				MatchSchedule::where('id',$matchId['id'])->where('a_id',$team_id)->update(['player_a_ids'=>$get_a_player_ids]);
-			}
-			
-		}
-		
-		//get schedule date with team b_id
-		$matchDetailArrayTeamb= array();
-		$matchDetailsTeamb = MatchSchedule::where('b_id',$team_id)->where('match_status','scheduled')->get(['player_b_ids','id']);
-		if(!empty($matchDetailsTeamb))
-		{
-			$matchDetailArrayTeamb = $matchDetailsTeamb->toArray();
-			foreach($matchDetailArrayTeamb as $match_id)
-			{
-				$get_b_player_ids = $match_id['player_b_ids'].$user_id.',';
-				MatchSchedule::where('id',$match_id['id'])->where('b_id',$team_id)->update(['player_b_ids'=>$get_b_player_ids]);
-			}
-			
-		}
-	}
-	//function to remove an element from an array
+        $parent_tournament_details = TournamentParent::where('id',$parent_tournament_id)->get();
+
+        $menu_details = array();
+        $sub_tournament_name = $sub_tournament_details[0]['name'];
+        $sport_name = Sport::where('id', $sub_tournament_details[0]['sports_id'])->pluck('sports_name');
+        $match_type = $sub_tournament_details[0]['match_type'];
+        if($match_type!='other')
+        {
+            $match_type = $match_type=='odi'?'('.strtoupper($match_type).')':'('.ucfirst($match_type).')';
+        }
+        if(!empty($parent_tournament_details))
+        {
+            $menu_details['logo'] = $parent_tournament_details[0]['logo'];
+            $menu_details['name'] = $parent_tournament_details[0]['name'].' '.$sub_tournament_name;
+            $menu_details['location'] = '';
+            $menu_details['description'] = $parent_tournament_details[0]['description'];
+            $menu_details['is_owner'] = Helper::isTournamentOwner($manager_id,$parent_tournament_id);
+            $menu_details['path'] = config('constants.PHOTO_PATH.TOURNAMENT');
+            $menu_details['id'] = $parent_tournament_id;
+            $menu_details['sports_matchtype'] = $sport_name.' '.$match_type;
+            $menu_details['exist_array'] = $exist_array;
+            $menu_details['sub_tournament_details'] = $sub_tournament_details[0];
+        }
+        return $menu_details;
+    }
+    //get the sports based on requirement
+    public static function getDevelopedSport($is_schedule_available,$is_scorecard_available)
+    {
+        $sports = Sport::where('is_schedule_available',$is_schedule_available)->where('is_scorecard_available',$is_scorecard_available)->orderBy('id')->lists('sports_name', 'id')->all();
+        return $sports;
+    }
+
+    //insert in match schedules when player is added to team
+    public static function insertTeamPlayersInSchedules($team_id,$user_id)
+    {
+        //get schedule data with team a
+        $matchDetailArray = array();
+        $matchDetails = MatchSchedule::where('a_id',$team_id)->where('match_status','scheduled')->get(['player_a_ids','id']);
+        if(!empty($matchDetails))
+        {
+            $matchDetailArray = $matchDetails->toArray();
+            foreach($matchDetailArray as $matchId)
+            {
+                $get_a_player_ids = $matchId['player_a_ids'].$user_id.',';
+                MatchSchedule::where('id',$matchId['id'])->where('a_id',$team_id)->update(['player_a_ids'=>$get_a_player_ids]);
+            }
+
+        }
+
+        //get schedule date with team b_id
+        $matchDetailArrayTeamb= array();
+        $matchDetailsTeamb = MatchSchedule::where('b_id',$team_id)->where('match_status','scheduled')->get(['player_b_ids','id']);
+        if(!empty($matchDetailsTeamb))
+        {
+            $matchDetailArrayTeamb = $matchDetailsTeamb->toArray();
+            foreach($matchDetailArrayTeamb as $match_id)
+            {
+                $get_b_player_ids = $match_id['player_b_ids'].$user_id.',';
+                MatchSchedule::where('id',$match_id['id'])->where('b_id',$team_id)->update(['player_b_ids'=>$get_b_player_ids]);
+            }
+
+        }
+    }
+    //function to remove an element from an array
     public static function removeFromArray($existing_ids_str,$new_id)
     {
         $existing_ids_str = trim($existing_ids_str,',');
@@ -1578,85 +1578,85 @@ $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids
         if(count($existing_ids))
         {
             $final_str = implode(',', $existing_ids);
-            $final_str = ','.$final_str.',';            
+            $final_str = ','.$final_str.',';
         }
         return $final_str;
-    } 
-	//remove player from the match schedule if score is not entered on that match
-	public static function removePlayersFromMatch($team_id,$user_id)
-	{
-		$matchDetailArray = array();
-		$matchDetails = MatchSchedule::where('a_id',$team_id)->where('match_status','scheduled')->whereNull('score_added_by')->get(['player_a_ids','id']);
-		if(!empty($matchDetails))
-		{
-			$matchDetailArray = $matchDetails->toArray();
-			foreach($matchDetailArray as $matchId)
-			{
-				$get_a_player_ids = $matchId['player_a_ids'];
-				$a_players = Helper::removeFromArray($get_a_player_ids,$user_id);
-				MatchSchedule::where('id', $matchId['id'])->update(['player_a_ids'=>$a_players]);
-			}
-			
-		}
-		//get schedule date with team b_id
-		$matchDetailArrayTeamb= array();
-		$matchDetailsTeamb = MatchSchedule::where('b_id',$team_id)->where('match_status','scheduled')->whereNull('score_added_by')->get(['player_b_ids','id']);
-		if(!empty($matchDetailsTeamb))
-		{
-			$matchDetailArrayTeamb = $matchDetailsTeamb->toArray();
-			foreach($matchDetailArrayTeamb as $match_id)
-			{
-				$get_b_player_ids = $match_id['player_b_ids'];
-				$b_players = Helper::removeFromArray($get_b_player_ids,$user_id);
-				MatchSchedule::where('id', $match_id['id'])->update(['player_b_ids'=>$b_players]);
-			}
-			
-		}
-	}
-        
-        //get the current scoring status
-	public static function getCurrentScoringStatus($scheduleData)
-	{
-                $returnText = trans('message.schedule.addscore');
-                $score_status_array = json_decode($scheduleData['score_added_by'],true);
-                if(empty($score_status_array['added_by'])) {
-                    $returnText = trans('message.schedule.addscore');
-                }
-				else if(!empty($score_status_array['added_by']) && !empty($scheduleData['scoring_status'])) 
-				{
-					if($scheduleData['scoring_status']=='rejected') {
-						$returnText = trans('message.schedule.editscore');
-					}else{
-						$returnText = trans('message.schedule.viewscore');
-					}					
-				}
-				else if(!empty($score_status_array['added_by']) && empty($scheduleData['scoring_status'])) {
-                    if($score_status_array['added_by']==Auth::user()->id) {
-                        $returnText = trans('message.schedule.editscore');
-                    }else{    
-                        $returnText = trans('message.schedule.viewscore');
-                    }    
-                }
-                
-                return !empty($returnText)?$returnText:'';
-	}
-	
-	// get the date and time based on application format
-	public static function getFormattedTimeStamp($scheduleData)
-	{
-			$match_start_time='';
-            $match_start_date = date(config('constants.DATE_FORMAT.VALIDATION_DATE_FORMAT'), strtotime($scheduleData['match_start_date']));
-			if(!empty($scheduleData['match_start_time']) && $scheduleData['match_start_time']!='00:00:00') {
-				$match_start_time = date(config('constants.DATE_FORMAT.VALIDATION_TIME_FORMAT'), strtotime($scheduleData['match_start_time']));
-			}
-			return $match_start_date.' '.$match_start_time;
-	}
-     public static function displayOtherUserImage($userid)
-	 {
-		$logo=User::where('id',$userid)->first(['logo']);			
-      	return Helper::Images(count($logo)?$logo->logo:"",'user_profile',array('height'=>100,'width'=>100) );
-		
-	 }	 
+    }
+    //remove player from the match schedule if score is not entered on that match
+    public static function removePlayersFromMatch($team_id,$user_id)
+    {
+        $matchDetailArray = array();
+        $matchDetails = MatchSchedule::where('a_id',$team_id)->where('match_status','scheduled')->whereNull('score_added_by')->get(['player_a_ids','id']);
+        if(!empty($matchDetails))
+        {
+            $matchDetailArray = $matchDetails->toArray();
+            foreach($matchDetailArray as $matchId)
+            {
+                $get_a_player_ids = $matchId['player_a_ids'];
+                $a_players = Helper::removeFromArray($get_a_player_ids,$user_id);
+                MatchSchedule::where('id', $matchId['id'])->update(['player_a_ids'=>$a_players]);
+            }
+
+        }
+        //get schedule date with team b_id
+        $matchDetailArrayTeamb= array();
+        $matchDetailsTeamb = MatchSchedule::where('b_id',$team_id)->where('match_status','scheduled')->whereNull('score_added_by')->get(['player_b_ids','id']);
+        if(!empty($matchDetailsTeamb))
+        {
+            $matchDetailArrayTeamb = $matchDetailsTeamb->toArray();
+            foreach($matchDetailArrayTeamb as $match_id)
+            {
+                $get_b_player_ids = $match_id['player_b_ids'];
+                $b_players = Helper::removeFromArray($get_b_player_ids,$user_id);
+                MatchSchedule::where('id', $match_id['id'])->update(['player_b_ids'=>$b_players]);
+            }
+
+        }
+    }
+
+    //get the current scoring status
+    public static function getCurrentScoringStatus($scheduleData)
+    {
+        $returnText = trans('message.schedule.addscore');
+        $score_status_array = json_decode($scheduleData['score_added_by'],true);
+        if(empty($score_status_array['added_by'])) {
+            $returnText = trans('message.schedule.addscore');
+        }
+        else if(!empty($score_status_array['added_by']) && !empty($scheduleData['scoring_status']))
+        {
+            if($scheduleData['scoring_status']=='rejected') {
+                $returnText = trans('message.schedule.editscore');
+            }else{
+                $returnText = trans('message.schedule.viewscore');
+            }
+        }
+        else if(!empty($score_status_array['added_by']) && empty($scheduleData['scoring_status'])) {
+            if($score_status_array['added_by']==Auth::user()->id) {
+                $returnText = trans('message.schedule.editscore');
+            }else{
+                $returnText = trans('message.schedule.viewscore');
+            }
+        }
+
+        return !empty($returnText)?$returnText:'';
+    }
+
+    // get the date and time based on application format
+    public static function getFormattedTimeStamp($scheduleData)
+    {
+        $match_start_time='';
+        $match_start_date = date(config('constants.DATE_FORMAT.VALIDATION_DATE_FORMAT'), strtotime($scheduleData['match_start_date']));
+        if(!empty($scheduleData['match_start_time']) && $scheduleData['match_start_time']!='00:00:00') {
+            $match_start_time = date(config('constants.DATE_FORMAT.VALIDATION_TIME_FORMAT'), strtotime($scheduleData['match_start_time']));
+        }
+        return $match_start_date.' '.$match_start_time;
+    }
+    public static function displayOtherUserImage($userid)
+    {
+        $logo=User::where('id',$userid)->first(['logo']);
+        return Helper::Images(count($logo)?$logo->logo:"",'user_profile',array('height'=>100,'width'=>100) );
+
+    }
 
     public static function displayDate($date, $format = 0){
         $format = ($format == 1) ? 'DISPLAY_DATE_FORMAT' : 'PHP_DISPLAY_DATE_FORMAT';
@@ -1665,7 +1665,7 @@ $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids
 
     public static function displayDateTime($date){
         return date("d-m-Y H:i:s", strtotime($date));
-    }    
+    }
 
     public static function storeDate($date,$flag='')
     {
@@ -1674,7 +1674,7 @@ $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids
             return date("Y-m-d",strtotime($date));
         }else {
             return date("Y-m-d H:i:s",strtotime($date));
-        }    
+        }
     }
     //function to check follow/unfollow
     public static function checkFollowUnfollow($userId,$type,$typeId)
@@ -1691,12 +1691,12 @@ $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids
         }
         return 0;
     }
-    
+
     // Get the joined tournaments of the logged in user
     public static function getJoinedTournaments() {
         $query = '';
-        $userId = Auth::user()->id;
-            $query = "select u.name as user_name,s.sports_name,t.id,t.name,tp.logo as url,t.description,
+        $userId = isset(Auth::user()->id)?Auth::user()->id:0;      //user or guest
+        $query = "select u.name as user_name,s.sports_name,t.id,t.name,tp.logo as url,t.description,
                         case 
                                 WHEN t.type='knockout' THEN IFNULL(t.final_stage_teams,0)
                                 ELSE (select IFNULL(count(id),0) from tournament_group_teams where tournament_id=t.id group by t.id)
@@ -1740,28 +1740,61 @@ $query = "select tp.team_id as id,tm.name,IF(FIND_IN_SET(tp.team_id,'".$team_ids
                         ) 
                         order by t.id";
         DB::setFetchMode(PDO::FETCH_ASSOC);
-            $tournaments = DB::select(DB::raw("$query"));
+        $tournaments = DB::select(DB::raw("$query"));
         DB::setFetchMode(PDO::FETCH_CLASS);
         return $tournaments;
     }
-        
-        /**
-         * sortMultiDimArrayNumeric() - returns the sorted array based on the values of the provided key
-         * 
-         * @param string $key
-         * @return mixed comparison result
-         * 
-         * @author Anoop Naik <anoopnaik2016@gmail.com>
-         */
-        public static function sortMultiDimArrayNumeric($key)
-        {
-                return function ($teamA, $teamB) use ($key) {
-                        if ($teamA[$key] == $teamB[$key])
-                        {
-                                return 0;
-                        }
-                        return ($teamA[$key] < $teamB[$key]) ? 1 : -1;
-                };
-        }
+
+    /**
+     * sortMultiDimArrayNumeric() - returns the sorted array based on the values of the provided key
+     *
+     * @param string $key
+     * @return mixed comparison result
+     *
+     * @author Anoop Naik <anoopnaik2016@gmail.com>
+     */
+    public static function sortMultiDimArrayNumeric($key)
+    {
+        return function ($teamA, $teamB) use ($key) {
+            if ($teamA[$key] == $teamB[$key])
+            {
+                return 0;
+            }
+            return ($teamA[$key] < $teamB[$key]) ? 1 : -1;
+        };
+    }
+
+
+    public static function getTeamDetails($team_id){
+        $team_model=Team::find($team_id);
+        $team_model->gallery_title="Photo Album of $team_model->name";
+        $team_model->gallery_sharing="Photo Album of $team_model->name";
+        $team_model->gallery_url="/uploads/gallery/team/$team_model->id/$team_model->logo";
+        return $team_model;
+    }
+
+    public static function getTournamentDetails($tournament_id){
+        $t_model=Tournaments::find($tournament_id);
+        $t_model->gallery_title="Photo Album of $t_model->name";
+        $t_model->gallery_sharing=" $t_model->name is a Tournament taking place which takes from $t_model->start_date to $t_model->end_date at $t_model->location";
+        $t_model->gallery_url="/uploads/gallery/tournaments/$t_model->id/$t_model->logo";
+        return $t_model;
+    }
+
+    public static function getUserDetails($user_id){
+        $model=User::find($user_id);
+        $model->gallery_title="Photo Album of $model->name";
+        $model->gallery_sharing="$model->name is $model->gender sport player. $model->name leaves at $model->location.  Click here to view his full gallery.";
+        $model->gallery_url="/uploads/gallery/users/$model->logo";
+        return $model;
+    }
+
+    public static function getOrganisationDetails($organization_id){
+        $model=Organization::find($organization_id);
+        $model->gallery_title="Photo Album of $model->name";
+        $model->gallery_sharing="$model->name is a sport organization with ... Click here to see its full gallery";
+        $model->gallery_url="/uploads/gallery/organisations/$model->logo";
+        return $model;
+    }
 
 }

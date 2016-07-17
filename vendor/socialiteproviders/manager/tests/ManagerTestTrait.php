@@ -42,7 +42,7 @@ trait ManagerTestTrait
      */
     protected function appMock()
     {
-        return m::mock('Illuminate\Contracts\Foundation\Application');
+        return m::mock(\Illuminate\Contracts\Foundation\Application::class);
     }
 
     /**
@@ -50,7 +50,7 @@ trait ManagerTestTrait
      */
     protected function socialiteMock()
     {
-        return m::mock('Laravel\Socialite\SocialiteManager');
+        return m::mock(\Laravel\Socialite\SocialiteManager::class);
     }
 
     protected function oauth2ProviderStub()
@@ -107,7 +107,7 @@ trait ManagerTestTrait
      */
     protected function fullStubClassName($stub)
     {
-        return __NAMESPACE__.'\Stubs\\'.$stub;
+        return __NAMESPACE__ . '\Stubs\\' . $stub;
     }
 
     /**
@@ -117,7 +117,7 @@ trait ManagerTestTrait
      */
     protected function fullClassName($class)
     {
-        return __NAMESPACE__.'\\'.$class;
+        return __NAMESPACE__ . '\\' . $class;
     }
 
     /**
@@ -137,7 +137,7 @@ trait ManagerTestTrait
      */
     protected function providerConfigKey($providerName)
     {
-        return 'services.'.$providerName;
+        return 'services.' . $providerName;
     }
 
     /**
@@ -145,7 +145,7 @@ trait ManagerTestTrait
      */
     protected function buildRequest()
     {
-        return m::mock('\Illuminate\Http\Request');
+        return m::mock(\Illuminate\Http\Request::class);
     }
 
     /**

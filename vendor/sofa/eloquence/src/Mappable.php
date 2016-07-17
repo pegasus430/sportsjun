@@ -50,6 +50,7 @@ trait Mappable
                 '__isset',
                 '__unset',
                 'queryHook',
+                'isDirty',
             ] as $method) {
             static::hook($method, $hooks->{$method}());
         }
@@ -60,7 +61,7 @@ trait Mappable
      *
      * @param  \Sofa\Eloquence\Builder $query
      * @param  string $method
-     * @param  \Sofa\Eloquence\ArgumentBag $args
+     * @param  \Sofa\Hookable\Contracts\ArgumentBag $args
      * @return mixed
      */
     protected function mappedQuery(Builder $query, $method, ArgumentBag $args)
@@ -80,7 +81,7 @@ trait Mappable
      * Adjust mapped columns for select statement.
      *
      * @param  \Sofa\Eloquence\Builder $query
-     * @param  \Sofa\Eloquence\ArgumentBag $args
+     * @param  \Sofa\Hookable\Contracts\ArgumentBag $args
      * @return void
      */
     protected function mappedSelect(Builder $query, ArgumentBag $args)
@@ -88,7 +89,7 @@ trait Mappable
         $columns = $args->get('columns');
 
         foreach ($columns as $key => $column) {
-            list($column) = $this->extractColumnAlias($column);
+            list($column, $as) = $this->extractColumnAlias($column);
 
             // Each mapped column will be selected appropriately. If it's alias
             // then prefix it with current table and use original field name
@@ -106,6 +107,10 @@ trait Mappable
 
                 $columns[$key] = "{$table}.{$mapped}";
 
+                if ($as !== $mapped) {
+                    $columns[$key] .= " as {$as}";
+                }
+
             // For non mapped columns present on this table we will simply
             // add the prefix, in order to avoid any column collisions,
             // that are likely to happen when we are joining tables.
@@ -122,7 +127,7 @@ trait Mappable
      *
      * @param  \Sofa\Eloquence\Builder $query
      * @param  string $method
-     * @param  \Sofa\Eloquence\ArgumentBag $args
+     * @param  \Sofa\Hookable\Contracts\ArgumentBag $args
      * @param  string $mapping
      * @return mixed
      */
@@ -142,7 +147,7 @@ trait Mappable
      *
      * @param  \Sofa\Eloquence\Builder $query
      * @param  string $method
-     * @param  \Sofa\Eloquence\ArgumentBag $args
+     * @param  \Sofa\Hookable\Contracts\ArgumentBag $args
      * @param  string $target
      * @param  string $column
      * @return mixed
@@ -164,7 +169,7 @@ trait Mappable
      * Order query by mapped attribute.
      *
      * @param  \Sofa\Eloquence\Builder $query
-     * @param  \Sofa\Eloquence\ArgumentBag $args
+     * @param  \Sofa\Hookable\Contracts\ArgumentBag $args
      * @param  string $table
      * @param  string $column
      * @param  string $target
@@ -181,7 +186,7 @@ trait Mappable
      * Get an array with the values of given mapped attribute.
      *
      * @param  \Sofa\Eloquence\Builder $query
-     * @param  \Sofa\Eloquence\ArgumentBag $args
+     * @param  \Sofa\Hookable\Contracts\ArgumentBag $args
      * @param  string $table
      * @param  string $column
      * @return array
@@ -209,7 +214,7 @@ trait Mappable
     protected function mappedSelectListsKey(Builder $query, $key)
     {
         if ($this->hasColumn($key)) {
-            return $query->addSelect($this->getTable().'.'.$key);
+            return $query->addSelect($this->getTable() . '.' . $key);
         }
 
         return $query->addSelect($key);
@@ -328,7 +333,7 @@ trait Mappable
      *
      * @param  \Sofa\Eloquence\Builder $query
      * @param  string $method
-     * @param  \Sofa\Eloquence\ArgumentBag $args
+     * @param  \Sofa\Hookable\Contracts\ArgumentBag $args
      * @param  string $target
      * @param  string $column
      * @return \Sofa\Eloquence\Builder
@@ -350,7 +355,7 @@ trait Mappable
      * Get the relation constraint closure.
      *
      * @param  string $method
-     * @param  \Sofa\Eloquence\ArgumentBag $args
+     * @param  \Sofa\Hookable\Contracts\ArgumentBag $args
      * @return \Closure
      */
     protected function getMappedWhereConstraint($method, ArgumentBag $args)
@@ -379,7 +384,7 @@ trait Mappable
      * Determine the operator for count relation query and set 'not' appropriately.
      *
      * @param  string $method
-     * @param  \Sofa\Eloquence\ArgumentBag $args
+     * @param  \Sofa\Hookable\Contracts\ArgumentBag $args
      * @return string
      */
     protected function getMappedOperator($method, ArgumentBag $args)
@@ -431,7 +436,7 @@ trait Mappable
             $this->parseMappings();
         }
 
-        return array_key_exists((string)$key, static::$mappedAttributes);
+        return array_key_exists((string) $key, static::$mappedAttributes);
     }
 
     /**

@@ -6,7 +6,16 @@
        
         @if(count($teams)) 
 			 <div class="group_no clearfix">
-            <h4 class="stage_head">Teams</h4>
+            <h4 class="stage_head pull-left">Teams</h4>
+                 @can('createTeam', $organization)
+                     <div class = "pull-right panel-right-btn">
+                         <a href="/team/create?organization_id={{ $id }}"
+                                 class = "btn btn-primary"
+                                 >
+                             Create New Team
+                         </a>
+                     </div> {{-- /.panel-right-btn--}}
+                 @endcan
             </div>
 			@foreach($teams as $t)
         <div class="t_details" style="min-height: inherit;">

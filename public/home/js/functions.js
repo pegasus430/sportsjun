@@ -1,60 +1,60 @@
 jQuery(document).ready(function(){
 	"use strict";
-	
+
 	/* ---------------------------------------------------------------------- */
 	/*	Click to Top 
-	/* ---------------------------------------------------------------------- */
+	 /* ---------------------------------------------------------------------- */
 	if($('.flexslider').length){
 		jQuery('.flexslider').flexslider({
 			animation: "slide",
 			start: function(slider){
-			  jQuery('body').removeClass('loading');
+				jQuery('body').removeClass('loading');
 			}
 		});
 	}
-	
-	
-	
-	
+
+
+
+
 	/* ---------------------------------------------------------------------- */
 	/*	Progress Bar
-	/* ---------------------------------------------------------------------- */
+	 /* ---------------------------------------------------------------------- */
 	if($('.kode_team_progress .progress .progress-bar').length){
 		$('.kode_team_progress  .progress .progress-bar').progressbar({display_text: 'fill'});
-	}	
-	
+	}
+
 	/* ---------------------------------------------------------------------- */
 	/*	Counter Functions
-	/* ---------------------------------------------------------------------- */
+	 /* ---------------------------------------------------------------------- */
 	if(jQuery('.word-count').length){
 		jQuery(".word-count").counterUp({
 			delay: 10,
 			time: 1000
 		});
 	}
-	
-	
+
+
 	/* ---------------------------------------------------------------------- */
 	/*	BxSlider
-	/* ---------------------------------------------------------------------- */
+	 /* ---------------------------------------------------------------------- */
 	if($('.bxslider').length){
 		$('.bxslider').bxSlider({
-		   mode: 'fade',
-		   pagerCustom: '#bx-pager'
+			mode: 'fade',
+			pagerCustom: '#bx-pager'
 		});
 	}
-	
+
 	if($('.top_slider_bxslider').length){
 		$('.top_slider_bxslider').bxSlider({
-		   auto:true,
-		    pagerCustom: '#bx-pager'
+			auto:true,
+			pagerCustom: '#bx-pager'
 		});
 	}
-	
-	
+
+
 	/* ---------------------------------------------------------------------- */
 	/*	Sticky header
-	/* ---------------------------------------------------------------------- */
+	 /* ---------------------------------------------------------------------- */
 	if($('.kode-header-absolute').length){
 		// grab the initial top offset of the navigation 
 		//var stickyNavTop = $('#mainbanner').offset().top;
@@ -64,10 +64,10 @@ jQuery(document).ready(function(){
 			var scrollTop = $(window).scrollTop(); // our current vertical position from the top
 			// if we've scrolled more than the navigation, change its position to fixed to stick to top,
 			// otherwise change it back to relative
-			if (scrollTop > stickyNavTop) { 
+			if (scrollTop > stickyNavTop) {
 				$('.kode-header-absolute').addClass('kf_sticky');
 			} else {
-				$('.kode-header-absolute').removeClass('kf_sticky'); 
+				$('.kode-header-absolute').removeClass('kf_sticky');
 			}
 		};
 		stickyNav();
@@ -76,11 +76,11 @@ jQuery(document).ready(function(){
 			stickyNav();
 		});
 	}
-	
+
 
 	/* ---------------------------------------------------------------------- */
 	/*	Click to Top 
-	/* ---------------------------------------------------------------------- */
+	 /* ---------------------------------------------------------------------- */
 	if($('.owl-carousel').length){
 		jQuery('.owl-carousel').owlCarousel({
 			loop:true,
@@ -105,7 +105,7 @@ jQuery(document).ready(function(){
 	}
 	/* ---------------------------------------------------------------------- */
 	/*	Click to Top 
-	/* ---------------------------------------------------------------------- */
+	 /* ---------------------------------------------------------------------- */
 	if($('.owl-carousel-team').length){
 		jQuery('.owl-carousel-team').owlCarousel({
 			loop:true,
@@ -129,16 +129,16 @@ jQuery(document).ready(function(){
 		});
 	}
 
-    /* ---------------------------------------------------------------------- */
-	/*	Click to Top 
 	/* ---------------------------------------------------------------------- */
+	/*	Click to Top 
+	 /* ---------------------------------------------------------------------- */
 	if($('audio,video').length){
 		jQuery('audio,video').mediaelementplayer({});
 	}
 
-    /* ---------------------------------------------------------------------- */
-	/*	Click to Top 
 	/* ---------------------------------------------------------------------- */
+	/*	Click to Top 
+	 /* ---------------------------------------------------------------------- */
 	if($('#kodeCountdown').length){
 		var austDay = new Date();
 		austDay = new Date(2016, 6-1, 5,12,10);
@@ -146,68 +146,68 @@ jQuery(document).ready(function(){
 		jQuery('#year').text(austDay.getFullYear());
 	}
 
-    /* ---------------------------------------------------------------------- */
-	/*	Click to Top 
 	/* ---------------------------------------------------------------------- */
-    if($('#kode-topbtn').length){
-		$('#kode-topbtn').on("click",function() {		
+	/*	Click to Top 
+	 /* ---------------------------------------------------------------------- */
+	if($('#kode-topbtn').length){
+		$('#kode-topbtn').on("click",function() {
 			jQuery('html, body').animate({scrollTop : 0},800);
 			return false;
 		});
 	}
 	/* ---------------------------------------------------------------------- */
-    /*  Accordion Script
-    /* ---------------------------------------------------------------------- */
-    if($('.accordion').length){
-        //custom animation for open/close
-        $.fn.slideFadeToggle = function(speed, easing, callback) {
-          return this.animate({opacity: 'toggle', height: 'toggle'}, speed, easing, callback);
-        };
+	/*  Accordion Script
+	 /* ---------------------------------------------------------------------- */
+	if($('.accordion').length){
+		//custom animation for open/close
+		$.fn.slideFadeToggle = function(speed, easing, callback) {
+			return this.animate({opacity: 'toggle', height: 'toggle'}, speed, easing, callback);
+		};
 
-        $('.accordion').accordion({
-          defaultOpen: 'section1',
-          cookieName: 'nav',
-          speed: 'slow',
-          animateOpen: function (elem, opts) { //replace the standard slideUp with custom function
-            elem.next().stop(true, true).slideFadeToggle(opts.speed);
-          },
-          animateClose: function (elem, opts) { //replace the standard slideDown with custom function
-            elem.next().stop(true, true).slideFadeToggle(opts.speed);
-          }
-        });
-    }
+		$('.accordion').accordion({
+			defaultOpen: 'section1',
+			cookieName: 'nav',
+			speed: 'slow',
+			animateOpen: function (elem, opts) { //replace the standard slideUp with custom function
+				elem.next().stop(true, true).slideFadeToggle(opts.speed);
+			},
+			animateClose: function (elem, opts) { //replace the standard slideDown with custom function
+				elem.next().stop(true, true).slideFadeToggle(opts.speed);
+			}
+		});
+	}
 
-    /* ---------------------------------------------------------------------- */
-    /*  Progress Bar
-    /* ---------------------------------------------------------------------- */
-    if($('.progress .progress-bar').length){
-        jQuery('.progress .progress-bar').progressbar({display_text: 'fill'});
-    }
-    
-    /* ---------------------------------------------------------------------- */
-    /*  Circle Progress
-    /* ---------------------------------------------------------------------- */
-    if($('.circle-progress').length){
-        $('.circle-progress').percentcircle({
-          animate : true,
-          diameter : 100,
-          guage: 3,
-          coverBg: '#fff',
-          bgColor: '#efefef',
-          fillColor: '#5c93c8',
-          percentSize: '50px',
-          percentWeight: 'normal'
-        });
-    }
-	
+	/* ---------------------------------------------------------------------- */
+	/*  Progress Bar
+	 /* ---------------------------------------------------------------------- */
+	if($('.progress .progress-bar').length){
+		jQuery('.progress .progress-bar').progressbar({display_text: 'fill'});
+	}
+
+	/* ---------------------------------------------------------------------- */
+	/*  Circle Progress
+	 /* ---------------------------------------------------------------------- */
+	if($('.circle-progress').length){
+		$('.circle-progress').percentcircle({
+			animate : true,
+			diameter : 100,
+			guage: 3,
+			coverBg: '#fff',
+			bgColor: '#efefef',
+			fillColor: '#5c93c8',
+			percentSize: '50px',
+			percentWeight: 'normal'
+		});
+	}
+
 	/* ---------------------------------------------------------------------- */
 	/*	Contact Form
-	/* ---------------------------------------------------------------------- */
-	
+	 /* ---------------------------------------------------------------------- */
+
 	if($('#contactform').length) {
 
 		var $form = $('#contactform'),
-		$loader = '<img src="images/ajax_loading.gif" alt="Loading..." />';
+			$loader = '<img src="images/ajax_loading.gif" alt="Loading..." />';
 		$form.append('<div class="hidden-me" id="contact_form_responce">');
 
 		var $response = $('#contact_form_responce');
@@ -226,7 +226,7 @@ jQuery(document).ready(function(){
 			$.post("inc/contact-send.php", data, function(response) {
 
 				response = $.parseJSON(response);
-				
+
 				$(".incorrect-data").removeClass("incorrect-data");
 				$response.find('img').remove();
 
@@ -272,28 +272,28 @@ jQuery(document).ready(function(){
 
 			e.preventDefault();
 
-		});				
+		});
 
 	}
 	/* ---------------------------------------------------------------------- */
 	/*	BxSlider Remove
-	/* ---------------------------------------------------------------------- */
+	 /* ---------------------------------------------------------------------- */
 	// $(".kode-testimonials-6 .bx-controls-direction .bx-prev").empty();
 	// $(".kode-testimonials-6 .bx-controls-direction .bx-next").empty();
 	// $(".kode-testimonials-6 .bx-controls-direction .bx-next").append('<i class="fa fa-angle-right"></i>');
 	// $(".kode-testimonials-6 .bx-controls-direction .bx-prev").append('<i class="fa fa-angle-left"></i>');
-	
+
 	/* ---------------------------------------------------------------------- */
 	/*	Google Map
-	/* ---------------------------------------------------------------------- */
+	 /* ---------------------------------------------------------------------- */
 	if($('#map-canvas').length){
 		google.maps.event.addDomListener(window, 'load', initialize);
 	}
-});	
+});
 
 /* ---------------------------------------------------------------------- */
 /*	Google Map Function for Custom Style
-/* ---------------------------------------------------------------------- */
+ /* ---------------------------------------------------------------------- */
 function initialize() {
 	var MY_MAPTYPE_ID = 'custom_style';
 	var map;
@@ -323,4 +323,72 @@ function initialize() {
 	var customMapType = new google.maps.StyledMapType(featureOpts, styledMapOptions);
 
 	map.mapTypes.set(MY_MAPTYPE_ID, customMapType);
+}
+
+
+function appendTabElement(a, b, c, d) {
+	var userSportCount = $('#userSportCount').val();
+	if(userSportCount>7) {
+		$.alert({
+			title: "Alert!",
+			content: 'You can add upto 8 teams only.'
+		});
+		return false;
+	}
+	$('<li class=""><a href="#addplayer_' + b + '" data-toggle="tab" aria-expanded="false" onclick="displaySportQuestions(\'unfollow\',' + b + "," + c + ",'" + d + "');\">" + d + "</a><span class='btn-tooltip' data-toggle='tooltip' data-placement='top' title='Remove "+d+"' onclick='removeUserStats(\"false\","+b+","+c+",\"follow\");'><i class='fa fa-remove'></i></span></li>").insertBefore("#unfollowedSportsLi");
+	$("#sport_name_" + b).parent().remove();
+	var e = $("#addplayer_" + b).wrap("<p/>").parent().html();
+	$("#addPlayerDiv").append(e);
+	$("#addplayer_" + b).unwrap();
+	$("#addplayer_" + b).remove();
+	displaySportQuestions(a, b, c, d);
+}
+
+function displaySportQuestions(a, b, c, d) {
+	if (!b) return false;
+	$.ajax({
+		url: "/viewpublic/getquestions",
+		type: "GET",
+		data: {
+			flag: a,
+			sportsid: b,
+			userId: c,
+			viewflag: $("#user_question").val()
+		},
+		dataType: "html",
+		beforeSend: function() {
+
+		},
+		success: function(d) {
+			//$.unblockUI();
+			if($.trim(d) == 'countexceed')
+			{
+				$.alert({
+					title: "Alert!",
+					content: 'You can add upto 8 teams only.'
+				});
+				return false;
+			}else
+			{
+				$(".question_div_class").html("");
+				$(".custom_form").hide();
+				$("#sportsjun_forms_" + b).show();
+				$("#question_div_" + b).html(d);
+				var userSportCount = $('#userSportCount').val();
+				if ("follow" == a) {
+					if (1 == $("#user_question").val()) {
+						$("#sport_name_" + b).addClass("active");
+						$("#sport_name_" + b).attr("onclick", "displaySportQuestions('unfollow'," + b + "," + c + ")");
+					} else if (2 == $("#user_question").val()) {
+						$("#addplayer_" + b).show();
+						$('.nav-tabs a[href="#addplayer_' + b + '"]').tab("show");
+						userSportCount++;
+						$('#userSportCount').val(userSportCount);
+					}
+				}
+				suggestedWidget("teams", c, b, "player_to_team",'');
+				suggestedWidget("tournaments", c, b, "player_to_tournament",'');
+			}
+		}
+	});
 }

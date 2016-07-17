@@ -52,7 +52,7 @@ class ProviderNameExtendSocialite
 {
     public function handle(SocialiteWasCalled $socialiteWasCalled)
     {
-        $socialiteWasCalled->extendSocialite('providername', 'Your\Name\Space\ProviderName');
+        $socialiteWasCalled->extendSocialite('providername', \Your\Name\Space\Provider::class);
     }
 }
 ```
@@ -66,3 +66,28 @@ class ProviderNameExtendSocialite
 ## Overriding a Built-in Provider
 
 You can easily override a built-in `laravel/socialite` provider by creating a new one with exactly the same name (i.e. 'facebook').
+
+
+## Dynamically Passing a Config
+
+You can dynamically pass a config by using:
+```
+$key = 'SocialiteProviders.config.<provider_name>';
+$config = new \SocialiteProviders\Manager\Config('key', 'secret', 'callbackUri');
+$this->app->instance($key, $config)
+```
+
+**You must call this before you run any Socialite methods.**
+
+## Getting the Access Token Response Body
+
+Laravel Socialite by default only allows access to the `access_token`.  Which can be accessed 
+via the `\Laravel\Socialite\User->token` public property.  Sometimes you need access to the whole response body which
+may contain items such as a `refresh_token`.  
+
+To make this possible, the OAuth2 provider class needs to extend `\SocialiteProviders\Manager\OAuth2\AbstractProvider`.
+
+Currently, not all providers in the Socialite Providers have this implemented.  If you need this, submit and issue for 
+the specific provider.
+
+For the repositories that do support this, you can access it from the user object like so: `$user->accessTokenResponseBody`

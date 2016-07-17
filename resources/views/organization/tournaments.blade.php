@@ -17,10 +17,15 @@
                         </div>
                         <div class="col-md-10 col-sm-9 col-xs-12">
                             <div class="t_tltle">
-                                <div class="pull-left"><a href="{{ url('/gettournamentdetails').'/'.$lis->id }}" id="{{'touname_'.$lis->id}}">{{ $lis->name }}</a></div>
+                                <div>Tournament: {{ $lis->tournament_parent_name }}</div>
+                                <div class="pull-left">Event: <a href="{{ url('/gettournamentdetails').'/'.$lis->id }}" id="{{'touname_'.$lis->id}}"><i class="fa fa-link"></i> {{ $lis->name }}</a></div>
                                 <p class="search_location t_by">{{ $lis->location }}</p>
                             </div>
                             <div class="clearfix"></div>
+                            <p>Tournament Type: {{ $lis->type }}</p>
+                            @if($lis->prize_money)
+                                <p>Prize Money: {{ $lis->prize_money }}₹</p>
+                            @endif
                             @if(isset($lis->winnerName))
                             <div class="m-y-10 red search-results-tournament-winner">Winner: <span>{{ $lis->winnerName }}</span></div>
                             @endif
