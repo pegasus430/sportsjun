@@ -460,7 +460,7 @@ function appendTabElement(a, b, c, d) {
 function displaySportQuestions(a, b, c, d) {
     if (!b) return false;
     $.ajax({
-        url: base_url + "/getquestions",
+        url: base_url + "/viewpublic/getquestions",
         type: "GET",
         data: {
             flag: a,
@@ -998,6 +998,37 @@ function displayCountries(a) {
                 b += "<option value='" + c["id"] + "'>" + c["state_name"] + "</option>";
             });
             $(".states").each(function() {
+                $(this).html(b);
+            });
+        }
+    });
+}
+
+function displayOrgGroups(a) {
+    if (!a) {
+        $("#organization_group_id").html("<option value=''>Select Group</option>");
+        return false;
+    }
+    $.ajax({
+        url: base_url + "/get_org_groups_list",
+        type: "GET",
+        data: {
+            orgId: a
+        },
+        dataType: "json",
+        beforeSend: function() {
+            $.blockUI({
+                width: "50px",
+                message: $("#spinner").html()
+            });
+        },
+        success: function(a) {
+            $.unblockUI();
+            var b = "<option value=''>Select Team Group</option>";
+            $.each(a, function(a, c) {
+                b += "<option value='" + c["id"] + "'>" + c["name"] + "</option>";
+            });
+            $(".org-groups").each(function() {
                 $(this).html(b);
             });
         }

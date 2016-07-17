@@ -20,11 +20,12 @@ Nothing to "generate", just some classes to let you develop and maintain CRUD ba
 ![rapyd laravel](https://raw.github.com/zofe/rapyd-laravel/master/public/assets/rapyd-laravel.png)
  
 
-## Install in Laravel 5.1, 5.0, 4.*
+## Install in Laravel 5.2, 5.1, 5.0, 4.*
 
-dev-master switched to laravel 5.1  
+dev-master should work laravel 5.2 but is tested on 5.1 (LTS)   
 
 1. To `composer.json` add:  
+`"zofe/rapyd": "2.2.*"` for Laravel 5.2  
 `"zofe/rapyd": "2.1.*"` for Laravel 5.1  
 `"zofe/rapyd": "2.0.*"` for Laravel 5.0  
 `"zofe/rapyd": "1.3.*"` for Laravel 4.*  
@@ -44,7 +45,13 @@ dev-master switched to laravel 5.1
   or for < 5.0  
  `$ php artisan asset:publish zofe/rapyd`  
  `$ php artisan config:publish zofe/rapyd`
-  
+
+
+5. (optional) enable demo, uncomment the route:  
+```php
+#  /app/Http/rapyd.php
+// Route::controller('rapyd-demo','\Zofe\Rapyd\Demo\DemoController');
+```
 
 ## DataGrid
 
@@ -125,6 +132,11 @@ datagrid supports also csv output, so it can be used as "report" tool.
    $grid->buildCSV('export_articles', 'Y-m-d.His');  // force download with custom stamp
    $grid->buildCSV('uploads/filename', 'Y-m-d');  // write on file 
     ...
+    $grid->buildCSV('uploads/filename', 'Y-m-d', false); // without sanitize cells
+    
+    $as_excel = ['delimiter'=>',', 'enclosure'=>'"', 'line_ending'=>"\n"];  
+    $grid->buildCSV('uploads/filename', 'Y-m-d', true, $as_excel); // with customizations
+    
 ```
 
 
@@ -305,6 +317,25 @@ It also support query scopes (see eloquent documentation), closures, and a cool 
 [Custom layout and custom query scope](http://www.rapyd.com/rapyd-demo/customfilter) 
 
 
+## DataTree
+
+The DataTree extends the DataGrid, and displays sortable tree widget. It supports all the
+methods of the DataGrid with the exception of pagination and sorting. Another difference is
+you need to pass in an already loaded Baum Model, not an empty Model or Query Builder.
+
+To use this widget you need to `php composer.phar require baum/baum` and make sure your
+model extends `Baum\Node`.
+
+```php
+    // the root node won't appear, only its sub-nodes will be displayed.
+    $root = Menu::find(1) or App::abort(404);
+
+    $tree = \DataTree::source($root);
+    $tree->add('title');
+    $tree->edit("/menu/edit", 'Edit', 'modify|delete');
+    $tree->submit('Save the order');
+    return view('menu-list', compact('tree'));
+```
 
 
 ## Namespace consideration, Extending etc.
@@ -365,13 +396,13 @@ you can do this with:
 <head>
   ...
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-{{ Rapyd::styles() }}
+{!! Rapyd::styles() !!}
 </head>
 ....
 
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-   {{ Rapyd::scripts() }}
+   {!! Rapyd::scripts() !!}
 </body>
 ```
 

@@ -5,8 +5,6 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Sofa\Eloquence\Eloquence;
-use App\Helpers\Helper;
-use Auth;
 
 class Tournaments extends Model
 {
@@ -14,12 +12,18 @@ class Tournaments extends Model
     use SoftDeletes,
         Eloquence;
 
-    protected $table             = 'tournaments';
-    protected $dates             = ['deleted_at'];
-    protected $searchableColumns = ['name',
-        'location'];
-    protected $morphClass        = 'tournaments';
-    protected $fillable          = array(
+    protected $table = 'tournaments';
+
+    protected $dates = ['deleted_at'];
+
+    protected $searchableColumns = [
+        'name',
+        'location',
+    ];
+
+    protected $morphClass = 'tournaments';
+    
+    protected $fillable = [
         'id',
         'name',
         'created_by',
@@ -59,7 +63,18 @@ class Tournaments extends Model
         'tournament_parent_name',
         'manager_id',
         'match_type',
-        'player_type');
+        'player_type',
+    ];
+
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function tournamentParent()
+    {
+        return $this->belongsTo(TournamentParent::class, 'tournament_parent_id',
+            'id');
+    }
 
     public function sports()
     {

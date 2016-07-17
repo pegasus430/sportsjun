@@ -145,6 +145,7 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\ComposerServiceProvider::class,
         'SocialiteProviders\Manager\ServiceProvider',
         'Illuminate\Html\HtmlServiceProvider',
 		Zofe\Rapyd\RapydServiceProvider::class,
@@ -152,6 +153,9 @@ return [
         Proengsoft\JsValidation\JsValidationServiceProvider::class,
         Mews\Captcha\CaptchaServiceProvider::class,
         'Sofa\Eloquence\ServiceProvider',
+
+		Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+		SKAgarwal\Generators\GeneratorsServiceProvider::class,
     ],
 
     /*

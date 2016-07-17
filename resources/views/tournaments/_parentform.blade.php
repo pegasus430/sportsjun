@@ -88,6 +88,34 @@
 </div>
 </div>
 
+</div>
+ <div class="row">
+    <div class = "col-sm-12">
+        <div class = "section">
+            <label class = "form_label">{{   trans('message.team.fields.organization') }} </label>
+            <label class = "field select">
+                {!! Form::select('organization_id',$organization,null, array('class'=>'gui-input','id'=>'organization_id','placeholder'=>'Select Organization', 'onchange' => 'displayOrgGroups(this.value)')) !!}
+                @if ($errors->has('organization_id'))
+                    <p class = "help-block">{{ $errors->first('organization_id') }}</p>
+                @endif
+                <i class = "arrow double"></i>
+            </label>
+        </div>
+    </div>
+
+    <div class = "col-sm-12">
+        <div class = "section" id="organization-groups" @if(!isset($groupsList)) style="display: none" @endif>
+            <label class = "form_label">{{   trans('message.team.fields.organization_groups') }} </label>
+            <p class = "help-block">Select groups only if it is an internal tournament.</p>
+            <label class = "field select">
+                {!! Form::select('organization_group_id[]',isset($groupsList) ? $groupsList : [], isset($groupId) ? $groupId : null, array('class'=>'gui-input org-groups','id'=>'organization_group_id','placeholder'=>'Select Group', 'multiple')) !!}
+                @if ($errors->has('organization_group_id'))
+                    <p class = "help-block">{{ $errors->first('organization_group_id') }}</p>
+                @endif
+                <i class = "arrow double"></i>
+            </label>
+        </div>
+    </div>
 
 
 </div>
@@ -121,6 +149,12 @@
                     $('#managerId').val(ui.item.id);
                 }
             });
+
+        $('[name=organization_id]').change(function(){
+            if($(this).val != '') {
+                $('#organization-groups').show();
+            }
+        });
     });
 
 

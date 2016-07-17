@@ -2,12 +2,11 @@
 
 namespace App\Model;
 
+use App\User;
+use Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Sofa\Eloquence\Eloquence;
-use App\Helpers\Helper;
-use Auth;
-use DB;
 
 class Organization extends Model
 {
@@ -25,6 +24,26 @@ class Organization extends Model
                 'latitude', 'address', 'city_id', 'city', 'state_id', 'state', 'country_id',
                 'country', 'zip', 'alternate_contact_number', 'contact_name', 'logo');
         protected $morphClass        = 'organization';
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function staff()
+    {
+        return $this->belongsToMany(User::class, 'organization_staffs',
+            'organization_id', 'user_id')
+                    ->withPivot('organization_role_id', 'status')
+                    ->withTimestamps();
+    }
+
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function groups()
+    {
+        return $this->hasMany(OrganizationGroup::class, 'organization_id', 'id');
+    }
 
         public function photos()
         {

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends(Auth::user() ? 'layouts.app' : 'home.layout')
 @section('content')
 @include ('tournaments._leftmenu')
 <div id="content-team" class="col-sm-10 group_stage">

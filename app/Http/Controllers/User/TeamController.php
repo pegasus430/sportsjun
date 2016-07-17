@@ -12,6 +12,7 @@ use App\Model\Country;
 use App\Model\MatchSchedule;
 use App\Model\Notifications;
 use App\Model\Organization;
+use App\Model\OrganizationGroup;
 use App\Model\Photo;
 use App\Model\Requestsmodel;
 use App\Model\Sport;
@@ -25,8 +26,6 @@ use Carbon\Carbon;
 use DB;
 use Request;
 use Response;
-use URL;
-use View;
 
 class TeamController extends Controller
 {
@@ -50,16 +49,18 @@ class TeamController extends Controller
 		$countries = Country::orderBy('country_name')
 							->lists('country_name', 'id')
 							->all();
+        $organization_id = Request::input('organization_id');
 		$states = [];
-                $organization = Organization::orderBy('name')->where('user_id', Auth::user()->id)->lists('name', 'id')->all();
+                $organization = Organization::orderBy('name')->where('user_id', (isset(Auth::user()->id)?Auth::user()->id:0))->lists('name', 'id')->all();
                 $cities = array();
 		return view('teams.createteam')->with(array('sports'=>['' => 'Select Sport'] + $sports))
 										->with('countries', ['' => 'Select Country'] + $countries)
 										->with('states', ['' => 'Select State'] + $states)
 										->with('cities', ['' => 'Select City'] + $cities)
                                         ->with('organization', ['' => 'Select Organization'] + $organization)
-										->with('enum', $enum);
-    }  
+										->with('enum', $enum)
+										->with('organization_id', $organization_id);
+    }
 
     /**
      * Store a newly created team in storage.
@@ -70,7 +71,7 @@ class TeamController extends Controller
     public function store(Requests\CreateTeamRequest $request)
     {
 		//getting team owner id from session logged in user id
-        $request['team_owner_id'] = Auth::user()->id;
+        $request['team_owner_id'] = (isset(Auth::user()->id)?Auth::user()->id:0);
 		$request['city'] = !empty(Request::get('city_id')) ? City::where('id',Request::get('city_id'))->first()->city_name : 'null';
 		$request['state'] = !empty(Request::get('state_id')) ? State::where('id', Request::get('state_id'))->first()->state_name : 'null';
 		$request['country'] = !empty($request['country_id']) ? Country::where('id', $request['country_id'])->first()->country_name : 'null';
@@ -78,28 +79,34 @@ class TeamController extends Controller
 	    $request['location']=trim($location,",");
 		//model call to save the data
 		$team_details = Team::create($request->all());
+
+        if ($request->has('organization_group_id')) {
+            $this->attachOrganizationGroupToTeam($team_details,
+                $request->input('organization_group_id'));
+        }
+
 		if(!empty($team_details))
 		{
 			$team_id = isset($team_details['id'])?$team_details['id']:0;
                         if(count($request['filelist_logo'])) {
-                            Helper::uploadPhotos($request['filelist_logo'],config('constants.PHOTO_PATH.TEAMS_FOLDER_PATH'),$team_id,1,1,config('constants.PHOTO.TEAM_PHOTO'),Auth::user()->id);
-                        }   
-        $logo=Photo::select('url')->where('imageable_type',config('constants.PHOTO.TEAM_PHOTO'))->where('imageable_id',  $team_details['id'])->where('user_id', Auth::user()->id)->where('is_album_cover',1)->get()->toArray();
+                            Helper::uploadPhotos($request['filelist_logo'],config('constants.PHOTO_PATH.TEAMS_FOLDER_PATH'),$team_id,1,1,config('constants.PHOTO.TEAM_PHOTO'),(isset(Auth::user()->id)?Auth::user()->id:0));
+                        }
+        $logo=Photo::select('url')->where('imageable_type',config('constants.PHOTO.TEAM_PHOTO'))->where('imageable_id',  $team_details['id'])->where('user_id', (isset(Auth::user()->id)?Auth::user()->id:0))->where('is_album_cover',1)->get()->toArray();
 		if(!empty($logo))
 		{
 			foreach($logo as $l)
 			{
 				  Team::where('id', $team_details['id'])->update(['logo' => $l['url']]);
-				
+
 			}
-			
-		 }						
+
+		 }
 			if(is_numeric($team_id))
 			{
 				//insert into team players table
                 $teamplayer_details = array(
 					'team_id' => $team_id,
-					'user_id' => Auth::user()->id,
+					'user_id' => (isset(Auth::user()->id)?Auth::user()->id:0),
 					'role' => 'owner',
 					'status' => 'accepted',
                     'created_at' => Carbon::now(),
@@ -109,7 +116,7 @@ class TeamController extends Controller
 					//insert into user statistics table
 					//check if there is any manager existing with that team
 					//if exist insert else update
-					$existing_user_details = UserStatistic::where('user_id', Auth::user()->id)->first();
+					$existing_user_details = UserStatistic::where('user_id', (isset(Auth::user()->id)?Auth::user()->id:0))->first();
 					if(count($existing_user_details))
 					{
 						if(!$this->isExist($existing_user_details['following_sports'],$request['sports_id']))
@@ -118,27 +125,27 @@ class TeamController extends Controller
 						}
 						// if(!$this->isExist($existing_user_details['following_teams'],$team_id))
 						// {
-							// $existing_user_details->following_teams = $existing_user_details['following_teams'].$team_id.',';							
+							// $existing_user_details->following_teams = $existing_user_details['following_teams'].$team_id.',';
 						// }
 						if(!$this->isExist($existing_user_details['managing_teams'],$team_id))
 						{
-							$existing_user_details->managing_teams = $existing_user_details['managing_teams'].$team_id.',';							
+							$existing_user_details->managing_teams = $existing_user_details['managing_teams'].$team_id.',';
 						}
 						if(!$this->isExist($existing_user_details['joined_teams'],$team_id))
 						{
-							$existing_user_details->joined_teams = $existing_user_details['joined_teams'].$team_id.',';							
+							$existing_user_details->joined_teams = $existing_user_details['joined_teams'].$team_id.',';
 						}
 						$existing_user_details->save();
 					}
 					else
 					{
 						$user_statistic_details = array(
-						'user_id' => Auth::user()->id,
+						'user_id' => (isset(Auth::user()->id)?Auth::user()->id:0),
 						'following_sports' => ','.$request['sports_id'].',',
 						//'following_teams' => ','.$team_id.',',
 						'managing_teams' => ','.$team_id.',',
 						'joined_teams' => ','.$team_id.',');
-						UserStatistic::create($user_statistic_details);						
+						UserStatistic::create($user_statistic_details);
 					}
 					//redirect to create team page with status message
 					return redirect()->route('team/teams')->with('status', trans('message.team.create'));
@@ -176,7 +183,7 @@ class TeamController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id) 
+    public function edit($id)
     {
 //		$sports = Sport::orderBy('sports_name')->lists('sports_name', 'id')->all();
                 $sports = Helper::getDevelopedSport(1,1);
@@ -208,6 +215,12 @@ class TeamController extends Controller
      */
     public function updateteam(Requests\CreateTeamRequest $request,$id)
     {
+        $router = route('team/teams');
+        
+        if ($request->has('organization_id')) {
+            $router = route('organizationTeamlist', [$request->input('organization_id')]);
+        }
+        
 		$request = Request::all();
 		if(is_numeric($id))
 		{
@@ -226,7 +239,7 @@ class TeamController extends Controller
 			$country = Country::where('id', config('constants.COUNTRY_INDIA'))->first()->country_name;
 			$locationn=Helper::address(	$address,$city,$state,$country );
 	        $location=trim($locationn,",");
-			
+
 			$player_available = !empty($request['player_available'])?$request['player_available']:0;
 			$team_available = !empty($request['team_available'])?$request['team_available']:0;
 			if(!empty($sports_id) && !empty($name))
@@ -238,28 +251,28 @@ class TeamController extends Controller
 					//update existing album cover to 0
 					Photo::where('imageable_id', '=', $id)->where('imageable_type', '=', config('constants.PHOTO.TEAM_PHOTO'))->update(['is_album_cover'=>0,'updated_at'=>Carbon::now()]);
 					//update new photo
-					
-					Helper::uploadPhotos($request['filelist_logo'],config('constants.PHOTO_PATH.TEAMS_FOLDER_PATH'),$id,1,1,config('constants.PHOTO.TEAM_PHOTO'),Auth::user()->id);
+
+					Helper::uploadPhotos($request['filelist_logo'],config('constants.PHOTO_PATH.TEAMS_FOLDER_PATH'),$id,1,1,config('constants.PHOTO.TEAM_PHOTO'),(isset(Auth::user()->id)?Auth::user()->id:0));
 				}
-				$logo=Photo::select('url')->where('is_album_cover','=','1')->where('imageable_type',config('constants.PHOTO.TEAM_PHOTO'))->where('imageable_id',  $id )->where('user_id', Auth::user()->id)->get()->toArray();
+				$logo=Photo::select('url')->where('is_album_cover','=','1')->where('imageable_type',config('constants.PHOTO.TEAM_PHOTO'))->where('imageable_id',  $id )->where('user_id', (isset(Auth::user()->id)?Auth::user()->id:0))->get()->toArray();
 					if(!empty($logo))
 					{
 						foreach($logo as $l)
 						{
 							  Team::where('id', $id)->update(['logo' => $l['url']]);
 						}
-						
+
 					}
-				return redirect()->route('team/teams')->with('status', trans('message.team.update'))->with('div_sel_mgt','active');
+				return redirect($router)->with('status', trans('message.team.update'))->with('div_sel_mgt','active');
 			}
 			else
 			{
-				return redirect()->route('team/teams')->withErrors('alert', trans('message.team.updatefail'))->with('div_sel_mgt','active');
-			}			
+				return redirect($router)->withErrors('alert', trans('message.team.updatefail'))->with('div_sel_mgt','active');
+			}
 		}
 		else
 		{
-			return redirect()->route('team/teams')->withErrors('alert', trans('message.team.updatefail'))->with('div_sel_mgt','active');
+			return redirect($router)->withErrors('alert', trans('message.team.updatefail'))->with('div_sel_mgt','active');
 		}
     }
 
@@ -273,7 +286,7 @@ class TeamController extends Controller
     {
         //
     }
-	
+
     /**
      *function for myteam
      */
@@ -289,7 +302,7 @@ class TeamController extends Controller
 				else
 				{
 					$q1->select()->whereNotIn('status',['rejected'])->orderBy('status','asc');
-				}													
+				}
 			},
 			'teamplayers.user'=>function($q2){
 				$q2->select();
@@ -298,12 +311,12 @@ class TeamController extends Controller
 				$q3->select();
 			}
 		));
-		$managingTeamIds = Helper::getManagingTeamIds(Auth::user()->id);
+		$managingTeamIds = Helper::getManagingTeamIds((isset(Auth::user()->id)?Auth::user()->id:0));
 		$managing_team_ids = explode(',', trim($managingTeamIds,','));
 		//if the team id is in managing team ids, then add owner conditioin
 		if(in_array($team_id, $managing_team_ids))
 		{
-			$teams_query->where('team_owner_id',Auth::user()->id);
+			$teams_query->where('team_owner_id',(isset(Auth::user()->id)?Auth::user()->id:0));
 		}
 		$teams = $teams_query->where('id',$team_id)->get();
 		$teams = $teams->toarray();
@@ -339,7 +352,7 @@ class TeamController extends Controller
 			}
 		}
 		//get following sports
-		$userId = Auth::user()->id;
+		$userId = (isset(Auth::user()->id)?Auth::user()->id:0);
 		$following_sportids = UserStatistic::where('user_id', $userId)->pluck('following_sports');
 		// Helper::setMenuToSelect(2,1);
 		$sport = !empty($teams[0]['sports_id']) ? Sport::where('id', $teams[0]['sports_id'])->pluck('sports_name') : '';
@@ -352,7 +365,7 @@ class TeamController extends Controller
 		}
 		//get role for the logged in user id
 		$logged_in_user_role = TeamPlayers::where('user_id', $userId)->where('team_id',$team_id)->pluck('role');
-                
+
         return view('teams.myteam')
                 ->with('teams',$teams)
                 ->with('team_owners_managers',$team_owners_managers)
@@ -363,21 +376,21 @@ class TeamController extends Controller
                 ->with('sport_id',$sport_id)
                 ->with('team_id',$team_id);
     }
-	
+
     /**
      *function for teams list
      */
     public function teamslist($user_id=null)
     {
-		
+
     	if($user_id == '')
     	{
-    		$user_id = Auth::user()->id;
+    		$user_id = (isset(Auth::user()->id)?Auth::user()->id:0);
     	}
 		else
 		{
 			$user_id = $user_id;
-			
+
 		}
 		$joinTeamArray = array();
 		$followingTeamArray = array();
@@ -385,15 +398,15 @@ class TeamController extends Controller
 		$managedOrgArray=array();
 		$managedOrgArray1=array();
 		$managedOrgArray= Organization::select('name', 'id','isactive')->where('user_id', $user_id)->get()->toArray();
-		
+
 		//get the details from user statistics based on user id
 		//$follow_teamDetails = UserStatistic::where('user_id', $user_id)->first();
 		$modelObj = new \App\Model\Followers;
-		
+
 		$follow_teamDetails = $modelObj->getFollowingList($user_id,'team');
 		//echo "<pre>";print_r($follow_teamDetails);exit;
-		
-		
+
+
 		$following_team_array = array();
 		if(isset($follow_teamDetails) && count($follow_teamDetails)>0)
 		{
@@ -401,47 +414,54 @@ class TeamController extends Controller
 		}
 
 		$modelObj = new \App\Model\Team;
-		
+
 		$teamDetails = $modelObj->getTeamsByRole($user_id,1);
 		// echo "<pre>";print_r($teamDetails);exit;
-		
+
 		if(isset($teamDetails) && count($teamDetails)>0)
 		{
 			$joined_team_array = array_filter(explode(',',$teamDetails[0]->joined_teams));
 			if(count($joined_team_array))
 			{
-				$joinTeamArray = $this->getteamdetails($joined_team_array);			
+				$joinTeamArray = $this->getteamdetails($joined_team_array);
 			}
 
 			$managed_team_array = array_filter(explode(',',$teamDetails[0]->managing_teams));
 			if(count($managed_team_array))
 			{
-				$manageTeamArray = $this->getteamdetails($managed_team_array);			
+				$manageTeamArray = $this->getteamdetails($managed_team_array);
 			}
 		}
 		if(count($following_team_array))
-		{	
-			$followingTeamArray = $this->getteamdetails($following_team_array);			
+		{
+			$followingTeamArray = $this->getteamdetails($following_team_array);
 		}
 	  	if(count($managedOrgArray))
 		{
-			foreach($managedOrgArray as $man)	
+			foreach($managedOrgArray as $man)
 			{
 				$id[]=$man['id'];
 			}
-			$managedOrgArray1=$this->getorgdeatils( $id);			
+			$managedOrgArray1=$this->getorgdeatils( $id);
 		}
-		
-		return view('teams.teamslist',array('joinTeamArray'=>$joinTeamArray,'followingTeamArray'=>$followingTeamArray,'manageTeamArray'=>$manageTeamArray,'managedOrgArray'=>$managedOrgArray1,'id'=>Auth::user()->id,'userId'=>$user_id));
-    }
+
+		return view('teams.teamslist', [
+			'joinTeamArray' => $joinTeamArray,
+			'followingTeamArray' => $followingTeamArray,
+			'manageTeamArray' => $manageTeamArray,
+			'managedOrgArray' => $managedOrgArray1,
+			'id' => (isset(Auth::user()->id)?Auth::user()->id:0),
+			'userId' => $user_id,
+		]);
+	}
 	function getorgdeatils($org_array='')
 	{
 		$result = array();
 		$org_details = Organization::with(array(
 				'teamplayers'=>function($q1){
-						$q1->select();	
+						$q1->select();
 				},
-								
+
 				'photos'=>function($q3){
 					$q3->select();
 				},
@@ -449,14 +469,14 @@ class TeamController extends Controller
 				{
 					$q4->select();
 				}
-				
+
 			// ))->whereIn('id',$teams_array)->get();
 			))->whereIn('id',$org_array)->orderBy('isactive','desc')->get();
 			if(count($org_details))
 			{
-				$result = $org_details->toArray();		
+				$result = $org_details->toArray();
 			}
-			return $result;						
+			return $result;
 	}
 	function getteamdetails($teams_array='')
 	{
@@ -464,11 +484,11 @@ class TeamController extends Controller
 		$result = array();
 		$team_details = Team::with(array(
 				'teamplayers'=>function($q1){
-						$q1->select();	
+						$q1->select();
 				},
 				'sports'=>function($q2){
-						$q2->select();	
-				},				
+						$q2->select();
+				},
 				'photos'=>function($q3){
 					$q3->select();
 				},
@@ -480,31 +500,31 @@ class TeamController extends Controller
 			))->whereIn('id',$teams_array)->orderBy('isactive','desc')->get();
 			if(count($team_details))
 			{
-				$result = $team_details->toArray();		
+				$result = $team_details->toArray();
 			}
-			return $result;						
+			return $result;
 	}
-	
+
 	function getorgDetails($id)
 	{
-		$user_id = Auth::user()->id;
+		$user_id = (isset(Auth::user()->id)?Auth::user()->id:0);
 	    $teams = Team::select('id','name')->where('organization_id',$id)->get()->toArray();
-		$photo= Photo::select('url')->where('imageable_id', '=', $id)->where('imageable_type', '=', config('constants.PHOTO.TEAM_PHOTO'))->where('user_id', Auth::user()->id)->get()->toArray();
+		$photo= Photo::select('url')->where('imageable_id', '=', $id)->where('imageable_type', '=', config('constants.PHOTO.TEAM_PHOTO'))->where('user_id', (isset(Auth::user()->id)?Auth::user()->id:0))->get()->toArray();
 		$orgInfo= Organization::select()->where('id',$id)->get()->toArray();
-	
+
 		return view('teams.teams')->with(array( 'teams'=>$teams,'photo'=>$photo,'orgInfo'=>$orgInfo,'id'=>$id, 'userId' => $user_id ));
 	}
 	function organizationTeamlist($id)
 	{
-	
+
 		   // $teams = Team::select('id','name','logo','description')->where('organization_id',$id)->get()->toArray();
-    	$user_id = Auth::user()->id;  
+    	$user_id = (isset(Auth::user()->id)?Auth::user()->id:0);
 		   $teams = DB::table('teams')
             ->join('users', 'users.id', '=', 'teams.team_owner_id')
             ->select('teams.id','teams.name as teamname','teams.team_owner_id','teams.logo','teams.description','users.name','teams.isactive')
 			->where('organization_id',$id)
             ->orderBy('isactive','desc')->get();
-		// $photo= Photo::select('url')->where('imageable_id', '=', $id)->where('imageable_type', '=', config('constants.PHOTO.TEAM_PHOTO'))->where('user_id', Auth::user()->id)->get()->toArray();
+		// $photo= Photo::select('url')->where('imageable_id', '=', $id)->where('imageable_type', '=', config('constants.PHOTO.TEAM_PHOTO'))->where('user_id', (isset(Auth::user()->id)?Auth::user()->id:0))->get()->toArray();
 		$orgInfo= Organization::select()->where('id',$id)->get()->toArray();
 		return view('teams.orgteams')->with(array( 'teams'=>$teams,'id'=>$id,'orgInfo'=>$orgInfo,'userId'=>$user_id));
 	}
@@ -547,17 +567,17 @@ class TeamController extends Controller
 			return redirect()->back()->with('error_msg', trans('message.team.validation'));
 		}
 	}
-	
+
 	//function to remove user from a team
 	public function removeplayerfromteam($team_id,$user_id)
 	{
 		if(is_numeric($team_id) && is_numeric($user_id))
 		{
 			$player_id = TeamPlayers::where('user_id', $user_id)->where('team_id', $team_id)->get(['id']);
-			
+
 			//remove player from the match schedule if score is not entered on that match
 			Helper::removePlayersFromMatch($team_id,$user_id);
-			
+
 			if(count($player_id))
 			{
 				if(TeamPlayers::whereIn('id',$player_id)->delete())
@@ -570,7 +590,7 @@ class TeamController extends Controller
 						{
 							$this->updateNotificatios($val->id);
 							Requestsmodel::find($val->id)->delete();
-						}						
+						}
 					}
 					return redirect()->back()->with('status', trans('message.team.userremoved'));
 				}
@@ -582,14 +602,14 @@ class TeamController extends Controller
 			else
 			{
 				return redirect()->back()->with('error_msg', trans('message.team.validation'));
-			}			
+			}
 		}
-		else		
+		else
 		{
 			return redirect()->back()->with('error_msg', trans('message.team.validation'));
 		}
 	}
-	
+
 	//function to make team makeasteamcaptain
 	public function makeasteamcaptain($team_id,$user_id)
 	{
@@ -629,7 +649,7 @@ class TeamController extends Controller
 			return redirect()->back()->with('error_msg', trans('message.team.validation'));
 		}
 	}
-	
+
 	//function to make team makeasteamvicecaptain
 	public function makeasteamvicecaptain($team_id,$user_id)
 	{
@@ -669,7 +689,7 @@ class TeamController extends Controller
 			return redirect()->back()->with('error_msg', trans('message.team.validation'));
 		}
 	}
-	
+
 	//function to reamove teammanager
 	public function removeasteammanager($team_id,$user_id)
 	{
@@ -698,7 +718,7 @@ class TeamController extends Controller
 			return redirect()->back()->with('error_msg', trans('message.team.validation'));
 		}
 	}
-	
+
 	//function to check whether the value exist or not
 	public function isExist($existing_ids_str,$new_id)
 	{
@@ -713,7 +733,7 @@ class TeamController extends Controller
 			return false;
 		}
 	}
-	
+
 	//function to send invite reminder
 	public function sendinvitereminder($team_id,$user_id)
 	{
@@ -727,7 +747,7 @@ class TeamController extends Controller
 			$view = 'emails.sendinvitereminder';
 			$subject = 'Reminder for invite';
 			$view_data = array('user_name'=>$user_name);
-			//send the data to sendmail 
+			//send the data to sendmail
 			$data = array('view'=>$view,'subject'=>$subject,'to_email_id'=>$to_email_id,'view_data'=>$view_data,'to_user_id'=>$user_id,'flag'=>'user','send_flag'=>1);
 			if(SendMail::sendmail($data))
 			{
@@ -751,7 +771,7 @@ class TeamController extends Controller
 		$request = Request::all();
 		$delete_id = Request::get('delete');
 		$edit_id = Request::get('modify');
-		$enum = config('constants.ENUM.TEAMS.TEAM_LEVEL');  
+		$enum = config('constants.ENUM.TEAMS.TEAM_LEVEL');
 		if(is_numeric($delete_id) && $delete_id > 0)
 		{
 			if(Team::find($delete_id)->delete())
@@ -775,14 +795,14 @@ class TeamController extends Controller
 			$sports = Sport::orderBy('sports_name')->lists('sports_name', 'id')->all();
 			return view('teams.editteam')->with(array('sports'=>['' => 'Select Sport'] + $sports))
 											->with('states', ['' => 'Select State'] + $states)
-											->with('cities', ['' => 'Select City'] + $cities)			
+											->with('cities', ['' => 'Select City'] + $cities)
 											->with('teamdetails' , $teamdetails)
-                                            ->with('organization', ['' => 'Select Organization'] + $organization)                              
+                                            ->with('organization', ['' => 'Select Organization'] + $organization)
 											->with('id' , $edit_id)
-											 ->with('enum', ['' => 'Team Level'] + $enum);			
+											 ->with('enum', ['' => 'Team Level'] + $enum);
 		}
 	}*/
-	
+
 	//to edit team
 	public function editteam($team_id)
 	{
@@ -795,7 +815,24 @@ class TeamController extends Controller
 		{
 			$teamdetails = Team::where('id',$edit_id)->first();
 		}
-        $organization = Organization::orderBy('name')->where('user_id', Auth::user()->id)->lists('name', 'id')->all();
+        $groupsList = [];
+        $groupId = null;
+        if ($teamdetails->organization_id) {
+            $groupsList =
+                OrganizationGroup::whereOrganizationId($teamdetails->organization_id)
+                                 ->lists('name', 'id');
+
+            $teamGroup = $teamdetails->organizationGroups()
+                                     ->where('organization_id',
+                                         $teamdetails->organization_id)
+                                     ->first();
+
+            if ($teamGroup) {
+                $groupId = $teamGroup->id;
+            }
+        }
+        
+        $organization = Organization::orderBy('name')->where('user_id', (isset(Auth::user()->id)?Auth::user()->id:0))->lists('name', 'id')->all();
 		$countries = Country::orderBy('country_name')->lists('country_name', 'id')->all();
 		$states = State::where('country_id', $teamdetails->country_id)->orderBy('state_name')->lists('state_name', 'id')->all();
 		if (isset($teamdetails->state_id) && is_numeric($teamdetails->state_id)) {
@@ -808,9 +845,11 @@ class TeamController extends Controller
 										->with('states', ['' => 'Select State'] + $states)
 										->with('cities', ['' => 'Select City'] + $cities)
 										->with('teamdetails' , $teamdetails)
-                                        ->with('organization', ['' => 'Select Organization'] + $organization)                              
+                                        ->with('organization', ['' => 'Select Organization'] + $organization)
 										->with('id' , $edit_id)
-										 ->with('enum', ['' => 'Team Level'] + $enum);
+										 ->with('enum', ['' => 'Team Level'] + $enum)
+										 ->with('groupId', $groupId)
+										 ->with('groupsList', $groupsList);
 	}
 	//function to delete the team
 	public function deleteteam($team_id,$flag)
@@ -851,18 +890,18 @@ class TeamController extends Controller
 			return redirect()->back()->with('error_msg', trans('message.team.teamupdatefail'))->with('div_sel_mgt','active');
 		}
 	}
-	
+
 	//function to get the team details, used in team list
 	// function getteamdetails($teams_array='')
 	// {
 		// $result = array();
 		// $team_details = Team::with(array(
 				// 'teamplayers'=>function($q1){
-						// $q1->select();	
+						// $q1->select();
 				// },
 				// 'sports'=>function($q2){
-						// $q2->select();	
-				// },				
+						// $q2->select();
+				// },
 				// 'photos'=>function($q3){
 					// $q3->select();
 				// },
@@ -874,10 +913,10 @@ class TeamController extends Controller
 			// ))->whereIn('id',$teams_array)->get();
 			// if(count($team_details))
 			// {
-				// $result = $team_details->toArray();		
+				// $result = $team_details->toArray();
 			// }
 		//	echo "<pre>";print_r($result );exit;
-			// return $result;						
+			// return $result;
 	// }
 	//function to update the availability of team/player
 	public function updateplayerorteamavailability()
@@ -912,7 +951,7 @@ class TeamController extends Controller
 	{
 		Helper::leftMenuVariables($id);
         $limit = config('constants.LIMIT');
-        $offset = 0;		
+        $offset = 0;
         $type_ids = config('constants.REQUEST_TYPE.PLAYER_TO_TEAM').','.config('constants.REQUEST_TYPE.TEAM_TO_PLAYER').','.config('constants.REQUEST_TYPE.TEAM_TO_TOURNAMENT').','.config('constants.REQUEST_TYPE.TEAM_TO_TEAM');
 		//pass type flag to get the request
 		$result = AllRequests::getrequests($id,$type_ids,$limit,$offset);
@@ -935,7 +974,7 @@ class TeamController extends Controller
 		if($flag == 'Received')
 		{
 			$result = AllRequests::getrequests($id,$type_ids,$limit,$offset1);
-			$offset1 = $offset1+$limit;		
+			$offset1 = $offset1+$limit;
 		}
 		else
 		{
@@ -985,7 +1024,7 @@ class TeamController extends Controller
 						$match_schedule_id = $this->getmatchshceduleid($request_id);
 						if(!empty($match_schedule_id))
 						{
-							$this->updatematchschedules($match_schedule_id,($flag=='a'?'accepted':'rejected'));	
+							$this->updatematchschedules($match_schedule_id,($flag=='a'?'accepted':'rejected'));
 						}
 					}
 					elseif($request_data['type'] == config('constants.REQUEST_TYPE.TEAM_TO_PLAYER'))
@@ -996,9 +1035,9 @@ class TeamController extends Controller
 					{
 						AllRequests::addplayer($request_data['from_id'],$request_data['to_id']);
 						AllRequests::updateteamplayerstatus($request_data['from_id'],$request_data['to_id'],$flag);
-					}	
+					}
 					//code to send response notification
-					AllRequests::sendResponseNotification($request_id);				
+					AllRequests::sendResponseNotification($request_id);
 				}
 
 			}
@@ -1030,7 +1069,7 @@ class TeamController extends Controller
 		$sport_type = Sport::where('id',$sport_id)->pluck('sports_type');
 		$request_type = !empty($request['req_type'])?$request['req_type']:NULL;
 		$player_tournament_id = !empty($request['player_tournament_id'])?$request['player_tournament_id']:0;
-		$user_id =  Auth::user()->id;
+		$user_id =  (isset(Auth::user()->id)?Auth::user()->id:0);
 		$teams = array();
 		if($request_type  == 'TEAM_TO_TOURNAMENT' || $request_type  == 'TEAM_TO_PLAYER')
 		{
@@ -1044,13 +1083,13 @@ class TeamController extends Controller
 		//$sport_id = Request::get('sport_id');//sport ids
 		//$team_id = Request::get('team_id');
 		$results = array();
-		
+
 		$team_player_qry = DB::table('team_players')
 						->select('team_players.user_id')
 						 ->where('team_id', '=', $team_id)
 						 ->whereNull('deleted_at')
 						 ->get();
-		$team_user_id = array();				
+		$team_user_id = array();
 		foreach($team_player_qry as $team)
 		{
 			$team_user_id[] = $team->user_id;
@@ -1089,11 +1128,11 @@ class TeamController extends Controller
 			$TeamPlayer->role = $role;
 			$TeamPlayer->save();
 			 $last_inserted_id = $TeamPlayer->id;
-			 
-			 
+
+
 			//insert players in match schedule table if match is scheduled on that team
 			$insertTeamPlayers = Helper::insertTeamPlayersInSchedules($team_id,$user_id);
-			 
+
 			//return Response::json($results);
 			//get the data by joining teams, teamplayers and users table
 			/*$teams = Team::with(array(
@@ -1105,7 +1144,7 @@ class TeamController extends Controller
 					else
 					{
 						$q1->select()->where('id',$last_inserted_id);
-					}													
+					}
 				},
 				'teamplayers.user'=>function($q2){
 					$q2->select();
@@ -1113,7 +1152,7 @@ class TeamController extends Controller
 				'teamplayers.user.photos'=>function($q3){
 					$q3->select();
 				}
-			))->where('team_owner_id',Auth::user()->id)->where('id',$team_id)->get();
+			))->where('team_owner_id',(isset(Auth::user()->id)?Auth::user()->id:0))->where('id',$team_id)->get();
 			$teams = $teams->toarray();
 			$team_owners_managers = array();
 			$team_players = array();
@@ -1147,7 +1186,7 @@ class TeamController extends Controller
 				}
 			}
 			//get following sports
-			$userId = Auth::user()->id;
+			$userId = (isset(Auth::user()->id)?Auth::user()->id:0);
 			$following_sportids = UserStatistic::where('user_id', $userId)->pluck('following_sports');
 			// Helper::setMenuToSelect(2,1);
 			$sport = !empty($teams[0]['sports_id']) ? Sport::where('id', $teams[0]['sports_id'])->pluck('sports_name') : '';
@@ -1160,8 +1199,8 @@ class TeamController extends Controller
 			}
 			//get role for the logged in user id
 			$logged_in_user_role = TeamPlayers::where('user_id', $userId)->where('team_id',$team_id)->pluck('role');
-	       
-			$returnHTML =  view('teams.myteamplayers')->with('teams',$teams)->with('team_owners_managers',$team_owners_managers)->with('team_players',$team_players)->with('logged_in_user_role',$logged_in_user_role)->with('following_sportids',$following_sportids)->with('managing_teams',$managing_teams)->with('sport_id',$sport_id)->render();	 
+
+			$returnHTML =  view('teams.myteamplayers')->with('teams',$teams)->with('team_owners_managers',$team_owners_managers)->with('team_players',$team_players)->with('logged_in_user_role',$logged_in_user_role)->with('following_sportids',$following_sportids)->with('managing_teams',$managing_teams)->with('sport_id',$sport_id)->render();
 			return \Response::json(array('status'=>'success','msg' => trans('message.sports.teamplayer'),'html' =>$returnHTML));
 				//return Response()->json( array('status' => 'success','msg' => trans('message.sports.teamplayer')) );*/
 			return $this->getTeamPlayersDiv($request_array = array('team_id'=>$team_id));
@@ -1187,7 +1226,7 @@ class TeamController extends Controller
 				else
 				{
 					$q1->select()->whereNotIn('status',['rejected'])->orderBy('status','asc');
-				}													
+				}
 			},
 			'teamplayers.user'=>function($q2){
 				$q2->select();
@@ -1196,12 +1235,12 @@ class TeamController extends Controller
 				$q3->select();
 			}
 		));
-		$managingTeamIds = Helper::getManagingTeamIds(Auth::user()->id);
+		$managingTeamIds = Helper::getManagingTeamIds((isset(Auth::user()->id)?Auth::user()->id:0));
 		$managing_team_ids = explode(',', trim($managingTeamIds,','));
 		//if the team id is in managing team ids, then add owner conditioin
 		if(in_array($team_id, $managing_team_ids))
 		{
-			$teams_query->where('team_owner_id',Auth::user()->id);
+			$teams_query->where('team_owner_id',(isset(Auth::user()->id)?Auth::user()->id:0));
 		}
 		$teams = $teams_query->where('id',$team_id)->get();
 		$teams = $teams->toarray();
@@ -1239,7 +1278,7 @@ class TeamController extends Controller
 			}
 		}
 		//get following sports
-		$userId = Auth::user()->id;
+		$userId = (isset(Auth::user()->id)?Auth::user()->id:0);
 		$following_sportids = UserStatistic::where('user_id', $userId)->pluck('following_sports');
 		// Helper::setMenuToSelect(2,1);
 		$sport = !empty($teams[0]['sports_id']) ? Sport::where('id', $teams[0]['sports_id'])->pluck('sports_name') : '';
@@ -1252,8 +1291,8 @@ class TeamController extends Controller
 		}
 		//get role for the logged in user id
 		$logged_in_user_role = TeamPlayers::where('user_id', $userId)->where('team_id',$team_id)->pluck('role');
-		$returnHTML =  view('teams.myteamplayers')->with('teams',$teams)->with('team_owners_managers',$team_owners_managers)->with('team_players',$team_players)->with('logged_in_user_role',$logged_in_user_role)->with('following_sportids',$following_sportids)->with('managing_teams',$managing_teams)->with('sport_id',$sport_id)->render();	 
-		return \Response::json(array('status'=>'success','msg' => trans('message.sports.teamplayer'),'html' =>$returnHTML));	
+		$returnHTML =  view('teams.myteamplayers')->with('teams',$teams)->with('team_owners_managers',$team_owners_managers)->with('team_players',$team_players)->with('logged_in_user_role',$logged_in_user_role)->with('following_sportids',$following_sportids)->with('managing_teams',$managing_teams)->with('sport_id',$sport_id)->render();
+		return \Response::json(array('status'=>'success','msg' => trans('message.sports.teamplayer'),'html' =>$returnHTML));
 	}
 	//function to update notifications table
 	public function updateNotificatios($request_id,$flag=0)
@@ -1269,12 +1308,12 @@ class TeamController extends Controller
 	}
 	 public function getCities($service,$sport,$search_by)
 	  {
-		$term = Request::get('term');	 
+		$term = Request::get('term');
 		 $results = array();
 		if( $service=='team')
 		{
 		 $users = DB::table('teams')
-                        ->select('id','location','name' )                                          
+                        ->select('id','location','name' )
 					    ->where('location','LIKE','%'.$term.'%')
 						 ->orwhere('name','LIKE','%'.$term.'%')
                         ->get();
@@ -1282,7 +1321,7 @@ class TeamController extends Controller
 		 if( $service=='tournament')
 		{
 		 $users = DB::table('tournaments')
-                        ->select('id','location','name' )                                          
+                        ->select('id','location','name' )
 					    ->where('location','LIKE','%'.$term.'%')
 						 ->orwhere('name','LIKE','%'.$term.'%')
                         ->get();
@@ -1290,7 +1329,7 @@ class TeamController extends Controller
 		 if( $service=='user')
 		{
 		 $users = DB::table('users')
-                        ->select('id','location','name' )                                          
+                        ->select('id','location','name' )
 					    ->where('location','LIKE','%'.$term.'%')
 						 ->orwhere('name','LIKE','%'.$term.'%')
                         ->get();
@@ -1298,19 +1337,19 @@ class TeamController extends Controller
 		 if( $service=='marketplace')
 		{
 		 $users = DB::table('marketplace')
-                        ->select('id','location','item' )                                          
+                        ->select('id','location','item' )
 					    ->where('location','LIKE','%'.$term.'%')
 						 ->orwhere('item','LIKE','%'.$term.'%')
                         ->get();
 		}
-		
-		
-						
+
+
+
 		if(count($users)>0)
 		{
 			foreach ($users as $query)
 			{
-			
+
 				if($service=='team')
 				{
 				   $name=$query->name;
@@ -1332,9 +1371,9 @@ class TeamController extends Controller
 				  $name=$query->item;
 				   $link=url('marketplace');
 				}
-				
-			
-				
+
+
+
 				$results[] = ['id' => $query->id, 'value' =>'('.$name.')'.$query->location,'link'=>$link];
 			}
 		}
@@ -1346,8 +1385,17 @@ class TeamController extends Controller
 	  	$match_schedule_id = Requestsmodel::where('id',$request_id)->pluck('id_to_update');
 	  	if(!empty($match_schedule_id))
 	  	{
-	  		return $match_schedule_id;	
+	  		return $match_schedule_id;
 	  	}
 	  	return false;
 	  }
+
+    /**
+     * @param \App\Model\Team $team_details
+     * @param $groupId
+     */
+    private function attachOrganizationGroupToTeam(Team $team_details, $groupId)
+    {
+        $team_details->organizationGroups()->attach($groupId);
+    }
 }
