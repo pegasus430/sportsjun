@@ -93,12 +93,12 @@ class FollowController extends Controller
                                         $followingTournamentDetails[$followKey]['user_name'] = '';
                                 if (count($followedTournament['photos']))
                                 {
-                                        $followingTournamentDetails[$followKey]['url'] = $photoUrl['url'];
+                                    $photoUrl        = $followingTournamentDetails[$followKey];
+                                    $followingTournamentDetails[$followKey]['url'] = $photoUrl['url'];
                                 }
                                 else
                                 {
                                         //                    $matchScheduleData[$key]['scheduleteamone']['url'] = '';
-                                        $photoUrl        = $followingTournamentDetails[$followKey];
                                         $photoUrl['url'] = '';
                                 }
 

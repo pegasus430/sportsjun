@@ -1,4 +1,4 @@
-<div class="players_row clearfix" style="padding-top: 8px; padding-bottom: 8px; top:10px;">
+<div class="players_row clearfix" style="padding-top: 8px; padding-bottom: 8px; margin-top:8px;margin-bottom:8px;">
     @if($sportDetails->sports_type=='both' || $sportDetails->sports_type=='team')
         <div class="col-md-6">
             <span class="switch-head">{{trans('message.sports.availableforteam_view')}}</span>
@@ -54,7 +54,7 @@
             </div>
             <!--<span id="overall_stats" onclick="togglePlayerStatistic(2)"><b>OVERALL STATS</b></span>-->
             <div id="overall_stats_div_{{$sportsId}}" class="tab-pane fade" >
-                <div class="col-md-12">
+                <div class="col-md-12 nopadding">
                     @if(View::exists($statsview))
                         @include($statsview)
                     @endif
