@@ -2949,3 +2949,8 @@ div#my_groups_container > .row > .col-xs-4 .single_group {
 .single_group_fields > ul > li > label {
     color: #666;
 }
+
+.nopadding {
+   padding: 0 !important;
+   margin: 0 !important;
+}
