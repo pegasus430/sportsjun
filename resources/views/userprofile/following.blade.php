@@ -28,8 +28,6 @@
                                                                         <div class="t_details">
                                                                                 <div class="row main_tour">
                                                                                         <div class="col-xs-2 text-center">
-                                                                                          <!--<img class="img-circle img-border" src="http://localhost/sportsjun/public/images/sunrisers_hyd.png" style="width: 90%;height:90%;">-->
-                                                                                          <!--  <img class="img-circle img-border" src="{{ asset('/uploads/'.config('constants.PHOTO_PATH.TOURNAMENT').'/'.$followedTeam['url']) }}" onerror="this.onerror=null;this.src='{{ asset('/images/default-profile-pic.jpg') }}';" style="width: 90%;height:90%;">-->
                                                                                                 {!! Helper::Images($followedTeam['tournament_parent']['logo'],config('constants.PHOTO_PATH.TOURNAMENT'),array('height'=>90,'width'=>90,'class'=>'img-circle img-border img-scale-down img-responsive') )!!}
 
                                                                                         </div>
@@ -86,7 +84,6 @@
                                                                                         <div class="col-md-2 col-sm-3 col-xs-12 text-center">
                                                                                                 @if(count($following_team['photos']))
                                                                                                 @foreach($following_team['photos'] as $p)
-                                                                                                 <!--   <img class="img-circle img-border" src="{{ asset('/uploads/'.config('constants.PHOTO_PATH.TEAMS_FOLDER_PATH').'/'.(!empty($p['url'])?$p['url']:'')) }}" onerror="this.onerror=null;this.src='{{ asset('/images/default-profile-pic.jpg') }}';" style="width: 90%;height:90%;">-->
                                                                                                 {!! Helper::Images((!empty($p['url'])?$p['url']:''),config('constants.PHOTO_PATH.TEAMS_FOLDER_PATH'),array('class'=>'img-circle img-border  img-scale-down','height'=>90,'width'=>90) )!!}
 
                                                                                                 @endforeach
@@ -146,7 +143,6 @@
                                                                                         <div class="search_thumbnail right-caption">
                                                                                                 <div class="col-md-2 col-sm-3 col-xs-12 text-center">
                                                                                                         @if(!empty($player->logo))
-                                                                                                         <!--   <img class="img-circle img-border" src="{{ asset('/uploads/'.config('constants.PHOTO_PATH.TEAMS_FOLDER_PATH').'/'.(!empty($p['url'])?$p['url']:'')) }}" onerror="this.onerror=null;this.src='{{ asset('/images/default-profile-pic.jpg') }}';" style="width: 90%;height:90%;">-->
                                                                                                         {!! Helper::Images( $player->logo ,config('constants.PHOTO_PATH.USERS_PROFILE'),array('height'=>90,'width'=>90,'class'=>'img-circle img-border img-scale-down img-responsive') )!!}
                                                                                                         @else
                                                                                                            <!-- <img class="img-circle img-border" src="{{ asset('/images/default-profile-pic.jpg') }}" onerror="this.onerror=null;this.src='{{ asset('/images/default-profile-pic.jpg') }}';" style="width: 90%;height:90%;">-->
