@@ -530,7 +530,7 @@ Route::post('match/insertAndUpdateSoccerCard', [
 ]);
 Route::post('match/insertAndUpdateHockeyCard', [
     'as'    => 'match/insertAndUpdateHockeyCard',
-    'uses'  => 'User\ScoreCard\HockeyScorecardController@insertAndUpdateHockeyScoreCard'
+    'uses'  => 'User\ScoreCard\HockeyScorecardController@insertAndUpdateHockeyScorecard'
 ]);
 
 Route::post('match/scoreCardStatus', [
@@ -555,12 +555,12 @@ Route::group(['prefix'=>'match'], function(){
     Route::get('/getSoccerDetails', 'User\ScoreCardController@getSoccerDetails');
 
     //routes for hockey
-    Route::post('confirmSquadHockey',         ['as'=>'match/confirmSquadHockey', 'uses'=>'User\ScoreCard\HockeyScoreCardController@confirmSquad']);
-    Route::post('hockeySwapPlayers',    ['as'=>'match/hockeySwapPlayersHockey', 'uses'=>'User\ScoreCard\HockeyScoreCardController@hockeySwapPlayers']);
-    Route::post('choosePenaltyPlayersHockey', ['as'=>'match/choosePenaltyPlayersHockey', 'uses'=>'User\ScoreCard\HockeyScoreCardController@choosePenaltyPlayers']);
-    Route::post('scorePenaltyHockey', ['as'=>'match/scorePenalty', 'uses'=>'User\ScoreCard\HockeyScoreCardController@scorePenalty']);
-    Route::post('/saveMatchRecordHockey', 'User\ScoreCard\HockeyScoreCardController@hockeyStoreRecord');
-    Route::get('/getHockeyDetails', 'User\ScoreCard\HockeyScoreCardController@getHockeyDetails');
+    Route::post('confirmSquadHockey',         ['as'=>'match/confirmSquadHockey', 'uses'=>'User\ScoreCard\HockeyScorecardController@confirmSquad']);
+    Route::post('hockeySwapPlayers',    ['as'=>'match/hockeySwapPlayersHockey', 'uses'=>'User\ScoreCard\HockeyScorecardController@hockeySwapPlayers']);
+    Route::post('choosePenaltyPlayersHockey', ['as'=>'match/choosePenaltyPlayersHockey', 'uses'=>'User\ScoreCard\HockeyScorecardController@choosePenaltyPlayers']);
+    Route::post('scorePenaltyHockey', ['as'=>'match/scorePenalty', 'uses'=>'User\ScoreCard\HockeyScorecardController@scorePenalty']);
+    Route::post('/saveMatchRecordHockey', 'User\ScoreCard\HockeyScorecardController@hockeyStoreRecord');
+    Route::get('/getHockeyDetails', 'User\ScoreCard\HockeyScorecardController@getHockeyDetails');
 
 });
 
