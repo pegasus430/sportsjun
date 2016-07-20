@@ -102,19 +102,22 @@ return [
                 1 => 'CricketStatistic',
                 2 => 'TennisStatistic',
                 3 => 'TtStatistic',
-                4 => 'SoccerStatistic'
+                4 => 'SoccerStatistic',
+                11=> 'HockeyStatistic',
         ],
         'SPORT_NAME'               => [
                 1 => 'Cricket',
                 2 => 'Tennis',
                 3 => 'Table Tennis',
-                4 => 'Soccer'
+                4 => 'Soccer',
+                11 => 'Hockey'
         ],
         'SPORT_ID'                 => [
                 'Cricket'      => 1,
                 'Tennis'       => 2,
                 'Table Tennis' => 3,
-                'Soccer'       => 4
+                'Soccer'       => 4,
+                'Hockey'       => 11
         ],
         'SERVICES'                 => [
                 //'facility' => 'Facility',

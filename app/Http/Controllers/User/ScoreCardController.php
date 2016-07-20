@@ -157,6 +157,11 @@ class ScoreCardController extends Controller {
 				{
 					return $this->soccerScoreCard($match_data,$sportsDetails,$tournamentDetails);
 				}
+				else if(strtolower($sport_name)==strtolower('hockey'))
+				{
+						$hockey= new ScoreCard\HockeyScorecardController;
+					return $hockey->hockeyScoreCard($match_data,$sportsDetails,$tournamentDetails);
+				}
 			}
 		}
 	}
@@ -3088,6 +3093,12 @@ class ScoreCardController extends Controller {
 				{
 					return $this->soccerScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
+
+				else if(strtolower($sport_name)==strtolower('hockey'))
+				{
+					$hockey = new Scorecard\HockeyScorecardController;
+					return $hockey->soccerScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
 			}
 		}
 	}
@@ -3272,7 +3283,10 @@ class ScoreCardController extends Controller {
 
 			}
 
-		}else if($sport_name=='Cricket')//cricket statistics
+		}
+
+
+		else if($sport_name=='Cricket')//cricket statistics
 		{
 			$cricket_details = CricketPlayerMatchwiseStats::where('match_id',$match_id)->where('match_type',$match_type)->where('innings','first')->get(['user_id']);
 			if(!empty($cricket_details) && count($cricket_details)>0)
@@ -3521,6 +3535,14 @@ class ScoreCardController extends Controller {
 
 		$match_model=MatchSchedule::find($match_id);
 		$match_details=[
+			"team_a"=>[
+				"id"=>$team_a_id,
+				"name"=>$team_a_name
+					],
+            "team_b"=>[
+            	"id"=>$team_b_id,
+            	"name"=>$team_b_name
+            		],
 			"{$team_a_id}"	=>	[
 				"id"=>$team_a_id,
 				"goals"=>0,

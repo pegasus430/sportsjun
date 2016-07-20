@@ -528,6 +528,10 @@ Route::post('match/insertAndUpdateSoccerCard', [
     'as' 	=> 'match/insertAndUpdateSoccerCard',
     'uses' 	=> 'User\ScoreCardController@insertAndUpdateSoccerScoreCard'
 ]);
+Route::post('match/insertAndUpdateHockeyCard', [
+    'as'    => 'match/insertAndUpdateHockeyCard',
+    'uses'  => 'User\ScoreCard\HockeyScorecardController@insertAndUpdateHockeyScoreCard'
+]);
 
 Route::post('match/scoreCardStatus', [
     'as'   => 'match/scoreCardStatus',
@@ -541,12 +545,23 @@ Route::post('match/checkScoreEnterd', [
 
 //new routes for soccer match
 Route::group(['prefix'=>'match'], function(){
+
+    //routes for soccer
     Route::post('confirmSquad', 	 	['as'=>'match/confirmSquad', 'uses'=>'User\ScoreCardController@confirmSquad']);
     Route::post('soccerSwapPlayers', 	['as'=>'match/soccerSwapPlayers', 'uses'=>'User\ScoreCardController@soccerSwapPlayers']);
     Route::post('choosePenaltyPlayers', ['as'=>'match/choosePenaltyPlayers', 'uses'=>'User\ScoreCardController@choosePenaltyPlayers']);
     Route::post('scorePenalty', ['as'=>'match/scorePenalty', 'uses'=>'User\ScoreCardController@scorePenalty']);
-    post('/saveMatchRecord', 'User\ScoreCardController@soccerStoreRecord');
-    get('/getSoccerDetails', 'User\ScoreCardController@getSoccerDetails');
+    Route::post('/saveMatchRecord', 'User\ScoreCardController@soccerStoreRecord');
+    Route::get('/getSoccerDetails', 'User\ScoreCardController@getSoccerDetails');
+
+    //routes for hockey
+    Route::post('confirmSquadHockey',         ['as'=>'match/confirmSquadHockey', 'uses'=>'User\ScoreCard\HockeyScoreCardController@confirmSquad']);
+    Route::post('hockeySwapPlayers',    ['as'=>'match/hockeySwapPlayersHockey', 'uses'=>'User\ScoreCard\HockeyScoreCardController@hockeySwapPlayers']);
+    Route::post('choosePenaltyPlayersHockey', ['as'=>'match/choosePenaltyPlayersHockey', 'uses'=>'User\ScoreCard\HockeyScoreCardController@choosePenaltyPlayers']);
+    Route::post('scorePenaltyHockey', ['as'=>'match/scorePenalty', 'uses'=>'User\ScoreCard\HockeyScoreCardController@scorePenalty']);
+    Route::post('/saveMatchRecordHockey', 'User\ScoreCard\HockeyScoreCardController@hockeyStoreRecord');
+    Route::get('/getHockeyDetails', 'User\ScoreCard\HockeyScoreCardController@getHockeyDetails');
+
 });
 
 //End Matches

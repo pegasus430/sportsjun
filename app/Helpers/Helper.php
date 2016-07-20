@@ -763,6 +763,36 @@ class Helper {
         return $finalArray;
     }
 
+    public static function getHockeyStats($teamStats,$teamId) {
+        $winCountOthers = 0;
+        $looseCountOthers = 0;
+        $isTiedothers = 0;
+        $othersWinPercentage = 0;
+
+        if (count($teamStats)) {
+            foreach ($teamStats as $stats) {
+                if($stats['match_type']=='other') {
+                    if ($stats['winner_id'] == $teamId) {
+                        $winCountOthers = $winCountOthers + 1;
+                    } else if ($stats['looser_id'] == $teamId) {
+                        $looseCountOthers = $looseCountOthers + 1;
+                    } else if ($stats['is_tied']) {
+                        $isTiedothers = $isTiedothers + 1;
+                    }
+                }
+            }
+        }
+        $othersTotalMatches = $winCountOthers + $looseCountOthers + $isTiedothers;
+        if($othersTotalMatches) {
+            $othersWinPercentage = number_format(($winCountOthers / ($othersTotalMatches)) * 100, 2);
+        }
+        $othersStatsArray = ['totalMatches' => $othersTotalMatches, 'winCount' => $winCountOthers, 'looseCount' => $looseCountOthers, 'isTied' => $isTiedothers, 'wonPercentage' => $othersWinPercentage];
+
+        $finalArray = ['othersStatsArray'=>$othersStatsArray];
+
+        return $finalArray;
+    }
+
 
 
     //function to get sport name

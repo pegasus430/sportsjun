@@ -791,6 +791,7 @@ class ScheduleController extends Controller {
                         ->get(['id','winner_id', 'looser_id', 'is_tied','match_type']);
         if(count($teamStats)) {    
             switch ($sportsId) {
+
                 case config('constants.SPORT_ID.Cricket'):
                     $statsArray = Helper::getCricketStats($teamStats,$teamId);
                     break;
@@ -803,9 +804,13 @@ class ScheduleController extends Controller {
                 case config('constants.SPORT_ID.Soccer'):
                     $statsArray = Helper::getSoccerStats($teamStats,$teamId);
                     break;
+                case config('constants.SPORT_ID.Hockey'):
+                    $statsArray = Helper::getHockeyStats($teamStats,$teamId);
+                    break;
                 default:
-                    $statsArray = Helper::getSoccerStats($teamStats,$teamId);
+                    $statsArray = Helper::getHockeyStats($teamStats,$teamId);
             }  
+
         }
 
         $statsview = 'schedules.'.preg_replace('/\s+/', '',strtolower(config('constants.SPORT_NAME.'.$sportsId))).'statsview';
