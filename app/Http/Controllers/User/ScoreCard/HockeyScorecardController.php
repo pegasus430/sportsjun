@@ -315,6 +315,14 @@ class HockeyScorecardController extends Controller
 
         if(empty($match_details) || !isset(json_decode($match_details)->first_half)){
             $match_details=[
+                "team_a"=>[
+                    "id"=>$team_a_id,
+                    "name"=>$team_a_name
+                    ],
+                "team_b"=>[
+                    "id"=>$team_b_id,
+                    "name"=>$team_b_name
+                    ],        
                 "{$team_a_id}"  =>  [
                     "id"=>$team_a_id,
                     "goals"=>0,
@@ -610,7 +618,7 @@ class HockeyScorecardController extends Controller
         }
     }
 
-
+    //select players for the match, substitute and playing. 
     public function confirmSquad(){
         $request=Request::all();
         $match_id       =$request['match_id'];
@@ -650,7 +658,7 @@ class HockeyScorecardController extends Controller
                 
         }
         
-
+        //insert the default match_details for the match
         $match_model=MatchSchedule::find($match_id);
         $match_details=[
             "team_a"=>[
@@ -722,7 +730,7 @@ class HockeyScorecardController extends Controller
 
 
 
-    /**Swap Player status form substitute to playing vice versa.
+    /**Swap Player status from substitute to playing vice versa.
      *
      * @return Response
      */
@@ -883,6 +891,7 @@ if(!isset($match_details['penalties']['team_b']['players_ids']))$match_details['
             return $match_details;
     }
 
+    //insert choosen players in match statistics
     public function insertHockeyScore($user_id,$tournament_id,$match_id,$team_id,$player_name,$team_name,$yellow_card_count,$red_card_count,$goal_count, $playing_status='S')
     {
         $hockey_model = new HockeyPlayerMatchwiseStats();
