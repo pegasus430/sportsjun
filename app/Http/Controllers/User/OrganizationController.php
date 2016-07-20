@@ -245,7 +245,10 @@ class OrganizationController extends Controller {
             ->join('tournaments', 'tournaments.tournament_parent_id', '=', 'tournament_parent.id')
             ->select('tournament_parent.logo',
                 'tournaments.id',
+                'tournaments.tournament_parent_name',
                 'tournaments.name',
+                'tournaments.type',
+                'tournaments.prize_money',
                 'tournaments.location',
                 'tournaments.start_date',
                 'tournaments.end_date',

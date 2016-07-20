@@ -45,7 +45,7 @@
                                     <?php $i++;?>
                                 @endforeach
 
-                                @if(count($sports) && $userId==isset(Auth::user()->id)?Auth::user()->id:0)
+                                @if(count($sports) && $userId==(isset(Auth::user()->id)?Auth::user()->id:0))
                                     <li class=dropdown id="unfollowedSportsLi">
                                         <a href=# id=myTabDrop1 class=dropdown-toggle data-toggle=dropdown aria-controls=myTabDrop1-contents><i class="fa fa-plus-circle"></i></a>
                                         <ul class=dropdown-menu aria-labelledby=myTabDrop1 id=myTabDrop1-contents>

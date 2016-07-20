@@ -2791,3 +2791,7 @@ p {
 }
 
 #gender-error{padding:3px 0 10px 0;}
+
+.sports_profile .panel .nav-tabs > li > a {
+    background:#f3f3f3;
+}

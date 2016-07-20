@@ -33,7 +33,7 @@
         <li>
             <a class = "sidemenu_4"
                href = "{{ route('organization.groups.list', [$id]) }}">
-                <span class = "ico ico-members"></span> Team Names
+                <span class = "ico ico-members"></span> Team Groups
             </a>
         </li>
 
@@ -42,7 +42,7 @@
             <a class = "sidemenu_2"
                href = "{{ url('/organizationTeamlist/'.$id) }}">
                 <span class = "ico ico-teams"></span>
-                Team Listings
+                Teams
             </a>
         </li>
 

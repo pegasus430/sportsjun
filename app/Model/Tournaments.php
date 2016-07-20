@@ -80,6 +80,11 @@ class Tournaments extends Model
     {
         return $this->hasMany('App\Model\Sport', 'id', 'sports_id');
     }
+    
+    public function logo()
+    {
+        return $this->hasOne('App\Model\Photo', 'imageable_id', 'tournament_parent_id')->where('imageable_type', 'tournaments')->where('is_album_cover', 1);
+    }
 
     public function photos()
     {

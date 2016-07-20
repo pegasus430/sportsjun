@@ -238,9 +238,8 @@ class TournamentsController extends Controller
 
 			if(count($following_team_array) > 0){
 				//echo "<pre>";print_r($following_team_array);exit;
-				$followingTournamentDetails = Tournaments::with('photos')->whereIn('id', $following_team_array)
-					->get(['id', 'name', 'created_by', 'sports_id', 'type', 'final_stage_teams', 'description']);
-
+				$followingTournamentDetails = Tournaments::with('logo')->whereIn('tournaments.id', $following_team_array)
+					->get(['id', 'tournament_parent_id', 'name', 'created_by', 'sports_id', 'type', 'final_stage_teams', 'description']);
 			}
 			//Helper::printQueries();
 			//echo "<pre>";print_r($followingTournamentDetails);exit;
@@ -257,13 +256,10 @@ class TournamentsController extends Controller
 						$followingTournamentDetails[$followKey]['user_name'] = $userName->name;
 					else
 						$followingTournamentDetails[$followKey]['user_name'] = '';
-					if (count($followedTournament['photos'])) {
-						$photoUrl = array_collapse($followedTournament['photos']);
-						$followingTournamentDetails[$followKey]['url'] = $photoUrl['url'];
+					if (count($followedTournament['logo'])) {
+						$followingTournamentDetails[$followKey]['url'] = $followedTournament['logo']['url'];
 					} else {
-						//                    $matchScheduleData[$key]['scheduleteamone']['url'] = '';
-						$photoUrl = $followingTournamentDetails[$followKey];
-						$photoUrl['url'] = '';
+						$followingTournamentDetails[$followKey]['url'] = '';
 					}
 
 					if ($followedTournament['type'] == 'knockout') {
@@ -775,7 +771,7 @@ class TournamentsController extends Controller
             'isOwner'             => $isOwner,
             'loginUserId'         => $loginUserId,
             'organization'        => ['' => 'Select Organization'] + $organizations,
-            'groupsList'         => ['' => 'Select Team name'] + $orgGroups,
+            'groupsList'         => ['' => 'Select Team Group'] + $orgGroups,
             'groupId'         => $orgGroupIds,
         ]);
     }

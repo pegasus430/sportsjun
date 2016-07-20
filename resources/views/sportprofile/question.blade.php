@@ -75,7 +75,7 @@
 
 <!--<span id="overall_stats" onclick="togglePlayerStatistic(2)"><b>OVERALL STATS</b></span>-->
 <div id="overall_stats_div_{{$sportsId}}" class="tab-pane fade">
-	<div class="col-md-12">
+	<div class="col-md-12 nopadding">
     @if(View::exists($statsview))
         @include($statsview)
     @endif

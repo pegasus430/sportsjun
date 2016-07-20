@@ -1603,12 +1603,12 @@ class ScoreCardController extends Controller {
 
 				if ((int) $totalruns_a > 50)
 				{
-					$fifties = (int) ($totalruns_a / 50);
+					$fifties = (int) floor($totalruns_a / 50);
 				}
 
 				if ((int) $totalruns_a > 100)
 				{
-					$hundreds = (int) ($totalruns_a / 100);
+					$hundreds = (int) floor($totalruns_a / 100);
 				}
 
 				if (count($is_player_exist)>0)// if player already exist
@@ -2153,7 +2153,7 @@ class ScoreCardController extends Controller {
 			{
 				$strikerate             = ($totalruns/$totalballs)*100;//strikerate calculation [total runs/total ball*100]
 			}
-			$average_bat                = $totalruns; //total runs / innings bat
+			$objStatistics->average_bat = $totalruns; //total runs / innings bat
 			$objStatistics->strikerate  = $strikerate;
 			$objStatistics->save();
 		}

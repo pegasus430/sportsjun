@@ -183,18 +183,19 @@ class SportController extends Controller {
         $allowedSports = array();
         $sportDetails = array();
         $sportsCount = 0;
-        if($userId == isset(Auth::user()->id)?Auth::user()->id:0)
+        $loggedInUserId = isset(Auth::user()->id) ? Auth::user()->id:0;
+        if ($userId == $loggedInUserId)
             $dispView = 'question';
         else
             $dispView = 'userquestion';
         try {
             if ($flag == 'follow') {
-                if($userId == isset(Auth::user()->id)?Auth::user()->id:0) {
+                if ($userId == $loggedInUserId) {
                     $userStatistic = UserStatistic::where('user_id', $userId)->first();
                     if (count($userStatistic)) {
-                        if(count($userStatistic->following_sports)) {
+                        if (count($userStatistic->following_sports)) {
                             $sportsCount = count(explode(',',trim($userStatistic->following_sports,',')));
-                            if($sportsCount>7) {
+                            if ($sportsCount>7) {
                                 return view('sportprofile.'.$dispView, ['sportsCount' => $sportsCount]);
                             }
 
@@ -204,7 +205,7 @@ class SportController extends Controller {
                             $userStatistic->following_sports = ',' . $sportsId . ',';
                         }
 
-                        if(count($userStatistic->allowed_sports)) {
+                        if (count($userStatistic->allowed_sports)) {
                             $sportsCount = count(explode(',',trim($userStatistic->allowed_sports,',')));
                             if($sportsCount>7) {
                                 return view('sportprofile.'.$dispView, ['sportsCount' => $sportsCount]);
