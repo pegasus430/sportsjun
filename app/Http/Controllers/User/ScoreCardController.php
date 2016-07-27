@@ -3118,13 +3118,13 @@ class ScoreCardController extends Controller {
 				}
 				else if(strtolower($sport_name)==strtolower('badminton'))
 				{
-					$hockey = new Scorecard\BadmintonScoreCardController;
-					return $hockey->badmintonScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
+					$badminton = new Scorecard\BadmintonScoreCardController;
+					return $badminton->badmintonScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
 				else if(strtolower($sport_name)==strtolower('squash'))
 				{
-					$hockey = new Scorecard\SquashScoreCardController;
-					return $hockey->squashScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
+					$squash = new Scorecard\SquashScoreCardController;
+					return $squash->squashScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
 			}
 		}
@@ -3215,7 +3215,7 @@ class ScoreCardController extends Controller {
 			$message = 'Your '.$scorecardDetails.' has been approved by '.$loginUserNameData.'. <br/>Sport:'.$sports_name.' , Sheduled Date:'.$match_start_date;
 
 			// call function to insert player wise match details in statistics table
-			if($sport_name!='' || $sport_name!='Badminton')
+			if($sport_name!='' || $sport_name!='Badminton' || $sport_name!='Squash')
 				$this->insertPlayerStatistics($sport_name,$match_id);
 
 			//send notification to players
