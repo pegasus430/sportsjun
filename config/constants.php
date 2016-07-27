@@ -69,6 +69,7 @@ return [
                                 'TABLE TENNIS' => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES',
                                         'mixed' => 'MIXED'],
                                 'FOOTBALL'     => ['other' => 'OTHERS'],
+                                'BADMINTON'    => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES', 'mixed'=>'MIXED'],
                                 'OTHERS'       => ['other' => 'OTHERS']
                         ],
                         'PLAYER_TYPE' => ['men' => 'MEN', 'women' => 'WOMEN', 'mixed' => 'MIXED']
@@ -103,21 +104,35 @@ return [
                 2 => 'TennisStatistic',
                 3 => 'TtStatistic',
                 4 => 'SoccerStatistic',
+                5 => 'BadmintonStatistic',
+                6 => 'BasketBallStatistic',
+                7 => 'VolleyBallStatistic',
                 11=> 'HockeyStatistic',
+                13=> 'SquashStatistic'
         ],
         'SPORT_NAME'               => [
                 1 => 'Cricket',
                 2 => 'Tennis',
                 3 => 'Table Tennis',
                 4 => 'Soccer',
-                11 => 'Hockey'
+                5 => 'Badminton',
+                6 => 'BasketBall',
+                7 => 'VolleyBall',
+                11 => 'Hockey',
+                13 => 'Squash'
+
         ],
         'SPORT_ID'                 => [
                 'Cricket'      => 1,
                 'Tennis'       => 2,
                 'Table Tennis' => 3,
                 'Soccer'       => 4,
-                'Hockey'       => 11
+                'Badminton'    => 5,
+                'BasketBall'   => 6,
+                'VolleyBall'   => 7,
+                'Hockey'       => 11,
+                'Squash'       => 13
+
         ],
         'SERVICES'                 => [
                 //'facility' => 'Facility',
@@ -177,6 +192,14 @@ return [
                 'GOALS_ASSIST'      => 'GOALS ASSIST',
                 'GOALS_PENALTIES'   => 'GOALS PENALTIES',
                 'SOCCER_STATISTICS' => 'SOCCER',
+        ],
+        'BADMINTON'       => [
+                'WON'               => 'WON',
+                'LOST'              => 'LOST',
+                'TIED'              => 'TIED',
+                'WON_PERCENTAGE'    => 'WON PERCENTAGE',
+                'POINTS'            => 'POINTS',                
+                'BADMINTON_STATISTICS' => 'GAMINTON',                
         ],
         'DEFAULT_PAGINATION'       => 10,
         'YEAR'                     => [

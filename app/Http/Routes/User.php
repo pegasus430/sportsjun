@@ -562,6 +562,21 @@ Route::group(['prefix'=>'match'], function(){
     Route::post('/saveMatchRecordHockey', 'User\ScoreCard\HockeyScorecardController@hockeyStoreRecord');
     Route::get('/getHockeyDetails', 'User\ScoreCard\HockeyScorecardController@getHockeyDetails');
 
+    //routes for badminton
+
+    Route::post('saveBadmintonPreferences', ['as'=>'match/saveBadmintonPreferences', 'uses'=>'User\ScoreCard\BadmintonScorecardController@savePreferences']);
+
+        //automatic scoring for badminton
+    Route::post('badmintonAddScore', ['as'=>'match/badmintonAddScore', 'uses'=>'User\ScoreCard\BadmintonScorecardController@addScore']);
+
+        //manual scoring for badminton
+    Route::post('manualScoringBadminton', ['as'=>'match/manualScoringBadminton', 'uses'=>'User\ScoreCard\BadmintonScorecardController@manualScoring']);
+
+        //save final match record. after clicking on end match
+    Route::post('saveMatchRecordBadminton', ['as'=>'match/saveMatchRecordBadminton', 'uses'=>'User\ScoreCard\BadmintonScorecardController@badmintonStoreRecord']);
+
+        //get match details for badminton
+    Route::get('/getBadmintonDetails', 'User\ScoreCard\BadmintonScorecardController@getBadmintonDetails');
 });
 
 //End Matches

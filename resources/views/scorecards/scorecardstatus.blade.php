@@ -24,6 +24,8 @@ $(document).ready(function(){
 		@else
 		@if($match_data[0]['scoring_status']=='' )
 			<span >{{'Need to send for approval'}}</span>
+		@elseif($match_data[0]['match_status']=='completed')
+			<span >{{'Match is completed'}}</span>
 		@endif
 		@endif
 		@endif

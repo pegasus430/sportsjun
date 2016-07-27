@@ -224,7 +224,7 @@ class Helper {
     //function to get the match types
     public static function getMatchTypes($sportName)
     {
-        $existingSports = array('CRICKET','TENNIS','TABLE TENNIS','FOOTBALL','OTHERS');
+        $existingSports = array('CRICKET','TENNIS','TABLE TENNIS','FOOTBALL','OTHERS','BADMINTON', 'SQUASH');
         $matchTypes = array();
         if(!empty($sportName))
         {
@@ -1826,5 +1826,65 @@ class Helper {
         $model->gallery_url="/uploads/gallery/organisations/$model->logo";
         return $model;
     }
+
+    public static function  sendEmailPlayers($match_details=[], $match_type=''){             
+
+                    $team_a_id=explode(',', $match_details['player_a_ids']);
+                    $team_b_id=explode(',', $match_details['player_b_ids']); 
+
+                    $team_a_name   =  Team::find($match_details['a_id'])->name;
+                    $team_b_name   =  Team::find($match_details['b_id'])->name;
+
+                //send email to  team_a players
+                    foreach ($team_a_id as $key => $player_id) {
+
+                            if(!is_null($user=User::find($player_id))){  
+                            $user_name=$user->name;
+                            $data=[
+                                'match_type'    =>  $match_type, 
+                                'match_date'    =>  $match_details['date'],
+                                'team_a_name'   =>  $team_a_name,
+                                'team_b_name'   =>  $team_b_name,
+                                'user_name'     =>  $user_name,
+                                'match_id'      =>  $match_details['id']
+                                ];
+                            $mail_data=[
+                                    'view'      =>  'emails.endmatchnotification',
+                                    'subject'   =>  'View your match details',
+                                    'to_user_id'=>  $player_id,
+                                    'to_email_id'=> $user->email,
+                                    'view_data' =>  $data, 
+                                    'flag'      =>  $match_type
+                            ];
+                        
+                        SendMail::sendmail($mail_data);
+                        }
+                    }
+                //send email to team_b players
+                    foreach ($team_b_id as $key => $player_id) {
+                            if(!is_null($user=User::find($player_id))){  
+                            $user_name=$user->name;
+                            $data=[
+                                'match_type'    =>  $match_type, 
+                                'match_date'    =>  $match_details['date'],
+                                'team_a_name'   =>  Team::find($match_details['a_id'])->name,
+                                'team_b_name'   =>  Team::find($match_details['b_id'])->name,
+                                'user_name'     =>  $user_name,
+                                'match_id'      =>  $match_details['id']
+                                ];
+                            $mail_data=[
+                                    'view'      =>  'emails.endmatchnotification',
+                                    'subject'   =>  'Match : '. strtoupper($team_a_name) .' vs ' . strtoupper($team_a_name) . 'Scorecard (sportsJun)' ,
+                                    'to_user_id'=>  $player_id,
+                                    'to_email_id'=> $user->email,
+                                    'view_data' =>  $data,
+                                    'flag'      =>  $match_type
+                            ];
+
+                        SendMail::sendmail($mail_data);
+                    }
+                }
+
+    }   
 
 }

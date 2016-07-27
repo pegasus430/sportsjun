@@ -173,6 +173,17 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 					</div>
 				</div>
 
+				 @if(!is_null($match_data[0]['tournament_id']))
+                <div class='row'>
+                    <div class='col-xs-12'>
+                        <div class='match_loc'>
+                            {{$tournamentDetails['name']}} Tournament
+                                
+                        </div>
+                    </div>
+                </div>
+            @endif
+
 				<div class="row">
 					<div class="col-xs-12">
 						<div class="match_loc">
@@ -1684,7 +1695,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 				dataType:'json',
 				success:function(response){
 					$(that).addClass('btn-penalty-chosen');
-					$('.btn_'+team_type+'_'+index).attr('disabled', true);
+					//$('.btn_'+team_type+'_'+index).attr('disabled', true);
 					var match_details=response;
 					var penalties=match_details.penalties;
 

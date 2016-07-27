@@ -457,12 +457,14 @@ class HockeyScorecardController extends Controller
                         $this->insertPlayerStatistics($sportName,$match_id);
 
                         //notification ocde
+                        Helper::sendEmailPlayers($matchScheduleDetails, 'Soccer');      
 
                     }
 
                 }
 
-            }else if(Auth::user()->role=='admin'){
+            }
+        else if(Auth::user()->role=='admin'){
                 if($is_tied==1) {
                     $match_status = 'completed';
                     $approved = 'approved';
@@ -476,10 +478,14 @@ class HockeyScorecardController extends Controller
                     $sportName = Sport::where('id',$matchScheduleDetails['sports_id'])->pluck('sports_name');
                     $this->insertPlayerStatistics($sportName,$match_id);
 
-                    //notification ocde
+                    //send mail to players
+                        Helper::sendEmailPlayers($matchScheduleDetails, 'Hockey');      
 
+
+                    //notification ocde
                 }
-            }else
+            }
+        else
             {
                 MatchSchedule::where('id',$match_id)->update(['winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
                     'is_tied'=>$is_tied,'score_added_by'=>$json_score_status]);

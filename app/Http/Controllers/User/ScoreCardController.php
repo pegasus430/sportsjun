@@ -130,11 +130,16 @@ class ScoreCardController extends Controller {
 				}
 
 			}
+
+
 			$match_details = MatchSchedule::where('id',$match_id)->get();
 			if(count($match_details)>0)
 				$match_data = $match_details->toArray();
 
-
+			//new tournament details for the new sports. soccer, 
+			if(!is_null($match_details[0]['tournament_id'])){
+				$tournamentDetails=Tournaments::find($match_details[0]['tournament_id'])->toArray();
+			}
 
 			$sport_id = $match_data[0]['sports_id'];//get sport id
 			$sportsDetails = Sport::where('id',$sport_id)->get()->toArray();//get sports details
@@ -156,6 +161,15 @@ class ScoreCardController extends Controller {
 				else if(strtolower($sport_name)==strtolower('soccer'))
 				{
 					return $this->soccerScoreCard($match_data,$sportsDetails,$tournamentDetails);
+				}
+				else if(strtolower($sport_name)==strtolower('badminton'))
+				{
+					$badminton= new ScoreCard\BadmintonScorecardController;
+					return $badminton->badmintonScoreCard($match_data,$match='Badminton',$sportsDetails,$tournamentDetails);
+				}
+				else if(strtolower($sport_name)==strtolower('squash')){
+					$squash= new ScoreCard\SquashScorecardController;
+					return $squash->squashScoreCard($match_data,$sportsDetails,$tournamentDetails);
 				}
 				else if(strtolower($sport_name)==strtolower('hockey'))
 				{
@@ -2858,7 +2872,7 @@ class ScoreCardController extends Controller {
 						$this->insertPlayerStatistics($sportName,$match_id);
 
 						//notification ocde
-
+						Helper::sendEmailPlayers($matchScheduleDetails, 'Soccer');		
 					}
 
 				}
@@ -2878,14 +2892,17 @@ class ScoreCardController extends Controller {
 					$this->insertPlayerStatistics($sportName,$match_id);
 
 					//notification ocde
-
-				}
-			}else
+					Helper::sendEmailPlayers($matchScheduleDetails, 'Soccer');	
+				}				 
+                    
+			}
+			else
 			{
 				MatchSchedule::where('id',$match_id)->update(['winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
 					'is_tied'=>$is_tied,'score_added_by'=>$json_score_status]);
 			}
 		}
+		
 		return $match_data->match_details;
 	}
 
@@ -3099,6 +3116,11 @@ class ScoreCardController extends Controller {
 					$hockey = new Scorecard\HockeyScorecardController;
 					return $hockey->soccerScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
+				else if(strtolower($sport_name)==strtolower('badminton'))
+				{
+					$hockey = new Scorecard\BadmintonScorecardController;
+					return $hockey->badmintonScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
 			}
 		}
 	}
@@ -3112,6 +3134,11 @@ class ScoreCardController extends Controller {
 		$loginUserId = Auth::user()->id;
 
 		$loginUserName = Auth::user()->name;
+
+		$matchDetails=MatchSchedule::find($match_id);
+		$sportId=$matchDetails->sports_id;
+		$sportDetails=Sport::find($sportId);
+		$sportName=$sportDetails->name;
 
 		//get previous scorecard status data
 		$scorecardDetails = MatchSchedule::where('id',$match_id)->pluck('score_added_by');
@@ -3183,8 +3210,11 @@ class ScoreCardController extends Controller {
 			$message = 'Your '.$scorecardDetails.' has been approved by '.$loginUserNameData.'. <br/>Sport:'.$sports_name.' , Sheduled Date:'.$match_start_date;
 
 			// call function to insert player wise match details in statistics table
-			if($sport_name!='')
+			if($sport_name!='' || $sport_name!='Badminton')
 				$this->insertPlayerStatistics($sport_name,$match_id);
+
+			//send notification to players
+			Helper::sendEmailPlayers($matchDetails, $sportName);	
 		}
 		//notification code
 		$url= '';//url('match/scorecard/edit/'.$match_id) ;

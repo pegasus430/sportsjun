@@ -175,16 +175,15 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 
 			<!-- If match is from tournament, displays tournament details -->
 			@if(!is_null($match_data[0]['tournament_id']))
-				<div class='row'>
-					<div class='col-xs-12'>
-						<div class='match_loc'>
-								
-
-						</div>
-					</div>
-				</div>
-			@endif
-
+                <div class='row'>
+                    <div class='col-xs-12'>
+                        <div class='match_loc'>
+                            {{$tournamentDetails['name']}} Tournament
+                                
+                        </div>
+                    </div>
+                </div>
+            @endif
 				<div class="row">
 					<div class="col-xs-12">
 						<div class="match_loc">
@@ -436,14 +435,6 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 									<option value='second_half'>Second Half</option>
 								</select>
 							</label>
-
-							<div class="bootstrap-switch-container" style="width: 135px; margin-left: 0px;">
-								<span class="bootstrap-switch-handle-on bootstrap-switch-primary" style="width: 45px;">Yes</span>
-								<span class="bootstrap-switch-label" style="width: 45px;">&nbsp;</span>
-								<span class="bootstrap-switch-handle-off bootstrap-switch-default" style="width: 45px;">No</span>
-								<input class="switch-class" type="checkbox" name="chk_available" id="chk_available" sportid="1" userid="173">
-							</div>
-
 
 							<button class="btn-link  btn-goal-card-select  soccer_buttons_disabled" id='soccerAddGoalId'  onclick="return SJ.SCORECARD.soccerAddGoal(this)">Goal</button>
 
@@ -1490,7 +1481,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 				title:"Alert",
 				content:"Are you sure you want to save squad?",
 				confirm:function(){
-					$(this).attr('disabled', true);
+					//$(this).attr('disabled', true);
 					$.ajax({
 						url:base_url+'/match/confirmSquad',
 						data:tempSquadData,

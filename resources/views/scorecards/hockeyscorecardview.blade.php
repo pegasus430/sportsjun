@@ -142,6 +142,17 @@
                     </div>
                 </div>
 
+                @if(!is_null($match_data[0]['tournament_id']))
+                <div class='row'>
+                    <div class='col-xs-12'>
+                        <div class='match_loc'>
+                            {{$tournamentDetails[0]['name']}}
+                                
+                        </div>
+                    </div>
+                </div>
+                @endif
+
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="match_loc">
@@ -156,7 +167,7 @@
 
             <div class="panel panel-default">
                 <div class="col-md-12">
-                    <h5 class="scoreboard_title">hockey Scorecard</h5>
+                    <h5 class="scoreboard_title">Hockey Scorecard</h5>
 
                     <div class="clearfix"></div>
                     <div class="form-inline">
@@ -193,7 +204,7 @@
                         @endif
                         <p class="match-status mg"><a href="{{ url('user/album/show').'/match'.'/0'.'/'.$action_id }}"><span class="fa" style="float: left; margin-left: 8px;"><img src="{{ asset('/images/sc-gallery.png') }}" height="18" width="22"></span> <b>Media Gallery</b></a></p>
                         @include('scorecards.share')
-                        <p class="match-status">@include('scorecards.scorecardstatus')</p>
+                        <p class="match-status">@include('scorecards.scorecardstatusview')</p>
                     </div>
                 </div>
             </div>

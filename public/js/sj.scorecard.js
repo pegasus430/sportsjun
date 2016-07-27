@@ -290,6 +290,10 @@ if (typeof SJ.SCORECARD === 'undefined')
                                         var player_content=$('#team_a_row_'+player_id)
                                         if(player_content.is("[yellow_card]") && Number(player_content.attr('yellow_card'))>0){
                                                 //if user has a yellow card return false
+                                                $.alert({
+                                                        title:'Alert',
+                                                        content:'This player already has a yellow card.'
+                                                })
                                                 return false;
                                         }
                                         $('#team_a_row_'+player_id).attr('yellow_card',1);
