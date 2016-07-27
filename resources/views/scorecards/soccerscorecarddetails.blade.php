@@ -53,9 +53,9 @@
 
     </style>
     
-
+            <div class='row'>
                 <div class="col-sm-10 col-sm-offset-1">
-                    <h3 id='team_b' class="team_bowl table_head">MATCH STATITICS</h3>
+                    <h3 id='team_b' class="team_bowl table_head">MATCH STATISTICS</h3>
                     <div class="table-responsive">
                         <table class="table table-striped">
                             <thead>
@@ -71,36 +71,36 @@
                                     <td colspan="2">{{$match_details->first_half->{"team_{$team_a_id}_goals"} }}</td>
                                     <td class="td_type">Half Time (<i class='fa fa-futbol-o'></i>) </td>
                                     <td colspan="2">{{$match_details->first_half->{"team_{$team_b_id}_goals"} }}</td>
-                                <tr>
+                                </tr>
                             @endif
                             @if(isset($match_details->{$team_a_id}))
                                 <tr>
                                     <td colspan="2">{{$match_details->{$team_a_id}->goals }}</td>
                                     <td class="td_type">Full Time (<i class='fa fa-futbol-o'></i>) </td>
                                     <td colspan="2">{{$match_details->{$team_b_id}->goals }}</td>
-                                <tr>
+                                </tr>
                                 <tr>
                                     <td colspan="2">{{$match_details->{$team_a_id}->red_card_count }}</td>
                                     <td class='td_type'>Red Cards <button class='btn-red-card btn-card' disabled=''>&nbsp;</button>  </td>
                                     <td colspan="2">{{$match_details->{$team_b_id}->red_card_count }}</td>
-                                <tr>
+                                </tr>
                                 <tr>
                                     <td colspan="2">{{$match_details->{$team_a_id}->yellow_card_count }}</td>
                                     <td class='td_type'>Yellow Cards <button class='btn-yellow-card btn-card' disabled=''>&nbsp;</button>  </td>
                                     <td colspan="2">{{$match_details->{$team_b_id}->yellow_card_count }}</td>
-                                <tr>
+                                </tr>
                                 <tr>
                                     <td colspan="2">{{$ball_percentage_a }} %</td>
                                     <td class='td_type'>Ball Percentage  % </td>
                                     <td colspan="2">{{$ball_percentage_b }} %</td>
-                                <tr>
+                                </tr>
                             @endif
                                 </tbody>                           
                         </table>
                     </div>
 
                 </div>
-            
+            </div>
 
             <div class="row">
 

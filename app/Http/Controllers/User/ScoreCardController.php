@@ -2987,7 +2987,12 @@ class ScoreCardController extends Controller {
 		$team_a_id=$request['team_a_id'];
 		$team_b_id=$request['team_b_id'];
 		$match_details=matchSchedule::find($match_id)->match_details;
-		return view('scorecards.soccerscorecarddetails', compact('match_details','team_a_id', 'team_b_id'));
+		$view=(string)view('scorecards.soccerscorecarddetails', compact('match_details','team_a_id', 'team_b_id'));
+		
+		return [
+		'json'=>$match_details,
+		'html'=>$view
+		];
 	}
 
 

@@ -251,7 +251,7 @@
               <br>
               <div class='row'>
             
-                  <div class='col-sm-4 col-xs-4'><label>Saving Side</label></div>
+                  <div class='col-sm-4 col-xs-4'><label>Serving Side</label></div>
                   <div class='col-sm-4 col-xs-4'><input type='radio' name='saving_side' value='left' checked id='choose_left'> Left</div>
                   <div class='col-sm-4 col-xs-4'><input type='radio' name='saving_side' value='right' id='choose_right'> Right</div>
                

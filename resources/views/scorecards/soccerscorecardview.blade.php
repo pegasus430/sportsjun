@@ -133,7 +133,7 @@
                                 <div class="team_detail">
                                     <div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['b_id'] }}">{{ $team_b_name }}</a></div>
                                     <div class="team_city">{{ $team_b_city }}</div>
-                                    <div class="team_score" id="team_b_score">{{$team_b_goals}} <span><i class="fa fa-info-circle soccer_info" data-toggle="tooltip" title="<?php echo $team_b_count;?>"></i></span></div>
+                                    <div class="team_score" id="team_b_score">{{$team_b_goals}} <span><i class="fa fa-info-circle soccer_info" id='team_b_count' data-toggle="tooltip" title="<?php echo $team_b_count;?>"></i></span></div>
 
 
                                 </div>
@@ -328,10 +328,11 @@
                 </div>
             </div>
 
-            <div class="row">
+        <div  id='display_match_statistics'>
+            <div class="row" >
 
                 <div class="col-sm-10 col-sm-offset-1">
-                    <h3 id='team_b' class="team_bowl table_head">MATCH STATITICS</h3>
+                    <h3 id='team_b' class="team_bowl table_head">MATCH STATISTICS</h3>
                     <div class="table-responsive">
                         <table class="table table-striped">
                             <thead>
@@ -608,5 +609,47 @@
     
     </script>
 
+<script type="text/javascript">
+
+var team_a_id={{$team_a_id}}
+var team_b_id={{$team_b_id}}
+
+    function getMatchDetails(){
+            //load details
+                var data={
+                    match_id:$('#match_id').val(),
+                    team_a_id:{{$team_a_id}},
+                    team_b_id:{{$team_b_id}}
+                }
+
+                    $.ajax({
+                        url:base_url+'/viewpublic/match/getSoccerDetails',
+                        method:'get',
+                        data:data,
+                        dataType:'json',
+                        success:function(response){
+                            $('#display_match_statistics').html(response.html);
+
+                        response=response.json
+
+                    var tem_a=response[team_a_id];
+                    var tem_b=response[team_b_id];
+
+                    $('#team_a_score').html(tem_a.goals)
+                    $('#team_b_score').html(tem_b.goals)
+
+                    $('#team_a_count').attr('title','Red Card Count:'+tem_a.red_card_count+','+'Yellow Card Count:'+tem_a.yellow_card_count);
+                    $('#team_b_count').attr('title', 'Red Card Count:'+tem_b.red_card_count+','+'Yellow Card Count:'+tem_b.yellow_card_count);
+
+                        }
+                    })
+        }
+
+
+@if($match_data[0]['match_status']!='completed')
+window.setInterval(getMatchDetails, 10000);
+@endif
+
+</script>
 
 @endsection
