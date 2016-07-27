@@ -107,7 +107,7 @@ class BadmintonScoreCardController extends Controller
         //
     }
 
-      public function badmintonScoreCard($match_data,$match,$sportsDetails=[],$tournamentDetails=[],$is_from_view=0)
+  public function badmintonScoreCard($match_data,$match,$sportsDetails=[],$tournamentDetails=[],$is_from_view=0)
     {
 
        
