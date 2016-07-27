@@ -29,7 +29,8 @@
 @include('common.editphoto',['photos'=>$tournament->photos,'type'=>'tournaments'])
 @endif
 
-
+{!!Form::hidden('tournament_id', null) !!}
+{!!Form::hidden('organisation_group_id', null) !!}
   
 <div class="row">	
 <div class="col-sm-6">		 

@@ -164,11 +164,11 @@ class ScoreCardController extends Controller {
 				}
 				else if(strtolower($sport_name)==strtolower('badminton'))
 				{
-					$badminton= new ScoreCard\BadmintonScorecardController;
+					$badminton= new ScoreCard\BadmintonScoreCardController;
 					return $badminton->badmintonScoreCard($match_data,$match='Badminton',$sportsDetails,$tournamentDetails);
 				}
 				else if(strtolower($sport_name)==strtolower('squash')){
-					$squash= new ScoreCard\SquashScorecardController;
+					$squash= new ScoreCard\SquashScoreCardController;
 					return $squash->squashScoreCard($match_data,$match='Squash',$sportsDetails,$tournamentDetails);
 				}
 				else if(strtolower($sport_name)==strtolower('hockey'))
@@ -3118,12 +3118,12 @@ class ScoreCardController extends Controller {
 				}
 				else if(strtolower($sport_name)==strtolower('badminton'))
 				{
-					$hockey = new Scorecard\BadmintonScorecardController;
+					$hockey = new Scorecard\BadmintonScoreCardController;
 					return $hockey->badmintonScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
 				else if(strtolower($sport_name)==strtolower('squash'))
 				{
-					$hockey = new Scorecard\SquashScorecardController;
+					$hockey = new Scorecard\SquashScoreCardController;
 					return $hockey->squashScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
 			}
