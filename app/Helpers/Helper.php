@@ -1846,7 +1846,8 @@ class Helper {
                                 'team_a_name'   =>  $team_a_name,
                                 'team_b_name'   =>  $team_b_name,
                                 'user_name'     =>  $user_name,
-                                'match_id'      =>  $match_details['id']
+                                'match_id'      =>  $match_details['id'],
+                                'user_id'       =>  $player_id
                                 ];
                             $mail_data=[
                                     'view'      =>  'emails.endmatchnotification',
@@ -1870,7 +1871,8 @@ class Helper {
                                 'team_a_name'   =>  Team::find($match_details['a_id'])->name,
                                 'team_b_name'   =>  Team::find($match_details['b_id'])->name,
                                 'user_name'     =>  $user_name,
-                                'match_id'      =>  $match_details['id']
+                                'match_id'      =>  $match_details['id'],
+                                'user_id'       =>  $player_id
                                 ];
                             $mail_data=[
                                     'view'      =>  'emails.endmatchnotification',
