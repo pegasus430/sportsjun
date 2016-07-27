@@ -575,6 +575,8 @@ Route::group(['prefix'=>'match'], function(){
         //save final match record. after clicking on end match
     Route::post('saveMatchRecordBadminton', ['as'=>'match/saveMatchRecordBadminton', 'uses'=>'User\ScoreCard\BadmintonScorecardController@badmintonStoreRecord']);
 
+    Route::post('updatePreferencesBadminton', ['as'=>'match/updatePreferencesBadminton', 'uses'=>'User\ScoreCard\BadmintonScorecardController@updatePreferences']);
+
         //get match details for badminton
     Route::get('/getBadmintonDetails', 'User\ScoreCard\BadmintonScorecardController@getBadmintonDetails');
 });
