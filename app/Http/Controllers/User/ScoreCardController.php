@@ -169,7 +169,7 @@ class ScoreCardController extends Controller {
 				}
 				else if(strtolower($sport_name)==strtolower('squash')){
 					$squash= new ScoreCard\SquashScorecardController;
-					return $squash->squashScoreCard($match_data,$sportsDetails,$tournamentDetails);
+					return $squash->squashScoreCard($match_data,$match='Squash',$sportsDetails,$tournamentDetails);
 				}
 				else if(strtolower($sport_name)==strtolower('hockey'))
 				{
@@ -3120,6 +3120,11 @@ class ScoreCardController extends Controller {
 				{
 					$hockey = new Scorecard\BadmintonScorecardController;
 					return $hockey->badmintonScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
+				else if(strtolower($sport_name)==strtolower('squash'))
+				{
+					$hockey = new Scorecard\SquashScorecardController;
+					return $hockey->squashScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
 			}
 		}

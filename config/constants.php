@@ -70,6 +70,7 @@ return [
                                         'mixed' => 'MIXED'],
                                 'FOOTBALL'     => ['other' => 'OTHERS'],
                                 'BADMINTON'    => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES', 'mixed'=>'MIXED'],
+                                'SQUASH'    => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES', 'mixed'=>'MIXED'],
                                 'OTHERS'       => ['other' => 'OTHERS']
                         ],
                         'PLAYER_TYPE' => ['men' => 'MEN', 'women' => 'WOMEN', 'mixed' => 'MIXED']
@@ -199,7 +200,8 @@ return [
                 'TIED'              => 'TIED',
                 'WON_PERCENTAGE'    => 'WON PERCENTAGE',
                 'POINTS'            => 'POINTS',                
-                'BADMINTON_STATISTICS' => 'GAMINTON',                
+                'BADMINTON_STATISTICS' => 'BADMINTON', 
+                'SQUASH_STATISTICS' => 'SQUASH',                
         ],
         'DEFAULT_PAGINATION'       => 10,
         'YEAR'                     => [
