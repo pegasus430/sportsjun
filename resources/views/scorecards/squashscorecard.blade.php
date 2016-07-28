@@ -822,7 +822,7 @@ function savePreferences(that){
                     })
               },
         cancel:function(){
-          return false;
+    
         }
     })
          return false;
@@ -964,10 +964,6 @@ function getTeamPlayers(that){
               match_id:match_id
               }
 
-          $.confirm({
-              title:"Alert",
-              content:"Add Score?",
-              confirm:function(){
                     $.ajax({
                         url:'/match/squashAddScore',
                         data:data,
@@ -985,12 +981,9 @@ function getTeamPlayers(that){
                         }
 
                        });
-                 return
-              }
-            });
+                return false;
+              }          
             
-            return false;
-          }
 
 
      function updatePreferences(that){

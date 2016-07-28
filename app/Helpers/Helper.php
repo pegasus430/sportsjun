@@ -222,15 +222,19 @@ class Helper {
     }
 
     //function to get the match types
-    public static function getMatchTypes($sportName)
+    public static function getMatchTypes($sportName, $from_tournament=false)
     {
         $existingSports = array('CRICKET','TENNIS','TABLE TENNIS','FOOTBALL','OTHERS','BADMINTON', 'SQUASH');
         $matchTypes = array();
+
+        if($from_tournament) $tour='TOURNAMENT_';
+        else $tour='';
+
         if(!empty($sportName))
         {
             $finalSportName = in_array($sportName, $existingSports)?$sportName:'OTHERS';
             //building match types array
-            foreach(config('constants.ENUM.SCHEDULE.MATCH_TYPE.'.$finalSportName) as $key=>$val)
+            foreach(config('constants.ENUM.'.$tour.'SCHEDULE.MATCH_TYPE.'.$finalSportName) as $key=>$val)
             {
                 $matchTypes[$key] = $val;
             }

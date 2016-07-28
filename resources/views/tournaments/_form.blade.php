@@ -365,7 +365,7 @@ $(function () {
 	function buildmatchtypedivs(selected_sport)
     {
      //get match type and schedules
-      $.get(base_url+"/schedule/getmatchandplayertypes",{'sport_name':selected_sport},function(response,status){
+      $.get(base_url+"/schedule/getmatchandplayertypes",{'sport_name':selected_sport,'from_tournament':'no'},function(response,status){
         var match_type_html = "<option value=''>Select Match Type</option>";
         var player_type_html = "<option value=''>Select Player Type</option>";
         if(status == 'success')

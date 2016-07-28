@@ -922,7 +922,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 
 							</div>
 						</div>
-						<center><label class='col-sm-4 col-sm-offset-4'><input type='gui-input' placeholder="Time substituted" name='time_substituted' required></label> </center>
+						<center><label class='col-sm-4 col-sm-offset-4'><input type='number' min='0' placeholder="Time substituted" name='time_substituted' required class="gui-input"></label> </center>
 						<center> </center>
 
 
@@ -1495,7 +1495,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 					})
 				},
 				cancel:function(){
-					return false;
+					
 				}
 			});
 

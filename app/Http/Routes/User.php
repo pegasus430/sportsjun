@@ -568,6 +568,7 @@ Route::group(['prefix'=>'match'], function(){
 
         //automatic scoring for badminton
     Route::post('badmintonAddScore', ['as'=>'match/badmintonAddScore', 'uses'=>'User\ScoreCard\BadmintonScoreCardController@addScore']);
+    Route::post('badmintonRemoveScore', ['as'=>'match/badmintonRemoveScore', 'uses'=>'User\ScoreCard\BadmintonScoreCardController@removeScore']);
 
         //manual scoring for badminton
     Route::post('manualScoringBadminton', ['as'=>'match/manualScoringBadminton', 'uses'=>'User\ScoreCard\BadmintonScoreCardController@manualScoring']);

@@ -1455,10 +1455,22 @@ class ScheduleController extends Controller {
         $request = Request::all();
         $sportName =  Request::get('sport_name');
         //building match types array
-        $matchTypes = Helper::getMatchTypes(strtoupper($sportName));
+
+        if(!is_null(Request::get('from_tournament'))){  //if request is from tournaments
+            $from_tournament=true;
+            $tour='TOURNAMENT_';
+        }
+        else {
+            $from_tournament=false;    //
+            $tour='';
+        }
+
+
+
+        $matchTypes = Helper::getMatchTypes(strtoupper($sportName),$from_tournament);
         $playerTypes = array();
         //building player types array
-        foreach (config('constants.ENUM.SCHEDULE.PLAYER_TYPE') as $key => $val) {
+        foreach (config('constants.ENUM.'.$tour.'SCHEDULE.PLAYER_TYPE') as $key => $val) {
             $playerTypes[$key] = $val;
         }
         return Response::json(['matchTypes'=>$matchTypes,'playerTypes'=>$playerTypes]);

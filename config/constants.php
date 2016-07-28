@@ -75,6 +75,26 @@ return [
                         ],
                         'PLAYER_TYPE' => ['men' => 'MEN', 'women' => 'WOMEN', 'mixed' => 'MIXED']
                 ],
+                'TOURNAMENT_SCHEDULE'     =>
+                [
+                        'MATCH_TYPE'  => [
+                                'CRICKET'      => ['odi' => 'ODI', 't20' => 'T20',
+                                        'test' => 'TEST', 'any'=>'ANY'],
+                                'TENNIS'       => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES',
+                                        'mixed' => 'MIXED', 'any'=>'ANY'],
+
+                                'TABLE TENNIS' => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES',
+                                        'mixed' => 'MIXED', 'any'=>'ANY'],
+                                'FOOTBALL'     => ['other' => 'OTHERS'],
+
+                                'BADMINTON'    => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES', 
+                                        'mixed'=>'MIXED', 'any'=>'ANY'],
+                                'SQUASH'    => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES', 
+                                        'mixed'=>'MIXED', 'any'=>'ANY'],
+                                'OTHERS'       => ['other' => 'OTHERS']
+                        ],
+                        'PLAYER_TYPE' => ['men' => 'MEN', 'women' => 'WOMEN', 'mixed' => 'MIXED', 'any'=>'ANY']
+                ],
                 'TEAMS'        =>
                 [
                         'TEAM_LEVEL' => [ 'ANY' => 'ANY', 'U12' => 'U12', 'U14' => 'U14',
