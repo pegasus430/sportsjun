@@ -6,7 +6,7 @@ use Illuminate\Http\Request as ObjectRequest;       //get all my requests data a
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
+use App\Model\Tournaments;
 use App\Model\MatchSchedule;
 use App\Model\UserStatistic;
 use App\Model\State;
@@ -107,7 +107,7 @@ class SquashScoreCardController extends Controller
         //
     }
 
-      public function squashScoreCard($match_data,$match,$sportsDetails=[],$tournamentDetails=[],$is_from_view=0)
+  public function squashScoreCard($match_data,$match,$sportsDetails=[],$tournamentDetails=[],$is_from_view=0)
     {
 
        
@@ -182,10 +182,9 @@ class SquashScoreCardController extends Controller
             $user_b_logo = Photo::select()->where('imageable_id', $match_data[0]['b_id'])->where('imageable_type',config('constants.PHOTO.USER_PHOTO'))->orderBy('id', 'desc')->first();//get user logo
             $upload_folder = 'user_profile';
             $is_singles = 'yes';
-            if($match=='squash')//Squash
-            
+                    
             $scores_a = SquashPlayerMatchScore::select()->where('match_id',$match_data[0]['id'])->first();
-            $scores_b = SquashPlayerMatchScore::select()->where('match_id',$match_data[0]['id'])->skip(2)->first();
+            $scores_b = SquashPlayerMatchScore::select()->where('match_id',$match_data[0]['id'])->skip(1)->first();
             
             
             if(count($scores_a)>0)
@@ -203,8 +202,7 @@ class SquashScoreCardController extends Controller
             $user_a_logo = Photo::select()->where('imageable_id', $match_data[0]['a_id'])->where('imageable_type',config('constants.PHOTO.TEAM_PHOTO'))->orderBy('id', 'desc')->first();//get user logo
             $user_b_logo = Photo::select()->where('imageable_id', $match_data[0]['b_id'])->where('imageable_type',config('constants.PHOTO.TEAM_PHOTO'))->orderBy('id', 'desc')->first();//get user logo
             $upload_folder = 'teams';
-            $is_singles = 'no';
-            
+            $is_singles = 'no';            
 
                 $scores_a = SquashPlayerMatchScore::select()->where('match_id',$match_data[0]['id'])->first();
                 $scores_b = SquashPlayerMatchScore::select()->where('match_id',$match_data[0]['id'])->skip(1)->first();
@@ -222,7 +220,7 @@ class SquashScoreCardController extends Controller
         //bye match
         if($match_data[0]['b_id']=='' && $match_data[0]['match_status']=='completed')
         {
-            $sport_class = 'Squash_scorcard';
+            $sport_class = 'squash_scorcard';
             return view('scorecards.byematchview',array('team_a_name'=>$user_a_name,'team_a_logo'=>$user_a_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'sport_class'=>$sport_class));
         }
 
@@ -260,11 +258,11 @@ class SquashScoreCardController extends Controller
         if($is_from_view==1 || (!empty($score_status_array['added_by']) && $score_status_array['added_by']!=$loginUserId && $match_data[0]['scoring_status']!='rejected') || $match_data[0]['match_status']=='completed' || $match_data[0]['scoring_status']=='approval_pending' || $match_data[0]['scoring_status']=='approved' || !$isValidUser)
         {
             
-                return view('scorecards.Squashscorecardview',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'user_a_name'=>$user_a_name,'user_b_name'=>$user_b_name,'user_a_logo'=>$user_a_logo,'user_b_logo'=>$user_b_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'is_singles'=>$is_singles,'score_a_array'=>$score_a_array,'score_b_array'=>$score_b_array,'b_players'=>$b_players,'a_players'=>$a_players,'team_a_player_images'=>$team_a_player_images,'team_b_player_images'=>$team_b_player_images,'decoded_match_details'=>$decoded_match_details,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city));
+                return view('scorecards.squashscorecardview',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'user_a_name'=>$user_a_name,'user_b_name'=>$user_b_name,'user_a_logo'=>$user_a_logo,'user_b_logo'=>$user_b_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'is_singles'=>$is_singles,'score_a_array'=>$score_a_array,'score_b_array'=>$score_b_array,'b_players'=>$b_players,'a_players'=>$a_players,'team_a_player_images'=>$team_a_player_images,'team_b_player_images'=>$team_b_player_images,'decoded_match_details'=>$decoded_match_details,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city));
             
 
         }
-        else //to view and edit Squash/table Squash score card
+        else //to view and edit squash /table squash score card
         {
           
                 //for form submit pass id from controller
@@ -285,8 +283,24 @@ class SquashScoreCardController extends Controller
         $left_team_id=$request->team_left;
         $right_team_id=$request->team_right;
 
+        if(!is_null($left_team_id)){
+
         $left_team_name=Team::find($left_team_id)->name;
         $right_team_name=Team::find($right_team_id)->name;
+
+        //for match_type player
+        $left_team_id_pre=$left_team_id;
+        $right_team_id_pre=$right_team_id;
+
+        }
+        else{
+        $left_team_name=null;
+        $right_team_name=null;
+
+        //match_type player
+        $left_team_id_pre=$request->select_player_1_left;
+        $right_team_id_pre=$request->select_player_1_right;
+        }
 
         $score_to_win=$request->score_to_win;
         $number_of_sets=$request->number_of_sets;
@@ -315,52 +329,58 @@ class SquashScoreCardController extends Controller
 
        if(empty($match_details)){
             $match_details=[
-                    "team_a"=>[                         //left team
+                    "team_a"=>[                         //left team  of left player for singles
                         "id"=>$left_team_id,
                         "name"=>$left_team_name,
                         "player_1_id"=>$left_player_1,
                         "player_2_id"=>$left_player_2
                     ],
-                    "team_b"=>[                         //right team
+                    "team_b"=>[                         //right team of right player for player type
                         "id"=>$right_team_id,
                         "name"=>$right_team_name,
                         "player_1_id"=>$right_player_1,
                         "player_2_id"=>$right_player_2
                     ],
                     "preferences"=>[
-                        "left_team_id"=>$left_team_id,
-                        "right_team_id"=>$right_team_id,
+                        "left_team_id"=>$left_team_id_pre,
+                        "right_team_id"=>$right_team_id_pre,
                         "saving_side"=>"left",
                         "number_of_sets"=>3,
                         "enable_two_points"=>"on",
                         "score_to_win"=>0,
                         "end_point"=>0
+                        
                     ],
                     "match_details"=>[
                         "set1"=>[
-                                "{$left_team_id}_score"=>0,
-                                "{$right_team_id}_score"=>0
+                                "{$left_team_id_pre}_score"=>0,
+                                "{$right_team_id_pre}_score"=>0
                             ],
                         "set2"=>[
-                                "{$left_team_id}_score"=>0,
-                                "{$right_team_id}_score"=>0
+                                 "{$left_team_id_pre}_score"=>0,
+                                "{$right_team_id_pre}_score"=>0
                             ],
                         "set3"=>[
-                                "{$left_team_id}_score"=>0,
-                                "{$right_team_id}_score"=>0
+                                "{$left_team_id_pre}_score"=>0,
+                                "{$right_team_id_pre}_score"=>0
                             ],
                         "set4"=>[
-                                 "{$left_team_id}_score"=>0,
-                                "{$right_team_id}_score"=>0
+                                  "{$left_team_id_pre}_score"=>0,
+                                "{$right_team_id_pre}_score"=>0
                             ],
                         "set5"=>[
-                                "{$left_team_id}_score"=>0,
-                                "{$right_team_id}_score"=>0
+                                 "{$left_team_id_pre}_score"=>0,
+                                "{$right_team_id_pre}_score"=>0
                             ]                     
 
                     ],
                     "match_type"=>$match_model->match_type,
-                    "schedule_type"=>$match_model->schedule_type
+                    "schedule_type"=>$match_model->schedule_type, 
+                    "current_set"=>1, 
+                    "scores"=>[
+                        "{$left_team_id_pre}_score"=>0,
+                        "{$right_team_id_pre}_score"=>0
+                    ]
                 ];
 
                 $match_details=json_encode($match_details);           
@@ -374,8 +394,8 @@ class SquashScoreCardController extends Controller
             $match_details->preferences->number_of_sets=$number_of_sets;
             $match_details->preferences->saving_side=$saving_side;
             $match_details->preferences->enable_two_points=$enable_two_points;
-            $match_details->preferences->left_team_id=$left_team_id;            
-            $match_details->right_team_id=$right_team_id;
+            $match_details->preferences->left_team_id=$left_team_id_pre;            
+            $match_details->preferences->right_team_id=$right_team_id_pre;
 
         //player preferences
 
@@ -417,7 +437,8 @@ class SquashScoreCardController extends Controller
 
             $match_id=$request->match_id;
             $table_score_id=$request->table_score_id;
-            $team_id=$request->team_id;
+            $team_id=(int)$request->team_id;
+            $action=$request->action;    //add or remove;
 
             $match_model=MatchSchedule::find($match_id);            //match_schedule data
             $match_details=json_decode($match_model->match_details);
@@ -431,43 +452,97 @@ class SquashScoreCardController extends Controller
             $score_to_win = $preferences->score_to_win;
             $number_of_sets = $preferences->number_of_sets;
             $saving_side = $preferences->saving_side;
-            $enable_two_points = $preferences->enable_two_points;          
+            $enable_two_points = $preferences->enable_two_points;
+
+            //get current active set;
+               
             
             // Check if set1 is complete
 
-            if($this->checkSet('set1', $match_score_model, $match_score_model_other, $preferences)){
-                $match_score_model->set1++;
-                $match_score_model->save();
-                $match_details->match_details->set1->{$team_id."_score"} ++;   
+                //first and second player(team) or left and right player(team)
+    $left_player_model=SquashPlayerMatchScore::where('match_id',$match_id)->first();
+    $right_player_model=SquashPlayerMatchScore::where('match_id',$match_id)->skip(1)->first();
+
+            if($this->checkSet('set1', $left_player_model, $right_player_model, $preferences)){
+
+                    if($action=='remove' && $match_score_model->set1>0 ){   //remove point if set_score>0
+                                $match_score_model->set1--;
+                                $match_score_model->save();
+
+                                $match_details->match_details->set1->{$team_id."_score"}=$match_score_model->set1;
+                               
+                    }
+                    elseif($action=='add') {
+
+                                $match_score_model->set1++;
+                                $match_score_model->save(); 
+
+                                $match_details->match_details->set1->{$team_id."_score"}=$match_score_model->set1;                              
+                    }  
             }
             else{           //set1 is complete
 
-                if($this->checkSet('set2', $match_score_model, $match_score_model_other, $preferences)){
-                $match_score_model->set2++;
-                $match_score_model->save();
-                $match_details->match_details->set2->{$team_id."_score"} ++;   
+                if($this->checkSet('set2',$left_player_model, $right_player_model, $preferences)){
+                        if($action=='remove' && $match_score_model->set2>0 ){
+                            $match_score_model->set2--;
+                            $match_score_model->save(); 
+            $match_details->match_details->set2->{$team_id."_score"} =$match_score_model->set2;                         
+                        }
+                        elseif($action=='add') {
+                                    $match_score_model->set2++;
+                                    $match_score_model->save();
+            $match_details->match_details->set2->{$team_id."_score"} =$match_score_model->set2;
+                                    
+                        }  
                 }
 
                 else{       //set2 is complete
                         if($this->checkSet('set3', $match_score_model, $match_score_model_other, $preferences)){
-                                $match_score_model->set3++;
-                                $match_score_model->save();
-                                $match_details->match_details->set3->{$team_id."_score"} ++;   
+                                if($action=='remove' && $match_score_model->set3>0 ){
+                                    $match_score_model->set3--;
+                                    $match_score_model->save();
+            $match_details->match_details->set3->{$team_id."_score"} =$match_score_model->set3;
+                                    
+                                }
+                                elseif($action=='add') {
+                                    $match_score_model->set3++;
+                                    $match_score_model->save();
+            $match_details->match_details->set3->{$team_id."_score"} =$match_score_model->set3;
+                                   
+                                }    
                             }
                         else{
 
                             if($number_of_sets>3){
 
                                     if($this->checkSet('set4', $match_score_model, $match_score_model_other, $preferences)){
-                                        $match_score_model->set4++;
-                                        $match_score_model->save();
-                                        $match_details->match_details->set4->{$team_id."_score"} ++;   
+                                            if($action=='remove' && $match_score_model->set4>0 ){
+
+                                                $match_score_model->set4--;
+                                                $match_score_model->save();
+
+            $match_details->match_details->set4->{$team_id."_score"} =$match_score_model->set4;                                                
+                                            }
+                                            elseif($action=='add') {
+                                                $match_score_model->set4++;
+                                                $match_score_model->save();
+            $match_details->match_details->set4->{$team_id."_score"} =$match_score_model->set4;
+                                         } 
                                     }
                                     else{
                                         if($this->checkSet('set5', $match_score_model, $match_score_model_other, $preferences)){
-                                                $match_score_model->set5++;
-                                                $match_score_model->save();
-                                                $match_details->match_details->set5->{$team_id."_score"} ++;   
+                                               if($action=='remove' && $match_score_model->set5>0 ){
+
+                                                    $match_score_model->set5--;
+                                                    $match_score_model->save();
+            $match_details->match_details->set5->{$team_id."_score"} =$match_score_model->set5;
+                                                 
+                                                }
+                                                elseif($action=='add') {
+                                                    $match_score_model->set5++;
+                                                    $match_score_model->save();
+            $match_details->match_details->set5->{$team_id."_score"} =$match_score_model->set5;
+                                              }  
                                          }
                                 }
                             
@@ -476,15 +551,20 @@ class SquashScoreCardController extends Controller
                 }
             }
 
+        $match_details->current_set=$this->getCurrentSet($match_id);
+        $match_details->scores=$this->getScoreSet($match_id);
+
         $match_details=json_encode($match_details);
         $match_model->match_details=$match_details;
         $match_model->save();
         $match_score_model->save();
 
-       if($match_score_model->match_type=='double')$player_ids=[$match_score_model->user_id_a, $match_score_model->user_id_b];
+
+
+       if($match_model->match_type!='singles')$player_ids=[$match_score_model->user_id_a, $match_score_model->user_id_b];
        else $player_ids=[$match_score_model->user_id_a];
 
-        $this->squashStatistics($player_ids,$match_model->match_type);
+        $this->squashStatistics($player_ids,$match_model->match_type, '', $match_model->schedule_type);
 
         return $match_details;
   }
@@ -505,11 +585,11 @@ class SquashScoreCardController extends Controller
                 return true;
             }
 
-            else if($set1_score==$end_point || $set1_score==$end_point){
+            else if($set1_score==$end_point || $set1_opponent_score==$end_point){
                 return false;
             }
 
-            else if($set1_score>=$score_to_win && $set1_opponent_score>=$score_to_win){
+            else if($set1_score>=$score_to_win || $set1_opponent_score>=$score_to_win){
                 if($enable_two_points=='on'){
                     if(($set1_score-$set1_opponent_score)>=2) return false;
                     elseif(($set1_opponent_score-$set1_score)>=2) return false;
@@ -523,7 +603,7 @@ class SquashScoreCardController extends Controller
 
     }
 
-   public function squashStatistics($player_ids_array,$match_type,$is_win='')
+  public function squashStatistics($player_ids_array,$match_type,$is_win='', $schedule_type)
     {
         //$player_ids_array = explode(',',$player_ids);
         foreach($player_ids_array as $user_id)
@@ -538,26 +618,32 @@ class SquashScoreCardController extends Controller
             }
 
             //check already user id exists or not
-            $squash_statistics_array = array();
-            $tennisStatistics = SquashStatistic::select()->where('user_id',$user_id)->where('match_type',$match_type)->get();
-            if(count($tennisStatistics)>0)
-            {
-                $squash_statistics_array = $tennisStatistics->toArray();
-                $matches = !empty($squash_statistics_array[0]['matches'])?$squash_statistics_array[0]['matches']:0;
-                $won = !empty($squash_statistics_array[0]['won'])?$squash_statistics_array[0]['won']:0;
-                $lost = !empty($squash_statistics_array[0]['lost'])?$squash_statistics_array[0]['lost']:0;
-                SquashStatistic::where('user_id',$user_id)->where('match_type',$match_type)->update(['matches'=>$player_match_details->count(),'double_faults'=>$double_faults_count]);
-                if($is_win=='yes') //win count
-                {
-                    $won_percentage = number_format((($won+1)/($matches+1))*100,2);
-                    SquashStatistic::where('user_id',$user_id)->where('match_type',$match_type)->update(['won'=>$won+1,'won_percentage'=>$won_percentage]);
+            $squash_statistics= SquashStatistics::whereUserId($user_id)->whereMatchType($match_type)->first();
 
-                }else if($is_win=='no')//loss count
-                {
-                    SquashStatistic::where('user_id',$user_id)->where('match_type',$match_type)->update(['lost'=>$lost+1]);
+            if(!is_null($squash_statistics)){  //if user exist update statistics
+                $won=0;
+                $lost=0;
+
+
+                if($schedule_type=='player'){
+                    foreach ($squash_statistics as $bs) {
+                            if($bs->winner_id==$user_id) $won++;
+                            if($bs->looser_id==$user_id) $lost++;
+                    }
                 }
-            }else
-            {
+
+                $matches=count($player_match_details);
+                $won_percentage = number_format((($won+1)/($matches+1))*100,2);
+
+                $squash_statistics->matches=$matches;
+                $squash_statistics->won=$won;
+                $squash_statistics->lost=$lost;
+                $squash_statistics->won_percentage=$won_percentage;
+                $squash_statistics->save();
+            }
+           
+            else
+            {                                   //else create new statisti
                 $won='';
                 $won_percentage='';
                 $lost='';
@@ -569,19 +655,20 @@ class SquashScoreCardController extends Controller
                 {
                     $lost=1;
                 }
-                $tennisStatisticsModel = new SquashStatistic();
-                $tennisStatisticsModel->user_id = $user_id;
-                $tennisStatisticsModel->match_type = $match_type;
-                $tennisStatisticsModel->matches = 1;
-                $tennisStatisticsModel->won_percentage = $won_percentage;
-                $tennisStatisticsModel->won = $won;
-                $tennisStatisticsModel->lost = $lost;
-                $tennisStatisticsModel->double_faults = $double_faults_count;
-                $tennisStatisticsModel->save();
+                $squashStatisticsModel = new SquashStatistic();
+                $squashStatisticsModel->user_id = $user_id;
+                $squashStatisticsModel->match_type = $match_type;
+                $squashStatisticsModel->matches = 1;
+                $squashStatisticsModel->won_percentage = $won_percentage;
+                $squashStatisticsModel->won = $won;
+                $squashStatisticsModel->lost = $lost;
+        
+                $squashStatisticsModel->save();
             }
         }
 
     }
+
 
 
     //save record manually;
@@ -591,14 +678,37 @@ class SquashScoreCardController extends Controller
             $number_of_sets=$request->number_of_sets;
 
             $score_a_model=SquashPlayerMatchScore::find($score_a_id);
-            $score_b_model=SquashPlayerMatchScore::find($score_b_id);  
+            $score_b_model=SquashPlayerMatchScore::find($score_b_id); 
+
+            $match_id=$score_a_model->match_id;             
+
+            $match_model=Matchschedule::find($match_id);
+            $match_details=json_decode($match_model->match_details);
+
+            $match_details_data=$match_details->match_details;
+
+            $left_team_id=$match_details->preferences->left_team_id;
+            $right_team_id=$match_details->preferences->right_team_id;
+            $end_point=$match_details->preferences->end_point;
+
+
 
             //start scoring
 
             for($i=1; $i<=$number_of_sets; $i++){
-                    $score_a_model->{"set".$i}=$request->{"a_set".$i};
-                    $score_b_model->{"set".$i}=$request->{"b_set".$i};
-            }
+                    $score_a_model->{"set".$i}=$request->{"a_set".$i}>$end_point?$end_point:(int)$request->{"a_set".$i};
+                    $score_b_model->{"set".$i}=$request->{"b_set".$i}>$end_point?$end_point:(int)$request->{"b_set".$i};
+
+                    $match_details_data->{"set".$i}->{$left_team_id."_score"}=(int)$request->{"a_set".$i}>$end_point?$end_point:(int)$request->{"a_set".$i};
+                    $match_details_data->{"set".$i}->{$right_team_id."_score"}=(int)$request->{"b_set".$i}>$end_point?$end_point:(int)$request->{"b_set".$i};
+               }
+
+            $match_details->match_details=$match_details_data;
+            $match_details->scores=$this->getScoreSet($match_id);
+            $match_details->current_set=$this->getCurrentSet($match_id);     //get current active set
+
+            $match_model->match_details=json_encode($match_details);
+            $match_model->save();
 
             $score_a_model->save();
             $score_b_model->save();
@@ -607,14 +717,16 @@ class SquashScoreCardController extends Controller
     }
 
 
-
+//get json details;
     public function getSquashDetails(ObjectRequest $request){
         $match_id=$request->match_id;
         $match_model=matchschedule::find($match_id);
         return $match_model->match_details;
     }
 
-    public function SquashStoreRecord(ObjectRequest $Objrequest){
+//store final record. When clicked on end match button //sets the winner and loser
+
+    public function squashStoreRecord(ObjectRequest $Objrequest){
 
         $loginUserId = Auth::user()->id;
         $request = Request::all();
@@ -725,7 +837,7 @@ class SquashScoreCardController extends Controller
                ];
             }                                                             
         else $player_ids=[$match_score_model->user_id_a];
-        $this->SquashStatistics($player_ids,$match_model->match_type);
+        $this->squashStatistics($player_ids,$match_model->match_type,'', $match_model->schedule_type);
 
         $match_score_model=$score_b_model;
         if($match_score_model->match_type=='double'){
@@ -735,7 +847,7 @@ class SquashScoreCardController extends Controller
                ];
             }                                                           
         else $player_ids=[$match_score_model->user_id_a];
-        $this->SquashStatistics($player_ids,$match_model->match_type);
+        $this->squashStatistics($player_ids,$match_model->match_type, '', $match_model->schedule_type);
     }
 
 
@@ -763,6 +875,85 @@ class SquashScoreCardController extends Controller
             return "preferences updated";
     }
 
+    //get the scores from number of sets winned.
+
+    public function getScoreSet($match_id){
+            $match_model=MatchSchedule::find($match_id);
+
+            $left_player_model=SquashPlayerMatchScore::where('match_id',$match_id)->first();
+            $right_player_model=SquashPlayerMatchScore::where('match_id',$match_id)->skip(1)->first();
+
+            $left_player_score=0;
+            $right_player_score=0;
+
+            for($i=1; $i<=5; $i++){
+                if($left_player_model->{'set'.$i}==$right_player_model->{'set'.$i}){
+                    //nothing to do
+                }
+                elseif($left_player_model->{'set'.$i}>$right_player_model->{'set'.$i}){
+                    $left_player_score++;
+                }
+                elseif($left_player_model->{'set'.$i}<$right_player_model->{'set'.$i}){
+                   $right_player_score++;
+                }
+            }
+
+    $team_a_id=$left_player_model->team_id==null?$left_player_model->user_id_a:$left_player_model->team_id;
+    $team_b_id=$right_player_model->team_id==null?$right_player_model->user_id_a:$right_player_model->team_id;
+
+
+
+        return [
+            "{$team_a_id}_score"=>$left_player_score,
+            "{$team_b_id}_score"=>$right_player_score
+        ];
+    }
+
+    public function getCurrentSet($match_id){
+            $match_model=MatchSchedule::find($match_id);
+
+            $preferences=json_decode($match_model->match_details)->preferences;
+
+            //first and second player(team) or left and right player(team)
+    $match_score_model=SquashPlayerMatchScore::where('match_id',$match_id)->first();
+    $match_score_model_other=SquashPlayerMatchScore::where('match_id',$match_id)->skip(1)->first();
+
+
+            if($this->checkSet('set1', $match_score_model, $match_score_model_other, $preferences)){
+                    return 1;                   
+            }
+            else{           //set1 is complete
+
+                if($this->checkSet('set2', $match_score_model, $match_score_model_other, $preferences)){
+                    return 2;  
+                }
+
+                else{       //set2 is complete
+                        if($this->checkSet('set3', $match_score_model, $match_score_model_other, $preferences)){
+                            return 3;  
+                            }
+                        else{
+                      
+                                if($this->checkSet('set4', $match_score_model, $match_score_model_other, $preferences)){
+                                        return 4;
+                                            
+                                    }
+                                    else{
+                                        if($this->checkSet('set5', $match_score_model, $match_score_model_other, $preferences)){
+                                              return 5; 
+                                         }
+                                         else return 0;
+                                }
+                            
+                            }
+                        }
+                }
+    }
+
+
+
 }
+
+
 
 

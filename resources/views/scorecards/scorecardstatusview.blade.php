@@ -12,9 +12,16 @@ $(document).ready(function(){
 	
 		@if($match_data[0]['match_status']=='pending')	
 			{{'Match is not completed'}}
+		
+	
+		@elseif($match_data[0]['scoring_status']=='approval_pending')
+			<span>{{'Scorecard is pending for approval'}} </span>	
+
 		@elseif($match_data[0]['match_status']='completed')
 			<span >{{'Match is completed'}}</span>		
+		
 		@endif
+
 			
 		
 	 
@@ -37,7 +44,7 @@ $(document).ready(function(){
 					@if($match_data[0]['match_status']=='completed')	
 						{{ 'Match is Completed.' }}
 					@else
-						@if($score_status_array['added_by']!='')	
+						@if($score_status_array['added_by']=='')	
 						{{ 'Scorecard Data Is Entered.' }}
 					@endif
 					@endif

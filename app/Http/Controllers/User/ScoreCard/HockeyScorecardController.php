@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User\ScoreCard;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\User\ScoreCardController as parentScoreCardController;
 use App\Model\MatchSchedule;
 use App\Model\UserStatistic;
 use App\Model\State;
@@ -24,84 +25,11 @@ use DateTime;
 use App\Helpers\AllRequests;
 use Session;
 use Request;
+use App\Model\Tournaments;
 
-class HockeyScorecardController extends Controller
+class HockeyScorecardController extends parentScoreCardController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+    
 
     public function hockeyScoreCard($match_data,$sportsDetails=[],$tournamentDetails=[],$is_from_view=0)
     {
@@ -453,7 +381,8 @@ class HockeyScorecardController extends Controller
                     }
                     if($match_status=='completed')
                     {
-                        $sportName = Sport::where('id',$matchScheduleDetails['sports_id'])->pluck('sports_name');
+                    $sportName = Sport::where('id',$matchScheduleDetails['sports_id'])->pluck('sports_name');
+
                         $this->insertPlayerStatistics($sportName,$match_id);
 
                         //notification ocde
@@ -476,10 +405,11 @@ class HockeyScorecardController extends Controller
                 if($match_status=='completed')
                 {
                     $sportName = Sport::where('id',$matchScheduleDetails['sports_id'])->pluck('sports_name');
+
                     $this->insertPlayerStatistics($sportName,$match_id);
 
                     //send mail to players
-                        Helper::sendEmailPlayers($matchScheduleDetails, 'Hockey');      
+                    Helper::sendEmailPlayers($matchScheduleDetails, 'Hockey');      
 
 
                     //notification ocde

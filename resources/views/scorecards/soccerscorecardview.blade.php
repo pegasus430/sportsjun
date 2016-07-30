@@ -647,7 +647,7 @@ var team_b_id={{$team_b_id}}
 
 
 @if($match_data[0]['match_status']!='completed')
-window.setInterval(getMatchDetails, 10000);
+//window.setInterval(getMatchDetails, 10000);
 @endif
 
 </script>

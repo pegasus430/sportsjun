@@ -2,7 +2,7 @@
 @section('content')
 <?php 
     $team_a_name = $user_a_name;
-		$team_b_name = $user_b_name;
+    $team_b_name = $user_b_name;
 
     $team_a_id=$match_data[0]['a_id'];
     $team_b_id=$match_data[0]['b_id'];
@@ -16,13 +16,53 @@
     
     if(isset($preferences->number_of_sets))$set=$preferences->number_of_sets ;
     else $set=3;
+
+    ${'team_'.$match_data[0]['a_id'].'_score'}=0;
+    ${'team_'.$match_data[0]['b_id'].'_score'}=0; 
+
+    $team_a_info='';
+    $team_b_info='';
+
+    if(isset($preferences)){
+    $current_set=$match_details->current_set;
+
+    $player_or_team_left_button_add= "<button class='btn button_add btn-circle btn-sm  btn-circle btn-sm pull-left' id='score_team_a' team_id='$preferences->left_team_id' table_score_id='{$score_a_array['id']}' onclick='return addScore(this)'> <i class='fa fa-plus'></i></button>";
+
+    $player_or_team_left_button_remove="  <button team_id='$preferences->left_team_id' table_score_id='{$score_a_array['id']}' onclick='return removeScore(this)'class='btn button_remove btn-circle btn-sm pull-right'> <i class='fa fa-minus'></i> </button>";
+
+    $player_or_team_right_button_add= "<button class='btn button_add btn-circle btn-sm  btn-circle btn-sm pull-left' id='score_team_b' team_id='$preferences->right_team_id' table_score_id='{$score_b_array['id']}' onclick='return addScore(this)'> <i class='fa fa-plus'></i></button>";
+
+    $player_or_team_right_button_remove=" <button team_id='$preferences->right_team_id' table_score_id=    '{$score_b_array['id']}' onclick='return removeScore(this)'class='btn button_remove btn-circle btn-sm pull-right'> <i class='fa fa-minus'></i> </button>";
+
+  ${'team_'.$preferences->left_team_id.'_score'}=$match_details->scores->{$preferences->left_team_id.'_score'};
+  ${'team_'.$preferences->right_team_id.'_score'}=$match_details->scores->{$preferences->right_team_id.'_score'};
+  }else{
+    $player_or_team_left_button_add='';
+    $player_or_team_left_button_remove='';
+    $player_or_team_right_button_remove='';
+    $player_or_team_right_button_add='';
+    $current_set='';
+  }
 ?>
 
 <style>
    
     input:read-only { 
     background-color: #f4f4f4;
+
 }
+.button_add, .button_add:hover, .button_add:active{
+   color:green;
+  background: none;
+  border: 0px #fff inset;
+}
+.button_remove, .button_remove:hover, .button_add:active{
+  color:red;
+  background: none;
+  border: 0px #fff inset;
+}
+
+
 </style>
 <div class="col_standard table_tennis_scorcard">
     <div id="team_vs" class="tt_bg">
@@ -31,27 +71,28 @@
                 <div class="team team_one col-xs-5">
                     <div class="row">
                         <div class="col-md-4 col-sm-12">
-                        	<div class="team_logo">
+                          <div class="team_logo">
                        
-						 @if($user_a_logo['url']!='')
-							<!--<img class="img-responsive img-circle" width="110" height="110" src="{{ url('/uploads/'.$upload_folder.'/'.$user_a_logo['url']) }}" onerror="this.onerror=null;this.src='{{ asset('/images/default-profile-pic.jpg') }}';">-->
-							{!! Helper::Images($user_a_logo['url'],$upload_folder,array('class'=>'img-responsive img-circle','height'=>110,'width'=>110) )!!}	
-							@else
-							<!--<img  class="img-responsive img-circle" width="110" height="110" src="{{ asset('/images/default-profile-pic.jpg') }}">-->
-							{!! Helper::Images('default-profile-pic.jpg','images',array('class'=>'img-responsive img-circle','height'=>110,'width'=>110) )!!}	
-						@endif
+             @if($user_a_logo['url']!='')
+              <!--<img class="img-responsive img-circle" width="110" height="110" src="{{ url('/uploads/'.$upload_folder.'/'.$user_a_logo['url']) }}" onerror="this.onerror=null;this.src='{{ asset('/images/default-profile-pic.jpg') }}';">-->
+              {!! Helper::Images($user_a_logo['url'],$upload_folder,array('class'=>'img-responsive img-circle','height'=>110,'width'=>110) )!!} 
+              @else
+              <!--<img  class="img-responsive img-circle" width="110" height="110" src="{{ asset('/images/default-profile-pic.jpg') }}">-->
+              {!! Helper::Images('default-profile-pic.jpg','images',array('class'=>'img-responsive img-circle','height'=>110,'width'=>110) )!!} 
+            @endif
                         </div>
                         </div>
                        <div class="col-md-8 col-sm-12">
-                        	<div class="team_detail">
-						@if($match_data[0]['schedule_type']=='player')
+                          <div class="team_detail">
+            @if($match_data[0]['schedule_type']=='player')
                           <div class="team_name"><a href="{{ url('/editsportprofile/'.$match_data[0]['a_id'])}}">{{ $user_a_name }}</a></div>
-						@else
-							<div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['a_id'] }}">{{ $user_a_name }}</a></div>
-						@endif
-					  
-						  <div class="team_city">{!! $team_a_city !!}</div>
-						  
+            @else
+              <div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['a_id'] }}">{{ $user_a_name }}</a></div>
+            @endif
+            
+              <div class="team_city">{!! $team_a_city !!}</div>
+              <div class="team_score team_{{$team_a_id}}_score" id="team_{{$team_a_id}}_score">{{${'team_'.$team_a_id.'_score'} }} <span><i class="fa fa-info-circle soccer_info" data-toggle="tooltip" title="<?php echo $team_a_info;?>"></i></span></div>
+              
                           </div>
                         </div>
                     </div>
@@ -63,36 +104,38 @@
                   <div class="row">
                         <div class="col-md-8 col-sm-12 visible-md visible-lg">
                         <div class="team_detail">
-						@if($match_data[0]['schedule_type']=='player')
+            @if($match_data[0]['schedule_type']=='player')
                           <div class="team_name"><a href="{{ url('/editsportprofile/'.$match_data[0]['b_id'])}}">{{ $user_b_name }}</a></div>
-						@else
-							<div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['b_id'] }}">{{ $user_b_name }}</a></div>
-						@endif
-							<div class="team_city">{!! $team_b_city !!}</div>
+            @else
+              <div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['b_id'] }}">{{ $user_b_name }}</a></div>
+            @endif
+              <div class="team_city">{!! $team_b_city !!}</div>
+              <div class="team_score team_{{$team_b_id}}_score" id="team_{{$team_b_id}}_score">{{${'team_'.$team_b_id.'_score'} }} <span><i class="fa fa-info-circle soccer_info" data-toggle="tooltip" title="<?php echo $team_b_info;?>"></i></span></div>
                             </div>
                         </div>
                               <div class="col-md-4 col-sm-12">
-                              	<div class="team_logo">
+                                <div class="team_logo">
                                 
                                 
-								
-								 @if($user_b_logo['url']!='')
+                
+                 @if($user_b_logo['url']!='')
               <!--  <img class="img-responsive img-circle" width="110" height="110" src="{{ url('/uploads/'.$upload_folder.'/'.$user_b_logo['url']) }}" onerror="this.onerror=null;this.src='{{ asset('/images/default-profile-pic.jpg') }}';">-->
-		  	{!! Helper::Images($user_b_logo['url'],$upload_folder,array('class'=>'img-responsive img-circle','height'=>110,'width'=>110) )!!}	
+        {!! Helper::Images($user_b_logo['url'],$upload_folder,array('class'=>'img-responsive img-circle','height'=>110,'width'=>110) )!!} 
                 @else
               <!--  <img  class="img-responsive img-circle"width="110" height="110" src="{{ asset('/images/default-profile-pic.jpg') }}">-->
-		  {!! Helper::Images('default-profile-pic.jpg','images',array('class'=>'img-responsive img-circle','height'=>110,'width'=>110) )!!}	
+      {!! Helper::Images('default-profile-pic.jpg','images',array('class'=>'img-responsive img-circle','height'=>110,'width'=>110) )!!} 
               @endif
               </div>
                               </div>
                               <div class="col-md-8 col-sm-12 visible-xs visible-sm">
                          <div class="team_detail">
-						@if($match_data[0]['schedule_type']=='player')
+            @if($match_data[0]['schedule_type']=='player')
                           <div class="team_name"><a href="{{ url('/editsportprofile/'.$match_data[0]['b_id'])}}">{{ $user_b_name }}</a></div>
-						@else
-							<div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['b_id'] }}">{{ $user_b_name }}</a></div>
-						@endif
-							<div class="team_city">{!! $team_b_city !!}</div>
+            @else
+              <div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['b_id'] }}">{{ $user_b_name }}</a></div>
+            @endif
+              <div class="team_city">{!! $team_b_city !!}</div>
+              <div class="team_score team_{{$team_b_id}}_score" id="team_{{$team_b_id}}_score">{{${'team_'.$team_b_id.'_score'} }} <span><i class="fa fa-info-circle soccer_info" data-toggle="tooltip" title="<?php echo $team_b_info;?>"></i></span></div>
                             </div>
                         </div>
                     </div>
@@ -117,9 +160,9 @@
                     </div>
                 </div>
             </div>
-			<h5 class="scoreboard_title">Squash Scorecard @if($match_data[0]['match_type']!='other')
-											<span class='match_type_text'>({{ $match_data[0]['match_type']=='odi'?strtoupper($match_data[0]['match_type']):ucfirst($match_data[0]['match_type']) }})</span>
-									@endif</h5>
+      <h5 class="scoreboard_title">Squash Scorecard @if($match_data[0]['match_type']!='other')
+                      <span class='match_type_text'>({{ $match_data[0]['match_type']=='odi'?strtoupper($match_data[0]['match_type']):ucfirst($match_data[0]['match_type']) }})</span>
+                  @endif</h5>
         </div>
           @if (session('status'))
           <div class="alert alert-success">{{ session('status') }}</div>
@@ -140,16 +183,16 @@
       @endif
 
 
-	@if($match_data[0]['match_status']=='completed')
-	<div class="form-group">
-    	<label class="win_head">Winner</label> 
+  @if($match_data[0]['match_status']=='completed')
+  <div class="form-group">
+      <label class="win_head">Winner</label> 
         <h3 class="win_team">{{ ($match_data[0]['a_id']==$match_data[0]['winner_id'])?$user_a_name:$user_b_name }}</h3>
     </div>
-	@else
+  @else
 
      
 
-	@endif
+  @endif
     <p class="match-status mg"><a href="{{ url('user/album/show').'/match'.'/0'.'/'.$action_id }}"><span class="fa" style="float: left; margin-left: 8px;"><img src=" {{ asset('/images/sc-gallery.png') }}" height="18" width="22"></span> <b>Media Gallery</b></a></p>
         @include('scorecards.share')
         <p class="match-status">@include('scorecards.scorecardstatus')</p>
@@ -186,7 +229,7 @@
 
                         <!-- if doubles select another player -->
 
-                        @if($match_data[0]['match_type']=='doubles')
+                        @if($match_data[0]['match_type']!='singles')
                           <br>
                         <label>Select Player 2</label>
                         <select name='select_player_2_left' class="form-control select-picker" id='select_player_2_left'>                     
@@ -198,9 +241,9 @@
 
 
                       @elseif($match_data[0]['schedule_type']=='player')
-                            <select name='select_player_1_b' class="form-control select-picker">
-                            <option value="{{$match_data[0]['a_id']}}">{{$user_a_name}}</option>
-                            <option value="{{$match_data[0]['b_id']}}" selected="">{{$user_b_name}}</option>
+                            <select name='select_player_1_left' class="form-control select-picker">
+                            <option value="{{$match_data[0]['a_id']}}" selected="">{{$user_a_name}}</option>
+                            <option value="{{$match_data[0]['b_id']}}" >{{$user_b_name}}</option>
                             </select>
                       @endif
 
@@ -225,7 +268,7 @@
                         </select>
                         <!-- if doubles select another player -->
 
-                        @if($match_data[0]['match_type']=='doubles')
+                        @if($match_data[0]['match_type']!='singles')
                               <br>
                             <label>Select Player 2</label>
                             <select name='select_player_2_right' class="form-control select-picker" id='select_player_2_right'>      
@@ -251,7 +294,7 @@
               <br>
               <div class='row'>
             
-                  <div class='col-sm-4 col-xs-4'><label>Saving Side</label></div>
+                  <div class='col-sm-4 col-xs-4'><label>Serving Side</label></div>
                   <div class='col-sm-4 col-xs-4'><input type='radio' name='saving_side' value='left' checked id='choose_left'> Left</div>
                   <div class='col-sm-4 col-xs-4'><input type='radio' name='saving_side' value='right' id='choose_right'> Right</div>
                
@@ -269,7 +312,9 @@
                         <label>Number of Sets</label>
                         <select class='form-control select-picker' name='number_of_sets'>
                           <option value='1'>1</option>
+                          <option value='2'>2</option>
                           <option value='3' selected="">3</option>
+                          <option value='4'>4</option>
                           <option value='5'>5</option>
                         </select>
 
@@ -309,14 +354,15 @@
 
   @else
 
-   {!! Form::open(array('url' => '', 'method' => 'POST','id'=>'Squash', 'onsubmit'=>'return manualScoring(this)')) !!}
+   {!! Form::open(array('url' => '', 'method' => 'POST','id'=>'squash', 'onsubmit'=>'return manualScoring(this)')) !!}
 
   <div class="row">
     <div class='col-sm-12'>
      <span class='pull-right'>   
-        <a href='javascript:void(0)' onclick="enableManualEditing(this)"><i class='fa fa-pencil'></i></a>
-        <span> &nbsp;</span>
-        <a href='javascript:void(0)' onclick="updatePreferences(this)"><i class='fa fa-gear fa-danger'></i></a>
+        <a href='javascript:void(0)' onclick="enableManualEditing(this)" style="color:#123456;">edit <i class='fa fa-pencil'></i></a> 
+        <span> &nbsp; &nbsp; </span>
+        <a href='javascript:void(0)' onclick="updatePreferences(this)" style='color:#123456;'> settings <i class='fa fa-gear fa-danger'></i></a>
+        <span> &nbsp; &nbsp; </span>
     </span>
     </div>
   </div>
@@ -327,44 +373,37 @@
         <thead>
           <tr class='team_bat team_title_head'>
              <th>PLAYERS</th>
-              <th>SET 1</th>
-            @if($set>1)
-              <th>SET 2</th>
-              <th>SET 3</th>
-            @endif 
-            @if($set>3)
-              <th>SET 4</th>
-              <th>SET 5</th>
-            @endif
+             
+            @for($set_index=1; $set_index<=$set; $set_index++)
+              <th>SET {{$set_index}}</th>
+            @endfor
+             
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>{{$score_a_array['player_name_a']}} / {{$score_a_array['player_name_b']}}</td>
-            <td><input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set1" value="{{$score_a_array['set1']}}" name='a_set1'></td>
-          @if($set>1)
-            <td><input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set2" value="{{$score_a_array['set2']}}" name='a_set2'></td>
-            <td><input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set3" value="{{$score_a_array['set3']}}" name='a_set3'></td>
-          @endif
 
-           @if($set>3)
-            <td><input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set4" value="{{$score_a_array['set4']}}" name='a_set4'></td>
-            <td><input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set5" value="{{$score_a_array['set5']}}" name='a_set5'></td>
-          @endif
+            <td>{{$score_a_array['player_name_a']}} / {{$score_a_array['player_name_b']}}</td>
+            
+          @for($set_index=1; $set_index<=$set; $set_index++)
+            <td>
+                <span class='hidden-xs pull-left remove_button_left left_button_remove_set_{{$set_index}}'></span>
+                 <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set{{$set_index}}" value="{{$score_a_array['set'.$set_index]}}" name='a_set{{$set_index}}'>
+                <span class='hidden-xs pull-right add_button_left left_button_add_set_{{$set_index}}'></span>
+            </td>
+          @endfor
         </tr>
 
           <tr>
             <td>{{$score_b_array['player_name_a']}} / {{$score_b_array['player_name_b']}}</td>
-            <td><input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new b_set1" value="{{$score_b_array['set1']}}" name='b_set1'></td>
-          @if($set>1)
-            <td><input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new b_set2" value="{{$score_b_array['set2']}}" name='b_set2'></td>
-            <td><input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new b_set3" value="{{$score_b_array['set3']}}" name='b_set3'></td>
-          @endif
 
-           @if($set>3)
-            <td><input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new b_set4" value="{{$score_b_array['set4']}}" name='b_set4'></td>
-            <td><input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new b_set5" value="{{$score_b_array['set5']}}" name='b_set5'></td>
-          @endif
+            @for($set_index=1; $set_index<=$set; $set_index++)
+              <td>
+                <span class='hidden-xs pull-left remove_button_right right_button_remove_set_{{$set_index}}'></span>
+                  <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new b_set{{$set_index}}" value="{{$score_b_array['set'.$set_index]}}" name='b_set{{$set_index}}'>
+                <span class='hidden-xs pull-right add_button_right right_button_add_set_{{$set_index}}'></span>
+              </td>
+            @endfor
         </tr>
 
         </tbody>
@@ -392,125 +431,97 @@
  {!! Form::open(array('url' => '', 'method' => 'POST','id'=>'endMatchForm', 'onsubmit'=>'return endMatch(this)')) !!}
 
 
-@if($match_data[0]['match_type']=='doubles')
+@if($match_data[0]['match_type']!='singles' )
 
 <div class="row" id='real_time_scoring'>
- <div class='col-sm-10 col-sm-offset-1'>
+  <div class="col-sm-6 col-xs-12 table-striped ">
+        <h3 class='team_bat team_title_head'>{{$score_a_array['team_name']}}</h3>
+       <div class='col-xs-9'>       
+            <div class='col-xs-12'>&nbsp;</div>
+            <div class='col-xs-12'>{{$score_a_array['player_name_a']}}</div>
+            <div class='col-xs-12'>&nbsp;</div>
+            <div class='col-xs-12'>{{$score_a_array['player_name_b']}}</div>
+            <div class='col-xs-12'>&nbsp;</div>
+        </div>
 
-  <div class="col-sm-6 table-bordered ">
-      <div class='col-xs-2'><br><br><button class='team_bow' team_id="{{$score_a_array['team_id']}}" table_score_id="{{$score_a_array['id']}}" onclick='return addScore(this)'> +</button></div>
-      <div class='col-xs-10'>  
-      <h3 class="class='team_bat"></h3>      
-            <div class='table-responsive'>
-              <table class='table table-striped '>
-                  <thead >
-                      <tr>
-                        <th></th>
-                      </tr>
+       <div class='col-xs-3 visible-xs-block'>
+           <br>
+          <button class='btn btn-success btn-circle btn-sm  btn-circle btn-sm pull-right' id='score_team_b' team_id="{{$preferences->left_team_id}}" table_score_id="{{$score_a_array['id']}}" onclick='return addScore(this)'> + 
+          </button>
 
-                  </thead>
-                  <tbody>
-                      <tr>
-                        <td>{{$score_a_array['player_name_a']}}</td>
-                      </tr>
-                      <tr>
-                        <td>{{$score_a_array['player_name_b']}}</td>
-                      </tr>
-                  </tbody>
-              </table>
-            </div>
-      </div>
+              <br><br>
+          <button team_id="{{$preferences->left_team_id}}" table_score_id="{{$score_a_array['id']}}" onclick='return removeScore(this)'class='btn btn-danger btn-circle btn-sm pull-right'> <i class='fa fa-minus'></i> </button>
+            <br>&nbsp;
+       </div>
   </div>
 
-  <div class='col-sm-6 table-bordered'>
-      <div class='col-xs-10'>
-      <h3 class="class='team_fall"></h3>
-          <div class='table-responsive'>
-              <table class='table table-striped'>
-                  <thead '>
-                      <tr>
-                        <th></th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <tr>
-                        <td>{{$score_b_array['player_name_a']}}</td>
-                      </tr>
-                      <tr>
-                        <td>{{$score_b_array['player_name_b']}}</td>
-                      </tr>
-                  </tbody>
-              </table>
-            </div>
+  <div class='col-sm-6 col-xs-12 table-striped'>
+     <h3 class='team_fall team_title_head'>{{$score_b_array['team_name']}}</h3>
+      <div class='col-xs-9'>       
+            <div class='col-xs-12'>&nbsp;</div>
+            <div class='col-xs-12'>{{$score_b_array['player_name_a']}}</div>
+            <div class='col-xs-12'>&nbsp;</div>
+            <div class='col-xs-12'>{{$score_b_array['player_name_b']}}</div>
+            <div class='col-xs-12'>&nbsp;</div>
+
+
       </div>
-      <div class='col-xs-2'><br><br><button class='team_bow  btn-round pull-right' id='score_team_b' team_id="{{$score_b_array['team_id']}}" table_score_id="{{$score_b_array['id']}}" onclick='return addScore(this)'> +</button></div>
+      <div class='col-xs-3 visible-xs-block '>
+              <br>
+            <button class='btn btn-success btn-circle btn-sm  btn-circle btn-sm pull-right' id='score_team_b' team_id="{{$preferences->right_team_id}}" table_score_id="{{$score_b_array['id']}}" onclick='return addScore(this)'> + </button>
+
+              <br><br>
+            <button team_id="{{$preferences->right_team_id}}" table_score_id="{{$score_b_array['id']}}" onclick='return removeScore(this)' class='btn btn-danger btn-circle btn-sm pull-right'><i class='fa fa-minus'></i></button>
+        <br>&nbsp;
+      </div>
   </div>
 </div>
-</div>
 
-@endif
 
- @if($match_data[0]['match_type']=='singles')
+ @else
 <div class="row" id='real_time_scoring'>
- <div class='col-sm-10 col-sm-offset-1'>
+  <div class="col-sm-6 col-xs-12">
+    <h3 class='team_bat team_title_head'>&nbsp;</h3>
+      
+      <div class='col-xs-9'>       
+            <div class='col-xs-12'>&nbsp;</div>
+            <div class='col-xs-12'>{{$score_a_array['player_name_a']}}</div>
+            <div class='col-xs-12'>&nbsp;</div>
 
-  <div class="col-sm-6 table-bordered ">
-      <div class='col-xs-2'><br><br><button class='team_bat  btn-circle btn-sm' team_id="{{$score_a_array['team_id']}}" table_score_id="{{$score_a_array['id']}}" onclick='return addScore(this)'> +</button></div>
-      <div class='col-xs-10'>  
-      <h3 class="class='team_bat"></h3>      
-            <div class='table-responsive'>
-              <table class='table table-striped '>
-                  <thead >
-                      <tr>
-                        <th></th>
-                      </tr>
-
-                  </thead>
-                  <tbody>
-                      <tr>
-                        <td id='left_player_a'>{{$score_a_array['player_name_a']}}</td>
-                      </tr>
-                      <tr>
-                        <td id='left_player_b'><span>&nbsp;</span></td>
-                      </tr>
-                     
-                  </tbody>
-              </table>
-            </div>
       </div>
-  </div>
+      <div class='col-xs-3 visible-xs-block'>         
+               <br>
+          <button class='btn btn-success btn-circle btn-sm  btn-circle btn-sm pull-right' id='score_team_b' team_id="{{$preferences->left_team_id}}" table_score_id="{{$score_a_array['id']}}" onclick='return addScore(this)'> + 
+          </button>
 
-  <div class='col-sm-6 table-bordered'>
-      <div class='col-xs-10'>
-      <h3 class="class='team_fall"></h3>
-          <div class='table-responsive'>
-              <table class='table table-striped'>
-                  <thead '>
-                      <tr>
-                        <th></th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <tr>
-                        <td id='right_player_b'><span>&nbsp;</span></td>
-                      </tr>
-                      <tr>
-                        <td id='right_player_b'>{{$score_b_array['player_name_a']}}</td>
-                      </tr>
-                      
-                  </tbody>
-              </table>
-            </div>
+              <br><br>
+          <button  team_id="{{$preferences->left_team_id}}" table_score_id="{{$score_a_array['id']}}" onclick='return removeScore(this)'  class='btn btn-danger btn-circle btn-sm pull-right'> <i class='fa fa-minus'></i> </button>
+            <br>&nbsp;
+        </div>
       </div>
-      <div class='col-xs-2'><br><br><button class=' btn-remove  btn-circle btn-sm pull-right' id='score_team_b' team_id="{{$score_b_array['team_id']}}" table_score_id="{{$score_b_array['id']}}" onclick='return addScore(this)'> +</button></div>
-  </div>
-</div>
+
+  <div class='col-xs-12 col-sm-6'>
+    <h3 class='team_fall team_title_head'>&nbsp;</h3>
+       <div class='col-xs-9'>
+                <div class='col-xs-12'>&nbsp;</div>
+                <div class='col-xs-12'>{{$score_b_array['player_name_a']}}</div>                    
+        
+      </div>
+      <div class='col-xs-3 visible-xs-block' >
+        <br>  
+        <!-- Add score button  -->
+      <button class='btn btn-success btn-circle btn-sm  btn-circle btn-sm pull-right' id='score_team_b' team_id="{{$preferences->right_team_id}}" table_score_id="{{$score_b_array['id']}}" onclick='return addScore(this)'> + </button>
+        <!-- Remove score button -->
+        <br><br>
+      <button team_id="{{$preferences->right_team_id}}" table_score_id="{{$score_b_array['id']}}" onclick='return removeScore(this)' class='btn btn-danger btn-circle btn-sm pull-right'><i class='fa fa-minus'></i></button>
+        <br>&nbsp;
+    </div>
 </div>
 
 
  @endif
 
-
+<!-- End match modal -->
   <div id="end_match" class="modal fade">
             <div class="modal-dialog sj_modal sportsjun-forms">
               <div class="modal-content">
@@ -519,31 +530,38 @@
                 <div class="modal-body">
 
                   <div class='row'>
-                     <div class="col-sm-12"><center><h3>Choose Winner</h3> </center></div>
+                 
                     <div class='col-sm-12'>
+                           <div class="form-group col-sm-4  ">
+                                  <label>Match Result</label>
+                                  <select name='match_result' required="">
+                                  <option value="" disabled>Select</option>
+                                  <option value="win">Win</option>
+                                  <option value='no_result'>No Result</option>
+                                  </select>
+                           
+                          </div>
                       
-                         <div class="form-inline" style="top:20px;">
-                          <div class="form-group form-select">
+                     
+                          <div class="form-group col-sm-4 col-sm-offset-4 ">
                             <label>Select Winner:</label>
-                            <select name="winner_id" id="winner_id" class="form-control selectpicker gui-input" onchange="selectWinner();">
+                            <select name="winner_id" id="winner_id" class="form-control gui-input" onchange="selectWinner();">
                             <option value="">Select</option>
                             <option value="{{ $match_data[0]['a_id'] }}" <?php if (isset($match_data[0]['winner_id']) && $match_data[0]['winner_id']==$match_data[0]['a_id']) echo ' selected';?>>{{ $user_a_name }}</option>
                             <option value="{{ $match_data[0]['b_id'] }}" <?php if (isset($match_data[0]['winner_id']) && $match_data[0]['winner_id']==$match_data[0]['b_id']) echo ' selected';?>>{{ $user_b_name }}</option>
                             </select>
                           </div>
                           </div>
-                        </div>
+                      
                       
                     </div>
+                    <br>
 
-                    <br><br>
-
-
-                  <div class='row' style="padding-bottom:20px;">
-                    <center class='col-sm-6 col-sm-offset-3'> <button class='btn btn-primary full-width ' onclick="" type='submit'> Save</button></center>
-                  </div>
+                    </div>
+                   
 
                   <div class="modal-footer">
+                    <button class='btn btn-primary  ' onclick="" type='submit'> Save</button>
                     <button type="button" class="button btn-secondary" data-dismiss="modal">Cancel</button>
                   </div>
                 </div>
@@ -552,39 +570,39 @@
           </div>
       
 
-	
+  
 
-	<!-- end -->
-		<input type="hidden" id="badminton_form_data" value="">
-    	{!! Form::hidden('user_id_a',$match_data[0]['a_id'],array('class'=>'gui-input ')) !!}
-    	{!! Form::hidden('user_id_b',$match_data[0]['b_id'],array('class'=>'gui-input ')) !!}
-    	{!! Form::hidden('player_ids_a',$match_data[0]['player_a_ids'],array('class'=>'gui-input ')) !!}
-    	{!! Form::hidden('player_ids_b',$match_data[0]['player_b_ids'],array('class'=>'gui-input ')) !!}
-    	{!! Form::hidden('match_type',$match_data[0]['match_type'],array('class'=>'gui-input ')) !!}
-    	{!! Form::hidden('tournament_id',$match_data[0]['tournament_id'],array('class'=>'gui-input ')) !!}
-    	{!! Form::hidden('match_id',$match_data[0]['id'],array('class'=>'gui-input','id'=>'match_id')) !!}
-    	{!! Form::hidden('player_name_b', $user_b_name,array('class'=>'gui-input ')) !!}
-    	{!! Form::hidden('player_name_a',$user_a_name,array('class'=>'gui-input ')) !!}
-    	{!! Form::hidden('is_singles',$is_singles,array('class'=>'gui-input ')) !!}
-		{!! Form::hidden('schedule_type',$match_data[0]['schedule_type'],array('class'=>'gui-input')) !!}
-    	  <input type="hidden" id="winner_team_id" name="winner_team_id" value="">
-		  <input type="hidden" id="is_winner_inserted" name="is_winner_inserted" value="{{$match_data[0]['winner_id']}}">
+  <!-- end -->
+    <input type="hidden" id="squash_form_data" value="">
+      {!! Form::hidden('user_id_a',$match_data[0]['a_id'],array('class'=>'gui-input ')) !!}
+      {!! Form::hidden('user_id_b',$match_data[0]['b_id'],array('class'=>'gui-input ')) !!}
+      {!! Form::hidden('player_ids_a',$match_data[0]['player_a_ids'],array('class'=>'gui-input ')) !!}
+      {!! Form::hidden('player_ids_b',$match_data[0]['player_b_ids'],array('class'=>'gui-input ')) !!}
+      {!! Form::hidden('match_type',$match_data[0]['match_type'],array('class'=>'gui-input ')) !!}
+      {!! Form::hidden('tournament_id',$match_data[0]['tournament_id'],array('class'=>'gui-input ')) !!}
+      {!! Form::hidden('match_id',$match_data[0]['id'],array('class'=>'gui-input','id'=>'match_id')) !!}
+      {!! Form::hidden('player_name_b', $user_b_name,array('class'=>'gui-input ')) !!}
+      {!! Form::hidden('player_name_a',$user_a_name,array('class'=>'gui-input ')) !!}
+      {!! Form::hidden('is_singles',$is_singles,array('class'=>'gui-input ')) !!}
+    {!! Form::hidden('schedule_type',$match_data[0]['schedule_type'],array('class'=>'gui-input')) !!}
+        <input type="hidden" id="winner_team_id" name="winner_team_id" value="">
+      <input type="hidden" id="is_winner_inserted" name="is_winner_inserted" value="{{$match_data[0]['winner_id']}}">
           
           <div class="sportsjun-forms text-center scorecards-buttons">
-		@if($isValidUser)
+    @if($isValidUser)
           
-				
-		@endif
+        
+    @endif
 
-		  
+      
     {!!Form::close()!!}
-	@if($isValidUser && $match_data[0]['schedule_type']=='team')
-				<!-- Adding already existing player-->
-				@include('scorecards.addplayer') 
-				<!-- Adding unknown Players-->
-				@include('scorecards.addunknownplayer')
-			@endif
- </div>			
+  @if($isValidUser && $match_data[0]['schedule_type']=='team')
+        <!-- Adding already existing player-->
+        @include('scorecards.addplayer') 
+        <!-- Adding unknown Players-->
+        @include('scorecards.addunknownplayer')
+      @endif
+ </div>     
      <input type="hidden" name="i" value="2" id="i">
    </div>
    </div>
@@ -600,40 +618,48 @@
                 <div class="alert alert-success" id="div_success1" style="display:none;"></div>
                 <div class="modal-body">
 
-                <form onsubmit="return updatePreferencesSave(this)" id='updatePreferencesForm'>
+                <form onsubmit="" id='updatePreferencesForm'>
                   <div class='row'>
                      <div class="col-sm-12"><center><h3>Update Preferences</h3> </center></div>
-                    <div class='col-sm-6'>
+                    <div class='col-sm-4'>
                         <label>Number of Sets</label>
-                        <select class='form-control select-picker'>
+                        <select class='form-control select-picker' name='number_of_sets'>
                             <option value=1  {{$preferences->number_of_sets==1?'selected':''}}>1</option>
+                            <option value=2  {{$preferences->number_of_sets==2?'selected':''}}>2</option>
                             <option value=3 {{$preferences->number_of_sets==3?'selected':''}}>3</option>
+                            <option value=4 {{$preferences->number_of_sets==4?'selected':''}}>4</option>
                             <option value=5 {{$preferences->number_of_sets==5?'selected':''}}>5</option>
                         </select>
                       {!!csrf_field()!!}
                       <input type='hidden' name='match_id' value="{{$match_data[0]['id']}}">
-                   <br>
-                        <input type='checkbox' name='enable_two_points' {{$preferences->enable_two_points=='on'?'checked':''}} id='enable_two_points'> 
-                        <label for='enable_two_points'>Enable Two points clear pattern</label>
+                                           
                     </div>
 
-                    <div class='col-sm-6'>
+                    <div class='col-sm-4'>
                         <label>Score to Win</label>
-                        <input type='text' name='score_to_win' class="form-control" required="" value="{{$preferences->score_to_win}}">
+                        <input type='text' name='score_to_win' class="form-control gui-input allownumericwithdecimal" required="" value="{{$preferences->score_to_win}}" readonly="">
 
-                        <br>
+                    </div>
+
+                    <div class='col-sm-4'>
                         <label>Set End Point</label>
-                        <input type='text' name='set_end_point' class="form-control" required="" value="{{$preferences->end_point}}">
+                        <input type='text' name='set_end_point' class="form-control gui-input allownumewithdecimal" required="" value="{{$preferences->end_point}}" readonly="">
 
                     </div>
-                    </div>
-                  <br><br>
 
-                  <div class='row' style="padding-bottom:20px;">
-                    <center class='col-sm-6 col-sm-offset-3'> <button class='btn btn-primary full-width ' onclick="" type='submit'> Save</button></center>
-                  </div>
+                                                    
+                    <div class='col-sm-12'>
+                      <br><br>
+                      <input type='checkbox' name='enable_two_points' readonly {{$preferences->enable_two_points=='on'?'checked':''}} id='enable_two_points'> 
+                        <label for='enable_two_points'>Enable Two points clear pattern</label>
+                      </div>
+                      
+                    </div>    
+                  </form>
+                  </div>            
 
-                  <div class="modal-footer">
+                    <div class="modal-footer">
+                    <button class='button btn btn-primary ' onclick="return updatePreferencesSave(this)" type='submit'> Save</button></center>
                     <button type="button" class="button btn-secondary" data-dismiss="modal">Cancel</button>
                   </div>
                 </div>
@@ -647,11 +673,11 @@ $(window).load(function(){
 var limit=2;
 $(".team_a_checkbox").on("ifChecked",function(e){
     var checkboxes = $(".team_a_checkbox:checkbox");
-	
+  
     var $this=$(this);
     if (checkboxes.filter(":checked").length > limit) { 
        //alert('Max limit reached');
-	   	$.alert({
+      $.alert({
             title: 'Alert!',
             content: 'Can only select 2 players at once.'
         });
@@ -665,7 +691,7 @@ $(".team_b_checkbox").on("ifChecked",function(e){
     var $this=$(this);
     if (checkboxes.filter(":checked").length > limit) { 
        //alert('Max limit reached');
-	   	$.alert({
+      $.alert({
             title: 'Alert!',
             content: 'Can only select 2 players at once.'
         });
@@ -677,108 +703,108 @@ $(".team_b_checkbox").on("ifChecked",function(e){
 });
 function checkPlayers()
 {
-	var type = "{{$match_data[0]['schedule_type']}}";
-	var match_type = "{{$match_data[0]['match_type']}}";
-	if(type=='player' || match_type=='singles')
-	{
-		$('#Squash').submit();
-	}else
-	{
-		var a_checkboxes = $(".team_a_checkbox:checkbox");
-		var a_checked_count = a_checkboxes.filter(":checked").length;
-		
-		var b_checkboxes = $(".team_b_checkbox:checkbox");
-		var b_checked_count = b_checkboxes.filter(":checked").length;
-		if(a_checked_count==2 && b_checked_count==2)
-		{
-			$('#Squash').submit();
-		}
-		else
-		{
-			$.alert({
-				title: 'Alert!',
-				content: 'Select Two Players From Both Teams.'
-			});
-		}
-	}
-	
+  var type = "{{$match_data[0]['schedule_type']}}";
+  var match_type = "{{$match_data[0]['match_type']}}";
+  if(type=='player' || match_type=='singles')
+  {
+    $('#squash').submit();
+  }else
+  {
+    var a_checkboxes = $(".team_a_checkbox:checkbox");
+    var a_checked_count = a_checkboxes.filter(":checked").length;
+    
+    var b_checkboxes = $(".team_b_checkbox:checkbox");
+    var b_checked_count = b_checkboxes.filter(":checked").length;
+    if(a_checked_count==2 && b_checked_count==2)
+    {
+      $('#squash').submit();
+    }
+    else
+    {
+      $.alert({
+        title: 'Alert!',
+        content: 'Select Two Players From Both Teams.'
+      });
+    }
+  }
+  
 }
 $('#winner_team_id').val($('#winner_id').val());
 function selectWinner()
 {
-	$('#winner_team_id').val($('#winner_id').val());
+  $('#winner_team_id').val($('#winner_id').val());
 }
 /*function createnewset(i)
 {
 
-	var i=$('#i').val();
-	if(i<=5)
-	{
+  var i=$('#i').val();
+  if(i<=5)
+  {
 
-		var thContent =  "<th>SET"+i+"</th>";
-						$("#sets").append(thContent);
+    var thContent =  "<th>SET"+i+"</th>";
+            $("#sets").append(thContent);
 
-		var td_a_content = "<td><input type='text' class='gui-input validation allownumericwithdecimal' name='set_"+i+"_a' /></td>";
-							$("#set_a").append(td_a_content);
+    var td_a_content = "<td><input type='text' class='gui-input validation allownumericwithdecimal' name='set_"+i+"_a' /></td>";
+              $("#set_a").append(td_a_content);
 
-		var td_b_content = "<td><input type='text' class='gui-input validation allownumericwithdecimal' name='set_"+i+"_b' /></td>";
-							$("#set_b").append(td_b_content);
-			i++;
-		  $('#i').val(i);
-	} else{
-		alert('Maximum Set Size is 5.');
-	}
-	allownumericwithdecimal();
+    var td_b_content = "<td><input type='text' class='gui-input validation allownumericwithdecimal' name='set_"+i+"_b' /></td>";
+              $("#set_b").append(td_b_content);
+      i++;
+      $('#i').val(i);
+  } else{
+    alert('Maximum Set Size is 5.');
+  }
+  allownumericwithdecimal();
 }*/
 
 allownumericwithdecimal();
 function allownumericwithdecimal()
 {
-	 $(".allownumericwithdecimal").on("keypress keyup blur",function (event) {
+   $(".allownumericwithdecimal").on("keypress keyup blur",function (event) {
             //this.value = this.value.replace(/[^0-9\.]/g,'');
      $(this).val($(this).val().replace(/[^0-9\.]/g,''));
             if (event.which != 08 && (event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
                 event.preventDefault();
             }
-	});
+  });
 }
 //Send Approval
 function forApproval()
 {
-	var winner_id = $('#winner_id').val();
-	var db_winner_id = "{{$match_data[0]['winner_id']}}";
-	if(winner_id=='' || db_winner_id=='')
-	{
-		$.alert({
+  var winner_id = $('#winner_id').val();
+  var db_winner_id = "{{$match_data[0]['winner_id']}}";
+  if(winner_id=='' || db_winner_id=='')
+  {
+    $.alert({
             title: 'Alert!',
             content: 'Select Winner & Save.'
         });
-		return false;
-	}
-		$.confirm({
-	title: 'Confirmation',
-	content: 'Are You Sure You want to Send Score for Approval ?',
-	confirm: function() {
-		match_id = $('#match_id').val();
-		$.ajax({
+    return false;
+  }
+    $.confirm({
+  title: 'Confirmation',
+  content: 'Are You Sure You want to Send Score for Approval ?',
+  confirm: function() {
+    match_id = $('#match_id').val();
+    $.ajax({
             url: base_url+'/match/scoreCardStatus',
             type: "post",
             data: {'scorecard_status': 'approval_pending','match_id':match_id},
             success: function(data) {
                 if(data.status == 'success') {
-						// $.alert({
-							// title: 'Alert!',
-							// content: data.msg
-						// });
-					window.location.href = base_url+'/match/scorecard/edit/'+match_id;
+            // $.alert({
+              // title: 'Alert!',
+              // content: data.msg
+            // });
+          window.location.href = base_url+'/match/scorecard/edit/'+match_id;
                 }
             }
-		});
-	},
-	cancel: function() {
-			// nothing to do
-		}
-	});
+    });
+  },
+  cancel: function() {
+      // nothing to do
+    }
+  });
 }
 
 </script>
@@ -822,7 +848,7 @@ function savePreferences(that){
                     })
               },
         cancel:function(){
-    
+          
         }
     })
          return false;
@@ -961,7 +987,8 @@ function getTeamPlayers(that){
           data={
               team_id:team_id,
               table_score_id:table_score_id,
-              match_id:match_id
+              match_id:match_id,
+              action:'add',
               }
 
                     $.ajax({
@@ -978,12 +1005,61 @@ function getTeamPlayers(that){
                                 $('.a_'+key).val(value[left_team_id+'_score']);
                                 $('.b_'+key).val(value[right_team_id+'_score']);
                             })
+
+                            addButtonSet(response.current_set)
+
+              $('.team_'+left_team_id+'_score').html(response.scores[left_team_id+"_score"]);
+              $('.team_'+right_team_id+'_score').html(response.scores[right_team_id+"_score"]);
+
+              console.log($('#team_'+left_team_id+'_score').html());
+
                         }
 
                        });
-                return false;
-              }          
+                  return false;
+              } 
+
+        function removeScore(that){
+        var team_id=$(that).attr('team_id');
+        var table_score_id=$(that).attr('table_score_id');
+
+
+          data={
+              team_id:team_id,
+              table_score_id:table_score_id,
+              match_id:match_id,
+              action:'remove',
+              }
+
+                    $.ajax({
+                        url:'/match/squashAddScore',
+                        data:data,
+                        method:'post',
+                        dataType:'json',
+                        success:function(response){
+                          var left_team_id=response.preferences.left_team_id;
+                          var right_team_id=response.preferences.right_team_id;
+
+                            $.each(response.match_details, function(key, value){
+
+                                $('.a_'+key).val(value[left_team_id+'_score']);
+                                $('.b_'+key).val(value[right_team_id+'_score']);
+                            })
+                          addButtonSet(response.current_set)
+
+              $('.team_'+left_team_id+'_score').html(response.scores[left_team_id+"_score"]);
+              $('.team_'+right_team_id+'_score').html(response.scores[right_team_id+"_score"]);
+
+                        }
+
+                       });
+                  return false;
+              } 
+
+
+     
             
+      
 
 
      function updatePreferences(that){
@@ -1013,7 +1089,7 @@ function getTeamPlayers(that){
      }
 
      function manualScoring(that){
-        var data=$('#Squash').serialize();
+        var data=$('#squash').serialize();
 
         $.ajax({
             url:base_url+"/match/manualScoringSquash",
@@ -1042,6 +1118,36 @@ function getTeamPlayers(that){
         return false;
      }
       
+</script>
+
+<script>
+
+//add remove and add button near current active field on current players.
+
+var player_or_team_left_button_add="{!!$player_or_team_left_button_add!!}";
+
+var player_or_team_left_button_remove="{!!$player_or_team_left_button_remove!!}";
+
+var player_or_team_right_button_add="{!!$player_or_team_right_button_add!!}";
+
+var player_or_team_right_button_remove="{!!$player_or_team_right_button_remove!!}";
+
+function addButtonSet(set_index){
+
+    $('.remove_button_right').html('');
+    $('.remove_button_left').html('');
+    $('.add_button_left').html('');
+    $('.add_button_right').html('');
+
+    $('.left_button_remove_set_'+set_index).html(player_or_team_left_button_remove);
+    $('.left_button_add_set_'+set_index).html(player_or_team_left_button_add);
+    $('.right_button_remove_set_'+set_index).html(player_or_team_right_button_remove);
+    $('.right_button_add_set_'+set_index).html(player_or_team_right_button_add);
+
+}
+
+addButtonSet({{$current_set}});
+
 </script>
 @endsection
 

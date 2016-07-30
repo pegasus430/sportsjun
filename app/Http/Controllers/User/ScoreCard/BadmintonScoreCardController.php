@@ -6,7 +6,7 @@ use Illuminate\Http\Request as ObjectRequest;       //get all my requests data a
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
+use App\Model\Tournaments;
 use App\Model\MatchSchedule;
 use App\Model\UserStatistic;
 use App\Model\State;
@@ -375,7 +375,12 @@ class BadmintonScoreCardController extends Controller
 
                     ],
                     "match_type"=>$match_model->match_type,
-                    "schedule_type"=>$match_model->schedule_type
+                    "schedule_type"=>$match_model->schedule_type, 
+                    "current_set"=>1, 
+                    "scores"=>[
+                        "{$left_team_id_pre}_score"=>0,
+                        "{$right_team_id_pre}_score"=>0
+                    ]
                 ];
 
                 $match_details=json_encode($match_details);           
@@ -447,36 +452,47 @@ class BadmintonScoreCardController extends Controller
             $score_to_win = $preferences->score_to_win;
             $number_of_sets = $preferences->number_of_sets;
             $saving_side = $preferences->saving_side;
-            $enable_two_points = $preferences->enable_two_points;          
+            $enable_two_points = $preferences->enable_two_points;
+
+            //get current active set;
+               
             
             // Check if set1 is complete
 
+                //first and second player(team) or left and right player(team)
+    $left_player_model=BadmintonPlayerMatchScore::where('match_id',$match_id)->first();
+    $right_player_model=BadmintonPlayerMatchScore::where('match_id',$match_id)->skip(1)->first();
 
-            if($this->checkSet('set1', $match_score_model, $match_score_model_other, $preferences)){
+            if($this->checkSet('set1', $left_player_model, $right_player_model, $preferences)){
 
                     if($action=='remove' && $match_score_model->set1>0 ){   //remove point if set_score>0
                                 $match_score_model->set1--;
                                 $match_score_model->save();
-                                $match_details->match_details->set1->{$team_id."_score"}--; 
+
+                                $match_details->match_details->set1->{$team_id."_score"}=$match_score_model->set1;
+                               
                     }
                     elseif($action=='add') {
+
                                 $match_score_model->set1++;
-                                $match_score_model->save();
-                                $match_details->match_details->set1->{$team_id."_score"} ++; 
+                                $match_score_model->save(); 
+
+                                $match_details->match_details->set1->{$team_id."_score"}=$match_score_model->set1;                              
                     }  
             }
             else{           //set1 is complete
 
-                if($this->checkSet('set2', $match_score_model, $match_score_model_other, $preferences)){
+                if($this->checkSet('set2',$left_player_model, $right_player_model, $preferences)){
                         if($action=='remove' && $match_score_model->set2>0 ){
                             $match_score_model->set2--;
-                            $match_score_model->save();
-                            $match_details->match_details->set2->{$team_id."_score"}--; 
+                            $match_score_model->save(); 
+            $match_details->match_details->set2->{$team_id."_score"} =$match_score_model->set2;                         
                         }
                         elseif($action=='add') {
                                     $match_score_model->set2++;
                                     $match_score_model->save();
-                                    $match_details->match_details->set2->{$team_id."_score"} ++; 
+            $match_details->match_details->set2->{$team_id."_score"} =$match_score_model->set2;
+                                    
                         }  
                 }
 
@@ -485,12 +501,14 @@ class BadmintonScoreCardController extends Controller
                                 if($action=='remove' && $match_score_model->set3>0 ){
                                     $match_score_model->set3--;
                                     $match_score_model->save();
-                                    $match_details->match_details->set3->{$team_id."_score"}--; 
+            $match_details->match_details->set3->{$team_id."_score"} =$match_score_model->set3;
+                                    
                                 }
                                 elseif($action=='add') {
                                     $match_score_model->set3++;
                                     $match_score_model->save();
-                                    $match_details->match_details->set3->{$team_id."_score"} ++; 
+            $match_details->match_details->set3->{$team_id."_score"} =$match_score_model->set3;
+                                   
                                 }    
                             }
                         else{
@@ -499,28 +517,32 @@ class BadmintonScoreCardController extends Controller
 
                                     if($this->checkSet('set4', $match_score_model, $match_score_model_other, $preferences)){
                                             if($action=='remove' && $match_score_model->set4>0 ){
+
                                                 $match_score_model->set4--;
                                                 $match_score_model->save();
-                                                $match_details->match_details->set4->{$team_id."_score"}--; 
+
+            $match_details->match_details->set4->{$team_id."_score"} =$match_score_model->set4;                                                
                                             }
                                             elseif($action=='add') {
                                                 $match_score_model->set4++;
                                                 $match_score_model->save();
-                                                $match_details->match_details->set4->{$team_id."_score"} ++; 
-                                            } 
+            $match_details->match_details->set4->{$team_id."_score"} =$match_score_model->set4;
+                                         } 
                                     }
                                     else{
                                         if($this->checkSet('set5', $match_score_model, $match_score_model_other, $preferences)){
                                                if($action=='remove' && $match_score_model->set5>0 ){
+
                                                     $match_score_model->set5--;
                                                     $match_score_model->save();
-                                                    $match_details->match_details->set5->{$team_id."_score"}--; 
+            $match_details->match_details->set5->{$team_id."_score"} =$match_score_model->set5;
+                                                 
                                                 }
                                                 elseif($action=='add') {
                                                     $match_score_model->set5++;
                                                     $match_score_model->save();
-                                                    $match_details->match_details->set5->{$team_id."_score"} ++; 
-                                                }  
+            $match_details->match_details->set5->{$team_id."_score"} =$match_score_model->set5;
+                                              }  
                                          }
                                 }
                             
@@ -529,15 +551,20 @@ class BadmintonScoreCardController extends Controller
                 }
             }
 
+        $match_details->current_set=$this->getCurrentSet($match_id);
+        $match_details->scores=$this->getScoreSet($match_id);
+
         $match_details=json_encode($match_details);
         $match_model->match_details=$match_details;
         $match_model->save();
         $match_score_model->save();
 
+
+
        if($match_model->match_type!='singles')$player_ids=[$match_score_model->user_id_a, $match_score_model->user_id_b];
        else $player_ids=[$match_score_model->user_id_a];
 
-        $this->badmintonStatistics($player_ids,$match_model->match_type);
+    $this->badmintonStatistics($player_ids,$match_model->match_type, '', $match_model->schedule_type);
 
         return $match_details;
   }
@@ -555,11 +582,13 @@ class BadmintonScoreCardController extends Controller
             $set1_opponent_score=$match_score_model_other->{$set};
 
             if($set1_score<$score_to_win && $set1_opponent_score<$score_to_win){
-                return true;
+                return true;                 
+                //if user one and two scores are less than the score to win, active set
             }
 
             else if($set1_score==$end_point || $set1_opponent_score==$end_point){
-                return false;
+                return false;  
+                //if a user score = end_point score, skip set. or complete set. 
             }
 
             else if($set1_score>=$score_to_win || $set1_opponent_score>=$score_to_win){
@@ -576,7 +605,7 @@ class BadmintonScoreCardController extends Controller
 
     }
 
-   public function badmintonStatistics($player_ids_array,$match_type,$is_win='')
+   public function badmintonStatistics($player_ids_array,$match_type,$is_win='',$schedule_type)
     {
         //$player_ids_array = explode(',',$player_ids);
         foreach($player_ids_array as $user_id)
@@ -591,26 +620,32 @@ class BadmintonScoreCardController extends Controller
             }
 
             //check already user id exists or not
-            $badminton_statistics_array = array();
-            $tennisStatistics = BadmintonStatistic::select()->where('user_id',$user_id)->where('match_type',$match_type)->get();
-            if(count($tennisStatistics)>0)
-            {
-                $badminton_statistics_array = $tennisStatistics->toArray();
-                $matches = !empty($badminton_statistics_array[0]['matches'])?$badminton_statistics_array[0]['matches']:0;
-                $won = !empty($badminton_statistics_array[0]['won'])?$badminton_statistics_array[0]['won']:0;
-                $lost = !empty($badminton_statistics_array[0]['lost'])?$badminton_statistics_array[0]['lost']:0;
-                BadmintonStatistic::where('user_id',$user_id)->where('match_type',$match_type)->update(['matches'=>$player_match_details->count(),'double_faults'=>$double_faults_count]);
-                if($is_win=='yes') //win count
-                {
-                    $won_percentage = number_format((($won+1)/($matches+1))*100,2);
-                    BadmintonStatistic::where('user_id',$user_id)->where('match_type',$match_type)->update(['won'=>$won+1,'won_percentage'=>$won_percentage]);
+            $badminton_statistics= BadmintonStatistic::whereUserId($user_id)->whereMatchType($match_type)->first();
 
-                }else if($is_win=='no')//loss count
-                {
-                    BadmintonStatistic::where('user_id',$user_id)->where('match_type',$match_type)->update(['lost'=>$lost+1]);
+            if(!is_null($badminton_statistics)){  //if user exist update statistics
+                $won=0;
+                $lost=0;
+
+
+                if($schedule_type=='player'){
+                    foreach ($badminton_statistics as $bs) {
+                            if($bs->winner_id==$user_id) $won++;
+                            if($bs->looser_id==$user_id) $lost++;
+                    }
                 }
-            }else
-            {
+
+                $matches=count($player_match_details);
+                $won_percentage = number_format((($won+1)/($matches+1))*100,2);
+
+                $badminton_statistics->matches=$matches;
+                $badminton_statistics->won=$won;
+                $badminton_statistics->lost=$lost;
+                $badminton_statistics->won_percentage=$won_percentage;
+                $badminton_statistics->save();
+            }
+           
+            else
+            {                                   //else create new statistics
                 $won='';
                 $won_percentage='';
                 $lost='';
@@ -622,15 +657,15 @@ class BadmintonScoreCardController extends Controller
                 {
                     $lost=1;
                 }
-                $tennisStatisticsModel = new BadmintonStatistic();
-                $tennisStatisticsModel->user_id = $user_id;
-                $tennisStatisticsModel->match_type = $match_type;
-                $tennisStatisticsModel->matches = 1;
-                $tennisStatisticsModel->won_percentage = $won_percentage;
-                $tennisStatisticsModel->won = $won;
-                $tennisStatisticsModel->lost = $lost;
-                $tennisStatisticsModel->double_faults = $double_faults_count;
-                $tennisStatisticsModel->save();
+                $badmintonStatisticsModel = new BadmintonStatistic();
+                $badmintonStatisticsModel->user_id = $user_id;
+                $badmintonStatisticsModel->match_type = $match_type;
+                $badmintonStatisticsModel->matches = 1;
+                $badmintonStatisticsModel->won_percentage = $won_percentage;
+                $badmintonStatisticsModel->won = $won;
+                $badmintonStatisticsModel->lost = $lost;
+        
+                $badmintonStatisticsModel->save();
             }
         }
 
@@ -655,20 +690,23 @@ class BadmintonScoreCardController extends Controller
 
             $left_team_id=$match_details->preferences->left_team_id;
             $right_team_id=$match_details->preferences->right_team_id;
+            $end_point=$match_details->preferences->end_point;
 
 
 
             //start scoring
 
             for($i=1; $i<=$number_of_sets; $i++){
-                    $score_a_model->{"set".$i}=$request->{"a_set".$i};
-                    $score_b_model->{"set".$i}=$request->{"b_set".$i};
+                    $score_a_model->{"set".$i}=$request->{"a_set".$i}>$end_point?$end_point:(int)$request->{"a_set".$i};
+                    $score_b_model->{"set".$i}=$request->{"b_set".$i}>$end_point?$end_point:(int)$request->{"b_set".$i};
 
-                    $match_details_data->{"set".$i}->{$left_team_id."_score"}=(int)$request->{"a_set".$i};
-                    $match_details_data->{"set".$i}->{$right_team_id."_score"}=(int)$request->{"a_set".$i};
+                    $match_details_data->{"set".$i}->{$left_team_id."_score"}=(int)$request->{"a_set".$i}>$end_point?$end_point:(int)$request->{"a_set".$i};
+                    $match_details_data->{"set".$i}->{$right_team_id."_score"}=(int)$request->{"b_set".$i}>$end_point?$end_point:(int)$request->{"b_set".$i};
                }
 
             $match_details->match_details=$match_details_data;
+            $match_details->scores=$this->getScoreSet($match_id);
+            $match_details->current_set=$this->getCurrentSet($match_id);     //get current active set
 
             $match_model->match_details=json_encode($match_details);
             $match_model->save();
@@ -680,12 +718,14 @@ class BadmintonScoreCardController extends Controller
     }
 
 
-
+//get json details;
     public function getBadmintonDetails(ObjectRequest $request){
         $match_id=$request->match_id;
         $match_model=matchschedule::find($match_id);
         return $match_model->match_details;
     }
+
+//store final record. When clicked on end match button //sets the winner and loser
 
     public function badmintonStoreRecord(ObjectRequest $Objrequest){
 
@@ -791,24 +831,24 @@ class BadmintonScoreCardController extends Controller
         $score_b_model=BadmintonPlayerMatchScore::where('match_id', $match_id)->skip(1)->first();
 
         $match_score_model=$score_a_model;
-        if($match_score_model->match_type=='double'){
+        if($match_score_model->match_type!='singles'){
             $player_ids=[
                $match_score_model->user_id_a,
                $match_score_model->user_id_b
                ];
             }                                                             
         else $player_ids=[$match_score_model->user_id_a];
-        $this->badmintonStatistics($player_ids,$match_model->match_type);
+    $this->badmintonStatistics($player_ids,$match_model->match_type, '', $match_model->schedule_type);
 
         $match_score_model=$score_b_model;
-        if($match_score_model->match_type=='double'){
+        if($match_score_model->match_type!='singles'){
             $player_ids=[
                $match_score_model->user_id_a,
                $match_score_model->user_id_b
                ];
             }                                                           
         else $player_ids=[$match_score_model->user_id_a];
-        $this->badmintonStatistics($player_ids,$match_model->match_type);
+    $this->badmintonStatistics($player_ids,$match_model->match_type, '', $match_model->schedule_type);
     }
 
 
@@ -836,6 +876,85 @@ class BadmintonScoreCardController extends Controller
             return "preferences updated";
     }
 
+    //get the scores from number of sets winned.
+
+    public function getScoreSet($match_id){
+            $match_model=MatchSchedule::find($match_id);
+
+            $left_player_model=BadmintonPlayerMatchScore::where('match_id',$match_id)->first();
+            $right_player_model=BadmintonPlayerMatchScore::where('match_id',$match_id)->skip(1)->first();
+
+            $left_player_score=0;
+            $right_player_score=0;
+
+            for($i=1; $i<=5; $i++){
+                if($left_player_model->{'set'.$i}==$right_player_model->{'set'.$i}){
+                    //nothing to do
+                }
+                elseif($left_player_model->{'set'.$i}>$right_player_model->{'set'.$i}){
+                    $left_player_score++;
+                }
+                elseif($left_player_model->{'set'.$i}<$right_player_model->{'set'.$i}){
+                   $right_player_score++;
+                }
+            }
+
+    $team_a_id=$left_player_model->team_id==null?$left_player_model->user_id_a:$left_player_model->team_id;
+    $team_b_id=$right_player_model->team_id==null?$right_player_model->user_id_a:$right_player_model->team_id;
+
+
+
+        return [
+            "{$team_a_id}_score"=>$left_player_score,
+            "{$team_b_id}_score"=>$right_player_score
+        ];
+    }
+
+    public function getCurrentSet($match_id){
+            $match_model=MatchSchedule::find($match_id);
+
+            $preferences=json_decode($match_model->match_details)->preferences;
+
+            //first and second player(team) or left and right player(team)
+    $match_score_model=BadmintonPlayerMatchScore::where('match_id',$match_id)->first();
+    $match_score_model_other=BadmintonPlayerMatchScore::where('match_id',$match_id)->skip(1)->first();
+
+
+            if($this->checkSet('set1', $match_score_model, $match_score_model_other, $preferences)){
+                    return 1;                   
+            }
+            else{           //set1 is complete
+
+                if($this->checkSet('set2', $match_score_model, $match_score_model_other, $preferences)){
+                    return 2;  
+                }
+
+                else{       //set2 is complete
+                        if($this->checkSet('set3', $match_score_model, $match_score_model_other, $preferences)){
+                            return 3;  
+                            }
+                        else{
+                      
+                                if($this->checkSet('set4', $match_score_model, $match_score_model_other, $preferences)){
+                                        return 4;
+                                            
+                                    }
+                                    else{
+                                        if($this->checkSet('set5', $match_score_model, $match_score_model_other, $preferences)){
+                                              return 5; 
+                                         }
+                                         else return 0;
+                                }
+                            
+                            }
+                        }
+                }
+    }
+
+
+
 }
+
+
 
 

@@ -19,6 +19,7 @@ use View;
 use Carbon\Carbon;
 use Route;
 use PDO;
+use App\Helpers\SendMail;
 
 class Helper {
 
@@ -1831,13 +1832,22 @@ class Helper {
         return $model;
     }
 
-    public static function  sendEmailPlayers($match_details=[], $match_type=''){             
+    public static function  sendEmailPlayers($match_details=[], $match_type=''){ 
+
+
 
                     $team_a_id=explode(',', $match_details['player_a_ids']);
                     $team_b_id=explode(',', $match_details['player_b_ids']); 
 
+                if($match_details['schedule_type']=='player'){
+                    $team_a_name   =  User::find($match_details['a_id'])->name;
+                    $team_b_name   =  User::find($match_details['b_id'])->name; 
+                }
+                else{
                     $team_a_name   =  Team::find($match_details['a_id'])->name;
                     $team_b_name   =  Team::find($match_details['b_id'])->name;
+                }
+       
 
                 //send email to  team_a players
                     foreach ($team_a_id as $key => $player_id) {
@@ -1846,7 +1856,7 @@ class Helper {
                             $user_name=$user->name;
                             $data=[
                                 'match_type'    =>  $match_type, 
-                                'match_date'    =>  $match_details['date'],
+                                'match_date'    =>  $match_details['match_start_date'],
                                 'team_a_name'   =>  $team_a_name,
                                 'team_b_name'   =>  $team_b_name,
                                 'user_name'     =>  $user_name,
@@ -1859,10 +1869,14 @@ class Helper {
                                     'to_user_id'=>  $player_id,
                                     'to_email_id'=> $user->email,
                                     'view_data' =>  $data, 
-                                    'flag'      =>  $match_type
+                                    'flag'      =>  $match_type, 
+                                    'send_flag' =>  1,
+
                             ];
                         
-                        SendMail::sendmail($mail_data);
+                            if(SendMail::sendmail($mail_data)){
+                                   // die('done');
+                            }
                         }
                     }
                 //send email to team_b players
@@ -1871,9 +1885,9 @@ class Helper {
                             $user_name=$user->name;
                             $data=[
                                 'match_type'    =>  $match_type, 
-                                'match_date'    =>  $match_details['date'],
-                                'team_a_name'   =>  Team::find($match_details['a_id'])->name,
-                                'team_b_name'   =>  Team::find($match_details['b_id'])->name,
+                                'match_date'    =>  $match_details['match_start_date'],
+                                'team_a_name'   =>  $team_a_name,
+                                'team_b_name'   =>  $team_b_name,
                                 'user_name'     =>  $user_name,
                                 'match_id'      =>  $match_details['id'],
                                 'user_id'       =>  $player_id
@@ -1884,7 +1898,8 @@ class Helper {
                                     'to_user_id'=>  $player_id,
                                     'to_email_id'=> $user->email,
                                     'view_data' =>  $data,
-                                    'flag'      =>  $match_type
+                                    'flag'      =>  $match_type,
+                                    'send_flag' =>  1,
                             ];
 
                         SendMail::sendmail($mail_data);

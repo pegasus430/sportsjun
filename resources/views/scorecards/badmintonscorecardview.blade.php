@@ -17,7 +17,25 @@
     
     if(isset($preferences->number_of_sets))$set=$preferences->number_of_sets ;
     else $set=3;
+
+    ${'team_'.$match_data[0]['a_id'].'_score'}=0;
+    ${'team_'.$match_data[0]['b_id'].'_score'}=0; 
+
+    $team_a_info='';
+    $team_b_info='';
+
+    if(isset($preferences)){
+    $current_set=$match_details->current_set;
+
+  ${'team_'.$preferences->left_team_id.'_score'}=$match_details->scores->{$preferences->left_team_id.'_score'};
+  ${'team_'.$preferences->right_team_id.'_score'}=$match_details->scores->{$preferences->right_team_id.'_score'};
+} else {
+  $current_set=0;
+}
+  
 ?>
+
+
 
 <div class="col_standard table_tennis_scorcard">
     <div id="team_vs" class="tt_bg">
@@ -45,6 +63,7 @@
 							<div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['a_id'] }}">{{ $user_a_name }}</a></div>
 						@endif
 							  <div class="team_city">{!! $team_a_city !!}</div>
+                <div class="team_score" id="team_{{$team_a_id}}_score">{{${'team_'.$team_a_id.'_score'} }} </div>
                          	</div>
                         </div>
                     </div>
@@ -62,6 +81,7 @@
 							<div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['b_id'] }}">{{ $user_b_name }}</a></div>
 						@endif
 							 <div class="team_city">{!! $team_b_city !!}</div>
+                <div class="team_score" id="team_{{$team_b_id}}_score">{{${'team_'.$team_b_id.'_score'} }} </div>
                             </div>
                         </div>
                               <div class="col-md-4 col-sm-12">
@@ -85,6 +105,7 @@
                                         <div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['b_id'] }}">{{ $user_b_name }}</a></div>
                                     @endif
                                          <div class="team_city">{!! $team_b_city !!}</div>
+                                          <div class="team_score" id="team_{{$team_b_id}}_score">{{${'team_'.$team_b_id.'_score'} }} </div>
                             </div>
                         </div>
                     </div>
@@ -146,48 +167,44 @@
       <table class='table table-striped table-bordered'>
         <thead>
           <tr class='team_fall team_title_head'>
-             <th>TEAMS</th>
+           @if(!is_null($score_a_array['team_id']))  <th><b>TEAMS</b></th> @endif
              <th>PLAYERS</th>
-              <th>SET 1</th>
-            @if($set>1)
-              <th>SET 2</th>
-              <th>SET 3</th>
-            @endif 
-            @if($set>3)
-              <th>SET 4</th>
-              <th>SET 5</th>
-            @endif
+
+             @for($set_index=1; $set_index<=$set; $set_index++)
+              <th>SET {{$set_index}}</th>
+             @endfor
+
           </tr>
         </thead>
         <tbody>
              <tr>
-            <td>{{$score_a_array['team_name']}}</td>
-            <td>{{$score_a_array['player_name_a']}} / {{$score_a_array['player_name_b']}}</td>
-            <td class='a_set1'>{{$score_a_array['set1']}}</td>
-          @if($set>1)
-            <td class='a_set2'>{{$score_a_array['set2']}}</td>
-            <td class='a_set3'>{{$score_a_array['set3']}}</td>
-          @endif
+             <!-- Show teams if schedule type is team -->
+            @if(!is_null($score_a_array['team_id']))<td><b>{{$score_a_array['team_name']}}</b></td>@endif
 
-           @if($set>3)
-            <td class='a_set4'>{{$score_a_array['set4']}}</td>
-            <td class='a_set5'>{{$score_a_array['set5']}}</td>
-          @endif
-        </tr>
+            <td><b>{{$score_a_array['player_name_a']}} / {{$score_a_array['player_name_b']}}</b></td>
+
+          @for($set_index=1; $set_index<=$set; $set_index++)
+               <td class='a_set{{$set_index}}'>
+                  <span class='remove_button_left button_set_{{$set_index}}'></span>
+                      {{$score_a_array['set'.$set_index]}}
+                  <span class='add_button_left button_set_{{$set_index}}'></span>
+               </td>
+          @endfor
+          
+          </tr>
 
           <tr>
-            <td>{{$score_a_array['team_name']}}</td>
-            <td>{{$score_b_array['player_name_a']}} / {{$score_b_array['player_name_b']}}</td>
-            <td class='b_set1'>{{$score_b_array['set1']}}</td>
-          @if($set>1)
-            <td class='b_set2'>{{$score_b_array['set2']}}</td>
-            <td class='b_set3'>{{$score_b_array['set3']}}</td>
-          @endif
+          <!-- Show teams if schedule type is team -->
+          @if(!is_null($score_b_array['team_id']))<td><b>{{$score_b_array['team_name']}}</b></td>@endif
 
-           @if($set>3)
-            <td class='b_set4'>{{$score_b_array['set4']}}</td>
-            <td class='b_set5'>{{$score_b_array['set5']}}</td>
-          @endif
+            <td><b>{{$score_b_array['player_name_a']}} / {{$score_b_array['player_name_b']}}</b></td>
+            @for($set_index=1; $set_index<=$set; $set_index++)
+               <td class='b_set{{$set_index}}'>
+                   <span class='remove_button_right button_set_{{$set_index}}'></span>
+                      {{$score_b_array['set'.$set_index]}}
+                   <span class='add_button_right button_set_{{$set_index}}'></span>
+                </td>
+          @endfor
         </tr>
 
         </tbody>
@@ -195,6 +212,57 @@
       </table>
     </div>
 
+    @if($match_data[0]['match_status']=='completed')
+
+
+@if($match_data[0]['match_type']!='singles' )
+
+<div class="row" id='real_time_scoring'>
+
+  <div class="col-sm-6 col-xs-12 table-striped ">
+        <h3 class='team_bat team_title_head'>{{$score_a_array['team_name']}}</h3>
+            
+            <div class='col-xs-12'>&nbsp;</div>
+            <div class='col-xs-12'>{{$score_a_array['player_name_a']}}</div>
+            <div class='col-xs-12'>&nbsp;</div>
+            <div class='col-xs-12'>{{$score_a_array['player_name_b']}}</div>
+            <div class='col-xs-12'>&nbsp;</div>
+        
+      </div>
+  
+
+  <div class='col-sm-6 col-xs-12 table-striped'>
+     <h3 class='team_fall team_title_head'>{{$score_a_array['team_name']}}</h3>
+         
+            <div class='col-xs-12'>&nbsp;</div>
+            <div class='col-xs-12'>{{$score_b_array['player_name_a']}}</div>
+            <div class='col-xs-12'>&nbsp;</div>
+            <div class='col-xs-12'>{{$score_b_array['player_name_b']}}</div>
+            <div class='col-xs-12'>&nbsp;</div>
+      </div>
+      
+</div> 
+
+ @else
+<div class="row" id='real_time_scoring'>
+  <div class="col-sm-6 col-xs-12">
+    <h3 class='team_bat team_title_head'>&nbsp;</h3> 
+            <div class='col-xs-12'>&nbsp;</div>
+            <div class='col-xs-12'><b>{{$score_a_array['player_name_a']}}</b></div>
+            <div class='col-xs-12'>&nbsp;</div>    
+  </div>
+
+  <div class='col-xs-12 col-sm-6'>
+    <h3 class='team_fall team_title_head'>&nbsp;</h3>      
+                <div class='col-xs-12'>&nbsp;</div>
+                <div class='col-xs-12'>{{$score_b_array['player_name_a']}}</div>    
+    
+  </div>
+</div>
+
+
+    @endif
+@endif
 	
 	<!-- if match schedule type is team -->
 
@@ -273,8 +341,12 @@ function getMatchDetails(){
 }
 
 @if($match_data[0]['match_status']!='completed')
-window.setInterval(getMatchDetails, 10000);
+//window.setInterval(getMatchDetails, 10000);
 @endif
 
 </script>
+
+
+<!-- Put plus and minus buttons on left and rights of sets -->
+
 @endsection

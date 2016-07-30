@@ -564,7 +564,9 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 												<?php if(empty($match_data[0]['tournament_round_number'])) { ?>
 												<option <?php if($match_data[0]['is_tied']>0) echo " selected";?> value="tie" >Tie</option>
 												<?php } ?>
+
 												<option <?php if($match_data[0]['is_tied']==0 && $match_data[0]['winner_id']>0) echo " selected";?> value="win">win</option>
+												<option value='no_result'>No Result</option>
 											</select>
 										</div>
 										<div class="form-group" style="margin-top:15px;">

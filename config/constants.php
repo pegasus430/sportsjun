@@ -81,16 +81,16 @@ return [
                                 'CRICKET'      => ['odi' => 'ODI', 't20' => 'T20',
                                         'test' => 'TEST', 'any'=>'ANY'],
                                 'TENNIS'       => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES',
-                                        'mixed' => 'MIXED', 'any'=>'ANY'],
+                                         'any'=>'ANY'],
 
                                 'TABLE TENNIS' => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES',
-                                        'mixed' => 'MIXED', 'any'=>'ANY'],
+                                         'any'=>'ANY'],
                                 'FOOTBALL'     => ['other' => 'OTHERS'],
 
                                 'BADMINTON'    => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES', 
-                                        'mixed'=>'MIXED', 'any'=>'ANY'],
+                                         'any'=>'ANY'],
                                 'SQUASH'    => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES', 
-                                        'mixed'=>'MIXED', 'any'=>'ANY'],
+                                         'any'=>'ANY'],
                                 'OTHERS'       => ['other' => 'OTHERS']
                         ],
                         'PLAYER_TYPE' => ['men' => 'MEN', 'women' => 'WOMEN', 'mixed' => 'MIXED', 'any'=>'ANY']

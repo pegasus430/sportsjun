@@ -17,18 +17,52 @@
     if(isset($preferences->number_of_sets))$set=$preferences->number_of_sets ;
     else $set=3;
 
-    $team_a_goals=0;
-    $team_b_goals=0; 
+    ${'team_'.$match_data[0]['a_id'].'_score'}=0;
+    ${'team_'.$match_data[0]['b_id'].'_score'}=0; 
 
     $team_a_info='';
     $team_b_info='';
+
+    if(isset($preferences)){
+    $current_set=$match_details->current_set;
+
+    $player_or_team_left_button_add= "<button class='btn button_add btn-circle btn-sm  btn-circle btn-sm pull-left' id='score_team_a' team_id='$preferences->left_team_id' table_score_id='{$score_a_array['id']}' onclick='return addScore(this)'> <i class='fa fa-plus'></i></button>";
+
+    $player_or_team_left_button_remove="  <button team_id='$preferences->left_team_id' table_score_id='{$score_a_array['id']}' onclick='return removeScore(this)'class='btn button_remove btn-circle btn-sm pull-right'> <i class='fa fa-minus'></i> </button>";
+
+    $player_or_team_right_button_add= "<button class='btn button_add btn-circle btn-sm  btn-circle btn-sm pull-left' id='score_team_b' team_id='$preferences->right_team_id' table_score_id='{$score_b_array['id']}' onclick='return addScore(this)'> <i class='fa fa-plus'></i></button>";
+
+    $player_or_team_right_button_remove=" <button team_id='$preferences->right_team_id' table_score_id=    '{$score_b_array['id']}' onclick='return removeScore(this)'class='btn button_remove btn-circle btn-sm pull-right'> <i class='fa fa-minus'></i> </button>";
+
+  ${'team_'.$preferences->left_team_id.'_score'}=$match_details->scores->{$preferences->left_team_id.'_score'};
+  ${'team_'.$preferences->right_team_id.'_score'}=$match_details->scores->{$preferences->right_team_id.'_score'};
+  }else{
+    $player_or_team_left_button_add='';
+    $player_or_team_left_button_remove='';
+    $player_or_team_right_button_remove='';
+    $player_or_team_right_button_add='';
+    $current_set='';
+  }
 ?>
 
 <style>
    
     input:read-only { 
     background-color: #f4f4f4;
+
 }
+.button_add, .button_add:hover, .button_add:active{
+   color:green;
+  background: none;
+  border: 0px #fff inset;
+}
+.button_remove, .button_remove:hover, .button_add:active{
+  color:red;
+  background: none;
+  border: 0px #fff inset;
+}
+
+
 </style>
 <div class="col_standard table_tennis_scorcard">
     <div id="team_vs" class="tt_bg">
@@ -57,7 +91,7 @@
 						@endif
 					  
 						  <div class="team_city">{!! $team_a_city !!}</div>
-              <div class="team_score" id="team_{{$team_a_id}}_score">{{$team_a_goals}} <span><i class="fa fa-info-circle soccer_info" data-toggle="tooltip" title="<?php echo $team_a_info;?>"></i></span></div>
+              <div class="team_score" id="team_{{$team_a_id}}_score">{{${'team_'.$team_a_id.'_score'} }} <span><i class="fa fa-info-circle soccer_info" data-toggle="tooltip" title="<?php echo $team_a_info;?>"></i></span></div>
 						  
                           </div>
                         </div>
@@ -76,7 +110,7 @@
 							<div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['b_id'] }}">{{ $user_b_name }}</a></div>
 						@endif
 							<div class="team_city">{!! $team_b_city !!}</div>
-              <div class="team_score" id="team_{{$team_b_id}}_score">{{$team_b_goals}} <span><i class="fa fa-info-circle soccer_info" data-toggle="tooltip" title="<?php echo $team_b_info;?>"></i></span></div>
+              <div class="team_score" id="team_{{$team_b_id}}_score">{{${'team_'.$team_b_id.'_score'} }} <span><i class="fa fa-info-circle soccer_info" data-toggle="tooltip" title="<?php echo $team_b_info;?>"></i></span></div>
                             </div>
                         </div>
                               <div class="col-md-4 col-sm-12">
@@ -101,7 +135,7 @@
 							<div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['b_id'] }}">{{ $user_b_name }}</a></div>
 						@endif
 							<div class="team_city">{!! $team_b_city !!}</div>
-              <div class="team_score" id="team_{{$team_b_id}}_score">{{$team_b_goals}} <span><i class="fa fa-info-circle soccer_info" data-toggle="tooltip" title="<?php echo $team_b_info;?>"></i></span></div>
+              <div class="team_score" id="team_{{$team_b_id}}_score">{{${'team_'.$team_b_id.'_score'} }} <span><i class="fa fa-info-circle soccer_info" data-toggle="tooltip" title="<?php echo $team_b_info;?>"></i></span></div>
                             </div>
                         </div>
                     </div>
@@ -352,7 +386,11 @@
             <td>{{$score_a_array['player_name_a']}} / {{$score_a_array['player_name_b']}}</td>
             
           @for($set_index=1; $set_index<=$set; $set_index++)
-            <td><input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set{{$set_index}}" value="{{$score_a_array['set'.$set_index]}}" name='a_set{{$set_index}}'></td>
+            <td>
+                <span class='hidden-xs pull-left remove_button_left left_button_remove_set_{{$set_index}}'></span>
+                 <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set{{$set_index}}" value="{{$score_a_array['set'.$set_index]}}" name='a_set{{$set_index}}'>
+                <span class='hidden-xs pull-right add_button_left left_button_add_set_{{$set_index}}'></span>
+            </td>
           @endfor
         </tr>
 
@@ -360,7 +398,11 @@
             <td>{{$score_b_array['player_name_a']}} / {{$score_b_array['player_name_b']}}</td>
 
             @for($set_index=1; $set_index<=$set; $set_index++)
-              <td><input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new b_set{{$set_index}}" value="{{$score_b_array['set'.$set_index]}}" name='b_set{{$set_index}}'></td>
+              <td>
+                <span class='hidden-xs pull-left remove_button_right right_button_remove_set_{{$set_index}}'></span>
+                  <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new b_set{{$set_index}}" value="{{$score_b_array['set'.$set_index]}}" name='b_set{{$set_index}}'>
+                <span class='hidden-xs pull-right add_button_right right_button_add_set_{{$set_index}}'></span>
+              </td>
             @endfor
         </tr>
 
@@ -392,8 +434,6 @@
 @if($match_data[0]['match_type']!='singles' )
 
 <div class="row" id='real_time_scoring'>
- <div class='col-sm-12 '>
-
   <div class="col-sm-6 col-xs-12 table-striped ">
         <h3 class='team_bat team_title_head'>{{$score_a_array['team_name']}}</h3>
        <div class='col-xs-9'>       
@@ -404,7 +444,7 @@
             <div class='col-xs-12'>&nbsp;</div>
         </div>
 
-       <div class='col-xs-3'>
+       <div class='col-xs-3 visible-xs-block'>
            <br>
           <button class='btn btn-success btn-circle btn-sm  btn-circle btn-sm pull-right' id='score_team_b' team_id="{{$preferences->left_team_id}}" table_score_id="{{$score_a_array['id']}}" onclick='return addScore(this)'> + 
           </button>
@@ -419,14 +459,14 @@
      <h3 class='team_fall team_title_head'>{{$score_a_array['team_name']}}</h3>
       <div class='col-xs-9'>       
             <div class='col-xs-12'>&nbsp;</div>
-            <div class='col-xs-12'>{{$score_b_array['player_name_a']}}</div>
+            <div class='col-xs-12'><b>{{$score_b_array['player_name_a']}}</b></div>
             <div class='col-xs-12'>&nbsp;</div>
-            <div class='col-xs-12'>{{$score_b_array['player_name_b']}}</div>
+            <div class='col-xs-12'><b>{{$score_b_array['player_name_b']}}</b></div>
             <div class='col-xs-12'>&nbsp;</div>
 
 
       </div>
-      <div class='col-xs-3'>
+      <div class='col-xs-3 visible-xs-block '>
               <br>
             <button class='btn btn-success btn-circle btn-sm  btn-circle btn-sm pull-right' id='score_team_b' team_id="{{$preferences->right_team_id}}" table_score_id="{{$score_b_array['id']}}" onclick='return addScore(this)'> + </button>
 
@@ -436,12 +476,10 @@
       </div>
   </div>
 </div>
-</div>
+
 
  @else
 <div class="row" id='real_time_scoring'>
- <div class='col-sm-12 col-xs-12'>
-
   <div class="col-sm-6 col-xs-12">
     <h3 class='team_bat team_title_head'>&nbsp;</h3>
       
@@ -451,7 +489,7 @@
             <div class='col-xs-12'>&nbsp;</div>
 
       </div>
-      <div class='col-xs-3'>         
+      <div class='col-xs-3 visible-xs-block'>         
                <br>
           <button class='btn btn-success btn-circle btn-sm  btn-circle btn-sm pull-right' id='score_team_b' team_id="{{$preferences->left_team_id}}" table_score_id="{{$score_a_array['id']}}" onclick='return addScore(this)'> + 
           </button>
@@ -469,21 +507,21 @@
                 <div class='col-xs-12'>{{$score_b_array['player_name_a']}}</div>                    
         
       </div>
-      <div class='col-xs-3' >
-        <br>
+      <div class='col-xs-3 visible-xs-block' >
+        <br>  
+        <!-- Add score button  -->
       <button class='btn btn-success btn-circle btn-sm  btn-circle btn-sm pull-right' id='score_team_b' team_id="{{$preferences->right_team_id}}" table_score_id="{{$score_b_array['id']}}" onclick='return addScore(this)'> + </button>
-
+        <!-- Remove score button -->
         <br><br>
       <button team_id="{{$preferences->right_team_id}}" table_score_id="{{$score_b_array['id']}}" onclick='return removeScore(this)' class='btn btn-danger btn-circle btn-sm pull-right'><i class='fa fa-minus'></i></button>
         <br>&nbsp;
     </div>
 </div>
-</div>
 
 
  @endif
 
-
+<!-- End match modal -->
   <div id="end_match" class="modal fade">
             <div class="modal-dialog sj_modal sportsjun-forms">
               <div class="modal-content">
@@ -494,9 +532,16 @@
                   <div class='row'>
                  
                     <div class='col-sm-12'>
-                      
+                          <div class="form-group col-sm-4  ">
+                                  <label>Match Result</label>
+                                  <select name='match_result' required="">
+                                  <option value="" disabled>Select</option>
+                                  <option value="win">Win</option>
+                                  <option value='no_result'>No Result</option>
+                                  </select>                           
+                          </div>
                      
-                          <div class="form-group col-sm-4 col-sm-offset-4 ">
+                          <div class="form-group col-sm-4  ">
                             <label>Select Winner:</label>
                             <select name="winner_id" id="winner_id" class="form-control gui-input" onchange="selectWinner();">
                             <option value="">Select</option>
@@ -504,7 +549,7 @@
                             <option value="{{ $match_data[0]['b_id'] }}" <?php if (isset($match_data[0]['winner_id']) && $match_data[0]['winner_id']==$match_data[0]['b_id']) echo ' selected';?>>{{ $user_b_name }}</option>
                             </select>
                           </div>
-                          </div>
+                      </div>
                       
                       
                     </div>
@@ -571,12 +616,12 @@
                 <div class="alert alert-success" id="div_success1" style="display:none;"></div>
                 <div class="modal-body">
 
-                <form onsubmit="return updatePreferencesSave(this)" id='updatePreferencesForm'>
+                <form onsubmit="" id='updatePreferencesForm'>
                   <div class='row'>
                      <div class="col-sm-12"><center><h3>Update Preferences</h3> </center></div>
                     <div class='col-sm-4'>
                         <label>Number of Sets</label>
-                        <select class='form-control select-picker'>
+                        <select class='form-control select-picker' name='number_of_sets'>
                             <option value=1  {{$preferences->number_of_sets==1?'selected':''}}>1</option>
                             <option value=2  {{$preferences->number_of_sets==2?'selected':''}}>2</option>
                             <option value=3 {{$preferences->number_of_sets==3?'selected':''}}>3</option>
@@ -590,7 +635,7 @@
 
                     <div class='col-sm-4'>
                         <label>Score to Win</label>
-                        <input type='text' name='score_to_win' class="form-control gui-input allownumericwithdecimal" required="" value="{{$preferences->score_to_win}}">
+                        <input type='text' name='score_to_win' class="form-control gui-input allownumericwithdecimal" required="" value="{{$preferences->score_to_win}}" readonly="">
 
                     </div>
 
@@ -603,7 +648,7 @@
                                                     
                     <div class='col-sm-12'>
                       <br><br>
-                      <input type='checkbox' name='enable_two_points' {{$preferences->enable_two_points=='on'?'checked':''}} id='enable_two_points' readonly> 
+                      <input type='checkbox' name='enable_two_points' readonly {{$preferences->enable_two_points=='on'?'checked':''}} id='enable_two_points'> 
                         <label for='enable_two_points'>Enable Two points clear pattern</label>
                       </div>
                       
@@ -612,7 +657,7 @@
                   </div>            
 
                     <div class="modal-footer">
-                    <button class='button btn btn-primary ' onclick="" type='submit'> Save</button></center>
+                    <button class='button btn btn-primary ' onclick="return updatePreferencesSave(this)" type='submit'> Save</button></center>
                     <button type="button" class="button btn-secondary" data-dismiss="modal">Cancel</button>
                   </div>
                 </div>
@@ -958,6 +1003,13 @@ function getTeamPlayers(that){
                                 $('.a_'+key).val(value[left_team_id+'_score']);
                                 $('.b_'+key).val(value[right_team_id+'_score']);
                             })
+
+                            addButtonSet(response.current_set)
+
+              $('#team_'+left_team_id+'_score').html(response.scores[left_team_id+"_score"]);
+              $('#team_'+right_team_id+'_score').html(response.scores[right_team_id+"_score"]);
+
+
                         }
 
                        });
@@ -990,6 +1042,11 @@ function getTeamPlayers(that){
                                 $('.a_'+key).val(value[left_team_id+'_score']);
                                 $('.b_'+key).val(value[right_team_id+'_score']);
                             })
+                          addButtonSet(response.current_set)
+
+              $('#team_'+left_team_id+'_score').html(response.scores[left_team_id+"_score"]);
+              $('#team_'+right_team_id+'_score').html(response.scores[right_team_id+"_score"]);
+
                         }
 
                        });
@@ -1058,6 +1115,36 @@ function getTeamPlayers(that){
         return false;
      }
       
+</script>
+
+<script>
+
+//add remove and add button near current active field on current players.
+
+var player_or_team_left_button_add="{!!$player_or_team_left_button_add!!}";
+
+var player_or_team_left_button_remove="{!!$player_or_team_left_button_remove!!}";
+
+var player_or_team_right_button_add="{!!$player_or_team_right_button_add!!}";
+
+var player_or_team_right_button_remove="{!!$player_or_team_right_button_remove!!}";
+
+function addButtonSet(set_index){
+
+    $('.remove_button_right').html('');
+    $('.remove_button_left').html('');
+    $('.add_button_left').html('');
+    $('.add_button_right').html('');
+
+    $('.left_button_remove_set_'+set_index).html(player_or_team_left_button_remove);
+    $('.left_button_add_set_'+set_index).html(player_or_team_left_button_add);
+    $('.right_button_remove_set_'+set_index).html(player_or_team_right_button_remove);
+    $('.right_button_add_set_'+set_index).html(player_or_team_right_button_add);
+
+}
+
+addButtonSet({{$current_set}});
+
 </script>
 @endsection
 
