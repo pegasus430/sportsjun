@@ -20,8 +20,19 @@ use App\Model\CricketStatistic;
 use App\Model\TennisStatistic;
 use App\Model\TtStatistic;
 use App\Model\CricketPlayerMatchwiseStats;
+//soccer
 use App\Model\SoccerPlayerMatchwiseStats;
 use App\Model\SoccerStatistic;
+//badminton
+use App\Model\BadmintonPlayerMatchScore;
+use App\Model\BadmintonStatistic;
+//hockey
+use App\Model\HockeyPlayerMatchwiseStats;
+use App\Model\HockeyStatistic;
+//squash
+use App\Model\SquashPlayerMatchScore;
+use App\Model\SquashStatistic;
+
 use App\User;
 use DB;
 use Request;
@@ -2869,6 +2880,14 @@ class ScoreCardController extends Controller {
 					if($match_status=='completed')
 					{
 						$sportName = Sport::where('id',$matchScheduleDetails['sports_id'])->pluck('sports_name');
+
+					if($match_data->has_result==0){
+						$match_data->match_details=null;
+						$match_data->save();
+						$players_stats=	SoccerPlayerMatchwiseStat::whereMatchId($match_id)->get();
+						$this->discardMatchRecords($players_stats);				
+					}
+
 						$this->insertPlayerStatistics($sportName,$match_id);
 
 						//notification ocde
@@ -2889,6 +2908,12 @@ class ScoreCardController extends Controller {
 				if($match_status=='completed')
 				{
 					$sportName = Sport::where('id',$matchScheduleDetails['sports_id'])->pluck('sports_name');
+					if($match_data->has_result==0){
+						$match_data->match_details=null;
+						$match_data->save();
+						$players_stats=	SoccerPlayerMatchwiseStat::whereMatchId($match_id)->get();
+						$this->discardMatchRecords($players_stats);				
+					}
 					$this->insertPlayerStatistics($sportName,$match_id);
 
 					//notification ocde
@@ -3193,6 +3218,7 @@ class ScoreCardController extends Controller {
 
 		$match_start_date = MatchSchedule::where('id',$match_id)->pluck('match_start_date');
 		$sports_id = MatchSchedule::where('id',$match_id)->pluck('sports_id');
+		$match_data=MatchSchedule::where('id', $match_id)->first();
 		$sports_name = Sport::where('id',$sports_id)->pluck('sports_name');
 
 		$scorecardDetails = htmlentities("<a href='".('REQURL|'.'/match/scorecard/edit'.'/'.$match_id)."'> scorecard </a>");
@@ -3218,6 +3244,31 @@ class ScoreCardController extends Controller {
 
 			//$message=  trans('message.scorecard.approvenotification') ;
 			$message = 'Your '.$scorecardDetails.' has been approved by '.$loginUserNameData.'. <br/>Sport:'.$sports_name.' , Sheduled Date:'.$match_start_date;
+
+			
+			//if no result, discard all data;
+
+			if($match_data->has_result==0){
+				$match_data->match_details=null;
+				$match_data->save();
+
+				if($sport_name=='Badminton'){
+					$players_stats=BadmintonPlayerMatchScore::whereMatchId($match_id)->get();
+					$this->discardMatchRecords($players_stats);
+				}
+				if($sport_name=='Squash'){
+					$players_stats=SquashPlayerMatchScore::whereMatchId($match_id)->get();
+					$this->discardMatchRecords($players_stats);
+				}
+				if($sport_name=='Hockey'){
+					$players_stats=	HockeyPlayerMatchwiseStat::whereMatchId($match_id)->get();
+					$this->discardMatchRecords($player_stats);
+				}
+				if($sport_name=='Soccer'){
+					$players_stats=	SoccerPlayerMatchwiseStat::whereMatchId($match_id)->get();
+					$this->discardMatchRecords($players_stats);
+				}
+			}
 
 			// call function to insert player wise match details in statistics table
 			if($sport_name!='' || $sport_name!='Badminton' || $sport_name!='Squash')
@@ -3804,6 +3855,13 @@ if(!isset($match_details['penalties']['team_b']['players_ids']))$match_details['
 			$match_model->match_details=$match_details;
 			$match_model->save();
 			return $match_details;
+	}
+
+//discard match details
+	public function discardMatchRecords($players_stats){
+			foreach ($players_stats as $ps) {
+				$ps->delete();
+			}
 	}
 }
 ?>

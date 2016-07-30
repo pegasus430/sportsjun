@@ -193,8 +193,13 @@
                                     <h3 class="win_team">{{ 'Tie' }}</h3>
 
                                 </div>
-                            @else
 
+                            @elseif(!$match_data[0]['has_result'])
+                                <div class="form-group">
+                                    <label>No result Match</label>
+
+                                </div>
+                            @else
 
                                 <div class="form-group">
                                     <label>Winner is Not Updated</label>

@@ -366,6 +366,30 @@ if (typeof SJ.SCORECARD === 'undefined')
                         showAlert:function (title, content){
                                 $.alert({ title: title, content: content });
                         },
+                        selectMatchType: function (that){
+                                        var val=$(that).val();
+
+                                        if(val=='no_result'){
+                                            $.confirm({
+                                                title:'Alert',
+                                                content:"All info for this match shall be discarded, and both teams shall have same points, do you want to continue?", 
+                                                confirm:function(){
+                                                  $('#select_winner').hide();
+                                                  $('.scorescard_stats').hide();
+                                                  return true
+                                                },
+                                                cancel:function(){
+                                                    $(that).val('win');
+                                                    $('#select_winner').show();
+                                                    $('.scorescard_stats').show();
+                                                }
+                                             })
+                                        }
+                                        else{
+                                          $('#select_winner').show();
+                                          $('.scorescard_stats').show();
+                                        }
+                        },
                         tempData:{},
 
                 };

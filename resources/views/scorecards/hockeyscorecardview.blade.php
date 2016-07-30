@@ -193,6 +193,11 @@
                                     <h3 class="win_team">{{ 'Tie' }}</h3>
 
                                 </div>
+                             @elseif(!$match_data[0]['has_result'])
+                                <div class="form-group">
+                                    <label>No result Match</label>
+
+                                </div>
                             @else
 
 
@@ -208,6 +213,25 @@
                     </div>
                 </div>
             </div>
+    <!-- Match has no results -->
+@if(!$match_data[0]['has_result'])
+        <div class='row' >
+            <div class="col-sm-8 col-sm-offset-2" style="background:#ffeeee">
+                
+                    <div class='col-sm-12'>
+                @if($match_data[0]['scoring_status']!='approved')
+                    This match has  been saved as 'no result'. All the changes and records for this match shall be discarded after approval.
+                @else
+                  
+                @endif
+
+                </div>
+            
+            
+            </div>
+        </div>  
+@endif
+
 
             <!-- Lineup and substitutes -->
             <div class="row">
@@ -327,6 +351,7 @@
                     </div>
                 </div>
             </div>
+
 
             <div class="row">
 

@@ -333,6 +333,15 @@ class HockeyScorecardController extends parentScoreCardController
 
         $json_score_status = json_encode($score_status);
 
+            //match result = 'no result' ; discard all match details;
+        if($match_result=='no_result'){
+            $match_data->has_result=0;           
+            $match_data->save();                    
+        }
+        else{
+            $match_data->has_result=1;           
+            $match_data->save(); 
+        }
 
         $is_tied = 0;
         if($match_result=='tie')
@@ -843,4 +852,6 @@ if(!isset($match_details['penalties']['team_b']['players_ids']))$match_details['
         $hockey_model->playing_status   = $playing_status;
         $hockey_model->save();
     }
+
+
 }

@@ -116,7 +116,7 @@
                 <div class='row'>
                     <div class='col-xs-12'>
                         <div class='match_loc'>
-                            {{$tournamentDetails[0]['name']}}
+                            {{$tournamentDetails['name']}}
                                 
                         </div>
                     </div>
@@ -148,6 +148,12 @@
         <label class="win_head">Winner</label>
         <h3 class="win_team">{{ ($match_data[0]['a_id']==$match_data[0]['winner_id'])?$user_a_name:$user_b_name }}</h3>
     </div>
+  @elseif(!$match_data[0]['has_result'] )
+     <div class="form-group">
+        <label>No Results Match</label>
+
+      </div>
+
 	@else
 
       <div class="form-group">
@@ -161,6 +167,26 @@
         <p class="match-status">@include('scorecards.scorecardstatusview')</p>
     </div>
 
+       <!-- Match has no results -->
+@if(!$match_data[0]['has_result'])
+        <div class='row' >
+            <div class="col-sm-8 col-sm-offset-2" style="background:#ffeeee">
+                
+                    <div class='col-sm-12'>
+                @if($match_data[0]['scoring_status']!='approved')
+                    This match has  been saved as 'no result'. All the changes and records for this match shall be discarded after approval.
+                @else
+                  No results found
+                @endif
+
+                </div>
+            
+            
+            </div>
+        </div>  
+@endif
+
+@if(!$match_data[0]['has_result'] && $match_data[0]['scoring_status']!='approved')
   <div class="row">
     <div class="col-sm-12">
    <div class='table-responsive'>
@@ -262,6 +288,7 @@
 
 
     @endif
+@endif
 @endif
 	
 	<!-- if match schedule type is team -->

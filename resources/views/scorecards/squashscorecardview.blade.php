@@ -116,7 +116,7 @@
                 <div class='row'>
                     <div class='col-xs-12'>
                         <div class='match_loc'>
-                            {{$tournamentDetails[0]['name']}}
+                            {{$tournamentDetails['name']}}
                                 
                         </div>
                     </div>

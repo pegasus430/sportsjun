@@ -444,7 +444,3 @@
     
 </script>
 
-<script>
-$('#player_type').removeAttr('disabled');
-$('#match_type').removeAttr('disabled');
-</script>

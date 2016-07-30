@@ -146,7 +146,7 @@
                 <div class='row'>
                     <div class='col-xs-12'>
                         <div class='match_loc'>
-                            {{$tournamentDetails[0]['name']}}
+                            {{$tournamentDetails['name']}}
                                 
                         </div>
                     </div>
@@ -324,11 +324,11 @@
 
                     <div class='col-sm-6'>
                         <label>Score to Win</label>
-                        <input type='text' name='score_to_win' class="form-control" required="">
+                        <input placeholder="e.g 21" type='text' name='score_to_win' class="form-control" required="">
 
                         <br>
                         <label>Set End Point</label>
-                        <input type='text' name='set_end_point' class="form-control gui-input" required="">
+                        <input placeholder="e.g 29" type='text' name='set_end_point' class="form-control gui-input" required="">
 
 
                     </div>
@@ -532,9 +532,9 @@
                   <div class='row'>
                  
                     <div class='col-sm-12'>
-                           <div class="form-group col-sm-4  ">
+                           <div class="form-group col-sm-4 col-sm-offset-2 ">
                                   <label>Match Result</label>
-                                  <select name='match_result' required="">
+                                  <select name='match_result' required="" class='form-control gui-input' onchange='return SJ.SCORECARD.selectMatchType(this)'>
                                   <option value="" disabled>Select</option>
                                   <option value="win">Win</option>
                                   <option value='no_result'>No Result</option>
@@ -543,7 +543,7 @@
                           </div>
                       
                      
-                          <div class="form-group col-sm-4 col-sm-offset-4 ">
+                          <div class="form-group col-sm-4 " id='select_winner'>
                             <label>Select Winner:</label>
                             <select name="winner_id" id="winner_id" class="form-control gui-input" onchange="selectWinner();">
                             <option value="">Select</option>
@@ -1117,6 +1117,8 @@ function getTeamPlayers(that){
         })
         return false;
      }
+
+     
       
 </script>
 

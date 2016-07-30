@@ -146,7 +146,7 @@
                 <div class='row'>
                     <div class='col-xs-12'>
                         <div class='match_loc'>
-                            {{$tournamentDetails[0]['name']}}
+                            {{$tournamentDetails['name']}}
                                 
                         </div>
                     </div>
@@ -324,11 +324,11 @@
 
                     <div class='col-sm-6'>
                         <label>Score to Win</label>
-                        <input type='text' name='score_to_win' class="form-control" required="">
+                        <input placeholder="eg. 21" type='text' name='score_to_win' class="form-control" required="">
 
                         <br>
                         <label>Set End Point</label>
-                        <input type='text' name='set_end_point' class="form-control gui-input" required="">
+                        <input placeholder="eg. 29" type='text' name='set_end_point' class="form-control gui-input" required="">
 
 
                     </div>
@@ -355,6 +355,19 @@
   @else
 
    {!! Form::open(array('url' => '', 'method' => 'POST','id'=>'badminton', 'onsubmit'=>'return manualScoring(this)')) !!}
+
+   <!-- show alert for no results -->
+
+@if(!$match_data[0]['has_result'])
+    <div class='row' >
+      <div class="col-sm-8 col-sm-offset-2" style="background:#ffeeee">
+        <div class='col-sm-12'>
+                    This match has  been saved as 'no result'. All the changes and records for this match shall be discarded after approval.
+                </div>
+      </div>
+    </div>  
+
+@endif
 
   <div class="row">
     <div class='col-sm-12'>
@@ -429,6 +442,8 @@
 </form>
 
  {!! Form::open(array('url' => '', 'method' => 'POST','id'=>'endMatchForm', 'onsubmit'=>'return endMatch(this)')) !!}
+
+
 
 
 @if($match_data[0]['match_type']!='singles' )
@@ -521,6 +536,7 @@
 
  @endif
 
+
 <!-- End match modal -->
   <div id="end_match" class="modal fade">
             <div class="modal-dialog sj_modal sportsjun-forms">
@@ -532,16 +548,17 @@
                   <div class='row'>
                  
                     <div class='col-sm-12'>
-                          <div class="form-group col-sm-4  ">
+                          <div class="form-group col-sm-4 col-sm-offset-2 ">
                                   <label>Match Result</label>
-                                  <select name='match_result' required="">
+                                  <select name='match_result' required="" class='form-control gui-input' onchange='SJ.SCORECARD.selectMatchType(this)'>
                                   <option value="" disabled>Select</option>
                                   <option value="win">Win</option>
-                                  <option value='no_result'>No Result</option>
+
+                                  <option value='no_result' {{$match_data[0]['has_result']==0?'selected':''}}>No Result</option>
                                   </select>                           
                           </div>
                      
-                          <div class="form-group col-sm-4  ">
+                          <div class="form-group col-sm-4  " id='select_winner'>
                             <label>Select Winner:</label>
                             <select name="winner_id" id="winner_id" class="form-control gui-input" onchange="selectWinner();">
                             <option value="">Select</option>
@@ -769,16 +786,20 @@ function allownumericwithdecimal()
 //Send Approval
 function forApproval()
 {
-	var winner_id = $('#winner_id').val();
+	var winner_id = $('#match_result').val();
 	var db_winner_id = "{{$match_data[0]['winner_id']}}";
-	if(winner_id=='' || db_winner_id=='')
-	{
-		$.alert({
-            title: 'Alert!',
-            content: 'Select Winner & Save.'
+	
+  if(winner_id!=''){
+        //return true;
+      }
+      else if((winner_id=='' || db_winner_id=='') )
+      {
+        $.alert({
+          title: 'Alert!',
+          content: 'Please Click on End Match Save Match Result then Send.'
         });
-		return false;
-	}
+        return false;
+      }
 		$.confirm({
 	title: 'Confirmation',
 	content: 'Are You Sure You want to Send Score for Approval ?',
@@ -1114,6 +1135,8 @@ function getTeamPlayers(that){
         })
         return false;
      }
+
+
       
 </script>
 

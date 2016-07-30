@@ -1229,8 +1229,8 @@ function autofillsubtournamentdetails(tournamentDetails) {
         $(".modal-body #address").val(tournamentDetails['address']);
         $(".modal-body #state_id").val(tournamentDetails['state_id']);
         $(".modal-body #zip").val(tournamentDetails['zip']);
-        $(".modal-body #player_type").prop("disabled", true);
-        $(".modal-body #match_type").prop("disabled", true);
+        // $(".modal-body #player_type").prop("disabled", true);
+        // $(".modal-body #match_type").prop("disabled", true);
         displayStates(tournamentDetails['state_id']);
         displayCountries(tournamentDetails['country_id']);
 

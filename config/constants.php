@@ -64,13 +64,11 @@ return [
                         'MATCH_TYPE'  => [
                                 'CRICKET'      => ['odi' => 'ODI', 't20' => 'T20',
                                         'test' => 'TEST'],
-                                'TENNIS'       => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES',
-                                        'mixed' => 'MIXED'],
-                                'TABLE TENNIS' => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES',
-                                        'mixed' => 'MIXED'],
+                                'TENNIS'       => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES'],
+                                'TABLE TENNIS' => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES'],
                                 'FOOTBALL'     => ['other' => 'OTHERS'],
-                                'BADMINTON'    => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES', 'mixed'=>'MIXED'],
-                                'SQUASH'    => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES', 'mixed'=>'MIXED'],
+                                'BADMINTON'    => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES'],
+                                'SQUASH'    => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES'],
                                 'OTHERS'       => ['other' => 'OTHERS']
                         ],
                         'PLAYER_TYPE' => ['men' => 'MEN', 'women' => 'WOMEN', 'mixed' => 'MIXED']

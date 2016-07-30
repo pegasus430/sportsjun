@@ -71,6 +71,8 @@
 
 
 
+
+
 	</style>
 	@if (session('status'))
 		<div class="alert alert-success">
@@ -363,6 +365,22 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 			@else
 			<!-- Scoring Start -->
 				<?php $a_count = 1;?>
+
+
+<!-- show alert for no results -->
+
+@if(!$match_data[0]['has_result'])
+		<div class='row' >
+			<div class="col-sm-8 col-sm-offset-2" style="background:#ffeeee">
+				<div class='col-sm-12'>
+                    This match has  been saved as 'no result'. All the changes and records for this match shall be discarded after approval.
+                </div>
+			</div>
+		</div>	
+
+@endif
+
+
 				<div class="row">
 					<!-- Team A Goals Start-->
 					<div class="col-sm-10 col-lg-10 col-sm-offset-1">
@@ -560,23 +578,23 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 									<div class="form-inline">
 										<div class="form-group">
 											<label for="match_result">End of Match Result:</label>
-											<select class="form-control selectpicker" name="match_result" id="match_result" onchange="getTeam();">
+											<select class="form-control selectpicker" name="match_result" id="match_result" onchange="getTeam();SJ.SCORECARD.selectMatchType(this)">
 												<option value="" >Select</option>
 												<?php if(empty($match_data[0]['tournament_round_number'])) { ?>
 												<option <?php if($match_data[0]['is_tied']>0) echo " selected";?> value="tie" >Tie</option>
 												<?php } ?>
 												<option <?php if($match_data[0]['is_tied']==0 && $match_data[0]['winner_id']>0) echo " selected";?> value="win">win</option>
-												<option value="no_result">No Result</option>
+												<option value="no_result" {{!$match_data[0]['has_result']?'selected':''}}>No Result</option>
 											</select>
 										</div>
-										<div class="form-group" style="margin-top:15px;">
+										<div class="form-group scorescard_stats" style="margin-top:15px;">
 											<label class="show_teams">Select Winner:</label>
 											<select name="winner_id" id="winner_id" class="show_teams form-control selectpicker" onchange="selectWinner();">
 												<option <?php if (isset($match_data[0]['winner_id']) && $match_data[0]['winner_id']==$match_data[0]['a_id']) echo ' selected';?> value="{{ $match_data[0]['a_id'] }}" >{{ $team_a_name }}</option>
 												<option <?php if (isset($match_data[0]['winner_id']) && $match_data[0]['winner_id']==$match_data[0]['b_id']) echo ' selected';?> value="{{ $match_data[0]['b_id'] }}">{{ $team_b_name }}</option>
 											</select>
 										</div>
-										<div class="form-group">
+										<div class="form-group scorescard_stats">
 
 											<label class="">Select Player of Match:</label>
 											<select name="player_of_the_match" id="player_of_the_match" class=" form-control selectpicker" onchange="">
@@ -595,7 +613,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 									</div>
 
 
-									<div class="form-inline" style="border:none">
+									<div class="form-inline scorescard_stats" style="border:none">
 										<div class='form-group'>
 											<label> {{$team_a_name}} Ball Percentage </label>
 											<input type='number' class='gui-input ' name='ball_percentage_{{$team_a_id}}' value="{{$ball_percentage_a}}" max="100" onchange="updateBallPercentage(event,this)" >
@@ -621,8 +639,6 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 						</div>
 					</div>
 				</div>
-
-
 
 				<!-- Team B Goals Start-->
 				<div class='row' id='match_details'>
@@ -1349,7 +1365,10 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 			var winner_id = $('#match_result').val();
 			var db_winner_id = "{{$match_data[0]['winner_id']}}";
 			var is_tied = "{{$match_data[0]['is_tied']}}";
-			if(winner_id=='' || (db_winner_id=='' && is_tied==0))
+			if(winner_id!=''){
+				//return true;
+			}
+			else if((db_winner_id=='' && is_tied==0) )
 			{
 				$.alert({
 					title: 'Alert!',

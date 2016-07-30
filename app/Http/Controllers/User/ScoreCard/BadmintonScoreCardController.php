@@ -733,6 +733,8 @@ class BadmintonScoreCardController extends Controller
         $request = Request::all();
         $tournament_id = !empty(Request::get('tournament_id'))?Request::get('tournament_id'):NULL;
         $match_id = !empty(Request::get('match_id'))?Request::get('match_id'):NULL;
+        $match_data=MatchSchedule::find($match_id);
+        $match_result=!empty(Request::get('match_result'))?Request::get('match_result'):NULL;
         $match_type = !empty(Request::get('match_type'))?Request::get('match_type'):NULL;
         $player_ids_a = !empty(Request::get('player_ids_a'))?Request::get('player_ids_a'):NULL;
         $player_ids_b= !empty(Request::get('player_ids_b'))?Request::get('player_ids_b'):NULL;
@@ -761,10 +763,19 @@ class BadmintonScoreCardController extends Controller
 
         $json_score_status = json_encode($score_status);
 
+        if($match_result=='no_result'){
+            $match_data->has_result=0;     
+            $match_data->save();                    
+        }
+        else{
+            $match_data->has_result=1;           
+            $match_data->save(); 
+        }
  
 
         //update winner id
         $matchScheduleDetails = MatchSchedule::where('id',$match_id)->first();
+
         if(count($matchScheduleDetails)) {
             $looser_team_id = NULL;
             $match_status = 'scheduled';
@@ -792,6 +803,14 @@ class BadmintonScoreCardController extends Controller
                     }
                     if($match_status=='completed')
                     {
+                        if($match_data->has_result==0){
+                            $match_data->match_details=null;
+                            $match_data->save();              
+                    $players_stats=BadmintonPlayerMatchScore::whereMatchId($match_id)->get();
+                    $this->discardMatchRecords($players_stats);             
+               
+                             }
+
                         $this->updateStatitics($match_id);
 
                         //notification code
@@ -807,6 +826,13 @@ class BadmintonScoreCardController extends Controller
                     'score_added_by'=>$json_score_status,'scoring_status'=>$approved]);
                 if($match_status=='completed')
                 {
+                    if($match_data->has_result==0){
+                            $match_data->match_details=null;
+                            $match_data->save();              
+                    $players_stats=BadmintonPlayerMatchScore::whereMatchId($match_id)->get();
+                    $this->discardMatchRecords($players_stats);             
+               
+                             }
                     $this->updateStatitics($match_id);
                     
                     //notification code
@@ -830,6 +856,8 @@ class BadmintonScoreCardController extends Controller
         $score_a_model=BadmintonPlayerMatchScore::where('match_id', $match_id)->first();
         $score_b_model=BadmintonPlayerMatchScore::where('match_id', $match_id)->skip(1)->first();
 
+        $match_model=MatchSchedule::find($match_id);
+        
         $match_score_model=$score_a_model;
         if($match_score_model->match_type!='singles'){
             $player_ids=[
@@ -949,6 +977,13 @@ class BadmintonScoreCardController extends Controller
                             }
                         }
                 }
+    }
+
+
+    public function discardMatchRecords($players_stats){
+            foreach ($players_stats as $ps) {
+                $ps->delete();
+            }
     }
 
 

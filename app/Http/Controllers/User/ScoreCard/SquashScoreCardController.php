@@ -618,7 +618,7 @@ class SquashScoreCardController extends Controller
             }
 
             //check already user id exists or not
-            $squash_statistics= SquashStatistics::whereUserId($user_id)->whereMatchType($match_type)->first();
+            $squash_statistics= SquashStatistic::whereUserId($user_id)->whereMatchType($match_type)->first();
 
             if(!is_null($squash_statistics)){  //if user exist update statistics
                 $won=0;
@@ -828,6 +828,8 @@ class SquashScoreCardController extends Controller
     public function updateStatitics($match_id){
         $score_a_model=SquashPlayerMatchScore::where('match_id', $match_id)->first();
         $score_b_model=SquashPlayerMatchScore::where('match_id', $match_id)->skip(1)->first();
+
+        $match_model=MatchSchedule::find($match_id);
 
         $match_score_model=$score_a_model;
         if($match_score_model->match_type=='double'){

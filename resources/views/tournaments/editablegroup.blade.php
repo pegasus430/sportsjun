@@ -300,6 +300,8 @@
             </div>
             <hr />
 			<!-- /.panel-body -->
+
+	
 <script type="text/javascript">
 
     $(function() {
