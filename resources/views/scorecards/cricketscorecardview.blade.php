@@ -132,16 +132,20 @@
 						
 					@else
                                                 @if($match_data[0]['is_tied']>0)
-                                                                <div class="form-group">
-                                                                        <label>Match Result</label>
-                                        <h3 class="win_team">{{ 'Tie' }}</h3>
-
-                                                          </div>   
+                                                    <div class="form-group">
+                                                        <label>Match Result</label>
+                                                        <h3 class="win_team">Tie</h3>
+                                                    </div>
+                                                @elseif($match_data[0]['match_result'] == "washout")
+                                                    <div class="form-group">
+                                                        <label>MATCH ENDED DUE TO</label>
+                                                        <h3 class="win_team">Washout</h3>
+                                                    </div>
                                                 @else
-                                  <div class="form-group">
-                                                  <label>Winner is not updated.</label>
-                                                                </div>
-                                                @endif	
+                                                    <div class="form-group">
+                                                        <label>Winner is not updated.</label>
+                                                    </div>
+                                                @endif
 					@endif
                                         
                         @if($match_data[0]['player_of_the_match']>0)
