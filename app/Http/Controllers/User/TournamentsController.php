@@ -885,7 +885,7 @@ class TournamentsController extends Controller
 						foreach ($match_details[$group_id] as $matchdata)
 						{
 							// net run rate changes - start
-							if (isset($matchdata['sports_id']) && $matchdata['sports_id'] == config('constants.SPORT_ID.Cricket') && !empty($matchdata['match_details']))
+							if (isset($matchdata['sports_id']) && $matchdata['sports_id'] == config('constants.SPORT_ID.Cricket') && !empty($matchdata['match_details']) && $matchdata['has_result'] == 1)
 							{
 								if ($matchdata['match_type'] == "t20")
 								{
