@@ -1909,4 +1909,22 @@ class Helper {
 
     }   
 
+    public static function getMatchDetails($match_id){
+            $match_model=MatchSchedule::find($match_id);
+
+            //get the winner
+            if(!is_null($match_model->winner_id)){
+                if($match_model->schedule_type=='player'){
+                    $match_model->winner=User::find($match_model->winner_id)->name;
+                }
+                else{
+                    $match_model->winner=Team::find($match_model->winner_id)->name;
+                }
+            }
+            else{
+                $match_model->winner='';
+            }
+        return $match_model;
+    }
+
 }

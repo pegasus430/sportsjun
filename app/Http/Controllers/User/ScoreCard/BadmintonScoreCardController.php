@@ -610,6 +610,7 @@ class BadmintonScoreCardController extends Controller
         //$player_ids_array = explode(',',$player_ids);
         foreach($player_ids_array as $user_id)
         {
+            if(!empty($user_id)){
             $double_faults_count = '';
 
             $player_match_details = BadmintonPlayerMatchScore::where('user_id_a',$user_id)->orWhere('user_id_b', $user_id)->get();
@@ -668,6 +669,8 @@ class BadmintonScoreCardController extends Controller
                 $badmintonStatisticsModel->save();
             }
         }
+
+     }
 
     }
 
@@ -797,11 +800,13 @@ class BadmintonScoreCardController extends Controller
                         }
                     }
 
-            if(($is_tie == 1 || $match_result == "washout") && !empty($matchScheduleDetails['tournament_group_id'])) {
+            if(!empty($matchScheduleDetails['tournament_group_id'])) {
                 $tournamentDetails = Tournaments::where('id', '=', $matchScheduleDetails['tournament_id'])->first();
+                  $match_status = 'completed';
                 if(Helper::isTournamentOwner($tournamentDetails['manager_id'],$tournamentDetails['tournament_parent_id'])) {
 
-                    MatchSchedule::where('id',$match_id)->update(['match_details'=>$json_match_details_array,'match_status'=>$match_status,
+                    MatchSchedule::where('id',$match_id)->update([
+                        'match_status'=>$match_status,
                         'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
                          'has_result'     => $has_result,
                          'match_result'   => $match_result,

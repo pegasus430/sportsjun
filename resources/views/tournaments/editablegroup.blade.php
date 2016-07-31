@@ -188,6 +188,17 @@
 											<span class='match_type_text'>({{ $match['match_type']=='odi'?strtoupper($match['match_type']):ucfirst($match['match_type']) }})</span>
 									@endif
 									<br/>
+									<!-- match_details -->
+									
+									Venue : <span class=''>{{$match['address']}}</span>,
+									Status : <span class='event_date'>{{$match['match_status']}}</span><br>
+									Scores : <span class='event_date'></span>,
+									@if(!is_null($match['winner_id']))
+									Winner : <span class='match_type_text'>					{{Helper::getMatchDetails($match['id'])->winner}} </span>
+								
+									@endif
+
+									<br>
 									@if(!empty($add_score_link[$match['id']]))
 										@if($add_score_link[$match['id']]==trans('message.schedule.viewscore'))
 											<span class="tournament_score"><a href="{{ url('match/scorecard/view/'.$match['id']) }}">{{$add_score_link[$match['id']]}}</a></span>
@@ -195,6 +206,8 @@
 											<span class="tournament_score"><a href="{{ url('match/scorecard/edit/'.$match['id']) }}">{{$add_score_link[$match['id']]}}</a></span>
 										@endif
 									@endif	
+
+
 										
 								</div>
 								

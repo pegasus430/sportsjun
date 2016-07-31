@@ -8,6 +8,7 @@
         
 		<div id="tournament_details_cover" class="col-md-12">
 			{!! Helper::Images(!empty($left_menu_data['logo'])?$left_menu_data['logo']:'',!empty($left_menu_data['path'])?$left_menu_data['path']:'',array('height'=>'','width'=>'100%','class'=>'img_tbl img-responsive') )!!}
+        </div>
             
             <div id="tournament_details" class="col-md-8 col-md-offset-2 captureImage">
                 <div class="group_no clearfix">

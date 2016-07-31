@@ -187,7 +187,7 @@
         </div>  
 @endif
 
-@if(!$match_data[0]['has_result'] && $match_data[0]['scoring_status']!='approved')
+
   <div class="row">
     <div class="col-sm-12">
    <div class='table-responsive'>
@@ -290,7 +290,7 @@
 
     @endif
 @endif
-@endif
+
 	
 	<!-- if match schedule type is team -->
 

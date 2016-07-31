@@ -229,7 +229,7 @@
 
                         <!-- if doubles select another player -->
 
-                        @if($match_data[0]['match_type']!='singles')
+                        @if($match_data[0]['match_type']=='doubles')
                           <br>
                         <label>Select Player 2</label>
                         <select name='select_player_2_left' class="form-control select-picker" id='select_player_2_left'>                     
@@ -268,7 +268,7 @@
                         </select>
                         <!-- if doubles select another player -->
 
-                        @if($match_data[0]['match_type']!='singles')
+                        @if($match_data[0]['match_type']=='doubles')
                               <br>
                             <label>Select Player 2</label>
                             <select name='select_player_2_right' class="form-control select-picker" id='select_player_2_right'>      

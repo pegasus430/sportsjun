@@ -1121,8 +1121,8 @@ class ScheduleController extends Controller {
          if(!empty($tournament_id)) {
              $tournamentDetails = Tournaments::where('id',$tournament_id)->first(['match_type','player_type','sports_id']);
              if(count($tournamentDetails)) {
-                $player_type = $tournamentDetails->player_type;
-                $match_type = $tournamentDetails->match_type;
+        $player_type = $tournamentDetails->player_type=='any'?Request::get('player_type'):$tournamentDetails->player_type;
+        $match_type = $tournamentDetails->match_type=='any'?Request::get('match_type'):$tournamentDetails->match_type;
                 $sports_id = $tournamentDetails->sports_id;
              }
 			$match_invite_status = 'accepted';

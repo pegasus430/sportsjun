@@ -3114,6 +3114,21 @@ class ScoreCardController extends Controller {
 				{
 					return $this->soccerScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
+				else if(strtolower($sport_name)==strtolower('hockey'))
+				{
+					$hockey = new Scorecard\HockeyScorecardController;
+					return $hockey->soccerScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
+				else if(strtolower($sport_name)==strtolower('badminton'))
+				{
+					$badminton = new Scorecard\BadmintonScoreCardController;
+					return $badminton->badmintonScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
+				else if(strtolower($sport_name)==strtolower('squash'))
+				{
+					$squash = new Scorecard\SquashScoreCardController;
+					return $squash->squashScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
 			}
 		}
 	}
