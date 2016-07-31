@@ -750,8 +750,8 @@ function editMatchSchedule(a, b, c, modal_id) {
                     $(".modal-body #tournament_group_id").val(e.scheduleData.tournament_group_id);
                 }    
                 if(e.scheduleData.tournament_id!='' && e.scheduleData.tournament_id!=null) {
-                    $(".modal-body #player_type").prop("disabled", true);
-                    $(".modal-body #match_type").prop("disabled", true);
+                    // $(".modal-body #player_type").prop("disabled", true);
+                    // $(".modal-body #match_type").prop("disabled", true);
                     $(".modal-body #tournament_id").val(e.scheduleData.tournament_id);
                 }
                 $(".modal-body #schedule_id").val(e.scheduleData.id);
