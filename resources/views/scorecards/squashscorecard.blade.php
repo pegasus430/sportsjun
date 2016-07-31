@@ -178,7 +178,7 @@
           <button class="btn btn-danger soccer_buttons_disabled" onclick="return SJ.SCORECARD.soccerSetTimes(this)"></i>End Match</button>
     @endif
 
-     @if($isValidUser && $isForApprovalExist && $match_data[0]['match_status']!='completed' )   
+  @if($isValidUser && $isForApprovalExist && ($match_data[0]['winner_id']>0 || $match_data[0]['is_tied']>0 || $match_data[0]['has_result'] == 0))   
       <button style="text-align:center;" type="button" onclick="forApproval();" class=" btn btn-primary">Send Score for Approval</button>
       @endif
 
@@ -534,11 +534,12 @@
                     <div class='col-sm-12'>
                            <div class="form-group col-sm-4 col-sm-offset-2 ">
                                   <label>Match Result</label>
-                                  <select name='match_result' required="" class='form-control gui-input' onchange='return SJ.SCORECARD.selectMatchType(this)'>
+                                   <select name='match_result' required="" class='form-control gui-input' onchange='SJ.SCORECARD.selectMatchType(this)'>
                                   <option value="" disabled>Select</option>
                                   <option value="win">Win</option>
-                                  <option value='no_result'>No Result</option>
-                                  </select>
+
+                                  <option value='washout' {{$match_data[0]['has_result']==0?'selected':''}}>No Result</option>
+                                  </select> 
                            
                           </div>
                       
@@ -771,16 +772,19 @@ function allownumericwithdecimal()
 //Send Approval
 function forApproval()
 {
-  var winner_id = $('#winner_id').val();
+ var winner_id = $('#match_result').val();
   var db_winner_id = "{{$match_data[0]['winner_id']}}";
-  if(winner_id=='' || db_winner_id=='')
-  {
-    $.alert({
-            title: 'Alert!',
-            content: 'Select Winner & Save.'
+  if(winner_id!=''){
+        //return true;
+      }
+      else if((winner_id=='' || db_winner_id=='') )
+      {
+        $.alert({
+          title: 'Alert!',
+          content: 'Please Click on End Match Save Match Result then Send.'
         });
-    return false;
-  }
+        return false;
+      }
     $.confirm({
   title: 'Confirmation',
   content: 'Are You Sure You want to Send Score for Approval ?',

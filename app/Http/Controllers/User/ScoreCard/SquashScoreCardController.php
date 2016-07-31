@@ -680,7 +680,8 @@ class SquashScoreCardController extends Controller
             $score_a_model=SquashPlayerMatchScore::find($score_a_id);
             $score_b_model=SquashPlayerMatchScore::find($score_b_id); 
 
-            $match_id=$score_a_model->match_id;             
+            $match_id=$score_a_model->match_id;    
+
 
             $match_model=Matchschedule::find($match_id);
             $match_details=json_decode($match_model->match_details);
@@ -733,6 +734,7 @@ class SquashScoreCardController extends Controller
         $tournament_id = !empty(Request::get('tournament_id'))?Request::get('tournament_id'):NULL;
         $match_id = !empty(Request::get('match_id'))?Request::get('match_id'):NULL;
         $match_type = !empty(Request::get('match_type'))?Request::get('match_type'):NULL;
+         $match_result=!empty(Request::get('match_result'))?Request::get('match_result'):NULL;
         $player_ids_a = !empty(Request::get('player_ids_a'))?Request::get('player_ids_a'):NULL;
         $player_ids_b= !empty(Request::get('player_ids_b'))?Request::get('player_ids_b'):NULL;
         $is_singles = !empty(Request::get('is_singles'))?Request::get('is_singles'):NULL;
@@ -760,7 +762,10 @@ class SquashScoreCardController extends Controller
 
         $json_score_status = json_encode($score_status);
 
- 
+        $is_tie         = ($match_result == 'tie')      ? 1 : 0;
+         $is_washout     = ($match_result == 'washout')  ? 1 : 0;
+         $has_result     = ($is_washout == 1) ? 0 : 1;
+        $match_result   = ( !in_array( $match_result, ['tie','win','washout'] ) ) ? NULL : $match_result;
 
         //update winner id
         $matchScheduleDetails = MatchSchedule::where('id',$match_id)->first();
@@ -768,21 +773,27 @@ class SquashScoreCardController extends Controller
             $looser_team_id = NULL;
             $match_status = 'scheduled';
             $approved='';
-            if(isset($winner_team_id)) {
-                if($winner_team_id==$matchScheduleDetails['a_id']) {
-                    $looser_team_id=$matchScheduleDetails['b_id'];
-                }else{
-                    $looser_team_id=$matchScheduleDetails['a_id'];
-                }
-                $match_status = 'completed';
-                $approved = 'approved';
-            }
+                    if($is_tie==0 || $is_washout == 0) {
+                        if(isset($winner_team_id)) {
+                            if($winner_team_id==$matchScheduleDetails['a_id']) {
+                                $looser_team_id=$matchScheduleDetails['b_id'];
+                            }else{
+                                $looser_team_id=$matchScheduleDetails['a_id'];
+                            }
+                            $match_status = 'completed';
+                            $approved = 'approved';
+                        }
+                    }
 
-            if(!empty($matchScheduleDetails['tournament_id'])) {
+            if(($is_tie == 1 || $match_result == "washout") && !empty($matchScheduleDetails['tournament_id'])) {
                 $tournamentDetails = Tournaments::where('id', '=', $matchScheduleDetails['tournament_id'])->first();
                 if(Helper::isTournamentOwner($tournamentDetails['manager_id'],$tournamentDetails['tournament_parent_id'])) {
                     MatchSchedule::where('id',$match_id)->update(['match_details'=>$json_match_details_array,'match_status'=>$match_status,
-                        'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
+                        'is_tied'        => $is_tie,
+                         'has_result'     => $has_result,
+                         'match_result'   => $match_result,
+                        'winner_id'=>$winner_team_id ,
+                        'looser_id'=>$looser_team_id,
                         'score_added_by'=>$json_score_status]);
 //                                Helper::printQueries();
 
@@ -801,8 +812,18 @@ class SquashScoreCardController extends Controller
             }else if(Auth::user()->role=='admin')
             {
 
+
+
+                if ($is_tie == 1 || $match_result == "washout"){
+                    $match_status = 'completed';
+                    $approved = 'approved';
+                }
+
                 MatchSchedule::where('id',$match_id)->update(['match_status'=>$match_status,
                     'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
+                    'is_tied'        => $is_tie,
+                     'has_result'     => $has_result,
+                     'match_result'   => $match_result,
                     'score_added_by'=>$json_score_status,'scoring_status'=>$approved]);
                 if($match_status=='completed')
                 {
@@ -813,8 +834,13 @@ class SquashScoreCardController extends Controller
             }
             else
             {
-                MatchSchedule::where('id',$match_id)->update(['winner_id'=>$winner_team_id ,
-                    'looser_id'=>$looser_team_id,'score_added_by'=>$json_score_status]);
+                MatchSchedule::where('id',$match_id)->update([
+                    'winner_id'=>$winner_team_id ,
+                    'looser_id'=>$looser_team_id,
+                    'has_result'     => $has_result,
+                    'is_tied'         => $is_tie,
+                     'match_result'   => $match_result,
+                    'score_added_by'=>$json_score_status]);
             }
         }
         //MatchSchedule::where('id',$match_id)->update(['winner_id'=>$winner_team_id,'match_details'=>$json_match_details_array,'score_added_by'=>$json_score_status ]);

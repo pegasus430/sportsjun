@@ -148,11 +148,12 @@
         <label class="win_head">Winner</label>
         <h3 class="win_team">{{ ($match_data[0]['a_id']==$match_data[0]['winner_id'])?$user_a_name:$user_b_name }}</h3>
     </div>
-  @elseif(!$match_data[0]['has_result'] )
-     <div class="form-group">
-        <label>No Results Match</label>
 
-      </div>
+      @elseif($match_data[0]['match_result'] == "washout")
+                                                     <div class="form-group">
+                                                         <label>MATCH ENDED DUE TO</label>
+                                                         <h3 class="win_team">Washout</h3>
+                                                     </div>
 
 	@else
 

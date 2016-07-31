@@ -72,7 +72,7 @@ if(!empty($matchScheduleCount) && $matchScheduleCount>0)
                <!-- <select id="main_player_typee" name="player_type">
                   <option value=''>Select Player Type</option>
                 </select>  --> 
-			{!! Form::select('player_type', $player_types, null,array('id'=>'main_player_typee','class'=>'gui-input',$disable)) !!}				
+			{!! Form::select('player_type', $player_types, null,array('id'=>'main_player_typee','class'=>'gui-input')) !!}				
                 @if ($errors->has('player_type')) <p class="help-block">{{ $errors->first('player_type') }}</p> @endif
                 <i class="arrow double"></i> 
               </label>
@@ -86,7 +86,7 @@ if(!empty($matchScheduleCount) && $matchScheduleCount>0)
                <!-- <select id="main_match_typee" name="match_type">
                   <option value=''>Select Match Type</option>
                 </select>-->
-				{!! Form::select('match_type', $match_types, null,array('id'=>'main_match_typee','class'=>'gui-input',$disable)) !!}	
+				{!! Form::select('match_type', $match_types, null,array('id'=>'main_match_typee','class'=>'gui-input')) !!}	
                 @if ($errors->has('match_type')) <p class="help-block">{{ $errors->first('match_type') }}</p> @endif
                 <i class="arrow double"></i> 
               </label>

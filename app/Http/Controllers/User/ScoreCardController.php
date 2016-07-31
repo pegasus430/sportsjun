@@ -2832,15 +2832,16 @@ class ScoreCardController extends Controller {
 		$json_score_status = json_encode($score_status);
 
 
-		$is_tied = 0;
-		if($match_result=='tie')
-			$is_tied = 1;
+		$is_tie         = ($match_result == 'tie')      ? 1 : 0;
+         $is_washout     = ($match_result == 'washout')  ? 1 : 0;
+         $has_result     = ($is_washout == 1) ? 0 : 1;
+         $match_result   = ( !in_array( $match_result, ['tie','win','washout'] ) ) ? NULL : $match_result;
 		$matchScheduleDetails = MatchSchedule::where('id',$match_id)->first();
 		if(count($matchScheduleDetails)) {
 			$looser_team_id = NULL;
 			$match_status='scheduled';
 			$approved = '';
-			if($is_tied==0) {
+			if($is_tie==0 || $is_washout == 0 ) {
 
 				if(isset($winner_team_id)) {
 					//$match_details=(object)$match_details;
@@ -2864,14 +2865,18 @@ class ScoreCardController extends Controller {
 			if(!empty($matchScheduleDetails['tournament_id'])) {
 //                        dd($winner_team_id.'<>'.$looser_team_id);
 				$tournamentDetails = Tournaments::where('id', '=', $matchScheduleDetails['tournament_id'])->first();
-				if($is_tied==1 && !empty($matchScheduleDetails['tournament_group_id'])) {
+			if (($is_tie == 1 || $match_result == "washout") && !empty($matchScheduleDetails['tournament_group_id'])){
 					$match_status = 'completed';
 				}
+				
 				if(Helper::isTournamentOwner($tournamentDetails['manager_id'],$tournamentDetails['tournament_parent_id'])) 
 				{
 					MatchSchedule::where('id',$match_id)->update(['match_status'=>$match_status,
 						'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
-						'is_tied'=>$is_tied,'score_added_by'=>$json_score_status]);
+						'is_tied'=>$is_tied,
+						 'has_result'     => $has_result,
+                         'match_result'   => $match_result,
+                         'score_added_by'=>$json_score_status]);
 //                                Helper::printQueries();
 
 					if(!empty($matchScheduleDetails['tournament_round_number'])) {
@@ -2897,13 +2902,18 @@ class ScoreCardController extends Controller {
 				}
 
 			}else if(Auth::user()->role=='admin'){
-				if($is_tied==1) {
+				if ($is_tie == 1 || $match_result == "washout") {
 					$match_status = 'completed';
 					$approved = 'approved';
 				}
 				MatchSchedule::where('id',$match_id)->update(['match_status'=>$match_status,
-					'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
-					'is_tied'=>$is_tied,'score_added_by'=>$json_score_status,'scoring_status'=>$approved]);
+					'winner_id'      => $winner_team_id,
+                     'looser_id'      => $looser_team_id,
+ 					'is_tied'        => $is_tie,
+                     'has_result'     => $has_result,
+                     'match_result'   => $match_result,
+                     'score_added_by' => $json_score_status,
+                     'scoring_status'=>$approved]);
 
 				if($match_status=='completed')
 				{
@@ -2924,7 +2934,10 @@ class ScoreCardController extends Controller {
 			else
 			{
 				MatchSchedule::where('id',$match_id)->update(['winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
-					'is_tied'=>$is_tied,'score_added_by'=>$json_score_status]);
+					'is_tied'=>$is_tie,
+					'has_result'     => $has_result,
+                    'match_result'   => $match_result,
+                     'score_added_by'=>$json_score_status]);
 			}
 		}
 		
@@ -3860,7 +3873,7 @@ if(!isset($match_details['penalties']['team_b']['players_ids']))$match_details['
 //discard match details
 	public function discardMatchRecords($players_stats){
 			foreach ($players_stats as $ps) {
-				$ps->delete();
+				//$ps->delete();
 			}
 	}
 }

@@ -1401,11 +1401,8 @@ class Helper {
         {
             if($isForApproval=='yes')
             {
-                if(!empty($score_status_array['added_by']) && ($matchData[0]['scoring_status']=='rejected' || $matchData[0]['scoring_status']=='') && ($matchData[0]['winner_id']!='' || $matchData[0]['is_tied']>0) )
+                if(!empty($score_status_array['added_by']) && ($matchData[0]['scoring_status']=='rejected' || $matchData[0]['scoring_status']=='') && ($matchData[0]['winner_id']!='' || $matchData[0]['is_tied']>0 || $matchData[0]['has_result'] == 0) )
                 {
-                    return true;
-                }
-                elseif( $matchData[0]['scoring_status']=='' && !$matchData[0]['has_result']){
                     return true;
                 }
                 else

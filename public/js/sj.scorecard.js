@@ -369,7 +369,7 @@ if (typeof SJ.SCORECARD === 'undefined')
                         selectMatchType: function (that){
                                         var val=$(that).val();
 
-                                        if(val=='no_result'){
+                                        if(val=='washout'){
                                             $.confirm({
                                                 title:'Alert',
                                                 content:"All info for this match shall be discarded, and both teams shall have same points, do you want to continue?", 

@@ -226,7 +226,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 								@if($match_data[0]['hasSetupSquad'])
 									<button class="btn btn-danger hockey_buttons_disabled" onclick="return SJ.SCORECARD.soccerSetTimes(this)"></i>End Match</button>
 								@endif
-				@if($isValidUser && $isForApprovalExist)
+				 @if($isValidUser && $isForApprovalExist && ($match_data[0]['winner_id']>0 || $match_data[0]['is_tied']>0 || $match_data[0]['has_result'] == 0))  
 
 					<button style="text-align:center;" type="button" onclick="forApproval();" class="btn btn-primary">Send Score for Approval</button>
 
@@ -584,7 +584,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 												<option <?php if($match_data[0]['is_tied']>0) echo " selected";?> value="tie" >Tie</option>
 												<?php } ?>
 												<option <?php if($match_data[0]['is_tied']==0 && $match_data[0]['winner_id']>0) echo " selected";?> value="win">win</option>
-												<option value="no_result" {{!$match_data[0]['has_result']?'selected':''}}>No Result</option>
+												<option value="washout" {{!$match_data[0]['has_result']?'selected':''}}>No Result</option>
 											</select>
 										</div>
 										<div class="form-group scorescard_stats" style="margin-top:15px;">
@@ -1365,10 +1365,9 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 			var winner_id = $('#match_result').val();
 			var db_winner_id = "{{$match_data[0]['winner_id']}}";
 			var is_tied = "{{$match_data[0]['is_tied']}}";
-			if(winner_id!=''){
-				//return true;
-			}
-			else if((db_winner_id=='' && is_tied==0) )
+			 var has_result = "{{$match_data[0]['has_result']}}";
+			
+			if(winner_id == '' || (db_winner_id == '' && is_tied == 0 && has_result == 1) )
 			{
 				$.alert({
 					title: 'Alert!',

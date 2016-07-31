@@ -194,11 +194,11 @@
 
                                 </div>
 
-                            @elseif(!$match_data[0]['has_result'])
-                                <div class="form-group">
-                                    <label>No result Match</label>
-
-                                </div>
+                              @elseif($match_data[0]['match_result'] == "washout")
+                                                     <div class="form-group">
+                                                         <label>MATCH ENDED DUE TO</label>
+                                                         <h3 class="win_team">Washout</h3>
+                                                     </div>
                             @else
 
                                 <div class="form-group">

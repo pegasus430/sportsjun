@@ -177,8 +177,7 @@
           <br>
           <button class="btn btn-danger soccer_buttons_disabled" onclick="return SJ.SCORECARD.soccerSetTimes(this)"></i>End Match</button>
     @endif
-
-     @if($isValidUser && $isForApprovalExist && $match_data[0]['match_status']!='completed' )   
+ @if($isValidUser && $isForApprovalExist && ($match_data[0]['winner_id']>0 || $match_data[0]['is_tied']>0 || $match_data[0]['has_result'] == 0))    
       <button style="text-align:center;" type="button" onclick="forApproval();" class=" btn btn-primary">Send Score for Approval</button>
       @endif
 
@@ -554,7 +553,7 @@
                                   <option value="" disabled>Select</option>
                                   <option value="win">Win</option>
 
-                                  <option value='no_result' {{$match_data[0]['has_result']==0?'selected':''}}>No Result</option>
+                                  <option value='washout' {{$match_data[0]['has_result']==0?'selected':''}}>No Result</option>
                                   </select>                           
                           </div>
                      

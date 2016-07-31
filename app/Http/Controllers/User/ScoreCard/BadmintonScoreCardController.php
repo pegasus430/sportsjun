@@ -763,14 +763,19 @@ class BadmintonScoreCardController extends Controller
 
         $json_score_status = json_encode($score_status);
 
-        if($match_result=='no_result'){
-            $match_data->has_result=0;     
-            $match_data->save();                    
-        }
-        else{
-            $match_data->has_result=1;           
-            $match_data->save(); 
-        }
+        // if($match_result=='no_result'){
+        //     $match_data->has_result=0;     
+        //     $match_data->save();                    
+        // }
+        // else{
+        //     $match_data->has_result=1;           
+        //     $match_data->save(); 
+        // }
+
+        $is_tie         = ($match_result == 'tie')      ? 1 : 0;
+         $is_washout     = ($match_result == 'washout')  ? 1 : 0;
+         $has_result     = ($is_washout == 1) ? 0 : 1;
+         $match_result   = ( !in_array( $match_result, ['tie','win','washout'] ) ) ? NULL : $match_result;
  
 
         //update winner id
@@ -780,21 +785,26 @@ class BadmintonScoreCardController extends Controller
             $looser_team_id = NULL;
             $match_status = 'scheduled';
             $approved='';
-            if(isset($winner_team_id)) {
-                if($winner_team_id==$matchScheduleDetails['a_id']) {
-                    $looser_team_id=$matchScheduleDetails['b_id'];
-                }else{
-                    $looser_team_id=$matchScheduleDetails['a_id'];
-                }
-                $match_status = 'completed';
-                $approved = 'approved';
-            }
+                     if($is_tie==0 || $is_washout == 0) {
+                        if(isset($winner_team_id )) {
+                            if($winner_team_id==$matchScheduleDetails['a_id']) {
+                                $looser_team_id=$matchScheduleDetails['b_id'];
+                            }else{
+                                $looser_team_id=$matchScheduleDetails['a_id'];
+                            }
+                            $match_status = 'completed';
+                            $approved = 'approved';
+                        }
+                    }
 
-            if(!empty($matchScheduleDetails['tournament_id'])) {
+            if(($is_tie == 1 || $match_result == "washout") && !empty($matchScheduleDetails['tournament_group_id'])) {
                 $tournamentDetails = Tournaments::where('id', '=', $matchScheduleDetails['tournament_id'])->first();
                 if(Helper::isTournamentOwner($tournamentDetails['manager_id'],$tournamentDetails['tournament_parent_id'])) {
+
                     MatchSchedule::where('id',$match_id)->update(['match_details'=>$json_match_details_array,'match_status'=>$match_status,
                         'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
+                         'has_result'     => $has_result,
+                         'match_result'   => $match_result,
                         'score_added_by'=>$json_score_status]);
 //                                Helper::printQueries();
 
@@ -803,11 +813,12 @@ class BadmintonScoreCardController extends Controller
                     }
                     if($match_status=='completed')
                     {
+                            //discard all records
                         if($match_data->has_result==0){
-                            $match_data->match_details=null;
-                            $match_data->save();              
-                    $players_stats=BadmintonPlayerMatchScore::whereMatchId($match_id)->get();
-                    $this->discardMatchRecords($players_stats);             
+                    //         $match_data->match_details=null;
+                    //         $match_data->save();              
+                    // $players_stats=BadmintonPlayerMatchScore::whereMatchId($match_id)->get();
+                    // $this->discardMatchRecords($players_stats);             
                
                              }
 
@@ -821,18 +832,27 @@ class BadmintonScoreCardController extends Controller
             }else if(Auth::user()->role=='admin')
             {
 
+                if ($is_tie == 1 || $match_result == "washout"){
+                    $match_status = 'completed';
+                    $approved = 'approved';
+                }
+
                 MatchSchedule::where('id',$match_id)->update(['match_status'=>$match_status,
-                    'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
-                    'score_added_by'=>$json_score_status,'scoring_status'=>$approved]);
+                    'winner_id'      => $winner_team_id,
+                     'looser_id'      => $looser_team_id,
+                    'is_tied'        => $is_tie,
+                     'has_result'     => $has_result,
+                     'match_result'   => $match_result,
+                     'score_added_by' => $json_score_status,'scoring_status'=>$approved]);
                 if($match_status=='completed')
                 {
                     if($match_data->has_result==0){
-                            $match_data->match_details=null;
-                            $match_data->save();              
-                    $players_stats=BadmintonPlayerMatchScore::whereMatchId($match_id)->get();
-                    $this->discardMatchRecords($players_stats);             
+                    //         $match_data->match_details=null;
+                    //         $match_data->save();              
+                    // $players_stats=BadmintonPlayerMatchScore::whereMatchId($match_id)->get();
+                    // $this->discardMatchRecords($players_stats);             
                
-                             }
+                   }
                     $this->updateStatitics($match_id);
                     
                     //notification code
@@ -841,7 +861,11 @@ class BadmintonScoreCardController extends Controller
             else
             {
                 MatchSchedule::where('id',$match_id)->update(['winner_id'=>$winner_team_id ,
-                    'looser_id'=>$looser_team_id,'score_added_by'=>$json_score_status]);
+                    'looser_id'=>$looser_team_id,
+                    'has_result'     => $has_result,
+                    'is_tied'         => $is_tie,
+                     'match_result'   => $match_result,
+                     'score_added_by'=>$json_score_status]);
             }
         }
         //MatchSchedule::where('id',$match_id)->update(['winner_id'=>$winner_team_id,'match_details'=>$json_match_details_array,'score_added_by'=>$json_score_status ]);
@@ -982,7 +1006,7 @@ class BadmintonScoreCardController extends Controller
 
     public function discardMatchRecords($players_stats){
             foreach ($players_stats as $ps) {
-                $ps->delete();
+                //$ps->delete();
             }
     }
 
