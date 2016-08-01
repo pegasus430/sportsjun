@@ -212,7 +212,7 @@ return [
                 'GOALS_PENALTIES'   => 'GOALS PENALTIES',
                 'SOCCER_STATISTICS' => 'SOCCER',
         ],
-        'BADMINTON'       => [
+        'BADMINTON_STATS'       => [
                 'WON'               => 'WON',
                 'LOST'              => 'LOST',
                 'TIED'              => 'TIED',

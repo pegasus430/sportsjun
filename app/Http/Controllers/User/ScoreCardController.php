@@ -3116,17 +3116,17 @@ class ScoreCardController extends Controller {
 				}
 				else if(strtolower($sport_name)==strtolower('hockey'))
 				{
-					$hockey = new Scorecard\HockeyScorecardController;
+					$hockey = new ScoreCard\HockeyScorecardController;
 					return $hockey->soccerScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
 				else if(strtolower($sport_name)==strtolower('badminton'))
 				{
-					$badminton = new Scorecard\BadmintonScoreCardController;
+					$badminton = new ScoreCard\BadmintonScoreCardController;
 					return $badminton->badmintonScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
 				else if(strtolower($sport_name)==strtolower('squash'))
 				{
-					$squash = new Scorecard\SquashScoreCardController;
+					$squash = new ScoreCard\SquashScoreCardController;
 					return $squash->squashScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
 			}
@@ -3171,17 +3171,17 @@ class ScoreCardController extends Controller {
 
 				else if(strtolower($sport_name)==strtolower('hockey'))
 				{
-					$hockey = new Scorecard\HockeyScorecardController;
+					$hockey = new ScoreCard\HockeyScorecardController;
 					return $hockey->soccerScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
 				else if(strtolower($sport_name)==strtolower('badminton'))
 				{
-					$badminton = new Scorecard\BadmintonScoreCardController;
+					$badminton = new ScoreCard\BadmintonScoreCardController;
 					return $badminton->badmintonScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
 				else if(strtolower($sport_name)==strtolower('squash'))
 				{
-					$squash = new Scorecard\SquashScoreCardController;
+					$squash = new ScoreCard\SquashScoreCardController;
 					return $squash->squashScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
 			}
@@ -3299,7 +3299,7 @@ class ScoreCardController extends Controller {
 			}
 
 			// call function to insert player wise match details in statistics table
-			if($sport_name!='' || $sport_name!='Badminton' || $sport_name!='Squash')
+			if($sport_name!='')
 				$this->insertPlayerStatistics($sport_name,$match_id);
 
 			//send notification to players

@@ -185,16 +185,16 @@
 									<span class="event-date">{{ $match_startdate_array[$match['id']] }}</span>
 									<span class='sports_text'>{{ isset($sport_name)?$sport_name:'' }}</span>
 									@if($match['match_type']!='other')
-											<span class='match_type_text'>({{ $match['match_type']=='odi'?strtoupper($match['match_type']):ucfirst($match['match_type']) }})</span>
+											<span class='match_type_text'>({{ $match['match_type']=='odi'?strtoupper($match['match_type']):ucfirst($match['match_type']) }}, {{ucfirst($match['match_category'])}})</span>
 									@endif
 									<br/>
 									<!-- match_details -->
 									
-									Venue : <span class=''>{{$match['address']}}</span>,
-									Status : <span class='event_date'>{{$match['match_status']}}</span><br>
-									Scores : <span class='event_date'></span>,
+									<span class=''>{{$match['address']}}</span><br>
+									Status : <span class='event_date'>{{$match['match_status']}}</span> <br>
+									Scores : <span class='blue'>{{Helper::getMatchDetails($match['id'])->scores}} </span> <br>
 									@if(!is_null($match['winner_id']))
-									Winner : <span class='match_type_text'>					{{Helper::getMatchDetails($match['id'])->winner}} </span>
+								<span class='red'>		Winner : 				{{Helper::getMatchDetails($match['id'])->winner}} </span>
 								
 									@endif
 

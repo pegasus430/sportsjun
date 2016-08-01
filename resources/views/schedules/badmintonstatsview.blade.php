@@ -8,6 +8,7 @@
             <th>{{trans('message.team.stats.won')}}</th>
             <th>{{trans('message.team.stats.lost')}}</th>
             <th>{{trans('message.team.stats.tied')}}</th>
+            <th>{{trans('message.team.stats.washout')}}</th>
             <th>% {{trans('message.team.stats.won')}}</th>
             </tr>
             </thead>
@@ -19,6 +20,7 @@
             <td>{{ $statsArray['singlesStatsArray']['winCount'] }}</td>
             <td>{{ $statsArray['singlesStatsArray']['looseCount'] }}</td>
             <td>{{ $statsArray['singlesStatsArray']['isTied'] }}</td>
+            <td>{{ $statsArray['singlesStatsArray']['washout'] }}</td>
             <td>{{ $statsArray['singlesStatsArray']['wonPercentage'] }}</td>
             </tr>
             @endif
@@ -29,10 +31,12 @@
             <td>{{ $statsArray['doublesStatsArray']['winCount'] }}</td>
             <td>{{ $statsArray['doublesStatsArray']['looseCount'] }}</td>
             <td>{{ $statsArray['doublesStatsArray']['isTied'] }}</td>
+            <td>{{ $statsArray['doublesStatsArray']['washout'] }}</td>
             <td>{{ $statsArray['doublesStatsArray']['wonPercentage'] }}</td>
             </tr>
             @endif
-            @if(count($statsArray['mixedStatsArray'])) 
+           
+           {{-- @if(count($statsArray['mixedStatsArray'])) 
             <tr>
             <td>{{ config('constants.ENUM.SCHEDULE.MATCH_TYPE.BADMINTON.mixed') }}</td>
             <td>{{ $statsArray['mixedStatsArray']['totalMatches'] }}</td>
@@ -42,6 +46,7 @@
             <td>{{ $statsArray['mixedStatsArray']['wonPercentage'] }}</td>
             </tr>
             @endif
+         --}}
         </tbody>
         </table>
     </div>
