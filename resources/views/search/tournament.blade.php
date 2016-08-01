@@ -10,12 +10,16 @@
 			@if(count($result) > 0)
 			<?php $i = 0;?>
 			@foreach($result as $lis)
-			<?php if($i%2 == 0){ $alt_class = '';}else{ $alt_class = 'bg_white';}?>
+			<?php 
+                $lis = $lis->toArray();
+                if ($i%2 == 0) { $alt_class = ''; }
+                else { $alt_class = 'bg_white'; }
+            ?>
 			<div class="teams_search_display row main_tour <?php echo $alt_class;?>">	       	            
 				<div class="search_thumbnail right-caption">
                 
                 	<div class="col-md-2 col-sm-3 col-xs-12 text-center">
-	                    {!! Helper::Images( $lis['logo'] ,'tournaments',array('height'=>90,'width'=>90,'class'=>'img-circle img-border img-scale-down img-responsive') )!!}
+	                    {!! Helper::Images( $lis['logo']['url'] ,'tournaments',array('height'=>90,'width'=>90,'class'=>'img-circle img-border img-scale-down img-responsive') )!!}
 					</div>
 					<div class="col-md-10 col-sm-9 col-xs-12">
                     	<div class="t_tltle">
