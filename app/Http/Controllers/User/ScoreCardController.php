@@ -20,8 +20,19 @@ use App\Model\CricketStatistic;
 use App\Model\TennisStatistic;
 use App\Model\TtStatistic;
 use App\Model\CricketPlayerMatchwiseStats;
+//soccer
 use App\Model\SoccerPlayerMatchwiseStats;
 use App\Model\SoccerStatistic;
+//badminton
+use App\Model\BadmintonPlayerMatchScore;
+use App\Model\BadmintonStatistic;
+//hockey
+use App\Model\HockeyPlayerMatchwiseStats;
+use App\Model\HockeyStatistic;
+//squash
+use App\Model\SquashPlayerMatchScore;
+use App\Model\SquashStatistic;
+
 use App\User;
 use DB;
 use Request;
@@ -130,11 +141,16 @@ class ScoreCardController extends Controller {
 				}
 
 			}
+
+
 			$match_details = MatchSchedule::where('id',$match_id)->get();
 			if(count($match_details)>0)
 				$match_data = $match_details->toArray();
 
-
+			//new tournament details for the new sports. soccer, 
+			if(!is_null($match_details[0]['tournament_id'])){
+				$tournamentDetails=Tournaments::find($match_details[0]['tournament_id'])->toArray();
+			}
 
 			$sport_id = $match_data[0]['sports_id'];//get sport id
 			$sportsDetails = Sport::where('id',$sport_id)->get()->toArray();//get sports details
@@ -156,6 +172,20 @@ class ScoreCardController extends Controller {
 				else if(strtolower($sport_name)==strtolower('soccer'))
 				{
 					return $this->soccerScoreCard($match_data,$sportsDetails,$tournamentDetails);
+				}
+				else if(strtolower($sport_name)==strtolower('badminton'))
+				{
+					$badminton= new ScoreCard\BadmintonScoreCardController;
+					return $badminton->badmintonScoreCard($match_data,$match='Badminton',$sportsDetails,$tournamentDetails);
+				}
+				else if(strtolower($sport_name)==strtolower('squash')){
+					$squash= new ScoreCard\SquashScoreCardController;
+					return $squash->squashScoreCard($match_data,$match='Squash',$sportsDetails,$tournamentDetails);
+				}
+				else if(strtolower($sport_name)==strtolower('hockey'))
+				{
+						$hockey= new ScoreCard\HockeyScorecardController;
+					return $hockey->hockeyScoreCard($match_data,$sportsDetails,$tournamentDetails);
 				}
 			}
 		}
@@ -1598,12 +1628,12 @@ class ScoreCardController extends Controller {
 
 				if ((int) $totalruns_a > 50)
 				{
-					$fifties = (int) ($totalruns_a / 50);
+					$fifties = (int) floor($totalruns_a / 50);
 				}
 
 				if ((int) $totalruns_a > 100)
 				{
-					$hundreds = (int) ($totalruns_a / 100);
+					$hundreds = (int) floor($totalruns_a / 100);
 				}
 
 				if (count($is_player_exist)>0)// if player already exist
@@ -2148,7 +2178,7 @@ class ScoreCardController extends Controller {
 			{
 				$strikerate             = ($totalruns/$totalballs)*100;//strikerate calculation [total runs/total ball*100]
 			}
-			$average_bat                = $totalruns; //total runs / innings bat
+			$objStatistics->average_bat = $totalruns; //total runs / innings bat
 			$objStatistics->strikerate  = $strikerate;
 			$objStatistics->save();
 		}
@@ -2802,15 +2832,16 @@ class ScoreCardController extends Controller {
 		$json_score_status = json_encode($score_status);
 
 
-		$is_tied = 0;
-		if($match_result=='tie')
-			$is_tied = 1;
+		$is_tie         = ($match_result == 'tie')      ? 1 : 0;
+         $is_washout     = ($match_result == 'washout')  ? 1 : 0;
+         $has_result     = ($is_washout == 1) ? 0 : 1;
+         $match_result   = ( !in_array( $match_result, ['tie','win','washout'] ) ) ? NULL : $match_result;
 		$matchScheduleDetails = MatchSchedule::where('id',$match_id)->first();
 		if(count($matchScheduleDetails)) {
 			$looser_team_id = NULL;
 			$match_status='scheduled';
 			$approved = '';
-			if($is_tied==0) {
+			if($is_tie==0 || $is_washout == 0 ) {
 
 				if(isset($winner_team_id)) {
 					//$match_details=(object)$match_details;
@@ -2834,14 +2865,18 @@ class ScoreCardController extends Controller {
 			if(!empty($matchScheduleDetails['tournament_id'])) {
 //                        dd($winner_team_id.'<>'.$looser_team_id);
 				$tournamentDetails = Tournaments::where('id', '=', $matchScheduleDetails['tournament_id'])->first();
-				if($is_tied==1 && !empty($matchScheduleDetails['tournament_group_id'])) {
+			if (($is_tie == 1 || $match_result == "washout") && !empty($matchScheduleDetails['tournament_group_id'])){
 					$match_status = 'completed';
 				}
+				
 				if(Helper::isTournamentOwner($tournamentDetails['manager_id'],$tournamentDetails['tournament_parent_id'])) 
 				{
 					MatchSchedule::where('id',$match_id)->update(['match_status'=>$match_status,
 						'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
-						'is_tied'=>$is_tied,'score_added_by'=>$json_score_status]);
+						'is_tied'=>$is_tied,
+						 'has_result'     => $has_result,
+                         'match_result'   => $match_result,
+                         'score_added_by'=>$json_score_status]);
 //                                Helper::printQueries();
 
 					if(!empty($matchScheduleDetails['tournament_round_number'])) {
@@ -2850,37 +2885,62 @@ class ScoreCardController extends Controller {
 					if($match_status=='completed')
 					{
 						$sportName = Sport::where('id',$matchScheduleDetails['sports_id'])->pluck('sports_name');
+
+					if($match_data->has_result==0){
+						$match_data->match_details=null;
+						$match_data->save();
+						$players_stats=	SoccerPlayerMatchwiseStat::whereMatchId($match_id)->get();
+						$this->discardMatchRecords($players_stats);				
+					}
+
 						$this->insertPlayerStatistics($sportName,$match_id);
 
 						//notification ocde
-
+						Helper::sendEmailPlayers($matchScheduleDetails, 'Soccer');		
 					}
 
 				}
 
 			}else if(Auth::user()->role=='admin'){
-				if($is_tied==1) {
+				if ($is_tie == 1 || $match_result == "washout") {
 					$match_status = 'completed';
 					$approved = 'approved';
 				}
 				MatchSchedule::where('id',$match_id)->update(['match_status'=>$match_status,
-					'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
-					'is_tied'=>$is_tied,'score_added_by'=>$json_score_status,'scoring_status'=>$approved]);
+					'winner_id'      => $winner_team_id,
+                     'looser_id'      => $looser_team_id,
+ 					'is_tied'        => $is_tie,
+                     'has_result'     => $has_result,
+                     'match_result'   => $match_result,
+                     'score_added_by' => $json_score_status,
+                     'scoring_status'=>$approved]);
 
 				if($match_status=='completed')
 				{
 					$sportName = Sport::where('id',$matchScheduleDetails['sports_id'])->pluck('sports_name');
+					if($match_data->has_result==0){
+						$match_data->match_details=null;
+						$match_data->save();
+						$players_stats=	SoccerPlayerMatchwiseStat::whereMatchId($match_id)->get();
+						$this->discardMatchRecords($players_stats);				
+					}
 					$this->insertPlayerStatistics($sportName,$match_id);
 
 					//notification ocde
-
-				}
-			}else
+					Helper::sendEmailPlayers($matchScheduleDetails, 'Soccer');	
+				}				 
+                    
+			}
+			else
 			{
 				MatchSchedule::where('id',$match_id)->update(['winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
-					'is_tied'=>$is_tied,'score_added_by'=>$json_score_status]);
+					'is_tied'=>$is_tie,
+					'has_result'     => $has_result,
+                    'match_result'   => $match_result,
+                     'score_added_by'=>$json_score_status]);
 			}
 		}
+		
 		return $match_data->match_details;
 	}
 
@@ -2965,7 +3025,12 @@ class ScoreCardController extends Controller {
 		$team_a_id=$request['team_a_id'];
 		$team_b_id=$request['team_b_id'];
 		$match_details=matchSchedule::find($match_id)->match_details;
-		return view('scorecards.soccerscorecarddetails', compact('match_details','team_a_id', 'team_b_id'));
+		$view=(string)view('scorecards.soccerscorecarddetails', compact('match_details','team_a_id', 'team_b_id'));
+		
+		return [
+		'json'=>$match_details,
+		'html'=>$view
+		];
 	}
 
 
@@ -3049,6 +3114,21 @@ class ScoreCardController extends Controller {
 				{
 					return $this->soccerScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
+				else if(strtolower($sport_name)==strtolower('hockey'))
+				{
+					$hockey = new Scorecard\HockeyScorecardController;
+					return $hockey->soccerScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
+				else if(strtolower($sport_name)==strtolower('badminton'))
+				{
+					$badminton = new Scorecard\BadmintonScoreCardController;
+					return $badminton->badmintonScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
+				else if(strtolower($sport_name)==strtolower('squash'))
+				{
+					$squash = new Scorecard\SquashScoreCardController;
+					return $squash->squashScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
 			}
 		}
 	}
@@ -3088,6 +3168,22 @@ class ScoreCardController extends Controller {
 				{
 					return $this->soccerScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
+
+				else if(strtolower($sport_name)==strtolower('hockey'))
+				{
+					$hockey = new Scorecard\HockeyScorecardController;
+					return $hockey->soccerScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
+				else if(strtolower($sport_name)==strtolower('badminton'))
+				{
+					$badminton = new Scorecard\BadmintonScoreCardController;
+					return $badminton->badmintonScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
+				else if(strtolower($sport_name)==strtolower('squash'))
+				{
+					$squash = new Scorecard\SquashScoreCardController;
+					return $squash->squashScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
 			}
 		}
 	}
@@ -3101,6 +3197,11 @@ class ScoreCardController extends Controller {
 		$loginUserId = Auth::user()->id;
 
 		$loginUserName = Auth::user()->name;
+
+		$matchDetails=MatchSchedule::find($match_id);
+		$sportId=$matchDetails->sports_id;
+		$sportDetails=Sport::find($sportId);
+		$sportName=$sportDetails->name;
 
 		//get previous scorecard status data
 		$scorecardDetails = MatchSchedule::where('id',$match_id)->pluck('score_added_by');
@@ -3145,6 +3246,7 @@ class ScoreCardController extends Controller {
 
 		$match_start_date = MatchSchedule::where('id',$match_id)->pluck('match_start_date');
 		$sports_id = MatchSchedule::where('id',$match_id)->pluck('sports_id');
+		$match_data=MatchSchedule::where('id', $match_id)->first();
 		$sports_name = Sport::where('id',$sports_id)->pluck('sports_name');
 
 		$scorecardDetails = htmlentities("<a href='".('REQURL|'.'/match/scorecard/edit'.'/'.$match_id)."'> scorecard </a>");
@@ -3171,9 +3273,37 @@ class ScoreCardController extends Controller {
 			//$message=  trans('message.scorecard.approvenotification') ;
 			$message = 'Your '.$scorecardDetails.' has been approved by '.$loginUserNameData.'. <br/>Sport:'.$sports_name.' , Sheduled Date:'.$match_start_date;
 
+			
+			//if no result, discard all data;
+
+			if($match_data->has_result==0){
+				$match_data->match_details=null;
+				$match_data->save();
+
+				if($sport_name=='Badminton'){
+					$players_stats=BadmintonPlayerMatchScore::whereMatchId($match_id)->get();
+					$this->discardMatchRecords($players_stats);
+				}
+				if($sport_name=='Squash'){
+					$players_stats=SquashPlayerMatchScore::whereMatchId($match_id)->get();
+					$this->discardMatchRecords($players_stats);
+				}
+				if($sport_name=='Hockey'){
+					$players_stats=	HockeyPlayerMatchwiseStat::whereMatchId($match_id)->get();
+					$this->discardMatchRecords($player_stats);
+				}
+				if($sport_name=='Soccer'){
+					$players_stats=	SoccerPlayerMatchwiseStat::whereMatchId($match_id)->get();
+					$this->discardMatchRecords($players_stats);
+				}
+			}
+
 			// call function to insert player wise match details in statistics table
-			if($sport_name!='')
+			if($sport_name!='' || $sport_name!='Badminton' || $sport_name!='Squash')
 				$this->insertPlayerStatistics($sport_name,$match_id);
+
+			//send notification to players
+			Helper::sendEmailPlayers($matchDetails, $sportName);	
 		}
 		//notification code
 		$url= '';//url('match/scorecard/edit/'.$match_id) ;
@@ -3272,7 +3402,10 @@ class ScoreCardController extends Controller {
 
 			}
 
-		}else if($sport_name=='Cricket')//cricket statistics
+		}
+
+
+		else if($sport_name=='Cricket')//cricket statistics
 		{
 			$cricket_details = CricketPlayerMatchwiseStats::where('match_id',$match_id)->where('match_type',$match_type)->where('innings','first')->get(['user_id']);
 			if(!empty($cricket_details) && count($cricket_details)>0)
@@ -3521,6 +3654,14 @@ class ScoreCardController extends Controller {
 
 		$match_model=MatchSchedule::find($match_id);
 		$match_details=[
+			"team_a"=>[
+				"id"=>$team_a_id,
+				"name"=>$team_a_name
+					],
+            "team_b"=>[
+            	"id"=>$team_b_id,
+            	"name"=>$team_b_name
+            		],
 			"{$team_a_id}"	=>	[
 				"id"=>$team_a_id,
 				"goals"=>0,
@@ -3742,6 +3883,13 @@ if(!isset($match_details['penalties']['team_b']['players_ids']))$match_details['
 			$match_model->match_details=$match_details;
 			$match_model->save();
 			return $match_details;
+	}
+
+//discard match details
+	public function discardMatchRecords($players_stats){
+			foreach ($players_stats as $ps) {
+				//$ps->delete();
+			}
 	}
 }
 ?>

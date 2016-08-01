@@ -165,7 +165,7 @@ border-radius: 50%; border:5px solid #fff;}
 .navbar-top-links li a { padding:15px 15px 10px 15px;}
 .team_player_search{ border:1px solid red; padding:10px; margin:10px 0; border:1px solid #ededed;}
 .teams_search_display{ margin:10px 0; border:1px solid #ededed; padding:10px; overflow:hidden; width:100%; background:#fafafa;}
-.bg_white{ background:#fff; !important}
+.bg_white{ background:#fff !important;}
 
 .search_thumbnail.right-caption > img {
     float: left;
@@ -944,7 +944,6 @@ table.dataTable thead .sorting:after {
 
 
 /*==========================Tournament Start================*/
-@charset "utf-8";
 /* CSS Document */
 a:focus,
 input:focus,
@@ -1566,7 +1565,6 @@ margin: 450px 0px 0px;
 /*--------------------------Form Validations End ----------*/
 
 
-@charset "utf-8";
 /* CSS Document */
 a:focus,
 input:focus,
@@ -2948,6 +2946,19 @@ div#my_groups_container > .row > .col-xs-4 .single_group {
 
 .single_group_fields > ul > li > label {
     color: #666;
+}
+
+div#tournament_details {
+    top: 100px;
+    position: absolute;
+    background: rgba(255,255,255,0.6);
+    border-radius: 10px;
+}
+
+div#tournament_details_cover img {
+    width:100%;
+    border-radius: 5px;
+    margin-top: 5px;
 }
 
 .nopadding {

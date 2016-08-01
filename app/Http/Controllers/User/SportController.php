@@ -374,7 +374,7 @@ class SportController extends Controller {
         }
         else //for delete
         {
-            $updatedAllowedSportsString = $this->removeFromArray($existingAllowedSportsString,$sportsId);
+            $updatedAllowedSportsString = $this->removeFromArray($existingAllowedSportsString,$sportsId).',';
         }
         $result = array();
         //update

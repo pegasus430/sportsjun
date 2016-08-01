@@ -9,29 +9,21 @@ $(document).ready(function(){
 </script>
      <!-- Button HTML (to Trigger Modal) -->
     <a href="#" class="launch-modal"><i class="fa fa-info"></i> <b>Match Status</b></a><br/>
-	@if($match_data[0]['tournament_id']=='')
-		@if($match_data[0]['scoring_status']=='approval_pending')
-			<span>{{'Scorecard is pending for approval'}} </span>
-		@else
-		@if($match_data[0]['scoring_status']=='approved')	
-			{{'Scorecard is approved'}}
-		@else
-		@if($match_data[0]['scoring_status']=='rejected')
-			{{'Scorecard is rejected'}}
-		@else
-		@if($score_status_array['added_by']=='')
-			{{ 'Scorecard Data Is Not Entered.' }}
-		@else
-		@if($match_data[0]['scoring_status']=='' )
-			<span >{{'Need to send for approval'}}</span>
-		@elseif($match_data[0]['match_status']=='completed')
-			<span >{{'Match is completed'}}</span>
+	
+		@if($match_data[0]['match_status']=='pending')	
+			{{'Match is not completed'}}
+		
+	
+		@elseif($match_data[0]['scoring_status']=='approval_pending')
+			<span>{{'Scorecard is pending for approval'}} </span>	
+
+		@elseif($match_data[0]['match_status']='completed')
+			<span >{{'Match is completed'}}</span>		
+		
 		@endif
-		@endif
-		@endif
-		@endif
-		@endif
-	@endif
+
+			
+		
 	 
     <!-- Modal HTML -->
     <div id="myModal" class="modal fade status-modal">
@@ -45,14 +37,14 @@ $(document).ready(function(){
 				
             <div class="modal-body">
 				<div class="form-group ">
-				@if($match_data[0]['tournament_id']!='' || $loginUserRole=='admin')
+			{{--	@if($match_data[0]['tournament_id']!='' || $loginUserRole=='admin')
 					@if($score_status_array['added_by']=='')
 						{{ 'Scorecard Data Is Not Entered.' }}
 					@else
 					@if($match_data[0]['match_status']=='completed')	
 						{{ 'Match is Completed.' }}
 					@else
-						@if($score_status_array['added_by']!='')	
+						@if($score_status_array['added_by']=='')	
 						{{ 'Scorecard Data Is Entered.' }}
 					@endif
 					@endif
@@ -93,6 +85,14 @@ $(document).ready(function(){
 						</p>
 					@endif	
 				@endif	
+
+			--}}
+
+		@if($match_data[0]['match_status']=='pending')	
+			{{'Match is not completed'}}
+		@elseif($match_data[0]['match_status']='completed')
+			<span >{{'Match is completed'}}</span>		
+		@endif
 				</div>
 				
 			

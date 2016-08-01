@@ -290,6 +290,10 @@ if (typeof SJ.SCORECARD === 'undefined')
                                         var player_content=$('#team_a_row_'+player_id)
                                         if(player_content.is("[yellow_card]") && Number(player_content.attr('yellow_card'))>0){
                                                 //if user has a yellow card return false
+                                                $.alert({
+                                                        title:'Alert',
+                                                        content:'This player already has a yellow card.'
+                                                })
                                                 return false;
                                         }
                                         $('#team_a_row_'+player_id).attr('yellow_card',1);
@@ -328,18 +332,18 @@ if (typeof SJ.SCORECARD === 'undefined')
 
                                 if(team_type=='team_b'){
                                         if(half_time=='first_half'){
-                                                displayFormContent.append("<div  class='records col-sm-12 '><div  class='col-sm-4 not-visible-xs'></div><div  class='col-sm-2 col-xs-6'><input type='number' placeholder='time e.g 20' name='time_"+index+"' class='gui-input col-sm-12 col-xs-12   input_first_half'  required></div><div  class='col-sm-2 col-xs-6'>"+record_type_name+"</div> <div  class='col-sm-2 col-xs-6'>"+player_name+"</div><div  class='col-sm-2 col-xs-6'><a href='#' onclick='deleteRow(this, "+index+", "+player_id+",\""+record_type+"\")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></div></div>");
+                                                displayFormContent.append("<div  class='records col-sm-12 '><div  class='col-sm-4 not-visible-xs'></div><div  class='col-sm-2 col-xs-6'><input type='number' min='0' placeholder='time e.g 20' name='time_"+index+"' class='gui-input col-sm-12 col-xs-12   input_first_half'  required></div><div  class='col-sm-2 col-xs-6'>"+record_type_name+"</div> <div  class='col-sm-2 col-xs-6'>"+player_name+"</div><div  class='col-sm-2 col-xs-6'><a href='#' onclick='deleteRow(this, "+index+", "+player_id+",\""+record_type+"\")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></div></div>");
                                         }
                                         else{
-                                                displayFormContent.append("<div  class='records col-sm-12 '><div  class='col-sm-4 not-visible-xs'></div><div  class='col-sm-2 col-xs-6'><input type='number' placeholder='time e.g 20' name='time_"+index+"' class='gui-input col-sm-12 col-xs-12 input_first_half'  required></div><div  class='col-sm-2 col-xs-6'>"+record_type_name+"</div> <div  class='col-sm-2 col-xs-6'>"+player_name+"</div><div  class='col-sm-2 col-xs-6'><a href='#' onclick='deleteRow(this, "+index+", "+player_id+",\""+record_type+"\")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></div></div>");
+                                                displayFormContent.append("<div  class='records col-sm-12 '><div  class='col-sm-4 not-visible-xs'></div><div  class='col-sm-2 col-xs-6'><input type='number' min='0' placeholder='time e.g 20' name='time_"+index+"' class='gui-input col-sm-12 col-xs-12 input_first_half'  required></div><div  class='col-sm-2 col-xs-6'>"+record_type_name+"</div> <div  class='col-sm-2 col-xs-6'>"+player_name+"</div><div  class='col-sm-2 col-xs-6'><a href='#' onclick='deleteRow(this, "+index+", "+player_id+",\""+record_type+"\")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></div></div>");
                                         }
                                 }
                                 else{
                                         if(half_time=='first_half'){
-                                                displayFormContent.append("<div  class='records col-sm-12 '><div  class='col-sm-2 col-xs-6'>"+player_name+"</div><div  class='col-sm-2 col-xs-6'>"+record_type_name+"</div><div  class='col-sm-2 col-xs-6'><input type='number' placeholder='time e.g 20' class=' col-sm-12 col-xs-12  input_second_half'  name='time_"+index+"' required></div><div  class='col-sm-4 not-visible-xs'></div><div  class='col-sm-2 col-xs-6'><a href='#' onclick='deleteRow(this, "+index+", "+player_id+",\""+record_type+"\")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></div></div>");
+                                                displayFormContent.append("<div  class='records col-sm-12 '><div  class='col-sm-2 col-xs-6'>"+player_name+"</div><div  class='col-sm-2 col-xs-6'>"+record_type_name+"</div><div  class='col-sm-2 col-xs-6'><input type='number' min='0' placeholder='time e.g 20' class=' col-sm-12 col-xs-12  input_second_half'  name='time_"+index+"' required></div><div  class='col-sm-4 not-visible-xs'></div><div  class='col-sm-2 col-xs-6'><a href='#' onclick='deleteRow(this, "+index+", "+player_id+",\""+record_type+"\")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></div></div>");
                                         }
                                         else{
-                                                displayFormContent.append("<div  class='records col-sm-12 '><div  class='col-sm-2 col-xs-6'>"+player_name+"</div><div  class='col-sm-2 col-xs-6'>"+record_type_name+"</div><div  class='col-sm-2 col-xs-6'><input type='number' placeholder='time e.g 20' class=' col-sm-12 col-xs-12 input_second_half'  name='time_"+index+"' required></div><div  class='col-sm-4 not-visible-xs'></div><div  class='col-sm-2 col-xs-6'><a href='#' onclick='deleteRow(this, "+index+", "+player_id+",\""+record_type+"\")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></div></div>");
+                                                displayFormContent.append("<div  class='records col-sm-12 '><div  class='col-sm-2 col-xs-6'>"+player_name+"</div><div  class='col-sm-2 col-xs-6'>"+record_type_name+"</div><div  class='col-sm-2 col-xs-6'><input type='number' min='0' placeholder='time e.g 20' class=' col-sm-12 col-xs-12 input_second_half'  name='time_"+index+"' required></div><div  class='col-sm-4 not-visible-xs'></div><div  class='col-sm-2 col-xs-6'><a href='#' onclick='deleteRow(this, "+index+", "+player_id+",\""+record_type+"\")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></div></div>");
                                         }
                                 }
                                 displayFormContent.append("<input type='hidden' name='player_"+index+"' value='"+player_id+"'>");
@@ -361,6 +365,30 @@ if (typeof SJ.SCORECARD === 'undefined')
 
                         showAlert:function (title, content){
                                 $.alert({ title: title, content: content });
+                        },
+                        selectMatchType: function (that){
+                                        var val=$(that).val();
+
+                                        if(val=='washout'){
+                                            $.confirm({
+                                                title:'Alert',
+                                                content:"All info for this match shall be discarded, and both teams shall have same points, do you want to continue?", 
+                                                confirm:function(){
+                                                  $('#select_winner').hide();
+                                                  $('.scorescard_stats').hide();
+                                                  return true
+                                                },
+                                                cancel:function(){
+                                                    $(that).val('win');
+                                                    $('#select_winner').show();
+                                                    $('.scorescard_stats').show();
+                                                }
+                                             })
+                                        }
+                                        else{
+                                          $('#select_winner').show();
+                                          $('.scorescard_stats').show();
+                                        }
                         },
                         tempData:{},
 

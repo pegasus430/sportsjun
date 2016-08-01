@@ -131,7 +131,6 @@
     				<th>{{ trans('message.scorecard.tennis_fields.set3') }}</th>
     				<th>{{ trans('message.scorecard.tennis_fields.set4') }}</th>
     				<th>{{ trans('message.scorecard.tennis_fields.set5') }}</th>
-					<th>{{ trans('message.scorecard.tennis_fields.double_faults') }}</th>
     		</tr>
       </thead>
     		<tbody>
@@ -150,11 +149,7 @@
     				<td>{!! Form::text('set_2_a',(!(empty($score_a_array[0]['set2'])))?$score_a_array[0]['set2']:'',array('class'=>'gui-input validation allownumericwithdecimal tennis_input_new')) !!}</td>
     				<td>{!! Form::text('set_3_a',(!(empty($score_a_array[0]['set3'])))?$score_a_array[0]['set3']:'',array('class'=>'gui-input validation allownumericwithdecimal tennis_input_new')) !!}</td>
     				<td>{!! Form::text('set_4_a',(!(empty($score_a_array[0]['set4'])))?$score_a_array[0]['set4']:'',array('class'=>'gui-input validation allownumericwithdecimal tennis_input_new')) !!}</td>
-    				<td>{!! Form::text('set_5_a',(!(empty($score_a_array[0]['set5'])))?$score_a_array[0]['set5']:'',array('class'=>'gui-input validation allownumericwithdecimal tennis_input_new')) !!}</td>  
-					
-					<td>{!! Form::text('double_faults_a',(!(empty($score_a_array[0]['double_faults'])))?$score_a_array[0]['double_faults']:'',array('class'=>'gui-input validation allownumericwithdecimal tennis_input_new')) !!}</td>
-					
-					
+    				<td>{!! Form::text('set_5_a',(!(empty($score_a_array[0]['set5'])))?$score_a_array[0]['set5']:'',array('class'=>'gui-input validation allownumericwithdecimal tennis_input_new')) !!}</td>
 					</tr>
     			<tr id="set_b">
     				<td>
@@ -172,8 +167,6 @@
     					<td>{!! Form::text('set_3_b',(!(empty($score_b_array[0]['set3'])))?$score_b_array[0]['set3']:'',array('class'=>'gui-input validation allownumericwithdecimal tennis_input_new')) !!}</td>
     					<td>{!! Form::text('set_4_b',(!(empty($score_b_array[0]['set4'])))?$score_b_array[0]['set4']:'',array('class'=>'gui-input validation allownumericwithdecimal tennis_input_new')) !!}</td>
     					<td>{!! Form::text('set_5_b',(!(empty($score_b_array[0]['set5'])))?$score_b_array[0]['set5']:'',array('class'=>'gui-input validation allownumericwithdecimal tennis_input_new')) !!}</td>
-						
-						<td>{!! Form::text('double_faults_b',(!(empty($score_b_array[0]['double_faults'])))?$score_b_array[0]['double_faults']:'',array('class'=>'gui-input validation allownumericwithdecimal tennis_input_new')) !!}</td>
             </tr>
     		</tbody>
     	</table>

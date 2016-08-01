@@ -64,14 +64,34 @@ return [
                         'MATCH_TYPE'  => [
                                 'CRICKET'      => ['odi' => 'ODI', 't20' => 'T20',
                                         'test' => 'TEST'],
-                                'TENNIS'       => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES',
-                                        'mixed' => 'MIXED'],
-                                'TABLE TENNIS' => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES',
-                                        'mixed' => 'MIXED'],
+                                'TENNIS'       => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES'],
+                                'TABLE TENNIS' => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES'],
                                 'FOOTBALL'     => ['other' => 'OTHERS'],
+                                'BADMINTON'    => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES'],
+                                'SQUASH'    => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES'],
                                 'OTHERS'       => ['other' => 'OTHERS']
                         ],
                         'PLAYER_TYPE' => ['men' => 'MEN', 'women' => 'WOMEN', 'mixed' => 'MIXED']
+                ],
+                'TOURNAMENT_SCHEDULE'     =>
+                [
+                        'MATCH_TYPE'  => [
+                                'CRICKET'      => ['odi' => 'ODI', 't20' => 'T20',
+                                        'test' => 'TEST', 'any'=>'ANY'],
+                                'TENNIS'       => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES',
+                                         'any'=>'ANY'],
+
+                                'TABLE TENNIS' => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES',
+                                         'any'=>'ANY'],
+                                'FOOTBALL'     => ['other' => 'OTHERS'],
+
+                                'BADMINTON'    => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES', 
+                                         'any'=>'ANY'],
+                                'SQUASH'    => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES', 
+                                         'any'=>'ANY'],
+                                'OTHERS'       => ['other' => 'OTHERS']
+                        ],
+                        'PLAYER_TYPE' => ['men' => 'MEN', 'women' => 'WOMEN', 'mixed' => 'MIXED', 'any'=>'ANY']
                 ],
                 'TEAMS'        =>
                 [
@@ -102,19 +122,36 @@ return [
                 1 => 'CricketStatistic',
                 2 => 'TennisStatistic',
                 3 => 'TtStatistic',
-                4 => 'SoccerStatistic'
+                4 => 'SoccerStatistic',
+                5 => 'BadmintonStatistic',
+                6 => 'BasketBallStatistic',
+                7 => 'VolleyBallStatistic',
+                11=> 'HockeyStatistic',
+                13=> 'SquashStatistic'
         ],
         'SPORT_NAME'               => [
                 1 => 'Cricket',
                 2 => 'Tennis',
                 3 => 'Table Tennis',
-                4 => 'Soccer'
+                4 => 'Soccer',
+                5 => 'Badminton',
+                6 => 'BasketBall',
+                7 => 'VolleyBall',
+                11 => 'Hockey',
+                13 => 'Squash'
+
         ],
         'SPORT_ID'                 => [
                 'Cricket'      => 1,
                 'Tennis'       => 2,
                 'Table Tennis' => 3,
-                'Soccer'       => 4
+                'Soccer'       => 4,
+                'Badminton'    => 5,
+                'BasketBall'   => 6,
+                'VolleyBall'   => 7,
+                'Hockey'       => 11,
+                'Squash'       => 13
+
         ],
         'SERVICES'                 => [
                 //'facility' => 'Facility',
@@ -174,6 +211,15 @@ return [
                 'GOALS_ASSIST'      => 'GOALS ASSIST',
                 'GOALS_PENALTIES'   => 'GOALS PENALTIES',
                 'SOCCER_STATISTICS' => 'SOCCER',
+        ],
+        'BADMINTON'       => [
+                'WON'               => 'WON',
+                'LOST'              => 'LOST',
+                'TIED'              => 'TIED',
+                'WON_PERCENTAGE'    => 'WON PERCENTAGE',
+                'POINTS'            => 'POINTS',                
+                'BADMINTON_STATISTICS' => 'BADMINTON', 
+                'SQUASH_STATISTICS' => 'SQUASH',                
         ],
         'DEFAULT_PAGINATION'       => 10,
         'YEAR'                     => [

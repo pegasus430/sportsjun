@@ -130,7 +130,6 @@
 				@if((!empty($score_a_array[0]) || !empty($score_b_array[0])) && ($score_a_array[0]['set5']!='' || $score_b_array[0]['set5']!=''))
     				<th>{{ trans('message.scorecard.tennis_fields.set5') }}</th>
 				@endif
-    				<th>{{ trans('message.scorecard.tennis_fields.double_faults') }}</th>
     		</tr>
       </thead>
     		<tbody>
@@ -160,7 +159,6 @@
 					@if((!empty($score_a_array[0]) || !empty($score_b_array[0])) && ($score_a_array[0]['set5']!='' || $score_b_array[0]['set5']!=''))
     				<td>{{(!(empty($score_a_array[0]['set5'])))?$score_a_array[0]['set5']:''}}</td>    
 					@endif
-    				<td>{{(!(empty($score_a_array[0]['double_faults'])))?$score_a_array[0]['double_faults']:''}}</td>    			
 					</tr>
     			<tr id="set_b">
     				<td>
@@ -188,7 +186,6 @@
 					@if((!empty($score_a_array[0]) || !empty($score_b_array[0])) && ($score_a_array[0]['set5']!='' || $score_b_array[0]['set5']!=''))
     					<td>{{(!(empty($score_b_array[0]['set5'])))?$score_b_array[0]['set5']:''}}</td>
 					@endif
-    					<td>{{(!(empty($score_b_array[0]['double_faults'])))?$score_b_array[0]['double_faults']:''}}</td>
             </tr>
     		</tbody>
     	</table>

@@ -75,7 +75,7 @@ class AuthController extends Controller
 			'verification_key' => md5($data['email'])
         ]);
 		
-		
+		 
 		//Start send verification mail to user
 		//--------------------------------------------------------------------------------------------------------------
 		$verification_key = $user->verification_key;
@@ -85,7 +85,14 @@ class AuthController extends Controller
 		$subject = 'Welcome to SportsJun';
 		$view_data = array('name'=>$user_name,'verification_key'=>$verification_key);
 		$view = 'emails.welcome';
-		$mail_data = array('view'=>$view,'subject'=>$subject,'to_email_id'=>$to_email_id,'to_user_id'=>$to_user_id,'view_data'=>$view_data,'flag'=>'user','send_flag'=>1,'verification_key'=>$verification_key);
+		$mail_data = array('view'=>$view,
+                           'subject'=>$subject,
+                           'to_email_id'=>$to_email_id,
+                           'to_user_id'=>$to_user_id,
+                           'view_data'=>$view_data,
+                           'flag'=>'user',
+                           'send_flag'=>1,
+                           'verification_key'=>$verification_key);
 		 
 		if(SendMail::sendmail($mail_data))
 		{

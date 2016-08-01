@@ -133,7 +133,7 @@
                                 <div class="team_detail">
                                     <div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['b_id'] }}">{{ $team_b_name }}</a></div>
                                     <div class="team_city">{{ $team_b_city }}</div>
-                                    <div class="team_score" id="team_b_score">{{$team_b_goals}} <span><i class="fa fa-info-circle soccer_info" id='team_b_count' data-toggle="tooltip" title="<?php echo $team_b_count;?>"></i></span></div>
+                                    <div class="team_score" id="team_b_score">{{$team_b_goals}} <span><i class="fa fa-info-circle soccer_info" data-toggle="tooltip" title="<?php echo $team_b_count;?>"></i></span></div>
 
 
                                 </div>
@@ -142,16 +142,16 @@
                     </div>
                 </div>
 
-            @if(!is_null($match_data[0]['tournament_id']))
+                @if(!is_null($match_data[0]['tournament_id']))
                 <div class='row'>
                     <div class='col-xs-12'>
                         <div class='match_loc'>
-                            {{$tournamentDetails['name']}} Tournament
+                            {{$tournamentDetails['name']}}
                                 
                         </div>
                     </div>
                 </div>
-            @endif
+                @endif
 
                 <div class="row">
                     <div class="col-xs-12">
@@ -167,7 +167,7 @@
 
             <div class="panel panel-default">
                 <div class="col-md-12">
-                    <h5 class="scoreboard_title">Soccer Scorecard</h5>
+                    <h5 class="scoreboard_title">Hockey Scorecard</h5>
 
                     <div class="clearfix"></div>
                     <div class="form-inline">
@@ -193,13 +193,13 @@
                                     <h3 class="win_team">{{ 'Tie' }}</h3>
 
                                 </div>
-
                               @elseif($match_data[0]['match_result'] == "washout")
                                                      <div class="form-group">
                                                          <label>MATCH ENDED DUE TO</label>
                                                          <h3 class="win_team">Washout</h3>
                                                      </div>
                             @else
+
 
                                 <div class="form-group">
                                     <label>Winner is Not Updated</label>
@@ -213,6 +213,25 @@
                     </div>
                 </div>
             </div>
+    <!-- Match has no results -->
+@if(!$match_data[0]['has_result'])
+        <div class='row' >
+            <div class="col-sm-8 col-sm-offset-2" style="background:#ffeeee">
+                
+                    <div class='col-sm-12'>
+                @if($match_data[0]['scoring_status']!='approved')
+                    This match has  been saved as 'no result'. All the changes and records for this match shall be discarded after approval.
+                @else
+                  
+                @endif
+
+                </div>
+            
+            
+            </div>
+        </div>  
+@endif
+
 
             <!-- Lineup and substitutes -->
             <div class="row">
@@ -227,13 +246,13 @@
                                 <table class="table table-striped">
 
                                     <tbody id="team_tr_a" >
-                                    @foreach($team_a_soccer_scores_array  as $player_a)
+                                    @foreach($team_a_hockey_scores_array  as $player_a)
                                         @if($player_a['playing_status']=='P' && $player_a['red_cards']==0)
                                             <tr class="team_a_playing_row " >
                                                 <td>
                                                     {{ $player_a['player_name']   }} {!!$player_a['has_substituted']?" <i class='fa fa-reply'></i> {$player_a['time_substituted']}\"":''!!}
                                                 </td>
-                                                <td>{!!$player_a['goals_scored']>0?" {$player_a['goals_scored']} <i class='fa fa-futbol-o'></i> ":'' !!}</td>
+                                                <td>{!!$player_a['goals_scored']>0?" {$player_a['goals_scored']} <img src='/images/scorecard/hockey.png' height='20px' width='20px' style='font-size:32px'> ":'' !!}</td>
                                                 <td>   {!!$player_a['yellow_cards']>0?" {$player_a['yellow_cards']} <button class='btn-yellow-card btn-card' disabled=''>&nbsp;</button> ":'' !!}</td>
                                                 <td>   {!! $player_a['red_cards']>0?" {$player_a['red_cards']} <button class='btn-red-card btn-card' disabled=''>&nbsp;</button >":'' !!} </td>
 
@@ -252,14 +271,14 @@
                                 <table class="table table-striped">
 
                                     <tbody id="team_tr_b" >
-                                    @foreach($team_b_soccer_scores_array  as $player_b)
+                                    @foreach($team_b_hockey_scores_array  as $player_b)
                                         @if($player_b['playing_status']=='P' && $player_b['red_cards']==0)
                                             <tr class="team_b_playing_row ">
 
                                                 <td>
                                                     {{ $player_b['player_name']   }} {!!$player_b['has_substituted']?"<i class='fa fa-reply'></i> {$player_b['time_substituted']}\"":''!!}
                                                 </td>
-                                                <td>{!!$player_b['goals_scored']>0?" {$player_b['goals_scored']} <i class='fa fa-futbol-o'></i> ":'' !!}</td>
+                                                <td>{!!$player_b['goals_scored']>0?" {$player_b['goals_scored']} <img src='/images/scorecard/hockey.png' height='20px' width='20px' style='font-size:32px'> ":'' !!}</td>
                                                 <td>   {!!$player_b['yellow_cards']>0?" {$player_b['yellow_cards']} <button class='btn-yellow-card btn-card' disabled=''>&nbsp;</button> ":'' !!}</td>
                                                 <td>    {!!$player_b['red_cards']>0?" {$player_b['red_cards']} <button class='btn-red-card btn-card' disabled=''>&nbsp;</button> ":'' !!}</td>
 
@@ -284,13 +303,13 @@
                                 <table class="table table-striped">
 
                                     <tbody id="team_tr_a" >
-                                    @foreach($team_a_soccer_scores_array  as $player_a)
+                                    @foreach($team_a_hockey_scores_array  as $player_a)
                                         @if($player_a['playing_status']=='S' || $player_a['red_cards']>0)
                                             <tr class="team_a_playing_row  ">
                                                 <td>
                                                     {{ $player_a['player_name']   }}  {!! $player_a['has_substituted']?"<i class='fa fa-share'></i> {$player_a['time_substituted']}\"":''!!}
                                                 </td>
-                                                <td>{!!$player_a['goals_scored']>0?" {$player_a['goals_scored']} <i class='fa fa-futbol-o'></i> ":'' !!}</td>
+                                                <td>{!!$player_a['goals_scored']>0?" {$player_a['goals_scored']} <img src='/images/scorecard/hockey.png' height='20px' width='20px' style='font-size:32px'> ":'' !!}</td>
                                                 <td>   {!!$player_a['yellow_cards']>0?" {$player_a['yellow_cards']} <button class='btn-yellow-card btn-card' disabled=''>&nbsp;</button> ":'' !!}</td>
                                                 <td>    {!!$player_a['red_cards']>0?" {$player_a['red_cards']} <button class='btn-red-card btn-card' disabled=''>&nbsp;</button> ":'' !!}</td>
 
@@ -310,13 +329,13 @@
                                 <table class="table table-striped">
 
                                     <tbody id="team_tr_b" >
-                                    @foreach($team_b_soccer_scores_array  as $player_b)
+                                    @foreach($team_b_hockey_scores_array  as $player_b)
                                         @if($player_b['playing_status']=='S' || $player_b['red_cards']>0)
                                             <tr class="team_a_playing_row">
                                                 <td>
                                                     {{ $player_b['player_name']   }} {!!$player_b['has_substituted']?"<i class='fa fa-share'></i> {$player_b['time_substituted']}\"":''!!}
                                                 </td>
-                                                <td>{!!$player_b['goals_scored']>0?" {$player_b['goals_scored']} <i class='fa fa-futbol-o'></i> ":'' !!}</td>
+                                                <td>{!!$player_b['goals_scored']>0?" {$player_b['goals_scored']} <img src='/images/scorecard/hockey.png' height='20px' width='20px' style='font-size:32px'> ":'' !!}</td>
                                                 <td>   {!!$player_b['yellow_cards']>0?" {$player_b['yellow_cards']} <button class='btn-yellow-card btn-card' disabled=''>&nbsp;</button> ":'' !!}</td>
                                                 <td>    {!!$player_b['red_cards']>0?" {$player_b['red_cards']} <button class='btn-red-card btn-card' disabled=''>&nbsp;</button> ":'' !!}</td>
 
@@ -333,11 +352,11 @@
                 </div>
             </div>
 
-        <div  id='display_match_statistics'>
-            <div class="row" >
+
+            <div class="row">
 
                 <div class="col-sm-10 col-sm-offset-1">
-                    <h3 id='team_b' class="team_bowl table_head">MATCH STATISTICS</h3>
+                    <h3 id='team_b' class="team_bowl table_head">MATCH STATITICS</h3>
                     <div class="table-responsive">
                         <table class="table table-striped">
                             <thead>
@@ -351,14 +370,14 @@
                             @if(count($first_half)>0)
                                 <tr>
                                     <td colspan="2">{{$match_details->first_half->{"team_{$team_a_id}_goals"} }}</td>
-                                    <td class="td_type">Half Time (<i class='fa fa-futbol-o'></i>) </td>
+                                    <td class="td_type">Half Time ( <img src='/images/scorecard/hockey.png' height='20px' width='20px' style='font-size:32px'> ) </td>
                                     <td colspan="2">{{$match_details->first_half->{"team_{$team_b_id}_goals"} }}</td>
                                 <tr>
                             @endif
                             @if(isset($match_details->{$team_a_id}))
                                 <tr>
                                     <td colspan="2">{{$match_details->{$team_a_id}->goals }}</td>
-                                    <td class="td_type">Full Time (<i class='fa fa-futbol-o'></i>) </td>
+                                    <td class="td_type">Full Time ( <img src='/images/scorecard/hockey.png' height='20px' width='20px' style='font-size:32px'> ) </td>
                                     <td colspan="2">{{$match_details->{$team_b_id}->goals }}</td>
                                 <tr>
                                 <tr>
@@ -404,9 +423,9 @@
 
                                         <tr>
                                             @if(isset($fh->team_type) && $fh->team_type=='team_a')
-                                                <td colspan="2">{{$fh->player_name}}</td><td>{{$fh->time}}"</td><td><i class='fa fa-futbol-o'></i></td><td>{{$fh->current_score}}</td><td colspan="4">&nbsp;</td>
+                                                <td colspan="2">{{$fh->player_name}}</td><td>{{$fh->time}}"</td><td><img src='/images/scorecard/hockey.png' height='20px' width='20px' style='font-size:32px'></td><td>{{$fh->current_score}}</td><td colspan="4">&nbsp;</td>
                                             @else
-                                                <td colspan="4">&nbsp;</td><td>{{$fh->current_score}}</td><td><i class='fa fa-futbol-o'></i></td><td>{{$fh->time}}"</td><td colspan="2">{{$fh->player_name}}</td>
+                                                <td colspan="4">&nbsp;</td><td>{{$fh->current_score}}</td><td><img src='/images/scorecard/hockey.png' height='20px' width='20px' style='font-size:32px'></td><td>{{$fh->time}}"</td><td colspan="2">{{$fh->player_name}}</td>
                                             @endif
                                         </tr>
                                     @endforeach
@@ -451,9 +470,9 @@
 
                                     <tr>
                                         @if(isset($fh->team_type) && $fh->team_type=='team_a')
-                                            <td colspan="2">{{$fh->player_name}}</td><td>{{$fh->time}}"</td><td><i class='fa fa-futbol-o'></i></td><td>{{$fh->current_score}}</td><td colspan="4">&nbsp;</td>
+                                            <td colspan="2">{{$fh->player_name}}</td><td>{{$fh->time}}"</td><td><img src='/images/scorecard/hockey.png' height='20px' width='20px' style='font-size:32px'></td><td>{{$fh->current_score}}</td><td colspan="4">&nbsp;</td>
                                         @else
-                                            <td colspan="4">&nbsp;</td><td>{{$fh->current_score}}</td><td><i class='fa fa-futbol-o'></i></td><td>{{$fh->time}}"</td><td colspan="2">{{$fh->player_name}}</td>
+                                            <td colspan="4">&nbsp;</td><td>{{$fh->current_score}}</td><td><img src='/images/scorecard/hockey.png' height='20px' width='20px' style='font-size:32px'></td><td>{{$fh->time}}"</td><td colspan="2">{{$fh->player_name}}</td>
                                         @endif
                                     </tr>
                                 @endforeach
@@ -597,7 +616,7 @@
                     $.ajax({
                         url: base_url+'/match/scoreCardStatus',
                         type: "post",
-                        data: {'scorecard_status': status,'match_id':match_id,'rej_note':rej_note,'sport_name':'Soccer'},
+                        data: {'scorecard_status': status,'match_id':match_id,'rej_note':rej_note,'sport_name':'hockey'},
                         success: function(data) {
                             if(data.status == 'success') {
                                 window.location.href = base_url+'/match/scorecard/edit/'+match_id;
@@ -614,47 +633,5 @@
     
     </script>
 
-<script type="text/javascript">
-
-var team_a_id={{$team_a_id}}
-var team_b_id={{$team_b_id}}
-
-    function getMatchDetails(){
-            //load details
-                var data={
-                    match_id:$('#match_id').val(),
-                    team_a_id:{{$team_a_id}},
-                    team_b_id:{{$team_b_id}}
-                }
-
-                    $.ajax({
-                        url:base_url+'/viewpublic/match/getSoccerDetails',
-                        method:'get',
-                        data:data,
-                        dataType:'json',
-                        success:function(response){
-                            $('#display_match_statistics').html(response.html);
-
-                        response=response.json
-
-                    var tem_a=response[team_a_id];
-                    var tem_b=response[team_b_id];
-
-                    $('#team_a_score').html(tem_a.goals)
-                    $('#team_b_score').html(tem_b.goals)
-
-                    $('#team_a_count').attr('title','Red Card Count:'+tem_a.red_card_count+','+'Yellow Card Count:'+tem_a.yellow_card_count);
-                    $('#team_b_count').attr('title', 'Red Card Count:'+tem_b.red_card_count+','+'Yellow Card Count:'+tem_b.yellow_card_count);
-
-                        }
-                    })
-        }
-
-
-@if($match_data[0]['match_status']!='completed')
-//window.setInterval(getMatchDetails, 10000);
-@endif
-
-</script>
 
 @endsection

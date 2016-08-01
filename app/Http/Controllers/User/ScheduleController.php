@@ -791,6 +791,7 @@ class ScheduleController extends Controller {
                         ->get(['id','winner_id', 'looser_id', 'is_tied','match_type']);
         if(count($teamStats)) {    
             switch ($sportsId) {
+
                 case config('constants.SPORT_ID.Cricket'):
                     $statsArray = Helper::getCricketStats($teamStats,$teamId);
                     break;
@@ -803,9 +804,16 @@ class ScheduleController extends Controller {
                 case config('constants.SPORT_ID.Soccer'):
                     $statsArray = Helper::getSoccerStats($teamStats,$teamId);
                     break;
+                case config('constants.SPORT_ID.Hockey'):
+                    $statsArray = Helper::getHockeyStats($teamStats,$teamId);
+                    break;
+                case config('constants.SPORT_ID.Badminton'):
+                    $statsArray = Helper::getTennisTableTennisStats($teamStats,$teamId);
+                    break;
                 default:
-                    $statsArray = Helper::getSoccerStats($teamStats,$teamId);
+                    $statsArray = Helper::getHockeyStats($teamStats,$teamId);
             }  
+
         }
 
         $statsview = 'schedules.'.preg_replace('/\s+/', '',strtolower(config('constants.SPORT_NAME.'.$sportsId))).'statsview';
@@ -1113,8 +1121,8 @@ class ScheduleController extends Controller {
          if(!empty($tournament_id)) {
              $tournamentDetails = Tournaments::where('id',$tournament_id)->first(['match_type','player_type','sports_id']);
              if(count($tournamentDetails)) {
-                $player_type = $tournamentDetails->player_type;
-                $match_type = $tournamentDetails->match_type;
+        $player_type = $tournamentDetails->player_type=='any'?Request::get('player_type'):$tournamentDetails->player_type;
+        $match_type = $tournamentDetails->match_type=='any'?Request::get('match_type'):$tournamentDetails->match_type;
                 $sports_id = $tournamentDetails->sports_id;
              }
 			$match_invite_status = 'accepted';
@@ -1447,10 +1455,22 @@ class ScheduleController extends Controller {
         $request = Request::all();
         $sportName =  Request::get('sport_name');
         //building match types array
-        $matchTypes = Helper::getMatchTypes(strtoupper($sportName));
+
+        if(!is_null(Request::get('from_tournament'))){  //if request is from tournaments
+            $from_tournament=true;
+            $tour='TOURNAMENT_';
+        }
+        else {
+            $from_tournament=false;    //
+            $tour='';
+        }
+
+
+
+        $matchTypes = Helper::getMatchTypes(strtoupper($sportName),$from_tournament);
         $playerTypes = array();
         //building player types array
-        foreach (config('constants.ENUM.SCHEDULE.PLAYER_TYPE') as $key => $val) {
+        foreach (config('constants.ENUM.'.$tour.'SCHEDULE.PLAYER_TYPE') as $key => $val) {
             $playerTypes[$key] = $val;
         }
         return Response::json(['matchTypes'=>$matchTypes,'playerTypes'=>$playerTypes]);
