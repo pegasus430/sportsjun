@@ -169,11 +169,11 @@
                                                 <label for="match_result">Match Result:</label>
                                                 <select class="form-control selectpicker selectpicker_new_span" name="match_result" id="match_result" autocomplete="off">
                                                         <option value="" >Select</option>
-<?php if (empty($match_data[0]['tournament_round_number']))
-{ ?>
-                                                                <option <?php if ($match_data[0]['is_tied'] > 0) echo " selected"; ?> value="tie" >Tie</option>
+<?php if (empty($match_data[0]['tournament_round_number'])) { ?>
+    <option <?php if ($match_data[0]['is_tied'] > 0) echo " selected"; ?> value="tie" >Tie</option>
 <?php } ?>    
-                                                        <option <?php if ($match_data[0]['is_tied'] == 0 && $match_data[0]['winner_id'] > 0) echo " selected"; ?> value="win">Win</option>
+    <option <?php if ($match_data[0]['is_tied'] == 0 && $match_data[0]['winner_id'] > 0) echo " selected"; ?> value="win">Win</option>
+    <option <?php if ($match_data[0]['match_result'] == "washout") echo " selected"; ?> value="washout">Washout</option>
                                                 </select>
                                         </div>
                                         <div class="form-group" style="margin-top:15px;display:none;">
@@ -303,7 +303,14 @@ if ($match_data[0]['match_type'] == 'test')
                                                 @if($match_data[0]['is_tied']>0)
                                                 <div class="form-group">
                                                         <label>Match Result</label>
-                                                        <h3 class="win_team">{{ 'Tie' }}</h3>
+                                                        <h3 class="win_team">Tie</h3>
+                                                </div>
+                                                @elseif($match_data[0]['match_result'] == "washout")
+                                                <div class="form-group">
+                                                        <div class="form-group">
+                                                            <label>MATCH ENDED DUE TO</label>
+                                                            <h3 class="win_team">Washout</h3>
+                                                        </div>
                                                 </div>
                                                 @else
                                                 <div class="form-group">
@@ -361,7 +368,7 @@ if ($match_data[0]['match_type'] == 'test')
 
                                                 <!-- /.panel-heading -->
                                                 @include('scorecards.cricketinnings')
-                                                @if($isValidUser && $isForApprovalExist && ($match_data[0]['winner_id']>0 || $match_data[0]['is_tied']>0))
+                                                @if($isValidUser && $isForApprovalExist && ($match_data[0]['winner_id']>0 || $match_data[0]['is_tied']>0 || $match_data[0]['has_result'] == 0))
 
                                                 <li><button style="text-align:center;" type="button" onclick="forApproval();" class="btn btn-green">Send Score for Approval</button></li>
 
@@ -425,8 +432,9 @@ if ($match_data[0]['match_type'] == 'test')
         {
                 var db_winner_id = "{{$match_data[0]['winner_id']}}";
                 var is_tied = "{{$match_data[0]['is_tied']}}";
+                var has_result = "{{$match_data[0]['has_result']}}";
                 var winner_id = $('#match_result').val();
-                if (winner_id == '' || (db_winner_id == '' && is_tied == 0))
+                if (winner_id == '' || (db_winner_id == '' && is_tied == 0 && has_result == 1))
                 {
                         $.alert({
                                 title: 'Alert!',
