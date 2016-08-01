@@ -1,6 +1,7 @@
 nbproject/
 public/uploads/
 vendor/
+storage/*
 config/database.php
 .env
 .idea/

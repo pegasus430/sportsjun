@@ -316,7 +316,7 @@ class TeamController extends Controller
 		//if the team id is in managing team ids, then add owner conditioin
 		if(in_array($team_id, $managing_team_ids))
 		{
-			$teams_query->where('team_owner_id',(isset(Auth::user()->id)?Auth::user()->id:0));
+			//$teams_query->where('team_owner_id',(isset(Auth::user()->id)?Auth::user()->id:0));
 		}
 		$teams = $teams_query->where('id',$team_id)->get();
 		$teams = $teams->toarray();

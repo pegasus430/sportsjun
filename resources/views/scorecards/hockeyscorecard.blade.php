@@ -6,7 +6,7 @@
 		.player_selected{
 			background: #111111;
 			background-color: red;
-		} 
+		}
 		.btn-yellow-card{
 			background: orange;
 			border: none;
@@ -68,6 +68,8 @@
         .btn-secondary-link{
         	background: #ddd;
         }
+
+
 
 
 
@@ -166,15 +168,14 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 								<div class="team_detail">
 									<div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['b_id'] }}">{{ $team_b_name }}</a></div>
 									<div class="team_city">{{ $team_b_city }}</div>
-									<div class="team_score" id="team_b_score">{{$team_b_goals}} <span><i class="fa fa-info-circle soccer_info" id='team_b_count' data-toggle="tooltip" title="<?php echo $team_b_count;?>"></i></span></div>
+									<div class="team_score" id="team_b_score">{{$team_b_goals}} <span><i class="fa fa-info-circle soccer_info" data-toggle="tooltip" title="<?php echo $team_b_count;?>"></i></span></div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 
-			<!-- If match is from tournament, displays tournament details -->
-			@if(!is_null($match_data[0]['tournament_id']))
+				 @if(!is_null($match_data[0]['tournament_id']))
                 <div class='row'>
                     <div class='col-xs-12'>
                         <div class='match_loc'>
@@ -184,6 +185,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
                     </div>
                 </div>
             @endif
+
 				<div class="row">
 					<div class="col-xs-12">
 						<div class="match_loc">
@@ -193,13 +195,13 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 				</div>
 			</div>
 		</div>
-		{!! Form::open(array('url' => 'match/insertAndUpdateSoccerScoreCard', 'method' => 'POST','id'=>'soccer', 'onsubmit'=> 'return saveMatchDetails()')) !!}
+		{!! Form::open(array('url' => 'match/insertAndUpdateHockeyScoreCard', 'method' => 'POST','id'=>'hockey', 'onsubmit'=> 'return saveMatchDetails()')) !!}
 
 		<div class="container pull-up">
 
 			<div class="row">
 				<div class="col-md-12">
-					<h5 class="scoreboard_title">Soccer Scorecard</h5>
+					<h5 class="scoreboard_title">Hockey Scorecard</h5>
 					<div class="clearfix"></div>
 					<div class="form-inline">
 						@if($match_data[0]['match_status']=='completed' && $match_data[0]['winner_id']>0)
@@ -218,12 +220,11 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 									{{ 'Tie' }}
 
 								</div>
-								
 							@else
 								<p></p>
 								<br>
 								@if($match_data[0]['hasSetupSquad'])
-									<button class="btn btn-danger soccer_buttons_disabled" onclick="return SJ.SCORECARD.soccerSetTimes(this)"></i>End Match</button>
+									<button class="btn btn-danger hockey_buttons_disabled" onclick="return SJ.SCORECARD.soccerSetTimes(this)"></i>End Match</button>
 								@endif
 				 @if($isValidUser && $isForApprovalExist && ($match_data[0]['winner_id']>0 || $match_data[0]['is_tied']>0 || $match_data[0]['has_result'] == 0))  
 
@@ -365,7 +366,10 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 			<!-- Scoring Start -->
 				<?php $a_count = 1;?>
 
-	@if(!$match_data[0]['has_result'])
+
+<!-- show alert for no results -->
+
+@if(!$match_data[0]['has_result'])
 		<div class='row' >
 			<div class="col-sm-8 col-sm-offset-2" style="background:#ffeeee">
 				<div class='col-sm-12'>
@@ -375,6 +379,8 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 		</div>	
 
 @endif
+
+
 				<div class="row">
 					<!-- Team A Goals Start-->
 					<div class="col-sm-10 col-lg-10 col-sm-offset-1">
@@ -390,14 +396,14 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 										</tr>
 										</thead>
 										<tbody id="team_tr_a" >
-										@foreach($team_a_soccer_scores_array as $team_a_soccer)
+										@foreach($team_a_hockey_scores_array as $team_a_hockey)
 
-											@if($team_a_soccer['playing_status']=="P" && $team_a_soccer['red_cards']==0 )
-												<tr id="team_a_row_{{$team_a_soccer['id']}}" yellow_card=
-												{{$team_a_soccer['yellow_cards']}} class="team_a_goal_row player_select" player_id="{{$team_a_soccer['id']}} " player_name="{{$team_a_soccer['player_name']}}" team_id="{{$team_a_id}}" team_type='team_a' user_id="{{$team_a_soccer['user_id']}}">
-													<td colspan="3" id="player_lineup_{{$team_a_soccer['id']}}">
-														{{$team_a_soccer['player_name']}}
-														{!! $team_a_soccer['yellow_cards']>0?"<button class='btn-yellow-card btn-card' disabled=''>&nbsp;</button> ":'' !!}
+											@if($team_a_hockey['playing_status']=="P" && $team_a_hockey['red_cards']==0 )
+												<tr id="team_a_row_{{$team_a_hockey['id']}}" yellow_card=
+												{{$team_a_hockey['yellow_cards']}} class="team_a_goal_row player_select" player_id="{{$team_a_hockey['id']}} " player_name="{{$team_a_hockey['player_name']}}" team_id="{{$team_a_id}}" team_type='team_a' user_id="{{$team_a_hockey['user_id']}}">
+													<td colspan="3" id="player_lineup_{{$team_a_hockey['id']}}">
+														{{$team_a_hockey['player_name']}}
+														{!! $team_a_hockey['yellow_cards']>0?"<button class='btn-yellow-card btn-card' disabled=''>&nbsp;</button> ":'' !!}
                                                 </td>
 											@endif
 										@endforeach
@@ -418,13 +424,13 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 
 										</thead>
 										<tbody id="team_tr_a" >
-										@foreach($team_b_soccer_scores_array as $team_b_soccer)
-											@if($team_b_soccer['playing_status']=="P" && $team_b_soccer['red_cards']==0)
-												<tr id="team_a_row_{{$team_b_soccer['id']}}" class="team_a_goal_row player_select" player_id="{{$team_b_soccer['id']}} "  player_name="{{$team_b_soccer['player_name']}}" team_id="{{$team_b_id}}" team_type='team_b' user_id="{{$team_b_soccer['user_id']}}" yellow_card=
-												{{$team_b_soccer['yellow_cards']}}>
+										@foreach($team_b_hockey_scores_array as $team_b_hockey)
+											@if($team_b_hockey['playing_status']=="P" && $team_b_hockey['red_cards']==0)
+												<tr id="team_a_row_{{$team_b_hockey['id']}}" class="team_a_goal_row player_select" player_id="{{$team_b_hockey['id']}} "  player_name="{{$team_b_hockey['player_name']}}" team_id="{{$team_b_id}}" team_type='team_b' user_id="{{$team_b_hockey['user_id']}}" yellow_card=
+												{{$team_b_hockey['yellow_cards']}}>
 													<td colspan="3">
-														{{$team_b_soccer['player_name']}}
-														{!! $team_b_soccer['yellow_cards']>0?"<button class='btn-yellow-card btn-card' disabled=''>&nbsp;</button> ":'' !!}
+														{{$team_b_hockey['player_name']}}
+														{!! $team_b_hockey['yellow_cards']>0?"<button class='btn-yellow-card btn-card' disabled=''>&nbsp;</button> ":'' !!}
 													</td>
 												</tr>
 											@endif
@@ -439,7 +445,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 
 
 						<center class=" sportsjun-forms " >
-							<button href="javascript:void(0);" data-toggle="modal" data-target="#soccerSubstituteModalA" class='btn-link btn-other btn-secondary-link  request pull-left' onclick="return false">Substitute A</button>
+							<button href="javascript:void(0);" data-toggle="modal" data-target="#hockeySubstituteModalA" class='btn-link btn-other btn-secondary-link  request pull-left' onclick="return false">Substitute A</button>
 
 							<label class="col-sm-3 col-xs-5">
 								<select name='select_half_time' class='form-control ' data-style="" onclick="return SJ.SCORECARD.soccerChooseTime(this)">
@@ -448,15 +454,16 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 								</select>
 							</label>
 
-							<button class="btn-link  btn-goal-card-select  soccer_buttons_disabled" id='soccerAddGoalId'  onclick="return SJ.SCORECARD.soccerAddGoal(this)">Goal</button>
 
-							<button class="btn-link btn-yellow-card-select soccer_buttons_disabled" id='soccerYellowCarId'  onclick="return SJ.SCORECARD.soccerYellowCard()">Card</button>
+							<button class="btn-link  btn-goal-card-select  hockey_buttons_disabled" id='soccerAddGoalId'  onclick="return SJ.SCORECARD.soccerAddGoal(this)">Goal</button>
 
-							<button  class="btn-link request btn-red-card-select  soccer_buttons_disabled" id='soccerRedCardId'  onclick="return SJ.SCORECARD.soccerRedCard()">Card</button>
+							<button class="btn-link btn-yellow-card-select hockey_buttons_disabled" id='soccerYellowCarId'  onclick="return SJ.SCORECARD.soccerYellowCard()">Card</button>
 
-							<button class="btn-link btn-secondary-link request   soccer_buttons_disabled" onclick="return false;" data-toggle="modal" data-target="#soccerPenaltiesModal">Penalties</button>
+							<button  class="btn-link request btn-red-card-select  hockey_buttons_disabled" id='soccerRedCardId'  onclick="return SJ.SCORECARD.soccerRedCard()">Card</button>
 
-							<button data-toggle="modal" data-target="#soccerSubstituteModalB" class='btn-link btn-secondary-link  request pull-right' onclick="return false">Substitute  B</button>
+							<button class="btn-link btn-secondary-link request   hockey_buttons_disabled" onclick="return false;" data-toggle="modal" data-target="#hockeyPenaltiesModal">Penalties</button>
+
+							<button data-toggle="modal" data-target="#hockeySubstituteModalB" class='btn-link btn-secondary-link  request pull-right' onclick="return false">Substitute  B</button>
 						</center>
 						<div class='row'>
 							<p><br>
@@ -576,12 +583,11 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 												<?php if(empty($match_data[0]['tournament_round_number'])) { ?>
 												<option <?php if($match_data[0]['is_tied']>0) echo " selected";?> value="tie" >Tie</option>
 												<?php } ?>
-
 												<option <?php if($match_data[0]['is_tied']==0 && $match_data[0]['winner_id']>0) echo " selected";?> value="win">win</option>
-												<option value='washout' {{!$match_data[0]['has_result']?'selected':''}}>No Result</option>
+												<option value="washout" {{!$match_data[0]['has_result']?'selected':''}}>No Result</option>
 											</select>
 										</div>
-									<div class="form-group scorescard_stats" style="margin-top:15px;" id='select_winner'> 
+										<div class="form-group scorescard_stats" style="margin-top:15px;">
 											<label class="show_teams">Select Winner:</label>
 											<select name="winner_id" id="winner_id" class="show_teams form-control selectpicker" onchange="selectWinner();">
 												<option <?php if (isset($match_data[0]['winner_id']) && $match_data[0]['winner_id']==$match_data[0]['a_id']) echo ' selected';?> value="{{ $match_data[0]['a_id'] }}" >{{ $team_a_name }}</option>
@@ -593,11 +599,11 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 											<label class="">Select Player of Match:</label>
 											<select name="player_of_the_match" id="player_of_the_match" class=" form-control selectpicker" onchange="">
 												<option value="0" disabled="">Team A</option>
-												@foreach($team_a_soccer_scores_array as $tm_player)
+												@foreach($team_a_hockey_scores_array as $tm_player)
 													<option value="{{$tm_player['user_id']}}" @if($match_data[0]['player_of_the_match']==$tm_player['user_id'])?'selected':'' @endif >{{$tm_player['player_name']}}</option>
 												@endforeach
 												<option value="0" disabled="">Team B</option>
-												@foreach($team_b_soccer_scores_array as $tm_player)
+												@foreach($team_b_hockey_scores_array as $tm_player)
 													<option value="{{$tm_player['user_id']}}" @if($match_data[0]['player_of_the_match']==$tm_player['user_id'])?'selected':'' @endif >{{$tm_player['player_name']}}</option>
 												@endforeach
 											</select>
@@ -607,7 +613,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 									</div>
 
 
-									<div class="form-inline scorescard_stats" style="border:none" >
+									<div class="form-inline scorescard_stats" style="border:none">
 										<div class='form-group'>
 											<label> {{$team_a_name}} Ball Percentage </label>
 											<input type='number' class='gui-input ' name='ball_percentage_{{$team_a_id}}' value="{{$ball_percentage_a}}" max="100" onchange="updateBallPercentage(event,this)" >
@@ -634,8 +640,6 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 					</div>
 				</div>
 
-
-
 				<!-- Team B Goals Start-->
 				<div class='row' id='match_details'>
 				<div class="col-sm-10 col-sm-offset-1 col-xs-12">
@@ -657,9 +661,9 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 
 									<tr>
 										@if(isset($fh->team_type) && $fh->team_type=='team_a')
-											<td colspan="2">{{$fh->player_name}}</td><td>{{$fh->time}}"</td><td><i class='fa fa-futbol-o'></i></td><td>{{$fh->current_score}}</td><td colspan="4">&nbsp;</td>
+											<td colspan="2">{{$fh->player_name}}</td><td>{{$fh->time}}"</td><td><img src='/images/scorecard/hockey.png' height='20px' width='20px' style='font-size:32px'></td><td>{{$fh->current_score}}</td><td colspan="4">&nbsp;</td>
 										@else
-											<td colspan="4">&nbsp;</td><td>{{$fh->current_score}}</td><td><i class='fa fa-futbol-o'></i></td><td>{{$fh->time}}"</td><td colspan="2">{{$fh->player_name}}</td>
+											<td colspan="4">&nbsp;</td><td>{{$fh->current_score}}</td><td><img src='/images/scorecard/hockey.png' height='20px' width='20px' style='font-size:32px'></td><td>{{$fh->time}}"</td><td colspan="2">{{$fh->player_name}}</td>
 										@endif
 									</tr>
 								@endforeach
@@ -704,9 +708,9 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 
 									<tr>
 										@if(isset($fh->team_type) && $fh->team_type=='team_a')
-											<td colspan="2">{{$fh->player_name}}</td><td>{{$fh->time}}"</td><td><i class='fa fa-futbol-o'></i></td><td>{{$fh->current_score}}</td><td colspan="4">&nbsp;</td>
+											<td colspan="2">{{$fh->player_name}}</td><td>{{$fh->time}}"</td><td><img src='/images/scorecard/hockey.png' height='20px' width='20px' style='font-size:32px'></td><td>{{$fh->current_score}}</td><td colspan="4">&nbsp;</td>
 										@else
-											<td colspan="4">&nbsp;</td><td>{{$fh->current_score}}</td><td><i class='fa fa-futbol-o'></i></td><td>{{$fh->time}}"</td><td colspan="2">{{$fh->player_name}}</td>
+											<td colspan="4">&nbsp;</td><td>{{$fh->current_score}}</td><td><img src='/images/scorecard/hockey.png' height='20px' width='20px' style='font-size:32px'></td><td>{{$fh->time}}"</td><td colspan="2">{{$fh->player_name}}</td>
 										@endif
 									</tr>
 								@endforeach
@@ -824,9 +828,9 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 
 	<input type='hidden' id='total_players_a' value="{{count($team_a_players)}}">
 	<input type='hidden' id='total_players_b' value="{{count($team_b_players)}}">
-	<input type="hidden" id="soccer_form_data" value="">
-	<input type="hidden" name="team_a_count" value="{{ (count($team_a_soccer_scores_array)>0)?count($team_a_soccer_scores_array):1 }}" id="team_a_count">
-	<input type="hidden" name="team_b_count" value="{{ (count($team_b_soccer_scores_array)>0)?count($team_b_soccer_scores_array):1 }}" id="team_b_count">
+	<input type="hidden" id="hockey_form_data" value="">
+	<input type="hidden" name="team_a_count" value="{{ (count($team_a_hockey_scores_array)>0)?count($team_a_hockey_scores_array):1 }}" id="team_a_count">
+	<input type="hidden" name="team_b_count" value="{{ (count($team_b_hockey_scores_array)>0)?count($team_b_hockey_scores_array):1 }}" id="team_b_count">
 	<input type="hidden" name="tournament_id" value="{{ $match_data[0]['tournament_id'] }}">
 	<input type="hidden" name="team_a_id" value="{{ $match_data[0]['a_id'] }}" id="team_a_id">
 	<input type="hidden" name="team_b_id" value="{{ $match_data[0]['b_id'] }}" id="team_b_id">
@@ -843,7 +847,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 					<li>
 
 						@if(!$match_data[0]['hasSetupSquad'])
-							<button type='submit' class='btn-danger btn .soccer_buttons_disabled' onclick="return confirmSquad()"><i class="fa fa-floppy-o"></i> Confirm Squad</button>
+							<button type='submit' class='btn-danger btn .hockey_buttons_disabled' onclick="return confirmSquad()"><i class="fa fa-floppy-o"></i> Confirm Squad</button>
 						@else
 
 
@@ -871,13 +875,13 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 
 	<!-- Start Modals -->
 
-	<div id="soccerSubstituteModalA" class="modal fade">
+	<div id="hockeySubstituteModalA" class="modal fade">
 		<div class="modal-dialog sj_modal sportsjun-forms">
 			<div class="modal-content">
 				<div class="alert alert-danger" id="div_failure1"></div>
 				<div class="alert alert-success" id="div_success1" style="display:none;"></div>
 				<div class="modal-body">
-					<form action='#' onsubmit="return soccerSwapPlayers('form_substitute_a')" id='form_substitute_a'>
+					<form action='#' onsubmit="return hockeySwapPlayers('form_substitute_a')" id='form_substitute_a'>
 						{!!csrf_field()!!}
 						<input type='hidden' name='match_id' value="{{$match_id}}">
 						<input type='hidden' name='team_id' value="{{$team_a_id}}">
@@ -892,14 +896,14 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 											<th colspan="4">Playing Squad</th>
 										</tr>
 										<tbody id="">
-										@foreach($team_a_soccer_scores_array as $key=>$team_a_soccer)
-											@if($team_a_soccer['playing_status']=="P" && $team_a_soccer['red_cards']==0)
-												<tr class="player_details_{{$team_a_soccer['id']}}">
-													<td colspan="3" class='select_left' class="team_a_goal_row player_select " player_id="{{$team_a_soccer['id']}} "  player_name="{{$team_a_soccer['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_soccer['player_name']}}
-														{!! $team_a_soccer['has_substituted']==1?"<i class='fa fa-share'></i>":''!!}
+										@foreach($team_a_hockey_scores_array as $key=>$team_a_hockey)
+											@if($team_a_hockey['playing_status']=="P" && $team_a_hockey['red_cards']==0)
+												<tr class="player_details_{{$team_a_hockey['id']}}">
+													<td colspan="3" class='select_left' class="team_a_goal_row player_select " player_id="{{$team_a_hockey['id']}} "  player_name="{{$team_a_hockey['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_hockey['player_name']}}
+														{!! $team_a_hockey['has_substituted']==1?"<i class='fa fa-share'></i>":''!!}
 													</td>
 													<td colspan="1" >
-														<input type='checkbox' name="substitute_a_{{$team_a_soccer['id']}}" {{$team_a_soccer['has_substituted']==1?'disabled':''}} >
+														<input type='checkbox' name="substitute_a_{{$team_a_hockey['id']}}" {{$team_a_hockey['has_substituted']==1?'disabled':''}} >
 													</td>
 												</tr>
 											@endif
@@ -917,14 +921,14 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 											<th colspan="4">Substitute Squad</th>
 										</tr>
 										<tbody id="">
-										@foreach($team_a_soccer_scores_array as $key=>$team_a_soccer)
-											@if($team_a_soccer['playing_status']=="S" && $team_a_soccer['red_cards']==0)
-												<tr class="player_details_{{$team_a_soccer['id']}}">
-													<td colspan="3" class='select_left' class="team_a_goal_row player_select" player_id="{{$team_a_soccer['id']}} "  player_name="{{$team_a_soccer['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_soccer['player_name']}}
-														{!!$team_a_soccer['has_substituted']==1?"<i class='fa fa-reply'></i> {$team_a_soccer['time_substituted']} \"":'' !!}
+										@foreach($team_a_hockey_scores_array as $key=>$team_a_hockey)
+											@if($team_a_hockey['playing_status']=="S" && $team_a_hockey['red_cards']==0)
+												<tr class="player_details_{{$team_a_hockey['id']}}">
+													<td colspan="3" class='select_left' class="team_a_goal_row player_select" player_id="{{$team_a_hockey['id']}} "  player_name="{{$team_a_hockey['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_hockey['player_name']}}
+														{!!$team_a_hockey['has_substituted']==1?"<i class='fa fa-reply'></i> {$team_a_hockey['time_substituted']} \"":'' !!}
 													</td>
 													<td colspan="1" >
-														<input type='checkbox' name="substitute_a_{{$team_a_soccer['id']}}" {{$team_a_soccer['has_substituted']==1?'disabled':''}}>
+														<input type='checkbox' name="substitute_a_{{$team_a_hockey['id']}}" {{$team_a_hockey['has_substituted']==1?'disabled':''}}>
 													</td>
 												</tr>
 											@endif
@@ -936,7 +940,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 
 							</div>
 						</div>
-						<center><label class='col-sm-4 col-sm-offset-4'><input type='number' min='0' placeholder="Time substituted" name='time_substituted' required class="gui-input"></label> </center>
+						<center><label class='col-sm-4 col-sm-offset-4'><input type='number' min='0' placeholder="Time substituted" name='time_substituted' required></label> </center>
 						<center> </center>
 
 
@@ -954,14 +958,14 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 	</div>
 
 
-	<div id="soccerSubstituteModalB" class="modal fade">
+	<div id="hockeySubstituteModalB" class="modal fade">
 		<div class="modal-dialog sj_modal sportsjun-forms">
 			<div class="modal-content">
 				<div class="alert alert-danger" id="div_failure1"></div>
 				<div class="alert alert-success" id="div_success1" style="display:none;"></div>
 				<div class="modal-body">
 					<div class='row'>
-						<form action='#' onsubmit="return soccerSwapPlayers('form_substitute_b')" id='form_substitute_b'>
+						<form action='#' onsubmit="return hockeySwapPlayers('form_substitute_b')" id='form_substitute_b'>
 							{!!csrf_field()!!}
 							<div class="table-responsive">
 								<center class='table_head'> {{$team_b_name}} Substitute</center>
@@ -976,14 +980,14 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 											<th colspan="4">Playing Squad</th>
 										</tr>
 										<tbody id="">
-										@foreach($team_b_soccer_scores_array as $team_a_soccer)
-											@if($team_a_soccer['playing_status']=="P" && $team_a_soccer['red_cards']==0)
-												<tr class="player_details_{{$team_a_soccer['id']}}">
-													<td colspan="3" class='select_left' class="team_a_goal_row player_select" player_id="{{$team_a_soccer['id']}} "  player_name="{{$team_a_soccer['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_soccer['player_name']}}
-														{!! $team_a_soccer['has_substituted']==1?"<i class='fa fa-share'></i> {$team_a_soccer['time_substituted']}\"":'' !!}
+										@foreach($team_b_hockey_scores_array as $team_a_hockey)
+											@if($team_a_hockey['playing_status']=="P" && $team_a_hockey['red_cards']==0)
+												<tr class="player_details_{{$team_a_hockey['id']}}">
+													<td colspan="3" class='select_left' class="team_a_goal_row player_select" player_id="{{$team_a_hockey['id']}} "  player_name="{{$team_a_hockey['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_hockey['player_name']}}
+														{!! $team_a_hockey['has_substituted']==1?"<i class='fa fa-share'></i> {$team_a_hockey['time_substituted']}\"":'' !!}
 													</td>
 													<td colspan="1" >
-														<input type='checkbox' name="substitute_a_{{$team_a_soccer['id']}}" {{$team_a_soccer['has_substituted']==1?'disabled':''}}>
+														<input type='checkbox' name="substitute_a_{{$team_a_hockey['id']}}" {{$team_a_hockey['has_substituted']==1?'disabled':''}}>
 													</td>
 												</tr>
 											@endif
@@ -1001,14 +1005,14 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 											<th colspan="4">Substitute Squad</th>
 										</tr>
 										<tbody id="">
-										@foreach($team_b_soccer_scores_array as $team_a_soccer)
-											@if($team_a_soccer['playing_status']=="S" && $team_a_soccer['red_cards']==0)
-												<tr class="player_details_{{$team_a_soccer['id']}}">
-													<td colspan="3" class='select_left' class="team_a_goal_row player_select" player_id="{{$team_a_soccer['id']}} "  player_name="{{$team_a_soccer['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_soccer['player_name']}}
-														{!! $team_a_soccer['has_substituted']==1?"<i class='fa fa-reply'></i>":'' !!}
+										@foreach($team_b_hockey_scores_array as $team_a_hockey)
+											@if($team_a_hockey['playing_status']=="S" && $team_a_hockey['red_cards']==0)
+												<tr class="player_details_{{$team_a_hockey['id']}}">
+													<td colspan="3" class='select_left' class="team_a_goal_row player_select" player_id="{{$team_a_hockey['id']}} "  player_name="{{$team_a_hockey['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_hockey['player_name']}}
+														{!! $team_a_hockey['has_substituted']==1?"<i class='fa fa-reply'></i>":'' !!}
 													</td>
 													<td colspan="1" >
-														<input type='checkbox' name="substitute_a_{{$team_a_soccer['id']}}" {{$team_a_soccer['has_substituted']==1?'disabled':''}}>
+														<input type='checkbox' name="substitute_a_{{$team_a_hockey['id']}}" {{$team_a_hockey['has_substituted']==1?'disabled':''}}>
 													</td>
 												</tr>
 											@endif
@@ -1037,7 +1041,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 	</div>
 
 
-	<div id="soccerPenaltiesModal" class="modal fade">
+	<div id="hockeyPenaltiesModal" class="modal fade">
 		<div class="modal-dialog sj_modal sportsjun-forms">
 			<div class="modal-content">
 				<div class="alert alert-danger" id="div_failure1"></div>
@@ -1061,17 +1065,17 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 										</tr>
 										<tbody id="">
 										<?php $p_index_a=0;?>
-										@foreach($team_a_soccer_scores_array as $team_a_soccer)
-											@if($team_a_soccer['playing_status']=="P" && $team_a_soccer['red_cards']==0)
+										@foreach($team_a_hockey_scores_array as $team_a_hockey)
+											@if($team_a_hockey['playing_status']=="P" && $team_a_hockey['red_cards']==0)
 
-												<tr class="player_details_{{$team_a_soccer['id']}}">
-													<td colspan="3" class='select_left' class="team_a_goal_row player_select" player_id="{{$team_a_soccer['id']}} "  player_name="{{$team_a_soccer['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_soccer['player_name']}}
+												<tr class="player_details_{{$team_a_hockey['id']}}">
+													<td colspan="3" class='select_left' class="team_a_goal_row player_select" player_id="{{$team_a_hockey['id']}} "  player_name="{{$team_a_hockey['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_hockey['player_name']}}
 													</td>
 													<td colspan="1" >
-														<input type='checkbox' name="penalty_player_a_{{$p_index_a}}" {{$team_a_soccer['penalty']==1?'checked':''}}  >
-														<input type='hidden' name="penalty_player_id_a_{{$p_index_a}}" value="{{$team_a_soccer['id']}}" >
-														<input type='hidden' name="penalty_player_user_id_a_{{$p_index_a}}" value="{{$team_a_soccer['user_id']}}" >
-														<input type='hidden' name='penalty_player_name_a_{{$p_index_a}}' value="{{$team_a_soccer['player_name']}}">
+														<input type='checkbox' name="penalty_player_a_{{$p_index_a}}" {{$team_a_hockey['penalty']==1?'checked':''}}  >
+														<input type='hidden' name="penalty_player_id_a_{{$p_index_a}}" value="{{$team_a_hockey['id']}}" >
+														<input type='hidden' name="penalty_player_user_id_a_{{$p_index_a}}" value="{{$team_a_hockey['user_id']}}" >
+														<input type='hidden' name='penalty_player_name_a_{{$p_index_a}}' value="{{$team_a_hockey['player_name']}}">
 														<input type='hidden' name='penalty_player_score_a_{{$p_index_a}}' >
 													</td>
 												</tr>
@@ -1092,17 +1096,17 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 										</tr>
 										<tbody id="">
 										<?php $p_index_b=0;?>
-										@foreach($team_b_soccer_scores_array as $team_a_soccer)
-											@if($team_a_soccer['playing_status']=="P" && $team_a_soccer['red_cards']==0)
-												<tr class="player_details_{{$team_a_soccer['id']}}">
-													<td colspan="3" class='select_left' class="team_a_goal_row player_select" player_id="{{$team_a_soccer['id']}} "  player_name="{{$team_a_soccer['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_soccer['player_name']}}
+										@foreach($team_b_hockey_scores_array as $team_a_hockey)
+											@if($team_a_hockey['playing_status']=="P" && $team_a_hockey['red_cards']==0)
+												<tr class="player_details_{{$team_a_hockey['id']}}">
+													<td colspan="3" class='select_left' class="team_a_goal_row player_select" player_id="{{$team_a_hockey['id']}} "  player_name="{{$team_a_hockey['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_hockey['player_name']}}
 													</td>
 													<td colspan="1" >
-														<input type='checkbox' name="penalty_player_b_{{$p_index_b}}" {{$team_b_soccer['penalty']==1?'checked':''}}   >
-														<input type='hidden' name="penalty_player_id_b_{{$p_index_b}}" value="{{$team_a_soccer['id']}}" >
-														<input type='hidden' name="penalty_player_user_id_b_{{$p_index_b}}" value="{{$team_a_soccer['user_id']}}" >
+														<input type='checkbox' name="penalty_player_b_{{$p_index_b}}" {{$team_b_hockey['penalty']==1?'checked':''}}   >
+														<input type='hidden' name="penalty_player_id_b_{{$p_index_b}}" value="{{$team_a_hockey['id']}}" >
+														<input type='hidden' name="penalty_player_user_id_b_{{$p_index_b}}" value="{{$team_a_hockey['user_id']}}" >
 														<input type='hidden' name='penalty_player_score_b_{{$p_index_b}}' >
-														<input type='hidden' name='penalty_player_name_b_{{$p_index_b}}' value="{{$team_a_soccer['player_name']}}"  >
+														<input type='hidden' name='penalty_player_name_b_{{$p_index_b}}' value="{{$team_a_hockey['player_name']}}"  >
 													</td>
 												</tr>
 												<?php $p_index_b++;?>
@@ -1116,7 +1120,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 
 							</div>
 
-							<center> <button class='btn btn-primary' type="submit" onclick=" return soccerChoosePenaltiesPlayers('form_choose_penalties');">Start Penalties</button></center>
+							<center> <button class='btn btn-primary' type="submit" onclick=" return hockeyChoosePenaltiesPlayers('form_choose_penalties');">Start Penalties</button></center>
 						</form>
 					</div>
 
@@ -1161,8 +1165,8 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 			$('#winner_team_id').val($('#winner_id').val());
 			$("#winner_id").hide();
 		}
-		var team_a_count='{{ (count($team_a_soccer_scores_array)>0)?count($team_a_soccer_scores_array):1 }}';
-		var team_b_count='{{ (count($team_b_soccer_scores_array)>0)?count($team_b_soccer_scores_array):1 }}';
+		var team_a_count='{{ (count($team_a_hockey_scores_array)>0)?count($team_a_hockey_scores_array):1 }}';
+		var team_b_count='{{ (count($team_b_hockey_scores_array)>0)?count($team_b_hockey_scores_array):1 }}';
 		allownumericwithdecimal();
 		checkDuplicatePlayers('select_player_a');
 		checkDuplicatePlayers('select_player_b');
@@ -1355,7 +1359,6 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 			});
 		}
 
-
 		//Send Approval
 		function forApproval()
 		{
@@ -1498,9 +1501,9 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 				title:"Alert",
 				content:"Are you sure you want to save squad?",
 				confirm:function(){
-					//$(this).attr('disabled', true);
+					$(this).attr('disabled', true);
 					$.ajax({
-						url:base_url+'/match/confirmSquad',
+						url:base_url+'/match/confirmSquadHockey',
 						data:tempSquadData,
 						type:'post',
 						success:function(response){
@@ -1512,7 +1515,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 					})
 				},
 				cancel:function(){
-					
+			
 				}
 			});
 
@@ -1522,9 +1525,9 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 		}
 
 		function saveMatchDetails(){
-			var data=$('#soccer').serialize();
+			var data=$('#hockey').serialize();
 			$.ajax({
-				url:base_url+'/match/insertAndUpdateSoccerCard',
+				url:base_url+'/match/insertAndUpdateHockeyCard',
 				data:data,
 				method:'post',
 				success:function(response){
@@ -1546,12 +1549,12 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 			var team_b_id={{$team_b_id}}
 
 			$.ajax({
-				url:base_url+'/match/saveMatchRecord',
+				url:base_url+'/match/saveMatchRecordHockey',
 				data:data,
 				method:'post',
 				dataType:'json',
 				success:function(response){
-					setTimeout(getSoccerDetails,2000);
+					setTimeout(getHockeyDetails,2000);
 					var tem_a=response[team_a_id];
 					var tem_b=response[team_b_id];
 
@@ -1580,7 +1583,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 			return false;
 		}
 
-		function getSoccerDetails(){
+		function getHockeyDetails(){
 			//load details
 				var data={
 					match_id:$('#match_id').val(),
@@ -1589,21 +1592,20 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 				}
 
 					$.ajax({
-						url:base_url+'/match/getSoccerDetails',
+						url:base_url+'/match/getHockeyDetails',
 						method:'get',
 						data:data,
-						dataType:'json',
 						success:function(response){
-							$('#match_details').html(response.html);
+							$('#match_details').html(response);
 						}
 					})
 		}
 
 		
-		function soccerSwapPlayers(ser_id){
+		function hockeySwapPlayers(ser_id){
 			var data=$('#'+ser_id).serialize();
 			$.ajax({
-				url:base_url+'/match/soccerSwapPlayers',
+				url:base_url+'/match/hockeySwapPlayers',
 				data:data,
 				method:'post',
 				success:function(response){
@@ -1661,11 +1663,11 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 
 
 		//Choose players for penalty
-		function soccerChoosePenaltiesPlayers(form_id){
+		function hockeyChoosePenaltiesPlayers(form_id){
 			$('#display_penalty_players').show();
 			var data=$('#'+form_id).serialize();
 			$.ajax({
-				url:base_url+'/match/choosePenaltyPlayers',
+				url:base_url+'/match/choosePenaltyPlayersHockey',
 				data:data,
 				method:'post',
 				dataType:'json',
@@ -1675,7 +1677,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 					var response_b=response.response_b;
 					$('#penalty_players_a').append(response_a);
 					$('#penalty_players_b').append(response_b);
-					$('#soccerPenaltiesModal').modal('hide');
+					$('#hockeyPenaltiesModal').modal('hide');
 
 				},
 				error:function(x,y,z){
@@ -1706,7 +1708,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 			$('.btn_'+team_type+'_'+index).removeClass('btn-penalty-chosen');
 
 			$.ajax({
-				url:base_url+'/match/scorePenalty',
+				url:base_url+'/match/scorePenaltyHockey',
 				type:'post',
 				data:data,
 				dataType:'json',
