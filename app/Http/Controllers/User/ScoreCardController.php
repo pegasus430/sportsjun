@@ -3299,7 +3299,7 @@ class ScoreCardController extends Controller {
 			}
 
 			// call function to insert player wise match details in statistics table
-			if($sport_name!='' || $sport_name!='Badminton' || $sport_name!='Squash')
+			if($sport_name!='')
 				$this->insertPlayerStatistics($sport_name,$match_id);
 
 			//send notification to players

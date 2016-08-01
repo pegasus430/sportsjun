@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Model\Tournaments;
 use App\Model\MatchSchedule;
+use App\Http\Controllers\User\ScoreCardController as parentScoreCardController;
 use App\Model\UserStatistic;
 use App\Model\State;
 use App\Model\City;
@@ -29,83 +30,9 @@ use App\Helpers\AllRequests;
 use Session;
 use Request;
 
-class SquashScoreCardController extends Controller
+class SquashScoreCardController extends parentScoreCardController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+    
 
   public function squashScoreCard($match_data,$match,$sportsDetails=[],$tournamentDetails=[],$is_from_view=0)
     {
@@ -622,16 +549,16 @@ class SquashScoreCardController extends Controller
             $squash_statistics= SquashStatistic::whereUserId($user_id)->whereMatchType($match_type)->first();
 
             if(!is_null($squash_statistics)){  //if user exist update statistics
-                $won=0;
-                $lost=0;
+                $won=$squash_statistics->won;
+                $lost=$squash_statistics->lost;
+  
+                    if($is_win=='yes'){
+                         $won++;                        
+                     }
+                    elseif($is_win=='no'){
+                         $lost++;
+                    }  
 
-
-                if($schedule_type=='player'){
-                    foreach ($squash_statistics as $bs) {
-                            if($bs->winner_id==$user_id) $won++;
-                            if($bs->looser_id==$user_id) $lost++;
-                    }
-                }
 
                 $matches=count($player_match_details);
                 $won_percentage = number_format((($won+1)/($matches+1))*100,2);
@@ -806,7 +733,10 @@ class SquashScoreCardController extends Controller
                     }
                     if($match_status=='completed')
                     {
-                        $this->updateStatitics($match_id);
+                        $sportName = Sport::where('id',$matchScheduleDetails['sports_id'])->pluck('sports_name');
+
+                        $this->insertPlayerStatistics($sportName,$match_id);
+                        $this->updateStatitics($match_id,$winner_team_id, $looser_team_id);
 
                         //notification code
                     }
@@ -831,7 +761,10 @@ class SquashScoreCardController extends Controller
                     'score_added_by'=>$json_score_status,'scoring_status'=>$approved]);
                 if($match_status=='completed')
                 {
-                    $this->updateStatitics($match_id);
+                    $sportName = Sport::where('id',$matchScheduleDetails['sports_id'])->pluck('sports_name');
+
+                    $this->insertPlayerStatistics($sportName,$match_id);
+                    $this->updateStatitics($match_id,$winner_team_id, $looser_team_id);
                     
                     //notification code
                 }
@@ -845,6 +778,8 @@ class SquashScoreCardController extends Controller
                     'is_tied'         => $is_tie,
                      'match_result'   => $match_result,
                     'score_added_by'=>$json_score_status]);
+
+                    $this->updateStatitics($match_id,$winner_team_id, $looser_team_id);
             }
         }
         //MatchSchedule::where('id',$match_id)->update(['winner_id'=>$winner_team_id,'match_details'=>$json_match_details_array,'score_added_by'=>$json_score_status ]);
@@ -855,7 +790,7 @@ class SquashScoreCardController extends Controller
 
     }
 
-    public function updateStatitics($match_id){
+    public function updateStatitics($match_id,$winner_team_id, $looser_team_id){
         $score_a_model=SquashPlayerMatchScore::where('match_id', $match_id)->first();
         $score_b_model=SquashPlayerMatchScore::where('match_id', $match_id)->skip(1)->first();
 
@@ -869,7 +804,16 @@ class SquashScoreCardController extends Controller
                ];
             }                                                             
         else $player_ids=[$match_score_model->user_id_a];
-        $this->squashStatistics($player_ids,$match_model->match_type,'', $match_model->schedule_type);
+        if($match_model->a_id==$winner_team_id){
+            $is_win='yes';
+        }
+        elseif($match_model->a_id=$looser_team_id){
+            $is_win='no';
+        }
+        else $is_win='';
+
+
+        $this->squashStatistics($player_ids,$match_model->match_type,$is_win, $match_model->schedule_type);
 
         $match_score_model=$score_b_model;
         if($match_score_model->match_type=='double'){
@@ -879,7 +823,14 @@ class SquashScoreCardController extends Controller
                ];
             }                                                           
         else $player_ids=[$match_score_model->user_id_a];
-        $this->squashStatistics($player_ids,$match_model->match_type, '', $match_model->schedule_type);
+        if($match_model->b_id==$winner_team_id){
+            $is_win='yes';
+        }
+        elseif($match_model->b_id=$looser_team_id){
+            $is_win='no';
+        }
+        else $is_win='';
+        $this->squashStatistics($player_ids,$match_model->match_type, $is_win, $match_model->schedule_type);
     }
 
 
