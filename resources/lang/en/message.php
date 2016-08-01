@@ -347,6 +347,7 @@ return [
 		'lost' => 'LOST',
 		'tied' => 'TIED',
 		'matches' => 'MATCHES',
+		'washout' => 'WASHOUT'
 		],
          'scores' => 'Scores' ,
 		'new_owner_notification'=>'Admin has added you as the Team Owner',	

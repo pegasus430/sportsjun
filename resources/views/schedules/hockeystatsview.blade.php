@@ -7,6 +7,7 @@
             <th>{{trans('message.team.stats.won')}}</th>
             <th>{{trans('message.team.stats.lost')}}</th>
             <th>{{trans('message.team.stats.tied')}}</th>
+            <th>{{trans('message.team.stats.washout')}}</th>
             <th>% {{trans('message.team.stats.won')}}</th>
             </tr>
             </thead>
@@ -17,6 +18,7 @@
             <td>{{ $statsArray['othersStatsArray']['winCount'] }}</td>
             <td>{{ $statsArray['othersStatsArray']['looseCount'] }}</td>
             <td>{{ $statsArray['othersStatsArray']['isTied'] }}</td>
+             <td>{{ $statsArray['othersStatsArray']['washout'] }}</td>
             <td>{{ $statsArray['othersStatsArray']['wonPercentage'] }}</td>
             </tr>
             @endif

@@ -685,6 +685,9 @@ class Helper {
         $doublesWinPercentage = 0;
         $mixedWinPercentage = 0;
 
+        $washoutSingles=0;
+        $washoutDoubles=0;
+
         if (count($teamStats)) {
             foreach ($teamStats as $stats) {
                 if($stats['match_type']=='singles') {
@@ -694,7 +697,10 @@ class Helper {
                         $looseCountSingles = $looseCountSingles + 1;
                     } else if ($stats['is_tied']) {
                         $isTiedSingles = $isTiedSingles + 1;
-                    }
+                    } 
+                      else if($stats['has_result']==0){
+                        $washoutSingles = $washoutSingles +1;
+                      }
                 }
                 else if($stats['match_type']=='doubles') {
                     if ($stats['winner_id'] == $teamId) {
@@ -704,6 +710,9 @@ class Helper {
                     } else if ($stats['is_tied']) {
                         $isTiedDoubles = $isTiedDoubles + 1;
                     }
+                     else if($stats['has_result']==0){
+                        $washoutDoubles = $washoutDoubles +1;
+                      }
                 }else if($stats['match_type']=='mixed') {
                     if ($stats['winner_id'] == $teamId) {
                         $winCountMixed = $winCountMixed + 1;
@@ -715,17 +724,18 @@ class Helper {
                 }
             }
         }
-        $singlesTotalMatches = $winCountSingles + $looseCountSingles + $isTiedSingles;
+        $singlesTotalMatches = $winCountSingles + $looseCountSingles + $isTiedSingles + $washoutSingles;
         if($singlesTotalMatches) {
             $singlesWinPercentage = number_format(($winCountSingles / ($singlesTotalMatches)) * 100, 2);
         }
-        $singlesStatsArray = ['totalMatches' => $singlesTotalMatches, 'winCount' => $winCountSingles, 'looseCount' => $looseCountSingles, 'isTied' => $isTiedSingles, 'wonPercentage' => $singlesWinPercentage];
+        $singlesStatsArray = ['totalMatches' => $singlesTotalMatches, 'winCount' => $winCountSingles, 'looseCount' => $looseCountSingles, 'isTied' => $isTiedSingles, 'wonPercentage' => $singlesWinPercentage, 'washout'=>$washoutSingles];
 
-        $doublesTotalMatches = $winCountDoubles + $looseCountDoubles + $isTiedDoubles;
+        $doublesTotalMatches = $winCountDoubles + $looseCountDoubles + $isTiedDoubles + $washoutDoubles;
+
         if($doublesTotalMatches) {
             $doublesWinPercentage = number_format(($winCountDoubles / ($doublesTotalMatches)) * 100, 2);
         }
-        $doublesStatsArray = ['totalMatches' => $doublesTotalMatches, 'winCount' => $winCountDoubles, 'looseCount' => $looseCountDoubles, 'isTied' => $isTiedDoubles, 'wonPercentage' => $doublesWinPercentage];
+        $doublesStatsArray = ['totalMatches' => $doublesTotalMatches, 'winCount' => $winCountDoubles, 'looseCount' => $looseCountDoubles, 'isTied' => $isTiedDoubles, 'wonPercentage' => $doublesWinPercentage, 'washout'=>$washoutDoubles];
 
         $mixedTotalMatches = $winCountMixed + $looseCountMixed + $isTiedmixed;
         if($mixedTotalMatches) {
@@ -743,6 +753,7 @@ class Helper {
         $looseCountOthers = 0;
         $isTiedothers = 0;
         $othersWinPercentage = 0;
+        $washoutCount=0;
 
         if (count($teamStats)) {
             foreach ($teamStats as $stats) {
@@ -754,6 +765,9 @@ class Helper {
                     } else if ($stats['is_tied']) {
                         $isTiedothers = $isTiedothers + 1;
                     }
+                     else if($stats['has_result']==0){
+                        $washoutCount = $washoutCount +1;
+                      }
                 }
             }
         }
@@ -761,7 +775,7 @@ class Helper {
         if($othersTotalMatches) {
             $othersWinPercentage = number_format(($winCountOthers / ($othersTotalMatches)) * 100, 2);
         }
-        $othersStatsArray = ['totalMatches' => $othersTotalMatches, 'winCount' => $winCountOthers, 'looseCount' => $looseCountOthers, 'isTied' => $isTiedothers, 'wonPercentage' => $othersWinPercentage];
+        $othersStatsArray = ['totalMatches' => $othersTotalMatches, 'winCount' => $winCountOthers, 'looseCount' => $looseCountOthers, 'isTied' => $isTiedothers, 'wonPercentage' => $othersWinPercentage, 'washout'=>$washoutCount];
 
         $finalArray = ['othersStatsArray'=>$othersStatsArray];
 
@@ -773,6 +787,7 @@ class Helper {
         $looseCountOthers = 0;
         $isTiedothers = 0;
         $othersWinPercentage = 0;
+        $washoutCount=0;
 
         if (count($teamStats)) {
             foreach ($teamStats as $stats) {
@@ -784,6 +799,9 @@ class Helper {
                     } else if ($stats['is_tied']) {
                         $isTiedothers = $isTiedothers + 1;
                     }
+                    else if($stats['has_result']==0){
+                        $washoutCount = $washoutCount +1;
+                      }
                 }
             }
         }
@@ -791,7 +809,7 @@ class Helper {
         if($othersTotalMatches) {
             $othersWinPercentage = number_format(($winCountOthers / ($othersTotalMatches)) * 100, 2);
         }
-        $othersStatsArray = ['totalMatches' => $othersTotalMatches, 'winCount' => $winCountOthers, 'looseCount' => $looseCountOthers, 'isTied' => $isTiedothers, 'wonPercentage' => $othersWinPercentage];
+        $othersStatsArray = ['totalMatches' => $othersTotalMatches, 'winCount' => $winCountOthers, 'looseCount' => $looseCountOthers, 'isTied' => $isTiedothers, 'wonPercentage' => $othersWinPercentage, 'washout'=>$washoutCount];
 
         $finalArray = ['othersStatsArray'=>$othersStatsArray];
 
@@ -1924,6 +1942,51 @@ class Helper {
             else{
                 $match_model->winner='';
             }
+
+        if($match_model->match_details!=null){
+
+            $match_details=json_decode($match_model->match_details);
+            $a_id=$match_model->a_id;
+            $b_id=$match_model->b_id;
+
+            switch ($match_model->sports_id) {
+                case '5':           //badminton
+                    $scores=$match_details->scores;
+            $match_model->scores=$scores->{$a_id.'_score'}.' sets - '. $scores->{$b_id.'_score'}.' sets';
+
+                break;
+
+                 case '13':           //squash
+                    $scores=$match_details->scores;
+            $match_model->scores=$scores->{$a_id.'_score'}.' sets - '. $scores->{$b_id.'_score'}.' sets';
+
+                break;
+
+                 case '4':           //soccer
+                   
+            $match_model->scores=$match_details->{$a_id}->goals.' - '. $match_details->{$b_id}->goals;
+
+                break;
+
+                 case '11':           //hockey
+                   
+            $match_model->scores=$match_details->{$a_id}->goals.' - '. $match_details->{$b_id}->goals;
+
+                break;
+                
+                case '1':           //cricket                   
+            $match_model->scores='';
+                break;
+                
+
+                default:
+                    $match_model->scores='';
+                    break;
+            }
+        }
+        else{
+                $match_model->scores='0 - 0';
+        }
         return $match_model;
     }
 
