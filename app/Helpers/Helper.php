@@ -1717,8 +1717,9 @@ class Helper {
         return date(config('constants.DATE_FORMAT.' . $format), strtotime($date));
     }
 
-    public static function displayDateTime($date){
-        return date("d-m-Y H:i:s", strtotime($date));
+    public static function displayDateTime($date, $format = 0){
+        $format = ($format == 1) ? config('constants.DATE_FORMAT.DISPLAY_DATE_FORMAT') . ' g:i A' : 'd-m-Y H:i:s';
+        return date($format, strtotime($date));
     }
 
     public static function storeDate($date,$flag='')
@@ -1975,7 +1976,8 @@ class Helper {
                 break;
                 
                 case '1':           //cricket                   
-            $match_model->scores='';
+            $match_model->scores =  Team::find($a_id)->name . " (" . $match_details->{$a_id}->fst_ing_score . "/" . $match_details->{$a_id}->fst_ing_wkt . (!empty($match_details->{$a_id}->scnd_ing_overs) ? ", " . $match_details->{$a_id}->scnd_ing_score . "/" . $match_details->{$a_id}->scnd_ing_wkt : "") . ") &nbsp;" . 
+                                    Team::find($b_id)->name . " (" . $match_details->{$b_id}->fst_ing_score . "/" . $match_details->{$b_id}->fst_ing_wkt . (!empty($match_details->{$b_id}->scnd_ing_overs) ? ", " . $match_details->{$b_id}->scnd_ing_score . "/" . $match_details->{$b_id}->scnd_ing_wkt : "") . ")";
                 break;
                 
 
