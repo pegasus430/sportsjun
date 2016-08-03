@@ -24,22 +24,17 @@
                                 </div>
                                 <div class="modal-body">
                                         <div class="content">
-                                                <div id="matchResultRadio" class="form-group">
+                                                <div id="matchResultSelect" class="form-group">
                                                         <div class="toss-detail">
                                                                 <span class="head">MATCH RESULT</span>
-                                                                <div class="radio-box">
-                                                                        <div class="radio">
-                                                                                <input name="matchResultRadio" type="radio" value="win" id="matchResultRadioWin" <?php if ($match_data[0]['is_tied'] == 0 && $match_data[0]['winner_id'] > 0 || !($match_data[0]['is_tied'] > 0)) { echo "checked=\"\""; } ?>>
-                                                                                <label for="matchResultRadioWin">WIN</label>
-                                                                        </div>
-                                                                        <div class="radio">
-                                                                                <input name="matchResultRadio" type="radio" value="tie" id="matchResultRadioTie" <?php if ($match_data[0]['is_tied'] > 0) { echo "checked=\"\""; } ?>>
-                                                                                <label for="matchResultRadioTie">TIE</label>
-                                                                        </div>
-                                                                </div>
+                                                                <select name="match_result" class="form-control">
+                                                                    <option value="win" <?php if ($match_data[0]['is_tied'] == 0 && $match_data[0]['winner_id'] > 0 || !($match_data[0]['is_tied'] > 0)) { echo "selected"; } ?>>Win</option>
+                                                                    <option value="tie" <?php if ($match_data[0]['is_tied'] > 0) { echo "selected"; } ?>>Tie</option>
+                                                                    <option value="washout" <?php if (isset($match_data[0]['match_result']) && $match_data[0]['match_result'] == "washout") { echo "selected"; } ?>>No Result (Washout)</option>
+                                                                </select>
                                                         </div>
                                                 </div>
-                                                <div id="matchWinnerRadio" class="form-group" <?php if ($match_data[0]['is_tied'] > 0) { echo "style=\"display:none;\""; } ?>>
+                                                <div id="matchWinnerRadio" class="form-group" <?php if ($match_data[0]['is_tied'] > 0 || $match_data[0]['match_result'] == "washout") { echo "style=\"display:none;\""; } ?>>
                                                         <div class="toss-detail">
                                                                 <span class="head">WINNER</span>
                                                                 <div class="radio-box">

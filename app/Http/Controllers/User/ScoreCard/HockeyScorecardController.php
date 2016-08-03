@@ -377,8 +377,12 @@ class HockeyScorecardController extends parentScoreCardController
                 if(Helper::isTournamentOwner($tournamentDetails['manager_id'],$tournamentDetails['tournament_parent_id'])) 
                 {
                     MatchSchedule::where('id',$match_id)->update(['match_status'=>$match_status,
-                        'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
-                        'is_tied'=>$is_tied,'score_added_by'=>$json_score_status]);
+                        'winner_id'=>$winner_team_id ,
+                        'looser_id'=>$looser_team_id,
+                        'has_result'     => $has_result,
+                        'match_result'   => $match_result,
+                        'is_tied'=>$is_tie,
+                        'score_added_by'=>$json_score_status]);
 //                                Helper::printQueries();
 
                     if(!empty($matchScheduleDetails['tournament_round_number'])) {

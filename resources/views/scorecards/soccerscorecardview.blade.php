@@ -167,7 +167,13 @@
 
             <div class="panel panel-default">
                 <div class="col-md-12">
-                    <h5 class="scoreboard_title">Soccer Scorecard</h5>
+                    <h5 class="scoreboard_title">Soccer Scorecard 
+                            @if(!empty($match_data[0]['match_category']))
+                             <span class='match_type_text'>
+                             ({{ucfirst($match_data[0]['match_category']) }})
+                             </span>
+                                @endif  
+                    </h5>
 
                     <div class="clearfix"></div>
                     <div class="form-inline">

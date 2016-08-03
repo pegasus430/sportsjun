@@ -666,6 +666,8 @@ Route::post('getplayers', [
     'as'   => 'getplayers',
     'uses' => 'User\InvitePlayerController@invitePlayers',
 ]);
+Route::post('/addemailtoplayer', 'User\InvitePlayerController@addEmailToPlayers');
+
 Route::get('user/info/{id?}', 'User\UserController@info');
 Route::get('user/team/{id?}', 'User\UserController@team');
 Route::get('user/notifications', 'User\UserController@getNotifications');

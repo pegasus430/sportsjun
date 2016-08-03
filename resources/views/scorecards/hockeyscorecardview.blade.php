@@ -167,7 +167,13 @@
 
             <div class="panel panel-default">
                 <div class="col-md-12">
-                    <h5 class="scoreboard_title">Hockey Scorecard</h5>
+                    <h5 class="scoreboard_title">Hockey Scorecard
+                            @if(!empty($match_data[0]['match_category']))
+                             <span class='match_type_text'>
+                             ({{ucfirst($match_data[0]['match_category']) }})
+                             </span>
+                                @endif
+                    </h5>
 
                     <div class="clearfix"></div>
                     <div class="form-inline">
@@ -193,7 +199,7 @@
                                     <h3 class="win_team">{{ 'Tie' }}</h3>
 
                                 </div>
-                              @elseif($match_data[0]['match_result'] == "washout")
+                            @elseif($match_data[0]['match_result'] == "washout")
                                                      <div class="form-group">
                                                          <label>MATCH ENDED DUE TO</label>
                                                          <h3 class="win_team">Washout</h3>
@@ -215,6 +221,7 @@
             </div>
     <!-- Match has no results -->
 @if(!$match_data[0]['has_result'])
+    {{--
         <div class='row' >
             <div class="col-sm-8 col-sm-offset-2" style="background:#ffeeee">
                 
@@ -230,6 +237,7 @@
             
             </div>
         </div>  
+    --}}
 @endif
 
 

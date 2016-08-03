@@ -104,6 +104,8 @@
 								<div class="team_players_actions">
 									<div class="{{ (!empty($player['status'])?(($player['status'] == 'pending')?'player_inactive':($player['status'] == 'accepted'?'player_active':'player_rejected')):'player_inactive') }}">
 										{{ (!empty($player['status'])?(($player['status'] == 'pending')?'P':($player['status'] == 'accepted'?'A':'R')):'P') }}</div>
+
+
 									<div class="player_glyph_action">
 										<div class="bs-example">
 											<div class="dropdown">
@@ -129,6 +131,12 @@
 									<a href="{{ url('/editsportprofile').'/'.(!empty($player['user_id'])?$player['user_id']:0) }}" class="team_players_sj_title">{{ (!empty($player['user']['name'])?$player['user']['name']:'NA') }}</a>
 									<div class="teamplayer_position">{{ !empty($player['role'])?$player['role']:'NA' }}</div>
 								</div>
+
+										<!-- add email -->
+
+									@if(empty(Helper::getUserDetails($player['user_id'])->email))
+		<span class='add_email'><a href='javascript:void(0)' onclick="addEmail(this)" user_id="{{$player['user_id']}}" team_id=" {{$team_id}} ">Add Player Email</a></span>
+									@endif
 							</div>
 						</div>
 						@endforeach
@@ -242,5 +250,82 @@
 		}
 	});
 
+
+
+</script>
+
+<script>
+	//add email to player
+		var oldContent='';
+		function addEmail(that){
+				var parentDiv=$(that).parents('.add_email');
+				    oldContent=parentDiv.html();
+				var user_id=$(that).attr('user_id');
+				var team_id=$(that).attr('team_id');
+
+		var newContent= "<input type='email' onblur='return saveEmail(this)' user_id='"+user_id+"' style='width:70%' team_id='"+team_id+"'  >";
+
+				parentDiv.html(newContent);
+		}
+
+		function saveEmail(that){
+			var parentDiv=$(that).parents('.add_email');				   
+			var user_id=$(that).attr('user_id');
+			var email=$(that).val();
+			var team_id=$(that).attr('team_id');
+
+			var data={
+				user_id:user_id,
+				email:email,
+				team_id:team_id
+			}
+
+			if(email==''){
+				parentDiv.html(oldContent);
+				return false;
+			}
+
+			$.confirm({
+				title:"Alert!",
+				content:"Add Email?",
+				confirm:function(){
+					$.ajax({
+						url:'/addemailtoplayer',
+						data:data,
+						type:'post',
+						dataType:'json',
+						success:function(response){
+							if(response.error=='no'){
+								parentDiv.addClass('alert').addClass('alert-success');
+								parentDiv.html(response.message);
+
+								setTimeout(function(){
+									parentDiv.removeClass('alert').removeClass('alert-success');
+									parentDiv.html('');
+								}, 3000)
+							}
+							else if(response.error=='yes'){
+								parentDiv.addClass('alert').addClass('alert-danger');
+								parentDiv.html(response.message);
+
+								setTimeout(function(){
+									parentDiv.removeClass('alert').removeClass('alert-danger');
+									parentDiv.html(oldContent);
+								}, 3000)
+							}
+							
+						},
+						error:function(){
+							parentDiv.html(oldContent);
+						}
+					})
+				},
+				cancel:function(){
+					parentDiv.html(oldContent);
+				}
+			})
+		}
+
+		
 </script>
 @endsection

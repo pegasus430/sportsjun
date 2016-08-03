@@ -182,7 +182,7 @@
                                         {{ $team_name_array[$match['b_id']] }}
                                     </h4>
 									
-									<span class="event-date">{{ $match_startdate_array[$match['id']] }}</span>
+									<span class="event-date">{{ Helper::displayDateTime($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""), 1) }}</span>
 									<span class='sports_text'>{{ isset($sport_name)?$sport_name:'' }}</span>
 									@if($match['match_type']!='other')
 											<span class='match_type_text'>({{ $match['match_type']=='odi'?strtoupper($match['match_type']):ucfirst($match['match_type']) }}, {{ucfirst($match['match_category'])}})</span>
@@ -191,10 +191,10 @@
 									<!-- match_details -->
 									
 									<span class=''>{{$match['address']}}</span><br>
-									Status : <span class='event_date'>{{$match['match_status']}}</span> <br>
-									Scores : <span class='blue'>{{Helper::getMatchDetails($match['id'])->scores}} </span> <br>
+									Status: <span class='event_date'>{{ ucfirst($match['match_status']) }}</span> <br>
+									Scores: <span class='blue'>{{Helper::getMatchDetails($match['id'])->scores}} </span> <br>
 									@if(!is_null($match['winner_id']))
-								<span class='red'>		Winner : 				{{Helper::getMatchDetails($match['id'])->winner}} </span>
+								<span class='red'>Winner: {{Helper::getMatchDetails($match['id'])->winner}} </span>
 								
 									@endif
 
@@ -259,7 +259,7 @@
                                         {{ $user_name[$match['b_id']] }}
                                     </h4>
 									
-									<span class="event-date">{{ $match_startdate_array[$match['id']] }}</span>
+									<span class="event-date">{{ Helper::displayDateTime($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""), 1) }}</span>
 									<span class='sports_text'>{{ isset($sport_name)?$sport_name:'' }}</span>
 									@if($match['match_type']!='other')
 											<span class='match_type_text'>({{ $match['match_type']=='odi'?strtoupper($match['match_type']):ucfirst($match['match_type']) }})</span>
