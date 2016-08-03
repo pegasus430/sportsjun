@@ -80,7 +80,7 @@
                 </div>
             </div>
 			<h5 class="scoreboard_title">TableTennis Scorecard @if($match_data[0]['match_type']!='other')
-											<span class='match_type_text'>({{ $match_data[0]['match_type']=='odi'?strtoupper($match_data[0]['match_type']):ucfirst($match_data[0]['match_type']) }})</span>
+											<span class='match_type_text'>({{ $match_data[0]['match_type']=='odi'?strtoupper($match_data[0]['match_type']):ucfirst($match_data[0]['match_type']) }}, {{ucfirst($match_data[0]['match_category']) }})</span>
 									@endif</h5>
         </div>
           @if (session('status'))

@@ -201,7 +201,13 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 
 			<div class="row">
 				<div class="col-md-12">
-					<h5 class="scoreboard_title">Hockey Scorecard</h5>
+					<h5 class="scoreboard_title">Hockey Scorecard
+					@if(!empty($match_data[0]['match_category']))
+                             <span class='match_type_text'>
+                             ({{ucfirst($match_data[0]['match_category']) }})
+                             </span>
+                                @endif</h5>
+
 					<div class="clearfix"></div>
 					<div class="form-inline">
 						@if($match_data[0]['match_status']=='completed' && $match_data[0]['winner_id']>0)

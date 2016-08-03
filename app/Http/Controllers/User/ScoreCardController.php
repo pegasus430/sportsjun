@@ -187,6 +187,16 @@ class ScoreCardController extends Controller {
 						$hockey= new ScoreCard\HockeyScorecardController;
 					return $hockey->hockeyScoreCard($match_data,$sportsDetails,$tournamentDetails);
 				}
+				else if(strtolower($sport_name)==strtolower('volleyball'))
+				{
+					$volleyball = new ScoreCard\VolleyballScoreCardController;
+					return $volleyball->volleyballScoreCard($match_data,$match='Volleyball',$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
+				else if(strtolower($sport_name)==strtolower('basketball'))
+				{
+					$basketball = new ScoreCard\BasketballScoreCardController;
+					return $basketball->basketballScoreCard($match_data,$match='Basketball',$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
 			}
 		}
 	}
@@ -3138,6 +3148,16 @@ class ScoreCardController extends Controller {
 					$squash = new ScoreCard\SquashScoreCardController;
 					return $squash->squashScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
+				else if(strtolower($sport_name)==strtolower('volleyball'))
+				{
+					$squash = new ScoreCard\VolleyballScoreCardController;
+					return $squash->volleyballScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
+				else if(strtolower($sport_name)==strtolower('basketball'))
+				{
+					$squash = new ScoreCard\BasketballScoreCardController;
+					return $squash->basketballScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
 			}
 		}
 	}
@@ -3192,6 +3212,16 @@ class ScoreCardController extends Controller {
 				{
 					$squash = new ScoreCard\SquashScoreCardController;
 					return $squash->squashScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
+				else if(strtolower($sport_name)==strtolower('volleyball'))
+				{
+					$squash = new ScoreCard\VolleyballScoreCardController;
+					return $squash->volleyballScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
+				else if(strtolower($sport_name)==strtolower('basketball'))
+				{
+					$squash = new ScoreCard\BasketballScoreCardController;
+					return $squash->basketallScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
 			}
 		}

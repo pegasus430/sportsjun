@@ -105,11 +105,6 @@
 									<div class="{{ (!empty($player['status'])?(($player['status'] == 'pending')?'player_inactive':($player['status'] == 'accepted'?'player_active':'player_rejected')):'player_inactive') }}">
 										{{ (!empty($player['status'])?(($player['status'] == 'pending')?'P':($player['status'] == 'accepted'?'A':'R')):'P') }}</div>
 
-										<!-- add email -->
-
-									@if(empty(Helper::getUserDetails($player['user_id'])->email))
-		<span class='add_email'><a href='javascript:void(0)' onclick="addEmail(this)" user_id="{{$player['user_id']}}" team_id=" {{$team_id}} ">Add Email</a></span>
-									@endif
 
 									<div class="player_glyph_action">
 										<div class="bs-example">
@@ -136,6 +131,12 @@
 									<a href="{{ url('/editsportprofile').'/'.(!empty($player['user_id'])?$player['user_id']:0) }}" class="team_players_sj_title">{{ (!empty($player['user']['name'])?$player['user']['name']:'NA') }}</a>
 									<div class="teamplayer_position">{{ !empty($player['role'])?$player['role']:'NA' }}</div>
 								</div>
+
+										<!-- add email -->
+
+									@if(empty(Helper::getUserDetails($player['user_id'])->email))
+		<span class='add_email'><a href='javascript:void(0)' onclick="addEmail(this)" user_id="{{$player['user_id']}}" team_id=" {{$team_id}} ">Add Player Email</a></span>
+									@endif
 							</div>
 						</div>
 						@endforeach
@@ -292,8 +293,27 @@
 						url:'/addemailtoplayer',
 						data:data,
 						type:'post',
-						success:function(){
-							parentDiv.html('');
+						dataType:'json',
+						success:function(response){
+							if(response.error=='no'){
+								parentDiv.addClass('alert').addClass('alert-success');
+								parentDiv.html(response.message);
+
+								setTimeout(function(){
+									parentDiv.removeClass('alert').removeClass('alert-success');
+									parentDiv.html('');
+								}, 3000)
+							}
+							else if(response.error=='yes'){
+								parentDiv.addClass('alert').addClass('alert-danger');
+								parentDiv.html(response.message);
+
+								setTimeout(function(){
+									parentDiv.removeClass('alert').removeClass('alert-danger');
+									parentDiv.html(oldContent);
+								}, 3000)
+							}
+							
 						},
 						error:function(){
 							parentDiv.html(oldContent);
@@ -305,5 +325,7 @@
 				}
 			})
 		}
+
+		
 </script>
 @endsection

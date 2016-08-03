@@ -272,6 +272,15 @@ class InvitePlayerController extends Controller
     		$user_id=$request->user_id;
     		$teamid=$request->team_id;
 
+    		$check_if_email_exist=user::where('email', $email)->get()->count();
+
+    		if($check_if_email_exist>0){
+    			return [
+    			'message'=>'This email already exist',
+    			'error'=>'yes'
+    			];
+    		}
+
     		$user=User::find($user_id);
     		$user->email=$email;
     		$teamname=Team::select('name')->where('id',$teamid)->get()->toArray();
@@ -295,6 +304,7 @@ class InvitePlayerController extends Controller
 			$data = array('view'=>$view,'subject'=>$subject,'to_email_id'=>$to_email_id,'view_data'=>$view_data,'to_user_id'=>  $to_user_id,'flag'=>'user','send_flag'=>1);
 			SendMail::sendmail($data);
 
-    	return $user;
+    	return ['message'=>'Email Added', 
+    			'error'=>'no'];
     }
 }
