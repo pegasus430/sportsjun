@@ -1885,7 +1885,7 @@ class Helper {
                                 ];
                             $mail_data=[
                                     'view'      =>  'emails.endmatchnotification',
-                                    'subject'   =>  'View your match details',
+                                    'subject'   =>  'Match : '. strtoupper($team_a_name) .' vs ' . strtoupper($team_b_name) . ' Scorecard (sportsJun)' ,
                                     'to_user_id'=>  $player_id,
                                     'to_email_id'=> $user->email,
                                     'view_data' =>  $data, 
@@ -1914,7 +1914,7 @@ class Helper {
                                 ];
                             $mail_data=[
                                     'view'      =>  'emails.endmatchnotification',
-                                    'subject'   =>  'Match : '. strtoupper($team_a_name) .' vs ' . strtoupper($team_a_name) . 'Scorecard (sportsJun)' ,
+                                    'subject'   =>  'Match : '. strtoupper($team_a_name) .' vs ' . strtoupper($team_b_name) . ' Scorecard (sportsJun)' ,
                                     'to_user_id'=>  $player_id,
                                     'to_email_id'=> $user->email,
                                     'view_data' =>  $data,

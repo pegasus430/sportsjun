@@ -2882,7 +2882,7 @@ class ScoreCardController extends Controller {
 				{
 					MatchSchedule::where('id',$match_id)->update(['match_status'=>$match_status,
 						'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
-						'is_tied'=>$is_tied,
+						'is_tied'=>$is_tie,
 						 'has_result'     => $has_result,
                          'match_result'   => $match_result,
                          'score_added_by'=>$json_score_status]);
