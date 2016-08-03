@@ -35,7 +35,7 @@
     $player_or_team_right_button_remove=" <button team_id='$preferences->right_team_id' table_score_id=    '{$score_b_array['id']}' onclick='return removeScore(this)'class='btn button_remove btn-circle btn-sm pull-right'> <i class='fa fa-minus'></i> </button>";
 
   ${'team_'.$preferences->left_team_id.'_score'}=$match_details->scores->{$preferences->left_team_id.'_score'}.' sets';
-  ${'team_'.$preferences->right_team_id.'_score'}=$match_details->scores->{$preferences->right_team_id.'_score'}/' sets';
+  ${'team_'.$preferences->right_team_id.'_score'}=$match_details->scores->{$preferences->right_team_id.'_score'}.' sets';
   }else{
     $player_or_team_left_button_add='';
     $player_or_team_left_button_remove='';
