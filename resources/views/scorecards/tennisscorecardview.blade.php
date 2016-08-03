@@ -72,6 +72,18 @@
                   </div>
               </div>
           </div>
+
+           @if(!is_null($match_data[0]['tournament_id']))
+                <div class='row'>
+                    <div class='col-xs-12'>
+                        <div class='match_loc'>
+                            {{$tournamentDetails['name']}}
+                                
+                        </div>
+                    </div>
+                </div>
+                @endif
+               
           <div class="row">
             <div class="col-xs-12">
                 <div class="match_loc">
@@ -80,7 +92,7 @@
               </div>
           </div>
 		  <h5 class="scoreboard_title">Tennis Scorecard @if($match_data[0]['match_type']!='other')
-											<span class='match_type_text'>({{ $match_data[0]['match_type']=='odi'?strtoupper($match_data[0]['match_type']):ucfirst($match_data[0]['match_type']) }})</span>
+											<span class='match_type_text'>({{ $match_data[0]['match_type']=='odi'?strtoupper($match_data[0]['match_type']):ucfirst($match_data[0]['match_type']) }}, {{ucfirst($match_data[0]['match_category']) }})</span>
 									@endif</h5>
       </div>
       @if (session('status'))

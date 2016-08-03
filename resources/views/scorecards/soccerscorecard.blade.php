@@ -199,7 +199,15 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 
 			<div class="row">
 				<div class="col-md-12">
-					<h5 class="scoreboard_title">Soccer Scorecard</h5>
+					<h5 class="scoreboard_title">Soccer Scorecard
+						@if(!empty($match_data[0]['match_category']))
+                             <span class='match_type_text'>
+                             ({{ucfirst($match_data[0]['match_category']) }})
+                             </span>
+                                @endif					 
+					 </h5>
+
+
 					<div class="clearfix"></div>
 					<div class="form-inline">
 						@if($match_data[0]['match_status']=='completed' && $match_data[0]['winner_id']>0)
@@ -366,13 +374,13 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 				<?php $a_count = 1;?>
 
 	@if(!$match_data[0]['has_result'])
-		<div class='row' >
+		<!-- <div class='row' >
 			<div class="col-sm-8 col-sm-offset-2" style="background:#ffeeee">
 				<div class='col-sm-12'>
                     This match has  been saved as 'no result'. All the changes and records for this match shall be discarded after approval.
                 </div>
 			</div>
-		</div>	
+		</div>	 -->
 
 @endif
 				<div class="row">

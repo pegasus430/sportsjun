@@ -83,7 +83,7 @@ class Tournaments extends Model
     
     public function logo()
     {
-        return $this->hasOne('App\Model\Photo', 'imageable_id', 'tournament_parent_id')->where('imageable_type', 'tournaments')->where('is_album_cover', 1);
+        return $this->hasOne('App\Model\Photo', 'imageable_id', 'tournament_parent_id')->where('imageable_type', 'tournaments')->where('is_album_cover', 1)->select('imageable_id','url');
     }
 
     public function photos()
@@ -117,10 +117,10 @@ class Tournaments extends Model
     {
         $offset = !empty($req_params['offset']) ? $req_params['offset'] : 0;
         $limit  = !empty($req_params['limit']) ? $req_params['limit'] : config('constants.LIMIT');
-        $query  = $this->search($req_params['search_by']);
+        $query  = $this->with('logo')->search($req_params['search_by']);
         if (trim($req_params['sport']) != '')
         {
-            $query = $this
+            $query = $this->with('logo')
                 ->search($req_params['search_by'])
                 ->whereIn('sports_id', explode(",", $req_params['sport']));
         }

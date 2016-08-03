@@ -60,7 +60,7 @@ class InvitePlayerController extends Controller
     {
         //
     }
-   
+    
     public function invitePlayers(Request $request)
     {
 		   //'password' => bcrypt($data['password']),
@@ -265,5 +265,46 @@ class InvitePlayerController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function addEmailToPlayers(Request $request){
+    		$email=$request->email;
+    		$user_id=$request->user_id;
+    		$teamid=$request->team_id;
+
+    		$check_if_email_exist=user::where('email', $email)->get()->count();
+
+    		if($check_if_email_exist>0){
+    			return [
+    			'message'=>'This email already exist',
+    			'error'=>'yes'
+    			];
+    		}
+
+    		$user=User::find($user_id);
+    		$user->email=$email;
+    		$teamname=Team::select('name')->where('id',$teamid)->get()->toArray();
+
+    		
+//generate new password for player
+    		$generatedPassword= str_random(6);
+			 $password=  bcrypt( $generatedPassword);
+			$user->email =  $email; 
+			$user->password = $password;
+			$user->verification_key = md5($email);
+			$user->is_verified =1;
+			$user->save();
+
+			$to_user_id = $user->id;
+			$to_email_id=  $user->email;
+			$user_name = $user->name;
+			$subject =  trans('message.inviteplayer.subject');
+			$view_data = array('email'=>$to_email_id,'password'=>$generatedPassword ,'user_name'=>$user_name,'team_name'=>$teamname[0]['name']);
+			$view = 'emails.invitePlayers';
+			$data = array('view'=>$view,'subject'=>$subject,'to_email_id'=>$to_email_id,'view_data'=>$view_data,'to_user_id'=>  $to_user_id,'flag'=>'user','send_flag'=>1);
+			SendMail::sendmail($data);
+
+    	return ['message'=>'Email Added', 
+    			'error'=>'no'];
     }
 }

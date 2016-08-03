@@ -72,9 +72,9 @@ if (typeof SJ.SCORECARD === 'undefined')
                                 }
                                 if ($('#endMatchModal').length > 0)
                                 {
-                                        $(document).on('ifChecked','#matchResultRadio input', function(){
+                                        $(document).on('change','#matchResultSelect select', function(){
                                                 SJ.SCORECARD.matchResult = this.value;
-                                                (this.value == 'tie') ? $('#matchWinnerRadio').slideUp() : $('#matchWinnerRadio').slideDown();
+                                                (this.value == 'tie' || this.value == 'washout') ? $('#matchWinnerRadio').slideUp() : $('#matchWinnerRadio').slideDown();
                                         });
 
                                         $(document).on('ifChecked','#matchWinnerRadio input', function(){
@@ -193,7 +193,7 @@ if (typeof SJ.SCORECARD === 'undefined')
                         {
                                 if ($('#endMatchModal').length > 0)
                                 {
-                                        if (SJ.SCORECARD.matchResult === "tie")
+                                        if (SJ.SCORECARD.matchResult === "tie" || SJ.SCORECARD.matchResult === "washout")
                                         {
                                                 $("#matchWinnerRadio").hide();
                                         }
@@ -203,7 +203,7 @@ if (typeof SJ.SCORECARD === 'undefined')
                         endMatch : function()
                         {
                                 $('#match_result').val(SJ.SCORECARD.matchResult).change();
-                                if (SJ.SCORECARD.matchResult === "tie")
+                                if (SJ.SCORECARD.matchResult === "tie" || SJ.SCORECARD.matchResult === "washout")
                                 {
                                         $('#winner_id').val("").change();
                                         $('.winner_team_id').val('');
@@ -304,7 +304,6 @@ if (typeof SJ.SCORECARD === 'undefined')
                         soccerPenalties:function(){
 
                         },
-
                         soccerAddField:function(player_id, record_type,record_type_name){
 
                                 var player_content=$('#team_a_row_'+player_id);                                

@@ -75,6 +75,17 @@
                     </div>
                 </div>
             </div>
+
+             @if(!is_null($match_data[0]['tournament_id']))
+                <div class='row'>
+                    <div class='col-xs-12'>
+                        <div class='match_loc'>
+                            {{$tournamentDetails['name']}}
+                                
+                        </div>
+                    </div>
+                </div>
+                @endif
             
             <div class="row">
             	<div class="col-xs-12">
@@ -92,7 +103,7 @@
 	<div class="panel panel-default">	
             <div class="panel-body">
             	<h5 class="scoreboard_title">Cricket Scorecard @if($match_data[0]['match_type']!='other')
-											<span class='match_type_text'>({{ $match_data[0]['match_type']=='odi'?strtoupper($match_data[0]['match_type']):ucfirst($match_data[0]['match_type']) }})</span>
+											<span class='match_type_text'>({{ $match_data[0]['match_type']=='odi'?strtoupper($match_data[0]['match_type']):ucfirst($match_data[0]['match_type']) }}, {{ucfirst($match_data[0]['match_category']) }})</span>
 									@endif</h5>
                 
                 <div class="form-inline">
@@ -132,16 +143,20 @@
 						
 					@else
                                                 @if($match_data[0]['is_tied']>0)
-                                                                <div class="form-group">
-                                                                        <label>Match Result</label>
-                                        <h3 class="win_team">{{ 'Tie' }}</h3>
-
-                                                          </div>   
+                                                    <div class="form-group">
+                                                        <label>Match Result</label>
+                                                        <h3 class="win_team">Tie</h3>
+                                                    </div>
+                                                @elseif($match_data[0]['match_result'] == "washout")
+                                                    <div class="form-group">
+                                                        <label>MATCH ENDED DUE TO</label>
+                                                        <h3 class="win_team">Washout</h3>
+                                                    </div>
                                                 @else
-                                  <div class="form-group">
-                                                  <label>Winner is not updated.</label>
-                                                                </div>
-                                                @endif	
+                                                    <div class="form-group">
+                                                        <label>Winner is not updated.</label>
+                                                    </div>
+                                                @endif
 					@endif
                                         
                         @if($match_data[0]['player_of_the_match']>0)

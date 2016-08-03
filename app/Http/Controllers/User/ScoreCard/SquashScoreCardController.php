@@ -633,6 +633,10 @@ class SquashScoreCardController extends parentScoreCardController
                     $match_details_data->{"set".$i}->{$right_team_id."_score"}=(int)$request->{"b_set".$i}>$end_point?$end_point:(int)$request->{"b_set".$i};
                }
 
+            
+            $score_a_model->save();
+            $score_b_model->save();
+
             $match_details->match_details=$match_details_data;
             $match_details->scores=$this->getScoreSet($match_id);
             $match_details->current_set=$this->getCurrentSet($match_id);     //get current active set
@@ -640,8 +644,6 @@ class SquashScoreCardController extends parentScoreCardController
             $match_model->match_details=json_encode($match_details);
             $match_model->save();
 
-            $score_a_model->save();
-            $score_b_model->save();
 
         return 'match saved';
     }
