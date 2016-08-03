@@ -105,6 +105,17 @@
                                 </div>
                         </div>
 
+                @if(!is_null($match_data[0]['tournament_id']))
+                            <div class='row'>
+                                <div class='col-xs-12'>
+                                    <div class='match_loc'>
+                                        {{$tournamentDetails['name']}}
+                                            
+                                    </div>
+                                </div>
+                            </div>
+                @endif
+
                         <div class="row">
                                 <div class="col-xs-12">
                                         <div class="match_loc">

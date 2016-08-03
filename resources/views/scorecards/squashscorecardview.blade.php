@@ -18,8 +18,8 @@
     if(isset($preferences->number_of_sets))$set=$preferences->number_of_sets ;
     else $set=3;
 
-    ${'team_'.$match_data[0]['a_id'].'_score'}=0;
-    ${'team_'.$match_data[0]['b_id'].'_score'}=0; 
+    ${'team_'.$match_data[0]['a_id'].'_score'}='0 sets';
+    ${'team_'.$match_data[0]['b_id'].'_score'}='0 sets'; 
 
     $team_a_info='';
     $team_b_info='';
@@ -27,8 +27,8 @@
     if(isset($preferences)){
     $current_set=$match_details->current_set;
 
-  ${'team_'.$preferences->left_team_id.'_score'}=$match_details->scores->{$preferences->left_team_id.'_score'};
-  ${'team_'.$preferences->right_team_id.'_score'}=$match_details->scores->{$preferences->right_team_id.'_score'};
+  ${'team_'.$preferences->left_team_id.'_score'}=$match_details->scores->{$preferences->left_team_id.'_score'} . 'sets';
+  ${'team_'.$preferences->right_team_id.'_score'}=$match_details->scores->{$preferences->right_team_id.'_score'} .'sets';
 } else {
   $current_set=0;
 }
@@ -63,7 +63,7 @@
               <div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['a_id'] }}">{{ $user_a_name }}</a></div>
             @endif
                 <div class="team_city">{!! $team_a_city !!}</div>
-                <div class="team_score" id="team_{{$team_a_id}}_score">{{${'team_'.$team_a_id.'_score'} }} </div>
+                <div class="team_score" id="team_{{$team_a_id}}_score">{{${'team_'.$team_a_id.'_score'} }}  </div>
                           </div>
                         </div>
                     </div>
@@ -81,7 +81,7 @@
               <div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['b_id'] }}">{{ $user_b_name }}</a></div>
             @endif
                <div class="team_city">{!! $team_b_city !!}</div>
-                <div class="team_score" id="team_{{$team_b_id}}_score">{{${'team_'.$team_b_id.'_score'} }} </div>
+                <div class="team_score" id="team_{{$team_b_id}}_score">{{${'team_'.$team_b_id.'_score'} }}  </div>
                             </div>
                         </div>
                               <div class="col-md-4 col-sm-12">
