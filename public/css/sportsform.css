@@ -2838,3 +2838,8 @@
     letter-spacing: 1px;
     font-size: 16px !important;
 }
+
+.match-detail-winner,
+.match-detail-score {
+font-weight:bold;
+}

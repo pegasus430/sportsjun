@@ -24,7 +24,7 @@
       <section class="features_bg_greay">
       			<div class="container">
                 	<div class="row">
-                    		<div class="col-md-7"><img src="http://placehold.it/750x300" ></div>
+                    		<div class="col-md-7"><img class="feature-img" src="/images/home/features/player.png" ></div>
                             <div class="col-md-5 features_txt_dis_new"><h2>Player</h2><p>Build individual sports profile (add sports, pictures, specialisation) to join and create teams. One profile for all your sporting activities. Carry your sporting profile wherever you travel.</p>
                             <ul>
                                 <li>Connect with teams</li>
@@ -44,7 +44,7 @@
       <section class="features_bg_whitee">
       			<div class="container">
                 	<div class="row">
-                    		<div class="col-md-7"><img src="http://placehold.it/750x300" ></div>
+                    		<div class="col-md-7"><img class="feature-img" src="/images/home/features/teams.png" ></div>
                             <div class="col-md-5 features_txt_dis_new"><h2>Teams</h2><p>Create Teams and assign players,managers and admins to manage great teams, stay connected with teams in a snap. Schedule your matches and update your scores, build team performance statistics as well as individual performance statistics</p>
                             <ul>
                                 <li>Create teams</li>
@@ -65,7 +65,7 @@
       <section class="features_bg_greay">
       			<div class="container">
                 	<div class="row">
-                    		<div class="col-md-7"><img src="http://placehold.it/750x300" ></div>
+                    		<div class="col-md-7"><img class="feature-img" src="/images/home/features/organization.png" ></div>
                             <div class="col-md-5 features_txt_dis_new"><h2>Organization Structure</h2><p>Create organization and assign all teams part of the organization for easier management.</p>
                             <ul>
                                 <li>Create your organization (Schools, colleges, Academies, institutions etc) and track all your sports teams under one roof.</li>
@@ -79,7 +79,7 @@
       <section class="features_bg_whitee">
       			<div class="container">
                 	<div class="row">
-                    		<div class="col-md-7"><img src="http://placehold.it/750x300" ></div>
+                    		<div class="col-md-7"><img class="feature-img" src="/images/home/features/online_scoring.png" ></div>
                             <div class="col-md-5 features_txt_dis_new"><h2>Online Scoring</h2><p>Use scoring system to enter real time and offline scoring for 4 sports (Cricket, Tennis, Badminton, Soccer) to build your automatic statistics.</p>
                             <ul>
                                 <li>Real time online scoring that can be accessed anywhere through web/mobile</li>
@@ -95,7 +95,7 @@
             <section class="features_bg_greay">
       			<div class="container">
                 	<div class="row">
-                    		<div class="col-md-7"><img src="http://placehold.it/750x300" ></div>
+                    		<div class="col-md-7"><img class="feature-img" src="/images/home/features/tournaments.png" ></div>
                             <div class="col-md-5 features_txt_dis_new"><h2>League and Tournaments</h2><p>Super easy league builder for organisers. Manage all aspects of league and tournament scheduling and provide real-time schedules, registration, stats and standings on SportsJun website.</p>
                             <ul>
                                 <li>Tournament Registration</li>
@@ -140,7 +140,7 @@
             <section class="features_bg_whitee">
       			<div class="container">
                 	<div class="row">
-                    		<div class="col-md-7"><img src="http://placehold.it/750x300" ></div>
+                    		<div class="col-md-7"><img class="feature-img" src="/images/home/features/gallery.png" ></div>
                             <div class="col-md-5 features_txt_dis_new"><h2>Gallery</h2><p>Create albums and post your personal sporting pictures and team events in a snap. Share your amazing sporting gallery memories to the world.</p>
                             <ul>
                                 <li>Create album and attach pictures to the album to create event specific memory</li>
@@ -157,7 +157,7 @@
                   <section class="features_bg_greay">
       			<div class="container">
                 	<div class="row">
-                    		<div class="col-md-7"><img src="http://placehold.it/750x300" ></div>
+                    		<div class="col-md-7"><img class="feature-img" src="/images/home/features/marketplace.png" ></div>
                             <div class="col-md-5 features_txt_dis_new"><h2>Market Place</h2><p>Connect with sporting community to buy and sell equipment.</p>
                             <ul>
 <li>Have loads of equipment catching dust – No worries – post an ad in marketplace – users connect with you – Negotiate on a price and sell</li>
