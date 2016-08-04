@@ -133,10 +133,11 @@
 								</div>
 
 										<!-- add email -->
-
+							@if($logged_in_user_role == 'owner' || $logged_in_user_role == 'manager')
 									@if(empty(Helper::getUserDetails($player['user_id'])->email))
 		<span class='add_email'><a href='javascript:void(0)' onclick="addEmail(this)" user_id="{{$player['user_id']}}" team_id=" {{$team_id}} ">Add Player Email</a></span>
 									@endif
+							@endif
 							</div>
 						</div>
 						@endforeach
