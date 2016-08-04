@@ -71,6 +71,8 @@
                                 <li>Create your organization (Schools, colleges, Academies, institutions etc) and track all your sports teams under one roof.</li>
                                 <li>Hassle free communication with all the teams</li>
                                 <li>Appoint managers and coaches to each team.</li>
+                                <li>Organize and manage internal and external sports events with ease.</li>
+                                <li>Group role up points for multi sports event.</li>
                             </ul>
                             </div>
                     </div>
@@ -80,7 +82,7 @@
       			<div class="container">
                 	<div class="row">
                     		<div class="col-md-7"><img class="feature-img" src="/images/home/features/online_scoring.png" ></div>
-                            <div class="col-md-5 features_txt_dis_new"><h2>Online Scoring</h2><p>Use scoring system to enter real time and offline scoring for 4 sports (Cricket, Tennis, Badminton, Soccer) to build your automatic statistics.</p>
+                            <div class="col-md-5 features_txt_dis_new"><h2>Online Scoring</h2><p>Use scoring system to enter real time and offline scoring (Cricket, Soccer, Hockey, Tennis, Table Tennis, Badminton, Squash, Basketball, Volleyball and many more to come) to build your automatic statistics.</p>
                             <ul>
                                 <li>Real time online scoring that can be accessed anywhere through web/mobile</li>
                                 <li>generate both team and personal stats.</li>
