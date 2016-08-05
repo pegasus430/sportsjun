@@ -3550,7 +3550,7 @@ class ScoreCardController extends Controller {
 				}
 
 			}
-			else if($match_data[0]['is_tied']>0)//if match is tied
+			else if ($match_data[0]['is_tied'] > 0 || $match_data[0]['match_result'] == "washout")//if match is tied/washout
 			{
 				TournamentGroupTeams::where('tournament_id',$match_data[0]['tournament_id'])->where('tournament_group_id',$match_data[0]['tournament_group_id'])->where('team_id',$team_a_id)->update(['points'=>$team_a_points+($tournament_won_poins/2)]);
 
