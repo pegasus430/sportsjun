@@ -221,6 +221,19 @@ return [
                 'BADMINTON_STATISTICS' => 'BADMINTON', 
                 'SQUASH_STATISTICS' => 'SQUASH',                
         ],
+        'BASKETBALL_STATS'       => [
+                'WON'               => 'WON',
+                'LOST'              => 'LOST',
+                'TIED'              => 'TIED',
+                'WON_PERCENTAGE'    => 'WON PERCENTAGE',
+                'POINTS'            => 'POINTS',                
+                'BASKETBALL_STATISTICS' => 'BASKETBALL ', 
+                'POINTS_1'          => 'POINTS_1', 
+                'POINTS_2'          => 'POINTS_2', 
+                'POINTS_3'          => 'POINTS_3',
+                'TOTAL_POINTS'      => 'TOTAL_POINTS',
+                'FOULS'             => 'FOULS'                
+        ],
         'DEFAULT_PAGINATION'       => 10,
         'YEAR'                     => [
                 'START_YEAR' => 2014,

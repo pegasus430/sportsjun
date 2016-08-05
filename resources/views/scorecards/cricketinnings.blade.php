@@ -70,7 +70,7 @@
 				<td>{!! Form::text('a_fours_'.$a_bat_fst_ing, (!empty($a_fst_inning['fours']))?$a_fst_inning['fours']:'', array('class'=>'gui-input allownumericwithdecimal runs_new','id'=>'a_fours_'.$a_bat_fst_ing)) !!}</td>
 				<td>{!! Form::text('a_sixes_'.$a_bat_fst_ing, (!empty($a_fst_inning['sixes']))?$a_fst_inning['sixes']:'', array('class'=>'gui-input allownumericwithdecimal runs_new','id'=>'a_sixes_'.$a_bat_fst_ing)) !!}</td>
 				<td>{!! Form::text('a_strik_rate_'.$a_bat_fst_ing, (!empty($a_fst_inning['strikerate']))?number_format($a_fst_inning['strikerate'],2):'', array('class'=>'gui-input allownumericwithdecimal strike_new runs_new','id'=>'a_strik_rate_'.$a_bat_fst_ing,'readonly')) !!}</td>
-				<td><a href="#" onclick="delete_row('a','bat',{{$a_fst_inning['id']}},{{$a_bat_fst_ing}});" class="btn btn-danger btn-circle btn-sm"><i class="fa fa-remove"></i></td>
+				<td><a href="javascript:void(0)" onclick="delete_row('a','bat',{{$a_fst_inning['id']}},{{$a_bat_fst_ing}});" class="btn btn-danger btn-circle btn-sm"><i class="fa fa-remove"></i></td>
 			</tr>
 			<?php $a_bat_fst_ing++; ?>
 			@endforeach
@@ -141,7 +141,7 @@
 
 				<td>{!! Form::text('b_bowler_wide_'.$b_bowl_fst_ing, (!empty($team_b_bowl['wides_bowl']))?$team_b_bowl['wides_bowl']:'', array('class'=>'gui-input allownumericwithdecimal b_wides runs_new','id'=>'b_bowler_wide_'.$b_bowl_fst_ing)) !!}</td>
                 <td>{!! Form::text('b_bowler_noball_'.$b_bowl_fst_ing, (!empty($team_b_bowl['noballs_bowl']))?$team_b_bowl['noballs_bowl']:'', array('class'=>'gui-input allownumericwithdecimal b_no_balls runs_new','id'=>'b_bowler_noball_'.$b_bowl_fst_ing)) !!}</td>
-				<td><a href="#" onclick="delete_row('b','bowl',{{$team_b_bowl['id']}},{{$b_bowl_fst_ing}});" class="btn btn-danger btn-circle btn-sm"><i class="fa fa-remove"></i></a></td>
+				<td><a href="javascript:void(0)" onclick="delete_row('b','bowl',{{$team_b_bowl['id']}},{{$b_bowl_fst_ing}});" class="btn btn-danger btn-circle btn-sm"><i class="fa fa-remove"></i></a></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -348,7 +348,7 @@
 				<td>{!! Form::text('b_fours_'.$team_b_bat_fst_ing, (!empty($team_b_bat['fours']))?$team_b_bat['fours']:'', array('class'=>'gui-input allownumericwithdecimal runs_new','id'=>'b_fours_'.$team_b_bat_fst_ing)) !!}</td>
 				<td>{!! Form::text('b_sixes_'.$team_b_bat_fst_ing, (!empty($team_b_bat['sixes']))?$team_b_bat['sixes']:'', array('class'=>'gui-input allownumericwithdecimal runs_new','id'=>'b_sixes_'.$team_b_bat_fst_ing)) !!}</td>
 				<td>{!! Form::text('b_strik_rate_'.$team_b_bat_fst_ing, (!empty($team_b_bat['strikerate']))?number_format($team_b_bat['strikerate'],2):'', array('class'=>'gui-input allownumericwithdecimal strike_new runs_new','id'=>'b_strik_rate_'.$team_b_bat_fst_ing,'readonly')) !!}</td>
-				<td><a href="#" onclick="delete_row('b','bat',{{$team_b_bat['id']}},{{$team_b_bat_fst_ing}});" class="btn btn-danger btn-circle btn-sm"><i class="fa fa-remove"></i></td>
+				<td><a href="javascript:void(0)" onclick="delete_row('b','bat',{{$team_b_bat['id']}},{{$team_b_bat_fst_ing}});" class="btn btn-danger btn-circle btn-sm"><i class="fa fa-remove"></i></td>
 				<?php $team_b_bat_fst_ing++;?>
 				@endforeach
 			</tr>
@@ -417,7 +417,7 @@
 				<td>{!! Form::text('a_ecomony_'.$team_a_bowl_fst_ing, (!empty($team_a_bowl['ecomony']))?number_format($team_a_bowl['ecomony'],2):'', array('class'=>'gui-input allownumericwithdecimal runs_new','id'=>'a_ecomony_'.$team_a_bowl_fst_ing,'readonly')) !!}</td>
 				<td>{!! Form::text('a_bowler_wide_'.$team_a_bowl_fst_ing, (!empty($team_a_bowl['wides_bowl']))?$team_a_bowl['wides_bowl']:'', array('class'=>'gui-input allownumericwithdecimal a_wides runs_new','id'=>'a_bowler_wide_'.$team_a_bowl_fst_ing)) !!}</td>
                 <td>{!! Form::text('a_bowler_noball_'.$team_a_bowl_fst_ing, (!empty($team_a_bowl['noballs_bowl']))?$team_a_bowl['noballs_bowl']:'', array('class'=>'gui-input allownumericwithdecimal a_no_balls runs_new','id'=>'a_bowler_noball_'.$team_a_bowl_fst_ing)) !!}</td>
-				<td><a href="#" onclick="delete_row('a','bowl',{{$team_a_bowl['id']}},{{$team_a_bowl_fst_ing}})" class="btn btn-danger btn-circle btn-sm"><i class="fa fa-remove"></i></td>
+				<td><a href="javascript:void(0)" onclick="delete_row('a','bowl',{{$team_a_bowl['id']}},{{$team_a_bowl_fst_ing}})" class="btn btn-danger btn-circle btn-sm"><i class="fa fa-remove"></i></td>
 
                 <td></td>
                 <td></td>

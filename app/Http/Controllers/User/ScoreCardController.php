@@ -32,6 +32,9 @@ use App\Model\HockeyStatistic;
 //squash
 use App\Model\SquashPlayerMatchScore;
 use App\Model\SquashStatistic;
+//Basketball
+use App\Model\BasketballPlayerMatchwiseStats;
+use App\Model\BasketballStatistic;
 
 use App\User;
 use DB;
@@ -190,12 +193,12 @@ class ScoreCardController extends Controller {
 				else if(strtolower($sport_name)==strtolower('volleyball'))
 				{
 					$volleyball = new ScoreCard\VolleyballScoreCardController;
-					return $volleyball->volleyballScoreCard($match_data,$match='Volleyball',$sportsDetails,$tournamentDetails,$is_from_view=1);
+					return $volleyball->volleyballScoreCard($match_data,$sportsDetails,$tournamentDetails);
 				}
 				else if(strtolower($sport_name)==strtolower('basketball'))
 				{
 					$basketball = new ScoreCard\BasketballScoreCardController;
-					return $basketball->basketballScoreCard($match_data,$match='Basketball',$sportsDetails,$tournamentDetails,$is_from_view=1);
+					return $basketball->basketballScoreCard($match_data,$sportsDetails,$tournamentDetails);
 				}
 			}
 		}
@@ -3151,12 +3154,12 @@ class ScoreCardController extends Controller {
 				else if(strtolower($sport_name)==strtolower('volleyball'))
 				{
 					$squash = new ScoreCard\VolleyballScoreCardController;
-					return $squash->volleyballScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
+					return $squash->volleyballScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
 				else if(strtolower($sport_name)==strtolower('basketball'))
 				{
 					$squash = new ScoreCard\BasketballScoreCardController;
-					return $squash->basketballScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
+					return $squash->basketballScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
 			}
 		}
@@ -3216,12 +3219,12 @@ class ScoreCardController extends Controller {
 				else if(strtolower($sport_name)==strtolower('volleyball'))
 				{
 					$squash = new ScoreCard\VolleyballScoreCardController;
-					return $squash->volleyballScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
+					return $squash->volleyballScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
 				else if(strtolower($sport_name)==strtolower('basketball'))
 				{
 					$squash = new ScoreCard\BasketballScoreCardController;
-					return $squash->basketallScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
+					return $squash->basketallScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
 			}
 		}
@@ -3315,27 +3318,27 @@ class ScoreCardController extends Controller {
 			
 			//if no result, discard all data;
 
-			if($match_data->has_result==0){
-				$match_data->match_details=null;
-				$match_data->save();
+			// if($match_data->has_result==0){
+			// 	$match_data->match_details=null;
+			// 	$match_data->save();
 
-				if($sport_name=='Badminton'){
-					$players_stats=BadmintonPlayerMatchScore::whereMatchId($match_id)->get();
-					$this->discardMatchRecords($players_stats);
-				}
-				if($sport_name=='Squash'){
-					$players_stats=SquashPlayerMatchScore::whereMatchId($match_id)->get();
-					$this->discardMatchRecords($players_stats);
-				}
-				if($sport_name=='Hockey'){
-					$players_stats=	HockeyPlayerMatchwiseStat::whereMatchId($match_id)->get();
-					$this->discardMatchRecords($player_stats);
-				}
-				if($sport_name=='Soccer'){
-					$players_stats=	SoccerPlayerMatchwiseStat::whereMatchId($match_id)->get();
-					$this->discardMatchRecords($players_stats);
-				}
-			}
+			// 	if($sport_name=='Badminton'){
+			// 		$players_stats=BadmintonPlayerMatchScore::whereMatchId($match_id)->get();
+			// 		$this->discardMatchRecords($players_stats);
+			// 	}
+			// 	if($sport_name=='Squash'){
+			// 		$players_stats=SquashPlayerMatchScore::whereMatchId($match_id)->get();
+			// 		$this->discardMatchRecords($players_stats);
+			// 	}
+			// 	if($sport_name=='Hockey'){
+			// 		$players_stats=	HockeyPlayerMatchwiseStat::whereMatchId($match_id)->get();
+			// 		$this->discardMatchRecords($player_stats);
+			// 	}
+			// 	if($sport_name=='Soccer'){
+			// 		$players_stats=	SoccerPlayerMatchwiseStat::whereMatchId($match_id)->get();
+			// 		$this->discardMatchRecords($players_stats);
+			// 	}
+			// }
 
 			// call function to insert player wise match details in statistics table
 			if($sport_name!='')
@@ -3437,6 +3440,34 @@ class ScoreCardController extends Controller {
 				foreach($soccer_details as $user_id)
 				{
 					$this->soccerStatistics($user_id['user_id']);
+				}
+
+			}
+
+		}
+
+		else if($sport_name=='Hockey')//soccer statistics Soccer
+		{
+			$soccer_details = HockeyPlayerMatchwiseStats::where('match_id',$match_id)->get(['user_id']);
+			if(!empty($soccer_details) && count($soccer_details)>0)
+			{
+				foreach($soccer_details as $user_id)
+				{
+					$this->hockeyStatistics($user_id['user_id']);
+				}
+
+			}
+
+		}
+
+		else if($sport_name=='BasketBall')//basketball statistics 
+		{
+			$basketball_details = BasketballPlayerMatchwiseStats::where('match_id',$match_id)->get(['user_id']);
+			if(!empty($basketball_details) && count($basketball_details)>0)
+			{
+				foreach($basketball_details as $user_id)
+				{
+					$this->basketballStatistics($user_id['user_id']);
 				}
 
 			}

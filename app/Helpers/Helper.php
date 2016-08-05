@@ -1974,6 +1974,12 @@ class Helper {
             $match_model->scores=$match_details->{$a_id}->goals.' - '. $match_details->{$b_id}->goals;
 
                 break;
+
+                case '6':           //basketball
+                   
+            $match_model->scores=$match_details->{$a_id}->total_points.' - '. $match_details->{$b_id}->total_points;
+
+                break;
                 
                 case '1':           //cricket                   
             $match_model->scores =  Team::find($a_id)->name . " (" . $match_details->{$a_id}->fst_ing_score . "/" . $match_details->{$a_id}->fst_ing_wkt . (!empty($match_details->{$a_id}->scnd_ing_overs) ? ", " . $match_details->{$a_id}->scnd_ing_score . "/" . $match_details->{$a_id}->scnd_ing_wkt : "") . ") &nbsp;" . 
