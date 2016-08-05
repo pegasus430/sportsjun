@@ -565,14 +565,12 @@ Route::group(['prefix'=>'match'], function(){
 
      //routes for basketball
     Route::post('confirmSquadbasketball',         ['as'=>'match/confirmSquadBasketball', 'uses'=>'User\ScoreCard\BasketballScoreCardController@confirmSquad']);
-    Route::post('basketballSwapPlayers',    ['as'=>'match/hockeySwapPlayersBasketball', 'uses'=>'User\ScoreCard\BasketballScorecardController@basketballSwapPlayers']);
-    Route::post('choosePenaltyPlayersHockey', ['as'=>'match/choosePenaltyPlayersHockey', 'uses'=>'User\ScoreCard\HockeyScorecardController@choosePenaltyPlayers']);
-    Route::post('scorePenaltyHockey', ['as'=>'match/scorePenalty', 'uses'=>'User\ScoreCard\HockeyScorecardController@scorePenalty']);
+    Route::post('basketballSwapPlayers',    ['as'=>'match/hockeySwapPlayersBasketball', 'uses'=>'User\ScoreCard\BasketballScoreCardController@basketballSwapPlayers']);
+    Route::post('choosePenaltyPlayersHockey', ['as'=>'match/choosePenaltyPlayersHockey', 'uses'=>'User\ScoreCard\HockeyScoreCardController@choosePenaltyPlayers']);
 
-    Route::post('/endMatchRecordBasketball', 'User\ScoreCard\BasketballScorecardController@basketballStoreRecord');
-    Route::post('/saveMatchRecordBasketball', 'User\ScoreCard\BasketballScorecardController@basketballSaveRecord');
+    Route::post('/endMatchRecordBasketball', 'User\ScoreCard\BasketballScoreCardController@basketballStoreRecord');
+    Route::post('/saveMatchRecordBasketball', 'User\ScoreCard\BasketballScoreCardController@basketballSaveRecord');
 
-    Route::get('/getHockeyDetails', 'User\ScoreCard\HockeyScorecardController@getHockeyDetails');
     Route::post('manualScoringBasketball', ['as'=>'match/manualScoringBasketball', 'uses'=>'User\ScoreCard\BasketballScoreCardController@manualScoring']);
 
 
