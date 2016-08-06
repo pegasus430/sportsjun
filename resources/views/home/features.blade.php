@@ -25,7 +25,7 @@
       			<div class="container">
                 	<div class="row">
                     		<div class="col-md-7"><img class="feature-img" src="/images/home/features/player.png" ></div>
-                            <div class="col-md-5 features_txt_dis_new"><h2>Player</h2><p>Build individual sports profile (add sports, pictures, specialisation) to join and create teams. One profile for all your sporting activities. Carry your sporting profile wherever you travel.</p>
+                            <div class="col-md-5 features_txt_dis_new"><h2>Player</h2><p>Build individual sports profile (add sports, pictures, specialization) to join and create teams. One profile for all your sporting activities. Carry your sporting profile wherever you travel.</p>
                             <ul>
                                 <li>Connect with teams</li>
                                 <li>Connect with coaches</li>
