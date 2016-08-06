@@ -25,7 +25,7 @@
       			<div class="container">
                 	<div class="row">
                     		<div class="col-md-7"><img class="feature-img" src="/images/home/features/player.png" ></div>
-                            <div class="col-md-5 features_txt_dis_new"><h2>Player</h2><p>Build individual sports profile (add sports, pictures, specialisation) to join and create teams. One profile for all your sporting activities. Carry your sporting profile wherever you travel.</p>
+                            <div class="col-md-5 features_txt_dis_new"><h2>Player</h2><p>Build individual sports profile (add sports, pictures, specialization) to join and create teams. One profile for all your sporting activities. Carry your sporting profile wherever you travel.</p>
                             <ul>
                                 <li>Connect with teams</li>
                                 <li>Connect with coaches</li>
@@ -50,7 +50,7 @@
                                 <li>Create teams</li>
                                 <li>Invite players</li>
                                 <li>Schedule matches with right talented teams right with the system</li>
-                                <li>Scoring system for 4 sports (Cricket, Tennis, Badminton, Soccer)</li>
+                                <li>Scoring system for 9 sports (<strong>Cricket, Soccer, Hockey, Tennis, Table Tennis, Badminton, Squash, Basketball, Volleyball</strong> and many more to come.)</li>
                                 <li>Build  player statistics and team performance statistics automatically</li> 
                                 <li>Search and book facilities for your matches</li>
                                 <li>search and connect with coaches</li>
@@ -68,7 +68,7 @@
                     		<div class="col-md-7"><img class="feature-img" src="/images/home/features/organization.png" ></div>
                             <div class="col-md-5 features_txt_dis_new"><h2>Organization Structure</h2><p>Create organization and assign all teams part of the organization for easier management.</p>
                             <ul>
-                                <li>Create your organization (Schools, colleges, Academies, institutions etc) and track all your sports teams under one roof.</li>
+                                <li>Create your organization (Schools, Colleges, Academies, Institutions etc) and track all your sports teams under one roof.</li>
                                 <li>Hassle free communication with all the teams</li>
                                 <li>Appoint managers and coaches to each team.</li>
                                 <li>Organize and manage internal and external sports events with ease.</li>
@@ -82,10 +82,10 @@
       			<div class="container">
                 	<div class="row">
                     		<div class="col-md-7"><img class="feature-img" src="/images/home/features/online_scoring.png" ></div>
-                            <div class="col-md-5 features_txt_dis_new"><h2>Online Scoring</h2><p>Use scoring system to enter real time and offline scoring (Cricket, Soccer, Hockey, Tennis, Table Tennis, Badminton, Squash, Basketball, Volleyball and many more to come) to build your automatic statistics.</p>
+                            <div class="col-md-5 features_txt_dis_new"><h2>Online Scoring</h2><p>Use scoring system to enter real time and offline scoring (<strong>Cricket, Soccer, Hockey, Tennis, Table Tennis, Badminton, Squash, Basketball, Volleyball</strong> and many more to come) to build your automatic statistics.</p>
                             <ul>
                                 <li>Real time online scoring that can be accessed anywhere through web/mobile</li>
-                                <li>generate both team and personal stats.</li>
+                                <li>Generate both team and personal stats.</li>
                                 <li>Use our mobile responsive web app to capture the scores to generate stats.</li>
                             </ul>
                             </div>
@@ -98,7 +98,7 @@
       			<div class="container">
                 	<div class="row">
                     		<div class="col-md-7"><img class="feature-img" src="/images/home/features/tournaments.png" ></div>
-                            <div class="col-md-5 features_txt_dis_new"><h2>League and Tournaments</h2><p>Super easy league builder for organisers. Manage all aspects of league and tournament scheduling and provide real-time schedules, registration, stats and standings on SportsJun website.</p>
+                            <div class="col-md-5 features_txt_dis_new"><h2>League and Tournaments</h2><p>Super easy league builder for organizers. Manage all aspects of league and tournament scheduling and provide real-time schedules, registration, stats and standings on SportsJun website.</p>
                             <ul>
                                 <li>Tournament Registration</li>
                                 <li>Easy access to teams participating in leagues and tournaments</li>
