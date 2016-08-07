@@ -172,56 +172,63 @@
         </div>
         
 
-        <div class="container pull-up">
+  <div class="container pull-up">
 
-            <div class="row">
+            <div class="panel panel-default">
                 <div class="col-md-12">
                     <h5 class="scoreboard_title">Basketball Scorecard
-                    @if(!empty($match_data[0]['match_category']))
+                            @if(!empty($match_data[0]['match_category']))
                              <span class='match_type_text'>
                              ({{ucfirst($match_data[0]['match_category']) }})
                              </span>
-                                @endif</h5>
+                                @endif
+                    </h5>
 
                     <div class="clearfix"></div>
                     <div class="form-inline">
-                        @if($match_data[0]['match_status']=='completed' && $match_data[0]['winner_id']>0)
+                        @if($match_data[0]['winner_id']>0)
 
                             <div class="form-group">
                                 <label class="win_head">Winner</label>
                                 <h3 class="win_team">{{ ($match_data[0]['a_id']==$match_data[0]['winner_id'])?$team_a_name:$team_b_name }}</h3>
-
+                            </div>
+                            <BR>
+                        @if(!empty($match_data[0]['player_of_the_match']))
+                            <div class="form-group">
+                                <label class="" style="color:red">Player of the Match</label>
+                                <h4 class="win_team">{{ Helper::getUserDetails($match_data[0]['player_of_the_match'])->name }}</h4>
 
                             </div>
+                        @endif
 
                         @else
-                            @if($match_data[0]['match_status']=='completed' && $match_data[0]['is_tied']>0)
+                            @if($match_data[0]['is_tied']>0)
+
                                 <div class="form-group">
                                     <label>Match Result : </label>
-                                    {{ 'Tie' }}
+                                    <h3 class="win_team">{{ 'Tie' }}</h3>
 
                                 </div>
+                            @elseif($match_data[0]['match_result'] == "washout")
+                                                     <div class="form-group">
+                                                         <label>MATCH ENDED DUE TO</label>
+                                                         <h3 class="win_team">Washout</h3>
+                                                     </div>
                             @else
-                                <p></p>
-                                <br>
-                                @if($match_data[0]['hasSetupSquad'])
-                                    <button class="btn btn-danger " onclick="return SJ.SCORECARD.soccerSetTimes(this)"></i>End Match</button>
-                                @endif
-                 @if($isValidUser && $isForApprovalExist && ($match_data[0]['winner_id']>0 || $match_data[0]['is_tied']>0 || $match_data[0]['has_result'] == 0))  
 
-                    <button style="text-align:center;" type="button" onclick="forApproval();" class="btn btn-primary">Send Score for Approval</button>
 
-                @endif
+                                <div class="form-group">
+                                    <label>Winner is Not Updated</label>
 
+                                </div>
                             @endif
                         @endif
                         <p class="match-status mg"><a href="{{ url('user/album/show').'/match'.'/0'.'/'.$action_id }}"><span class="fa" style="float: left; margin-left: 8px;"><img src="{{ asset('/images/sc-gallery.png') }}" height="18" width="22"></span> <b>Media Gallery</b></a></p>
                         @include('scorecards.share')
-                        <p class="match-status">@include('scorecards.scorecardstatus')</p>
+                        <p class="match-status">@include('scorecards.scorecardstatusview')</p>
                     </div>
                 </div>
             </div>
-
     <!-- Match has no results -->
     <div class="row">
                     <!-- Team A Goals Start-->

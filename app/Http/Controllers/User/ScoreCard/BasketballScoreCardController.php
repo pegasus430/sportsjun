@@ -717,7 +717,7 @@ class BasketballScoreCardController extends parentScoreCardController
           $match_details->{$team_id}->players->{'player_'.$basketball_model->user_id}->{$quarter}->points_1++;
           $match_details->{$team_id}->players->{'player_'.$basketball_model->user_id}->{$quarter}->total_points=$basketball_model->{$quarter};
           
-          $basketball_model->total_points=$basketball_model->quarter_1+$basketball_model->quarter_2+$basketball_model->quarter_3;
+          $basketball_model->total_points=$this->getTotal($basketball_model);
 
       $match_details->{$team_id}->total_points++;
       $match_details->{$team_id}->players->{'player_'.$basketball_model->user_id}->total_points=$basketball_model->total_points;
@@ -734,7 +734,7 @@ class BasketballScoreCardController extends parentScoreCardController
        $match_details->{$team_id}->players->{'player_'.$basketball_model->user_id}->{$quarter}->total_points=$basketball_model->{$quarter};
 
           $match_details->{$team_id}->total_points+=2;
-          $basketball_model->total_points=$basketball_model->quarter_1+$basketball_model->quarter_2+$basketball_model->quarter_3;
+          $basketball_model->total_points=$this->getTotal($basketball_model);
       $match_details->{$team_id}->players->{'player_'.$basketball_model->user_id}->total_points=$basketball_model->total_points;
 
 
@@ -750,7 +750,7 @@ class BasketballScoreCardController extends parentScoreCardController
                $match_details->{$team_id}->players->{'player_'.$basketball_model->user_id}->{$quarter}->total_points=$basketball_model->{$quarter};
                
           $match_details->{$team_id}->total_points+=3;
-          $basketball_model->total_points=$basketball_model->quarter_1+$basketball_model->quarter_2+$basketball_model->quarter_3;
+          $basketball_model->total_points=$this->getTotal($basketball_model);
 
       $match_details->{$team_id}->players->{'player_'.$basketball_model->user_id}->total_points=$basketball_model->total_points;
 
@@ -798,6 +798,14 @@ class BasketballScoreCardController extends parentScoreCardController
 		//BasketballStatistic::where('user_id',$user_id)->update(['yellow_cards'=>$yellow_card_count,'red_cards'=>$red_card_count,'goals_scored'=>$goal_count]);
 	}
 	//
+
+	public function getTotal($player_model){
+		$total=0; 
+		for($i=1; $i<=6; $i++){
+				$total+=$player_model->{'quarter_'.$i};
+		}
+		return $total;
+	}
 
 
 
