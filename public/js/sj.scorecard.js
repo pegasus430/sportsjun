@@ -371,7 +371,7 @@ if (typeof SJ.SCORECARD === 'undefined')
                 }
                 else{
                      
-                       displayFormContent.append("<div  class='records col-sm-12 '><div  class='col-sm-3 col-xs-6'>"+player_name+"</div><div  class='col-sm-2 col-xs-4'>"+half_time+"</div><div  class='col-sm-2 col-xs-2'>"+record_type_name+"</div><div  class='col-sm-2 col-xs-6'><input type='number' min='0' placeholder='time e.g 20' class=' col-sm-12 col-xs-12  input_second_half'  name='time_"+index+"' required></div><div  class='col-sm-3 col-xs-6'><a href='javascript:void(0)' onclick='deleteRow(this, "+index+", "+player_id+",\""+record_type+"\")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></div></div>");
+                       //displayFormContent.append("<div  class='records col-sm-12 '><div  class='col-sm-3 col-xs-6'>"+player_name+"</div><div  class='col-sm-2 col-xs-4'>"+half_time+"</div><div  class='col-sm-2 col-xs-2'>"+record_type_name+"</div><div  class='col-sm-2 col-xs-6'><input type='number' min='0' placeholder='time e.g 20' class=' col-sm-12 col-xs-12  input_second_half'  name='time_"+index+"' required></div><div  class='col-sm-3 col-xs-6'><a href='javascript:void(0)' onclick='deleteRow(this, "+index+", "+player_id+",\""+record_type+"\")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></div></div>");
                                                                    
                 }
 
@@ -391,6 +391,9 @@ if (typeof SJ.SCORECARD === 'undefined')
                                 displayFormContent.append("<input type='hidden' name='team_b_id' value='"+team_b_id+"'>");
                                 displayFormContent.append("<input type='hidden' name='index' value='"+index+"'>");
                         
+                if(match_name==='basketball'){
+                        $('#form_record_'+index).submit();
+                }
 
                         },
 

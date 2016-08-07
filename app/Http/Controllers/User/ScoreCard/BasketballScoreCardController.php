@@ -45,13 +45,16 @@ class BasketballScoreCardController extends parentScoreCardController
 
         $team_a_players = array();
         $team_b_players = array();
+       
         $team_a_id = $match_data[0]['a_id'];
         $team_b_id = $match_data[0]['b_id'];
         $team_a_playerids = explode(',',$match_data[0]['player_a_ids']);
         $team_b_playerids = explode(',',$match_data[0]['player_b_ids']);
 
+       
         //get match id
         $match_id=$match_data[0]['id'];
+        $match_players = BasketballPlayerMatchwiseStats::whereMatchId($match_id)->get(['user_id'])->toArray();
 
         //get Basketball scores for team a
         $team_a_basketball_scores = BasketballPlayerMatchwiseStats::select()->where('match_id',$match_data[0]['id'])->where('team_id',$team_a_id)->get();
@@ -210,10 +213,10 @@ class BasketballScoreCardController extends parentScoreCardController
             $player_of_the_match=$match_data[0]['player_of_the_match'];
             if($player_of_the_match_model=User::find($player_of_the_match))$player_of_the_match=$player_of_the_match_model;
             else $player_of_the_match=NULL;
-            return view('scorecards.basketballscorecardview',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'team_a'=>[''=>'Select Player']+$team_a,'team_b'=>[''=>'Select Player']+$team_b,'match_data'=>$match_data,'team_a_name'=>$team_a_name,'team_b_name'=>$team_b_name,'team_a_basketball_scores_array'=>$team_a_basketball_scores_array,'team_b_basketball_scores_array'=>$team_b_basketball_scores_array,'team_a_count'=>$team_a_count,'team_b_count'=>$team_b_count,'team_a_logo'=>$team_a_logo,'team_b_logo'=>$team_b_logo,'team_a_goals'=>$team_a_goals,'team_b_goals'=>$team_b_goals,'player_name_array'=> $player_name_array,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'team_a_red_count'=>$team_a_red_count,'team_a_yellow_count'=>$team_a_yellow_count,'team_b_red_count'=>$team_b_red_count,'team_b_yellow_count'=>$team_b_yellow_count,'form_id'=>$form_id,'team_a_players'=>$team_a_players, 'team_b_players'=>$team_b_players, 'player_of_the_match'=>$player_of_the_match));
+            return view('scorecards.basketballscorecardview',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'team_a'=>[''=>'Select Player']+$team_a,'team_b'=>[''=>'Select Player']+$team_b,'match_data'=>$match_data,'team_a_name'=>$team_a_name,'team_b_name'=>$team_b_name,'team_a_basketball_scores_array'=>$team_a_basketball_scores_array,'team_b_basketball_scores_array'=>$team_b_basketball_scores_array,'team_a_count'=>$team_a_count,'team_b_count'=>$team_b_count,'team_a_logo'=>$team_a_logo,'team_b_logo'=>$team_b_logo,'team_a_goals'=>$team_a_goals,'team_b_goals'=>$team_b_goals,'player_name_array'=> $player_name_array,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'team_a_red_count'=>$team_a_red_count,'team_a_yellow_count'=>$team_a_yellow_count,'team_b_red_count'=>$team_b_red_count,'team_b_yellow_count'=>$team_b_yellow_count,'form_id'=>$form_id,'team_a_players'=>$team_a_players, 'team_b_players'=>$team_b_players, 'player_of_the_match'=>$player_of_the_match, 'match_players'=>$match_players));
         }else //Basketball score view and edit
         {
-            return view('scorecards.basketballscorecard',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'team_a'=>[''=>'Select Player']+$team_a,'team_b'=>[''=>'Select Player']+$team_b,'match_data'=>$match_data,'team_a_name'=>$team_a_name,'team_b_name'=>$team_b_name,'team_a_basketball_scores_array'=>$team_a_basketball_scores_array,'team_b_basketball_scores_array'=>$team_b_basketball_scores_array,'team_a_count'=>$team_a_count,'team_b_count'=>$team_b_count,'team_a_logo'=>$team_a_logo,'team_b_logo'=>$team_b_logo,'team_a_goals'=>$team_a_goals,'team_b_goals'=>$team_b_goals,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'team_a_red_count'=>$team_a_red_count,'team_a_yellow_count'=>$team_a_yellow_count,'team_b_red_count'=>$team_b_red_count,'team_b_yellow_count'=>$team_b_yellow_count,'form_id'=>$form_id, 'team_a_players'=>$team_a_players, 'team_b_players'=>$team_b_players));
+            return view('scorecards.basketballscorecard',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'team_a'=>[''=>'Select Player']+$team_a,'team_b'=>[''=>'Select Player']+$team_b,'match_data'=>$match_data,'team_a_name'=>$team_a_name,'team_b_name'=>$team_b_name,'team_a_basketball_scores_array'=>$team_a_basketball_scores_array,'team_b_basketball_scores_array'=>$team_b_basketball_scores_array,'team_a_count'=>$team_a_count,'team_b_count'=>$team_b_count,'team_a_logo'=>$team_a_logo,'team_b_logo'=>$team_b_logo,'team_a_goals'=>$team_a_goals,'team_b_goals'=>$team_b_goals,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'team_a_red_count'=>$team_a_red_count,'team_a_yellow_count'=>$team_a_yellow_count,'team_b_red_count'=>$team_b_red_count,'team_b_yellow_count'=>$team_b_yellow_count,'form_id'=>$form_id, 'team_a_players'=>$team_a_players, 'team_b_players'=>$team_b_players, 'match_players'=>$match_players));
         }
 
     }
@@ -255,28 +258,28 @@ class BasketballScoreCardController extends parentScoreCardController
         	"playing_status"=>0,
         	"dismissed"=>0, 
         	"quarters_played"=>'',
-        	"quarter_1"=>(object)[
+        	"quarter_1"=>[
 		        	"points_1"=>0,
 		        	"points_2"=>0,
 		        	"points_3"=>0,
 		        	"fouls"=>0,
 		        	"total_points"=>0,
         	],
-        	"quarter_2"=>(object)[
+        	"quarter_2"=>[
         			"points_1"=>0,
 		        	"points_2"=>0,
 		        	"points_3"=>0,
 		        	"fouls"=>0,
 		        	"total_points"=>0,
         	],
-        	"quarter_3"=>(object)[
+        	"quarter_3"=>[
 	        		"points_1"=>0,
 		        	"points_2"=>0,
 		        	"points_3"=>0,
 		        	"fouls"=>0,
 		        	"total_points"=>0
         	],
-        	"quarter_4"=>(object)[
+        	"quarter_4"=>[
         			"points_1"=>0,
 		        	"points_2"=>0,
 		        	"points_3"=>0,
@@ -402,10 +405,20 @@ class BasketballScoreCardController extends parentScoreCardController
 
     		foreach ($players_stats as $key => $player) {
     			//stores quarters played
-						$player->quarters_played=$request->{'quarters_'.$player->id};
-						$match_details->{$player->team_id}->players->{'player_'.$player->user_id}->quarters_played=$request->{'quarters_'.$player->id};
+						//$player->quarters_played=$request->{'quarters_'.$player->id};
+						//$match_details->{$player->team_id}->players->{'player_'.$player->user_id}->quarters_played=$request->{'quarters_'.$player->id};
 
-							//if player fouls is greater than max, return max to the player.
+    			//number of points type
+    				$player->points_1=$request->{'points_1_'.$player->id};
+    				$player->points_2=$request->{'points_2_'.$player->id};
+    				$player->points_3=$request->{'points_3_'.$player->id};
+
+    			$match_details->{$player->team_id}->players->{'player_'.$player->user_id}->points_1=$player->points_1;
+    			$match_details->{$player->team_id}->players->{'player_'.$player->user_id}->points_2=$player->points_2;
+    			$match_details->{$player->team_id}->players->{'player_'.$player->user_id}->points_3=$player->points_3;
+    			
+
+								//if player fouls is greater than max, return max to the player.
 						if($request->{'fouls_'.$player->id}>$max_fouls) $request->{'fouls_'.$player->id}=$max_fouls;
 
 									//stores fouls per player
@@ -419,10 +432,10 @@ class BasketballScoreCardController extends parentScoreCardController
 						$total_points_per_player=0;
 								for($i=1; $i<=$number_of_quarters; $i++){
 
-											$total_points_per_player+=$request->{'quarters_'.$i.'_player_'.$player->id};
-											$match_details->{$player->team_id}->players->{'player_'.$player->user_id}->{'quarter_'.$i}->total_points=$request->{'quarters_'.$i.'_player_'.$player->id};
+							$total_points_per_player+=$request->{'quarters_'.$i.'_player_'.$player->id};
+							$match_details->{$player->team_id}->players->{'player_'.$player->user_id}->{'quarter_'.$i}->total_points=$request->{'quarters_'.$i.'_player_'.$player->id};
 
-											$player['quarter_'.$i]=$request->{'quarters_'.$i.'_player_'.$player->id};
+							$player['quarter_'.$i]=$request->{'quarters_'.$i.'_player_'.$player->id};
 						
 
 								}
@@ -685,7 +698,7 @@ class BasketballScoreCardController extends parentScoreCardController
                 $player_stat_id=$request['player_'.$i];
                 $user_id=$request['user_'.$i];
                 $record_type=$request['record_type_'.$i];
-                $time=$request['time_'.$i];
+               // $time=$request['time_'.$i];
                 $player_name=$request['player_name_'.$i];
                 $team_type=$request['team_type_'.$i];
 
@@ -699,26 +712,31 @@ class BasketballScoreCardController extends parentScoreCardController
 
           $basketball_model->points_1++;
           $basketball_model->{$quarter}++;
-          $match_details->{$team_id}->players->{'player_'.$basketball_model->user_id}->total_points++;
+          
           $match_details->{$team_id}->players->{'player_'.$basketball_model->user_id}->points_1++;
-          $match_details->{$team_id}->players->{'player_'.$basketball_model->user_id}->{$quarter}->points_1=$basketball_model->points_1;
+          $match_details->{$team_id}->players->{'player_'.$basketball_model->user_id}->{$quarter}->points_1++;
           $match_details->{$team_id}->players->{'player_'.$basketball_model->user_id}->{$quarter}->total_points=$basketball_model->{$quarter};
-          $match_details->{$team_id}->total_points++;
-          $basketball_model->total_points=$basketball_model->points_1+$basketball_model->points_2+$basketball_model->points_1;
+          
+          $basketball_model->total_points=$basketball_model->quarter_1+$basketball_model->quarter_2+$basketball_model->quarter_3;
+
+      $match_details->{$team_id}->total_points++;
+      $match_details->{$team_id}->players->{'player_'.$basketball_model->user_id}->total_points=$basketball_model->total_points;
 
                 		break;
 
                 	case 'points_2':
            $basketball_model->points_2++;
            $basketball_model->{$quarter}+=2;
-          $match_details->{$team_id}->players->{'player_'.$basketball_model->user_id}->total_points+=2;
-            $match_details->{$team_id}->players->{'player_'.$basketball_model->user_id}->points_2++;
-          $match_details->{$team_id}->players->{'player_'.$basketball_model->user_id}->{$quarter}->points=$basketball_model->points_2;
 
-               $match_details->{$team_id}->players->{'player_'.$basketball_model->user_id}->{$quarter}->total_points=$basketball_model->{$quarter};
+    
+       $match_details->{$team_id}->players->{'player_'.$basketball_model->user_id}->points_2++;
+       $match_details->{$team_id}->players->{'player_'.$basketball_model->user_id}->{$quarter}->points_2++;
+       $match_details->{$team_id}->players->{'player_'.$basketball_model->user_id}->{$quarter}->total_points=$basketball_model->{$quarter};
 
           $match_details->{$team_id}->total_points+=2;
           $basketball_model->total_points=$basketball_model->quarter_1+$basketball_model->quarter_2+$basketball_model->quarter_3;
+      $match_details->{$team_id}->players->{'player_'.$basketball_model->user_id}->total_points=$basketball_model->total_points;
+
 
                 	break;
 
@@ -732,7 +750,9 @@ class BasketballScoreCardController extends parentScoreCardController
                $match_details->{$team_id}->players->{'player_'.$basketball_model->user_id}->{$quarter}->total_points=$basketball_model->{$quarter};
                
           $match_details->{$team_id}->total_points+=3;
-          $basketball_model->total_points=$basketball_model->points_1+$basketball_model->points_2+$basketball_model->points_3;
+          $basketball_model->total_points=$basketball_model->quarter_1+$basketball_model->quarter_2+$basketball_model->quarter_3;
+
+      $match_details->{$team_id}->players->{'player_'.$basketball_model->user_id}->total_points=$basketball_model->total_points;
 
                 	break;
 

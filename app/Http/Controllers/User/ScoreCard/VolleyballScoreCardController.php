@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\User\ScoreCard;
 
 use Illuminate\Http\Request as ObjectRequest;       //get all my requests data as object
@@ -7,6 +6,7 @@ use Illuminate\Http\Request as ObjectRequest;       //get all my requests data a
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Model\Tournaments;
+use App\Http\Controllers\User\ScoreCardController as parentScoreCardController;
 use App\Model\MatchSchedule;
 use App\Model\UserStatistic;
 use App\Model\State;
@@ -14,9 +14,9 @@ use App\Model\City;
 use App\Model\Team;
 use App\Model\TeamPlayers;
 use App\Model\Sport;
-use App\Model\SquashPlayerMatchwiseStats;
-use App\Model\SquashPlayerMatchScore;
-use App\Model\SquashStatistic;
+use App\Model\VolleyballPlayerMatchwiseStats;
+use App\Model\VolleyballPlayerMatchScore;
+use App\Model\VolleyballStatistic;
 use App\Model\Photo;
 use App\User;
 use DB;
@@ -29,91 +29,11 @@ use App\Helpers\AllRequests;
 use Session;
 use Request;
 
-class VolleyballScoreCardController extends Controller
+class VolleyballscoreCardController extends parentScoreCardController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+ 
+ public function volleyballScoreCard($match_data,$sportsDetails=[],$tournamentDetails=[],$is_from_view=0)
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-      public function squashScoreCard($match_data,$match,$sportsDetails=[],$tournamentDetails=[],$is_from_view=0)
-    {
-
-       
-        $score_a_array=array();
-        $score_b_array=array();
-
         $loginUserId = '';
         $loginUserRole = '';
 
@@ -123,115 +43,136 @@ class VolleyballScoreCardController extends Controller
         if(isset(Auth::user()->role))
             $loginUserRole = Auth::user()->role;
 
-        //!empty($matchScheduleDetails['tournament_id'])
-        //if($match_data[0]['match_status']=='scheduled')//match should be already scheduled
-        //{
-        $player_a_ids = $match_data[0]['player_a_ids'];
-        $player_b_ids = $match_data[0]['player_b_ids'];
+        $team_a_players = array();
+        $team_b_players = array();
+        $team_a_id = $match_data[0]['a_id'];
+        $team_b_id = $match_data[0]['b_id'];
+        $team_a_playerids = explode(',',$match_data[0]['player_a_ids']);
+        $team_b_playerids = explode(',',$match_data[0]['player_b_ids']);
 
-        $decoded_match_details = array();
-        if($match_data[0]['match_details']!='')
+        //get match id
+        $match_id=$match_data[0]['id'];
+
+        //get volleyball scores for team a
+        $team_a_volleyball_scores = VolleyballPlayerMatchwiseStats::select()->where('match_id',$match_data[0]['id'])->where('team_id',$team_a_id)->get();
+
+        $team_a_volleyball_scores_array = array();
+        if(count($team_a_volleyball_scores)>0)
         {
-            $decoded_match_details = json_decode($match_data[0]['match_details'],true);
+            $team_a_volleyball_scores_array = $team_a_volleyball_scores->toArray();
         }
 
-        $a_players = array();
-
-        $team_a_playerids = (!empty($decoded_match_details[$match_data[0]['a_id']]) && !($match_data[0]['scoring_status']=='' || $match_data[0]['scoring_status']=='rejected'))?$decoded_match_details[$match_data[0]['a_id']]:explode(',',$player_a_ids);
-
-        $a_team_players = User::select('id','name')->whereIn('id',$team_a_playerids)->get();
-
-        if (count($a_team_players)>0)
-            $a_players = $a_team_players->toArray();
-
-        $b_players = array();
-
-        $team_b_playerids = (!empty($decoded_match_details[$match_data[0]['b_id']]) && !($match_data[0]['scoring_status']=='' || $match_data[0]['scoring_status']=='rejected'))?$decoded_match_details[$match_data[0]['b_id']]:explode(',',$player_b_ids);
-
-
-        $b_team_players = User::select('id','name')->whereIn('id',$team_b_playerids)->get();
-
-        if (count($b_team_players)>0)
-            $b_players = $b_team_players->toArray();
-
-        $team_a_player_images = array();
-        $team_b_player_images = array();
-
-        //team a player images
-        if(count($a_players)>0)
+        //get volleyball scores for team b
+        $team_b_volleyball_scores = VolleyballPlayerMatchwiseStats::select()->where('match_id',$match_data[0]['id'])->where('team_id',$team_b_id)->get();
+        $team_b_volleyball_scores_array = array();
+        if(count($team_b_volleyball_scores)>0)
         {
-            foreach($a_players as $a_player)
-            {
-                $team_a_player_images[$a_player['id']]=Photo::select()->where('imageable_id', $a_player['id'])->where('imageable_type',config('constants.PHOTO.USER_PHOTO'))->orderBy('id', 'desc')->first();//get user logo
-            }
+            $team_b_volleyball_scores_array = $team_b_volleyball_scores->toArray();
         }
 
-        //team b player images
-        if(count($b_players)>0)
+        //get player names
+        $a_team_players = User::select()->whereIn('id',$team_a_playerids)->get();
+        $b_team_players = User::select()->whereIn('id',$team_b_playerids)->get();
+
+        //get players statistics
+        $team_a_players_stat=VolleyballPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_a_id)->get();
+        $team_b_players_stat=VolleyballPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_b_id)->get();
+
+        //get team names
+        $team_a_name = Team::where('id',$team_a_id)->pluck('name');
+        $team_b_name = Team::where('id',$team_b_id)->pluck('name');
+
+        if(!empty($a_team_players))
+            $team_a_players = $a_team_players->toArray();
+        if(!empty($b_team_players))
+            $team_b_players = $b_team_players->toArray();
+        $team_a = array();
+        $team_b = array();
+
+        //get team a players
+        foreach($team_a_players as $team_a_player)
         {
-            foreach($b_players as $b_player)
-            {
-                $team_b_player_images[$b_player['id']]=Photo::select()->where('imageable_id', $b_player['id'])->where('imageable_type',config('constants.PHOTO.USER_PHOTO'))->orderBy('id', 'desc')->first();//get user logo
-            }
+            $team_a[$team_a_player['id']] = $team_a_player['name'];
         }
-        if($match_data[0]['schedule_type'] == 'player')//&& $match_data[0]['schedule_type'] == 'player'
+
+        //get team b players
+        foreach($team_b_players as $team_b_player)
         {
-            $user_a_name = User::where('id',$match_data[0]['a_id'])->pluck('name');
-            $user_b_name = User::where('id',$match_data[0]['b_id'])->pluck('name');
-            $user_a_logo = Photo::select()->where('imageable_id', $match_data[0]['a_id'])->where('imageable_type',config('constants.PHOTO.USER_PHOTO'))->orderBy('id', 'desc')->first();//get user logo
-            $user_b_logo = Photo::select()->where('imageable_id', $match_data[0]['b_id'])->where('imageable_type',config('constants.PHOTO.USER_PHOTO'))->orderBy('id', 'desc')->first();//get user logo
-            $upload_folder = 'user_profile';
-            $is_singles = 'yes';
-            if($match=='squash')//Squash
-            
-            $scores_a = SquashPlayerMatchScore::select()->where('match_id',$match_data[0]['id'])->first();
-            $scores_b = SquashPlayerMatchScore::select()->where('match_id',$match_data[0]['id'])->skip(2)->first();
-            
-            
-            if(count($scores_a)>0)
-                $score_a_array = $scores_a->toArray();
-
-            if(count($scores_b)>0)
-                $score_b_array = $scores_b->toArray();
-
-            $team_a_city = Helper::getUserCity($match_data[0]['a_id']);
-            $team_b_city = Helper::getUserCity($match_data[0]['b_id']);
-        }else
-        {
-            $user_a_name = Team::where('id',$match_data[0]['a_id'])->pluck('name');//team details
-            $user_b_name = Team::where('id',$match_data[0]['b_id'])->pluck('name');//team details
-            $user_a_logo = Photo::select()->where('imageable_id', $match_data[0]['a_id'])->where('imageable_type',config('constants.PHOTO.TEAM_PHOTO'))->orderBy('id', 'desc')->first();//get user logo
-            $user_b_logo = Photo::select()->where('imageable_id', $match_data[0]['b_id'])->where('imageable_type',config('constants.PHOTO.TEAM_PHOTO'))->orderBy('id', 'desc')->first();//get user logo
-            $upload_folder = 'teams';
-            $is_singles = 'no';
-            
-
-                $scores_a = SquashPlayerMatchScore::select()->where('match_id',$match_data[0]['id'])->first();
-                $scores_b = SquashPlayerMatchScore::select()->where('match_id',$match_data[0]['id'])->skip(1)->first();
-            
-            if(count($scores_a)>0)
-                $score_a_array = $scores_a->toArray();
-
-            if(count($scores_b)>0)
-                $score_b_array = $scores_b->toArray();
-
-            $team_a_city = Helper::getTeamCity($match_data[0]['a_id']);
-            $team_b_city = Helper::getTeamCity($match_data[0]['b_id']);
+            $team_b[$team_b_player['id']] = $team_b_player['name'];
         }
+
+        $team_a_logo = Photo::select()->where('imageable_id', $match_data[0]['a_id'])->where('imageable_type',config('constants.PHOTO.TEAM_PHOTO'))->orderBy('id', 'desc')->first();//get user logo
+        $team_b_logo = Photo::select()->where('imageable_id', $match_data[0]['b_id'])->where('imageable_type',config('constants.PHOTO.TEAM_PHOTO'))->orderBy('id', 'desc')->first();//get user logo
+
+
 
         //bye match
         if($match_data[0]['b_id']=='' && $match_data[0]['match_status']=='completed')
         {
-            $sport_class = 'Squash_scorcard';
-            return view('scorecards.byematchview',array('team_a_name'=>$user_a_name,'team_a_logo'=>$user_a_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'sport_class'=>$sport_class));
+            $sport_class = 'bascketball_scorecard ss_bg';
+            $upload_folder = 'teams';
+            return view('scorecards.byematchview',array('team_a_name'=>$team_a_name,'team_a_logo'=>$team_a_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'sport_class'=>$sport_class));
+        }
+
+        $team_a_count = count($team_a);
+        $team_b_count = count($team_b);
+
+
+
+        //get match details fall of wickets
+        $team_wise_score_details = array();
+        $match_details = $match_data[0]['match_details'];
+        if($match_details!='' && $match_details!=NULL)
+        {
+            $json_decode_array = json_decode($match_details,true);
+            foreach($json_decode_array as $key => $array)
+            {
+                $team_wise_score_details[$key] = $array;
+            }
+        }
+        $team_a_goals=0;
+        $team_b_goals=0;
+
+        $team_a_red_count = 0;
+        $team_b_red_count = 0;
+        $team_a_yellow_count = 0;
+        $team_b_yellow_count = 0;
+        //team a goals
+        if(!empty($team_wise_score_details[$match_data[0]['a_id']]['goals']) && $team_wise_score_details[$match_data[0]['a_id']]['goals']!=null)
+        {
+            $team_a_goals = $team_wise_score_details[$match_data[0]['a_id']]['goals'];
+
+        }
+        if(!empty($team_wise_score_details[$match_data[0]['a_id']]['red_card_count']) && $team_wise_score_details[$match_data[0]['a_id']]['red_card_count']!=null)
+        {
+            $team_a_red_count = $team_wise_score_details[$match_data[0]['a_id']]['red_card_count'];
+
+        }
+        if(!empty($team_wise_score_details[$match_data[0]['a_id']]['yellow_card_count']) && $team_wise_score_details[$match_data[0]['a_id']]['yellow_card_count']!=null)
+        {
+            $team_a_yellow_count = $team_wise_score_details[$match_data[0]['a_id']]['yellow_card_count'];
+
+        }
+
+
+        //team b goals
+        if(!empty($team_wise_score_details[$match_data[0]['b_id']]['goals']) && $team_wise_score_details[$match_data[0]['b_id']]['goals']!=null)
+        {
+            $team_b_goals = $team_wise_score_details[$match_data[0]['b_id']]['goals'];
+        }
+        if(!empty($team_wise_score_details[$match_data[0]['b_id']]['red_card_count']) && $team_wise_score_details[$match_data[0]['b_id']]['red_card_count']!=null)
+        {
+            $team_b_red_count = $team_wise_score_details[$match_data[0]['b_id']]['red_card_count'];
+        }
+        if(!empty($team_wise_score_details[$match_data[0]['b_id']]['yellow_card_count']) && $team_wise_score_details[$match_data[0]['b_id']]['yellow_card_count']!=null)
+        {
+            $team_b_yellow_count = $team_wise_score_details[$match_data[0]['b_id']]['yellow_card_count'];
         }
 
 
 
         //score status
         $score_status_array = json_decode($match_data[0]['score_added_by'],true);
-
-
         $rej_note_str='';
         if($score_status_array['rejected_note']!='')
         {
@@ -244,7 +185,6 @@ class VolleyballScoreCardController extends Controller
         }
         $rej_note_str = trim($rej_note_str, ",");
 
-
         //is valid user for score card enter or edit
         $isValidUser = 0;
         $isApproveRejectExist = 0;
@@ -256,384 +196,286 @@ class VolleyballScoreCardController extends Controller
             $isForApprovalExist = Helper::isApprovalExist($match_data,$isForApproval='yes');
         }
 
-        //ONLY FOR VIEW SCORE CARD
-        if($is_from_view==1 || (!empty($score_status_array['added_by']) && $score_status_array['added_by']!=$loginUserId && $match_data[0]['scoring_status']!='rejected') || $match_data[0]['match_status']=='completed' || $match_data[0]['scoring_status']=='approval_pending' || $match_data[0]['scoring_status']=='approved' || !$isValidUser)
-        {
-            
-                return view('scorecards.Squashscorecardview',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'user_a_name'=>$user_a_name,'user_b_name'=>$user_b_name,'user_a_logo'=>$user_a_logo,'user_b_logo'=>$user_b_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'is_singles'=>$is_singles,'score_a_array'=>$score_a_array,'score_b_array'=>$score_b_array,'b_players'=>$b_players,'a_players'=>$a_players,'team_a_player_images'=>$team_a_player_images,'team_b_player_images'=>$team_b_player_images,'decoded_match_details'=>$decoded_match_details,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city));
-            
+        $team_a_city = Helper::getTeamCity($match_data[0]['a_id']);
+        $team_b_city = Helper::getTeamCity($match_data[0]['b_id']);
+        $form_id = 'bascketball';
 
-        }
-        else //to view and edit Squash/table Squash score card
+        if($is_from_view==1 || (!empty($score_status_array['added_by']) && $score_status_array['added_by']!=$loginUserId && $match_data[0]['scoring_status']!='rejected') || $match_data[0]['match_status']=='completed' || $match_data[0]['scoring_status']=='approval_pending' || $match_data[0]['scoring_status']=='approved' || !$isValidUser)//volleyball score view only
         {
-          
-                //for form submit pass id from controller
-                $form_id = 'squash';
-                return view('scorecards.squashscorecard',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'user_a_name'=>$user_a_name,'user_b_name'=>$user_b_name,'user_a_logo'=>$user_a_logo,'user_b_logo'=>$user_b_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'is_singles'=>$is_singles,'score_a_array'=>$score_a_array,'score_b_array'=>$score_b_array,'b_players'=>$b_players,'a_players'=>$a_players,'team_a_player_images'=>$team_a_player_images,'team_b_player_images'=>$team_b_player_images,'decoded_match_details'=>$decoded_match_details,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'form_id'=>$form_id));
-           
+            $player_name_array = array();
+            $users = User::select('id', 'name')->get()->toArray(); //get player names
+            foreach ($users as $user) {
+                $player_name_array[$user['id']] = $user['name']; //get team names
+            }
+            $player_of_the_match=$match_data[0]['player_of_the_match'];
+            if($player_of_the_match_model=User::find($player_of_the_match))$player_of_the_match=$player_of_the_match_model;
+            else $player_of_the_match=NULL;
+            return view('scorecards.volleyballscorecardview',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'team_a'=>[''=>'Select Player']+$team_a,'team_b'=>[''=>'Select Player']+$team_b,'match_data'=>$match_data,'team_a_name'=>$team_a_name,'team_b_name'=>$team_b_name,'team_a_volleyball_scores_array'=>$team_a_volleyball_scores_array,'team_b_volleyball_scores_array'=>$team_b_volleyball_scores_array,'team_a_count'=>$team_a_count,'team_b_count'=>$team_b_count,'team_a_logo'=>$team_a_logo,'team_b_logo'=>$team_b_logo,'team_a_goals'=>$team_a_goals,'team_b_goals'=>$team_b_goals,'player_name_array'=> $player_name_array,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'team_a_red_count'=>$team_a_red_count,'team_a_yellow_count'=>$team_a_yellow_count,'team_b_red_count'=>$team_b_red_count,'team_b_yellow_count'=>$team_b_yellow_count,'form_id'=>$form_id,'team_a_players'=>$team_a_players, 'team_b_players'=>$team_b_players, 'player_of_the_match'=>$player_of_the_match));
+        }else //volleyball score view and edit
+        {
+            return view('scorecards.volleyballscorecard',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'team_a'=>[''=>'Select Player']+$team_a,'team_b'=>[''=>'Select Player']+$team_b,'match_data'=>$match_data,'team_a_name'=>$team_a_name,'team_b_name'=>$team_b_name,'team_a_volleyball_scores_array'=>$team_a_volleyball_scores_array,'team_b_volleyball_scores_array'=>$team_b_volleyball_scores_array,'team_a_count'=>$team_a_count,'team_b_count'=>$team_b_count,'team_a_logo'=>$team_a_logo,'team_b_logo'=>$team_b_logo,'team_a_goals'=>$team_a_goals,'team_b_goals'=>$team_b_goals,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'team_a_red_count'=>$team_a_red_count,'team_a_yellow_count'=>$team_a_yellow_count,'team_b_red_count'=>$team_b_red_count,'team_b_yellow_count'=>$team_b_yellow_count,'form_id'=>$form_id, 'team_a_players'=>$team_a_players, 'team_b_players'=>$team_b_players));
         }
 
     }
 
-//save or update preferences. 
-    public function savePreferences(ObjectRequest $request){
-        $match_id=$request->match_id;
-        $team_a_name=$request->team_a_name;
-        $team_b_name=$request->team_b_name;
-        $tournament_id=$request->tournament_id;
+        //select players for the match, substitute and playing. 
+    public function confirmSquad(){
+        $request=Request::all();
+        $match_id       =$request['match_id'];
 
-        $left_team_id=$request->team_left;
-        $right_team_id=$request->team_right;
+        $tournament_id  =isset($request['tournament_id'])?$request['tournament_id']:null;
+        $team_a_id      =$request['team_a_id'];
+        $team_b_id      =$request['team_b_id'];
 
-        $left_team_name=Team::find($left_team_id)->name;
-        $right_team_name=Team::find($right_team_id)->name;
-
-        $score_to_win=$request->score_to_win;
-        $number_of_sets=$request->number_of_sets;
-        $score_to_win=$request->score_to_win;
-        $end_point=$request->set_end_point;
-        $saving_side=$request->saving_side;
-        $enable_two_points=$request->enable_two_points;
-
-        //left players details
-        $left_player_1=$request->select_player_1_left;  
-        $left_player_1_name=user::find($left_player_1)->name;
-
-        if(!is_null($left_player_2=$request->select_player_2_left)) $left_player_2_name=user::find($left_player_2)->name;
-        else $left_player_2_name=null;
-
-        //right players details
-        $right_player_1=$request->select_player_1_right; 
-        $right_player_1_name=user::find($right_player_1)->name;
-
-        if(!is_null($right_player_2=$request->select_player_2_right)) $right_player_2_name=user::find($right_player_2)->name;
-        else $right_player_2_name=null;
-
-       $match_model=MatchSchedule::find($match_id);   
-
-       $match_details=$match_model->match_details;
-
-       if(empty($match_details)){
-            $match_details=[
-                    "team_a"=>[                         //left team
-                        "id"=>$left_team_id,
-                        "name"=>$left_team_name,
-                        "player_1_id"=>$left_player_1,
-                        "player_2_id"=>$left_player_2
-                    ],
-                    "team_b"=>[                         //right team
-                        "id"=>$right_team_id,
-                        "name"=>$right_team_name,
-                        "player_1_id"=>$right_player_1,
-                        "player_2_id"=>$right_player_2
-                    ],
-                    "preferences"=>[
-                        "left_team_id"=>$left_team_id,
-                        "right_team_id"=>$right_team_id,
-                        "saving_side"=>"left",
-                        "number_of_sets"=>3,
-                        "enable_two_points"=>"on",
-                        "score_to_win"=>0,
-                        "end_point"=>0
-                    ],
-                    "match_details"=>[
-                        "set1"=>[
-                                "{$left_team_id}_score"=>0,
-                                "{$right_team_id}_score"=>0
-                            ],
-                        "set2"=>[
-                                "{$left_team_id}_score"=>0,
-                                "{$right_team_id}_score"=>0
-                            ],
-                        "set3"=>[
-                                "{$left_team_id}_score"=>0,
-                                "{$right_team_id}_score"=>0
-                            ],
-                        "set4"=>[
-                                 "{$left_team_id}_score"=>0,
-                                "{$right_team_id}_score"=>0
-                            ],
-                        "set5"=>[
-                                "{$left_team_id}_score"=>0,
-                                "{$right_team_id}_score"=>0
-                            ]                     
-
-                    ],
-                    "match_type"=>$match_model->match_type,
-                    "schedule_type"=>$match_model->schedule_type
-                ];
-
-                $match_details=json_encode($match_details);           
-            } 
-
-            $match_details=json_decode($match_details) ;     //convert it to object to use.
-
-        //set game preferences
-            $match_details->preferences->end_point=$end_point;
-            $match_details->preferences->score_to_win=$score_to_win;
-            $match_details->preferences->number_of_sets=$number_of_sets;
-            $match_details->preferences->saving_side=$saving_side;
-            $match_details->preferences->enable_two_points=$enable_two_points;
-            $match_details->preferences->left_team_id=$left_team_id;            
-            $match_details->right_team_id=$right_team_id;
-
-        //player preferences
-
-        $match_details=json_encode($match_details);
-
-        //enter choosen players in the database
-        $this->insertSquashPlayer($left_player_1, $left_player_2, $tournament_id, $left_team_id, $left_team_name, $match_id, $left_player_1_name, $left_player_2_name);
-
-        $this->insertSquashPlayer($right_player_1, $right_player_2, $tournament_id, $right_team_id,$right_team_name, $match_id, $right_player_1_name, $right_player_2_name);
-
+        $match_model=MatchSchedule::find($match_id);
         $match_model->hasSetupSquad=1;
-        $match_model->match_details=$match_details;
         $match_model->save();
 
-        return $match_details;
-    }
+        $number_of_quarters=$request['preferences']['number_of_quarters'];
+        $quarter_time=$request['preferences']['quarter_time'];
+        $max_fouls=$request['preferences']['max_fouls'];
 
-        //insert selected players in the database
-    public function insertSquashPlayer($player_1_id, $player_2_id, $tournament_id, $team_id, $team_name, $match_id, $player_1_name, $player_2_name){
-         $match_score_model=new SquashPlayerMatchScore;
+        $team_a_name=$request['team_a_name'];
+        $team_b_name=$request['team_b_name'];
+        $team_a_playing_players=isset($request['team_a']['playing'])?$request['team_a']['playing']:[];
+        $team_b_playing_players=isset($request['team_b']['playing'])?$request['team_b']['playing']:[];
+
+        $team_a_substitute_players=isset($request['team_a']['substitute'])?$request['team_a']['substitute']:[];
+        $team_b_substitute_players=isset($request['team_b']['substitute'])?$request['team_b']['substitute']:[];
+
+        $players_a_details=[];
+        $players_b_details=[];
+
+        $default_player_details=[           //default player info
+            "points_1"=>0,
+            "points_2"=>0,
+            "points_3"=>0,
+            "fouls"=>0,
+            "total_points"=>0,
+            "playing_status"=>0,
+            "dismissed"=>0, 
+            "quarters_played"=>'',
+            "quarter_1"=>(object)[
+                    "points_1"=>0,
+                    "points_2"=>0,
+                    "points_3"=>0,
+                    "fouls"=>0,
+                    "total_points"=>0,
+            ],
+            "quarter_2"=>(object)[
+                    "points_1"=>0,
+                    "points_2"=>0,
+                    "points_3"=>0,
+                    "fouls"=>0,
+                    "total_points"=>0,
+            ],
+            "quarter_3"=>(object)[
+                    "points_1"=>0,
+                    "points_2"=>0,
+                    "points_3"=>0,
+                    "fouls"=>0,
+                    "total_points"=>0
+            ],
+            "quarter_4"=>(object)[
+                    "points_1"=>0,
+                    "points_2"=>0,
+                    "points_3"=>0,
+                    "fouls"=>0,
+                    "total_points"=>0,
+                ],
+            "quarter_5"=>(object)[
+                    "points_1"=>0,
+                    "points_2"=>0,
+                    "points_3"=>0,
+                    "fouls"=>0,
+                    "total_points"=>0,
+                ],
+            "quarter_6"=>(object)[
+                    "points_1"=>0,
+                    "points_2"=>0,
+                    "points_3"=>0,
+                    "fouls"=>0,
+                    "total_points"=>0,
+                ]
+        ];
+
+        foreach($team_a_playing_players as $p){
+
+            $player_name=User::find($p)->name;
+            $default_player_details['playing_status']=1;
+            $this->insertVolleyballscore($p, $tournament_id, $match_id, $team_a_id,$player_name, $team_a_name,'P');
+            $players_a_details['player_'.$p]=$default_player_details;
+        }
+        foreach($team_a_substitute_players as $p){
+            $player_name=User::find($p)->name;
+            $this->insertVolleyballscore($p, $tournament_id, $match_id, $team_a_id,$player_name, $team_a_name,'S');
+            $players_a_details['player_'.$p]=$default_player_details; 
+        }
+        foreach($team_b_playing_players as $p){
+
+            $player_name=User::find($p)->name;
+             $default_player_details['playing_status']=1;
+            $this->insertVolleyballscore($p, $tournament_id, $match_id, $team_b_id,$player_name, $team_b_name,'P');
+            $players_b_details['player_'.$p]=$default_player_details;
+        }
+        foreach($team_b_substitute_players as $p){          
+            $player_name=User::find($p)->name;
+            $this->insertVolleyballscore($p, $tournament_id, $match_id, $team_b_id,$player_name, $team_b_name,'S');
+            $players_b_details['player_'.$p]=$default_player_details;     
+        }
         
-            $match_score_model->user_id_a       =$player_1_id;
-            $match_score_model->user_id_b       =$player_2_id;
-            $match_score_model->tournament_id   =$tournament_id;
-            $match_score_model->team_id         =$team_id;
-            $match_score_model->team_name       =$team_name;
-            $match_score_model->match_id        =$match_id;
-            $match_score_model->player_name_a   =$player_1_name;
-            $match_score_model->player_name_b   =$player_2_name;
-            $match_score_model->isactive        =1;
+        //insert the default match_details for the match
+        $match_model=MatchSchedule::find($match_id);
+        $match_details=[
+            "team_a"=>[
+                "id"=>$team_a_id,
+                "name"=>$team_a_name
+                    ],
+            "team_b"=>[
+                "id"=>$team_b_id,
+                "name"=>$team_b_name
+                    ],
+            "{$team_a_id}"  =>  [
+                "id"=>$team_a_id,
+                "total_points"=>0,
+                "fouls"=>0,
+                "players"=>$players_a_details,
+                ],
+            "{$team_b_id}"=>[
+                "id"=>$team_b_id,
+                "total_points"=>0,
+                "fouls"=>0,
+                "players"=>$players_b_details
+                ] ,           
+            "first_half"=>[
 
-            $match_score_model->save();
+            ],
+            "second_half"=>[
+               
+            ],          
+            "preferences"=>[
+                    'number_of_quarters'=>$number_of_quarters,
+                    'quarter_time'=>$quarter_time,
+                    'max_fouls'=>$max_fouls
+                 ],
+            
+            
+        ];
+
+        $match_model->match_details=json_encode($match_details);
+        $match_model->save();
     }
 
-    //add scores
 
-    public function addScore(ObjectRequest $request){
+      public function insertVolleyballscore($user_id,$tournament_id,$match_id,$team_id,$player_name,$team_name,$playing_status='S')
+    {
+        $volleyball_model = new VolleyballPlayerMatchwiseStats();
+        $volleyball_model->user_id          = $user_id;
+        $volleyball_model->tournament_id    = $tournament_id;
+        $volleyball_model->match_id         = $match_id;
+        $volleyball_model->team_id          = $team_id;
+        $volleyball_model->player_name      = $player_name;
+        $volleyball_model->team_name        = $team_name;
+        $volleyball_model->playing_status   = $playing_status;
+        $volleyball_model->save();
+    }
 
 
+    public function manualScoring(ObjectRequest $request){
             $match_id=$request->match_id;
-            $table_score_id=$request->table_score_id;
-            $team_id=$request->team_id;
-
-            $match_model=MatchSchedule::find($match_id);            //match_schedule data
+            $match_model=MatchSchedule::find($match_id);
             $match_details=json_decode($match_model->match_details);
+            $team_a_id=$match_model->a_id;
+            $team_b_id=$match_model->b_id;
+
+            ${$team_a_id.'_fouls'}=0;
+            ${$team_b_id.'_fouls'}=0;
+
+            ${$team_a_id.'_points'}=0;
+            ${$team_b_id.'_points'}=0;
+
             $preferences=$match_details->preferences;
+            $number_of_quarters=$preferences->number_of_quarters;
+            $max_fouls=$preferences->max_fouls;
 
-            $match_score_model=SquashPlayerMatchScore::find($table_score_id);    //scoring team data
+            $players_stats=VolleyballPlayerMatchwiseStats::whereMatchId($match_id)->get();
 
-            $match_score_model_other=SquashPlayerMatchScore::where('match_id', $match_id)->where('id', '!=', $table_score_id)->first();                             //opponent team data
+            foreach ($players_stats as $key => $player) {
+                //stores quarters played
+                        $player->quarters_played=$request->{'quarters_'.$player->id};
+                        $match_details->{$player->team_id}->players->{'player_'.$player->user_id}->quarters_played=$request->{'quarters_'.$player->id};
 
-            $end_point = $preferences->end_point;
-            $score_to_win = $preferences->score_to_win;
-            $number_of_sets = $preferences->number_of_sets;
-            $saving_side = $preferences->saving_side;
-            $enable_two_points = $preferences->enable_two_points;          
-            
-            // Check if set1 is complete
+                            //if player fouls is greater than max, return max to the player.
+                        if($request->{'fouls_'.$player->id}>$max_fouls) $request->{'fouls_'.$player->id}=$max_fouls;
 
-            if($this->checkSet('set1', $match_score_model, $match_score_model_other, $preferences)){
-                $match_score_model->set1++;
-                $match_score_model->save();
-                $match_details->match_details->set1->{$team_id."_score"} ++;   
-            }
-            else{           //set1 is complete
+                                    //stores fouls per player
+                        $player->fouls=$request->{'fouls_'.$player->id};
 
-                if($this->checkSet('set2', $match_score_model, $match_score_model_other, $preferences)){
-                $match_score_model->set2++;
-                $match_score_model->save();
-                $match_details->match_details->set2->{$team_id."_score"} ++;   
-                }
+                        $match_details->{$player->team_id}->players->{'player_'.$player->user_id}->fouls=$request->{'fouls_'.$player->id};
+                        $match_details->{$player->team_id}->players->{'player_'.$player->user_id}->dismissed=1;
 
-                else{       //set2 is complete
-                        if($this->checkSet('set3', $match_score_model, $match_score_model_other, $preferences)){
-                                $match_score_model->set3++;
-                                $match_score_model->save();
-                                $match_details->match_details->set3->{$team_id."_score"} ++;   
-                            }
-                        else{
-
-                            if($number_of_sets>3){
-
-                                    if($this->checkSet('set4', $match_score_model, $match_score_model_other, $preferences)){
-                                        $match_score_model->set4++;
-                                        $match_score_model->save();
-                                        $match_details->match_details->set4->{$team_id."_score"} ++;   
-                                    }
-                                    else{
-                                        if($this->checkSet('set5', $match_score_model, $match_score_model_other, $preferences)){
-                                                $match_score_model->set5++;
-                                                $match_score_model->save();
-                                                $match_details->match_details->set5->{$team_id."_score"} ++;   
-                                         }
-                                }
                             
-                            }
-                        }
-                }
+                                    //stores points per player
+                        $total_points_per_player=0;
+                                for($i=1; $i<=$number_of_quarters; $i++){
+
+                                            $total_points_per_player+=$request->{'quarters_'.$i.'_player_'.$player->id};
+                                            $match_details->{$player->team_id}->players->{'player_'.$player->user_id}->{'quarter_'.$i}->total_points=$request->{'quarters_'.$i.'_player_'.$player->id};
+
+                                            $player['quarter_'.$i]=$request->{'quarters_'.$i.'_player_'.$player->id};
+                        
+
+                                }
+
+                        //stores players total points
+                            $player->total_points=$total_points_per_player;
+                            $player->save();
+
+                        //store points to team
+                        ${$player->team_id.'_points'}+=$player->total_points;
+                                //stores fouls to teams
+                        ${$player->team_id.'_fouls'}+=$player->fouls;
+
             }
+
+        $match_details->{$team_a_id}->fouls=${$team_a_id.'_fouls'};
+        $match_details->{$team_b_id}->fouls=${$team_b_id.'_fouls'};
+
+        $match_details->{$team_a_id}->total_points=${$team_a_id.'_points'};
+        $match_details->{$team_b_id}->total_points=${$team_b_id.'_points'};
 
         $match_details=json_encode($match_details);
+
         $match_model->match_details=$match_details;
         $match_model->save();
-        $match_score_model->save();
-
-       if($match_score_model->match_type=='double')$player_ids=[$match_score_model->user_id_a, $match_score_model->user_id_b];
-       else $player_ids=[$match_score_model->user_id_a];
-
-        $this->squashStatistics($player_ids,$match_model->match_type);
 
         return $match_details;
-  }
-
-    //check if a set is full or complete. returns true for not complete returns false for complete
-
-    public function checkSet($set, $match_score_model, $match_score_model_other, $preferences){
-            $end_point = $preferences->end_point;
-            $score_to_win = $preferences->score_to_win;
-            $number_of_sets = $preferences->number_of_sets;
-            $saving_side = $preferences->saving_side;
-            $enable_two_points = $preferences->enable_two_points;
-
-            $set1_score=$match_score_model->{$set};
-            $set1_opponent_score=$match_score_model_other->{$set};
-
-            if($set1_score<$score_to_win && $set1_opponent_score<$score_to_win){
-                return true;
-            }
-
-            else if($set1_score==$end_point || $set1_score==$end_point){
-                return false;
-            }
-
-            else if($set1_score>=$score_to_win && $set1_opponent_score>=$score_to_win){
-                if($enable_two_points=='on'){
-                    if(($set1_score-$set1_opponent_score)>=2) return false;
-                    elseif(($set1_opponent_score-$set1_score)>=2) return false;
-                    else return true;
-                }
-                else{
-                    return false;
-                }
-            }
-            
-
+    
     }
 
-   public function squashStatistics($player_ids_array,$match_type,$is_win='')
-    {
-        //$player_ids_array = explode(',',$player_ids);
-        foreach($player_ids_array as $user_id)
-        {
-            $double_faults_count = '';
+     public function volleyballStoreRecord(ObjectRequest $Objrequest){
 
-            $player_match_details = SquashPlayerMatchScore::where('user_id_a',$user_id)->orWhere('user_id_b', $user_id)->get();
+       $request=Request::all();
 
-            if($match_type=='singles')
-            {
-                // $double_faults_count = (!empty($player_match_details[0]['double_faults_count']))?$player_match_details[0]['double_faults_count']:'';
-            }
+        $match_id=$request['match_id'];
+        $first_half=isset($request['first_half'])?$request['first_half']:[];
+        $second_half=isset($request['second_half'])?$request['second_half']:[];
+        $team_a_id=$request['team_a_id'];
+        $team_b_id=$request['team_b_id'];
+        $last_index=$request['last_index'];
+        $match_data=matchSchedule::find($match_id);
+        $match_details=$match_data['match_details'];
+        $volleyball_player=VolleyballPlayerMatchwiseStats::whereMatchId($match_id)->first();
+        $delted_ids=$request['delted_ids'];
+        $match_result=$request['match_result'];
+        $winner_team_id = !empty(Request::get('winner_team_id'))?Request::get('winner_team_id'):NULL;//winner_id
+        $player_of_the_match=isset($request['player_of_the_match'])?$request['player_of_the_match']:NULL;
 
-            //check already user id exists or not
-            $squash_statistics_array = array();
-            $tennisStatistics = SquashStatistic::select()->where('user_id',$user_id)->where('match_type',$match_type)->get();
-            if(count($tennisStatistics)>0)
-            {
-                $squash_statistics_array = $tennisStatistics->toArray();
-                $matches = !empty($squash_statistics_array[0]['matches'])?$squash_statistics_array[0]['matches']:0;
-                $won = !empty($squash_statistics_array[0]['won'])?$squash_statistics_array[0]['won']:0;
-                $lost = !empty($squash_statistics_array[0]['lost'])?$squash_statistics_array[0]['lost']:0;
-                SquashStatistic::where('user_id',$user_id)->where('match_type',$match_type)->update(['matches'=>$player_match_details->count(),'double_faults'=>$double_faults_count]);
-                if($is_win=='yes') //win count
-                {
-                    $won_percentage = number_format((($won+1)/($matches+1))*100,2);
-                    SquashStatistic::where('user_id',$user_id)->where('match_type',$match_type)->update(['won'=>$won+1,'won_percentage'=>$won_percentage]);
+        $match_data->player_of_the_match=$player_of_the_match;
 
-                }else if($is_win=='no')//loss count
-                {
-                    SquashStatistic::where('user_id',$user_id)->where('match_type',$match_type)->update(['lost'=>$lost+1]);
-                }
-            }else
-            {
-                $won='';
-                $won_percentage='';
-                $lost='';
-                if($is_win=='yes') //win count
-                {
-                    $won = 1;
-                    $won_percentage = number_format(100,2);
-                }else if($is_win=='no') //lost count
-                {
-                    $lost=1;
-                }
-                $tennisStatisticsModel = new SquashStatistic();
-                $tennisStatisticsModel->user_id = $user_id;
-                $tennisStatisticsModel->match_type = $match_type;
-                $tennisStatisticsModel->matches = 1;
-                $tennisStatisticsModel->won_percentage = $won_percentage;
-                $tennisStatisticsModel->won = $won;
-                $tennisStatisticsModel->lost = $lost;
-                $tennisStatisticsModel->double_faults = $double_faults_count;
-                $tennisStatisticsModel->save();
-            }
-        }
-
-    }
-
-
-    //save record manually;
-    public function manualScoring(ObjectRequest $request){
-            $score_a_id=$request->score_a_id;
-            $score_b_id=$request->score_b_id;
-            $number_of_sets=$request->number_of_sets;
-
-            $score_a_model=SquashPlayerMatchScore::find($score_a_id);
-            $score_b_model=SquashPlayerMatchScore::find($score_b_id);  
-
-            //start scoring
-
-            for($i=1; $i<=$number_of_sets; $i++){
-                    $score_a_model->{"set".$i}=$request->{"a_set".$i};
-                    $score_b_model->{"set".$i}=$request->{"b_set".$i};
-            }
-
-            $score_a_model->save();
-            $score_b_model->save();
-
-        return 'match saved';
-    }
-
-
-
-    public function getSquashDetails(ObjectRequest $request){
-        $match_id=$request->match_id;
-        $match_model=matchschedule::find($match_id);
-        return $match_model->match_details;
-    }
-
-    public function SquashStoreRecord(ObjectRequest $Objrequest){
+        $deleted_ids=explode(',',$delted_ids);
 
         $loginUserId = Auth::user()->id;
-        $request = Request::all();
-        $tournament_id = !empty(Request::get('tournament_id'))?Request::get('tournament_id'):NULL;
-        $match_id = !empty(Request::get('match_id'))?Request::get('match_id'):NULL;
-        $match_type = !empty(Request::get('match_type'))?Request::get('match_type'):NULL;
-        $player_ids_a = !empty(Request::get('player_ids_a'))?Request::get('player_ids_a'):NULL;
-        $player_ids_b= !empty(Request::get('player_ids_b'))?Request::get('player_ids_b'):NULL;
-        $is_singles = !empty(Request::get('is_singles'))?Request::get('is_singles'):NULL;
-        $is_winner_inserted = !empty(Request::get('is_winner_inserted'))?Request::get('is_winner_inserted'):NULL;
-        $winner_team_id = !empty(Request::get('winner_team_id'))?Request::get('winner_team_id'):$is_winner_inserted;//winner_id
-
-        $team_a_players = !empty(Request::get('a_player_ids'))?Request::get('a_player_ids'):array();//player id if match type is singles
-        $team_b_players = !empty(Request::get('b_player_ids'))?Request::get('b_player_ids'):array();//player id if match type is singles
-
-        $schedule_type = !empty(Request::get('schedule_type'))?Request::get('schedule_type'):NULL;
-
-      
-        //get previous scorecard status data
         $scorecardDetails = MatchSchedule::where('id',$match_id)->pluck('score_added_by');
         $decode_scorecard_data = json_decode($scorecardDetails,true);
 
@@ -648,29 +490,55 @@ class VolleyballScoreCardController extends Controller
 
         $json_score_status = json_encode($score_status);
 
- 
+            //match result = 'no result' ; discard all match details;
+        
 
-        //update winner id
+       $is_tie         = ($match_result == 'tie')      ? 1 : 0;
+         $is_washout     = ($match_result == 'washout')  ? 1 : 0;
+         $has_result     = ($is_washout == 1) ? 0 : 1;
+        $match_result   = ( !in_array( $match_result, ['tie','win','washout'] ) ) ? NULL : $match_result;
+        
         $matchScheduleDetails = MatchSchedule::where('id',$match_id)->first();
         if(count($matchScheduleDetails)) {
             $looser_team_id = NULL;
-            $match_status = 'scheduled';
-            $approved='';
-            if(isset($winner_team_id)) {
-                if($winner_team_id==$matchScheduleDetails['a_id']) {
-                    $looser_team_id=$matchScheduleDetails['b_id'];
-                }else{
-                    $looser_team_id=$matchScheduleDetails['a_id'];
+            $match_status='scheduled';
+            $approved = '';
+             if($is_tie==0 || $is_washout == 0) {
+
+                if(isset($winner_team_id)) {
+                    //$match_details=(object)$match_details;
+                    // if($match_details->{$team_a_id}->goals>$match_details->{$team_b_id}->goals){
+                    //   $looser_team_id=$matchScheduleDetails['b_id'];
+                    //    }else{
+                    //        $looser_team_id=$matchScheduleDetails['a_id'];
+                    //    }
+                    if($winner_team_id==$matchScheduleDetails['a_id']) {
+                        $looser_team_id=$matchScheduleDetails['b_id'];
+                    }else{
+                        $looser_team_id=$matchScheduleDetails['a_id'];
+                    }
+
+                    $match_status='completed';
+                    $approved = 'approved';
                 }
-                $match_status = 'completed';
-                $approved = 'approved';
+
             }
 
             if(!empty($matchScheduleDetails['tournament_id'])) {
+//                        dd($winner_team_id.'<>'.$looser_team_id);
                 $tournamentDetails = Tournaments::where('id', '=', $matchScheduleDetails['tournament_id'])->first();
-                if(Helper::isTournamentOwner($tournamentDetails['manager_id'],$tournamentDetails['tournament_parent_id'])) {
-                    MatchSchedule::where('id',$match_id)->update(['match_details'=>$json_match_details_array,'match_status'=>$match_status,
-                        'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
+                if (($is_tie == 1 || $match_result == "washout") && !empty($matchScheduleDetails['tournament_group_id'])){
+
+                    $match_status = 'completed';
+                }
+                if(Helper::isTournamentOwner($tournamentDetails['manager_id'],$tournamentDetails['tournament_parent_id'])) 
+                {
+                    MatchSchedule::where('id',$match_id)->update(['match_status'=>$match_status,
+                        'winner_id'=>$winner_team_id ,
+                        'looser_id'=>$looser_team_id,
+                        'has_result'     => $has_result,
+                        'match_result'   => $match_result,
+                        'is_tied'=>$is_tie,
                         'score_added_by'=>$json_score_status]);
 //                                Helper::printQueries();
 
@@ -679,90 +547,238 @@ class VolleyballScoreCardController extends Controller
                     }
                     if($match_status=='completed')
                     {
-                        $this->updateStatitics($match_id);
+                    $sportName = Sport::where('id',$matchScheduleDetails['sports_id'])->pluck('sports_name');
 
-                        //notification code
+                        $this->insertPlayerStatistics($sportName,$match_id);
+
+                        //notification ocde
+                        Helper::sendEmailPlayers($matchScheduleDetails, 'Volleyball');      
+
                     }
 
                 }
 
-            }else if(Auth::user()->role=='admin')
-            {
-
+            }
+        else if(Auth::user()->role=='admin'){
+             if ($is_tie == 1 || $match_result == "washout"){
+                    $match_status = 'completed';
+                    $approved = 'approved';
+                }
                 MatchSchedule::where('id',$match_id)->update(['match_status'=>$match_status,
-                    'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
-                    'score_added_by'=>$json_score_status,'scoring_status'=>$approved]);
+                    'winner_id'      => $winner_team_id,
+                     'looser_id'      => $looser_team_id,
+                    'is_tied'        => $is_tie,
+                     'has_result'     => $has_result,
+                     'match_result'   => $match_result,
+                     'score_added_by' => $json_score_status,'scoring_status'=>$approved]);
+
                 if($match_status=='completed')
                 {
-                    $this->updateStatitics($match_id);
-                    
-                    //notification code
+                    $sportName = Sport::where('id',$matchScheduleDetails['sports_id'])->pluck('sports_name');
+
+                    $this->insertPlayerStatistics($sportName,$match_id);
+
+                    //send mail to players
+                    Helper::sendEmailPlayers($matchScheduleDetails, 'Volleyball');      
+
+
+                    //notification ocde
                 }
             }
-            else
+        else
             {
-                MatchSchedule::where('id',$match_id)->update(['winner_id'=>$winner_team_id ,
-                    'looser_id'=>$looser_team_id,'score_added_by'=>$json_score_status]);
+                MatchSchedule::where('id',$match_id)->update(['winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
+                    'is_tied'=>$is_tie,
+                    'has_result'     => $has_result,
+                     'match_result'   => $match_result,
+                     'score_added_by'=>$json_score_status]);
             }
         }
-        //MatchSchedule::where('id',$match_id)->update(['winner_id'=>$winner_team_id,'match_details'=>$json_match_details_array,'score_added_by'=>$json_score_status ]);
-        //if($winner_team_id>0)
-        //return redirect()->route('match/scorecard/view', [$match_id])->with('status', trans('message.scorecard.scorecardmsg'));
-
-        return redirect()->back()->with('status', trans('message.scorecard.scorecardmsg'));
+        return $match_data->match_details;
 
     }
 
-    public function updateStatitics($match_id){
-        $score_a_model=SquashPlayerMatchScore::where('match_id', $match_id)->first();
-        $score_b_model=SquashPlayerMatchScore::where('match_id', $match_id)->skip(1)->first();
+        public function volleyballStatistics($user_id)
+    {
+        //check already player has record or not
+        $user_volleyball_details = VolleyballStatistic::select()->where('user_id',$user_id)->get();
 
-        $match_score_model=$score_a_model;
-        if($match_score_model->match_type=='double'){
-            $player_ids=[
-               $match_score_model->user_id_a,
-               $match_score_model->user_id_b
-               ];
-            }                                                             
-        else $player_ids=[$match_score_model->user_id_a];
-        $this->SquashStatistics($player_ids,$match_model->match_type);
+        $volleyball_details = VolleyballPlayerMatchwiseStats::selectRaw('count(match_id) as match_count')->selectRaw('sum(points_1) as points_1')->selectRaw('sum(points_2) as points_2')->selectRaw('sum(points_3) as points_3')->selectRaw('sum(total_points) as total_points')->selectRaw('sum(fouls) as fouls')->where('user_id',$user_id)->groupBy('user_id')->get();
 
-        $match_score_model=$score_b_model;
-        if($match_score_model->match_type=='double'){
-            $player_ids=[
-               $match_score_model->user_id_a,
-               $match_score_model->user_id_b
-               ];
-            }                                                           
-        else $player_ids=[$match_score_model->user_id_a];
-        $this->SquashStatistics($player_ids,$match_model->match_type);
+
+
+        $points_1 = (!empty($volleyball_details[0]['points_1']))?$volleyball_details[0]['points_1']:0;
+        $points_2 = (!empty($volleyball_details[0]['points_2']))?$volleyball_details[0]['points_2']:0;
+        $points_3 = (!empty($volleyball_details[0]['points_3']))?$volleyball_details[0]['points_3']:0;
+        $fouls = (!empty($volleyball_details[0]['fouls']))?$volleyball_details[0]['fouls']:0;
+        $total_points = (!empty($volleyball_details[0]['total_points']))?$volleyball_details[0]['total_points']:0;
+
+        if(count($user_volleyball_details)>0)
+        {
+            $match_count = (!empty($volleyball_details[0]['match_count']))?$volleyball_details[0]['match_count']:0;
+
+            VolleyballStatistic::where('user_id',$user_id)
+                ->update([  'matches'=>$match_count,
+                            'points_1'=>$points_1,
+                            'points_2'=>$points_2,
+                            'points_3'=>$points_3,
+                            'fouls'=>$fouls,
+                            'total_points'=>$total_points
+                         ]);
+        }else
+        {
+            $volleyball_statistic = new VolleyballStatistic();
+            $volleyball_statistic->user_id = $user_id;
+            $volleyball_statistic->matches = 1;
+            $volleyball_statistic->{'points_1'} = $points_1;
+            $volleyball_statistic->{'points_2'} = $points_2;
+            $volleyball_statistic->{'points_3'} = $points_3;
+            $volleyball_statistic->fouls = $fouls;
+            $volleyball_statistic->total_points = $total_points;
+            $volleyball_statistic->save();
+        }
     }
 
+        public function volleyballSwapPlayers(){
+        $request=Request::all();
+        $match_id=$request['match_id'];
+        $team_id=$request['team_id'];
+        $time_substituted=$request['time_substituted'];
+        $volleyball_model=VolleyballPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_id)->get();
 
-    public function updatePreferences(ObjectRequest $request){
-            $match_id=$request->match_id;
+        foreach ($volleyball_model as $sm ){
+            $sm_id=$sm->id;
+            $sm_status=$sm->playing_status;
 
-            $match_model=MatchSchedule::find($match_id);
-            $match_details=json_decode($match_model->match_details);
+            if(isset($request["substitute_a_".$sm_id]) && ($request["substitute_a_".$sm_id]=='on')){
+                if($sm_status=='P'){
+                    $sm->playing_status='S';
+                }
+                else $sm->playing_status='P';
 
-            $preferences=$match_details->preferences;
+                $sm->has_substituted=1;
+                $sm->time_substituted=$time_substituted;
+                $sm->save();
+            }
 
-            $preferences->number_of_sets=$request->number_of_sets;
-            $preferences->end_point=$request->set_end_point;
-            $preferences->score_to_win=$request->score_to_win;
-            $preferences->enable_two_points=$request->enable_two_points;
+        }
+        return $volleyball_model;
 
-            $match_details->preferences=$preferences;
-
-            $match_details=json_encode($match_details);
-
-            $match_model->match_details=$match_details;
-
-            $match_model->save();
-
-            return "preferences updated";
     }
 
-}
+     public function volleyballSaveRecord(){
+            $request=Request::all();
+            $match_id=$request['match_id'];
+        
+     
+        $team_a_id=$request['team_a_id'];
+        $team_b_id=$request['team_b_id'];
+        $i=$request['index'];
+        $match_data=matchSchedule::find($match_id);
+        $match_details=json_decode($match_data['match_details']);
+        $max_fouls=$match_details->preferences->max_fouls;
+        $volleyball_players=VolleyballPlayerMatchwiseStats::whereMatchId($match_id)->first();
 
 
+                $quarter=$request['quarter_'.$i];
+                $team_id=$request['team_'.$i];
+                $player_stat_id=$request['player_'.$i];
+                $user_id=$request['user_'.$i];
+                $record_type=$request['record_type_'.$i];
+                $time=$request['time_'.$i];
+                $player_name=$request['player_name_'.$i];
+                $team_type=$request['team_type_'.$i];
+
+       $volleyball_model= VolleyballPlayerMatchwiseStats::find($player_stat_id);
+       $team_id=$volleyball_model->team_id;
+
+                
+
+                switch ($record_type) {
+                    case 'points_1':
+
+          $volleyball_model->points_1++;
+          $volleyball_model->{$quarter}++;
+          $match_details->{$team_id}->players->{'player_'.$volleyball_model->user_id}->total_points++;
+          $match_details->{$team_id}->players->{'player_'.$volleyball_model->user_id}->points_1++;
+          $match_details->{$team_id}->players->{'player_'.$volleyball_model->user_id}->{$quarter}->points_1=$volleyball_model->points_1;
+          $match_details->{$team_id}->players->{'player_'.$volleyball_model->user_id}->{$quarter}->total_points=$volleyball_model->{$quarter};
+          $match_details->{$team_id}->total_points++;
+          $volleyball_model->total_points=$volleyball_model->points_1+$volleyball_model->points_2+$volleyball_model->points_1;
+
+                        break;
+
+                    case 'points_2':
+           $volleyball_model->points_2++;
+           $volleyball_model->{$quarter}+=2;
+          $match_details->{$team_id}->players->{'player_'.$volleyball_model->user_id}->total_points+=2;
+            $match_details->{$team_id}->players->{'player_'.$volleyball_model->user_id}->points_2++;
+          $match_details->{$team_id}->players->{'player_'.$volleyball_model->user_id}->{$quarter}->points=$volleyball_model->points_2;
+
+               $match_details->{$team_id}->players->{'player_'.$volleyball_model->user_id}->{$quarter}->total_points=$volleyball_model->{$quarter};
+
+          $match_details->{$team_id}->total_points+=2;
+          $volleyball_model->total_points=$volleyball_model->quarter_1+$volleyball_model->quarter_2+$volleyball_model->quarter_3;
+
+                    break;
+
+                    case 'points_3':
+           $volleyball_model->points_3++;
+           $volleyball_model->{$quarter}+=3;
+          $match_details->{$team_id}->players->{'player_'.$volleyball_model->user_id}->total_points+=3;
+            $match_details->{$team_id}->players->{'player_'.$volleyball_model->user_id}->points_3++;;
+          $match_details->{$team_id}->players->{'player_'.$volleyball_model->user_id}->{$quarter}->points=$volleyball_model->points_3;
+
+               $match_details->{$team_id}->players->{'player_'.$volleyball_model->user_id}->{$quarter}->total_points=$volleyball_model->{$quarter};
+               
+          $match_details->{$team_id}->total_points+=3;
+          $volleyball_model->total_points=$volleyball_model->points_1+$volleyball_model->points_2+$volleyball_model->points_3;
+
+                    break;
+
+                    case 'fouls':
+               if($volleyball_model->fouls>=$max_fouls){
+                   $match_details->{$team_id}->players->{'player_'.$user_id}->dismissed=1;
+                   $volleyball_model->playing_status='S';
+               }
+
+          $volleyball_model->fouls++;
+          $match_details->{$team_id}->players->{'player_'.$user_id}->fouls ++; 
+          $match_details->{$team_id}->players->{'player_'.$user_id}->{$quarter}->fouls++;
+          $match_details->{$team_id}->fouls++;
+        
+                    break;
+                    
+                    default:
+                        # code...
+                        break;
+                }
+
+              $volleyball_model->save();
+
+        //$this->updateVolleyballscore($user_id,$match_id,$team_id,$player_name,$points_1, $points_2, $points_3, $total_points, $fouls);
+        $this->volleyballStatistics($user_id);          
+
+
+        $match_data->match_details=json_encode($match_details);
+        $match_data->save();
+            return $match_data->match_details;
+
+    }
+
+    public function updateVolleyballscore($user_id,$match_id,$team_id,$player_name,$points_1,$points_2,$points_3, $total_points, $fouls)
+    {
+        $player_stat=VolleyballPlayerMatchwiseStats::where('user_id',$user_id)->where('match_id',$match_id)->where('team_id',$team_id)->update(['user_id'=>$user_id,
+            'points_1'=>$points_1,
+            'points_2'=>$points_2,
+            'points_3'=>$points_3,
+            'total_points'=>$total_points,
+            'fouls'=>$fouls
+            ]);
+        //VolleyballStatistic::where('user_id',$user_id)->update(['yellow_cards'=>$yellow_card_count,'red_cards'=>$red_card_count,'goals_scored'=>$goal_count]);
+    }
+    //
+
+
+
+ }

@@ -114,6 +114,8 @@ input:read-only {
 	$b_points=0;
 	$a_fouls=0;
 	$b_fouls=0;
+	$number_of_quarters=0;
+
 
 	if(isset($preferences->number_of_quarters)){
 		$number_of_quarters=$preferences->number_of_quarters;
@@ -127,8 +129,6 @@ input:read-only {
 		$b_fouls=$match_details->{$team_b_id}->fouls;		
 	}
 	
-$ball_percentage_a=isset($match_details->{$team_a_id}->ball_percentage)?$match_details->{$team_a_id}->ball_percentage:50;
-$ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_details->{$team_b_id}->ball_percentage:50;
 	?>
 
 	<div class="col_standard soccer_scorecard">
@@ -406,7 +406,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 
 				<div class="row">
 					<!-- Team A Goals Start-->
-					<div class="col-sm-10 col-lg-10 col-sm-offset-1">
+					<div class="col-sm-12 col-lg-12">
    <form id='basketball' onsubmit='return manualScoring(this)'>
    				{!!csrf_field()!!}
    					 <div class="row">
@@ -433,13 +433,17 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 									<table class="table table-striped table-bordered">
 										<thead class="thead ">
 											<tr>
-												<th  >Player</th>
-												<th >Qtr Played</th>
+												<th >Player</th>
+												<th> 1 Pts </th>
+												<th> 2 Pts </th>
+												<th> 3 Pts </th>												
 												<th >Fouls</th>
 												
 										@for($index=1; $index<=$number_of_quarters; $index++)
-												<th>Quarter {{$index}}</th>
+												<th>Qtr {{$index}}</th>
 										@endfor
+
+												<th> Total </th>
 												
 
 											</tr>
@@ -464,17 +468,29 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 												<td>
 														{{$player['player_name']}}								
                                                 </td>
-                                                 <td>
-                                                	<input type='text' class="tennis_input_new gui-input  quarters_{{$player['user_id']}}"" readonly="" name="quarters_{{$player['id']}}" value="{{$player['quarters_played']}}" placeholder="e.g 1,2">
-                                                	</td>
+                                                <td> 
+      <input type='text' class="tennis_input_new gui-input  points_1_player_{{$player['user_id']}}" readonly="" name="points_1_{{$player['id']}}" value="{{$player['points_1']}}" >
+                                                </td>
+                                                <td>
+      <input type='text' class="tennis_input_new gui-input  points_2_player_{{$player['user_id']}}" readonly="" name="points_2_{{$player['id']}}" value="{{$player['points_2']}}" >
+
+                                                </td>
+                                                <td>
+      <input type='text' class="tennis_input_new gui-input  points_3_player_{{$player['user_id']}}" readonly="" name="points_3_{{$player['id']}}" value="{{$player['points_3']}}" >
+                                                </td>                                             
                                               
                                                 <td class="{{$player['id']}}_fouls">
                                                			 <input type='text' class="tennis_input_new gui-input validation allownumericwithdecimal fouls_player_{{$player['user_id']}}" readonly="" name="fouls_{{$player['id']}}" value="{{$player['fouls']}}">
                                                 </td>
+      											
 
                                               @for($index=1; $index<=$number_of_quarters; $index++)
                                                 <td><input type='text' class="tennis_input_new gui-input validation allownumericwithdecimal quarters_{{$index}}_player_{{$player['user_id']}}" readonly="" name="quarters_{{$index}}_player_{{$player['id']}}" value="{{$player['quarter_'.$index]}}"></td>
                                               @endfor
+
+                                              <td>
+      <input type='text' class="tennis_input_new gui-input  total_points_player_{{$player['user_id']}}" readonly="" name="total_points_{{$player['id']}}" value="{{$player['total_points']}}" >
+      											</td>
                                          </tr>
 											@endforeach
 										</tbody>
@@ -491,12 +507,15 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 										<thead class="thead ">
 											<tr>
 												<th >Player</th>
-												<th >Qtr Played</th>
+												<th> 1 Pts </th>
+												<th> 2 Pts </th>
+												<th> 3 Pts </th>	
 												<th >Fouls</th>											
 												
 										@for($index=1; $index<=$number_of_quarters; $index++)
-												<th>Quarter {{$index}}</th>
+												<th>Qtr {{$index}}</th>
 										@endfor
+												<th>Total</th>
 
 
 											</tr>
@@ -519,20 +538,31 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 
 										<tr id="team_a_row_{{$player['id']}}"  class="team_a_goal_row player_select {{$class_ps}}" player_id="{{$player['id']}} " player_name="{{$player['player_name']}}" team_id="{{$team_b_id}}" team_type='team_a' user_id="{{$player['user_id']}}" {!!$attr!!}>
 
-												<td  id="player_lineup_{{$player['id']}}">
+												
+												<td>
 														{{$player['player_name']}}								
-                                                </td >
-
+                                                </td>
+                                                <td> 
+      <input type='text' class="tennis_input_new gui-input  points_1_player_{{$player['user_id']}}" readonly="" name="points_1_{{$player['id']}}" value="{{$player['points_1']}}" >
+                                                </td>
                                                 <td>
-                                                	<input type='text' class="tennis_input_new gui-input validation quarters_{{$player['user_id']}} " readonly="" name="quarters_{{$player['id']}}" value="{{$player['quarters_played']}}" placeholder="e.g 2,3,4"></td>
-                                           
+      <input type='text' class="tennis_input_new gui-input  points_2_player_{{$player['user_id']}}" readonly="" name="points_2_{{$player['id']}}" value="{{$player['points_2']}}" >
+
+                                                </td>
+                                                <td>
+      <input type='text' class="tennis_input_new gui-input  points_3_player_{{$player['user_id']}}" readonly="" name="points_3_{{$player['id']}}" value="{{$player['points_3']}}" >
+                                                </td>                                             
+                                              
                                                 <td class="{{$player['id']}}_fouls">
                                                			 <input type='text' class="tennis_input_new gui-input validation allownumericwithdecimal fouls_player_{{$player['user_id']}}" readonly="" name="fouls_{{$player['id']}}" value="{{$player['fouls']}}">
-                                                </td>
+                                                </td>      											
 
                                               @for($index=1; $index<=$number_of_quarters; $index++)
                                                 <td><input type='text' class="tennis_input_new gui-input validation allownumericwithdecimal quarters_{{$index}}_player_{{$player['user_id']}}" readonly="" name="quarters_{{$index}}_player_{{$player['id']}}" value="{{$player['quarter_'.$index]}}"></td>
                                               @endfor
+   											    <td>
+      <input type='text' class="tennis_input_new gui-input  total_points_player_{{$player['user_id']}}" readonly="" name="total_points_{{$player['id']}}" value="{{$player['total_points']}}" >
+      											</td>
                                          </tr>
 									
 
@@ -589,26 +619,8 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 
 <!-- Temporal Data -->
 					<div class="col-sm-10 col-sm-offset-1 " id='new_records_match'>
-						<h3 id='team_b' class="team_bowl team_title_head">New Records</h3>
-						<div class="">
-							<div class='row table-stripped'>						
-								
-								<div class="col-lg-12 col-sm-12 visible-md visible-sm visible-lg not-visible-xs">
-									<h5 class="col-sm-3 team_a ">Player</h5>
-									<h5 class="col-sm-2 team_a ">Quarter</h5>
-									<h5 class="col-sm-2 team_a ">Type</h5>
-									<h5 class="col-sm-2 team_a ">Time</h5>									
-									<h5 class="col-sm-3 team_a ">Action</h5>
-								</div>
-								
-								<div id="displayGoalsFirstHalfTemporal" class="col-lg-12 col-sm-12" >
-								
-								</div>
-
-							</div>
-							
+						<div id="displayGoalsFirstHalfTemporal" class="col-lg-12 col-sm-12" >								
 						</div>
-
 					</div>
 
 
@@ -982,7 +994,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 
 
 
-
+<input type='hidden' id='match_players' value="{{json_encode($match_players)}}">
 
 	<script>
 		$(document).ready(function(){
@@ -1416,6 +1428,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 					var number_of_quarters=response.preferences.number_of_quarters;
 
 
+
 					$('.team_a_score').html(tem_a.total_points + " <span class='fouls'>"+tem_a.fouls+"</span>")
 					$('.team_b_score').html(tem_b.total_points + " <span class='fouls'>"+tem_b.fouls+"</span>")
 
@@ -1423,7 +1436,17 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 					$.each(tem_a.players, function(key, value){							
 							
 							var fouls=value.fouls;
+							var points_1=value.points_1;
+							var points_2=value.points_2;
+							var points_3=value.points_3;
+							var total_points=value.total_points;
+
 							$('.fouls_'+key).val(fouls);
+							$('.points_1_'+key).val(points_1);
+							$('.points_2_'+key).val(points_2);
+							$('.points_3_'+key).val(points_3);
+							$('.total_points_'+key).val(total_points)
+
 
 							for(i=1; i<=number_of_quarters; i++){
 								var fouls_per_quarter=value['quarter_'+i].fouls;
@@ -1433,8 +1456,18 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 					});
 					$.each(tem_b.players, function(key, value){
 
-							var fouls=value.fouls;						
+							var fouls=value.fouls;
+							var points_1=value.points_1;
+							var points_2=value.points_2;
+							var points_3=value.points_3;
+							var total_points=value.total_points;
+
 							$('.fouls_'+key).val(fouls);
+							$('.points_1_'+key).val(points_1);
+							$('.points_2_'+key).val(points_2);
+							$('.points_3_'+key).val(points_3);
+							$('.total_points_'+key).val(total_points)
+
 
 							for(i=1; i<=number_of_quarters; i++){
 								var fouls_per_quarter=value['quarter_'+i].fouls;
@@ -1450,7 +1483,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 						 var player_content=$('#team_a_row_'+player_id);
 						 var user_id=player_content.attr('user_id');
 						 var team_id=player_content.attr('team_id');
-						 console.log(user_id + '  '+ team_id);
+							
 
 						 var dismiss_status=response[team_id].players['player_'+user_id].dismissed;
 
@@ -1678,7 +1711,62 @@ var manual=false;
 
      function manualScoring(that){
         var data=$('#basketball').serialize();
+        var match_players=$('#match_players').val();
+        var number_of_quarters={{$number_of_quarters}}
+        var check_inputs=false;
 
+        match_players=JSON.parse(match_players);
+
+
+
+//check inputs are corrects. 
+        $.each(match_players, function(key, value){
+        		
+        		var value=value.user_id;       		
+        	       		
+        		var pt_1_count=Number($('.points_1_player_'+value).val());
+        		var pt_2_count=Number($('.points_2_player_'+value).val());
+        		var pt_3_count=Number($('.points_3_player_'+value).val());
+
+        		console.log(pt_3_count);
+
+        		var quarter_count_total=0;
+        		for(j=1; j<=number_of_quarters; j++){
+        			var quart_count=Number($('.quarters_'+j+'_player_'+value).val());
+        			quarter_count_total+=quart_count;
+        		}
+
+        		
+        			//total points calculation.
+        		var total_count=(pt_1_count * 1) + (pt_2_count * 2) + (pt_3_count * 3);
+
+        		var total=Number($('.total_points_player_'+value).val());
+
+        		if(total_count!=quarter_count_total){			
+        				// if sum of points is not equal to the total input        		
+        			alert('please verify points or quarters ');
+        			$('.points_1_player_'+value).focus();
+        			$('.total_points_player_'+value).focus();
+        			check_inputs=false;
+        			return false;
+        		}
+        		
+        		else{
+        			check_inputs=true;
+        		}
+
+        })
+
+      
+      if(check_inputs){
+      		send();
+      }
+      else{
+      	return false;
+      }
+
+
+function send(){
         $.ajax({
             url:base_url+"/match/manualScoringBasketball",
             type:'post',
@@ -1688,7 +1776,7 @@ var manual=false;
             }
         })
 
-
+}
         return false;
      }
 

@@ -234,14 +234,18 @@
                                 <div class="table-responsive">
                                     <table class="table table-striped table-bordered">
                                         <thead class="thead ">
-                                            <tr>
-                                                <th  >Player</th>
-                                                <th >Qtr Halves</th>
+                                          <tr>
+                                                <th >Player</th>
+                                                <th> 1 Pts </th>
+                                                <th> 2 Pts </th>
+                                                <th> 3 Pts </th>                                                
                                                 <th >Fouls</th>
                                                 
                                         @for($index=1; $index<=$number_of_quarters; $index++)
-                                                <th>Quarter {{$index}}</th>
+                                                <th>Qtr {{$index}}</th>
                                         @endfor
+
+                                                <th> Total </th>
                                                 
 
                                             </tr>
@@ -251,20 +255,34 @@
 
                                         <tr id="team_a_row_{{$player['id']}}">
 
+                                               
                                                 <td>
                                                         {{$player['player_name']}}                              
                                                 </td>
-                                                 <td>
-                                                        {{$player['quarters_played']}}
-                                                    </td>
+                                                <td> 
+ {{$player['points_1']}}
+                                                </td>
+                                                <td>
+     {{$player['points_2']}}
+
+                                                </td>
+                                                <td>
+      {{$player['points_3']}}
+                                                </td>                                             
                                               
-                                                <td class="{{$player['id']}}_faults">
+                                                <td class="{{$player['id']}}_fouls">
                                                         {{$player['fouls']}}
                                                 </td>
+                                                
 
                                               @for($index=1; $index<=$number_of_quarters; $index++)
                                                 <td>{{$player['quarter_'.$index]}}</td>
                                               @endfor
+
+                                              <td>
+    {{$player['total_points']}}
+                                                </td>
+                                         </tr>
                                          </tr>
                                             @endforeach
                                         </tbody>
@@ -279,15 +297,19 @@
                                 <div class="table-responsive">
                                     <table class="table table-striped"> 
                                         <thead class="thead ">
-                                            <tr>
+                                           <tr>
                                                 <th >Player</th>
-                                                <th >Qtr Halves</th>
-                                                <th >Fouls</th>                                         
+                                                <th> 1 Pts </th>
+                                                <th> 2 Pts </th>
+                                                <th> 3 Pts </th>                                                
+                                                <th >Fouls</th>
                                                 
                                         @for($index=1; $index<=$number_of_quarters; $index++)
-                                                <th>Quarter {{$index}}</th>
+                                                <th>Qtr {{$index}}</th>
                                         @endfor
 
+                                                <th> Total </th>
+                                                
 
                                             </tr>
                                         </thead>                                    
@@ -297,20 +319,33 @@
 
                                         <tr>
 
-                                                <td  id="player_lineup_{{$player['id']}}">
+                                                
+                                                <td>
                                                         {{$player['player_name']}}                              
                                                 </td>
-
+                                                <td> 
+     {{$player['points_1']}}
+                                                </td>
                                                 <td>
-                                                   {{$player['quarters_played']}}</td>
-                                           
-                                                <td class="{{$player['id']}}_faults">
+     {{$player['points_2']}}
+
+                                                </td>
+                                                <td>
+      {{$player['points_3']}}
+                                                </td>                                             
+                                              
+                                                <td class="{{$player['id']}}_fouls">
                                                          {{$player['fouls']}}
                                                 </td>
+                                                
 
                                               @for($index=1; $index<=$number_of_quarters; $index++)
                                                 <td>{{$player['quarter_'.$index]}}</td>
                                               @endfor
+
+                                              <td>{{$player['total_points']}}
+                                                </td>
+                                         </tr>
                                          </tr>
                                     
 
