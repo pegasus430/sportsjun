@@ -718,3 +718,6 @@ Route::get('get_org_groups_list', [
 
 Route::resource('sport', 'User\SportController');
 Route::resource('team', 'User\TeamController');
+
+
+Route::get('/reloadgroupteampoints', 'User\OrganizationController@testTournaments');

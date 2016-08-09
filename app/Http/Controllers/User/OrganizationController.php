@@ -11,11 +11,13 @@ use App\Model\State;
 use App\Model\City;
 use App\Model\Team;
 use App\Helpers\Helper;
+use App\Model\TournamentParent;
 use Auth;
 use App\Model\Photo;
 use App\Model\Sport;
 use App\Http\Controllers\User\SearchController;
 use DB;
+use App\Model\TournamentGroupTeams;
 
 //use Helper;
 
@@ -245,6 +247,7 @@ class OrganizationController extends Controller {
             ->join('tournaments', 'tournaments.tournament_parent_id', '=', 'tournament_parent.id')
             ->select('tournament_parent.logo',
                 'tournaments.id',
+                'tournaments.tournament_parent_id',
                 'tournaments.tournament_parent_name',
                 'tournaments.name',
                 'tournaments.type',
@@ -264,41 +267,46 @@ class OrganizationController extends Controller {
         $total       = count($totalresult);
         $tournaments = $query->limit($limit)->offset($offset)->orderBy('tournaments.updated_at', 'desc')->get();
         $orgInfo     = Organization::select()->where('id', $id)->get()->toArray();
+        $orgInfoObj   = Organization::find($id);
+
+        $parent_tournaments=TournamentParent::whereOrganizationId($id)->get();
         
-        if (!empty($tournaments))
+        if (!empty($parent_tournaments))
         {
-            foreach ($tournaments as $teamdet)
-            {
-                $currentTimestamp   = time();
-                $startDateTimestamp = strtotime($teamdet->start_date);
-                $endDateTimestamp   = strtotime($teamdet->end_date);
-                if ($endDateTimestamp <= $currentTimestamp)
-                {
-                    $teamdet->status = "Completed";
-                    $teamdet->statusColor = "black";
-                    $tournament_winner_details = SearchController::getTournamentWinner($teamdet, ["name"]);
-                    if (!empty($tournament_winner_details))
+            foreach($parent_tournaments as $parent_tournament){
+                    foreach ($parent_tournament->tournaments as $teamdet)
                     {
-                        $teamdet->winnerName = $tournament_winner_details["name"];
+                        $currentTimestamp   = time();
+                        $startDateTimestamp = strtotime($teamdet->start_date);
+                        $endDateTimestamp   = strtotime($teamdet->end_date);
+                        if ($endDateTimestamp <= $currentTimestamp)
+                        {
+                            $teamdet->status = "Completed";
+                            $teamdet->statusColor = "black";
+                            $tournament_winner_details = SearchController::getTournamentWinner($teamdet, ["name"]);
+                            if (!empty($tournament_winner_details))
+                            {
+                                $teamdet->winnerName = $tournament_winner_details["name"];
+                            }
+                        }
+                        else if ($startDateTimestamp > $currentTimestamp){
+                            $teamdet->status = "Not started";
+                            $teamdet->statusColor = "green";
+                        }
+                        else if ($currentTimestamp >= $startDateTimestamp)
+                        {
+                            $teamdet->status = "In progress";
+                            $teamdet->statusColor = "black";
+                        }
                     }
-                }
-                else if ($startDateTimestamp > $currentTimestamp){
-                    $teamdet->status = "Not started";
-                    $teamdet->statusColor = "green";
-                }
-                else if ($currentTimestamp >= $startDateTimestamp)
-                {
-                    $teamdet->status = "In progress";
-                    $teamdet->statusColor = "black";
-                }
-            }
-            
-            $sports       = Sport::get();
-            foreach ($sports as $sport)
-            {
-                $sports_array[$sport->id] = $sport->sports_name;
-            }
+                    
+                    $sports       = Sport::get();
+                    foreach ($sports as $sport)
+                    {
+                        $sports_array[$sport->id] = $sport->sports_name;
+                    }
         }
+    }
         
         return view('organization.tournaments')->with([
                 'tournaments'      => $tournaments,
@@ -308,8 +316,14 @@ class OrganizationController extends Controller {
                 'totalTournaments' => $total,
                 'sports_array'     => $sports_array,
                 'exist_array'      => $exist_array,
-                'follow_array'     => $follow_array
+                'follow_array'     => $follow_array,
+                'parent_tournaments' => $parent_tournaments,
+                'orgInfoObj'       => $orgInfoObj
         ]);
+    }
+
+    public function testTournaments(){
+            return Helper::updateOrganizationTeamsPoints();
     }
 
 }

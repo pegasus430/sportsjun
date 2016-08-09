@@ -61,6 +61,11 @@ class TournamentParent extends Model
         return $this->belongsTo(Organization::class, 'organization_id', 'id');
     }
 
+    public function tournaments()
+    {
+        return $this->hasMany('App\Model\Tournaments', 'tournament_parent_id', 'id');
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
@@ -71,5 +76,21 @@ class TournamentParent extends Model
             'organization_group_id');
     }
 
+      function getGroupPoints(){
+            return $this->hasMany('App\Model\OrganizationGroupTeamPoint')->groupBy('sports_id');
+    }
+
+
+    function getEachGroupPoints($tournament_parent_id,$organization_group_id,$sports_id){
+
+          $points=OrganizationGroupTeamPoint::whereTournamentParentId($tournament_parent_id)->whereOrganizationGroupId($organization_group_id)->whereSportsId($sports_id)->first();
+            if(empty($points)){
+                $points=0;
+            }
+            else{
+                $points=$points->points;
+            }
+            return $points;
+    }
 }
 

@@ -3224,7 +3224,7 @@ class ScoreCardController extends Controller {
 				else if(strtolower($sport_name)==strtolower('basketball'))
 				{
 					$squash = new ScoreCard\BasketballScoreCardController;
-					return $squash->basketallScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
+					return $squash->basketballScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
 			}
 		}
@@ -3559,6 +3559,10 @@ class ScoreCardController extends Controller {
 			}
 
 		}
+
+		//update organization points;
+
+		Helper::updateOrganizationTeamsPoints();
 
 	}
 

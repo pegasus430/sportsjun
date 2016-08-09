@@ -20,6 +20,8 @@ use Carbon\Carbon;
 use Route;
 use PDO;
 use App\Helpers\SendMail;
+use App\Model\TournamentGroupTeams;
+use App\Model\OrganizationGroupTeamPoint;
 
 class Helper {
 
@@ -1821,7 +1823,7 @@ class Helper {
 
 
     public static function getTeamDetails($team_id){
-        $team_model=Team::find($team_id);
+        $team_model=Team::find($team_id);        
         $team_model->gallery_title="Photo Album of $team_model->name";
         $team_model->gallery_sharing="Photo Album of $team_model->name";
         $team_model->gallery_url="/uploads/gallery/team/$team_model->id/$team_model->logo";
@@ -1996,6 +1998,56 @@ class Helper {
                 $match_model->scores='0 - 0';
         }
         return $match_model;
+    }
+
+    public static function updateOrganizationTeamsPoints(){
+            $tournaments_teams=DB::table('tournament_group_teams')
+                      ->join('tournaments', 'tournaments.id', '=', 'tournament_group_teams.tournament_id')
+                      ->join('organization_group_teams', 'organization_group_teams.team_id', '=','tournament_group_teams.team_id')
+                      ->join('organization_groups', 'organization_groups.id', '=', 'organization_group_teams.organization_group_id')                      
+                      ->select('tournament_group_teams.*','organization_groups.*', 'tournaments.*', 'organization_group_teams.*', DB::RAW('sum(tournament_group_teams.points) as organization_group_points'))  
+                      ->groupBy('organization_group_teams.organization_group_id')                   
+                      ->get();
+
+                foreach($tournaments_teams as $organization_group_team){
+                    $tournament_id=$organization_group_team->tournament_id;
+                    $organization_id=$organization_group_team->organization_id;
+                    $organization_group_id=$organization_group_team->organization_group_id;
+                    $sports_id=$organization_group_team->sports_id;
+                    $organization_group_points=$organization_group_team->organization_group_points;
+
+                    $check=OrganizationGroupTeamPoint::whereTournamentId($tournament_id)->whereOrganizationGroupId($organization_group_id)->first();
+
+                    if(!empty($check)){
+                        $check->points=$organization_group_points;
+                        $check->save();
+                    }
+                    else{
+
+                        if(empty($organization_group_points))$organization_group_points=0;
+
+
+                        $new_ogtp=new OrganizationGroupTeamPoint;
+
+                        $new_ogtp->organization_id          =$organization_id;
+                        $new_ogtp->tournament_id            =$tournament_id;
+                        $new_ogtp->sports_id                =$sports_id;
+                        $new_ogtp->points                   =$organization_group_points;
+                        $new_ogtp->organization_group_id    =$organization_group_id;
+                        $new_ogtp->tournament_parent_id     =$organization_group_team->tournament_parent_id;
+
+                          $new_ogtp->save();
+                        
+                    }
+                }
+
+
+
+            return $tournaments_teams;
+    }
+
+    public function getOrganizationTeamPoints($tournament_id=''){
+            return updateOrganizationTeamsPoints();
     }
 
 }
