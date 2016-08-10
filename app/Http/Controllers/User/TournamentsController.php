@@ -33,9 +33,9 @@ use Session;
 use View;
 
 
-use App\Model\SoccerPlayerMatchWiseStats;
-use App\Model\HockeyPlayerMatchWiseStats;
-use App\Model\BasketballPlayerMatchWiseStats;
+use App\Model\SoccerPlayerMatchwiseStats;
+use App\Model\HockeyPlayerMatchwiseStats;
+use App\Model\BasketballPlayerMatchwiseStats;
 
 
 class TournamentsController extends Controller
@@ -2232,7 +2232,7 @@ class TournamentsController extends Controller
 			switch ($sport_id) {
 				case  4: 			//soccer
 
-					$player=SoccerPlayerMatchWiseStats::join('match_schedules', 'match_schedules.id', '=', 'soccer_player_matchwise_stats.match_id')
+					$player=SoccerPlayerMatchwiseStats::join('match_schedules', 'match_schedules.id', '=', 'soccer_player_matchwise_stats.match_id')
 							->join('teams', 'teams.id','=', 'soccer_player_matchwise_stats.team_id')
 							->join('users', 'users.id', '=', 'soccer_player_matchwise_stats.user_id')
 							->where('match_schedules.tournament_id', $tournament_id)
@@ -2248,7 +2248,7 @@ class TournamentsController extends Controller
 					break;
 
 				case 11:	//hockey
-						$player=HockeyPlayerMatchWiseStats::join('match_schedules', 'match_schedules.id', '=', 'hockey_player_matchwise_stats.match_id')
+						$player=HockeyPlayerMatchwiseStats::join('match_schedules', 'match_schedules.id', '=', 'hockey_player_matchwise_stats.match_id')
 							->join('teams', 'teams.id','=', 'hockey_player_matchwise_stats.team_id')
 							->join('users', 'users.id', '=', 'hockey_player_matchwise_stats.user_id')
 							->where('match_schedules.tournament_id', $tournament_id)
@@ -2262,7 +2262,7 @@ class TournamentsController extends Controller
 							->get();
 
 				case 6:	//basketball
-						$player=BasketballPlayerMatchWiseStats::join('match_schedules', 'match_schedules.id', '=', 'basketball_player_matchwise_stats.match_id')
+						$player=BasketballPlayerMatchwiseStats::join('match_schedules', 'match_schedules.id', '=', 'basketball_player_matchwise_stats.match_id')
 							->join('teams', 'teams.id','=', 'basketball_player_matchwise_stats.team_id')
 							->join('users', 'users.id', '=', 'basketball_player_matchwise_stats.user_id')
 							->where('match_schedules.tournament_id', $tournament_id)
