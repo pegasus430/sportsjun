@@ -2234,8 +2234,9 @@ class TournamentsController extends Controller
 
 					$player=SoccerPlayerMatchWiseStats::join('match_schedules', 'match_schedules.id', '=', 'soccer_player_matchwise_stats.match_id')
 							->join('teams', 'teams.id','=', 'soccer_player_matchwise_stats.team_id')
+							->join('users', 'users.id', '=', 'soccer_player_matchwise_stats.user_id')
 							->where('match_schedules.tournament_id', $tournament_id)
-							->select('soccer_player_matchwise_stats.*')							
+							->select('soccer_player_matchwise_stats.*','users.*')							
 							->selectRaw('sum(yellow_cards) as yellow_cards')
 							->selectRaw('count(match_schedules.id) as matches')
 							->selectRaw('sum(red_cards) as red_cards')
@@ -2249,8 +2250,9 @@ class TournamentsController extends Controller
 				case 11:	//hockey
 						$player=HockeyPlayerMatchWiseStats::join('match_schedules', 'match_schedules.id', '=', 'hockey_player_matchwise_stats.match_id')
 							->join('teams', 'teams.id','=', 'hockey_player_matchwise_stats.team_id')
+							->join('users', 'users.id', '=', 'hockey_player_matchwise_stats.user_id')
 							->where('match_schedules.tournament_id', $tournament_id)
-							->select('hockey_player_matchwise_stats.*')							
+							->select('hockey_player_matchwise_stats.*','users.*')							
 							->selectRaw('sum(yellow_cards) as yellow_cards')
 							->selectRaw('count(match_schedules.id) as matches')
 							->selectRaw('sum(red_cards) as red_cards')
@@ -2262,8 +2264,9 @@ class TournamentsController extends Controller
 				case 6:	//basketball
 						$player=BasketballPlayerMatchWiseStats::join('match_schedules', 'match_schedules.id', '=', 'basketball_player_matchwise_stats.match_id')
 							->join('teams', 'teams.id','=', 'basketball_player_matchwise_stats.team_id')
+							->join('users', 'users.id', '=', 'basketball_player_matchwise_stats.user_id')
 							->where('match_schedules.tournament_id', $tournament_id)
-							->select('basketball_player_matchwise_stats.*')							
+							->select('basketball_player_matchwise_stats.*','users.*')							
 							->selectRaw('sum(points_1) as points_1')
 							->selectRaw('count(match_schedules.id) as matches')
 							->selectRaw('sum(points_2) as points_2')

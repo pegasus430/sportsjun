@@ -1,5 +1,5 @@
 @if (count($player_standing))
-    <h4><b>{{ config('constants.SOCCER_STATS.SOCCER_STATISTICS')}}</b></h4>
+    <h4><b>{{ config('constants.SOCCER_STATS.HOCKEY_STATISTICS')}}</b></h4>
     <div class=" stats-table" id='teamStatsDiv'>
     <table class="table table-hover">
         <thead>
@@ -19,7 +19,7 @@
             @foreach($player_standing as $statistic)  
             <tr>
                 <td>
-                
+
                     @if($statistic->url!='')
                                 <!--<img class="fa fa-user fa-fw fa-2x" height="42" width="42" src="{{ url('/uploads/user_profile/'.$statistic->url) }}" onerror="this.onerror=null;this.src='{{ asset('/images/default-profile-pic.jpg') }}';">-->
                                 

@@ -59,7 +59,7 @@ return [
                         'SCHEDULE_TYPE' => ['team' => 'TEAM', 'individual' => 'INDIVIDUAL']
                 ]
                 ,
-                'SCHEDULE'     =>
+                'SCHEDULE'     => 
                 [
                         'MATCH_TYPE'  => [
                                 'CRICKET'      => ['odi' => 'ODI', 't20' => 'T20',
@@ -211,6 +211,7 @@ return [
                 'GOALS_ASSIST'      => 'GOALS ASSIST',
                 'GOALS_PENALTIES'   => 'GOALS PENALTIES',
                 'SOCCER_STATISTICS' => 'SOCCER',
+                'HOCKEY_STATISTICS' => 'HOCKEY'
         ],
         'BADMINTON_STATS'       => [
                 'WON'               => 'WON',
