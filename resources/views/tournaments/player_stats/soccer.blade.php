@@ -4,12 +4,12 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>PLAYER NAME</th>
-                <th>TEAM NAME</th>
+                <th>PLAYER </th>
+                <th>TEAM </th>
                 <th>{{ config('constants.STATISTICS.MATCHES')}}</th>                
-                <th>{{ config('constants.SOCCER_STATS.YELLOW_CARDS')}}</th>
-                <th>{{ config('constants.SOCCER_STATS.RED_CARDS')}}</th>
-                <th>{{ config('constants.SOCCER_STATS.GOALS_SCORED')}}</th>
+                <th>Y CARDS</th>
+                <th>R CARDS</th>
+                <th>GOALS</th>
 <!--                <th>{{ config('constants.SOCCER_STATS.GOALS_SAVED')}}</th>
                 <th>{{ config('constants.SOCCER_STATS.GOALS_ASSIST')}}</th>
                 <th>{{ config('constants.SOCCER_STATS.GOALS_PENALTIES')}}</th>-->

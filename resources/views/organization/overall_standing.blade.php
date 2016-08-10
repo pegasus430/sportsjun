@@ -12,7 +12,7 @@
 									<tr>
 											<th></th>
 											@foreach($orgInfoObj->groups as $og)
-												<td><p><center>{{$og->name}}</center></p>
+												<td><p><b><center>{{$og->name}}</center></b></p>
 													<br>
 													<?php $og->total_points=0;?>
 													<img src="{{url('/uploads/org/groups/logo/'.$og->logo)}}"

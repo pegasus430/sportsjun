@@ -2286,15 +2286,8 @@ class TournamentsController extends Controller
 							->join('teams', 'teams.id','=', 'cricket_player_matchwise_stats.team_id')
 							->join('users', 'users.id', '=', 'cricket_player_matchwise_stats.user_id')
 							->where('match_schedules.tournament_id', $tournament_id)
-							->select('cricket_player_matchwise_stats.*','users.*')							
-							->selectRaw('sum(points_1) as points_1')
-							->selectRaw('count(match_schedules.id) as matches')
-							->selectRaw('sum(points_2) as points_2')
-							->selectRaw('sum(points_3) as points_3')
-							->selectRaw('sum(total_points) as total_points')
-							->selectRaw('sum(fouls) as fouls')
-							->orderBy('total_points', 'desc')
-							->groupBy('match_type')
+							->select('cricket_player_matchwise_stats.*','users.*')			
+							
 							->groupBy('user_id')
 							->get();
 

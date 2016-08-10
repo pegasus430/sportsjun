@@ -17,7 +17,7 @@
 								   			<td>
 								   		@foreach($orgInfoObj->groups as $og)
 												<td>
-													<p><center>{{$og->name}}</center></p>
+													<p><b><center>{{$og->name}}</center></b></p>
 													<br>
 													<img src="{{url('/uploads/org/groups/logo/'.$og->logo)}}"
 														 class='img-responsive img-rounded img-center' height='60px' width='60px'>

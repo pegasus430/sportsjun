@@ -4,13 +4,13 @@
     <table class="table">
         <thead>
             <tr>
-                <th>PLAYER NAME</th>
-                <th>TEAM NAME</th>
+                <th>PLAYER </th>
+                <th>TEAM </th>
                 <th>{{ config('constants.STATISTICS.MATCHES')}}</th>
-                <th>{{ config('constants.BASKETBALL_STATS.POINTS_1')}}</th>
-                <th>{{ config('constants.BASKETBALL_STATS.POINTS_2')}}</th>
-                <th>{{ config('constants.BASKETBALL_STATS.POINTS_3')}}</th>
-                <th>{{ config('constants.BASKETBALL_STATS.TOTAL_POINTS')}}</th>
+                <th>1 P</th>
+                <th>2 P</th>
+                <th>3 P</th>
+                <th>T POINTS</th>
                 <th>{{ config('constants.BASKETBALL_STATS.FOULS')}}</th>
 <!--                <th>{{ config('constants.BASKETBALL_STATS.GOALS_SAVED')}}</th>
                 <th>{{ config('constants.BASKETBALL_STATS.GOALS_ASSIST')}}</th>

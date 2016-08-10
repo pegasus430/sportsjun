@@ -1,7 +1,7 @@
 <div class="col-sm-2" id="sidebar-left">
 	<div class="row">
 			<div class="team_view">
-						{!! Helper::Images(!empty($photo['url'])?$photo['url']:'','organization',array('height'=>100,'width'=>100) )!!}
+						{!! Helper::Images(!empty($orgInfo[0]['logo'])?$orgInfo[0]['logo']:'','organization',array('height'=>100,'width'=>100) )!!}
 						<h1>{{ $orgInfo[0]['name'] or "" }}</h1>
 
                                         @if(isset($userId) && isset($orgInfo) && ($userId == $orgInfo[0]['user_id']))
