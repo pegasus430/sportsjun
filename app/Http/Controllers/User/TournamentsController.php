@@ -36,6 +36,7 @@ use View;
 use App\Model\SoccerPlayerMatchwiseStats;
 use App\Model\HockeyPlayerMatchwiseStats;
 use App\Model\BasketballPlayerMatchwiseStats;
+use App\Model\CricketPlayerMatchwiseStats;
 
 
 class TournamentsController extends Controller
@@ -2260,6 +2261,7 @@ class TournamentsController extends Controller
 							->orderBy('goals', 'desc')
 							->groupBy('user_id')
 							->get();
+				break;
 
 				case 6:	//basketball
 						$player=BasketballPlayerMatchwiseStats::join('match_schedules', 'match_schedules.id', '=', 'basketball_player_matchwise_stats.match_id')
@@ -2274,6 +2276,25 @@ class TournamentsController extends Controller
 							->selectRaw('sum(total_points) as total_points')
 							->selectRaw('sum(fouls) as fouls')
 							->orderBy('total_points', 'desc')
+							->groupBy('user_id')
+							->get();
+
+
+				break;
+				case 1:	//cricket
+						$player=CricketPlayerMatchwiseStats::join('match_schedules', 'match_schedules.id', '=', 'cricket_player_matchwise_stats.match_id')
+							->join('teams', 'teams.id','=', 'cricket_player_matchwise_stats.team_id')
+							->join('users', 'users.id', '=', 'cricket_player_matchwise_stats.user_id')
+							->where('match_schedules.tournament_id', $tournament_id)
+							->select('cricket_player_matchwise_stats.*','users.*')							
+							->selectRaw('sum(points_1) as points_1')
+							->selectRaw('count(match_schedules.id) as matches')
+							->selectRaw('sum(points_2) as points_2')
+							->selectRaw('sum(points_3) as points_3')
+							->selectRaw('sum(total_points) as total_points')
+							->selectRaw('sum(fouls) as fouls')
+							->orderBy('total_points', 'desc')
+							->groupBy('match_type')
 							->groupBy('user_id')
 							->get();
 

@@ -1,25 +1,32 @@
 @if (count($player_standing))
-    <h4><b>{{ config('constants.SOCCER_STATS.HOCKEY_STATISTICS')}}</b></h4>
+     <h4><b>{{ config('constants.CRICKET_STATS.BATTING_STATS.BATTING_STATISTICS')}}</b></h4>
     <div class=" stats-table" id='teamStatsDiv'>
     <table class="table table-hover">
-        <thead>
+         <thead>
             <tr>
+
                 <th>PLAYER NAME</th>
                 <th>TEAM NAME</th>
-                <th>{{ config('constants.STATISTICS.MATCHES')}}</th>                
-                <th>{{ config('constants.SOCCER_STATS.YELLOW_CARDS')}}</th>
-                <th>{{ config('constants.SOCCER_STATS.RED_CARDS')}}</th>
-                <th>{{ config('constants.SOCCER_STATS.GOALS_SCORED')}}</th>
-<!--                <th>{{ config('constants.SOCCER_STATS.GOALS_SAVED')}}</th>
-                <th>{{ config('constants.SOCCER_STATS.GOALS_ASSIST')}}</th>
-                <th>{{ config('constants.SOCCER_STATS.GOALS_PENALTIES')}}</th>-->
+                <th>{{ config('constants.STATISTICS.MATCH_TYPE')}}</th>  
+                <th>{{ config('constants.STATISTICS.MATCHES')}}</th>
+                <th>{{ config('constants.STATISTICS.INNINGS')}}</th>
+                <th>{{ config('constants.CRICKET_STATS.BATTING_STATS.NOT_OUTS')}}</th>
+                <th>{{ config('constants.CRICKET_STATS.BATTING_STATS.TOTAL_RUNS')}}</th>
+                <th>{{ config('constants.CRICKET_STATS.BATTING_STATS.50s')}}</th>
+                <th>{{ config('constants.CRICKET_STATS.BATTING_STATS.100s')}}</th>
+                <th>{{ config('constants.CRICKET_STATS.BATTING_STATS.4s')}}</th>
+                <th>{{ config('constants.CRICKET_STATS.BATTING_STATS.6s')}}</th>
+                <th>{{ config('constants.CRICKET_STATS.BATTING_STATS.AVERAGE')}}</th>
+                <th>{{ config('constants.CRICKET_STATS.BATTING_STATS.HIGH_SCORE')}}</th>
+                <th>{{ config('constants.CRICKET_STATS.BATTING_STATS.STRIKE_RATE')}}</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($player_standing as $statistic)  
-            <tr>
-                <td>
+            @foreach($sportsPlayerStatistics as $statistic)  
 
+            <tr>
+                <td><a href='/editsportprofile/{{$statistic->team_id}}' class="text-primary">
+ 
                     @if($statistic->url!='')
                                 <!--<img class="fa fa-user fa-fw fa-2x" height="42" width="42" src="{{ url('/uploads/user_profile/'.$statistic->url) }}" onerror="this.onerror=null;this.src='{{ asset('/images/default-profile-pic.jpg') }}';">-->
                                 
@@ -35,16 +42,20 @@
                     
                     @endif
 
-                 {{$statistic->player_name}}</td>                
-                <td><a href='/editsportprofile/{{$statistic->team_id}}' class="text-primary">{{$statistic->player_name}}</a></td>                
-                <td><a href='/team/members/{{$statistic->team_id}}' class="text-primary">{{$statistic->team_name}}</a></td>                
+                    {{$statistic->player_name}}</a></td>                
+                <td><a href='/team/members/{{$statistic->team_id}}' class="text-primary">{{$statistic->team_name}}</a></td>
+                <td>{{$statistic->match_type}}</td>  
                 <td>{{$statistic->matches}}</td>
-                <td>{{$statistic->yellow_cards}}</td>
-                <td>{{$statistic->red_cards}}</td>
-                <td>{{$statistic->goals}}</td>
-<!--                <td>{{$statistic->goals_saved}}</td>
-                <td>{{$statistic->goal_assist}}</td>
-                <td>{{$statistic->goal_penalties}}</td>-->
+                <td>{{$statistic->innings_bat}}</td>
+                <td>{{$statistic->notouts}}</td>
+                <td>{{$statistic->totalruns}}</td>
+                <td>{{$statistic->fifties}}</td>
+                <td>{{$statistic->hundreds}}</td>
+                <td>{{$statistic->fours}}</td>
+                <td>{{$statistic->sixes}}</td>
+                <td>{{$statistic->average_bat}}</td>
+                <td>{{$statistic->highscore}}</td>
+                <td>{{$statistic->strikerate}}</td>
             </tr>
             @endforeach
         </tbody>
