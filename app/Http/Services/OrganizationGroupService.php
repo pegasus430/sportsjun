@@ -37,6 +37,8 @@ class OrganizationGroupService extends Service
         return $group;
     }
 
+
+
     /**
      * @return string
      */

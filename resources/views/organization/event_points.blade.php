@@ -7,22 +7,25 @@
 
 				<div class='row'>
 					<div class='col-sm-12'>
-						<div class='table-responsive'>
-							<table class='table table-striped table-bordered'>
+						<div class='table-responsive' id="teamStatsDiv">
+							<table class='table table-striped table-bordered '>
 								<thead>
-									<tr>
-										<th>
-										</th>
-											@foreach($orgInfoObj->groups as $og)
-												<th>
-													
+								
+								  </thead>
+								<tbody>
+								   <tr>
+								   			<td>
+								   		@foreach($orgInfoObj->groups as $og)
+												<td>
+													<p><center>{{$og->name}}</center></p>
+													<br>
 													<img src="{{url('/uploads/org/groups/logo/'.$og->logo)}}"
 														 class='img-responsive img-rounded img-center' height='60px' width='60px'>
-												</th>
+												</td>
 											@endforeach
+
 								   </tr>
-								</thead>
-								<tbody>
+								
 										<tr>
 											<td>{{$lis->sport->sports_name}} </td>
 

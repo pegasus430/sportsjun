@@ -384,7 +384,8 @@ if (typeof SJ.SCORECARD === 'undefined')
                                 displayFormContent.append("<input type='hidden' name='half_time_"+index+"' value='"+half_time+"'>");
                                 displayFormContent.append("<input type='hidden' name='team_type_"+index+"' value='"+team_type+"'>");
                                 displayFormContent.append("<input type='hidden' name='player_name_"+index+"' value='"+player_name+"'>");
-
+                                displayFormContent.append("<input type='hidden' name='quarter_"+index+"' value='"+half_time+"'>");
+                                
                                 displayFormContent.append("<input type='hidden' name='match_id' value='"+match_id+"'>");
                                 displayFormContent.append("<input type='hidden' name='tournament_id' value='"+tournament_id+"'>");
                                 displayFormContent.append("<input type='hidden' name='team_a_id' value='"+team_a_id+"'>");

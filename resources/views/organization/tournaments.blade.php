@@ -11,7 +11,9 @@
 			@foreach($parent_tournaments as $parent_tournament)
                 <div class="teams_search_display row main_tour">
                     <div class='col-sm-12'>	
-                       <div class='t_tltle' style="padding-left:30px;"><div><h3>Tournament : {{ $parent_tournament->name }}</h3>
+                       <div class='t_tltle' style="padding-left:30px;"><div><h3>Tournament : {{ $parent_tournament->name }}
+
+                       </h3>
                             <span class="pull-right"><button class="btn btn-event" href="javascript:void(0);" data-toggle="modal" data-target="#overall_standing_{{$parent_tournament->id}}">Overall Standing</span>
                        </div></div>
                     </div>
@@ -81,8 +83,12 @@
 
                 
                 @endforeach
+                          
+                          <center>   <a href='/tournaments/{{$parent_tournament->id}}/edit' class='btn btn-tiny btn-primary'> Add Event</a> </center>
+                         
                 </div>
             @include('organization.overall_standing')
+
         @endforeach 
 		@else
 		<div class="sj-alert sj-alert-info sj-alert-sm">No tournament conducted by the organization.</div>

@@ -15,11 +15,34 @@
 <div class="col-sm-12">
 <div class="row group-flex-content">
 @if(count($roundArray))
-        @foreach($roundArray as $round)
-        @if($round==1)
+        @foreach($roundArray as $key=>$round)
+          <?php
+            $round_name=[];
+                switch (count($roundArray)) {
+                  case 1:
+                      $round_name[1]='FINAL';
+                    break;
+                  case 2:
+                      $round_name[1]='SEMI FINAL';
+                      $round_name[2]='FINAL';
+                     
+                      break;
+                  case 3:  
+                      $round_name[1]='QUARTER FINAL';
+                      $round_name[2]='SEMI FINAL';
+                      $round_name[3]='FINAL';
+                      break;               
+                  default:
+                    # code...
+                    break;
+                }
+
+
+              ?>  
+                 @if($round==1)
         <div class="col-sm-2">
             <div class="round-{{Helper::convert_number_to_words($round)}}">
-                <div class="round"><p>ROUND {{$round}}</p></div>
+                <div class="round"><p>      {{$round_name[$key]}} </p></div>
                  @if(count($firstRoundBracketArray))
                  @foreach($firstRoundBracketArray as $key => $schedule)
                  	<div class="match_set" style="height: 150px;">
@@ -89,7 +112,7 @@
         @else
         <div class="col-sm-2">
             <div class="round-{{Helper::convert_number_to_words($round)}}">
-                <div class="round"><p>ROUND {{$round}}</p></div>
+                <div class="round"><p> {{$round_name[$key]}}</p></div>
 
                  @if(count($bracketTeamArray))
                     <?php

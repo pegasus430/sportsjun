@@ -32,6 +32,12 @@ use Response;
 use Session;
 use View;
 
+
+use App\Model\SoccerPlayerMatchWiseStats;
+use App\Model\HockeyPlayerMatchWiseStats;
+use App\Model\BasketballPlayerMatchWiseStats;
+
+
 class TournamentsController extends Controller
 {
 	/**
@@ -2191,5 +2197,93 @@ class TournamentsController extends Controller
 		$left_menu_data = Helper::getLeftMenuData($tournamentInfo[0]['tournament_parent_id'],$tournamentInfo[0]['manager_id'],$tournamentInfo);
 
 		return view('tournaments.tournamentsdetails')->with(array( 'tournamentInfo'=>$tournamentInfo,'action_id'=>$id,'left_menu_data'=>$left_menu_data, 'tournament_id' => $id, 'lef_menu_condition'=> $lef_menu_condition, 'tournament_type' => $tournamentInfo[0]['type'],'sport_name'=>$sport_name,'manager_name'=> $manager_name));
+	}
+
+
+
+	public function playerStanding($tournament_id){
+		$left_menu_data = array();
+		$id=$tournament_id;
+		$action_id=$tournament_id;
+
+		$tournamentInfo= Tournaments::whereId($tournament_id)->get();
+		
+		$tournament_type=$tournamentInfo[0]['type'];
+		$tournament_parent_id=$tournamentInfo[0]['tournament_parent_id'];
+
+		$lef_menu_condition = 'display_gallery';
+		$left_menu_data = Helper::getLeftMenuData($tournamentInfo[0]['tournament_parent_id'],$tournamentInfo[0]['manager_id'],$tournamentInfo);
+
+		$sport_id=$tournamentInfo[0]['sports_id'];
+		$sport_name=strtolower(Sport::find($sport_id)->sports_name);
+
+		$player_standing=$this->getPlayerStanding($sport_id, $tournament_id);
+
+
+			return view('tournaments.player_standing', compact(
+					'tournamentInfo','lef_menu_condition',
+					'left_menu_data', 'tournamentInfo','id', 
+					'tournament_id' , 'action_id',
+					'tournament_parent_id', 'tournament_type', 
+					'player_standing', 'sport_id', 'sport_name'));
+	}
+
+	public function getPlayerStanding($sport_id, $tournament_id){
+			switch ($sport_id) {
+				case  4: 			//soccer
+
+					$player=SoccerPlayerMatchWiseStats::join('match_schedules', 'match_schedules.id', '=', 'soccer_player_matchwise_stats.match_id')
+							->join('teams', 'teams.id','=', 'soccer_player_matchwise_stats.team_id')
+							->where('match_schedules.tournament_id', $tournament_id)
+							->select('soccer_player_matchwise_stats.*')							
+							->selectRaw('sum(yellow_cards) as yellow_cards')
+							->selectRaw('count(match_schedules.id) as matches')
+							->selectRaw('sum(red_cards) as red_cards')
+							->selectRaw('sum(goals_scored) as goals')
+							->orderBy('goals', 'desc')
+							->groupBy('user_id')
+							->get();
+					# code...
+					break;
+
+				case 11:	//hockey
+						$player=HockeyPlayerMatchWiseStats::join('match_schedules', 'match_schedules.id', '=', 'hockey_player_matchwise_stats.match_id')
+							->join('teams', 'teams.id','=', 'hockey_player_matchwise_stats.team_id')
+							->where('match_schedules.tournament_id', $tournament_id)
+							->select('hockey_player_matchwise_stats.*')							
+							->selectRaw('sum(yellow_cards) as yellow_cards')
+							->selectRaw('count(match_schedules.id) as matches')
+							->selectRaw('sum(red_cards) as red_cards')
+							->selectRaw('sum(goals_scored) as goals')
+							->orderBy('goals', 'desc')
+							->groupBy('user_id')
+							->get();
+
+				case 6:	//basketball
+						$player=BasketballPlayerMatchWiseStats::join('match_schedules', 'match_schedules.id', '=', 'basketball_player_matchwise_stats.match_id')
+							->join('teams', 'teams.id','=', 'basketball_player_matchwise_stats.team_id')
+							->where('match_schedules.tournament_id', $tournament_id)
+							->select('basketball_player_matchwise_stats.*')							
+							->selectRaw('sum(points_1) as points_1')
+							->selectRaw('count(match_schedules.id) as matches')
+							->selectRaw('sum(points_2) as points_2')
+							->selectRaw('sum(points_3) as points_3')
+							->selectRaw('sum(total_points) as total_points')
+							->selectRaw('sum(fouls) as fouls')
+							->orderBy('total_points', 'desc')
+							->groupBy('user_id')
+							->get();
+
+
+				break;
+
+				
+				default:
+					# code...
+				$player=[];
+					break;
+			}
+
+			return $player;
 	}
 }

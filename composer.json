@@ -19,7 +19,7 @@
         "mews/captcha": "^2.1",
         "sofa/eloquence": "~5.1@dev",
         "barryvdh/laravel-ide-helper": "^2.2"
-    },
+           },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "0.9.*",

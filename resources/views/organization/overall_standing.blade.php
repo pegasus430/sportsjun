@@ -7,19 +7,19 @@
 					<div class='row'>
 					<div class='col-sm-12'>
 						<div class='table-responsive'>
-							<table class='table table-striped table-bordered'>
+							<table class='table table-striped table-bordered table-hover'>
 								<thead>
 									<tr>
-										<th>&nbsp;
-										</th>
+											<th></th>
 											@foreach($orgInfoObj->groups as $og)
-												<th>
+												<td><p><center>{{$og->name}}</center></p>
+													<br>
 													<?php $og->total_points=0;?>
 													<img src="{{url('/uploads/org/groups/logo/'.$og->logo)}}"
 														 class='img-responsive img-rounded center-block' height='60px' width='60px'>
-												</th>
+												</td>
 											@endforeach
-								   </tr>
+								   </tr>								   	
 								</thead>
 								<tbody>
 									

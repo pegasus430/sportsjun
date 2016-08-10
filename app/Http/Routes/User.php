@@ -44,6 +44,10 @@ Route::group(['prefix' => 'organization/{id}'], function () {
         'as'   => 'organization.groups.store',
         'uses' => 'User\OrganizationGroupsController@store',
     ]);
+    Route::put('groups', [
+        'as'   => 'organization.groups.update',
+        'uses' => 'User\OrganizationGroupsController@edit',
+    ]);
 });
 
 Route::get('getteamdetails', [
@@ -208,6 +212,10 @@ Route::resource('gallery', 'User\GalleryController');
 Route::resource('user/album', 'User\AlbumController');
 //End Gallery
 //Tournamets
+Route::get('tournaments/groups/{id}/player_standing', [
+    'as'   => 'groups',
+    'uses' => 'User\TournamentsController@playerStanding',
+]);
 Route::get('tournaments/groups/{id}/{type?}', [
     'as'   => 'groups',
     'uses' => 'User\TournamentsController@groups',
