@@ -39,5 +39,7 @@ class Kernel extends HttpKernel
 		'photos'=>'App\Http\Middleware\PhotosMiddleware',
         'role'=>'App\Http\Middleware\Role',
         // 'team' => 'App\Http\Middleware\TeamMiddleware',
+        'jwt.auth' => 'Tymon\JWTAuth\Middleware\GetUserFromToken',
+        'jwt.refresh' => 'Tymon\JWTAuth\Middleware\RefreshToken',
     ];
 }
