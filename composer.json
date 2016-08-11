@@ -18,7 +18,9 @@
         "proengsoft/laravel-jsvalidation": "~1.1",
         "mews/captcha": "^2.1",
         "sofa/eloquence": "~5.1@dev",
-        "barryvdh/laravel-ide-helper": "^2.2"
+        "barryvdh/laravel-ide-helper": "^2.2",
+        "barryvdh/laravel-cors": "^0.8.1",
+        "tymon/jwt-auth": "^0.5.9"
            },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

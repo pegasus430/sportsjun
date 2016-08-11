@@ -12,7 +12,7 @@ if (typeof SJ.GLOBAL === 'undefined')
                         defaultAjaxSettings : {},
                         init : function () {
                                 window.site_url = ( typeof site_url === 'undefined' ) ? 'http://' + window.location.hostname : site_url;
-				window.secure_url = ( typeof secure_url === 'undefined' ) ? 'http://' + window.location.hostname: secure_url;
+				window.secure_url = ( typeof secure_url === 'undefined' ) ? 'http://' + window.location.host: secure_url;
                                 this.defaultAjaxSettings = $.extend( true, {}, $.ajaxSettings );
                                 o.bootstrapModalInit();
                                 if (window.location.href.indexOf("?open_popup=login") > -1)

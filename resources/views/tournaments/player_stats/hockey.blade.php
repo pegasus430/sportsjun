@@ -19,7 +19,7 @@
             @foreach($player_standing as $statistic)  
             <tr>
                                    
-                <td><a href='/editsportprofile/{{$statistic->team_id}}' class="text-primary">
+                <td><a href='/editsportprofile/{{$statistic->user_id}}' class="text-primary">
 
                      
                     @if($statistic->url!='')

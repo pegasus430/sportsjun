@@ -2282,15 +2282,46 @@ class TournamentsController extends Controller
 
 				break;
 				case 1:	//cricket
+						
 						$player=CricketPlayerMatchwiseStats::join('match_schedules', 'match_schedules.id', '=', 'cricket_player_matchwise_stats.match_id')
 							->join('teams', 'teams.id','=', 'cricket_player_matchwise_stats.team_id')
 							->join('users', 'users.id', '=', 'cricket_player_matchwise_stats.user_id')
 							->where('match_schedules.tournament_id', $tournament_id)
-							->select('cricket_player_matchwise_stats.*','users.*')			
+							->select('cricket_player_matchwise_stats.*','users.*')	
+							->selectRaw('count(innings) as innings_bat')
+							->selectRaw('sum(totalruns) as totalruns')
+							->selectRaw('sum(balls_played) as balls_played')
+							->selectRaw('sum(fifties) as fifties')
+							->selectRaw('sum(hundreds) as hundreds')
+							->selectRaw('sum(fours) as fours')
+							->selectRaw('sum(sixes) as sixes')
+							->selectRaw('sum(IF(bat_status="notout", 1, 0)) as notouts')
+							->selectRaw('max(totalruns) as highscore')
 							
+													
+		
+                        	// ->select( "*", DB::raw( 'count( innings ) innings_bat, SUM(notouts) notouts, SUM(totalruns) totalruns, SUM(totalballs) totalballs, '
+                         //    . 'SUM(fifties) fifties,SUM(hundreds) hundreds,SUM(fours) fours,SUM(sixes) sixes,CAST(AVG(average_bat) AS DECIMAL(10,2)) average_bat,'
+                         //    . 'CAST(AVG(strikerate) AS DECIMAL(10,2)) strikerate, SUM(catches) catches, SUM(stumpouts) stumpouts, SUM(runouts) runouts,'
+                         //    . 'SUM(innings_bowl) innings_bowl, SUM(wickets) wickets, SUM(runs_conceded) runs_conceded, SUM(overs_bowled) overs_bowled, SUM(wides_bowl) wides_bowl, SUM(noballs_bowl) noballs_bowl,'
+                         //    . 'CAST(AVG(average_bowl) AS DECIMAL(10,2)) average_bowl, CAST(AVG(ecomony) AS DECIMAL(10,2)) ecomony' ) )
+							
+
+							->selectRaw('count(DISTINCT(match_id)) as matches')
+							->selectRaw('count(innings) as inningscount')
+							->selectRaw('sum(wickets) as wickets')
+							->selectRaw('sum(runs_conceded) as runs_conceded')
+							->selectRaw('sum(overs_bowled) as overs_bowled')
+							->selectRaw('count(innings) as innings_bowled')
+							->selectRaw('CAST(AVG(average_bowl) AS DECIMAL(10,2))  average_bowl')
+							->selectRaw('CAST(AVG(ecomony) AS DECIMAL(10,2)) ecomony')
 							->groupBy('user_id')
+							->groupBy( 'match_type' )
 							->get();
 
+					
+
+						return $player;
 
 				break;
 

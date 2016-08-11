@@ -20,7 +20,7 @@
             <tr>
                 
               
-                <td><a href='/editsportprofile/{{$statistic->team_id}}' class="text-primary"> 
+                <td><a href='/editsportprofile/{{$statistic->user_id}}' class="text-primary"> 
                     
                     @if($statistic->url!='')
                                 <!--<img class="fa fa-user fa-fw fa-2x" height="42" width="42" src="{{ url('/uploads/user_profile/'.$statistic->url) }}" onerror="this.onerror=null;this.src='{{ asset('/images/default-profile-pic.jpg') }}';">-->
