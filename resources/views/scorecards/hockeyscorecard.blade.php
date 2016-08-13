@@ -179,7 +179,9 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
                 <div class='row'>
                     <div class='col-xs-12'>
                         <div class='match_loc'>
-                            {{$tournamentDetails['name']}} Tournament
+                           <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
+				                 		{{$tournamentDetails['name']}} Tournament
+				            </a>
                                 
                         </div>
                     </div>
@@ -887,7 +889,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 				<div class="alert alert-danger" id="div_failure1"></div>
 				<div class="alert alert-success" id="div_success1" style="display:none;"></div>
 				<div class="modal-body">
-					<form action='#' onsubmit="return hockeySwapPlayers('form_substitute_a')" id='form_substitute_a'>
+					<form  onsubmit="return hockeySwapPlayers('form_substitute_a')" id='form_substitute_a'>
 						{!!csrf_field()!!}
 						<input type='hidden' name='match_id' value="{{$match_id}}">
 						<input type='hidden' name='team_id' value="{{$team_a_id}}">
@@ -971,7 +973,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 				<div class="alert alert-success" id="div_success1" style="display:none;"></div>
 				<div class="modal-body">
 					<div class='row'>
-						<form action='#' onsubmit="return hockeySwapPlayers('form_substitute_b')" id='form_substitute_b'>
+						<form  onsubmit="return hockeySwapPlayers('form_substitute_b')" id='form_substitute_b'>
 							{!!csrf_field()!!}
 							<div class="table-responsive">
 								<center class='table_head'> {{$team_b_name}} Substitute</center>
@@ -1054,7 +1056,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 				<div class="alert alert-success" id="div_success1" style="display:none;"></div>
 				<div class="modal-body">
 					<div class='row'>
-						<form action='#' onsubmit="return false" id='form_choose_penalties'>
+						<form  onsubmit="return false" id='form_choose_penalties'>
 							{!!csrf_field()!!}
 							<div class="table-responsive">
 								<center class='table_head'> Select Players for penalties</center>

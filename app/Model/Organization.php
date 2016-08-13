@@ -64,7 +64,7 @@ class Organization extends Model
 
         public function teamplayers()
         {
-                return $this->hasMany('App\Model\team', 'organization_id', 'id');
+                return $this->hasMany('App\Model\Team', 'organization_id', 'id');
         }
 
         //Global team search

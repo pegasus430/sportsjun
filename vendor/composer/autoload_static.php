@@ -20,6 +20,7 @@ class ComposerStaticInit426b571aa1fb5691aa728df7555c373e
         'e7223560d890eab89cda23685e711e2c' => __DIR__ . '/..' . '/psy/psysh/src/Psy/functions.php',
         'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
         '58571171fd5812e6e447dce228f52f4d' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/helpers.php',
+        '3919eeb97e98d4648304477f8ef734ba' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/Crypt/Random.php',
         '14812156da62770d06ccc3ede5af6de1' => __DIR__ . '/..' . '/zofe/burp/src/helpers.php',
         'f18cc91337d49233e5754e93f3ed9ec3' => __DIR__ . '/..' . '/laravelcollective/html/src/helpers.php',
         '752af1c2bdb339e8474c3c31b22b7d54' => __DIR__ . '/..' . '/illuminate/html/helpers.php',
@@ -44,6 +45,10 @@ class ComposerStaticInit426b571aa1fb5691aa728df7555c373e
         'W' => 
         array (
             'Webmozart\\Assert\\' => 17,
+        ),
+        'T' => 
+        array (
+            'Tymon\\JWTAuth\\' => 14,
         ),
         'S' => 
         array (
@@ -123,6 +128,7 @@ class ComposerStaticInit426b571aa1fb5691aa728df7555c373e
         'B' => 
         array (
             'Barryvdh\\LaravelIdeHelper\\' => 26,
+            'Barryvdh\\Cors\\' => 14,
         ),
         'A' => 
         array (
@@ -152,6 +158,10 @@ class ComposerStaticInit426b571aa1fb5691aa728df7555c373e
         'Webmozart\\Assert\\' => 
         array (
             0 => __DIR__ . '/..' . '/webmozart/assert/src',
+        ),
+        'Tymon\\JWTAuth\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/tymon/jwt-auth/src',
         ),
         'Symfony\\Polyfill\\Util\\' => 
         array (
@@ -349,6 +359,10 @@ class ComposerStaticInit426b571aa1fb5691aa728df7555c373e
         array (
             0 => __DIR__ . '/..' . '/barryvdh/laravel-ide-helper/src',
         ),
+        'Barryvdh\\Cors\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/barryvdh/laravel-cors/src',
+        ),
         'App\\' => 
         array (
             0 => __DIR__ . '/../..' . '/app',
@@ -358,6 +372,10 @@ class ComposerStaticInit426b571aa1fb5691aa728df7555c373e
     public static $prefixesPsr0 = array (
         'S' => 
         array (
+            'System' => 
+            array (
+                0 => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib',
+            ),
             'SecurityLib' => 
             array (
                 0 => __DIR__ . '/..' . '/ircmaxell/security-lib/lib',
@@ -385,11 +403,26 @@ class ComposerStaticInit426b571aa1fb5691aa728df7555c373e
                 0 => __DIR__ . '/..' . '/phpspec/phpspec/src',
             ),
         ),
+        'N' => 
+        array (
+            'Net' => 
+            array (
+                0 => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib',
+            ),
+            'Namshi\\JOSE' => 
+            array (
+                0 => __DIR__ . '/..' . '/namshi/jose/src',
+            ),
+        ),
         'M' => 
         array (
             'Mockery' => 
             array (
                 0 => __DIR__ . '/..' . '/mockery/mockery/library',
+            ),
+            'Math' => 
+            array (
+                0 => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib',
             ),
         ),
         'J' => 
@@ -412,6 +445,13 @@ class ComposerStaticInit426b571aa1fb5691aa728df7555c373e
             'Guzzle' => 
             array (
                 0 => __DIR__ . '/..' . '/guzzle/guzzle/src',
+            ),
+        ),
+        'F' => 
+        array (
+            'File' => 
+            array (
+                0 => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib',
             ),
         ),
         'D' => 
@@ -447,6 +487,10 @@ class ComposerStaticInit426b571aa1fb5691aa728df7555c373e
         ),
         'C' => 
         array (
+            'Crypt' => 
+            array (
+                0 => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib',
+            ),
             'Cron' => 
             array (
                 0 => __DIR__ . '/..' . '/mtdowling/cron-expression/src',

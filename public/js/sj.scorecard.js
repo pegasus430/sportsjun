@@ -243,6 +243,7 @@ if (typeof SJ.SCORECARD === 'undefined')
 
                         getSelectedPlayerId:function(){
                                 var player_id=$('#selected_player_id_value').val();
+
                                 if(player_id==0){
                                         SJ.SCORECARD.showAlert('Alert!', 'Please select a player from the lineup. ');
                                         return false;
@@ -304,7 +305,28 @@ if (typeof SJ.SCORECARD === 'undefined')
                         soccerPenalties:function(){
 
                         },
-                        soccerAddField:function(player_id, record_type,record_type_name){
+                        basketballAddPoint:function(that){
+                                var type=$(that).attr('type')
+                                var type_name=$(that).html();
+
+                                 var player_id=SJ.SCORECARD.getSelectedPlayerId();
+                                if(player_id){ 
+                                        $('#new_records_match').show();
+                                        var player_content=$('#team_a_row_'+player_id)
+                                        if(player_content.is("[playing_status]") && player_content.attr('playing_status')=='S'){
+                                                //if user has a yellow card return false
+                                                $.alert({
+                                                        title:'Alert',
+                                                        content:'This player has been substituted.'
+                                                })
+                                                return false;
+                                        }
+                                       
+                                     SJ.SCORECARD.soccerAddField(player_id,type, type_name, 'basketball');                                        
+                                }
+                                return false;
+                        },
+                        soccerAddField:function(player_id, record_type,record_type_name, match_name=''){
 
                                 var player_content=$('#team_a_row_'+player_id);                                
                                 var user_id= player_content.attr('user_id')
@@ -322,29 +344,39 @@ if (typeof SJ.SCORECARD === 'undefined')
 
                                 $('#last_index').val(index);
 
-                                        if(half_time=='first_half') var displayField='#displayGoalsFirstHalfTemporal';
-                                        else var displayField='#displayGoalsSecondHalfTemporal';
-
+                                       var displayField='#displayGoalsFirstHalfTemporal';
+                                       
                                 //create a new form for content
                                 $(displayField).append("<form id='form_record_"+index+"' onsubmit='return saveRecord("+index+", \""+record_type+"\", "+player_id+")' class='col-sm-12 col-xs-12'>");
                                 var displayFormContent=$('#form_record_'+index);
 
+                if(match_name!='basketball'){
+
                                 if(team_type=='team_b'){
                                         if(half_time=='first_half'){
-                                                displayFormContent.append("<div  class='records col-sm-12 '><div  class='col-sm-4 not-visible-xs'></div><div  class='col-sm-2 col-xs-6'><input type='number' min='0' placeholder='time e.g 20' name='time_"+index+"' class='gui-input col-sm-12 col-xs-12   input_first_half'  required></div><div  class='col-sm-2 col-xs-6'>"+record_type_name+"</div> <div  class='col-sm-2 col-xs-6'>"+player_name+"</div><div  class='col-sm-2 col-xs-6'><a href='#' onclick='deleteRow(this, "+index+", "+player_id+",\""+record_type+"\")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></div></div>");
+                                                displayFormContent.append("<div  class='records col-sm-12 '><div  class='col-sm-4 not-visible-xs'></div><div  class='col-sm-2 col-xs-6'><input type='number' min='0' placeholder='time e.g 20' name='time_"+index+"' class='gui-input col-sm-12 col-xs-12   input_first_half'  required></div><div  class='col-sm-2 col-xs-6'>"+record_type_name+"</div> <div  class='col-sm-2 col-xs-6'>"+player_name+"</div><div  class='col-sm-2 col-xs-6'><a href='javascript:void(0)' onclick='deleteRow(this, "+index+", "+player_id+",\""+record_type+"\")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></div></div>");
                                         }
                                         else{
-                                                displayFormContent.append("<div  class='records col-sm-12 '><div  class='col-sm-4 not-visible-xs'></div><div  class='col-sm-2 col-xs-6'><input type='number' min='0' placeholder='time e.g 20' name='time_"+index+"' class='gui-input col-sm-12 col-xs-12 input_first_half'  required></div><div  class='col-sm-2 col-xs-6'>"+record_type_name+"</div> <div  class='col-sm-2 col-xs-6'>"+player_name+"</div><div  class='col-sm-2 col-xs-6'><a href='#' onclick='deleteRow(this, "+index+", "+player_id+",\""+record_type+"\")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></div></div>");
+                                                displayFormContent.append("<div  class='records col-sm-12 '><div  class='col-sm-4 not-visible-xs'></div><div  class='col-sm-2 col-xs-6'><input type='number' min='0' placeholder='time e.g 20' name='time_"+index+"' class='gui-input col-sm-12 col-xs-12 input_first_half'  required></div><div  class='col-sm-2 col-xs-6'>"+record_type_name+"</div> <div  class='col-sm-2 col-xs-6'>"+player_name+"</div><div  class='col-sm-2 col-xs-6'><a href='javascript:void(0)' onclick='deleteRow(this, "+index+", "+player_id+",\""+record_type+"\")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></div></div>");
                                         }
                                 }
                                 else{
                                         if(half_time=='first_half'){
-                                                displayFormContent.append("<div  class='records col-sm-12 '><div  class='col-sm-2 col-xs-6'>"+player_name+"</div><div  class='col-sm-2 col-xs-6'>"+record_type_name+"</div><div  class='col-sm-2 col-xs-6'><input type='number' min='0' placeholder='time e.g 20' class=' col-sm-12 col-xs-12  input_second_half'  name='time_"+index+"' required></div><div  class='col-sm-4 not-visible-xs'></div><div  class='col-sm-2 col-xs-6'><a href='#' onclick='deleteRow(this, "+index+", "+player_id+",\""+record_type+"\")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></div></div>");
+                                                displayFormContent.append("<div  class='records col-sm-12 '><div  class='col-sm-2 col-xs-6'>"+player_name+"</div><div  class='col-sm-2 col-xs-6'>"+record_type_name+"</div><div  class='col-sm-2 col-xs-6'><input type='number' min='0' placeholder='time e.g 20' class=' col-sm-12 col-xs-12  input_second_half'  name='time_"+index+"' required></div><div  class='col-sm-4 not-visible-xs'></div><div  class='col-sm-2 col-xs-6'><a href='javascript:void(0)' onclick='deleteRow(this, "+index+", "+player_id+",\""+record_type+"\")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></div></div>");
                                         }
                                         else{
-                                                displayFormContent.append("<div  class='records col-sm-12 '><div  class='col-sm-2 col-xs-6'>"+player_name+"</div><div  class='col-sm-2 col-xs-6'>"+record_type_name+"</div><div  class='col-sm-2 col-xs-6'><input type='number' min='0' placeholder='time e.g 20' class=' col-sm-12 col-xs-12 input_second_half'  name='time_"+index+"' required></div><div  class='col-sm-4 not-visible-xs'></div><div  class='col-sm-2 col-xs-6'><a href='#' onclick='deleteRow(this, "+index+", "+player_id+",\""+record_type+"\")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></div></div>");
+                                                displayFormContent.append("<div  class='records col-sm-12 '><div  class='col-sm-2 col-xs-6'>"+player_name+"</div><div  class='col-sm-2 col-xs-6'>"+record_type_name+"</div><div  class='col-sm-2 col-xs-6'><input type='number' min='0' placeholder='time e.g 20' class=' col-sm-12 col-xs-12 input_second_half'  name='time_"+index+"' required></div><div  class='col-sm-4 not-visible-xs'></div><div  class='col-sm-2 col-xs-6'><a href='javascript:void(0)' onclick='deleteRow(this, "+index+", "+player_id+",\""+record_type+"\")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></div></div>");
                                         }
                                 }
+                }
+                else{
+                     
+                       //displayFormContent.append("<div  class='records col-sm-12 '><div  class='col-sm-3 col-xs-6'>"+player_name+"</div><div  class='col-sm-2 col-xs-4'>"+half_time+"</div><div  class='col-sm-2 col-xs-2'>"+record_type_name+"</div><div  class='col-sm-2 col-xs-6'><input type='number' min='0' placeholder='time e.g 20' class=' col-sm-12 col-xs-12  input_second_half'  name='time_"+index+"' required></div><div  class='col-sm-3 col-xs-6'><a href='javascript:void(0)' onclick='deleteRow(this, "+index+", "+player_id+",\""+record_type+"\")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></div></div>");
+                                                                   
+                }
+
+
+
                                 displayFormContent.append("<input type='hidden' name='player_"+index+"' value='"+player_id+"'>");
                                 displayFormContent.append("<input type='hidden' name='record_type_"+index+"' value='"+record_type+"'>");
                                 displayFormContent.append("<input type='hidden' name='user_"+index+"' value='"+user_id+"'>");
@@ -352,13 +384,17 @@ if (typeof SJ.SCORECARD === 'undefined')
                                 displayFormContent.append("<input type='hidden' name='half_time_"+index+"' value='"+half_time+"'>");
                                 displayFormContent.append("<input type='hidden' name='team_type_"+index+"' value='"+team_type+"'>");
                                 displayFormContent.append("<input type='hidden' name='player_name_"+index+"' value='"+player_name+"'>");
-
+                                displayFormContent.append("<input type='hidden' name='quarter_"+index+"' value='"+half_time+"'>");
+                                
                                 displayFormContent.append("<input type='hidden' name='match_id' value='"+match_id+"'>");
                                 displayFormContent.append("<input type='hidden' name='tournament_id' value='"+tournament_id+"'>");
                                 displayFormContent.append("<input type='hidden' name='team_a_id' value='"+team_a_id+"'>");
                                 displayFormContent.append("<input type='hidden' name='team_b_id' value='"+team_b_id+"'>");
                                 displayFormContent.append("<input type='hidden' name='index' value='"+index+"'>");
                         
+                if(match_name==='basketball'){
+                        $('#form_record_'+index).submit();
+                }
 
                         },
 

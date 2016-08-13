@@ -8,6 +8,7 @@ use App\Http\Requests\CreateOrganizationGroupRequest;
 use App\Http\Services\OrganizationGroupService;
 use App\Model\Organization;
 use Illuminate\Http\Request;
+use App\Model\OrganizationGroup;
 
 class OrganizationGroupsController extends Controller
 {
@@ -18,6 +19,8 @@ class OrganizationGroupsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    private $uploadPath = 'uploads/org/groups/logo';
+
     public function index($id)
     {
         $organization = Organization::findOrFail($id);
@@ -76,9 +79,28 @@ class OrganizationGroupsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
         //
+
+        $orgGroup=OrganizationGroup::findOrFail($request->group_id);
+        $orgGroup->manager_id=$request->manager_id;
+        $orgGroup->name = $request->name;
+
+        if($request->has('logo')){
+             $file = $request->file('logo');
+        
+            $orgGroup->logo = $this->generateUniqueName();
+           
+            $request->file('logo')
+                    ->move(public_path($this->uploadPath), $group->logo);
+        }
+        $orgGroup->save();
+
+       
+        return redirect()->back();
+
+
     }
 
     /**
@@ -104,5 +126,10 @@ class OrganizationGroupsController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    private function generateUniqueName()
+    {
+        return md5(microtime(true)) . '.png';
     }
 }

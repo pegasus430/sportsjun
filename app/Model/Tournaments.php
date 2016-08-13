@@ -146,4 +146,18 @@ class Tournaments extends Model
             'total' => $total);
         return $response;
     }
+
+    function getGroupPoints($tournament_id,$organization_group_id){
+            $points=OrganizationGroupTeamPoint::whereTournamentId($tournament_id)->whereOrganizationGroupId($organization_group_id)->first();
+            if(empty($points)){
+                $points=0;
+            }
+            else{
+                $points=$points->points;
+            }
+            return $points;
+
+    }
+
+    
 }

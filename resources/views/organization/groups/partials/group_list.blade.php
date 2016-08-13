@@ -10,6 +10,11 @@
                     <div class = "single_group_info">
                         <div class = "single_group_name">
                             {{ $group->name }}
+
+                                  @can('createGroup', $organization)
+                                   <span class='pull-right '><a href='javascript:void(0)' class="red"    data-toggle = "modal"
+                                    data-target = "#edit_group_{{$group->id}}"><i class='fa fa-edit'></i> Edit</a></span>
+                                  @endcan
                         </div>
                         <div class = "single_group_fields">
                             <ul>
@@ -25,7 +30,12 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> 
+
+     @can('createGroup', $organization)
+            @include('organization.groups.partials.edit_group_modal')
+     @endcan
+
         @endforeach
     </div> {{-- /.row --}}
 @endforeach

@@ -12,6 +12,7 @@
 */
 
 require(__DIR__ . "/Routes/Public.php");
+require(__DIR__ . "/Routes/Api.php");
 $router->group(['middleware' => 'auth'], function ()
 {
   require(__DIR__ . "/Routes/User.php");

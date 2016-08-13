@@ -8,7 +8,7 @@ $(document).ready(function(){
 });
 </script>
      <!-- Button HTML (to Trigger Modal) -->
-    <a href="#" class="launch-modal"><i class="fa fa-info"></i> <b>Match Status</b></a><br/>
+    <a href="javascript:void(0)" class="launch-modal"><i class="fa fa-info"></i> <b>Match Status</b></a><br/>
 	
 		@if($match_data[0]['match_status']=='pending')	
 			{{'Match is not completed'}}

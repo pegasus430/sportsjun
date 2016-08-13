@@ -59,7 +59,7 @@ return [
                         'SCHEDULE_TYPE' => ['team' => 'TEAM', 'individual' => 'INDIVIDUAL']
                 ]
                 ,
-                'SCHEDULE'     =>
+                'SCHEDULE'     => 
                 [
                         'MATCH_TYPE'  => [
                                 'CRICKET'      => ['odi' => 'ODI', 't20' => 'T20',
@@ -124,8 +124,8 @@ return [
                 3 => 'TtStatistic',
                 4 => 'SoccerStatistic',
                 5 => 'BadmintonStatistic',
-                6 => 'BasketBallStatistic',
-                7 => 'VolleyBallStatistic',
+                6 => 'BasketballStatistic',
+                7 => 'VolleyballStatistic',
                 11=> 'HockeyStatistic',
                 13=> 'SquashStatistic'
         ],
@@ -211,6 +211,7 @@ return [
                 'GOALS_ASSIST'      => 'GOALS ASSIST',
                 'GOALS_PENALTIES'   => 'GOALS PENALTIES',
                 'SOCCER_STATISTICS' => 'SOCCER',
+                'HOCKEY_STATISTICS' => 'HOCKEY'
         ],
         'BADMINTON_STATS'       => [
                 'WON'               => 'WON',
@@ -220,6 +221,19 @@ return [
                 'POINTS'            => 'POINTS',                
                 'BADMINTON_STATISTICS' => 'BADMINTON', 
                 'SQUASH_STATISTICS' => 'SQUASH',                
+        ],
+        'BASKETBALL_STATS'       => [
+                'WON'               => 'WON',
+                'LOST'              => 'LOST',
+                'TIED'              => 'TIED',
+                'WON_PERCENTAGE'    => 'WON PERCENTAGE',
+                'POINTS'            => 'POINTS',                
+                'BASKETBALL_STATISTICS' => 'BASKETBALL ', 
+                'POINTS_1'          => '1 POINT', 
+                'POINTS_2'          => '2 POINTS', 
+                'POINTS_3'          => '3 POINTS',
+                'TOTAL_POINTS'      => 'TOTAL POINTS',
+                'FOULS'             => 'FOULS'                
         ],
         'DEFAULT_PAGINATION'       => 10,
         'YEAR'                     => [

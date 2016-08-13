@@ -27,16 +27,28 @@
                         @include('organization.groups.partials.group_list')
                     </div> {{-- /#my_groups_container --}}
                 @else
-                    <div id = "groups_empty">
+                    <div id = "groups_empty text-left">
                         @can('createGroup', $organization)
-                            <div id = "groups_empty_info">You have not created any team groups yet</div>
+                            <div >
+                            Team Groups for Group Competation in the Organization
+                            </div>
+
+                            <br><h3><b>Steps to follow</b></h3>
+
+                            <br>
+                            
+                            <b>1.</b> Create Team Groups if organization want to group multi sport teams into Specific groups. (Ex. to create group competation in the organization and points need to role up from multi events.)
+                           <i><center> <div id = "text-center text-centered">You have not created any team groups yet</div></i></center>
                             <div id = "create_first_group">
-                                <button type = "button"
+                                <!-- <button type = "button"
                                         class = "btn btn-primary"
                                         data-toggle = "modal"
                                         data-target = "#create_group">Create Your First Team Group
-                                </button>
+                                </button> -->
                             </div>
+
+                            <br>
+                            <b>2. </b> Make sure to create Staff members. Staff members will need to be linked with every Team Group. (Ex: Manager, Coach, Physio etc)
                         @else
                             <div id = "groups_empty_info">There are no team groups yet.</div>
                         @endcan

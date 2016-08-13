@@ -32,6 +32,13 @@ use Response;
 use Session;
 use View;
 
+
+use App\Model\SoccerPlayerMatchwiseStats;
+use App\Model\HockeyPlayerMatchwiseStats;
+use App\Model\BasketballPlayerMatchwiseStats;
+use App\Model\CricketPlayerMatchwiseStats;
+
+
 class TournamentsController extends Controller
 {
 	/**
@@ -305,10 +312,12 @@ class TournamentsController extends Controller
 		$lef_menu_condition = '';
 		$tournament_type='';
 		$left_menu_data = array();
+		$follow_array=array();
+	
 		Helper::setMenuToSelect(6, 1);
 		return view('tournaments.team', array('joinTeamArray' => $joinTeamArray, 'followingTeamArray' => $followingTeamArray, 'manageTeamArray' => $manageTeamArray,
 			'lef_menu_condition' => $lef_menu_condition, 'managedTournamentDetails' => $managedTournamentDetails,
-			'subTournamentsArray'=>$subTournamentsArray,'loginUserId'=>$loginUserId, 'tournament_type'=>$tournament_type));
+			'subTournamentsArray'=>$subTournamentsArray,'loginUserId'=>$loginUserId, 'tournament_type'=>$tournament_type, 'follow_array'=>$follow_array));
 	}
 
 	/**
@@ -1267,6 +1276,9 @@ class TournamentsController extends Controller
 
 		$follow_unfollow = Helper::checkFollowUnfollow(isset(Auth::user()->id)?Auth::user()->id:0, 'TOURNAMENT', $tournament_id);
 
+		
+
+	
 
 //            dd($tournament_id);
 		return view('tournaments.groups', array(
@@ -1301,7 +1313,8 @@ class TournamentsController extends Controller
 			'add_score_link'           => $add_score_link,
 			'sport_name'               => $sport_name,
 			'match_startdate_array'    => $match_startdate_array,
-			'match_count'              => $match_count
+			'match_count'              => $match_count,
+			
 		))
 			->with('match_types', ['' => 'Select Match Type'] + $match_types)
 			->with('player_types', ['' => 'Select Player Type'] + $player_types)
@@ -2189,7 +2202,149 @@ class TournamentsController extends Controller
 		}
 		$left_menu_data = array();
 		$left_menu_data = Helper::getLeftMenuData($tournamentInfo[0]['tournament_parent_id'],$tournamentInfo[0]['manager_id'],$tournamentInfo);
-
+		
+	
 		return view('tournaments.tournamentsdetails')->with(array( 'tournamentInfo'=>$tournamentInfo,'action_id'=>$id,'left_menu_data'=>$left_menu_data, 'tournament_id' => $id, 'lef_menu_condition'=> $lef_menu_condition, 'tournament_type' => $tournamentInfo[0]['type'],'sport_name'=>$sport_name,'manager_name'=> $manager_name));
+	}
+
+
+
+	public function playerStanding($tournament_id){
+		$left_menu_data = array();
+		
+
+		$id=$tournament_id;
+		$action_id=$tournament_id;
+
+		$tournamentInfo= Tournaments::whereId($tournament_id)->get();
+		
+		$tournament_type=$tournamentInfo[0]['type'];
+		$tournament_parent_id=$tournamentInfo[0]['tournament_parent_id'];
+
+		$lef_menu_condition = 'display_gallery';
+		$left_menu_data = Helper::getLeftMenuData($tournamentInfo[0]['tournament_parent_id'],$tournamentInfo[0]['manager_id'],$tournamentInfo);
+
+		$sport_id=$tournamentInfo[0]['sports_id'];
+		$sport_name=strtolower(Sport::find($sport_id)->sports_name);
+
+		$player_standing=$this->getPlayerStanding($sport_id, $tournament_id);
+
+		
+
+			return view('tournaments.player_standing', compact(
+					'tournamentInfo','lef_menu_condition',
+					'left_menu_data', 'tournamentInfo','id', 
+					'tournament_id' , 'action_id',
+					'tournament_parent_id', 'tournament_type', 
+					'player_standing', 'sport_id', 'sport_name', 'follow_array'));
+	}
+
+	public function getPlayerStanding($sport_id, $tournament_id){
+			switch ($sport_id) {
+				case  4: 			//soccer
+
+					$player=SoccerPlayerMatchwiseStats::join('match_schedules', 'match_schedules.id', '=', 'soccer_player_matchwise_stats.match_id')
+							->join('teams', 'teams.id','=', 'soccer_player_matchwise_stats.team_id')
+							->join('users', 'users.id', '=', 'soccer_player_matchwise_stats.user_id')
+							->where('match_schedules.tournament_id', $tournament_id)
+							->select('soccer_player_matchwise_stats.*','users.*')							
+							->selectRaw('sum(yellow_cards) as yellow_cards')
+							->selectRaw('count(match_schedules.id) as matches')
+							->selectRaw('sum(red_cards) as red_cards')
+							->selectRaw('sum(goals_scored) as goals')
+							->orderBy('goals', 'desc')
+							->groupBy('user_id')
+							->get();
+					# code...
+					break;
+
+				case 11:	//hockey
+						$player=HockeyPlayerMatchwiseStats::join('match_schedules', 'match_schedules.id', '=', 'hockey_player_matchwise_stats.match_id')
+							->join('teams', 'teams.id','=', 'hockey_player_matchwise_stats.team_id')
+							->join('users', 'users.id', '=', 'hockey_player_matchwise_stats.user_id')
+							->where('match_schedules.tournament_id', $tournament_id)
+							->select('hockey_player_matchwise_stats.*','users.*')							
+							->selectRaw('sum(yellow_cards) as yellow_cards')
+							->selectRaw('count(match_schedules.id) as matches')
+							->selectRaw('sum(red_cards) as red_cards')
+							->selectRaw('sum(goals_scored) as goals')
+							->orderBy('goals', 'desc')
+							->groupBy('user_id')
+							->get();
+				break;
+
+				case 6:	//basketball
+						$player=BasketballPlayerMatchwiseStats::join('match_schedules', 'match_schedules.id', '=', 'basketball_player_matchwise_stats.match_id')
+							->join('teams', 'teams.id','=', 'basketball_player_matchwise_stats.team_id')
+							->join('users', 'users.id', '=', 'basketball_player_matchwise_stats.user_id')
+							->where('match_schedules.tournament_id', $tournament_id)
+							->select('basketball_player_matchwise_stats.*','users.*')							
+							->selectRaw('sum(points_1) as points_1')
+							->selectRaw('count(match_schedules.id) as matches')
+							->selectRaw('sum(points_2) as points_2')
+							->selectRaw('sum(points_3) as points_3')
+							->selectRaw('sum(total_points) as total_points')
+							->selectRaw('sum(fouls) as fouls')
+							->orderBy('total_points', 'desc')
+							->groupBy('user_id')
+							->get();
+
+
+				break;
+				case 1:	//cricket
+						
+						$player=CricketPlayerMatchwiseStats::join('match_schedules', 'match_schedules.id', '=', 'cricket_player_matchwise_stats.match_id')
+							->join('teams', 'teams.id','=', 'cricket_player_matchwise_stats.team_id')
+							->join('users', 'users.id', '=', 'cricket_player_matchwise_stats.user_id')
+							->where('match_schedules.tournament_id', $tournament_id)
+							->select('cricket_player_matchwise_stats.*','users.*')	
+							->selectRaw('count(innings) as innings_bat')
+							->selectRaw('sum(totalruns) as totalruns')
+							->selectRaw('sum(balls_played) as balls_played')
+							->selectRaw('sum(fifties) as fifties')
+							->selectRaw('sum(hundreds) as hundreds')
+							->selectRaw('sum(fours) as fours')
+							->selectRaw('sum(sixes) as sixes')
+							->selectRaw('sum(IF(bat_status="notout", 1, 0)) as notouts')
+							->selectRaw('max(totalruns) as highscore')
+							->orderBy('totalruns', 'desc')
+							
+													
+		
+                        	// ->select( "*", DB::raw( 'count( innings ) innings_bat, SUM(notouts) notouts, SUM(totalruns) totalruns, SUM(totalballs) totalballs, '
+                         //    . 'SUM(fifties) fifties,SUM(hundreds) hundreds,SUM(fours) fours,SUM(sixes) sixes,CAST(AVG(average_bat) AS DECIMAL(10,2)) average_bat,'
+                         //    . 'CAST(AVG(strikerate) AS DECIMAL(10,2)) strikerate, SUM(catches) catches, SUM(stumpouts) stumpouts, SUM(runouts) runouts,'
+                         //    . 'SUM(innings_bowl) innings_bowl, SUM(wickets) wickets, SUM(runs_conceded) runs_conceded, SUM(overs_bowled) overs_bowled, SUM(wides_bowl) wides_bowl, SUM(noballs_bowl) noballs_bowl,'
+                         //    . 'CAST(AVG(average_bowl) AS DECIMAL(10,2)) average_bowl, CAST(AVG(ecomony) AS DECIMAL(10,2)) ecomony' ) )
+							
+
+							->selectRaw('count(DISTINCT(match_id)) as matches')
+							->selectRaw('count(innings) as inningscount')
+							->selectRaw('sum(wickets) as wickets')
+							->selectRaw('sum(runs_conceded) as runs_conceded')
+							->selectRaw('sum(overs_bowled) as overs_bowled')
+							->selectRaw('SUM(innings) innings_bowl')
+							->selectRaw('count(innings) as innings_bowled')
+							->selectRaw('CAST(AVG(average_bowl) AS DECIMAL(10,2))  average_bowl')
+							->selectRaw('CAST(AVG(ecomony) AS DECIMAL(10,2)) ecomony')
+							->orderBy('wickets', 'desc')
+							->groupBy('user_id')
+							->groupBy( 'match_type' )
+							->get();
+
+					
+
+						return $player;
+
+				break;
+
+				
+				default:
+					# code...
+				$player=[];
+					break;
+			}
+
+			return $player;
 	}
 }

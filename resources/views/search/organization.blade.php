@@ -19,14 +19,16 @@
                                                         <div class="pull-left"><a href="{{ url('/organizationTeamlist').'/'.$lis['id'] }}" id="{{'tname_'.$lis['id']}}">{{ $lis['name'] }}</a></div>
                                                                                 <p class="search_location t_by">{{ $lis['location'] }}</p>
                                                 </div>
+                                                   <ul class="t_tags">
                                                 @if(isset($lis['sports_id']) && !empty($lis['sports_id']))
-                                                <ul class="t_tags">
+                                             
                                                         <li>Sport:
                                                                 <span class="green">
-                                                                        {{$sports_array[$lis['sports_id']]}}
+                                                                        {{$sports_array[$lis['sports_id']]}} 
                                                                 </span>
                                                         </li>
-                                                </ul>
+
+                                                
                                                 @endif
                                                 <?php 
                                                 /*
@@ -48,6 +50,19 @@
                                                  * 
                                                  */
                                                 ?>
+                                                
+                                              	
+
+                                           
+                                                        <li>Teams:
+                                                                <span class="green">
+                                                                        {{count($lis['teamplayers'])}}
+                                                                </span>
+                                                        </li>
+                                                </ul>
+
+                                              	<p>
+                                                <div class="follow_unfollow_organization" id="follow_unfollow_organization_{{$lis['id']}}" uid="{{$lis['id']}}" val="ORGANIZATION" flag="{{ in_array($lis['id'],$follow_array)?0:1 }}"><a href="#" id="follow_unfollow_organization_a_{{$lis['id']}}" class="{{ in_array($lis['id'],$follow_array)?'sj_unfollow':'sj_follow' }}"><span id="follow_unfollow_organization_span_{{$lis['id']}}"><i class="{{ in_array($lis['id'],$follow_array)?'fa fa-remove':'fa fa-check' }}"></i>{{ in_array($lis['id'],$follow_array)?'Unfollow':'Follow' }}</span></a></div> 
                                                 
                                         </div>
                                 </div>

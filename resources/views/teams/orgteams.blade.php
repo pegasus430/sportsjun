@@ -43,8 +43,16 @@
                         @endif
                     </div>
 
-                    <div class="clearfix"></div>
+
+                    <div class="clearfix"></div>                   
                     <p class="lt-grey">{{ !empty($t->description)?$t->description:'' }}</p>
+                    <br>
+                    <p>Sport : <span class='blue match_type_text'>{{Helper::getSportName($t->sports_id)}}</span> &nbsp; &nbsp; Players :  <span class='blue match_type_text'> {{Helper::getTeamDetails($t->id)->teamplayers->count()}}  </span>&nbsp; &nbsp; Group : <span class='blue match_type_text'>
+
+                    @foreach(Helper::getTeamDetails($t->id)->organizationGroups as $og)
+                         {{$og->name}}, 
+                    @endforeach 
+                    </span>
                 </div>
 
             </div>

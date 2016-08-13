@@ -156,6 +156,8 @@ return [
 
 		Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 		SKAgarwal\Generators\GeneratorsServiceProvider::class,
+        Barryvdh\Cors\ServiceProvider::class,
+        'Tymon\JWTAuth\Providers\JWTAuthServiceProvider'
     ],
 
     /*
@@ -214,6 +216,8 @@ return [
 //        'Linkedin'  => 'League\oauth2-client\Provider\LinkedIn',
         'JsValidator' => Proengsoft\JsValidation\Facades\JsValidatorFacade::class,
         'Captcha' => Mews\Captcha\Facades\Captcha::class,
+        'JWTAuth' => 'Tymon\JWTAuth\Facades\JWTAuth',
+        'JWTFactory' => 'Tymon\JWTAuth\Facades\JWTFactory'
 
     ],
 
