@@ -83,8 +83,11 @@
 
                 
                 @endforeach
+
+                     @can('createTeam', $orgInfoObj)
                           
                           <center>   <a href='/tournaments/{{$parent_tournament->id}}/edit' class='btn btn-tiny btn-primary'> Add Event</a> </center>
+                      @endcan
                          
                 </div>
             @include('organization.overall_standing')
