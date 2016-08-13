@@ -263,8 +263,9 @@ class FollowController extends Controller
 
 
 
-                $sports_array = $follow_array = $sports = [];
+                //$sports_array = $follow_array = $sports = [];
                 $followingOrganizationsArray=[];
+                 $existing_organization_ids=null;
                 if (count($following_organization_array) > 0)
                 {
                         /*
@@ -283,6 +284,7 @@ class FollowController extends Controller
                         
                         // data for performing checks of user following
                         $checkArray = "";
+
                         foreach($followingOrganizationsArray as $player){
                                         $checkArray.= $player->user_id.",";
                         }
@@ -290,16 +292,16 @@ class FollowController extends Controller
                         if (!empty($checkArray))
                         {
                                 DB::setFetchMode(PDO::FETCH_ASSOC);
-                                $follow_array = DB::select("SELECT DISTINCT tp.type_id as item
+                                $existing_organization_ids = DB::select("SELECT DISTINCT tp.type_id as item
                                 FROM `followers` tp  
                                 WHERE tp.user_id = $user_id "
                                 . "AND tp.type_id IN ($checkArray) "
                                 . "AND `type` = 'organization' AND tp.deleted_at IS NULL ");
                                 DB::setFetchMode(PDO::FETCH_CLASS);
                         }
-                        if (!empty($follow_array))
+                        if (!empty($existing_organization_ids))
                         {
-                                $follow_array = array_column($follow_array, 'item');
+                                $existing_organization_ids = array_column($existing_organization_ids, 'item');
                         }
                         
                         //print_r($follow_array);exit;
@@ -319,7 +321,8 @@ class FollowController extends Controller
                         'self_user_id'         => $self_user_id,
                         'existing_team_ids'    => $existing_team_ids,
                         'player_available_in_teams' => $player_available_in_teams,
-                        'existing_tournament_ids'    => $existing_tournament_ids
+                        'existing_tournament_ids'    => $existing_tournament_ids,
+                        'existing_organization_ids'  => $existing_organization_ids
                 ));
         }
 

@@ -79,7 +79,7 @@
                                                                         @foreach($followingOrganizations as $followkey => $followedTeam)
                                                                         <div class="t_details">
                                                                                 <div class="row main_tour">
-                                                                                        <div class="col-xs-2 
+                                                                                        <div class="col-xs-12 col-sm-2 
                                                                                         text-center">
 
                                                                 
