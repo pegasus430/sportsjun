@@ -44,6 +44,10 @@ Route::group(['prefix' => 'organization/{id}'], function () {
         'as'   => 'organization.groups.store',
         'uses' => 'User\OrganizationGroupsController@store',
     ]);
+    Route::put('groups', [
+        'as'   => 'organization.groups.update',
+        'uses' => 'User\OrganizationGroupsController@edit',
+    ]);
 });
 
 Route::get('getteamdetails', [
@@ -169,7 +173,13 @@ Route::get('organizationTournaments/{id}', [
     'as'   => 'organizationTournaments',
     'uses' => 'User\OrganizationController@organizationTournaments',
 ]);
+
 Route::resource('organization', 'User\OrganizationController');
+
+Route::post('parent_tournament/{id}/add_sport', [
+    'as'   => 'addSportsOrganizationGroup',
+    'uses' => 'User\OrganizationController@addGroupSportPoints',
+]);
 //End Organizations
 
 //Gallery
@@ -208,6 +218,10 @@ Route::resource('gallery', 'User\GalleryController');
 Route::resource('user/album', 'User\AlbumController');
 //End Gallery
 //Tournamets
+Route::get('tournaments/groups/{id}/player_standing', [
+    'as'   => 'groups',
+    'uses' => 'User\TournamentsController@playerStanding',
+]);
 Route::get('tournaments/groups/{id}/{type?}', [
     'as'   => 'groups',
     'uses' => 'User\TournamentsController@groups',
@@ -562,6 +576,22 @@ Route::group(['prefix'=>'match'], function(){
     Route::post('/saveMatchRecordHockey', 'User\ScoreCard\HockeyScorecardController@hockeyStoreRecord');
     Route::get('/getHockeyDetails', 'User\ScoreCard\HockeyScorecardController@getHockeyDetails');
 
+
+     //routes for basketball
+    Route::post('confirmSquadbasketball',         ['as'=>'match/confirmSquadBasketball', 'uses'=>'User\ScoreCard\BasketballScoreCardController@confirmSquad']);
+    Route::post('basketballSwapPlayers',    ['as'=>'match/hockeySwapPlayersBasketball', 'uses'=>'User\ScoreCard\BasketballScoreCardController@basketballSwapPlayers']);
+    Route::post('/endMatchRecordBasketball', 'User\ScoreCard\BasketballScoreCardController@basketballStoreRecord');
+    Route::post('/saveMatchRecordBasketball', 'User\ScoreCard\BasketballScoreCardController@basketballSaveRecord');
+    Route::post('manualScoringBasketball', ['as'=>'match/manualScoringBasketball', 'uses'=>'User\ScoreCard\BasketballScoreCardController@manualScoring']);
+
+     //routes for volleyball
+    Route::post('confirmSquadvolleyball',         ['as'=>'match/confirmSquadVolleyball', 'uses'=>'User\ScoreCard\VolleyballScoreCardController@confirmSquad']);
+    Route::post('volleyballSwapPlayers',    ['as'=>'match/hockeySwapPlayersVolleyball', 'uses'=>'User\ScoreCard\BasketballScoreCardController@basketballSwapPlayers']);
+    Route::post('/endMatchRecordVolleyball', 'User\ScoreCard\BasketballScoreCardController@volleyballStoreRecord');
+    Route::post('/saveMatchRecordVolleyball', 'User\ScoreCard\BasketballScoreCardController@volleyballSaveRecord');
+    Route::post('manualScoringVolleyball', ['as'=>'match/manualScoringVolleyball', 'uses'=>'User\ScoreCard\VolleyballScoreCardController@manualScoring']);
+
+
     //routes for badminton
 
     Route::post('saveBadmintonPreferences', ['as'=>'match/saveBadmintonPreferences', 'uses'=>'User\ScoreCard\BadmintonScoreCardController@savePreferences']);
@@ -702,3 +732,6 @@ Route::get('get_org_groups_list', [
 
 Route::resource('sport', 'User\SportController');
 Route::resource('team', 'User\TeamController');
+
+
+Route::get('/reloadgroupteampoints', 'User\OrganizationController@testTournaments');

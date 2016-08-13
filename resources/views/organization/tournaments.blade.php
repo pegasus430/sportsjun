@@ -4,12 +4,22 @@
 <div id="content" class="col-sm-10" style="height: 986px;">
     <div class="col-sm-9 tournament_profile">
        
-        @if(count($tournaments)) 
+        @if(count($parent_tournaments)) 
 			<div class="group_no clearfix">
                 <h4 class="stage_head">Tournaments</h4>
             </div>        
-			@foreach($tournaments as $lis)
-                <div class="teams_search_display row main_tour">	       	            
+			@foreach($parent_tournaments as $parent_tournament)
+                <div class="teams_search_display row main_tour">
+                    <div class='col-sm-12'>	
+                       <div class='t_tltle' style="padding-left:30px;"><div><h3>Tournament : {{ $parent_tournament->name }}
+
+                       </h3>
+                            <span class="pull-right"><button class="btn btn-event" href="javascript:void(0);" data-toggle="modal" data-target="#overall_standing_{{$parent_tournament->id}}">Overall Standing</span>
+                       </div></div>
+                    </div>
+
+                    @foreach($parent_tournament->tournaments as $lis)   
+            
                     <div class="search_thumbnail right-caption">
 
                         <div class="col-md-2 col-sm-3 col-xs-12 text-center">
@@ -17,7 +27,7 @@
                         </div>
                         <div class="col-md-10 col-sm-9 col-xs-12">
                             <div class="t_tltle">
-                                <div>Tournament: {{ $lis->tournament_parent_name }}</div>
+                                
                                 <div class="pull-left">Event: <a href="{{ url('/gettournamentdetails').'/'.$lis->id }}" id="{{'touname_'.$lis->id}}"><i class="fa fa-link"></i> {{ $lis->name }}</a></div>
                                 <p class="search_location t_by">{{ $lis->location }}</p>
                             </div>
@@ -44,6 +54,9 @@
                                     Enrollment Fee: <span class="green">{{$lis->enrollment_fee}}</span>
                                 </li>
                                 @endif
+                                <li class="pull-right">
+                                    <button class='btn schedule_but_new' href="javascript:void(0);" data-toggle="modal" data-target="#event_points_{{$lis->id}}">Event Points </button>
+                                </li>
                             </ul>
                             @if($lis->description)
                             <p class="lt-grey">{{$lis->description}}</p>
@@ -60,7 +73,25 @@
                             ?>			
                         </div>
                     </div>
+                
+                <div class=''>
+                    <p>&nbsp;
+                    <hr class="red">
                 </div>
+
+                @include('organization.event_points')
+
+                
+                @endforeach
+
+                     @can('createTeam', $orgInfoObj)
+                          
+                          <center>   <a href='/tournaments/{{$parent_tournament->id}}/edit' class='btn btn-tiny btn-primary'> Add Event</a> </center>
+                      @endcan
+                         
+                </div>
+            @include('organization.overall_standing')
+
         @endforeach 
 		@else
 		<div class="sj-alert sj-alert-info sj-alert-sm">No tournament conducted by the organization.</div>

@@ -41,6 +41,7 @@ else $check_user='';
             @if($tournament_type=='knockout' || $tournament_type=='multistage')
                 <li><a class="sidemenu_4" href="{{ url($check_user.'/tournaments/groups').'/'.$action_id.'/final'}}"><span class="ico ico-final-stage"></span> Final Stage</a></li>
             @endif
+                <li><a class="sidemenu_5" href="{{ url($check_user.'/tournaments/groups').'/'.$action_id.'/player_standing'}}"><span class="ico ico-user"></span> Player Standing</a></li>
         </ul>
     </div>
 </div>

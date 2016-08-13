@@ -6,14 +6,17 @@
 
                 @if (Session::has('message'))
                 <div class="alert alert-info">{{ Session::get('message') }}</div>
-                @endif
+                @endif 
                 <!-- /.panel-heading -->
                 <div class="panel-body">
+                    <h3>Following</h3>
                         <!-- Nav tabs -->
                         <ul class="nav nav-tabs nav-justified">
-                                <li class="active"><a href="#followingplayers" data-toggle="tab" aria-expanded="true">Following Players <span class="t_badge"> {{ count($followingPlayers) }} </span></a></li>
-                                <li class=""><a href="#followingteams" data-toggle="tab" aria-expanded="false">Following Teams <span class="t_badge"> {{ count($followingTeams) }} </span></a></li>
-                                <li class=""><a href="#followingtournaments" data-toggle="tab" aria-expanded="false">Following Tournaments  <span class="t_badge"> {{ count($followingTournaments) }} </span></a></li>
+                                <li class="active"><a href="#followingplayers" data-toggle="tab" aria-expanded="true">Players <span class="t_badge"> {{ count($followingPlayers) }} </span></a></li>
+                                <li class=""><a href="#followingteams" data-toggle="tab" aria-expanded="false"> Teams <span class="t_badge"> {{ count($followingTeams) }} </span></a></li>
+                                <li class=""><a href="#followingtournaments" data-toggle="tab" aria-expanded="false">Tournaments  <span class="t_badge"> {{ count($followingTournaments) }} </span></a></li>
+                                <li class=""><a href="#followingorganizations" data-toggle="tab" aria-expanded="false">
+                                Organizations  <span class="t_badge"> {{ count($followingOrganizations) }} </span></a></li>
                         </ul>
                         <!-- Tab panes -->
                         <div class="tab-content">
@@ -60,6 +63,62 @@
                                                                         @include ('widgets.teamspopup')
                                                                         @else
                                                                         <div class="message_new_for_team">Search for Tournaments and Follow easily.</div>
+                                                                        @endif
+                                                                </td>
+                                                        </tr>
+                                                </tbody>
+                                        </table>
+                                </div>
+
+                                 <div class="tab-pane fade" id="followingorganizations">
+                                        <table class="table">
+                                                <tbody>
+                                                        <tr>
+                                                                <td>
+                                                                        @if(count($followingOrganizations))
+                                                                        @foreach($followingOrganizations as $followkey => $followedTeam)
+                                                                        <div class="t_details">
+                                                                                <div class="row main_tour">
+                                                                                        <div class="col-xs-12 col-sm-2 
+                                                                                        text-center">
+
+                                                                
+        {!! Helper::Images($followedTeam->logo,'organization',array('height'=>90,'width'=>90,'class'=>'img-circle img-border img-scale-down img-responsive') )!!}
+
+                                                                                        </div>
+                                                                                        <div class="col-xs-10">
+                                                                                                <p class="t_tltle">
+                <a href="{{ url('/organizationTeamlist').'/'.$followedTeam->id }}">{{ $followedTeam->name }}</a>
+                <p class="t_by">By :<a href='/editsportprofile/{{$followedTeam->user->id}}' target="_blank" class="red">{{ $followedTeam->user->name}}</a><br>
+                  {{$followedTeam->location}}
+                                                                                                <ul class="t_tags">
+                  
+                    <li>Teams <span class="green">{{count($followedTeam->teamplayers)}}</span></li>
+
+                       @if(isset($followedTeam->sports_id) && !empty($followedTeam->sports_id))
+                                             
+                                                        <li>Sport:
+                                                                <span class="green">
+                                                                        {{$followedTeam->sports_id}} 
+                                                                </span>
+                                                        </li>
+
+                                                
+                        @endif
+                                                                                                </ul>
+             
+                 <div class="follow_unfollow_organization" id="follow_unfollow_organization_{{$followedTeam->id}}" uid="{{$followedTeam->id}}" val="ORGANIZATION" flag="0">
+                 <a href="javascript:void(0);" id="follow_unfollow_organization_a_{{$followedTeam->id}}" class="sj_unfollow">
+                <span id="follow_unfollow_organization_span_{{$followedTeam->id}}"><i class="fa fa-remove"></i>Unfollow</span>
+                                                                                                        </a>
+                                                                                                </div>
+                                                                                        </div>
+                                                                                </div>
+                                                                        </div>
+                                                                        @endforeach
+                                                                        @include ('widgets.teamspopup')
+                                                                        @else
+                                                                        <div class="message_new_for_team">Search for Organizations and Follow easily.</div>
                                                                         @endif
                                                                 </td>
                                                         </tr>
@@ -156,13 +215,15 @@
                                                                                                         </div>
                                                                                                         <ul class="t_tags">
                                                                                                                 <li>Sports:
-                                                                                                                <?php $sport_ids = explode(",", trim($player->following_sports,","));
+                                    <?php $sport_ids = explode(",", trim($player->following_sports,","));
                                                                                                                                         ?>
-                                                                                                                <span class="green">
-                                                                                                                    <?php $sport_names = ''; ?>
-                                                                                                                    @foreach($sport_ids as $key=>$val)
-                                                                                                                    <?php
-                                                                                                                        $sport_names .= ", ".$sports_array[$val];
+                                                                                <span class="green">
+                                                                <?php $sport_names = ''; ?>
+                                                    @foreach($sport_ids as $key=>$val)
+                                                <?php                     
+
+                                                    if(isset($sports_array[$val]))
+                                                    $sport_names .= ", ".$sports_array[$val];
                                                                                                                     ?>
                                                                                                                     @endforeach
                                                                                                                     <?php $sport_names = trim($sport_names,",");?>
@@ -171,7 +232,7 @@
                                                                                                             </li>
                                                                                                         </ul>
                                                                                                 </div>
-                                                                                                @if(!$selfProfile || ($selfProfile && in_array($player->user_id,$follow_array)))
+                                             @if(!$selfProfile || ($selfProfile && in_array($player->user_id,$follow_array)))
                                                                                                 <div class="sj_actions_new">
                                                                                                         <div class="follow_unfollow_player" id="follow_unfollow_player_{{$player->user_id}}" uid="{{$player->user_id}}" val="PLAYER" flag="{{ in_array($player->user_id,$follow_array)?0:1 }}">
                                                                                                                 <a href="#" id="follow_unfollow_player_a_{{$player->user_id}}" class="{{ in_array($player->user_id,$follow_array)?'sj_unfollow':'sj_follow' }}">

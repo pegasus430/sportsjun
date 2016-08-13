@@ -1,7 +1,7 @@
 <div class="col-sm-2" id="sidebar-left">
 	<div class="row">
 			<div class="team_view">
-						{!! Helper::Images(!empty($photo['url'])?$photo['url']:'','organization',array('height'=>100,'width'=>100) )!!}
+						{!! Helper::Images(!empty($orgInfo[0]['logo'])?$orgInfo[0]['logo']:'','organization',array('height'=>100,'width'=>100) )!!}
 						<h1>{{ $orgInfo[0]['name'] or "" }}</h1>
 
                                         @if(isset($userId) && isset($orgInfo) && ($userId == $orgInfo[0]['user_id']))
@@ -13,6 +13,16 @@
 				  <i class="fa fa-map-marker"></i>&nbsp;<span style="word-wrap: break-word;">{{ $orgInfo[0]['location'] or "Location" }}</span>
 				 </div>
 		            <div class="more desc">{{ $orgInfo[0]['about']  or 'Description' }}</div>
+
+                @if(isset($follow_array))
+
+                <?php
+
+                ?>
+                      <div class="follow_unfollow_organization" id="follow_unfollow_organization_{{$id}}" uid="{{$id}}" val="ORGANIZATION" flag="{{ in_array($id,$follow_array)?0:1 }}"><a href="#" id="follow_unfollow_organization_a_{{$id}}" class="{{ in_array($id,$follow_array)?'sj_unfollow':'sj_follow' }}"><span id="follow_unfollow_organization_span_{{$id}}"><i class="{{ in_array($id,$follow_array)?'fa fa-remove':'fa fa-check' }}"></i>{{ in_array($id,$follow_array)?'Unfollow':'Follow' }}</span></a></div> 
+                
+              @endif
+
 	          </div>
 	<ul class="nav sidemenu_nav leftmenu-icon" id="side-menu">
         <li>

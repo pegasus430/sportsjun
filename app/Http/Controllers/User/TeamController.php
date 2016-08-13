@@ -224,6 +224,7 @@ class TeamController extends Controller
 		$request = Request::all();
 		if(is_numeric($id))
 		{
+
 			$sports_id = $request['sports_id'];
 			$name = $request['name'];
 			$address = $request['address'];
@@ -246,6 +247,13 @@ class TeamController extends Controller
 			{
 				//update team table
 				Team::where('id', '=', $id)->update(['sports_id'=>$sports_id,'name'=>$name,'location'=>$location,'address'=>$address,'city_id'=>$city_id,'city'=>$city,'state_id'=>$state_id,'country_id'=>$country_id,'country'=>$country,'zip'=>$zip,'description'=>$description,'player_available'=>$player_available,'team_available'=>$team_available,'updated_at'=>Carbon::now(),'team_level'=>$request['team_level'],'gender'=>$gender,'organization_id'=>$organization_id]);
+
+				$team_details=Team::find($id);
+	//assign group to team.
+		$organization_group_id=$request['organization_group_id'];
+			if(is_numeric($organization_group_id)){
+				$this->attachOrganizationGroupToTeam($team_details, $organization_group_id);				 
+		}
 				if(!empty($request['filelist_logo']))
 				{
 					//update existing album cover to 0
@@ -520,13 +528,20 @@ class TeamController extends Controller
 		   // $teams = Team::select('id','name','logo','description')->where('organization_id',$id)->get()->toArray();
     	$user_id = (isset(Auth::user()->id)?Auth::user()->id:0);
 		   $teams = DB::table('teams')
-            ->join('users', 'users.id', '=', 'teams.team_owner_id')
-            ->select('teams.id','teams.name as teamname','teams.team_owner_id','teams.logo','teams.description','users.name','teams.isactive')
-			->where('organization_id',$id)
-            ->orderBy('isactive','desc')->get();
+        ->join('users', 'users.id', '=', 'teams.team_owner_id')
+       
+        // ->join('organization_group_teams', 'organization_group_teams.team_id', '=', 'teams.id')
+        // ->join('organization_groups', 'organization_groups.id', '=', 'organization_group_teams.organization_group_id')
+        ->select('teams.id','teams.name as teamname','teams.team_owner_id','teams.logo','teams.description','users.name','teams.isactive', 'teams.sports_id')
+		->where('teams.organization_id',$id)
+        ->orderBy('isactive','desc')->get();
 		// $photo= Photo::select('url')->where('imageable_id', '=', $id)->where('imageable_type', '=', config('constants.PHOTO.TEAM_PHOTO'))->where('user_id', (isset(Auth::user()->id)?Auth::user()->id:0))->get()->toArray();
 		$orgInfo= Organization::select()->where('id',$id)->get()->toArray();
-		return view('teams.orgteams')->with(array( 'teams'=>$teams,'id'=>$id,'orgInfo'=>$orgInfo,'userId'=>$user_id));
+	
+		return view('teams.orgteams')->with(array( 'teams'=>$teams,
+												   'id'=>$id,
+												   'orgInfo'=>$orgInfo,
+												   'userId'=>$user_id ));
 	}
 	//function to make team makeasteammanager
 	public function makeasteammanager($team_id,$user_id)

@@ -146,7 +146,9 @@
                 <div class='row'>
                     <div class='col-xs-12'>
                         <div class='match_loc'>
-                            {{$tournamentDetails['name']}}
+                           <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
+                            {{$tournamentDetails['name']}} Tournament
+                          </a>
                                 
                         </div>
                     </div>
@@ -360,7 +362,7 @@
 @if(!$match_data[0]['has_result'])
     <div class='row' >
       <div class="col-sm-8 col-sm-offset-2" style="background:#ffeeee">
-        <div class='col-sm-12'>
+        <div class='col-sm-12 alert alert-danger'>
                     This match has  been saved as 'no result'. All the changes and records for this match shall be discarded after approval.
                 </div>
       </div>

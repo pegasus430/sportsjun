@@ -12,21 +12,21 @@ class CreateTournamentOrgGroupsTable extends Migration
      */
     public function up()
     {
-        Schema::create('tournament_org_groups', function (Blueprint $table) {
-            $table->integer('tournament_parent_id');
-            //$table->foreign('tournament_parent_id')
-            //      ->references('id')
-            //      ->on('trounament_parent')
-            //      ->onUpdate('CASCADE')
-            //      ->onDelete('CASCADE');
+        // Schema::create('tournament_org_groups', function (Blueprint $table) {
+        //     // $table->integer('tournament_parent_id');
+        //     // //$table->foreign('tournament_parent_id')
+        //     // //      ->references('id')
+        //     // //      ->on('trounament_parent')
+        //     // //      ->onUpdate('CASCADE')
+        //     // //      ->onDelete('CASCADE');
 
-            $table->unsignedInteger('organization_group_id');
-            $table->foreign('organization_group_id')
-                  ->references('id')
-                  ->on('organization_groups')
-                  ->onUpdate('CASCADE')
-                  ->onDelete('CASCADE');
-        });
+        //     // $table->unsignedInteger('organization_group_id');
+        //     // $table->foreign('organization_group_id')
+        //     //       ->references('id')
+        //     //       ->on('organization_groups')
+        //     //       ->onUpdate('CASCADE')
+        //     //       ->onDelete('CASCADE');
+        // });
     }
 
     /**

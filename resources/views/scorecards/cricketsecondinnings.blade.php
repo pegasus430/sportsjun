@@ -79,7 +79,7 @@ $team_b_count = $team_b_scnd_ing_count; //team b player count
 
 				<td>{!! Form::text('a_strik_rate_'.$a_bat_second_ing, (!empty($a_batng_second_ing['strikerate']))?number_format($a_batng_second_ing['strikerate'],2):'', array('class'=>'gui-input allownumericwithdecimal strike_new','id'=>'a_strik_rate_ing_'.$a_bat_second_ing,'readonly')) !!}</td>
 
-				<td><a href="#" onclick="deleteRow('a','batting',{{$a_batng_second_ing['id']}},{{$a_bat_second_ing}})" class="btn btn-danger btn-circle btn-sm"><i class="fa fa-remove"></i></td>
+				<td><a href="javascript:void(0)" onclick="deleteRow('a','batting',{{$a_batng_second_ing['id']}},{{$a_bat_second_ing}})" class="btn btn-danger btn-circle btn-sm"><i class="fa fa-remove"></i></td>
 			</tr>
 			<?php $a_bat_second_ing++;?>
 			@endforeach
@@ -151,7 +151,7 @@ $team_b_count = $team_b_scnd_ing_count; //team b player count
                 <td></td>
                 <td></td>
                 <td></td>
-               <td><a href="#" onclick="deleteRow('b','bowling',{{$team_b_bowl_scnd_ing['id']}},{{$b_bowl_second_ing}})" class="btn btn-danger btn-circle btn-sm"><i class="fa fa-remove"></i></a></td>
+               <td><a href="javascript:void(0)" onclick="deleteRow('b','bowling',{{$team_b_bowl_scnd_ing['id']}},{{$b_bowl_second_ing}})" class="btn btn-danger btn-circle btn-sm"><i class="fa fa-remove"></i></a></td>
 			</tr>
 			<?php $b_bowl_second_ing++;?>
 			@endforeach
@@ -355,7 +355,7 @@ $team_b_count = $team_b_scnd_ing_count; //team b player count
 				<td>{!! Form::text('b_fours_'.$team_b_bat_scnd_ing, (!empty($team_b_bat_scnd['fours']))?$team_b_bat_scnd['fours']:'', array('class'=>'gui-input allownumericwithdecimal','id'=>'b_fours_'.$team_b_bat_scnd_ing)) !!}</td>
 				<td>{!! Form::text('b_sixes_'.$team_b_bat_scnd_ing, (!empty($team_b_bat_scnd['sixes']))?$team_b_bat_scnd['sixes']:'', array('class'=>'gui-input allownumericwithdecimal','id'=>'b_sixes_'.$team_b_bat_scnd_ing)) !!}</td>
 				<td>{!! Form::text('b_strik_rate_'.$team_b_bat_scnd_ing, (!empty($team_b_bat_scnd['strikerate']))?number_format($team_b_bat_scnd['strikerate'],2):'', array('class'=>'gui-input allownumericwithdecimal strike_new','id'=>'b_strik_rate_ing_'.$team_b_bat_scnd_ing,'readonly')) !!}</td>
-				 <td><a href="#" onclick="deleteRow('b','batting',{{$team_b_bat_scnd['id']}},{{$team_b_bat_scnd_ing}})" class="btn btn-danger btn-circle btn-sm"><i class="fa fa-remove"></i></td>
+				 <td><a href="javascript:void(0)" onclick="deleteRow('b','batting',{{$team_b_bat_scnd['id']}},{{$team_b_bat_scnd_ing}})" class="btn btn-danger btn-circle btn-sm"><i class="fa fa-remove"></i></td>
 			</tr>
 			<?php $team_b_bat_scnd_ing++; ?>
 			@endforeach
@@ -424,7 +424,7 @@ $team_b_count = $team_b_scnd_ing_count; //team b player count
 
 				<td>{!! Form::text('a_bowler_wide_'.$team_a_secnd_bat_ing, (!empty($team_a_secnd_bat['wides_bowl']))?$team_a_secnd_bat['wides_bowl']:'', array('class'=>'gui-input allownumericwithdecimal a_wides_ing','id'=>'a_bowler_wide_ing_'.$team_a_secnd_bat_ing)) !!}</td>
 				<td>{!! Form::text('a_bowler_noball_'.$team_a_secnd_bat_ing, (!empty($team_a_secnd_bat['noballs_bowl']))?$team_a_secnd_bat['noballs_bowl']:'', array('class'=>'gui-input allownumericwithdecimal a_noballs_ing','id'=>'a_bowler_noball_ing_'.$team_a_secnd_bat_ing)) !!}</td>
-				<td><a href="#" onclick="deleteRow('a','bowling',{{$team_a_secnd_bat['id']}},{{$team_a_secnd_bat_ing}})" class="btn btn-danger btn-circle btn-sm"><i class="fa fa-remove"></i></td>
+				<td><a href="javascript:void(0)" onclick="deleteRow('a','bowling',{{$team_a_secnd_bat['id']}},{{$team_a_secnd_bat_ing}})" class="btn btn-danger btn-circle btn-sm"><i class="fa fa-remove"></i></td>
 				<td></td>
 				<td></td>
 				<td></td>

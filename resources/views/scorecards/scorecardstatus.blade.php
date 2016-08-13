@@ -8,7 +8,7 @@ $(document).ready(function(){
 });
 </script>
      <!-- Button HTML (to Trigger Modal) -->
-    <a href="#" class="launch-modal"><i class="fa fa-info"></i> <b>Match Status</b></a><br/>
+    <a href="javascript:void(0)" class="launch-modal"><i class="fa fa-info"></i> <b>Match Status</b></a><br/>
 	@if($match_data[0]['tournament_id']=='')
 		@if($match_data[0]['scoring_status']=='approval_pending')
 			<span>{{'Scorecard is pending for approval'}} </span>

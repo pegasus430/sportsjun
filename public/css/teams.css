@@ -60,23 +60,26 @@
 	}
 
 
-#teamStatsDiv {
+#teamStatsDiv , .teamStatsDiv{
 	border-radius: 3px;
 	margin-bottom: 15px;
 }
 
-#teamStatsDiv .table thead {
+#teamStatsDiv .table thead , .teamStatsDiv .table thead {
 	background:#1FA67A;
     color: #fff;}
-#teamStatsDiv .table thead tr th {border-bottom: none;}
+
+
+
+#teamStatsDiv .table thead tr th,.teamStatsDiv .table thead tr th  {border-bottom: none;}
 #teamStatsDiv .table tbody {border: 1px solid #f0f0f0;}
-#teamStatsDiv .table thead tr th {
+#teamStatsDiv .table thead tr th, .teamStatsDiv .table thead tr th  {
 	text-align: center;}
-#teamStatsDiv .table tbody tr td {
+#teamStatsDiv .table tbody tr td,.teamStatsDiv .table tbody tr td {
 	background: white;
 	line-height: 25px;
 	text-align: center;}
-#teamStatsDiv .table tbody tr td:first-child {
+#teamStatsDiv .table tbody tr td:first-child ,.teamStatsDiv .table tbody tr td:first-child {
 	text-align: left;}
 .schedule_list:first-child {
 	border-bottom: none;
