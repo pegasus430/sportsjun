@@ -196,7 +196,7 @@ class FollowController extends Controller
                 }
                 
                 // get following players
-                $follow_playerDetails = $modelObj->getFollowingList($user_id, 'player');
+            $follow_playerDetails = $modelObj->getFollowingList($user_id, 'player');
                 $following_player_array     = [];
                 if (isset($follow_playerDetails) && count($follow_playerDetails) > 0)
                 {
@@ -252,6 +252,7 @@ class FollowController extends Controller
                         //$followingPlayersArray->toArray();
                 }
 
+
                 //getorganization
 
                  $follow_organizationDetails = $modelObj->getFollowingList($user_id, 'organization');
@@ -263,9 +264,9 @@ class FollowController extends Controller
 
 
 
-                //$sports_array = $follow_array = $sports = [];
+              
                 $followingOrganizationsArray=[];
-                 $existing_organization_ids=null;
+                $existing_organization_ids=[];
                 if (count($following_organization_array) > 0)
                 {
                         /*
@@ -285,8 +286,8 @@ class FollowController extends Controller
                         // data for performing checks of user following
                         $checkArray = "";
 
-                        foreach($followingOrganizationsArray as $player){
-                                        $checkArray.= $player->user_id.",";
+                        foreach($followingOrganizationsArray as $organization){
+                                        $checkArray.= $organization->user_id.",";
                         }
                         $checkArray = trim($checkArray,",");
                         if (!empty($checkArray))

@@ -215,13 +215,15 @@
                                                                                                         </div>
                                                                                                         <ul class="t_tags">
                                                                                                                 <li>Sports:
-                                                                                                                <?php $sport_ids = explode(",", trim($player->following_sports,","));
+                                    <?php $sport_ids = explode(",", trim($player->following_sports,","));
                                                                                                                                         ?>
-                                                                                                                <span class="green">
-                                                                                                                    <?php $sport_names = ''; ?>
-                                                                                                                    @foreach($sport_ids as $key=>$val)
-                                                                                                                    <?php
-                                                                                                                        $sport_names .= ", ".$sports_array[$val];
+                                                                                <span class="green">
+                                                                <?php $sport_names = ''; ?>
+                                                    @foreach($sport_ids as $key=>$val)
+                                                <?php                     
+
+                                                    if(isset($sports_array[$val]))
+                                                    $sport_names .= ", ".$sports_array[$val];
                                                                                                                     ?>
                                                                                                                     @endforeach
                                                                                                                     <?php $sport_names = trim($sport_names,",");?>
@@ -230,7 +232,7 @@
                                                                                                             </li>
                                                                                                         </ul>
                                                                                                 </div>
-                                                                                                @if(!$selfProfile || ($selfProfile && in_array($player->user_id,$follow_array)))
+                                             @if(!$selfProfile || ($selfProfile && in_array($player->user_id,$follow_array)))
                                                                                                 <div class="sj_actions_new">
                                                                                                         <div class="follow_unfollow_player" id="follow_unfollow_player_{{$player->user_id}}" uid="{{$player->user_id}}" val="PLAYER" flag="{{ in_array($player->user_id,$follow_array)?0:1 }}">
                                                                                                                 <a href="#" id="follow_unfollow_player_a_{{$player->user_id}}" class="{{ in_array($player->user_id,$follow_array)?'sj_unfollow':'sj_follow' }}">
