@@ -1,34 +1,47 @@
 @if (count($player_standing))
 
 <!-- Batting -->
-     <h4><b>{{ config('constants.CRICKET_STATS.BATTING_STATS.BATTING_STATISTICS')}}</b></h4>
-    <div class=" stats-table" id='teamStatsDiv'>
+
+<div class="panel panel-default">
+       <div class="panel-body">
+         <ul class="nav nav-tabs nav-justified">
+                                <li class="active"><a href="#batting" data-toggle="tab" aria-expanded="true"> <b>{{ config('constants.CRICKET_STATS.BATTING_STATS.BATTING_STATISTICS')}}</b></a></li>
+                                <li class=""><a href="#bowling" data-toggle="tab" aria-expanded="false">   <b>{{ config('constants.CRICKET_STATS.BOWLLING_STATS.BOWLLING_STATISTICS')}}</b></a></li>
+                               
+        </ul>
+
+    <div class="tab-content">
+
+    <div class="tab-pane fade active in" id="batting">
+
+    <div class="table-responsive stats-table teamStatsDiv" >
     <table class="table table-hover">
          <thead>
             <tr>
 
-                <th>PLAYER NAME</th>
-                <th>TEAM NAME</th>
-                <th>{{ config('constants.STATISTICS.MATCH_TYPE')}}</th>  
-                <th>{{ config('constants.STATISTICS.MATCHES')}}</th>
-                <th>{{ config('constants.STATISTICS.INNINGS')}}</th>
-                <th>{{ config('constants.CRICKET_STATS.BATTING_STATS.NOT_OUTS')}}</th>
-                <th>{{ config('constants.CRICKET_STATS.BATTING_STATS.TOTAL_RUNS')}}</th>
+                <th>PLAYER</th>
+                <th>TEAM</th>
+       
+                <th>MAT</th>
+                <th>INN</th>
+                <th>NO</th>
+                <th>RUNS</th>
                 <th>{{ config('constants.CRICKET_STATS.BATTING_STATS.50s')}}</th>
                 <th>{{ config('constants.CRICKET_STATS.BATTING_STATS.100s')}}</th>
                 <th>{{ config('constants.CRICKET_STATS.BATTING_STATS.4s')}}</th>
                 <th>{{ config('constants.CRICKET_STATS.BATTING_STATS.6s')}}</th>
-                <th>{{ config('constants.CRICKET_STATS.BATTING_STATS.AVERAGE')}}</th>
-                <th>{{ config('constants.CRICKET_STATS.BATTING_STATS.HIGH_SCORE')}}</th>
-                <th>{{ config('constants.CRICKET_STATS.BATTING_STATS.STRIKE_RATE')}}</th>
+                <th>AVE</th>
+                <th>HS</th>
+                <th>S/R</th>
             </tr>
         </thead>
         <tbody>
             @foreach($player_standing as $statistic)  
 
+        @if(!empty($statistic->totalruns))
             <tr>
                 <td><a href='/editsportprofile/{{$statistic->user_id}}' class="text-primary">
- 
+            <span class='hidden-xs hidden-sm'> 
                     @if($statistic->url!='')
                                 <!--<img class="fa fa-user fa-fw fa-2x" height="42" width="42" src="{{ url('/uploads/user_profile/'.$statistic->url) }}" onerror="this.onerror=null;this.src='{{ asset('/images/default-profile-pic.jpg') }}';">-->
                                 
@@ -43,10 +56,10 @@
                                 
                     
                     @endif
-
+                </span>
                     {{$statistic->player_name}}</a></td>                
                 <td><a href='/team/members/{{$statistic->team_id}}' class="text-primary">{{$statistic->team_name}}</a></td>
-                <td>{{$statistic->match_type}}</td>  
+    
                 <td>{{$statistic->matches}}</td>
                 <td>{{$statistic->innings_bat}}</td>
                 <td>{{$statistic->notouts}}</td>
@@ -59,37 +72,40 @@
                 <td>{{$statistic->highscore}}</td>
                 <td>{{$statistic->strikerate}}</td>
             </tr>
+        @endif
             @endforeach
         </tbody>
     </table>
     </div>
+    </div>
 
-    <br>
-    <br><p>&nbsp;<p>
+    <div class="tab-pane fade" id="bowling">
 
-     <h4><b>{{ config('constants.CRICKET_STATS.BOWLLING_STATS.BOWLLING_STATISTICS')}}</b></h4>
-    <div class=" stats-table" id='teamStatsDiv'>
+    <div class=" table-responsive stats-table teamStatsDiv">
     <table class="table table-hover">
          <thead>
             <tr>
 
-                <th>PLAYER NAME</th>
-                <th>TEAM NAME</th>
-                <th>{{ config('constants.STATISTICS.MATCH_TYPE')}}</th>
-                <th>{{ config('constants.STATISTICS.MATCHES')}}</th>
-                <th>{{ config('constants.STATISTICS.INNINGS')}}</th>
-                <th>{{ config('constants.CRICKET_STATS.BOWLLING_STATS.WICKETS')}}</th>
-                <th>{{ config('constants.CRICKET_STATS.BOWLLING_STATS.RUNS CONCEDED')}}</th>
-                <th>{{ config('constants.CRICKET_STATS.BOWLLING_STATS.AVERAGE')}}</th>
-                <th>{{ config('constants.CRICKET_STATS.BOWLLING_STATS.ECONOMY')}}</th>
+                <th>PLAYER</th>
+                <th>TEAM</th>
+               
+                <th>MAT</th>
+                <th>INN</th>
+                <th>W</th>
+                <th>RUNS</th>
+                <th>AVE</th>
+                <th>ECN</th>
             </tr>
         </thead>
         <tbody>
             @foreach($player_standing as $statistic)  
 
+       @if(!empty($statistic->ecomony))
             <tr>
                 <td><a href='/editsportprofile/{{$statistic->user_id}}' class="text-primary">
  
+
+                     <span class='hidden-xs hidden-sm'> 
                     @if($statistic->url!='')
                                 <!--<img class="fa fa-user fa-fw fa-2x" height="42" width="42" src="{{ url('/uploads/user_profile/'.$statistic->url) }}" onerror="this.onerror=null;this.src='{{ asset('/images/default-profile-pic.jpg') }}';">-->
                                 
@@ -104,10 +120,11 @@
                                 
                     
                     @endif
+                    </span>
 
                     {{$statistic->player_name}}</a></td>                
                 <td><a href='/team/members/{{$statistic->team_id}}' class="text-primary">{{$statistic->team_name}}</a></td>
-                <td>{{$statistic->match_type}}</td>  
+                
                  <td>{{$statistic->matches}}</td>
                 <td>{{$statistic->innings_bowl}}</td>
                 <td>{{$statistic->wickets}}</td>
@@ -115,6 +132,7 @@
                 <td>{{$statistic->average_bowl}}</td>
                 <td>{{$statistic->ecomony}}</td>
             </tr>
+         @endif
             @endforeach
         </tbody>
     </table>

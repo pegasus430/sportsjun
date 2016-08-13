@@ -173,7 +173,13 @@ Route::get('organizationTournaments/{id}', [
     'as'   => 'organizationTournaments',
     'uses' => 'User\OrganizationController@organizationTournaments',
 ]);
+
 Route::resource('organization', 'User\OrganizationController');
+
+Route::post('parent_tournament/{id}/add_sport', [
+    'as'   => 'addSportsOrganizationGroup',
+    'uses' => 'User\OrganizationController@addGroupSportPoints',
+]);
 //End Organizations
 
 //Gallery

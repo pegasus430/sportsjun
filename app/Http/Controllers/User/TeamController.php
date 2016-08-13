@@ -224,6 +224,7 @@ class TeamController extends Controller
 		$request = Request::all();
 		if(is_numeric($id))
 		{
+
 			$sports_id = $request['sports_id'];
 			$name = $request['name'];
 			$address = $request['address'];
@@ -246,6 +247,13 @@ class TeamController extends Controller
 			{
 				//update team table
 				Team::where('id', '=', $id)->update(['sports_id'=>$sports_id,'name'=>$name,'location'=>$location,'address'=>$address,'city_id'=>$city_id,'city'=>$city,'state_id'=>$state_id,'country_id'=>$country_id,'country'=>$country,'zip'=>$zip,'description'=>$description,'player_available'=>$player_available,'team_available'=>$team_available,'updated_at'=>Carbon::now(),'team_level'=>$request['team_level'],'gender'=>$gender,'organization_id'=>$organization_id]);
+
+				$team_details=Team::find($id);
+	//assign group to team.
+		$organization_group_id=$request['organization_group_id'];
+			if(is_numeric($organization_group_id)){
+				$this->attachOrganizationGroupToTeam($team_details, $organization_group_id);				 
+		}
 				if(!empty($request['filelist_logo']))
 				{
 					//update existing album cover to 0

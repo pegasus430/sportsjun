@@ -1188,6 +1188,14 @@ $(document.body).on('click', '.follow_unfollow_tournament' ,function(){
     var val = $(this).attr('val');
     var flag = $(this).attr('flag');
     follow_unfollow(id,val,flag);
+}); 
+
+//follow/unfollow functionlaity
+$(document.body).on('click', '.follow_unfollow_organization' ,function(){ 
+    var id = $(this).attr('uid');
+    var val = $(this).attr('val');
+    var flag = $(this).attr('flag');
+    follow_unfollow(id,val,flag);
 });  
 
 //function to insert/update follow/unfollow

@@ -18,6 +18,9 @@ use App\Model\Sport;
 use App\Http\Controllers\User\SearchController;
 use DB;
 use App\Model\TournamentGroupTeams;
+use App\Model\OrganizationGroupTeamPoint;
+
+use Illuminate\Http\Request as ObjRequest;
 
 //use Helper;
 
@@ -324,6 +327,42 @@ class OrganizationController extends Controller {
 
     public function testTournaments(){
             return Helper::updateOrganizationTeamsPoints();
+    }
+
+    public function addGroupSportPoints($tournament_parent_id, ObjRequest $request){
+            $sports_id=$request->sport_id;
+            $max_index=$request->max_index;
+
+            $parent_tournament=TournamentParent::find($tournament_parent_id);
+             $orgInfoObj   = Organization::find($parent_tournament->organization_id);
+
+             $organization_id=$orgInfoObj->id;
+
+
+             $check=OrganizationGroupTeamPoint::whereTournamentParentId($tournament_parent_id)->whereSportsId($sports_id)->whereOrganizationId($organization_id)->first();
+
+             if(!is_null($check)){
+                   
+                      return 'Sorry, this sports already exists';
+             }
+
+             else{
+
+                for($i=0; $i<=$max_index; $i++){
+                    $group_id=$request->{'group_'.$i};
+                    $points=$request->{'input_'.$i};
+
+                    $model=new OrganizationGroupTeamPoint;
+                    $model->points=$points;
+                    $model->organization_group_id=$group_id;
+                    $model->tournament_parent_id=$tournament_parent_id;
+                    $model->organization_id=$organization_id;
+                    $model->sports_id=$sports_id;
+                    $model->save();
+                }
+             }
+
+        return view('organization.standing.overall_standing_display_sports', compact('orgInfo', 'orgInfoObj','parent_tournament'));
     }
 
 }

@@ -1,12 +1,12 @@
 @if (count($player_standing))
     <h4><b>{{ config('constants.SOCCER_STATS.HOCKEY_STATISTICS')}}</b></h4>
-    <div class=" stats-table" id='teamStatsDiv'>
+    <div class="table-responsive stats-table teamStatsDiv" >
     <table class="table table-hover">
         <thead>
             <tr>
                 <th>PLAYER</th>
                 <th>TEAM </th>
-                <th>{{ config('constants.STATISTICS.MATCHES')}}</th>                
+                <th>MAT</th>                
                 <th>Y CARDS</th>
                 <th>R RARDS</th>
                 <th>GOALS</th>
@@ -21,7 +21,7 @@
                                    
                 <td><a href='/editsportprofile/{{$statistic->user_id}}' class="text-primary">
 
-                     
+                     <span class='hidden-xs hidden-sm'> 
                     @if($statistic->url!='')
                                 <!--<img class="fa fa-user fa-fw fa-2x" height="42" width="42" src="{{ url('/uploads/user_profile/'.$statistic->url) }}" onerror="this.onerror=null;this.src='{{ asset('/images/default-profile-pic.jpg') }}';">-->
                                 
@@ -36,7 +36,7 @@
                                 
                     
                     @endif
-
+                        </span>
                 {{$statistic->player_name}}</a></td>                
                 <td><a href='/team/members/{{$statistic->team_id}}' class="text-primary">{{$statistic->team_name}}</a></td>                
                 <td>{{$statistic->matches}}</td>

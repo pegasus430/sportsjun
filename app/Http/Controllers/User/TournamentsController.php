@@ -312,10 +312,12 @@ class TournamentsController extends Controller
 		$lef_menu_condition = '';
 		$tournament_type='';
 		$left_menu_data = array();
+		$follow_array=array();
+	
 		Helper::setMenuToSelect(6, 1);
 		return view('tournaments.team', array('joinTeamArray' => $joinTeamArray, 'followingTeamArray' => $followingTeamArray, 'manageTeamArray' => $manageTeamArray,
 			'lef_menu_condition' => $lef_menu_condition, 'managedTournamentDetails' => $managedTournamentDetails,
-			'subTournamentsArray'=>$subTournamentsArray,'loginUserId'=>$loginUserId, 'tournament_type'=>$tournament_type));
+			'subTournamentsArray'=>$subTournamentsArray,'loginUserId'=>$loginUserId, 'tournament_type'=>$tournament_type, 'follow_array'=>$follow_array));
 	}
 
 	/**
@@ -1274,6 +1276,9 @@ class TournamentsController extends Controller
 
 		$follow_unfollow = Helper::checkFollowUnfollow(isset(Auth::user()->id)?Auth::user()->id:0, 'TOURNAMENT', $tournament_id);
 
+		
+
+	
 
 //            dd($tournament_id);
 		return view('tournaments.groups', array(
@@ -1308,7 +1313,8 @@ class TournamentsController extends Controller
 			'add_score_link'           => $add_score_link,
 			'sport_name'               => $sport_name,
 			'match_startdate_array'    => $match_startdate_array,
-			'match_count'              => $match_count
+			'match_count'              => $match_count,
+			
 		))
 			->with('match_types', ['' => 'Select Match Type'] + $match_types)
 			->with('player_types', ['' => 'Select Player Type'] + $player_types)
@@ -2196,7 +2202,8 @@ class TournamentsController extends Controller
 		}
 		$left_menu_data = array();
 		$left_menu_data = Helper::getLeftMenuData($tournamentInfo[0]['tournament_parent_id'],$tournamentInfo[0]['manager_id'],$tournamentInfo);
-
+		
+	
 		return view('tournaments.tournamentsdetails')->with(array( 'tournamentInfo'=>$tournamentInfo,'action_id'=>$id,'left_menu_data'=>$left_menu_data, 'tournament_id' => $id, 'lef_menu_condition'=> $lef_menu_condition, 'tournament_type' => $tournamentInfo[0]['type'],'sport_name'=>$sport_name,'manager_name'=> $manager_name));
 	}
 
@@ -2204,6 +2211,8 @@ class TournamentsController extends Controller
 
 	public function playerStanding($tournament_id){
 		$left_menu_data = array();
+		
+
 		$id=$tournament_id;
 		$action_id=$tournament_id;
 
@@ -2220,13 +2229,14 @@ class TournamentsController extends Controller
 
 		$player_standing=$this->getPlayerStanding($sport_id, $tournament_id);
 
+		
 
 			return view('tournaments.player_standing', compact(
 					'tournamentInfo','lef_menu_condition',
 					'left_menu_data', 'tournamentInfo','id', 
 					'tournament_id' , 'action_id',
 					'tournament_parent_id', 'tournament_type', 
-					'player_standing', 'sport_id', 'sport_name'));
+					'player_standing', 'sport_id', 'sport_name', 'follow_array'));
 	}
 
 	public function getPlayerStanding($sport_id, $tournament_id){
@@ -2297,6 +2307,7 @@ class TournamentsController extends Controller
 							->selectRaw('sum(sixes) as sixes')
 							->selectRaw('sum(IF(bat_status="notout", 1, 0)) as notouts')
 							->selectRaw('max(totalruns) as highscore')
+							->orderBy('totalruns', 'desc')
 							
 													
 		
@@ -2312,9 +2323,11 @@ class TournamentsController extends Controller
 							->selectRaw('sum(wickets) as wickets')
 							->selectRaw('sum(runs_conceded) as runs_conceded')
 							->selectRaw('sum(overs_bowled) as overs_bowled')
+							->selectRaw('SUM(innings) innings_bowl')
 							->selectRaw('count(innings) as innings_bowled')
 							->selectRaw('CAST(AVG(average_bowl) AS DECIMAL(10,2))  average_bowl')
 							->selectRaw('CAST(AVG(ecomony) AS DECIMAL(10,2)) ecomony')
+							->orderBy('wickets', 'desc')
 							->groupBy('user_id')
 							->groupBy( 'match_type' )
 							->get();

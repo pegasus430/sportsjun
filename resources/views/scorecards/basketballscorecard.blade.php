@@ -208,7 +208,9 @@ input:read-only {
                 <div class='row'>
                     <div class='col-xs-12'>
                         <div class='match_loc'>
-                            {{$tournamentDetails['name']}} Tournament
+				                 <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
+				                 		{{$tournamentDetails['name']}} Tournament
+				                  </a>
                                 
                         </div>
                     </div>

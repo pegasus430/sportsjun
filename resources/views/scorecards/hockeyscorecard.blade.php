@@ -179,7 +179,9 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
                 <div class='row'>
                     <div class='col-xs-12'>
                         <div class='match_loc'>
-                            {{$tournamentDetails['name']}} Tournament
+                           <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
+				                 		{{$tournamentDetails['name']}} Tournament
+				            </a>
                                 
                         </div>
                     </div>

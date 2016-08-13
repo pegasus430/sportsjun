@@ -1,16 +1,17 @@
 @if (count($player_standing))
-     <h4><b>{{ config('constants.BASKETBALL_STATS.BASKETBALL_STATISTICS')}}</b></h4>
-    <div class=" stats-table" id='teamStatsDiv'>
-    <table class="table">
+
+<div class="row ">
+    <div class="table-responsive stats-table teamStatsDiv" >
+    <table class="table table-striped " >
         <thead>
             <tr>
                 <th>PLAYER </th>
                 <th>TEAM </th>
-                <th>{{ config('constants.STATISTICS.MATCHES')}}</th>
+                <th>MAT</th>
                 <th>1 P</th>
                 <th>2 P</th>
                 <th>3 P</th>
-                <th>T POINTS</th>
+                <th>T PTS</th>
                 <th>{{ config('constants.BASKETBALL_STATS.FOULS')}}</th>
 <!--                <th>{{ config('constants.BASKETBALL_STATS.GOALS_SAVED')}}</th>
                 <th>{{ config('constants.BASKETBALL_STATS.GOALS_ASSIST')}}</th>
@@ -21,7 +22,7 @@
             @foreach($player_standing as $statistic)  
             <tr>
                 <td><a href='/editsportprofile/{{$statistic->user_id}}' class="text-primary">
-
+                <span class='hidden-xs hidden-sm'> 
                     @if($statistic->url!='')
                                 <!--<img class="fa fa-user fa-fw fa-2x" height="42" width="42" src="{{ url('/uploads/user_profile/'.$statistic->url) }}" onerror="this.onerror=null;this.src='{{ asset('/images/default-profile-pic.jpg') }}';">-->
                                 
@@ -36,7 +37,7 @@
                                 
                     
                     @endif
-
+                </span>
                     {{$statistic->player_name}}</a></td>                
                 <td><a href='/team/members/{{$statistic->team_id}}' class="text-primary">{{$statistic->team_name}}</a></td>
                 <td>{{$statistic->matches}}</td>

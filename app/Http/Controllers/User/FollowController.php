@@ -12,6 +12,7 @@ use App\Model\Team;
 use App\Model\TournamentGroups;
 use App\Model\TournamentGroupTeams;
 use App\Model\Tournaments;
+use App\Model\Organization;
 use App\User;
 use Auth;
 use DB;
@@ -251,11 +252,66 @@ class FollowController extends Controller
                         //$followingPlayersArray->toArray();
                 }
 
+                //getorganization
+
+                 $follow_organizationDetails = $modelObj->getFollowingList($user_id, 'organization');
+                $following_organization_array     = [];
+                if (isset($follow_organizationDetails) && count($follow_organizationDetails) > 0)
+                {
+                        $following_organization_array = array_filter(explode(',', $follow_organizationDetails[0]->following_list));
+                }
+
+
+
+                $sports_array = $follow_array = $sports = [];
+                $followingOrganizationsArray=[];
+                if (count($following_organization_array) > 0)
+                {
+                        /*
+                         * $followingPlayerDetails = Tournaments::with('photos')
+                                ->whereIn('id', $following_team_array)
+                                ->get(['id', 'name', 'created_by', 'sports_id', 'type',
+                                'final_stage_teams', 'description']);
+                         * 
+                         */
+                        
+                        $followingOrganizationsArray = Organization::
+                                //where('organization.user_id', '!=' , $self_user_id)
+                                whereIn('organization.id', $following_organization_array)
+                                ->whereNull('organization.deleted_at')
+                                ->get();
+                        
+                        // data for performing checks of user following
+                        $checkArray = "";
+                        foreach($followingOrganizationsArray as $player){
+                                        $checkArray.= $player->user_id.",";
+                        }
+                        $checkArray = trim($checkArray,",");
+                        if (!empty($checkArray))
+                        {
+                                DB::setFetchMode(PDO::FETCH_ASSOC);
+                                $follow_array = DB::select("SELECT DISTINCT tp.type_id as item
+                                FROM `followers` tp  
+                                WHERE tp.user_id = $user_id "
+                                . "AND tp.type_id IN ($checkArray) "
+                                . "AND `type` = 'organization' AND tp.deleted_at IS NULL ");
+                                DB::setFetchMode(PDO::FETCH_CLASS);
+                        }
+                        if (!empty($follow_array))
+                        {
+                                $follow_array = array_column($follow_array, 'item');
+                        }
+                        
+                        //print_r($follow_array);exit;
+                        //$followingPlayersArray->toArray();
+                }
+
 
                 return view('userprofile.following', array(
                         'followingTournaments' => $followingTournamentsArray,
                         'followingTeams'        => $followingTeamsArray,
                         'followingPlayers'      => $followingPlayersArray,
+                        'followingOrganizations' => $followingOrganizationsArray,
                         'sports_array'          => $sports_array,
                         'userId'                => $user_id,
                         'follow_array'          => $follow_array,

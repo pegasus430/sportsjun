@@ -328,6 +328,17 @@ class SearchController extends Controller
                                         DB::setFetchMode(PDO::FETCH_CLASS);
                                 }
                         }
+                        if ($model == 'Organization')
+                        {
+                                if (!empty($checkArray))
+                                {
+                                         DB::setFetchMode(PDO::FETCH_ASSOC);
+                                        $follow_array = DB::select("SELECT DISTINCT tp.type_id as item
+                                                FROM `followers` tp  
+                                                WHERE tp.user_id = $loginUserId AND tp.type_id IN ($checkArray) AND `type` = 'organization' AND tp.deleted_at IS NULL ");
+                                        DB::setFetchMode(PDO::FETCH_CLASS);
+                                }
+                        }
                         //echo "<pre>";print_r($exist_items_array);exit;
                         //dd($exist_array);
                         if ($model == 'Tournaments')
