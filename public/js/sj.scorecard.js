@@ -326,8 +326,8 @@ if (typeof SJ.SCORECARD === 'undefined')
                                 }
                                 return false;
                         },
-                        soccerAddField:function(player_id, record_type,record_type_name, match_name=''){
-
+                        soccerAddField:function(player_id, record_type,record_type_name, match_name){
+                                match_name = (typeof match_name !== "undefined") ? match_name : "";
                                 var player_content=$('#team_a_row_'+player_id);                                
                                 var user_id= player_content.attr('user_id')
                                 var player_name=player_content.attr('player_name');
