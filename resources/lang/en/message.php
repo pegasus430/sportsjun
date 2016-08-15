@@ -275,6 +275,7 @@ return [
 		'tournamentdetails'=>'Tournament Details',
 		'editheading' => 'Edit Tornaments',
 		'edit_schedule' => 'Edit Schedule',
+		'edit_schedule_short' => 'Edit',
 		'gallery' => 'Choose Tournament Gallery Pics',
 		'schedule_type' =>'Schedule Type',
 		'manager_name' =>'Manager Name',

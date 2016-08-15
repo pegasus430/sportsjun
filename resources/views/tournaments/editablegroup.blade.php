@@ -175,7 +175,8 @@
                                 </div>
 								@endif	
 								</div>
-								<div class="col-md-6 schedule_new_team_txt">
+								<div class="col-md-7 schedule_new_team_txt">
+									<div class='col-md-8 col-sm-8'>
                                 	<h4 class="tour-title">
                                     	{{ $team_name_array[$match['a_id']] }}
                                         {{ 'VS' }}                                        
@@ -202,10 +203,39 @@
 									@if(!empty($add_score_link[$match['id']]))
 										@if($add_score_link[$match['id']]==trans('message.schedule.viewscore'))
 											<span class="tournament_score"><a href="{{ url('match/scorecard/view/'.$match['id']) }}">{{$add_score_link[$match['id']]}}</a></span>
+
+											<span class=""><a href="javascript:void(0)" class="text-primary">Match Summary</a></span>
 										@else
 											<span class="tournament_score"><a href="{{ url('match/scorecard/edit/'.$match['id']) }}">{{$add_score_link[$match['id']]}}</a></span>
 										@endif
+
+
+
 									@endif	
+
+									</div>
+
+									<div class='col-md-4 col-sm-4'>									
+
+										@if(!empty($match['player_of_the_match']))
+										<div class='visible-xs-block'>
+											<hr>
+										</div>
+										<center><h5 class=' tour-title'>Player of the Match</h5></center>
+										<br>
+											<?php $player_of_the_match=Helper::getUserDetails($match['player_of_the_match']);
+											?>
+								{!! Helper::Images($player_of_the_match->url, 'user_profile',array('class'=>'img-circle img-border img-responsive lazy','height'=>52,'width'=>52) )!!}
+
+								<center><br><a href='/editsportprofile/{{$player_of_the_match->id}}'>{{$player_of_the_match->name}}</a>
+								
+
+												<br>
+											
+							    </center>
+										@endif
+
+									</div>
 
 
 										
@@ -213,8 +243,15 @@
 								
 								
 	
-								<div class="col-md-3 schedule_new_team_edit">
-									<div class="edit-link pull-right" onclick="editMatchSchedule({{$match['id']}},1,'','myModal')"><i class="fa fa-pencil"></i> {{ trans('message.tournament.fields.edit_schedule') }}</div>
+								<div class="col-md-2 schedule_new_team_edit">
+									<div class="edit-link pull-right visible-xs-block" onclick="editMatchSchedule({{$match['id']}},1,'','myModal')"><i class="fa fa-pencil"></i>			
+									 {{ trans('message.tournament.fields.edit_schedule') }}
+									 </div>
+
+									 <div class="edit-link pull-right hidden-xs" onclick="editMatchSchedule({{$match['id']}},1,'','myModal')"><i class="fa fa-pencil"></i>			
+									 {{ trans('message.tournament.fields.edit_schedule_short') }}
+									 </div>
+								
 								</div>
 							</div>
 							@else
