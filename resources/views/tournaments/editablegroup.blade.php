@@ -206,13 +206,15 @@
 
 											@if($match['sports_id']==1)
 												<span class=""><a href="javascript:void(0)" class="text-primary">Match Summary</a></span>
+
+										      @include('tournaments.match_stats.match_summary')
 											@endif
 										@else
 											<span class="tournament_score"><a href="{{ url('match/scorecard/edit/'.$match['id']) }}">{{$add_score_link[$match['id']]}}</a></span>
 										@endif
 
 
-									@include('tournaments.match_stats.match_summary')
+									
 
 
 
