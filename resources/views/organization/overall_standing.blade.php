@@ -75,7 +75,7 @@
 								<input type='hidden' name='group_{{$group_key}}' value="{{$og->id}}">
 							@endforeach
 
-							<input type='hidden' name="max_index" value="{{$group_key}}">
+							<input type='hidden' name="max_index" value="{{{$group_key or ""}}}">
 							<input type='hidden' name='parent_tournament' value="{{$parent_tournament->id}}">
 
 							
