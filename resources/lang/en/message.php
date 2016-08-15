@@ -197,6 +197,10 @@ return [
 	'deletefail' => 'Failed To Deactivate Organization.',
 	'activate' => 'Organization Activated Successfully.',
 	'activatefail' => 'Failed To Activate Organization.',
+	'tournaments' => [
+		'no_player_stats' => 'No team group available',
+
+	],
 	'updatefail' => 'Failed To Update Organization.',
 		'fields' => [
 		'userid' => 'User Id',

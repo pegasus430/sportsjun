@@ -2056,6 +2056,34 @@ class Helper {
             return updateOrganizationTeamsPoints();
     }
 
+
+    public static function getRoundStage($tournament_id, $key){
+        
+
+        $matches=MatchSchedule::whereTournamentId($tournament_id)->where('tournament_round_number', $key)->get();
+        $count=$matches->count();
+
+            if($count==1){ 
+                if($matches[0]['a_id']!='' && $matches[0]['b_id']){
+                   return 'FINAL';
+                }
+                //else return 'WINNER';                                        
+                
+            }
+            else if($count==2){
+                return 'SEMI FINAL';
+            }
+            else if($count<=4){
+                return 'QUARTER FINAL';
+            }
+             else if($count<=8){
+                return 'ROUND 1';
+            }
+
+            else return '';
+
+    }
+
    
 
 }

@@ -209,6 +209,25 @@
 
 
 													<td>
+													<div class='col-md-4 col-sm-4'>									
+
+										@if(!empty($match['player_of_the_match']))
+										<div class='visible-xs-block'>
+											<hr>
+										</div>
+										<center><h5 class=' tour-title'>Player of the Match</h5></center>
+										<br>
+											<?php $player_of_the_match=Helper::getUserDetails($match['player_of_the_match']);
+											?>
+								{!! Helper::Images($player_of_the_match->url, 'user_profile',array('class'=>'img-circle img-border img-responsive lazy','height'=>52,'width'=>52) )!!}
+								
+								<center><br><a href='/editsportprofile/{{$player_of_the_match->id}}'>{{$player_of_the_match->name}}</a>
+							         @endif
+								
+
+												<br>
+											
+							    </center>
 
 													</td>
 												</tr>

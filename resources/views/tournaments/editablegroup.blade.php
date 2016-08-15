@@ -204,10 +204,15 @@
 										@if($add_score_link[$match['id']]==trans('message.schedule.viewscore'))
 											<span class="tournament_score"><a href="{{ url('match/scorecard/view/'.$match['id']) }}">{{$add_score_link[$match['id']]}}</a></span>
 
-											<span class=""><a href="javascript:void(0)" class="text-primary">Match Summary</a></span>
+											@if($match['sports_id']==1)
+												<span class=""><a href="javascript:void(0)" class="text-primary">Match Summary</a></span>
+											@endif
 										@else
 											<span class="tournament_score"><a href="{{ url('match/scorecard/edit/'.$match['id']) }}">{{$add_score_link[$match['id']]}}</a></span>
 										@endif
+
+
+									@include('tournaments.match_stats.match_summary')
 
 
 
@@ -226,7 +231,7 @@
 											<?php $player_of_the_match=Helper::getUserDetails($match['player_of_the_match']);
 											?>
 								{!! Helper::Images($player_of_the_match->url, 'user_profile',array('class'=>'img-circle img-border img-responsive lazy','height'=>52,'width'=>52) )!!}
-
+								
 								<center><br><a href='/editsportprofile/{{$player_of_the_match->id}}'>{{$player_of_the_match->name}}</a>
 								
 
@@ -687,3 +692,4 @@
 	
 
 </script>
+

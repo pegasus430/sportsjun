@@ -8,6 +8,8 @@
 					<div class='col-sm-12'>
 						<div class='table-responsive'>
 							<table class='table table-striped table-bordered table-hover'>
+
+						@if(count($orgInfoObj->groups))
 								<thead>
 									<tr>
 											<th></th>
@@ -84,6 +86,11 @@
 												
 
 								</tbody>
+
+					@else
+						{{trans('message.organization.tournaments.no_player_stats')}}
+
+					@endif
 							</table>
 						</div>
 					</div>
@@ -105,6 +112,7 @@
 
 			<div class="modal-footer">	
 				@can('createTeam', $orgInfoObj)
+
 					<button class='button btn-primary' type="button" save='0' onclick="addSport({{$parent_tournament->id}}, this)">Add Sport</button>	
 				@endcan
 				</form>			

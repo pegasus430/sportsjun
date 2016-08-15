@@ -2293,7 +2293,8 @@ class TournamentsController extends Controller
 				break;
 				case 1:	//cricket
 						
-						$player=CricketPlayerMatchwiseStats::join('match_schedules', 'match_schedules.id', '=', 'cricket_player_matchwise_stats.match_id')
+					$player=[];
+						$player['batting']=CricketPlayerMatchwiseStats::join('match_schedules', 'match_schedules.id', '=', 'cricket_player_matchwise_stats.match_id')
 							->join('teams', 'teams.id','=', 'cricket_player_matchwise_stats.team_id')
 							->join('users', 'users.id', '=', 'cricket_player_matchwise_stats.user_id')
 							->where('match_schedules.tournament_id', $tournament_id)
@@ -2308,28 +2309,26 @@ class TournamentsController extends Controller
 							->selectRaw('sum(IF(bat_status="notout", 1, 0)) as notouts')
 							->selectRaw('max(totalruns) as highscore')
 							->orderBy('totalruns', 'desc')
+							->groupBy('user_id')						
+							->get();
 							
-													
-		
-                        	// ->select( "*", DB::raw( 'count( innings ) innings_bat, SUM(notouts) notouts, SUM(totalruns) totalruns, SUM(totalballs) totalballs, '
-                         //    . 'SUM(fifties) fifties,SUM(hundreds) hundreds,SUM(fours) fours,SUM(sixes) sixes,CAST(AVG(average_bat) AS DECIMAL(10,2)) average_bat,'
-                         //    . 'CAST(AVG(strikerate) AS DECIMAL(10,2)) strikerate, SUM(catches) catches, SUM(stumpouts) stumpouts, SUM(runouts) runouts,'
-                         //    . 'SUM(innings_bowl) innings_bowl, SUM(wickets) wickets, SUM(runs_conceded) runs_conceded, SUM(overs_bowled) overs_bowled, SUM(wides_bowl) wides_bowl, SUM(noballs_bowl) noballs_bowl,'
-                         //    . 'CAST(AVG(average_bowl) AS DECIMAL(10,2)) average_bowl, CAST(AVG(ecomony) AS DECIMAL(10,2)) ecomony' ) )
-							
+						
+					$player['bowling']=CricketPlayerMatchwiseStats::join('match_schedules', 'match_schedules.id', '=', 'cricket_player_matchwise_stats.match_id')
+							->join('teams', 'teams.id','=', 'cricket_player_matchwise_stats.team_id')
+							->join('users', 'users.id', '=', 'cricket_player_matchwise_stats.user_id')
+							->where('match_schedules.tournament_id', $tournament_id)
+							->select('cricket_player_matchwise_stats.*','users.*')
 
-							->selectRaw('count(DISTINCT(match_id)) as matches')
-							->selectRaw('count(innings) as inningscount')
+							->selectRaw('count(DISTINCT(match_id)) as matches')							
 							->selectRaw('sum(wickets) as wickets')
 							->selectRaw('sum(runs_conceded) as runs_conceded')
 							->selectRaw('sum(overs_bowled) as overs_bowled')
 							->selectRaw('SUM(innings) innings_bowl')
 							->selectRaw('count(innings) as innings_bowled')
 							->selectRaw('CAST(AVG(average_bowl) AS DECIMAL(10,2))  average_bowl')
-							->selectRaw('CAST(AVG(ecomony) AS DECIMAL(10,2)) ecomony')
+							->selectRaw('CAST(AVG(ecomony) AS DECIMAL(10,2)) ecomony')							
 							->orderBy('wickets', 'desc')
-							->groupBy('user_id')
-							->groupBy( 'match_type' )
+							->groupBy('user_id')							
 							->get();
 
 					

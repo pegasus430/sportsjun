@@ -250,10 +250,13 @@ class TeamController extends Controller
 
 				$team_details=Team::find($id);
 	//assign group to team.
+
+	 if(isset($request['organization_group_id'])){
 		$organization_group_id=$request['organization_group_id'];
 			if(is_numeric($organization_group_id)){
 				$this->attachOrganizationGroupToTeam($team_details, $organization_group_id);				 
 		}
+	 }
 				if(!empty($request['filelist_logo']))
 				{
 					//update existing album cover to 0

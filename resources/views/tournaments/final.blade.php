@@ -16,35 +16,13 @@
 <div class="row group-flex-content">
 @if(count($roundArray))
         @foreach($roundArray as $key=>$round)
-          <?php
-            $round_name=[];
-                switch (count($roundArray)) {
-                  case 1:
-                      $round_name[1]='FINAL';
-                    break;
-                  case 2:
-                      $round_name[1]='SEMI FINAL';
-                      $round_name[2]='FINAL';
-                     
-                      break;
-                  case 3:  
-                      $round_name[1]='QUARTER FINAL';
-                      $round_name[2]='SEMI FINAL';
-                      $round_name[3]='FINAL';
-                      break;               
-                  default:
-                    # code...
-                    break;
-                }
-
-
-              ?>  
+          
                  @if($round==1)
         <div class="col-sm-2">
             <div class="round-{{Helper::convert_number_to_words($round)}}">
-                <div class="round"><p>      {{$round_name[$key]}} </p></div>
+                <div class="round"><p>      {{Helper::getRoundStage($tournament_id, $key)}} </p></div>
                  @if(count($firstRoundBracketArray))
-                 @foreach($firstRoundBracketArray as $key => $schedule)
+                 @foreach($firstRoundBracketArray as $key_schedule => $schedule)
                  	<div class="match_set" style="height: 150px;">
                     @if(isset($schedule['tournament_round_number']) && $schedule['tournament_round_number']==$round)
                            <ul>
@@ -112,7 +90,7 @@
         @else
         <div class="col-sm-2">
             <div class="round-{{Helper::convert_number_to_words($round)}}">
-                <div class="round"><p> {{$round_name[$key]}}</p></div>
+                <div class="round"><p>  {{Helper::getRoundStage($tournament_id, $key)}}</p></div>
 
                  @if(count($bracketTeamArray))
                     <?php
@@ -125,10 +103,13 @@
                         $actualHeigh = $height.'px';
                     ?>
                     @foreach($bracketTeamArray as $brk => $bracketTeam)
-                    	<div class="match_set" style="height: <?php echo $height.'px';?>">
-                        <ul>
+                    	<div class="match_set" style="height: <?php echo $height.'px';?>">                        <ul>
+
+                    
                             @foreach($bracketTeam as $bt => $bracket)
                                 @if(isset($bracket['tournament_round_number']) && $bracket['tournament_round_number']==$round)
+
+
 
                                     @if($round==($lastRoundWinner+1))
                                         <div class="clearfix">
