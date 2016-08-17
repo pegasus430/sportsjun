@@ -159,6 +159,13 @@
 																<span class="tournament_score"><a href="{{ url('match/scorecard/edit/'.$match['id']) }}">{{$add_score_link[$match['id']]}}</a></span>
 															@endif
 														@endif
+						{{--
+														@if($match['sports_id']==1)
+									<span class=""><a href="javascript:void(0)" class="text-primary" data-toggle="modal" data-target="#match_summary">Match Summary</a></span>
+
+							      @include('tournaments.match_stats.match_summary')
+								@endif
+						--}}
 
 
 													</div>

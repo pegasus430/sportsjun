@@ -225,19 +225,18 @@
 									<br>
 									@if(!empty($add_score_link[$match['id']]))
 										@if($add_score_link[$match['id']]==trans('message.schedule.viewscore'))
-											<span class="tournament_score"><a href="{{ url('match/scorecard/view/'.$match['id']) }}">{{$add_score_link[$match['id']]}}</a></span>
-
-											@if($match['sports_id']==1)
-												<span class=""><a href="javascript:void(0)" class="text-primary">Match Summary</a></span>
-
-										      @include('tournaments.match_stats.match_summary')
-											@endif
+											<span class="tournament_score"><a href="{{ url('match/scorecard/view/'.$match['id']) }}">{{$add_score_link[$match['id']]}}</a></span>										
 										@else
 											<span class="tournament_score"><a href="{{ url('match/scorecard/edit/'.$match['id']) }}">{{$add_score_link[$match['id']]}}</a></span>
 										@endif
 
+								{{--
+														@if($match['sports_id']==1)
+									<span class=""><a href="javascript:void(0)" class="text-primary" data-toggle="modal" data-target="#match_summary">Match Summary</a></span>
 
-									
+							      @include('tournaments.match_stats.match_summary')
+								@endif
+						--}}							
 
 
 
