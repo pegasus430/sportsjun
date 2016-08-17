@@ -78,15 +78,34 @@
 									<br>
 					@if(isset($schedule['winner_text']))
                                   <a href="{{ url('match/scorecard/edit/'.$schedule['id']) }}">{{$schedule['winner_text']}}</a>
-          @else
-              @if($isOwner)
-                                          <a href="javascript:void(0)" id="scheduleEdit_{{$schedule['id']}}"  onclick="editMatchSchedule({{$schedule['id']}},1,'','myModal')">Edit</a>
-              @endif
+                                 </div>
+      
           @endif
 
 
-										
+								<div class="col-md-3 ">
+
+						@if(!empty($match['player_of_the_match']))
+								<div class='visible-xs-block'>
+									<hr>
 								</div>
+								<center><h5 class=' tour-title'>Player of the Match</h5></center>
+								<br>
+									<?php $player_of_the_match=Helper::getUserDetails($match['player_of_the_match']);
+									?>
+								{!! Helper::Images($player_of_the_match->url, 'user_profile',array('class'=>'img-circle img-border img-responsive lazy','height'=>52,'width'=>52) )!!}
+								
+								<center><br><a href='/editsportprofile/{{$player_of_the_match->id}}'>{{$player_of_the_match->name}}</a>
+											
+							    </center>
+					
+					 	@endif							
+								
+								</div>
+
+
+										
+								
 								
 								
 
@@ -153,7 +172,11 @@
 							  @endif
 
 
+
+
               @else
+
+
    
                                     @endif
                  </div>

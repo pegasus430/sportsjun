@@ -36,6 +36,7 @@
                 <?php $table_count = 0;?>
 				@if(!empty($team_details[$group->id]))
 						<?php $table_count=count($team_details[$group->id]);?>	
+
                         @endif
 					<div class="tab-pane fade active in" id="teams_{{ $group->id }}">
                     <div class="action-panel group-multiselect">
@@ -69,9 +70,14 @@
                                     <thead class="thead">
                                     <tr>
                                     <th>Name</th>
-                                    <th>Matches</th>
+                                    <th>Mat</th>
                                     <th>Won</th>
                                     <th>Lost</th>
+                                    <th>Draw</th>
+                                @if(in_array($sports_id, [4,11]))                               		
+                                    <th>GF</th>
+                                    <th>GA</th>
+                                @endif
                                     <th>Points</th>
                                     @if ( $tour['sports_id'] == 1 )
                                     <th>Net Run Rate</th>
@@ -83,11 +89,21 @@
                                 @if(!empty($team_details[$group->id]))
                                 <?php $table_count=count($team_details[$group->id]);?>	
                                     @foreach($team_details[$group->id] as $team)
+
+               <?php $match_count_details=Helper::getMatchGroupDetails($tournament_id, $group->id, $team['team_id']);?>
+                                    
                                     <tr id="row_{{$team['id']}}" class="group_row_{{$group->id}}">
                                     <td>{{ $team['name'] }}</td>
                                     <td>{{ !empty($match_count[$group->id][$team['team_id']])?$match_count[$group->id][$team['team_id']]:0 }}</td>
                                     <td>{{ !empty($team['won'])?$team['won']:0 }}</td>
                                     <td>{{ !empty($team['lost'])?$team['lost']:0 }}</td>
+
+                           		    <td>{{$match_count_details['tie']}}</td>
+                                @if(in_array($sports_id, [4,11]))                               		
+                                    <td>{{$match_count_details['gf']}}</td>
+                                    <td>{{$match_count_details['ga']}}</td>                                   
+                                @endif
+
                                     <td>{{ !empty($team['points'])?$team['points']:0 }}</td>
                                     @if ( $tour['sports_id'] == 1 )
                                     <td>{{ !empty($net_run_rate[$team['team_id']])?$net_run_rate[$team['team_id']]:"--" }}</td>
@@ -96,7 +112,13 @@
                                     </tr>	
                                     @endforeach
                                 @else
-                                    <tr id="no_teams_{{$group->id}}"><td colspan="6">{{trans('message.tournament.empty_teams') }}</td></tr>
+                                    <tr id="no_teams_{{$group->id}}">
+			                                @if(in_array($sports_id, [4,11]))                               		
+			                                    <td colspan="9">
+			                                @else
+			                                	<td colspan="7">
+                                			@endif
+                                    	{{trans('message.tournament.empty_teams') }}</td></tr>
                                 @endif
                                 </tbody>
                                 </table>
@@ -117,6 +139,7 @@
                         <div class="clearfix"></div>
 						<!--<h4>matches</h4>-->
 						@if(!empty($match_details[$group->id]))
+
 						<div class="schedule_table_new">
 							<div>
 							<?php $i=1;?>
@@ -175,8 +198,8 @@
                                 </div>
 								@endif	
 								</div>
-								<div class="col-md-7 schedule_new_team_txt">
-									<div class='col-md-8 col-sm-8'>
+								<div class="col-md-6 schedule_new_team_txt">
+									
                                 	<h4 class="tour-title">
                                     	{{ $team_name_array[$match['a_id']] }}
                                         {{ 'VS' }}                                        
@@ -220,44 +243,33 @@
 
 									@endif	
 
-									</div>
-
-									<div class='col-md-4 col-sm-4'>									
-
-										@if(!empty($match['player_of_the_match']))
-										<div class='visible-xs-block'>
-											<hr>
-										</div>
-										<center><h5 class=' tour-title'>Player of the Match</h5></center>
-										<br>
-											<?php $player_of_the_match=Helper::getUserDetails($match['player_of_the_match']);
-											?>
-								{!! Helper::Images($player_of_the_match->url, 'user_profile',array('class'=>'img-circle img-border img-responsive lazy','height'=>52,'width'=>52) )!!}
-								
-								<center><br><a href='/editsportprofile/{{$player_of_the_match->id}}'>{{$player_of_the_match->name}}</a>
-								
-
-												<br>
-											
-							    </center>
-										@endif
-
-									</div>
-
+									
 
 										
 								</div>
 								
 								
 	
-								<div class="col-md-2 schedule_new_team_edit">
-									<div class="edit-link pull-right visible-xs-block" onclick="editMatchSchedule({{$match['id']}},1,'','myModal')"><i class="fa fa-pencil"></i>			
-									 {{ trans('message.tournament.fields.edit_schedule') }}
-									 </div>
+								<div class="col-md-3 schedule_new_team_edit">
 
-									 <div class="edit-link pull-right hidden-xs" onclick="editMatchSchedule({{$match['id']}},1,'','myModal')"><i class="fa fa-pencil"></i>			
-									 {{ trans('message.tournament.fields.edit_schedule_short') }}
-									 </div>
+						@if(!empty($match['player_of_the_match']))
+								<div class='visible-xs-block'>
+									<hr>
+								</div>
+								<center><h5 class=' tour-title'>Player of the Match</h5></center>
+								<br>
+									<?php $player_of_the_match=Helper::getUserDetails($match['player_of_the_match']);
+									?>
+								{!! Helper::Images($player_of_the_match->url, 'user_profile',array('class'=>'img-circle img-border img-responsive lazy','height'=>52,'width'=>52) )!!}
+								
+								<center><br><a href='/editsportprofile/{{$player_of_the_match->id}}'>{{$player_of_the_match->name}}</a>
+											
+							    </center>
+						@else
+							<div class="edit-link pull-right" onclick="editMatchSchedule({{$match['id']}},1,'','myModal')"><i class="fa fa-pencil"></i>			
+							 {{ trans('message.tournament.fields.edit_schedule') }}
+							 </div>	
+					 	@endif							
 								
 								</div>
 							</div>
@@ -428,6 +440,11 @@
                                  '<td>' + item.match_id + '</td>'+
                                  '<td>' + item.won + '</td>'+
                                  '<td>' + item.lost + '</td>'+
+                                 '<td> </td>'+
+                              @if(in_array($sports_id, [4,11]))
+                                 '<td> </td>'+
+                                 '<td> </td>'+
+                              @endif
                                  '<td>' + item.points + '</td>'+
                                  '<td></td>'+
                                  '<td><a href="#" class="btn btn-danger btn-circle btn-sm" onclick="deleteTeam('+tournament_id+','+item.tournament_group_id+','+item.id+','+item.team_id+');"><i class="fa fa-remove"></i></a></td>'+

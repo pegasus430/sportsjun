@@ -2057,31 +2057,101 @@ class Helper {
     }
 
 
-    public static function getRoundStage($tournament_id, $key){
-        
+    public static function getRoundStage($tournament_id, $round_number){
 
-        $matches=MatchSchedule::whereTournamentId($tournament_id)->where('tournament_round_number', $key)->get();
-        $count=$matches->count();
+        $tournaments=Tournaments::find($tournament_id);
+        $count=$tournaments->final_stage_teams;
 
-            if($count==1){ 
-                if($matches[0]['a_id']!='' && $matches[0]['b_id']){
-                   return 'FINAL';
+        switch ($count) {
+            case ($count<=2):
+                    if($round_number==1) return 'FINAL';
+                    else return '';                
+            break;
+            case ($count>2 && $count<=4  ):
+                    if($round_number==1) return 'SEMI FINAL';
+                    else if($round_number==2) return 'FINAL';
+                    else return '';                
+            break;
+            case ($count>4 && $count<=8  ):
+                    if($round_number==1) return 'QUARTER FINAL';
+                    else if($round_number==2) return 'SEMI FINAL';
+                    else if($round_number==3) return 'FINAL';
+                    else return '';                
+            break;
+             case ($count>8 && $count<=16  ):
+                    if($round_number==1) return 'ROUND 1';
+                    else if($round_number==2) return 'QUARTER FINAL';
+                    else if($round_number==3) return 'SEMI FINAL';
+                    else if($round_number==4) return 'FINAL';
+                    else return '';                
+            break;
+             case ($count>8 && $count<=16  ):
+                    if($round_number==1) return 'ROUND 1';
+                    else if($round_number==2) return 'ROUND 2';
+                    else if($round_number==3) return 'QUARTER FINAL';
+                    else if($round_number==4) return 'SEMI FINAL';
+                    else if($round_number==5) return 'FINAL';
+                    else return '';                
+            break;
+            
+            default:
+                # code...
+                break;
+        }
+
+      
+    }
+
+    public static function getMatchGroupDetails($tournament_id, $tournament_group_id, $team_id){
+
+        $details=[];
+        $details['gf']=0;
+        $details['ga']=0;
+        $details['tie']=0;
+        $tournament=Tournaments::find($tournament_id);
+        $sports_id=$tournament->sports_id;
+        $matches=MatchSchedule::whereTournamentId($tournament_id)
+                        ->whereTournamentGroupId($tournament_group_id)
+                        ->where(function($query) use ($team_id){
+                                $query->where('a_id','=',$team_id)
+                                      ->orWhere('b_id','=', $team_id);
+                                  });
+        $match_models=$matches->get();
+
+            foreach ($match_models as $key => $value) {
+                if($value->is_tied==1) $details['tie']++;
+            }
+       
+        switch ($sports_id) {
+
+            case ($sports_id==4||$sports_id==11):
+            //die(json_encode($team_id));
+            foreach ($match_models as $key => $match) {
+                if($match->a_id==$team_id){         //sets the home and againts team
+                    $gf_team=$match->a_id; 
+                    $ga_team=$match->b_id;                 
                 }
-                //else return 'WINNER';                                        
-                
-            }
-            else if($count==2){
-                return 'SEMI FINAL';
-            }
-            else if($count<=4){
-                return 'QUARTER FINAL';
-            }
-             else if($count<=8){
-                return 'ROUND 1';
+                elseif ($match->b_id==$team_id) {
+                    $gf_team=$match->b_id; 
+                    $ga_team=$match->a_id;
+                }
+                $match_details=json_decode($match->match_details);
+                        if(!empty($match->match_details)){
+                            $details['gf']+=$match_details->{$gf_team}->goals;
+                            $details['ga']+=$match_details->{$ga_team}->goals;
+                        }
+
             }
 
-            else return '';
 
+                break;
+            
+            default:
+               
+                break;
+        }
+
+        return $details;
     }
 
    
