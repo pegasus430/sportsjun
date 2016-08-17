@@ -5,12 +5,14 @@ if(!empty($matchScheduleCount) && $matchScheduleCount>0)
 ?>
 
 
+
+
 <div class="row">
     <div class="col-sm-12">
         <div class="section">
-            <label class="form_label">{{ trans('message.tournament.fields.name') }}<span  class='required'>*</span></label>
+            <label class="form_label">TOURNAMENT - EVENT NAME <span  class='required'>*</span></label>
         <label class="field prepend-icon">
-        {!! Form::text('name', null, array('required','class'=>'gui-input','placeholder'=> trans('message.tournament.fields.name') )) !!}
+        {!! Form::text('name', $tournament->name, array('required','class'=>'gui-input','placeholder'=> trans('message.tournament.fields.name') )) !!}
         @if ($errors->has('name')) <p class="help-block">{{ $errors->first('name') }}</p> @endif
         <label for="firstname" class="field-icon"><i class="fa fa-trophy"></i></label>  
         </label>

@@ -427,6 +427,7 @@
                 $(".modal-body #player_type").val(parsed_data.scheduleData.match_category);
                 $(".modal-body #match_type").val(parsed_data.scheduleData.match_type);
                 $(".modal-body #address").val(parsed_data.scheduleData.address);
+                 $(".modal-body #country_id").val(parsed_data.scheduleData.country_id);
                 $(".modal-body #state_id").val(parsed_data.scheduleData.state_id);
                 $(".modal-body #city_id").val(parsed_data.scheduleData.city_id);
                 $(".modal-body #zip").val(parsed_data.scheduleData.zip); 

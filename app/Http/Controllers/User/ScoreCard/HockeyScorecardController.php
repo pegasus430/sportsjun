@@ -697,7 +697,7 @@ class HockeyScorecardController extends parentScoreCardController
             $sm_id=$sm->id;
             $sm_status=$sm->playing_status;
 
-            if(isset($request["substitute_a_".$sm_id]) && ($request["substitute_a_".$sm_id]=='on' && $sm->has_substituted==0)){
+            if(isset($request["substitute_a_".$sm_id]) && $request["substitute_a_".$sm_id]=='on'){
                 if($sm_status=='P'){
                     $sm->playing_status='S';
                 }
