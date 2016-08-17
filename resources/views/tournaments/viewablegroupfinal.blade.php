@@ -19,15 +19,27 @@
 @if(count($roundArray))
         @foreach($roundArray as $key=>$round)
             @if($round==1)
-          @include('tournaments.sub_match_schedules')
-     @else 
+              <div class="col-sm-12">
+                <div class="round-{{Helper::convert_number_to_words($round)}}">
+                    <div class="round"><p>    {{Helper::getRoundStage($tournament_id, $key)}} </p></div>
+                   @include('tournaments.sub_match_schedules')
+                </div>
+              </div>
+           @else 
 
-           @if(count($bracketTeamArray))
-               @foreach($bracketTeamArray as $brk => $bracketTeam)                    
-                  <?php $firstRoundBracketArray=$bracketTeam;?>
-                  @include('tournaments.sub_match_schedules')
-               @endforeach
-           @endif
+            <div class="col-sm-12">
+                    <div class="round-{{Helper::convert_number_to_words($round)}}">
+                        <div class="round"><p>    {{Helper::getRoundStage($tournament_id, $key)}} </p></div>
+
+               @if(count($bracketTeamArray))
+                   @foreach($bracketTeamArray as $brk => $bracketTeam)                    
+                      <?php $firstRoundBracketArray=$bracketTeam;?>
+                      @include('tournaments.sub_match_schedules')
+                   @endforeach
+               @endif
+
+              </div>
+            </div>
   
      @endif
 @endforeach

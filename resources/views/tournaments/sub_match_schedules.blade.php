@@ -1,6 +1,4 @@
-     <div class="col-sm-12">
-            <div class="round-{{Helper::convert_number_to_words($round)}}">
-                <div class="round"><p>    {{Helper::getRoundStage($tournament_id, $key)}} </p></div>
+
 @if(count($firstRoundBracketArray))
   @foreach($firstRoundBracketArray as $key => $schedule)
   	    @if((isset($schedule['tournament_round_number']) && $schedule['tournament_round_number']==$round) && isset($schedule['id'])  )
@@ -188,5 +186,4 @@
                  @endforeach
 
                  @endif
-            </div>
-        </div>
+        
