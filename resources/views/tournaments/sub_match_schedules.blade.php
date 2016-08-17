@@ -182,8 +182,7 @@
 
 
         @endif
-                 <p><p>&nbsp;</p>
-                 @endforeach
+                                 @endforeach
 
                  @endif
         
