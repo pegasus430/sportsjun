@@ -2,12 +2,13 @@
 @if(count($firstRoundBracketArray))
   @foreach($firstRoundBracketArray as $key => $schedule)
   	    @if((isset($schedule['tournament_round_number']) && $schedule['tournament_round_number']==$round) && isset($schedule['id'])  )
-                 	<div class="col-sm-12 match_set" style="">             	
-
+                <div class="col-sm-12 match_set" style="">             	
+                  
                        <?php $match=Helper::getMatchDetails($schedule['id']); ?>
 
 
       @if(($match['a_id']!='' && $match['b_id']) ) 
+      		<br>
 				@if($match['schedule_type']=='team' )
 							<div class="row">
 						
@@ -182,7 +183,8 @@
 
 
         @endif
-                                 @endforeach
+              
+                 @endforeach
 
                  @endif
         
