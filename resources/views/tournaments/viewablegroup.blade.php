@@ -30,6 +30,11 @@
 											<th>Matches</th>
 											<th>Won</th>
 											<th>Lost</th>
+								    <th>Draw</th>
+                                @if(in_array($sports_id, [4,11]))                               		
+                                    <th>GF</th>
+                                    <th>GA</th>
+                                @endif
 											<th>Points</th>
 											@if ( $tour['sports_id'] == 1 )
 												<th>Net Run Rate</th>
@@ -38,11 +43,17 @@
 										</thead>
 										<tbody>
 										@foreach($team_details[$group->id] as $team)
+				 <?php $match_count_details=Helper::getMatchGroupDetails($tournament_id, $group->id, $team['team_id']);?>
 											<tr>
 												<td>{{ $team['name'] }}</td>
 												<td>{{ !empty($match_count[$group->id][$team['team_id']])?$match_count[$group->id][$team['team_id']]:0 }}</td>
 												<td>{{ !empty($team['won'])?$team['won']:0 }}</td>
 												<td>{{ !empty($team['lost'])?$team['lost']:0 }}</td>
+									<td>{{$match_count_details['tie']}}</td>
+                                @if(in_array($sports_id, [4,11]))                               		
+                                    <td>{{$match_count_details['gf']}}</td>
+                                    <td>{{$match_count_details['ga']}}</td>
+                                @endif
 												<td>{{ !empty($team['points'])?$team['points']:0 }}</td>
 												@if ( $tour['sports_id'] == 1 )
 													<td>{{ !empty($net_run_rate[$team['team_id']])?$net_run_rate[$team['team_id']]:"--" }}</td>
@@ -56,18 +67,30 @@
 								@endif
 							</div>
 						</div>
-						<div class="tab-pane fade table-responsive" id="matches_{{ $group->id }}">
+						<div class="tab-pane fade " id="matches_{{ $group->id }}">
+						<div class="action-panel">
 							<center><h4 class="mtc_details">Match Details</h4></center>
-							@if(!empty($match_details[$group->id]))
-								<table class="table table-striped">
-									<tbody>
+							@if(!empty($match_details[$group->id]))	
+									<?php $i=0;?>				
 									@foreach($match_details[$group->id] as $match)
+
+							<?php 
+							$i++;
+								$class='schedule_new_req_nor';	
+								if($i % 2 == 0)
+								{
+									$class='schedule_new_req_alt';	
+								}else
+								{
+									
+									$class='schedule_new_req_nor';	
+								}
+							?>	
 										@if($match['a_id']!='' && $match['b_id'])
 											@if($match['schedule_type']=='team')
-												<tr>
+												<div class="row {{$class}}">
 
-
-													<td>
+													<div class='col-md-3 schedule_new_team_img'>
 													@if(!empty($team_logo[$match['a_id']]))
 														@if($team_logo[$match['a_id']]['url']!='')
 															<!--<img class="fa fa-user fa-fw fa-2x" height="42" width="42" src="{{ url('/uploads/teams/'.$team_logo[$match['a_id']]['url']) }}" onerror="this.onerror=null;this.src='{{ asset('/images/default-profile-pic.jpg') }}';">-->
@@ -105,8 +128,8 @@
 																{!! Helper::Images('default-profile-pic.jpg','images',array('class'=>'img-circle img-border img-responsive lazy','height'=>52,'width'=>52) )!!}
 															</div>
 														@endif
-													</td>
-													<td>
+													</div>
+													<div class='col-md-6 schedule_new_team_txt'>
 														<h4 class="tour-title">
 															{{ $team_name_array[$match['a_id']] }}
 															{{ 'VS' }}
@@ -136,21 +159,46 @@
 																<span class="tournament_score"><a href="{{ url('match/scorecard/edit/'.$match['id']) }}">{{$add_score_link[$match['id']]}}</a></span>
 															@endif
 														@endif
+						{{--
+														@if($match['sports_id']==1)
+									<span class=""><a href="javascript:void(0)" class="text-primary" data-toggle="modal" data-target="#match_summary">Match Summary</a></span>
+
+							      @include('tournaments.match_stats.match_summary')
+								@endif
+						--}}
 
 
-													</td>
+													</div>
 
 
 
-													<td>
+													<div class='col-md-3 hidden-xs schedule_new_team_edit'>
+																						
 
-													</td>
+										@if(!empty($match['player_of_the_match']))
+										<div class='visible-xs-block'>
+											<hr>
+										</div>
+										<center><h5 class=' tour-title'>Player of the Match</h5></center>
+										<br>
+											<?php $player_of_the_match=Helper::getUserDetails($match['player_of_the_match']);
+											?>
+								{!! Helper::Images($player_of_the_match->url, 'user_profile',array('class'=>'img-circle img-border img-responsive lazy','height'=>52,'width'=>52) )!!}
+								
+								<center><br><a href='/editsportprofile/{{$player_of_the_match->id}}'>{{$player_of_the_match->name}}</a>
+							         @endif
+								
 
-												</tr>
+												<br>
+											
+							    </center>
+													</div>
+
+												</div>
 											@else
 
-												<tr>
-													<td>
+												<div class='row'>
+													<div class='col-md-3'>
 
 													@if($user_profile[$match['a_id']]['url']!='')
 														<!--<img class="fa fa-user fa-fw fa-2x" height="42" width="42" src="{{ url('/uploads/user_profile/'.$user_profile[$match['a_id']]['url']) }}" onerror="this.onerror=null;this.src='{{ asset('/images/default-profile-pic.jpg') }}';">-->
@@ -181,9 +229,9 @@
 
 														@endif
 
-													</td>
+													</div>
 
-													<td>
+													<div class='col-md-6'>
 														<h4 class="tour-title">
 															{{ $user_name[$match['a_id']] }}
 															{{ 'VS' }}
@@ -204,22 +252,22 @@
 															@endif
 
 														@endif
-													</td>
+													</div>
 
 
 
-													<td>
+													<div class="col-md-3">
+												
 
-													</td>
-												</tr>
+													</div>>
+												</div>>
 
 											@endif
 										@else
 											No Scheduled Matches.
 										@endif
 									@endforeach
-									</tbody>
-								</table>
+									
 							@else
 								No Scheduled Matches.
 							@endif

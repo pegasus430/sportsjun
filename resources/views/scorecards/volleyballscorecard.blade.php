@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 @section('content')
 	<style type="text/css">
@@ -929,39 +930,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 					<div class='row'>
 						<form  onsubmit="return confirmSquad()" >
 							{!!csrf_field()!!}
-							<div class="table-responsive">
-								<center class='table_head'> Game Preferences</center>
-								<hr>
-								<div class='col-sm-12'>								
-									<div class='row'>
-										<div class='col-sm-4'>
-											Number of Quarters
-										</div>
-										<div class="col-sm-5">
-											<input type='text' required="" placeholder="eg. 2" name='number_of_quarters' id='number_of_quarters'>
-										</div>
-									</div>
-									<br>
-									<div class='row'>
-										<div class='col-sm-4'>
-											Each Quarter time
-										</div>
-										<div class="col-sm-5">
-											<input type='text' required="" placeholder="eg. 30" name='quarter_time' id='quarter_time'>
-										</div>
-									</div>
-
-									<br>
-									<div class='row'>
-										<div class='col-sm-4'>
-											Player max fouls
-										</div>
-										<div class="col-sm-5">
-											<input type='text' required="" placeholder="eg. 3" name='max_fould' id='max_fouls'>
-										</div>
-									</div>
-
-									<br>
+							
 
 									<div class="row">
 							<center> <button class='btn btn-primary' type="submit" >Save</button></center>

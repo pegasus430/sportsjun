@@ -191,11 +191,11 @@ class ScoreCardController extends Controller {
 						$hockey= new ScoreCard\HockeyScorecardController;
 					return $hockey->hockeyScoreCard($match_data,$sportsDetails,$tournamentDetails);
 				}
-				else if(strtolower($sport_name)==strtolower('volleyball'))
-				{
-					$volleyball = new ScoreCard\VolleyballScoreCardController;
-					return $volleyball->volleyballScoreCard($match_data,$sportsDetails,$tournamentDetails);
-				}
+				// else if(strtolower($sport_name)==strtolower('volleyball'))
+				// {
+				// 	$volleyball = new ScoreCard\VolleyballScoreCardController;
+				// 	return $volleyball->volleyballScoreCard($match_data,$sportsDetails,$tournamentDetails);
+				// }
 				else if(strtolower($sport_name)==strtolower('basketball'))
 				{
 					$basketball = new ScoreCard\BasketballScoreCardController;
@@ -554,6 +554,8 @@ class ScoreCardController extends Controller {
 						$sportName = Sport::where('id',$matchScheduleDetails['sports_id'])->pluck('sports_name');
 						$this->insertPlayerStatistics($sportName,$match_id);
 
+						Helper::sendEmailPlayers($matchScheduleDetails, 'Tennis');	
+
 						//notification code
 					}
 
@@ -569,6 +571,8 @@ class ScoreCardController extends Controller {
 				{
 					$sportName = Sport::where('id',$matchScheduleDetails['sports_id'])->pluck('sports_name');
 					$this->insertPlayerStatistics($sportName,$match_id);
+
+					Helper::sendEmailPlayers($matchScheduleDetails, 'Tennis');	
 
 					//notification code
 				}
@@ -845,6 +849,8 @@ class ScoreCardController extends Controller {
 						$sportName = Sport::where('id',$matchScheduleDetails['sports_id'])->pluck('sports_name');
 						$this->insertPlayerStatistics($sportName,$match_id);
 
+						Helper::sendEmailPlayers($matchScheduleDetails, 'Table Tennis');	
+
 						//notification code
 					}
 
@@ -862,6 +868,7 @@ class ScoreCardController extends Controller {
 					$this->insertPlayerStatistics($sportName,$match_id);
 
 					//notification code
+					Helper::sendEmailPlayers($matchScheduleDetails, 'Table Tennis');	
 				}
 			}
 			else
@@ -1589,6 +1596,17 @@ class ScoreCardController extends Controller {
 		$match_report  = !empty(Request::get('match_report')) ? Request::get('match_report') : NULL;
 		$player_of_the_match  = !empty(Request::get('player_of_the_match')) ? Request::get('player_of_the_match') : NULL;
 
+		$match_model=MatchSchedule::find($match_id);
+		$team_a_model=Team::find($team_a_id);
+		$team_b_model=Team::find($team_b_id);
+
+		if(!is_null($team_a_model)){
+			$team_a_name=$team_a_model->name;
+		}
+		if(!is_null($team_b_model)){
+			$team_b_name=$team_b_model->name;
+		}
+		
 		//toss won by
 		$tossWonBy = !empty(Request::get('toss_won_by'))?Request::get('toss_won_by'):NULL; //toss won by team id
 		$toss_won_team_name = !empty(Request::get('toss_won_team_name'))?Request::get('toss_won_team_name'):NULL; //toss won by team id
@@ -2012,6 +2030,8 @@ class ScoreCardController extends Controller {
 						$sportName = Sport::where('id', $matchScheduleDetails['sports_id'])->pluck('sports_name');
 						$this->insertPlayerStatistics($sportName, $match_id);
 
+						Helper::sendEmailPlayers($matchScheduleDetails, 'Cricket');	
+
 						//notification code
 					}
 				}
@@ -2040,6 +2060,8 @@ class ScoreCardController extends Controller {
 				{
 					$sportName = Sport::where('id', $matchScheduleDetails['sports_id'])->pluck('sports_name');
 					$this->insertPlayerStatistics($sportName, $match_id);
+
+					Helper::sendEmailPlayers($matchScheduleDetails, 'Cricket');	
 
 					//notification code
 				}
@@ -3152,11 +3174,11 @@ class ScoreCardController extends Controller {
 					$squash = new ScoreCard\SquashScoreCardController;
 					return $squash->squashScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
-				else if(strtolower($sport_name)==strtolower('volleyball'))
-				{
-					$squash = new ScoreCard\VolleyballScoreCardController;
-					return $squash->volleyballScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
-				}
+				// else if(strtolower($sport_name)==strtolower('volleyball'))
+				// {
+				// 	$squash = new ScoreCard\VolleyballScoreCardController;
+				// 	return $squash->volleyballScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
+				// }
 				else if(strtolower($sport_name)==strtolower('basketball'))
 				{
 					$squash = new ScoreCard\BasketballScoreCardController;
@@ -3217,11 +3239,11 @@ class ScoreCardController extends Controller {
 					$squash = new ScoreCard\SquashScoreCardController;
 					return $squash->squashScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
-				else if(strtolower($sport_name)==strtolower('volleyball'))
-				{
-					$squash = new ScoreCard\VolleyballScoreCardController;
-					return $squash->volleyballScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
-				}
+				// else if(strtolower($sport_name)==strtolower('volleyball'))
+				// {
+				// 	$squash = new ScoreCard\VolleyballScoreCardController;
+				// 	return $squash->volleyballScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
+				// }
 				else if(strtolower($sport_name)==strtolower('basketball'))
 				{
 					$squash = new ScoreCard\BasketballScoreCardController;
@@ -3822,7 +3844,7 @@ class ScoreCardController extends Controller {
 			$sm_id=$sm->id;
 			$sm_status=$sm->playing_status;
 
-			if(isset($request["substitute_a_".$sm_id]) && ($request["substitute_a_".$sm_id]=='on' && $sm->has_substituted==0)){
+			if(isset($request["substitute_a_".$sm_id]) && $request["substitute_a_".$sm_id]=='on' ){
 				if($sm_status=='P'){
 					$sm->playing_status='S';
 				}

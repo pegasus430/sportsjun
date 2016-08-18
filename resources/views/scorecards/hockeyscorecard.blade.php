@@ -911,7 +911,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 														{!! $team_a_hockey['has_substituted']==1?"<i class='fa fa-share'></i>":''!!}
 													</td>
 													<td colspan="1" >
-														<input type='checkbox' name="substitute_a_{{$team_a_hockey['id']}}" {{$team_a_hockey['has_substituted']==1?'disabled':''}} >
+														<input type='checkbox' name="substitute_a_{{$team_a_hockey['id']}}" {{$team_a_hockey['has_substituted']==1?'':''}} >
 													</td>
 												</tr>
 											@endif
@@ -936,7 +936,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 														{!!$team_a_hockey['has_substituted']==1?"<i class='fa fa-reply'></i> {$team_a_hockey['time_substituted']} \"":'' !!}
 													</td>
 													<td colspan="1" >
-														<input type='checkbox' name="substitute_a_{{$team_a_hockey['id']}}" {{$team_a_hockey['has_substituted']==1?'disabled':''}}>
+														<input type='checkbox' name="substitute_a_{{$team_a_hockey['id']}}" {{$team_a_hockey['has_substituted']==1?'':''}}>
 													</td>
 												</tr>
 											@endif
@@ -995,7 +995,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 														{!! $team_a_hockey['has_substituted']==1?"<i class='fa fa-share'></i> {$team_a_hockey['time_substituted']}\"":'' !!}
 													</td>
 													<td colspan="1" >
-														<input type='checkbox' name="substitute_a_{{$team_a_hockey['id']}}" {{$team_a_hockey['has_substituted']==1?'disabled':''}}>
+														<input type='checkbox' name="substitute_a_{{$team_a_hockey['id']}}" {{$team_a_hockey['has_substituted']==1?'':''}}>
 													</td>
 												</tr>
 											@endif
@@ -1020,7 +1020,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 														{!! $team_a_hockey['has_substituted']==1?"<i class='fa fa-reply'></i>":'' !!}
 													</td>
 													<td colspan="1" >
-														<input type='checkbox' name="substitute_a_{{$team_a_hockey['id']}}" {{$team_a_hockey['has_substituted']==1?'disabled':''}}>
+														<input type='checkbox' name="substitute_a_{{$team_a_hockey['id']}}" {{$team_a_hockey['has_substituted']==1?'':''}}>
 													</td>
 												</tr>
 											@endif
