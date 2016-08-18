@@ -1596,6 +1596,17 @@ class ScoreCardController extends Controller {
 		$match_report  = !empty(Request::get('match_report')) ? Request::get('match_report') : NULL;
 		$player_of_the_match  = !empty(Request::get('player_of_the_match')) ? Request::get('player_of_the_match') : NULL;
 
+		$match_model=MatchSchedule::find($match_id);
+		$team_a_model=Team::find($team_a_id);
+		$team_b_model=Team::find($team_b_id);
+
+		if(!is_null($team_a_model)){
+			$team_a_name=$team_a_model->name;
+		}
+		if(!is_null($team_b_model)){
+			$team_b_name=$team_b_model->name;
+		}
+		
 		//toss won by
 		$tossWonBy = !empty(Request::get('toss_won_by'))?Request::get('toss_won_by'):NULL; //toss won by team id
 		$toss_won_team_name = !empty(Request::get('toss_won_team_name'))?Request::get('toss_won_team_name'):NULL; //toss won by team id
