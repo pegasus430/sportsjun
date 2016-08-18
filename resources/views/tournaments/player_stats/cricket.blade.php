@@ -36,7 +36,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($player_standing as $statistic)  
+            @foreach($player_standing['batting'] as $statistic)  
 
         @if(!empty($statistic->totalruns))
             <tr>
@@ -98,7 +98,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($player_standing as $statistic)  
+            @foreach($player_standing['bowling'] as $statistic)  
 
        @if(!empty($statistic->ecomony))
             <tr>

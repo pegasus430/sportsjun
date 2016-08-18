@@ -197,6 +197,10 @@ return [
 	'deletefail' => 'Failed To Deactivate Organization.',
 	'activate' => 'Organization Activated Successfully.',
 	'activatefail' => 'Failed To Activate Organization.',
+	'tournaments' => [
+		'no_player_stats' => 'No team group available',
+
+	],
 	'updatefail' => 'Failed To Update Organization.',
 		'fields' => [
 		'userid' => 'User Id',
@@ -275,6 +279,7 @@ return [
 		'tournamentdetails'=>'Tournament Details',
 		'editheading' => 'Edit Tornaments',
 		'edit_schedule' => 'Edit Schedule',
+		'edit_schedule_short' => 'Edit',
 		'gallery' => 'Choose Tournament Gallery Pics',
 		'schedule_type' =>'Schedule Type',
 		'manager_name' =>'Manager Name',
