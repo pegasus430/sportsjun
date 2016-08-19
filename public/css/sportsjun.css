@@ -2965,3 +2965,9 @@ div#tournament_details_cover img {
    padding: 0 !important;
    margin: 0 !important;
 }
+
+/* ------------------------------------ NEW CSS BY YM --------------------*/
+.dark-border{
+    border: inset 1px #000000;
+    padding: 5px;
+}

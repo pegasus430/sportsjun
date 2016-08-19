@@ -73,7 +73,7 @@
 							<div class="clearfix"></div>
 
 							@if(!empty($match_details[$group->id]))	
-						<div class="pull-left half-width col-xs-12 col-sm-4 "> <input class='gui-input full-width form-control' placeholder="filter match e.g arjun soccer" onkeyup="filterDiv(this, {{$group->id}})"></div>
+						<div class="pull-left half-width col-xs-12 col-sm-4 "> <input class='full-width form-control dark-border' placeholder="filter match e.g team name, date" onkeyup="filterDiv(this, {{$group->id}})"></div>
 						<div class="clearfix"></div>
 							<br>
 									<?php $i=0;?>				

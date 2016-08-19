@@ -136,7 +136,7 @@
 					<div class="tab-pane fade" id="matches_{{ $group->id }}">
                     <div class="action-panel">
 
-                    	<div class="pull-left half-width col-xs-12 col-sm-6"> <input class='gui-input full-width form-control' placeholder="filter match e.g arjun soccer" onkeyup="filterDiv(this, {{$group->id}})"></div>
+                    	<div class="pull-left half-width col-xs-12 col-sm-6"> <input class='dark-border full-width form-control' placeholder="filter match e.g team name, date" onkeyup="filterDiv(this, {{$group->id}})"></div>
                     
 						<div class="btn btn-event pull-right" onclick="schedulegroupmatches({{ $group->id }})"><i class="fa fa-calendar"></i> {{ trans('message.schedule.fields.schedulematch') }}</div>
                         <div class="clearfix"></div>
