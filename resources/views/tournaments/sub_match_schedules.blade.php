@@ -10,7 +10,7 @@
       @if(($match['a_id']!='' && $match['b_id']) ) 
       		<br>
 				@if($match['schedule_type']=='team' )
-							<div class="row">
+							<div class="row row_to_filter_">
 						
 								<div class="col-md-3 schedule_new_team_img">
 					@if(!empty($team_logo[$match['a_id']]))
@@ -51,15 +51,16 @@
                                 </div>
 					@endif	
 								</div>
-								<div class="col-md-6 schedule_new_team_txt">
+								<div class="col-md-6 col-sm-8 schedule_new_team_txt">
                                 	<h4 class="tour-title">
                                     	{{ $team_name_array[$match['a_id']] }}
                                         {{ 'VS' }}                                        
                                         {{ $team_name_array[$match['b_id']] }}
                                     </h4>
-									
-									<span class="event-date">{{ Helper::displayDateTime($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""), 1) }}</span>
+                                    <br>									
+									<span class="match-detail-score">{{ Helper::displayDateTime($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""), 1) }}</span>
 									<span class='sports_text'>{{ isset($sport_name)?$sport_name:'' }}</span>
+									
 					@if($match['match_type']!='other')
 											<span class='match_type_text'>({{ $match['match_type']=='odi'?strtoupper($match['match_type']):ucfirst($match['match_type']) }}, {{ucfirst($match['match_category'])}})</span>
 					@endif
@@ -82,7 +83,7 @@
           @endif
 
 
-								<div class="col-md-3 ">
+								<div class="col-md-3 col-sm-4">
 
 						@if(!empty($match['player_of_the_match']))
 								<div class='visible-xs-block'>

@@ -1286,3 +1286,24 @@ jqXHR.done(function (result) {
 });		
 		//return false;;
 }
+
+
+
+//filter matches
+function filterDiv(that, index){
+    var txt=$(that).val();
+    var index = (typeof index !== "undefined") ? index : "";
+
+    $('.row_to_filter_'+index).each(function(){
+       if($(this).text().toUpperCase().indexOf(txt.toUpperCase()) != -1){
+           $(this).fadeIn();
+           }
+       else{
+         $(this).fadeOut();
+       }
+
+
+        });
+
+}
+    

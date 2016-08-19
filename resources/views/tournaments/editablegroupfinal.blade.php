@@ -15,33 +15,29 @@
 <div class="col-sm-12">
 <div class="row group-flex-content">
 
-
 @if(count($roundArray))
+	<br>
+    <div class="pull-left half-width col-xs-12 col-sm-6 col-sm-offset-3"> <center><input class='gui-input full-width form-control' placeholder="filter match e.g arjun soccer" onkeyup="filterDiv(this)"></center></div>
+
         @foreach($roundArray as $round)
-            @if($round==1)
-         	  <div class="col-sm-12">
+
+          <div class="col-sm-12">
                 <div class="round-{{Helper::convert_number_to_words($round)}}">
                     <div class="round"><p>    {{Helper::getRoundStage($tournament_id, $round)}} </p></div>
-                   @include('tournaments.sub_match_schedules')
-                </div>
-              </div>
-     @else 
+                          @if($round==1)             
+                                 @include('tournaments.sub_match_schedules')               
+                         @else 
 
-             <div class="col-sm-12">
-                    <div class="round-{{Helper::convert_number_to_words($round)}}">
-                        <div class="round"><p>    {{Helper::getRoundStage($tournament_id, $round)}} </p></div>
-
-			               @if(count($bracketTeamArray))
-			                   @foreach($bracketTeamArray as $brk => $bracketTeam)                    
-			                      <?php $firstRoundBracketArray=$bracketTeam;?>
-			                      @include('tournaments.sub_match_schedules')
-			                   @endforeach
-			               @endif
-
-			              </div>
-            </div>
+                         @if(count($bracketTeamArray))
+                             @foreach($bracketTeamArray as $brk => $bracketTeam)                    
+                                <?php $firstRoundBracketArray=$bracketTeam;?>
+                                @include('tournaments.sub_match_schedules')
+                             @endforeach
+                         @endif        
   
-     @endif
+                     @endif
+                </div>
+            </div>
 @endforeach
 
 @endif

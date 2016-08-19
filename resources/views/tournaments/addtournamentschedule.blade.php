@@ -319,19 +319,20 @@
 		});*/
                 $("#bye").val(1);
                 $("#bye").on("change", function() {
-	var d = new Date();
-    var month = d.getMonth()+1;
-    var day = d.getDate();
-    var year = d.getFullYear();
-                        var date = day+'/'+month+'/'+year;
+										var d = new Date();
+									    var month = d.getMonth()+1;
+									    var day = d.getDate();
+									    var year = d.getFullYear();
+                        				var date = day+'/'+month+'/'+year;
+
                         if($(this).val()==1) {
                             $("#oppTeamDiv").show();
                             $("#matchStartDatediv").show();
                             $("#matchStartTimeDiv").show();
                         }else{
                             $("#oppTeamDiv").hide();
-                            $("#matchStartDatediv").hide();
-                            $("#matchStartTimeDiv").hide();
+                            // $("#matchStartDatediv").hide();
+                            // $("#matchStartTimeDiv").hide();
                         }
                         $("#myteam").val('');
                         $("#oppteam").val('');
