@@ -22,20 +22,12 @@
                 <td><a href='/editsportprofile/{{$statistic->user_id}}' class="text-primary">
 
                      <span class='hidden-xs hidden-sm'> 
-                    @if($statistic->url!='')
-                                <!--<img class="fa fa-user fa-fw fa-2x" height="42" width="42" src="{{ url('/uploads/user_profile/'.$statistic->url) }}" onerror="this.onerror=null;this.src='{{ asset('/images/default-profile-pic.jpg') }}';">-->
-                                
+                   
                          
-                                    {!! Helper::Images($statistic->url,'user_profile',array('class'=>'img-circle img-border img-responsive lazy','height'=>52,'width'=>52) )!!}
+ {!! Helper::Images($statistic->logo,'user_profile',array('class'=>'img-circle img-border ','height'=>52,'width'=>52) )!!}
                              
                                 
-                                @else
-                            <!--    <img  class="fa fa-user fa-fw fa-2x" height="42" width="42" src="{{ asset('/images/default-profile-pic.jpg') }}">-->
-                              
-                                    {!! Helper::Images('default-profile-pic.jpg','images',array('class'=>'img-circle img-border img-responsive lazy','height'=>52,'width'=>52) )!!}
-                                
-                    
-                    @endif
+                             
                         </span>
                 {{$statistic->player_name}}</a></td>                
                 <td><a href='/team/members/{{$statistic->team_id}}' class="text-primary">{{$statistic->team_name}}</a></td>                

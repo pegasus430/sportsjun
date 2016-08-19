@@ -789,7 +789,7 @@ function editMatchSchedule(a, b, c, modal_id) {
                         var month = d.getMonth()+1;
                         var day = d.getDate();
                         var year = d.getFullYear();
-                        var date = day+'-'+month+'-'+year;
+                        var date = day+'/'+month+'/'+year;
                         $("#oppteam").val(1);
                         $("#match_start_date").val(date);
                         $('#bye').val(2);

@@ -3,6 +3,7 @@
 @include ('tournaments._leftmenu')
 <div id="content-team" class="col-sm-10 group_stage">
     <div class="col-sm-12 group-stage sportsjun-forms">
+    @include('tournaments.share_groups')
         @if($dispViewFlag=='group')
         @if($tournament_type=='league' || $tournament_type=='multistage')
         <div id="group_stage">
@@ -57,6 +58,7 @@
         @endif
     </div>
     
+</div>
 </div>
 @include ('tournaments.addtournamentschedule',[])
 <script type="text/javascript">
