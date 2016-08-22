@@ -7,7 +7,10 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class UserApiController extends Controller
+use App\Model\Sport;
+use Response;
+
+class SportApiController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,6 +20,12 @@ class UserApiController extends Controller
     public function index()
     {
         //
+        $sports=Sport::all();
+        return Response::json([
+             'status'=>200,
+             'data'=>$sports,
+             'error'=>false
+            ]);
     }
 
     /**
@@ -61,7 +70,7 @@ class UserApiController extends Controller
     {
         //
     }
- 
+
     /**
      * Update the specified resource in storage.
      *

@@ -12,9 +12,9 @@
 							<tr class="selected-teams">
                             <td>
                                 @if($schedule_type=='team')
-                                    {!! Helper::Images($requestedTeam['logo'],config('constants.PHOTO_PATH.TEAMS_FOLDER_PATH'),array('class'=>'img-circle img-border img-responsive lazy','height'=>30,'width'=>30) )!!}
+                                    {!! Helper::Images($requestedTeam['logo'],config('constants.PHOTO_PATH.TEAMS_FOLDER_PATH'),array('class'=>'img-circle img-border ','height'=>30,'width'=>30) )!!}
                                 @else
-                                    {!! Helper::Images($requestedTeam['logo'],config('constants.PHOTO_PATH.USERS_PROFILE'),array('class'=>'img-circle img-border img-responsive lazy','height'=>30,'width'=>30) )!!}
+                                    {!! Helper::Images($requestedTeam['logo'],config('constants.PHOTO_PATH.USERS_PROFILE'),array('class'=>'img-circle img-border ','height'=>30,'width'=>30) )!!}
                                 @endif
                             </td>
                             <td>{{ $requestedTeam['name'] }}</td>

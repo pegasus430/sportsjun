@@ -137,7 +137,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 								<div class="team_detail">
 									<div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['b_id'] }}">{{ $team_b_name }}</a></div>
 									<div class="team_city">{{ $team_b_city }}</div>
-									<div class="team_score" id="team_b_score">{{$team_b_goals}} <span ><i class="fa fa-info-circle soccer_info" id='team_b_count' data-toggle="tooltip" title="<?php echo $team_b_count;?>"></i></span></div>
+									<div class="team_score team_b_score" id="team_b_score">{{$team_b_goals}} <span ><i class="fa fa-info-circle soccer_info" id='team_b_count' data-toggle="tooltip" title="<?php echo $team_b_count;?>"></i></span></div>
 									<div class='team_city' id='penalty_b'>
 							@if(isset($penalties['team_b']['players']) && count($penalties['team_b']['players'])>0 )
 								  Penalties:    {{$penalties['team_b']['goals']}}
@@ -166,7 +166,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 								<div class="team_detail">
 									<div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['b_id'] }}">{{ $team_b_name }}</a></div>
 									<div class="team_city">{{ $team_b_city }}</div>
-									<div class="team_score" id="team_b_score">{{$team_b_goals}} <span><i class="fa fa-info-circle soccer_info" id='team_b_count' data-toggle="tooltip" title="<?php echo $team_b_count;?>"></i></span></div>
+									<div class="team_score team_b_score" id="team_b_score">{{$team_b_goals}} <span><i class="fa fa-info-circle soccer_info" id='team_b_count' data-toggle="tooltip" title="<?php echo $team_b_count;?>"></i></span></div>
 								</div>
 							</div>
 						</div>
@@ -194,7 +194,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 				</div>
 			</div>
 		</div>
-		{!! Form::open(array('url' => 'match/insertAndUpdateSoccerScoreCard', 'method' => 'POST','id'=>'soccer', 'onsubmit'=> 'return saveMatchDetails()')) !!}
+		{!! Form::open(array('url' => 'match/insertAndUpdateSoccerScoreCard', 'method' => 'POST','id'=>'soccer', 'onsubmit'=> 'return saveMatchDetails(); return false;')) !!}
 
 		<div class="container pull-up">
 
@@ -1417,6 +1417,8 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 			$('#end_match').hide();
 			$('.select_player_squad').css({cursor:'pointer', background:'none'});
 			$('.select_player').css({cursor:'pointer'})
+
+			window.can_save=true;
 			window.tempSquadData={
 				team_a:{
 					playing:[],
@@ -1532,20 +1534,29 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 
 		function saveMatchDetails(){
 			var data=$('#soccer').serialize();
-			$.ajax({
-				url:base_url+'/match/insertAndUpdateSoccerCard',
-				data:data,
-				method:'post',
-				success:function(response){
-					window.location=window.location.pathname;
-				},
-				error:function(x,y,z){
 
-				}
+			if(can_save){ //if clicked on match button
+				can_save=false;
+						$.ajax({
+							url:base_url+'/match/insertAndUpdateSoccerCard',
+							data:data,
+							method:'post',
+							success:function(response){
+								window.location=window.location.pathname;
+							},
+							error:function(x,y,z){
+					can_save=true;
+							}
 
-			})
-			return false;
-		}
+				})
+				return false;
+			}
+			
+			else {
+				return false;
+			}
+
+	}
 
 		function saveRecord(i, record_type,player_id){
 			
@@ -1565,7 +1576,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 					var tem_b=response[team_b_id];
 
 					$('#team_a_score').html(tem_a.goals)
-					$('#team_b_score').html(tem_b.goals)
+					$('.team_b_score').html(tem_b.goals)
 
 					$('#team_a_count').attr('title','Red Card Count:'+tem_a.red_card_count+','+'Yellow Card Count:'+tem_a.yellow_card_count);
 					$('#team_b_count').attr('title', 'Red Card Count:'+tem_b.red_card_count+','+'Yellow Card Count:'+tem_b.yellow_card_count);

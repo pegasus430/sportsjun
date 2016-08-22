@@ -852,7 +852,7 @@ class TournamentsController extends Controller
 		return view('tournaments.edit',compact('tournament'))->with(array('sports'=> [''=>'Select Sport']+$sports,'id'=>$id,'countries' =>  [''=>'Select Country']+$countries,'states' =>  [''=>'Select State']+$states,'cities' =>  [''=>'Select City']+$cities,'enum'=>['' => 'Tournament Type'] + $enum,'tournament'=>$tournament,'type'=>'edit','roletype'=>'user','schedule_type_enum'=>$schedule_type_enum,'parent_id'=>$id,'tournament_name'=>$tournament['name'],'logo'=>$tournament['logo'],'manager_name'=>$manager_name,'matchTypes'=>$matchTypes,'playerTypes'=>$playerTypes,'match_types'=>['' => 'Select Match Type'] +$match_types,'player_types'=>['' => 'Select Player Type'] +$player_types,'matchScheduleCount'=>$matchScheduleCount,'tournamentGroupCount'=>$tournamentGroupCount));
 	}
 	//function to display tournament groups
-	public function groups($tournament_id,$type='') {
+	public function groups($tournament_id,$type='', $from_api=false) {
 		$tournaments           = Tournaments::with('groups')->where('id', '=', $tournament_id)->get(); //get tournaments which having the type as league
 		$tournament_type       = $tournaments[0]['type'];
 		$team_details          = array();
@@ -1276,6 +1276,45 @@ class TournamentsController extends Controller
 
 		$follow_unfollow = Helper::checkFollowUnfollow(isset(Auth::user()->id)?Auth::user()->id:0, 'TOURNAMENT', $tournament_id);
 
+		if($from_api){
+
+			return Response::json([
+			'tournament'               => $tournaments,
+			'team_details'             => $team_details,
+			'net_run_rate'             => $net_run_rate,
+			'tournament_id'            => $tournament_id,
+			'lef_menu_condition'       => $lef_menu_condition,
+			'action_id'                => $tournament_id,
+			'match_details'            => $match_details,
+			'team_name_array'          => $team_name_array,
+			'team_logo'                => $team_logo,
+			'user_name'                => $user_name,
+			'user_profile'             => $user_profile,
+			'schedule_type'            => $schedule_type,
+			'tournament_type'          => $tournament_type,
+			'tournamentDetails'        => $tournaments->toArray(),
+			'team_name'                => '',
+			'tournamentTeams'          => !empty($tournamentTeams) ? $tournamentTeams : [],
+			'sports_id'                => $sport_id,
+			'roundArray'               => !empty($roundArray) ? $roundArray : [],
+			'scheduleTypeOne'          => !empty($scheduleTypeOne) ? $scheduleTypeOne : '',
+			'scheduleTypeTwo'          => !empty($scheduleTypeTwo) ? $scheduleTypeTwo : '',
+			'bracketTeamArray'         => !empty($bracketTeamArray) ? $bracketTeamArray : [],
+			'isOwner'                  => $isOwner, 'lastRoundWinner'          => $lastRoundWinner,
+			'firstRoundBracket'        => $firstRoundBracket,
+			'firstRoundBracketArray'   => !empty($firstRoundBracketArray) ? $firstRoundBracketArray : [],
+			'selectetdFinalStageTeams' => !empty($selectetdFinalStageTeams) ? $selectetdFinalStageTeams : [],
+			'maxRoundNumber'           => $maxRoundNumber,
+			'dispViewFlag'             => $dispViewFlag,
+			'linkUrl'                  => $linkUrl, 'left_menu_data'           => $left_menu_data,
+			'add_score_link'           => $add_score_link,
+			'sport_name'               => $sport_name,
+			'match_startdate_array'    => $match_startdate_array,
+			'match_count'              => $match_count,
+				]);
+
+		}
+
 		
 
 	
@@ -1392,6 +1431,7 @@ class TournamentsController extends Controller
 
 // Building links(Add Score,ScoreCard, Edit)
 									if (count($winnerTeamSchedule)) {
+
 										$bracketTeamArray[$j][$k]['id'] = $winnerTeamSchedule->id;
 										if(count($winnerTeamSchedule->match_start_date)) {
 											$startDate = Carbon::createFromFormat('Y-m-d', $winnerTeamSchedule->match_start_date);
@@ -1443,6 +1483,7 @@ class TournamentsController extends Controller
 											$bracketTeamArray[$j][$k]['match_start_date']=  date(config('constants.DATE_FORMAT.VALIDATION_DATE_TIME_FORMAT'));
 											$bracketTeamArray[$j][$k]['winner_text'] = 'edit';
 											$bracketTeamArray[$j][$k]['schdule_id'] = $currentScheduleData['id'];
+											$bracketTeamArray[$j][$k]['id'] = $currentScheduleData['id'];
 											if($currentScheduleData->match_type!='other')
 											{
 												$bracketTeamArray[$j][$k]['match_type'] = $currentScheduleData->match_type=='odi'?'('.strtoupper($currentScheduleData->match_type).')':'('.ucfirst($currentScheduleData->match_type).')';
@@ -2209,7 +2250,7 @@ class TournamentsController extends Controller
 
 
 
-	public function playerStanding($tournament_id){
+	public function playerStanding($tournament_id, $from_api=false){
 		$left_menu_data = array();
 		
 
@@ -2228,7 +2269,8 @@ class TournamentsController extends Controller
 		$sport_name=strtolower(Sport::find($sport_id)->sports_name);
 
 		$player_standing=$this->getPlayerStanding($sport_id, $tournament_id);
-
+	
+		if($from_api) return Response::json($player_standing);
 		
 
 			return view('tournaments.player_standing', compact(

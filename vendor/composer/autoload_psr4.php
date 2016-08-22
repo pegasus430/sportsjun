@@ -10,6 +10,7 @@ return array(
     'Zofe\\Rapyd\\' => array($vendorDir . '/zofe/rapyd/src'),
     'Zofe\\Burp\\' => array($vendorDir . '/zofe/burp/src'),
     'XdgBaseDir\\' => array($vendorDir . '/dnoegel/php-xdg-base-dir/src'),
+    'Xaamin\\Whatsapi\\' => array($vendorDir . '/xaamin/whatsapi/src'),
     'Webmozart\\Assert\\' => array($vendorDir . '/webmozart/assert/src'),
     'Tymon\\JWTAuth\\' => array($vendorDir . '/tymon/jwt-auth/src'),
     'Symfony\\Polyfill\\Util\\' => array($vendorDir . '/symfony/polyfill-util'),

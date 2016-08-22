@@ -17,32 +17,27 @@
 
 
 @if(count($roundArray))
+    <div class="pull-left half-width col-xs-12 col-sm-6"> <input class='full-width form-control dark-border' placeholder="filter match e.g team name, date" onkeyup="filterDiv(this)"></div>
+
         @foreach($roundArray as $round)
-            @if($round==1)
-              <div class="col-sm-12">
-                <div class="round-{{Helper::convert_number_to_words($round)}}">
-                    <div class="round"><p>    {{Helper::getRoundStage($tournament_id, $round)}} </p></div>
-                   @include('tournaments.sub_match_schedules')
-                </div>
-              </div>
-           @else 
+                  <div class="col-sm-12">
+                        <div class="round-{{Helper::convert_number_to_words($round)}}">
+                            <div class="round"><p>    {{Helper::getRoundStage($tournament_id, $round)}} </p></div>
+                                  @if($round==1)             
+                                         @include('tournaments.sub_match_schedules')               
+                                 @else 
 
-            <div class="col-sm-12">
-                    <div class="round-{{Helper::convert_number_to_words($round)}}">
-                        <div class="round"><p>    {{Helper::getRoundStage($tournament_id, $round)}} </p></div>
-
-               @if(count($bracketTeamArray))
-                   @foreach($bracketTeamArray as $brk => $bracketTeam)                    
-                      <?php $firstRoundBracketArray=$bracketTeam;?>
-                      @include('tournaments.sub_match_schedules')
-                   @endforeach
-               @endif
-
-              </div>
-            </div>
-  
-     @endif
-@endforeach
+                                 @if(count($bracketTeamArray))
+                                     @foreach($bracketTeamArray as $brk => $bracketTeam)                    
+                                        <?php $firstRoundBracketArray=$bracketTeam;?>
+                                        @include('tournaments.sub_match_schedules')
+                                     @endforeach
+                                 @endif        
+          
+                             @endif
+                        </div>
+                    </div>
+      @endforeach
 
 @endif
 

@@ -1403,7 +1403,7 @@ class Helper {
     public static function isApprovalExist($matchData,$isForApproval='')
     {
         $loginUserId = Auth::user()->id;
-        $loginUserRole = Auth::user()->role;
+        $loginUserRole = Auth::check()?Auth::user()->role:null;
         $team_a_id = $matchData[0]['a_id'];
         $team_b_id = $matchData[0]['b_id'];
         $score_status_array = json_decode($matchData[0]['score_added_by'],true);
@@ -1483,7 +1483,7 @@ class Helper {
     public static function isValidUserForScoreEnter($matchData)
     {
         $loginUserId = isset(Auth::user()->id)?Auth::user()->id:0;
-        $loginUserRole = Auth::user()->role;
+        $loginUserRole = Auth::check()?Auth::user()->role:null;
         $team_a_id = $matchData[0]['a_id'];
         $team_b_id = $matchData[0]['b_id'];
         if($loginUserRole=='admin')// if admin login
@@ -1934,12 +1934,12 @@ class Helper {
             $match_model=MatchSchedule::find($match_id);
 
             //get the winner
-            if(!is_null($match_model->winner_id)){
+            if(!empty($match_model->winner_id)){
                 if($match_model->schedule_type=='player'){
                     $match_model->winner=User::find($match_model->winner_id)->name;
                 }
                 else{
-                    $match_model->winner=Team::find($match_model->winner_id)->name;
+                     $match_model->winner=Team::find($match_model->winner_id)->name;
                 }
             }
             else{
@@ -2060,45 +2060,22 @@ class Helper {
     public static function getRoundStage($tournament_id, $round_number){
 
         $tournaments=Tournaments::find($tournament_id);
-        $count=$tournaments->final_stage_teams;
+        $count=$tournaments->final_stage_teams; 
 
-        switch ($count) {
-            case ($count<=2):
-                    if($round_number==1) return 'FINAL';
-                    else return '';                
-            break;
-            case ($count>2 && $count<=4  ):
-                    if($round_number==1) return 'SEMI FINAL';
-                    else if($round_number==2) return 'FINAL';
-                    else return '';                
-            break;
-            case ($count>4 && $count<=8  ):
-                    if($round_number==1) return 'QUARTER FINAL';
-                    else if($round_number==2) return 'SEMI FINAL';
-                    else if($round_number==3) return 'FINAL';
-                    else return '';                
-            break;
-             case ($count>8 && $count<=16  ):
-                    if($round_number==1) return 'ROUND 1';
-                    else if($round_number==2) return 'QUARTER FINAL';
-                    else if($round_number==3) return 'SEMI FINAL';
-                    else if($round_number==4) return 'FINAL';
-                    else return '';                
-            break;
-             case ($count>8 && $count<=16  ):
-                    if($round_number==1) return 'ROUND 1';
-                    else if($round_number==2) return 'ROUND 2';
-                    else if($round_number==3) return 'QUARTER FINAL';
-                    else if($round_number==4) return 'SEMI FINAL';
-                    else if($round_number==5) return 'FINAL';
-                    else return '';                
-            break;
-            
-            default:
-                # code...
-                break;
+        $round_names=[];
+        $round_names[-1]='';
+        $round_names[-2]='';
+        $round_names[0]='FINAL';
+        $round_names[1]='SEMI FINAL';
+        $round_names[2]='QUARTER FINAL';
+
+        for($i=3; $i<=12; $i++){
+                $round_names[$i]="ROUND ".($i-2);
         }
 
+        $total_rounds=ceil(log($count, 2));
+
+        return $round_names[$total_rounds- $round_number];
       
     }
 

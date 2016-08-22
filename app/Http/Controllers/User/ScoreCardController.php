@@ -3537,6 +3537,7 @@ class ScoreCardController extends Controller {
 			$tournamentDetails = Tournaments::where('id',$match_data[0]['tournament_id'])->get(['points_win','points_loose']);
 			$tournament_won_poins = !empty($tournamentDetails[0]['points_win'])?$tournamentDetails[0]['points_win']:0;
 			$tournament_lost_poins = !empty($tournamentDetails[0]['points_loose'])?$tournamentDetails[0]['points_loose']:0;
+			$tournament_tie_poins = !empty($tournamentDetails[0]['points_tie'])?$tournamentDetails[0]['points_tie']:0;
 
 
 			$team_a_groupdetails = TournamentGroupTeams::where('tournament_id',$match_data[0]['tournament_id'])->where('tournament_group_id',$match_data[0]['tournament_group_id'])->where('team_id',$team_a_id)->get(['won','lost','points']);
@@ -3575,11 +3576,13 @@ class ScoreCardController extends Controller {
 			}
 			else if ($match_data[0]['is_tied'] > 0 || $match_data[0]['match_result'] == "washout")//if match is tied/washout
 			{
-				TournamentGroupTeams::where('tournament_id',$match_data[0]['tournament_id'])->where('tournament_group_id',$match_data[0]['tournament_group_id'])->where('team_id',$team_a_id)->update(['points'=>$team_a_points+($tournament_won_poins/2)]);
+				TournamentGroupTeams::where('tournament_id',$match_data[0]['tournament_id'])->where('tournament_group_id',$match_data[0]['tournament_group_id'])->where('team_id',$team_a_id)->update(['points'=>$team_a_points+($tournament_tie_poins)]);
 
-				TournamentGroupTeams::where('tournament_id',$match_data[0]['tournament_id'])->where('tournament_group_id',$match_data[0]['tournament_group_id'])->where('team_id',$team_b_id)->update(['points'=>$team_b_points+($tournament_won_poins/2)]);
+				TournamentGroupTeams::where('tournament_id',$match_data[0]['tournament_id'])->where('tournament_group_id',$match_data[0]['tournament_group_id'])->where('team_id',$team_b_id)->update(['points'=>$team_b_points+($tournament_tie_poins)]);
 
 			}
+
+
 
 			//update organization points;
 

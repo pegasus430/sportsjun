@@ -20,7 +20,8 @@
         "sofa/eloquence": "~5.1@dev",
         "barryvdh/laravel-ide-helper": "^2.2",
         "barryvdh/laravel-cors": "^0.8.1",
-        "tymon/jwt-auth": "^0.5.9"
+        "tymon/jwt-auth": "^0.5.9",
+        "xaamin/whatsapi": "^1.1"
            },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
