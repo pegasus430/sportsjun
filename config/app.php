@@ -158,7 +158,7 @@ return [
 		SKAgarwal\Generators\GeneratorsServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
         'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
-          'Xaamin\Whatsapi\WhatsapiServiceProvider'
+        //'Xaamin\Whatsapi\WhatsapiServiceProvider'
     ],
 
     /*
@@ -219,8 +219,8 @@ return [
         'Captcha'       => Mews\Captcha\Facades\Captcha::class,
         'JWTAuth'       => 'Tymon\JWTAuth\Facades\JWTAuth',
         'JWTFactory'    => 'Tymon\JWTAuth\Facades\JWTFactory',
-        'Whatsapi'      => 'Xaamin\Whatsapi\Facades\Laravel\Whatsapi',
-        'WhatsapiTool'  => 'Xaamin\Whatsapi\Facades\Laravel\Registration',
+        //'Whatsapi'      => 'Xaamin\Whatsapi\Facades\Laravel\Whatsapi',
+        //'WhatsapiTool'  => 'Xaamin\Whatsapi\Facades\Laravel\Registration',
 
     ],
 
