@@ -95,3 +95,19 @@ Route::get('/mailscron', function()
 Route::get('social/redirect/{provider}', ['uses' => 'User\UserController@redirectToProvider', 'as' => 'social.login']);
 Route::get('social/callback/{provider}', 'User\UserController@handleProviderCallback');
 //End Login/Signup
+
+
+Route::get('/whatsapp/', function(){
+
+	 $user = new stdClass;
+    $user->name = 'Benjamín Martínez Mateos';
+    $user->phone = '5219512222222';
+
+    $message = "Hello $user->name and welcome to our site";
+
+    $messages = Whatsapi::send($message, function($send) use ($user)
+    {
+        $send->to($user->phone);
+    });
+
+});	

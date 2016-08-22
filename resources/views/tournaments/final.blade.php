@@ -204,6 +204,9 @@
 </div>
 @endif
 
+</div>
+<div class='clearfix'>
+
 
 <script type="text/javascript">
 function finalStageTeams(flag) {

@@ -60,7 +60,11 @@
     
 </div>
 </div>
+</div>
+<div class='clearfix'>
+
 @include ('tournaments.addtournamentschedule',[])
+
 <script type="text/javascript">
 $(function() {  
     @if($tournament_type=='knockout')

@@ -157,7 +157,8 @@ return [
 		Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 		SKAgarwal\Generators\GeneratorsServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
-        'Tymon\JWTAuth\Providers\JWTAuthServiceProvider'
+        'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
+          'Xaamin\Whatsapi\WhatsapiServiceProvider'
     ],
 
     /*
@@ -214,10 +215,12 @@ return [
 //        'Validator' => 'IlluminateSupportFacadesValidator',
 //        'View'      => 'IlluminateSupportFacadesView',
 //        'Linkedin'  => 'League\oauth2-client\Provider\LinkedIn',
-        'JsValidator' => Proengsoft\JsValidation\Facades\JsValidatorFacade::class,
-        'Captcha' => Mews\Captcha\Facades\Captcha::class,
-        'JWTAuth' => 'Tymon\JWTAuth\Facades\JWTAuth',
-        'JWTFactory' => 'Tymon\JWTAuth\Facades\JWTFactory'
+        'JsValidator'   => Proengsoft\JsValidation\Facades\JsValidatorFacade::class,
+        'Captcha'       => Mews\Captcha\Facades\Captcha::class,
+        'JWTAuth'       => 'Tymon\JWTAuth\Facades\JWTAuth',
+        'JWTFactory'    => 'Tymon\JWTAuth\Facades\JWTFactory',
+        'Whatsapi'      => 'Xaamin\Whatsapi\Facades\Laravel\Whatsapi',
+        'WhatsapiTool'  => 'Xaamin\Whatsapi\Facades\Laravel\Registration',
 
     ],
 

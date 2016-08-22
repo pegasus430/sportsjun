@@ -264,7 +264,7 @@ if(!empty($matchScheduleCount) && $matchScheduleCount>0)
 </div>
 </div>
 <div class="row">
-<div class="col-sm-6">					
+<div class="col-sm-4">					
     <div class="section">
         <label class="form_label">{{  trans('message.tournament.fields.pointstowinningteam') }} </label>	
         <label class="field prepend-icon">
@@ -274,7 +274,7 @@ if(!empty($matchScheduleCount) && $matchScheduleCount>0)
         </label>
     </div>
 </div>
-<div class="col-sm-6">
+<div class="col-sm-4">
 <div class="section">
     <label class="form_label">{{  trans('message.tournament.fields.Pointstolosingteam') }} </label>	
 	<label class="field prepend-icon">
@@ -282,6 +282,16 @@ if(!empty($matchScheduleCount) && $matchScheduleCount>0)
 	@if ($errors->has('points_loose')) <p class="help-block">{{ $errors->first('points_loose') }}</p> @endif
                                 <label for="Pointstolosingteam" class="field-icon"><i class="fa fa-thumbs-down"></i></label>
 	</label>
+</div>
+</div>
+<div class="col-sm-4">
+<div class="section">
+    <label class="form_label">{{  trans('message.tournament.fields.Pointsfortie') }} </label> 
+    <label class="field prepend-icon">
+    {!! Form::text('points_tie', null, array('class'=>'gui-input','placeholder'=>trans('message.tournament.fields.Pointsfortie'),$disable)) !!}
+    @if ($errors->has('points_tie')) <p class="help-block">{{ $errors->first('points_tie') }}</p> @endif
+                                <label for="Pointstolosingteam" class="field-icon"><i class="fa fa-thumbs-down"></i></label>
+    </label>
 </div>
 </div>
 	</div>		
