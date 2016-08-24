@@ -1506,11 +1506,33 @@ class ScheduleController extends Controller {
             $matchNumber = $matchScheduleDetails['tournament_match_number'];
             $matchNumberToCheck = ceil($matchNumber / 2);
            
+                       //check if corresponding player is there.
+$matchScheduleData = MatchSchedule::where('tournament_id',$matchScheduleDetails['tournament_id'])
+            ->where('tournament_round_number',$roundNumber+1)
+            ->where('tournament_match_number',$matchNumberToCheck)
+            ->first();
+
+                       
             if ($matchScheduleDetails['schedule_type'] == 'team') {
                 $player_a_ids = TeamPlayers::select(DB::raw('GROUP_CONCAT(DISTINCT user_id) AS player_a_ids'))->where('team_id', $matchScheduleDetails['winner_id'])->pluck('player_a_ids');
             }else {
                 $player_a_ids = $matchScheduleDetails['winner_id'];
             }
+
+                //check if corresponding team is in database
+            if(count($matchScheduleData)){
+                   if(!empty($matchScheduleData->a_id)){
+                        $matchScheduleData->b_id=$matchScheduleDetails['a_id'];
+                        $matchScheduleData->player_b_ids=$matchScheduleDetails['player_a_ids'];
+                   }
+                   else{
+                        $matchScheduleData->a_id=$matchScheduleDetails['a_id'];
+                        $matchScheduleData->player_a_ids=$matchScheduleDetails['player_a_ids'];
+                   }
+
+                   $matchScheduleData->save();
+            }
+            else{
             $scheduleArray[] = [
                 'tournament_id' => $matchScheduleDetails['tournament_id'],
                 'tournament_round_number' => $roundNumber+1,
@@ -1538,6 +1560,8 @@ class ScheduleController extends Controller {
             ];
 
             MatchSchedule::insert($scheduleArray);
+
+        }
             
     }
 }

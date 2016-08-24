@@ -1,4 +1,17 @@
+<style>
 
+@media (max-width: 750px){
+  .jsplumb-connector{
+      color: red;
+      display: none;
+  }
+  .jsplumb-connector-outline{
+     color: blue;
+     display: none;
+  }
+}
+
+</style>
 @if(count($tournamentDetails[0]['final_stage_teams']))
 <!--<div>
     Add Round
@@ -13,7 +26,7 @@
 <div id="round_div_1">
 </div>    -->
 <div class="col-sm-12">
-<div class="row group-flex-content">
+<div class="row group-flex-content flowchart-object flowchart-action " id='canvas'>
 @if(count($roundArray))
         @foreach($roundArray as $round)
         @if($round==1)
@@ -24,7 +37,7 @@
                  @foreach($firstRoundBracketArray as $key => $schedule)
                   <div class="match_set" style="height: 150px;">
                     @if(isset($schedule['tournament_round_number']) && $schedule['tournament_round_number']==$round)
-                           <ul>
+                           <ul class="window jtk-node">
                                <div class="clearfix">
                                   <span class="tour_match_date fa fa-info" data-toggle="tooltip" data-placement="left" title="{{$schedule['match_start_date'].$sport_name.' '.$schedule['match_type']}}"></span>
                                   <span class="tour_score">
@@ -38,6 +51,7 @@
                                   @endif
                                   </span>
                                </div>
+                          <div  id="tour_{{$round}}_match_{{$schedule['tournament_match_number']}}">
                               <li title="{{isset($schedule[$scheduleTypeOne]['name'])?$schedule[$scheduleTypeOne]['name']:'Bye'}}"  data-toggle="tooltip" data-placement="top">
                                 {!! Helper::Images($schedule[$scheduleTypeOne]['url'],config('constants.PHOTO_PATH.TEAMS_FOLDER_PATH'),array('class'=>'img-circle img-border','height'=>30,'width'=>30) )!!}
                                 @if(isset($schedule[$scheduleTypeOne]['name']))
@@ -62,6 +76,7 @@
                                    <span>{{trans('message.bye')}}</span>
                                 @endif
                               </li>
+                            </div>
                           </ul>
                     @else
                             <ul>
@@ -103,7 +118,7 @@
                     ?>
                     @foreach($bracketTeamArray as $brk => $bracketTeam)
                       <div class="match_set" style="height: <?php echo $height.'px';?>">
-                        <ul>
+                        <ul  id="tour_{{$round}}_match_{{($brk+1)}}">
                             @foreach($bracketTeam as $bt => $bracket)
                                 @if(isset($bracket['tournament_round_number']) && $bracket['tournament_round_number']==$round)
 
@@ -207,6 +222,12 @@
 </div>
 <div class='clearfix'>
 
+<script type="text/javascript">
+  window.matches={{$tournamentDetails[0]['final_stage_teams']}};
+</script>
+<script type="text/javascript" src="/js/jsplumb/jsPlumb-2.1.5-min.js"></script>
+<script type="text/javascript" src="/js/jsplumb/drawlines.js">  </script>
+
 
 <script type="text/javascript">
 function finalStageTeams(flag) {
@@ -277,7 +298,7 @@ function addRoundMatches(tournamentId,roundNumber) {
                 $.unblockUI();
             }
     });
-}
+} 
 
 function addRoundMatchesSchedule(tournamentId,roundNumber, matchNumber) {
     $.ajax({

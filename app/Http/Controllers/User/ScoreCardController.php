@@ -2931,13 +2931,7 @@ class ScoreCardController extends Controller {
 					{
 						$sportName = Sport::where('id',$matchScheduleDetails['sports_id'])->pluck('sports_name');
 
-					if($match_data->has_result==0){
-						$match_data->match_details=null;
-						$match_data->save();
-						$players_stats=	SoccerPlayerMatchwiseStat::whereMatchId($match_id)->get();
-						$this->discardMatchRecords($players_stats);				
-					}
-
+					
 						$this->insertPlayerStatistics($sportName,$match_id);
 
 						//notification ocde
@@ -3429,7 +3423,7 @@ class ScoreCardController extends Controller {
 	//function to call sport statistics
 	public function insertPlayerStatistics($sport_name,$match_id)
 	{
-		$match_data = MatchSchedule::where('id',$match_id)->get(['winner_id','match_type','match_details','tournament_id','tournament_group_id','a_id','b_id','is_tied']);
+		$match_data = MatchSchedule::where('id',$match_id)->get(['winner_id','match_type','match_details','tournament_id','tournament_group_id','a_id','b_id','is_tied', 'match_result']);
 		$match_type = !empty($match_data[0]['match_type'])?$match_data[0]['match_type']:'';
 		$match_details = !empty($match_data[0]['match_details'])?$match_data[0]['match_details']:'';
 		$winner_id = !empty($match_data[0]['winner_id'])?$match_data[0]['winner_id']:'';
@@ -3534,7 +3528,7 @@ class ScoreCardController extends Controller {
 			$team_a_id = $match_data[0]['a_id'];
 			$team_b_id = $match_data[0]['b_id'];
 
-			$tournamentDetails = Tournaments::where('id',$match_data[0]['tournament_id'])->get(['points_win','points_loose']);
+			$tournamentDetails = Tournaments::where('id',$match_data[0]['tournament_id'])->get(['points_win','points_loose', 'points_tie']);
 			$tournament_won_poins = !empty($tournamentDetails[0]['points_win'])?$tournamentDetails[0]['points_win']:0;
 			$tournament_lost_poins = !empty($tournamentDetails[0]['points_loose'])?$tournamentDetails[0]['points_loose']:0;
 			$tournament_tie_poins = !empty($tournamentDetails[0]['points_tie'])?$tournamentDetails[0]['points_tie']:0;
@@ -3576,9 +3570,9 @@ class ScoreCardController extends Controller {
 			}
 			else if ($match_data[0]['is_tied'] > 0 || $match_data[0]['match_result'] == "washout")//if match is tied/washout
 			{
-				TournamentGroupTeams::where('tournament_id',$match_data[0]['tournament_id'])->where('tournament_group_id',$match_data[0]['tournament_group_id'])->where('team_id',$team_a_id)->update(['points'=>$team_a_points+($tournament_tie_poins)]);
+				TournamentGroupTeams::where('tournament_id',$match_data[0]['tournament_id'])->where('tournament_group_id',$match_data[0]['tournament_group_id'])->where('team_id',$team_a_id)->update(['points'=>$team_a_points+$tournament_tie_poins]);
 
-				TournamentGroupTeams::where('tournament_id',$match_data[0]['tournament_id'])->where('tournament_group_id',$match_data[0]['tournament_group_id'])->where('team_id',$team_b_id)->update(['points'=>$team_b_points+($tournament_tie_poins)]);
+				TournamentGroupTeams::where('tournament_id',$match_data[0]['tournament_id'])->where('tournament_group_id',$match_data[0]['tournament_group_id'])->where('team_id',$team_b_id)->update(['points'=>$team_b_points+$tournament_tie_poins]);
 
 			}
 
@@ -3616,7 +3610,14 @@ class ScoreCardController extends Controller {
 			}else {
 				$player_b_ids = $winner_team_id;
 			}
-			MatchSchedule::where('id',$matchScheduleData['id'])->update(['b_id'=>$winner_team_id,'player_b_ids'=>!empty($player_b_ids)?(','.trim($player_b_ids).','):NULL]);
+
+
+			 if(!empty($matchScheduleData->a_id)){
+                    MatchSchedule::where('id',$matchScheduleData['id'])->update(['b_id'=>$winner_team_id,'player_b_ids'=>!empty($player_b_ids)?(','.trim($player_b_ids).','):NULL]);
+                   }
+              else{
+                      MatchSchedule::where('id',$matchScheduleData['id'])->update(['a_id'=>$winner_team_id,'player_a_ids'=>!empty($player_b_ids)?(','.trim($player_b_ids).','):NULL]);
+                   }			
 
 		}else{
 			if ($matchScheduleData['schedule_type'] == 'team') {

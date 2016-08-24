@@ -1,8 +1,9 @@
 nbproject/
 public/uploads/
+public/mailoutput/
 vendor/
 storage/*
-config/database.php
+config/*
 .env
 .idea/
 *.sublime-*
