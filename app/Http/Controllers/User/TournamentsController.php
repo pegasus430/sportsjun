@@ -873,18 +873,38 @@ class TournamentsController extends Controller
 				if (count((array) $teamDetails) > 0)
 					$team_details[$group_id] = $teamDetails->toArray(); //get tournament group teams
 
-
+ 
 				//get team match count
 				if (!empty($team_details[$group_id]))
 				{
-					foreach ($team_details[$group_id] as $scheduled_teams)
+					foreach ($team_details[$group_id] as $key=>$scheduled_teams)
 					{
 						$teamId                          = $scheduled_teams['team_id'];
 						$match_count[$group_id][$teamId] = MatchSchedule::where('tournament_id', $tournament_id)->where('tournament_group_id', $group_id)
 							->where('match_status', 'completed')->where(function($query) use ($teamId) {
 								$query->where('a_id', $teamId)->orWhere('b_id', $teamId);
 							})->count();
-					}
+
+				
+					$match_count_details=Helper::getMatchGroupDetails($tournament_id, $group_id, $scheduled_teams['team_id']);
+
+					//calculate ga, gf and tie.
+						$scheduled_teams['tie']=$match_count_details['tie'];
+			     			if(in_array($tournaments[0]['sports_id'], [4,11])){
+			     				
+									$scheduled_teams['ga']=$match_count_details['ga'];
+									$scheduled_teams['gf']=$match_count_details['gf'];
+							 }
+
+				 	$team_details[$group_id][$key]=$scheduled_teams;
+
+				 		}
+
+				 	if(in_array($tournaments[0]['sports_id'], [4,11])){
+				 		$team_details[$group_id]=$this->sortGroupTeams($team_details[$group_id]);
+				 	}
+
+
 				}
 
 				$matchDetails = MatchSchedule::select()->where('tournament_id', $tournament_id)->where('tournament_group_id', $group_id)->orderby('match_start_date', 'desc')->orderby('match_start_time', 'desc')->get();
@@ -2387,5 +2407,34 @@ class TournamentsController extends Controller
 			}
 
 			return $player;
+	}
+
+
+	public function sortGroupTeams($group_teams=[]){
+			$lenght=count($group_teams);
+
+			for ($i=0; $i<$lenght; $i++) {
+					for($j=0; $j<$lenght; $j++){
+
+						//die(json_encode($group_teams[$i]));
+							$ga_points=$group_teams[$i]['gf'];
+				 			$points=$group_teams[$i]['points'];
+
+				 			$next_ga_points=$group_teams[$j]['gf'];
+				 			$next_points=$group_teams[$j]['points'];
+
+				 			if( $points == $next_points){
+				 					if($next_ga_points<$ga_points){
+				 							$temp_team=$group_teams[$i];
+				 							$group_teams[$i]=$group_teams[$j];
+				 							$group_teams[$j]=$temp_team;
+				 					}
+				 			}
+
+					}
+				 
+			}
+
+			return $group_teams;
 	}
 }
