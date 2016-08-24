@@ -55,7 +55,7 @@ return [
         'mysql' => [
             'driver'    => 'mysql',
             'host'      => 'localhost',
-            'database'  => 'sportsjun_2016_07_11',
+            'database'  => 'sportsjun_dev',
             'username'  => 'sportsjun_dev',
             'password'  => '8rAf@2af$dAw',
             'charset'   => 'utf8',
