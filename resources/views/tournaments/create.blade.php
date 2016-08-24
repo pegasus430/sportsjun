@@ -96,12 +96,7 @@ function resetData()
 								}, " tie match points must be less than Winning team points");
 								$('[name="points_tie"]').rules("add", "win_tie_points");
 								
-								
-								
-								
-								
-								
-								
+																
 							});
 </script>
 
