@@ -1,9 +1,16 @@
 <style>
-@media (max-width: 480px){
-.x-gap {
-    margin:0;
+
+@media (max-width: 750px){
+  .jsplumb-connector{
+      color: red;
+      display: none;
+  }
+  .jsplumb-connector-outline{
+     color: blue;
+     display: none;
   }
 }
+
 </style>
 @if(count($tournamentDetails[0]['final_stage_teams']))
 <!--<div>
@@ -291,7 +298,7 @@ function addRoundMatches(tournamentId,roundNumber) {
                 $.unblockUI();
             }
     });
-}
+} 
 
 function addRoundMatchesSchedule(tournamentId,roundNumber, matchNumber) {
     $.ajax({

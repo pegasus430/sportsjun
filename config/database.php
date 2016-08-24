@@ -54,7 +54,7 @@ return [
 
         'mysql' => [
             'driver'    => 'mysql',
-            'host'      => 'localhost',            
+            'host'      => 'localhost',  
             'database'  => 'sportsjun_prod',
             'username'  => 'sportsjun_prod',
             'password'  => 'Xedu_h6thEsw',
