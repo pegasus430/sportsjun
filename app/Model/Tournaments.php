@@ -50,6 +50,7 @@ class Tournaments extends Model
         'enrollment_fee',
         'points_win',
         'points_loose',
+        'points_tie',
         'status',
         'description',
         'final_stage_teams',

@@ -23,6 +23,6 @@ return array(
     '14812156da62770d06ccc3ede5af6de1' => $vendorDir . '/zofe/burp/src/helpers.php',
     'f18cc91337d49233e5754e93f3ed9ec3' => $vendorDir . '/laravelcollective/html/src/helpers.php',
     '752af1c2bdb339e8474c3c31b22b7d54' => $vendorDir . '/illuminate/html/helpers.php',
-    '5e8fe2a5ffaded85af682684fe3bbf5a' => $vendorDir . '/mews/captcha/src/helpers.php',
     'c3506a526c5ff171720322fdf42d15c3' => $vendorDir . '/sofa/eloquence/src/helpers.php',
+    '5e8fe2a5ffaded85af682684fe3bbf5a' => $vendorDir . '/mews/captcha/src/helpers.php',
 );

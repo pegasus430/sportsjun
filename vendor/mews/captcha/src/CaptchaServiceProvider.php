@@ -26,7 +26,11 @@ class CaptchaServiceProvider extends ServiceProvider {
         if (strpos($this->app->version(), 'Lumen') !== false) {
            $this->app->get('captcha[/{config}]', 'Mews\Captcha\LumenCaptchaController@getCaptcha');
         } else {
-            $this->app['router']->get('captcha/{config?}', '\Mews\Captcha\CaptchaController@getCaptcha');
+            if ((double) $this->app->version() >= 5.2) {
+                $this->app['router']->get('captcha/{config?}', '\Mews\Captcha\CaptchaController@getCaptcha')->middleware('web');
+            } else {
+                $this->app['router']->get('captcha/{config?}', '\Mews\Captcha\CaptchaController@getCaptcha');
+            }
         }
 
         // Validator extensions

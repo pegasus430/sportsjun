@@ -78,6 +78,18 @@
 									return (parseInt(points_win)) >= parseInt((points_loose));
 								}, " Losing team points must be less than Winning team points");
 								$('[name="points_loose"]').rules("add", "win_loose_points");
+
+								$.validator.addMethod("win_tie_points", function(value, element) {
+									 var points_win = $('[name="points_win"]').val();
+									  var points_tie = $('[name="points_tie"]').val();
+									  
+									  	if(points_win == '' && points_tie == '')
+					        		    return true;
+					        	    else
+									return (parseInt(points_win)) >= parseInt((points_tie));
+								}, " tie match points must be less than Winning team points");
+								$('[name="points_tie"]').rules("add", "win_tie_points");
+								
 								
 								
 								

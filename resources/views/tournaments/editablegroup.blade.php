@@ -69,6 +69,7 @@
                                 <table class="table table-striped" id="records_table_{{$group->id}}">
                                     <thead class="thead">
                                     <tr>
+                                    <th>Rank </th>
                                     <th>Name</th>
                                     <th>Mat</th>
                                     <th>Won</th>
@@ -88,20 +89,21 @@
                                 <tbody>
                                 @if(!empty($team_details[$group->id]))
                                 <?php $table_count=count($team_details[$group->id]);?>	
-                                    @foreach($team_details[$group->id] as $team)
+                                    @foreach($team_details[$group->id] as $key_team=>$team)
 
                <?php $match_count_details=Helper::getMatchGroupDetails($tournament_id, $group->id, $team['team_id']);?>
                                     
                                     <tr id="row_{{$team['id']}}" class="group_row_{{$group->id}}">
+                                    <td>{{ ($key_team + 1) }}</td>
                                     <td>{{ $team['name'] }}</td>
                                     <td>{{ !empty($match_count[$group->id][$team['team_id']])?$match_count[$group->id][$team['team_id']]:0 }}</td>
                                     <td>{{ !empty($team['won'])?$team['won']:0 }}</td>
                                     <td>{{ !empty($team['lost'])?$team['lost']:0 }}</td>
 
-                           		    <td>{{$match_count_details['tie']}}</td>
+                           		    <td>{{ !empty($team['tie'])?$team['tie']:0 }}</td>
                                 @if(in_array($sports_id, [4,11]))                               		
-                                    <td>{{$match_count_details['gf']}}</td>
-                                    <td>{{$match_count_details['ga']}}</td>                                   
+                                    <td>{{ !empty($team['gf'])?$team['gf']:0 }}</td>
+                                   <td>{{ !empty($team['ga'])?$team['ga']:0 }}</td>                                 
                                 @endif
 
                                     <td>{{ !empty($team['points'])?$team['points']:0 }}</td>

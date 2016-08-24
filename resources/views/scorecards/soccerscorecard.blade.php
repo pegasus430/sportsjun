@@ -2,6 +2,9 @@
 @section('content')
 	<style type="text/css">
 		.alert{display: none;}
+		.label_half_time{
+			cursor: pointer;
+		}
 		.show_teams{display: none;}
 		.player_selected{
 			background: #111111;
@@ -447,15 +450,31 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 						</div>
 
 
+						<div class='col-xs-12 panel'>
+							<div class='hidden-xs col-sm-4'>
+								<label>Choose Half Time </label>
+							</div>
+							<div class='col-xs-6 col-sm-4'>
+								<label for='first_half' class="label_half_time" > First Half  &nbsp;</label>
+							    <input type='radio' name='choose_half_time' value='first_half' checked="" id='first_half' class='checkbox_half_time' > 
+							</div>
+							<div class='col-xs-6 col-sm-4'>
+								<label for='second_half' class="label_half_time"> Second Half &nbsp;</label>
+								<input type='radio' name='choose_half_time' value='second_half' id='second_half' class='checkbox_half_time' > 
+							</div>
+						</div>
+
+						<p>
+
 						<center class=" sportsjun-forms " >
 							<button href="javascript:void(0);" data-toggle="modal" data-target="#soccerSubstituteModalA" class='btn-link btn-other btn-secondary-link  request pull-left' onclick="return false">Substitute A</button>
 
-							<label class="col-sm-3 col-xs-5">
+						<!-- 	<label class="col-sm-3 col-xs-5">
 								<select name='select_half_time' class='form-control ' data-style="" onclick="return SJ.SCORECARD.soccerChooseTime(this)">
 									<option value="first_half">First Half</option>
 									<option value='second_half'>Second Half</option>
 								</select>
-							</label>
+							</label> -->
 
 							<button class="btn-link  btn-goal-card-select  soccer_buttons_disabled" id='soccerAddGoalId'  onclick="return SJ.SCORECARD.soccerAddGoal(this)">Goal</button>
 
@@ -1746,6 +1765,20 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 			})
 			return false;
 		}
+
+
+	</script>
+
+	<script type="text/javascript">
+
+	$(window).load(function(){
+		$('.checkbox_half_time').on('ifChecked', function(){
+
+				console.log($(this).val());
+				return SJ.SCORECARD.soccerChooseTime(this);
+		});
+	
+	})
 
 
 	</script>
