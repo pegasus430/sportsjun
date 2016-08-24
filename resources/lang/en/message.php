@@ -273,7 +273,7 @@ return [
 		'enrollmentfee' => 'Enrollment Fee',
 		'pointstowinningteam' => 'Points to Winning team',
 		'Pointstolosingteam' => 'Points to Losing team',
-		'Pointsfortie' 		 => 'Points for tie / washout',
+		'Pointsfortie' 		 => 'Tie Match Points',
 		'status' => 'Status',
 		'description' => 'Description',
 		'heading' => 'Tournaments',

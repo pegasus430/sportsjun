@@ -419,7 +419,13 @@
                 $.each(parsed_data.cities, function(key, value) {
                     options += "<option value='" + key + "'>" + value + "</option>";
                 });
+                var states = "<option value=''>Select State</option>";
+                $.each(parsed_data.states, function(key, value) {
+                    states += "<option value='" + key + "'>" + value + "</option>";
+                });
                 $(".modal-body #city_id").html(options);
+                $(".modal-body #state_id").html(states);
+                
                 $(".modal-body #schedule_id").val(parsed_data.scheduleData.id);
                 $(".modal-body #myteam").val(parsed_data.team_a_name);
                 $(".modal-body #my_team_id").val(parsed_data.scheduleData.a_id);

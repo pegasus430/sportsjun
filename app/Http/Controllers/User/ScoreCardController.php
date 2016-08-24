@@ -3616,7 +3616,14 @@ class ScoreCardController extends Controller {
 			}else {
 				$player_b_ids = $winner_team_id;
 			}
-			MatchSchedule::where('id',$matchScheduleData['id'])->update(['b_id'=>$winner_team_id,'player_b_ids'=>!empty($player_b_ids)?(','.trim($player_b_ids).','):NULL]);
+
+
+			 if(!empty($matchScheduleData->a_id)){
+                    MatchSchedule::where('id',$matchScheduleData['id'])->update(['b_id'=>$winner_team_id,'player_b_ids'=>!empty($player_b_ids)?(','.trim($player_b_ids).','):NULL]);
+                   }
+              else{
+                      MatchSchedule::where('id',$matchScheduleData['id'])->update(['a_id'=>$winner_team_id,'player_a_ids'=>!empty($player_b_ids)?(','.trim($player_b_ids).','):NULL]);
+                   }			
 
 		}else{
 			if ($matchScheduleData['schedule_type'] == 'team') {

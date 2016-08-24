@@ -12,6 +12,7 @@ use App\Model\Tournaments;
 use App\Model\TeamPlayers;
 use App\Helpers\AllRequests;
 use App\User;
+use App\Model\Organization;
 use File;
 use Auth;
 use DB;
