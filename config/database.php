@@ -54,10 +54,10 @@ return [
 
         'mysql' => [
             'driver'    => 'mysql',
-            'host'      => 'localhost',  
-            'database'  => 'sportsjun_prod',
-            'username'  => 'sportsjun_prod',
-            'password'  => 'Xedu_h6thEsw',
+            'host'      => 'localhost',
+            'database'  => 'sportsjun_2016_07_11',
+            'username'  => 'sportsjun_dev',
+            'password'  => '8rAf@2af$dAw',
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix'    => '',
