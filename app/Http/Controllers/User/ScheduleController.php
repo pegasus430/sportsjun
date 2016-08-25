@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\User;
+ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
@@ -1522,12 +1522,12 @@ $matchScheduleData = MatchSchedule::where('tournament_id',$matchScheduleDetails[
                 //check if corresponding team is in database
             if(count($matchScheduleData)){
                    if(!empty($matchScheduleData->a_id)){
-                        $matchScheduleData->b_id=$matchScheduleDetails['a_id'];
-                        $matchScheduleData->player_b_ids=$matchScheduleDetails['player_a_ids'];
+                        $matchScheduleData->b_id=$matchScheduleDetails['winner_id'];
+                        $matchScheduleData->player_b_ids=$player_a_ids;
                    }
                    else{
-                        $matchScheduleData->a_id=$matchScheduleDetails['a_id'];
-                        $matchScheduleData->player_a_ids=$matchScheduleDetails['player_a_ids'];
+                        $matchScheduleData->a_id=$matchScheduleDetails['winner_id'];
+                        $matchScheduleData->player_a_ids=$player_a_ids;
                    }
 
                    $matchScheduleData->save();
