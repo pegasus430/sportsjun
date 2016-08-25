@@ -1456,7 +1456,7 @@ class TournamentsController extends Controller
 									if (count($winnerTeamSchedule)) {
 
 										$bracketTeamArray[$j][$k]['id'] = $winnerTeamSchedule->id;
-										//$match_ids[]=$winnerTeamSchedule->id;
+										$match_ids[]=$winnerTeamSchedule->id;
 										if(count($winnerTeamSchedule->match_start_date)) {
 											$startDate = Carbon::createFromFormat('Y-m-d', $winnerTeamSchedule->match_start_date);
 											if (!empty($winnerTeamSchedule->winner_id) && $winnerTeamSchedule->match_status=='completed') {
