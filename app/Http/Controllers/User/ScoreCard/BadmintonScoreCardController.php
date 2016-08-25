@@ -729,7 +729,7 @@ class BadmintonScoreCardController extends parentScoreCardController
                         }
                     }
 
-            if(!empty($matchScheduleDetails['tournament_group_id'])) {
+            if(!empty($matchScheduleDetails['tournament_id'])) {
                 $tournamentDetails = Tournaments::where('id', '=', $matchScheduleDetails['tournament_id'])->first();
                   $match_status = 'completed';
                 if(Helper::isTournamentOwner($tournamentDetails['manager_id'],$tournamentDetails['tournament_parent_id'])) {
