@@ -11,6 +11,10 @@
   }
 }
 
+.match_winner{
+    background: #dcdccc;
+}
+
 </style>
 @if(count($tournamentDetails[0]['final_stage_teams']))
 <!--<div>
@@ -135,7 +139,7 @@
                                                @if(isset($bracket['winner_text']))
                                                     @if($bracket['winner_text']=='edit')
                                                         @if(isset($bracket['id']))
-                                                            <a href="javascript:void(0)" id="scheduleEdit_{{$bracket['id']}}" onclick="editMatchSchedule({{$bracket['schdule_id']}},{{$round}},{{$brk+1}},'myModal')">Edit</a>
+                                                            <a href="javascript:void(0)" id="scheduleEdit_{{$bracket['id']}}" onclick="editMatchSchedule({{$bracket['schdule_id']}},1,{{$round}},'myModal')">Edit</a>
                                                         @endif    
                                                     @else
                                                         @if(isset($bracket['id']))
@@ -145,7 +149,7 @@
                                                @else
                                                     @if($isOwner)
                                                         @if(isset($bracket['id']))
-                                                            <a href="javascript:void(0)" id="scheduleEdit_{{$bracket['id']}}" onclick="editMatchSchedule({{$bracket['schdule_id']}},{{$round}}, {{$brk+1}},['myModal')">Edit</a>
+                                                            <a href="javascript:void(0)" id="scheduleEdit_{{$bracket['id']}}" onclick="editMatchSchedule({{$bracket['schdule_id']}},1,{{$round}},'myModal')">Edit</a>
                                                         @endif    
                                                     @endif
                                                @endif
@@ -325,6 +329,10 @@ function addRoundMatchesSchedule(tournamentId,roundNumber, matchNumber) {
 //                    $(".modal-body #tournament_match_number").val(response['matchNumber']);
                     $(".modal-body #tournament_match_number").val(matchNumber);
                     $(".modal-body #scheduletype").val(response['scheduleType']);
+
+                    $(".modal-body #myteam").removeAttr("readonly"); 
+                    $(".modal-body #oppteam").removeAttr("readonly");
+                    
                     
                    autofillsubtournamentdetails(tournamentDetails);
                 }

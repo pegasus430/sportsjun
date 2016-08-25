@@ -1389,6 +1389,7 @@ class TournamentsController extends Controller
 
 	function getBracketTeams($tournament_id, $maxRoundNumber, $scheduleType, $isOwner) {
 		$bracketTeamArray = [];
+		$match_ids=[];
 		$k = 0;
 		if ($maxRoundNumber > 1) {
 			for ($i = 2; $i <= $maxRoundNumber; $i++) {
@@ -1443,8 +1444,10 @@ class TournamentsController extends Controller
 										->where(function($query) use ($winnerId) {
 											$query->where('a_id', $winnerId)->orWhere('b_id', $winnerId);
 										})
+										->whereNotIn('id', $match_ids)										
+
 //                                            ->where('a_id', $brschedule['winner_id'])->orWhere('b_id', $brschedule['winner_id'])
-										->orderBy('id','desc')
+										->orderBy('id','asc')
 										->first(['id', 'tournament_id', 'tournament_round_number', 'tournament_match_number', 'a_id', 'b_id', 'match_start_date', 'winner_id', 'match_invite_status', 'match_status','match_type']);
 //                                    Helper::printQueries();
 //                                            dd($winnerTeamSchedule);
@@ -1453,6 +1456,7 @@ class TournamentsController extends Controller
 									if (count($winnerTeamSchedule)) {
 
 										$bracketTeamArray[$j][$k]['id'] = $winnerTeamSchedule->id;
+										//$match_ids[]=$winnerTeamSchedule->id;
 										if(count($winnerTeamSchedule->match_start_date)) {
 											$startDate = Carbon::createFromFormat('Y-m-d', $winnerTeamSchedule->match_start_date);
 											if (!empty($winnerTeamSchedule->winner_id) && $winnerTeamSchedule->match_status=='completed') {
@@ -1493,17 +1497,22 @@ class TournamentsController extends Controller
 									else
 									{
 										if ($isOwner) {
+
+
 											$currentScheduleData = MatchSchedule::where('tournament_id', $tournament_id)
 												->whereNull('tournament_group_id')
 												->where('tournament_round_number', ($i))
 												->where('tournament_match_number', ceil($brschedule['tournament_match_number'] / 2))
-												->orderBy('tournament_match_number')
+												->orderBy('tournament_match_number')								
 												->first(['id','match_type']);
+
+									$match_ids[]=$currentScheduleData['id'];
+								 
 //                                                $bracketTeamArray[$j][$k]['match_start_date']=  Carbon::now();
 											$bracketTeamArray[$j][$k]['match_start_date']=  date(config('constants.DATE_FORMAT.VALIDATION_DATE_TIME_FORMAT'));
 											$bracketTeamArray[$j][$k]['winner_text'] = 'edit';
 											$bracketTeamArray[$j][$k]['schdule_id'] = $currentScheduleData['id'];
-											$bracketTeamArray[$j][$k]['id'] = $currentScheduleData['id'];
+											//$bracketTeamArray[$j][$k]['id'] = $currentScheduleData['id'];
 											if($currentScheduleData->match_type!='other')
 											{
 												$bracketTeamArray[$j][$k]['match_type'] = $currentScheduleData->match_type=='odi'?'('.strtoupper($currentScheduleData->match_type).')':'('.ucfirst($currentScheduleData->match_type).')';
@@ -1524,6 +1533,9 @@ class TournamentsController extends Controller
 				}
 			}
 		}
+ 
+  // die(json_encode($match_ids));
+
 //                                            Helper::printQueries();
 		return $bracketTeamArray;
 	}
