@@ -469,13 +469,6 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 						<center class=" sportsjun-forms " >
 							<button href="javascript:void(0);" data-toggle="modal" data-target="#soccerSubstituteModalA" class='btn-link btn-other btn-secondary-link  request pull-left' onclick="return false">Substitute A</button>
 
-						<!-- 	<label class="col-sm-3 col-xs-5">
-								<select name='select_half_time' class='form-control ' data-style="" onclick="return SJ.SCORECARD.soccerChooseTime(this)">
-									<option value="first_half">First Half</option>
-									<option value='second_half'>Second Half</option>
-								</select>
-							</label> -->
-
 							<button class="btn-link  btn-goal-card-select  soccer_buttons_disabled" id='soccerAddGoalId'  onclick="return SJ.SCORECARD.soccerAddGoal(this)">Goal</button>
 
 							<button class="btn-link btn-yellow-card-select soccer_buttons_disabled" id='soccerYellowCarId'  onclick="return SJ.SCORECARD.soccerYellowCard()">Card</button>
@@ -1470,6 +1463,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 				return this;
 			};
 			$('.select_player_squad').click(function(){
+
 				var player_id=$(this).attr('player_id');
 				var team_type=$(this).attr('team_type');
 				var player_type=$(this).attr('player_type');
@@ -1674,6 +1668,8 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 				$('.player_select').removeClass('player_selected').css({background:'none'})
 				$(this).addClass('player_selected').css({background:'#ffddee'})
 				$('#selected_player_id_value').val(player_id);
+
+	console.log({!!json_encode($team_a_soccer_scores_array )!!})
 			}
 			return false;
 		})

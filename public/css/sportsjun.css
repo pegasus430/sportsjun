@@ -1480,7 +1480,7 @@ padding: 0px 5px;
 .group-flex-content ul li:last-child{
 border-top: none;
 }
-.round-two,.round-three,.round-four{
+.round-two,.round-three,.round-four, .round-five, .round-six{
 padding: 0px 5px;
 }
 .round-two ul{
@@ -1488,22 +1488,27 @@ margin: 140px 0px 0px 0px;
 }
 .round-two > ul:nth-child(2){
 margin: 90px 0px 0px !important;
-
 }
+
 .round-three > ul:nth-child(2){
 margin: 200px 0px 0px !important;
-
 }
 .round-three ul{
 margin: 145px 0px 0px !important;
-
 }
+
 .round-four ul{
 margin: 315px 0px 0px 0px;
 }
 
+
+
 .round-five ul{
-margin: 415px 0px 0px 0px;
+margin: 745px 0px 0px 0px;
+}
+
+.round-six ul{
+margin: 900px 0px 0px 0px;
 }
 
 .round p{margin: 8px 0px 7px 0px;padding: 3px; font-size: 14px; font-weight: 600;letter-spacing: .5px;text-align: center;color: #455A64;}

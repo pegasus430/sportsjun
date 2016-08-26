@@ -213,7 +213,8 @@
             <td><b>{{$score_a_array['player_name_a']}} / {{$score_a_array['player_name_b']}}</b></td>
 
           @for($set_index=1; $set_index<=$set; $set_index++)
-               <td class='a_set{{$set_index}}'>
+                 
+               <td class='a_set{{$set_index}} ' >
                   <span class='remove_button_left button_set_{{$set_index}}'></span>
                       {{$score_a_array['set'.$set_index]}}
                   <span class='add_button_left button_set_{{$set_index}}'></span>
@@ -228,7 +229,8 @@
 
             <td><b>{{$score_b_array['player_name_a']}} / {{$score_b_array['player_name_b']}}</b></td>
             @for($set_index=1; $set_index<=$set; $set_index++)
-               <td class='b_set{{$set_index}}'>
+                  
+               <td class='b_set{{$set_index}}  '>
                    <span class='remove_button_right button_set_{{$set_index}}'></span>
                       {{$score_b_array['set'.$set_index]}}
                    <span class='add_button_right button_set_{{$set_index}}'></span>

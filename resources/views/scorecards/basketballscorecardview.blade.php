@@ -26,6 +26,20 @@
         $a_fouls=$match_details->{$team_a_id}->fouls;
         $b_fouls=$match_details->{$team_b_id}->fouls;       
     }
+
+    function getClass($number){
+            if($number>0){
+                return 'match-detail-score primary red';
+            }
+            else return '';
+    }
+
+     function getPlayerClass($playing_status){
+            if($playing_status=='P'){
+                return 'match-detail-score primary blue';
+            }
+            else return '';
+    }
     
     ?>
 
@@ -265,30 +279,30 @@
                                         <tr id="team_a_row_{{$player['id']}}">
 
                                                
-                                                <td>
+                                                <td class="{{getPlayerClass($player['playing_status'])}}">
                                                         {{$player['player_name']}}                              
                                                 </td>
-                                                <td> 
- {{$player['points_1']}}
+                                                <td class="{{getClass($player['points_1'])}}"> 
+    {{$player['points_1']}}
                                                 </td>
-                                                <td>
+                                                <td class="{{getClass($player['points_2'])}}">
      {{$player['points_2']}}
 
                                                 </td>
-                                                <td>
+                                                <td class="{{getClass($player['points_3'])}}">
       {{$player['points_3']}}
                                                 </td>                                             
                                               
-                                                <td class="{{$player['id']}}_fouls">
+                                                <td class="{{getClass($player['fouls'])}} ">
                                                         {{$player['fouls']}}
                                                 </td>
                                                 
 
                                               @for($index=1; $index<=$number_of_quarters; $index++)
-                                                <td>{{$player['quarter_'.$index]}}</td>
+                                            <td class="{{getClass($player['quarter_'.$index])}}">{{$player['quarter_'.$index]}}</td>
                                               @endfor
 
-                                              <td>
+                                              <td class="{{getClass($player['total_points'])}}">
     {{$player['total_points']}}
                                                 </td>
                                          </tr>
@@ -329,30 +343,30 @@
                                         <tr>
 
                                                 
-                                                <td>
+                                                <td class="{{getPlayerClass($player['playing_status'])}}">
                                                         {{$player['player_name']}}                              
                                                 </td>
-                                                <td> 
+                                                <td class="{{getClass($player['points_1'])}}"> 
      {{$player['points_1']}}
                                                 </td>
-                                                <td>
+                                                <td  class="{{getClass($player['points_2'])}}">
      {{$player['points_2']}}
 
                                                 </td>
-                                                <td>
+                                                <td class="{{getClass($player['points_3'])}}">
       {{$player['points_3']}}
                                                 </td>                                             
                                               
-                                                <td class="{{$player['id']}}_fouls">
+                                                <td class="{{$player['id']}}_fouls {{getClass($player['fouls'])}}"">
                                                          {{$player['fouls']}}
                                                 </td>
                                                 
 
                                               @for($index=1; $index<=$number_of_quarters; $index++)
-                                                <td>{{$player['quarter_'.$index]}}</td>
+                                                <td class="{{getClass($player['quarter_'.$index])}}">{{$player['quarter_'.$index]}}</td>
                                               @endfor
 
-                                              <td>{{$player['total_points']}}
+                                              <td class="{{getClass($player['total_points'])}}">{{$player['total_points']}}
                                                 </td>
                                          </tr>
                                          </tr>
