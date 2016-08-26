@@ -1690,8 +1690,8 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 				else $('#displayGoalsFirstHalf').append("<tr><td></td><td></td><td></td><td></td>");
 			}
 
-			for(i=0; i<first_half.length; i++){
-				if(first_half.goals_details.team_type=='team_a')
+			for(i=0; i<second_half.length; i++){
+				if(second_half.goals_details.team_type=='team_a')
 					$('#displayGoalsSecondHalf').append("<tr><td></td><td></td><td></td><td></td>");
 				else $('#displayGoalsSecondHalf').append("<tr><td></td><td></td><td></td><td></td>");
 			}
@@ -1770,17 +1770,9 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 	</script>
 
 	<script type="text/javascript">
-
-	$(window).load(function(){
-		$('.checkbox_half_time').on('ifChecked', function(){
-
-				console.log($(this).val());
-				return SJ.SCORECARD.soccerChooseTime(this);
-		});
-	
-	})
-
-
+        $(document).on('ifChecked', '.checkbox_half_time', function(){
+            return SJ.SCORECARD.soccerChooseTime(this);
+        });
 	</script>
 
 @endsection
