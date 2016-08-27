@@ -9,4 +9,3 @@ config/*
 *.sublime-*
 .DS_Store
 Thumbs.db
-.gitignore
