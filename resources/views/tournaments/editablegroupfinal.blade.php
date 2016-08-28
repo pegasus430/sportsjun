@@ -137,6 +137,12 @@ function addRoundMatchesSchedule(tournamentId,roundNumber, matchNumber) {
                     $("#byeDiv").show();
                     $("#byeTextDiv").hide();
                     clearModal();
+
+                    $("#myteam").focus("");
+				    $("#my_team_id").val("");
+				    $("#oppteam").focus("");
+				    $("#opp_team_id").val("");
+				    $("#match_start_date").val("");
                     
                     var tournamentDetails = response['tournamentDetails'];
                     $(".modal-body #search_team_ids").val(response['searchTeamIds']);
@@ -145,6 +151,16 @@ function addRoundMatchesSchedule(tournamentId,roundNumber, matchNumber) {
 //                    $(".modal-body #tournament_match_number").val(response['matchNumber']);
                     $(".modal-body #tournament_match_number").val(matchNumber);
                     $(".modal-body #scheduletype").val(response['scheduleType']);
+
+                    $(".modal-body #myteam").attr("readonly", false); 
+                    $(".modal-body #oppteam").attr("readonly", false);
+
+                    $(".modal-body #myteam").focus(function(){
+                        $('#myteam').focus();
+                    });
+                    $(".modal-body #oppteam").focus(function(){
+                        $('#oppteam').focus();
+                    });
                     
                    autofillsubtournamentdetails(tournamentDetails);
                 }

@@ -1294,9 +1294,6 @@ input:read-only {
 			}
 
 
-
-			//console.log(window.tempSquadData);
-
 			Array.prototype.remove = function() {
 				var what, a = arguments, L = a.length, ax;
 				while (L && this.length) {
@@ -1730,9 +1727,7 @@ var manual=false;
         		var pt_2_count=Number($('.points_2_player_'+value).val());
         		var pt_3_count=Number($('.points_3_player_'+value).val());
 
-        		console.log(pt_3_count);
-
-        		var quarter_count_total=0;
+        	var quarter_count_total=0;
         		for(j=1; j<=number_of_quarters; j++){
         			var quart_count=Number($('.quarters_'+j+'_player_'+value).val());
         			quarter_count_total+=quart_count;

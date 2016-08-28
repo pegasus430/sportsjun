@@ -119,16 +119,13 @@ jsPlumb.ready(function() {
             var matches = Math.ceil(teams_count/2);
 
             var tours=Math.ceil(Math.log(teams_count,2)) + 2;
-            console.log(tours);
-
+          
             for(t=1; t<=tours; t++){
 
                 for(m=1; m<=matches; m++){
-                        console.log('matches - '+ matches);
-
+                      
                         if($("#tour_"+t+"_match_"+m).length){
-                                console.log( 't - ' +t  + ' m - ' + m);
-
+                            
                             if(m%2==1){
                                 _addEndpoints("tour_"+t+"_match_"+m, ["TopCenter", "BottomCenter"], ["LeftMiddle", "RightMiddle"]);
                             }
@@ -143,26 +140,14 @@ jsPlumb.ready(function() {
             }
         
 
-        // _addEndpoints("tour_1_match_1", ["TopCenter", "BottomCenter"], ["LeftMiddle", "RightMiddle"]);
-        // _addEndpoints("tour_1_match_2", ["LeftMiddle", "BottomCenter"], ["TopCenter", "RightMiddle"]);
-        // _addEndpoints("tour_1_match_2", ["LeftMiddle", "BottomCenter"], ["TopCenter", "RightMiddle"]);
-        // _addEndpoints("tour_1_match_2", ["LeftMiddle", "BottomCenter"], ["TopCenter", "RightMiddle"]);
 
-        // _addEndpoints("tour_2_match_1", ["TopCenter", "BottomCenter"], ["RightMiddle", "TopCenter"]);
-        // _addEndpoints("tour_1_match_4", ["LeftMiddle", "RightMiddle"], ["TopCenter", "BottomCenter"]);
 
         // listen for new connections; initialise them the same way we initialise the connections at startup.
         instance.bind("connection", function (connInfo, originalEvent) {
             init(connInfo.connection);
         });
 
-        // make all the window divs draggable
-        // instance.draggable(jsPlumb.getSelector(".flowchart-demo .window"), { grid: [20, 20] });
-        // // THIS DEMO ONLY USES getSelector FOR CONVENIENCE. Use your library's appropriate selector
-        // // method, or document.querySelectorAll:
-        // //jsPlumb.draggable(document.querySelectorAll(".window"), { grid: [20, 20] });
-
-        // connect a few up
+       
 
           var teams_count=window.matches;
           var matches = Math.ceil(teams_count/2);
@@ -175,8 +160,7 @@ jsPlumb.ready(function() {
                      var cur_m=Math.ceil(m/2);
                     if($("#tour_"+t+"_match_"+cur_m).length){
 
-                        console.log( ' cur_m ' + cur_m)
-                        if(m%2==1){
+                       if(m%2==1){
                            instance.connect({uuids: ["tour_"+t+"_match_"+m+"RightMiddle", "tour_"+(t+1)+"_match_"+cur_m+"TopCenter"], editable: false});;
                         }
                         else{
@@ -190,17 +174,7 @@ jsPlumb.ready(function() {
                 matches=Math.ceil(matches/2);
             }
 
-       
-      
-        // instance.connect({uuids: ["tour_1_match_1RightMiddle", "tour_2_match_1TopCenter"], editable: false});
-        // instance.connect({uuids: ["tour_1_match_2RightMiddle", "tour_2_match_1BottomCenter"], editable: false});
-        // instance.connect({uuids: ["tour_1_match_3RightMiddle", "tour_2_match_2TopCenter"], editable: false});
-        // instance.connect({uuids: ["tour_1_match_4RightMiddle", "tour_2_match_2BottomCenter"], editable: false});
-
-        // instance.connect({uuids: ["tour_2_match_1RightMiddle", "tour_3_match_1TopCenter"], editable: false});
-
-
-        
+    
 
         //
         // listen for clicks on connections, and offer to delete connections on click.

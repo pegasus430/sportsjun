@@ -11,6 +11,10 @@
   }
 }
 
+.match_winner{
+    background: #dcdccc;
+}
+
 </style>
 @if(count($tournamentDetails[0]['final_stage_teams']))
 <!--<div>
@@ -325,6 +329,10 @@ function addRoundMatchesSchedule(tournamentId,roundNumber, matchNumber) {
 //                    $(".modal-body #tournament_match_number").val(response['matchNumber']);
                     $(".modal-body #tournament_match_number").val(matchNumber);
                     $(".modal-body #scheduletype").val(response['scheduleType']);
+
+                    $(".modal-body #myteam").removeAttr("readonly"); 
+                    $(".modal-body #oppteam").removeAttr("readonly");
+                    
                     
                    autofillsubtournamentdetails(tournamentDetails);
                 }

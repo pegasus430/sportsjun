@@ -54,10 +54,13 @@ return [
 
         'mysql' => [
             'driver'    => 'mysql',
-            'host'      => 'localhost',  
-            'database'  => 'sportsjun_prod',
-            'username'  => 'sportsjun_prod',
-            'password'  => 'Xedu_h6thEsw',
+            'host'      => 'localhost',
+            'database'  => 'sportsjun_dev',
+            'username'  => 'sportsjun_dev',
+            'password'  => '8rAf@2af$dAw',
+            // 'database'  => 'sportsjun_dev',
+            // 'username'  => 'root',
+            // 'password'  => '',
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix'    => '',

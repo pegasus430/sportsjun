@@ -343,13 +343,20 @@ if (typeof SJ.SCORECARD === 'undefined')
                                 index++;
 
                                 $('#last_index').val(index);
+                      if(match_name==='basketball'){
+                                var displayField='#displayGoalsFirstHalfTemporal'
+                                 $(displayField).append("<form id='form_record_"+index+"' onsubmit='return saveRecord("+index+", \""+record_type+"\", "+player_id+")' class='col-sm-12 col-xs-12'>");
+                                var displayFormContent=$('#form_record_'+index);
+                      }
 
+                       else{
                                 if(half_time=='first_half')  var displayField='#displayGoalsFirstHalfTemporal';
                                 else var displayField='#displayGoalsSecondHalfTemporal';
-                                       
+                                 $(displayField).append("<form id='form_record_"+index+"' onsubmit='return saveRecord("+index+", \""+record_type+"\", "+player_id+")' class='col-sm-12 col-xs-12'>");
+                                var displayFormContent=$('#form_record_'+index);
+                              
                                 //create a new form for content
-                                $(displayField).append("<form id='form_record_"+index+"' onsubmit='return saveRecord("+index+", \""+record_type+"\", "+player_id+")' class='col-sm-12 col-xs-12'>");
-                                var displayFormContent=$('#form_record_'+index);                
+                                               
 
                                 if(team_type=='team_b'){
                                         if(half_time=='first_half'){
@@ -366,7 +373,8 @@ if (typeof SJ.SCORECARD === 'undefined')
                                         else{
                                                 displayFormContent.append("<div  class='records col-sm-12 '><div  class='col-sm-2 col-xs-6'>"+player_name+"</div><div  class='col-sm-2 col-xs-6'>"+record_type_name+"</div><div  class='col-sm-2 col-xs-6'><input type='number' min='0' placeholder='time e.g 20' class=' col-sm-12 col-xs-12 input_second_half'  name='time_"+index+"' required></div><div  class='col-sm-4 not-visible-xs'></div><div  class='col-sm-2 col-xs-6'><a href='javascript:void(0)' onclick='deleteRow(this, "+index+", "+player_id+",\""+record_type+"\")' class='btn btn-danger btn-circle btn-sm'><i class='fa fa-remove'></i></a><button class='btn btn-success btn-circle btn-sm saveMatchForm' type='submit' index='"+index+"'><i class='fa fa-check'></i></button></div></div>");
                                         }
-                                }             
+                                } 
+                        }            
 
 
 
@@ -386,7 +394,9 @@ if (typeof SJ.SCORECARD === 'undefined')
                                 displayFormContent.append("<input type='hidden' name='index' value='"+index+"'>");
                         
                 if(match_name==='basketball'){
+
                         $('#form_record_'+index).submit();
+                      
                 }
 
                         },

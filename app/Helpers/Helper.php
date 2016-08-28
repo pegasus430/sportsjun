@@ -2062,6 +2062,8 @@ class Helper {
 
         $tournaments=Tournaments::find($tournament_id);
         $count=$tournaments->final_stage_teams; 
+        $total_rounds=ceil(log($count, 2));
+        $diff=$total_rounds- $round_number;
 
         $round_names=[];
         $round_names[-1]='';
@@ -2070,11 +2072,9 @@ class Helper {
         $round_names[1]='SEMI FINAL';
         $round_names[2]='QUARTER FINAL';
 
-        for($i=3; $i<=12; $i++){
-                $round_names[$i]="ROUND ".($i-2);
-        }
-
-        $total_rounds=ceil(log($count, 2));
+        for($i=3; $i<=7; $i++){
+                $round_names[$i]="ROUND ".($total_rounds-$i);
+        }       
 
         return $round_names[$total_rounds- $round_number];
       
