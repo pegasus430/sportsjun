@@ -1016,8 +1016,7 @@ function getTeamPlayers(that){
               $('.team_'+left_team_id+'_score').html(response.scores[left_team_id+"_score"] + ' sets');
               $('.team_'+right_team_id+'_score').html(response.scores[right_team_id+"_score"] + ' sets');
 
-              console.log($('#team_'+left_team_id+'_score').html());
-
+              
                         }
 
                        });

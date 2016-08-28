@@ -1450,7 +1450,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 
 
 
-			//console.log(window.tempSquadData);
+			
 
 			Array.prototype.remove = function() {
 				var what, a = arguments, L = a.length, ax;
@@ -1669,7 +1669,6 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 				$(this).addClass('player_selected').css({background:'#ffddee'})
 				$('#selected_player_id_value').val(player_id);
 
-	console.log({!!json_encode($team_a_soccer_scores_array )!!})
 			}
 			return false;
 		})
