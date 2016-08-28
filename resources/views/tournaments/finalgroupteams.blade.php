@@ -15,8 +15,9 @@
                 <tbody id="addedTeamsTable">
                 @if(count($tournamentTeams))
                     @foreach($tournamentTeams as $requestedTeam)
-                            <tr class="selected-teams">                           
-                            <td>{{ $requestedTeam['name'] }}</td>
+                            <tr class="selected-teams">
+                            
+                            <td>{{ $requestedTeam }}</td>
                             
                         </tr>
                     @endforeach
