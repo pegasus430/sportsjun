@@ -3,7 +3,7 @@ public/uploads/
 public/mailoutput/
 vendor/
 storage/*
-config/*
+config/database.php
 .env
 .idea/
 *.sublime-*
