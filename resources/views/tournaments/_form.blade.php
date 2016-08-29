@@ -362,7 +362,7 @@ $(function () {
 	function sportsChange(sport_id)
 	{
 		var sport_name = $( "#sports_id option:selected" ).text();
-		if(sport_name.toLowerCase()=='tennis' || sport_name.toLowerCase()=='table tennis')
+		if(sport_name.toLowerCase()=='tennis' || sport_name.toLowerCase()=='table tennis' || sport_name.toLowerCase()=='badminton' || sport_name.toLowerCase()=='squash')
 		{
 			$('#show_hide_div').show();
 			$("#schedule_type").val('team');
