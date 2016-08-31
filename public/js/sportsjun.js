@@ -1002,7 +1002,10 @@ function displayCountries(a, s_id) {
                 $(this).html(b);
             });
 
+            if(s_id){
                     $(".modal-body #state_id").val(s_id);
+            }
+                
         }
     });
 }
