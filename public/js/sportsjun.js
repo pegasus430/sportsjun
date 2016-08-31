@@ -805,6 +805,7 @@ function editMatchSchedule(a, b, c, modal_id) {
             $(".modal-body #address").val(e.scheduleData.address);
             $(".modal-body #state_id").val(e.scheduleData.state_id);
             $(".modal-body #city_id").val(e.scheduleData.city_id);
+            $(".modal-body #country_id").val(e.scheduleData.country_id);
             $(".modal-body #zip").val(e.scheduleData.zip);
             
              setTimeout(function(){ 
@@ -973,11 +974,12 @@ function displayStates(a) {
     });
 }
 
-function displayCountries(a) {
+function displayCountries(a, s_id) {
     if (!a) {
         $("#country_id").html("<option value=''>Select Country</option>");
         return false;
     }
+ var c_id=a;
     $.ajax({
         url: base_url + "/getstates",
         type: "GET",
@@ -1000,6 +1002,11 @@ function displayCountries(a) {
             $(".states").each(function() {
                 $(this).html(b);
             });
+
+            if(s_id){
+                    $(".modal-body #state_id").val(s_id);
+            }
+                
         }
     });
 }
@@ -1235,12 +1242,16 @@ function autofillsubtournamentdetails(tournamentDetails) {
         $(".modal-body #player_type").val(tournamentDetails['player_type']);
         $(".modal-body #match_type").val(tournamentDetails['match_type']);
         $(".modal-body #address").val(tournamentDetails['address']);
-        $(".modal-body #state_id").val(tournamentDetails['state_id']);
+        $(".modal-body #state_id").val(tournamentDetails['state_id']);       
         $(".modal-body #zip").val(tournamentDetails['zip']);
         // $(".modal-body #player_type").prop("disabled", true);
-        // $(".modal-body #match_type").prop("disabled", true);
+        // $(".modal-body #match_type").prop("disabled", true);]
+        displayCountries(tournamentDetails['country_id'],tournamentDetails['state_id'] );
         displayStates(tournamentDetails['state_id']);
-        displayCountries(tournamentDetails['country_id']);
+
+        $(".modal-body #state_id").val(tournamentDetails['state_id']);
+        $(".modal-body #country_id").val(tournamentDetails['country_id']);
+      
 
         if(scheduletype === "team")
         {

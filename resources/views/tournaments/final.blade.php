@@ -15,6 +15,10 @@
     background: #dcdccc;
 }
 
+.tour_score{
+  
+}
+
 </style>
 @if(count($tournamentDetails[0]['final_stage_teams']))
 <!--<div>
@@ -61,7 +65,7 @@
                                 @if(isset($schedule[$scheduleTypeOne]['name']))
                                     <span>
                                         <a href="{{ url($linkUrl,[$schedule[$scheduleTypeOne]['id']]) }}">
-                                            {{Helper::get_first_letters($schedule[$scheduleTypeOne]['name'])}}
+                                            {{Helper::get_first_20_letters($schedule[$scheduleTypeOne]['name'])}}
                                         </a>
                                     </span>
                                 @else
@@ -73,7 +77,7 @@
                                 @if(isset($schedule[$scheduleTypeTwo]['name']))
                                    <span>
                                         <a href="{{ url($linkUrl,[$schedule[$scheduleTypeOne]['id']]) }}">
-                                            {{Helper::get_first_letters($schedule[$scheduleTypeTwo]['name'])}}
+                                            {{Helper::get_first_20_letters($schedule[$scheduleTypeTwo]['name'])}}
                                         </a>
                                    </span>
                                 @else
@@ -164,7 +168,7 @@
           @if(isset($bracket['name']))
                                                 <span>
                                                    <a href="{{ url($linkUrl,[$bracket['team_or_player_id']]) }}">
-                                                    {{Helper::get_first_letters($bracket['name'])}}
+                                                    {{Helper::get_first_20_letters($bracket['name'])}}
                                                    </a>
                                                 </span>
                                         @else

@@ -1545,6 +1545,11 @@ class Helper {
         return strtoupper(preg_replace('/(\B.|\s+)/','',$string));
     }
 
+    public static function get_first_20_letters($string)
+    {
+        return ucfirst(substr($string, 0, 10));
+    }
+
     //tournament left menu
     public static function getLeftMenuData($parent_tournament_id,$manager_id,$sub_tournament_details)
     {
