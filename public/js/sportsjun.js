@@ -805,6 +805,7 @@ function editMatchSchedule(a, b, c, modal_id) {
             $(".modal-body #address").val(e.scheduleData.address);
             $(".modal-body #state_id").val(e.scheduleData.state_id);
             $(".modal-body #city_id").val(e.scheduleData.city_id);
+            $(".modal-body #country_id").val(e.scheduleData.country_id);
             $(".modal-body #zip").val(e.scheduleData.zip);
             
              setTimeout(function(){ 
