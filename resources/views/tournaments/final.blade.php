@@ -66,6 +66,7 @@
                                     <span>
                                         <a href="{{ url($linkUrl,[$schedule[$scheduleTypeOne]['id']]) }}">
                                             {{Helper::get_first_20_letters($schedule[$scheduleTypeOne]['name'])}}
+
                                         </a>
                                     </span>
                                 @else
@@ -76,8 +77,9 @@
                                 {!! Helper::Images($schedule[$scheduleTypeTwo]['url'],config('constants.PHOTO_PATH.TEAMS_FOLDER_PATH'),array('class'=>'img-circle img-border','height'=>30,'width'=>30) )!!}
                                 @if(isset($schedule[$scheduleTypeTwo]['name']))
                                    <span>
-                                        <a href="{{ url($linkUrl,[$schedule[$scheduleTypeOne]['id']]) }}">
+                                        <a href="{{ url($linkUrl,[$schedule[$scheduleTypeTwo]['id']]) }}">
                                             {{Helper::get_first_20_letters($schedule[$scheduleTypeTwo]['name'])}}
+                                          
                                         </a>
                                    </span>
                                 @else
