@@ -18,7 +18,7 @@
 @if(count($roundArray))
 	<br>
     <div class="pull-left half-width col-xs-12 col-sm-6 col-sm-offset-3"> <center><input class='full-width form-control dark-border' placeholder="filter match e.g team name, date" onkeyup="filterDiv(this)"></center></div>
-
+<?php $i=0;?>
         @foreach($roundArray as $round)
 
           <div class="col-sm-12">

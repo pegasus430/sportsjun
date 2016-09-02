@@ -2077,7 +2077,7 @@ class Helper {
         $round_names[1]='SEMI FINAL';
         $round_names[2]='QUARTER FINAL';
 
-        for($i=3; $i<=7; $i++){
+        for($i=3; $i<=8; $i++){
                 $round_names[$i]="ROUND ".($total_rounds-$i);
         }       
 

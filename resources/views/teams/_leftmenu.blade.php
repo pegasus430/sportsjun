@@ -9,7 +9,13 @@
                     <span class="fa fa-pencil" title="Edit"></span>
                 </a>
             @endif
-            <div class="locations"><i class="fa fa-map-marker"></i>&nbsp;<span style="word-wrap: break-word;">{{ !empty($location)?$location:'Location' }}</span>&nbsp;&nbsp;<i class="fa fa-globe"></i>&nbsp;<span id="left-menu-sport-name" data-sport-id="{{$sport_id}}">{{ $sport or 'Sport'}}</span></div>
+            <div class="locations"><i class="fa fa-map-marker"></i>&nbsp;<span style="word-wrap: break-word;">{{ !empty($location)?$location:'Location' }}</span>&nbsp;&nbsp;
+            <p>
+            <i class="fa fa-globe"></i>&nbsp;<span id="left-menu-sport-name" data-sport-id="{{$sport_id}}" class='sports_text'>{{ $sport or 'Sport'}}</span>
+                @if(!empty($teams))
+             <span class='sports_text'> ({{$teams[0]['gender']}})
+                @endif
+            </div>
             <div class="more desc">{{ $description or 'Description' }}</div>
             <?php if (!$user_in_team && $player_available_in_team) { ?>
             <div class="sb_join_team_main">

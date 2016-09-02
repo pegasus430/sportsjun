@@ -1,5 +1,11 @@
 @extends('layouts.app')
 @section('content')
+  <style>
+    .error{
+        color:red;
+        font-weight: normal;
+    }
+  </style>
 <?php 
     $team_a_name = $user_a_name;
 		$team_b_name = $user_b_name;
@@ -311,7 +317,7 @@
               <div class='row'>
                    <div class='col-sm-6'>
                         <label>Number of Sets</label>
-                        <select class='form-control select-picker' name='number_of_sets'>
+                        <select class=' form-control select-picker field select' name='number_of_sets'>
                           <option value='1'>1</option>
                           <option value='2'>2</option>
                           <option value='3' selected="">3</option>
@@ -324,12 +330,13 @@
                     </div>
 
                     <div class='col-sm-6'>
-                        <label>Score to Win</label>
-                        <input placeholder="eg. 21" type='text' name='score_to_win' class="form-control" required="">
+                      <div class="section">
+                        <label class="form_label">Score to Win <span  class='required'>*</span> </label>
+                        <input placeholder="eg. 21" type='number' name='score_to_win' min="0" class="form-control" required="">
 
                         <br>
-                        <label>Set End Point</label>
-                        <input placeholder="eg. 29" type='text' name='set_end_point' class="form-control gui-input" required="">
+                        <label class="form_label">Set End Point <span  class='required'>*</span></label>
+                        <input placeholder="eg. 29" type='number' name='set_end_point' min='0' class="form-control gui-input" required="">
 
 
                     </div>
@@ -348,6 +355,7 @@
                 </div>    
                 </div>        
               </form>
+
 
           </div>
       </div>
@@ -551,7 +559,7 @@
                     <div class='col-sm-12'>
                           <div class="form-group col-sm-4 col-sm-offset-2 ">
                                   <label>Match Result</label>
-                                  <select name='match_result' required="" class='form-control gui-input' onchange='SJ.SCORECARD.selectMatchType(this)'>
+                                  <select name='match_result' required="" class='form-control ' onchange='SJ.SCORECARD.selectMatchType(this)'>
                                   <option value="" disabled>Select</option>
                                   <option value="win">Win</option>
 
@@ -561,8 +569,8 @@
                      
                           <div class="form-group col-sm-4  " id='select_winner'>
                             <label>Select Winner:</label>
-                            <select name="winner_id" id="winner_id" class="form-control gui-input" onchange="selectWinner();">
-                            <option value="">Select</option>
+                            <select name="winner_id" id="winner_id" class="form-control " onchange="selectWinner();">
+                            <option value="">Select Winner</option>
                             <option value="{{ $match_data[0]['a_id'] }}" <?php if (isset($match_data[0]['winner_id']) && $match_data[0]['winner_id']==$match_data[0]['a_id']) echo ' selected';?>>{{ $user_a_name }}</option>
                             <option value="{{ $match_data[0]['b_id'] }}" <?php if (isset($match_data[0]['winner_id']) && $match_data[0]['winner_id']==$match_data[0]['b_id']) echo ' selected';?>>{{ $user_b_name }}</option>
                             </select>
@@ -639,7 +647,7 @@
                      <div class="col-sm-12"><center><h3>Update Preferences</h3> </center></div>
                     <div class='col-sm-4'>
                         <label>Number of Sets</label>
-                        <select class='form-control select-picker' name='number_of_sets'>
+                        <select class='form-control select-picker' name='number_of_sets' readonly>
                             <option value=1  {{$preferences->number_of_sets==1?'selected':''}}>1</option>
                             <option value=2  {{$preferences->number_of_sets==2?'selected':''}}>2</option>
                             <option value=3 {{$preferences->number_of_sets==3?'selected':''}}>3</option>
@@ -666,7 +674,7 @@
                                                     
                     <div class='col-sm-12'>
                       <br><br>
-                      <input type='checkbox' name='enable_two_points' readonly {{$preferences->enable_two_points=='on'?'checked':''}} id='enable_two_points'> 
+                      <input type='checkbox' name='enable_two_points' readonly="readonly" {{$preferences->enable_two_points=='on'?'checked':''}} id='enable_two_points'> 
                         <label for='enable_two_points'>Enable Two points clear pattern</label>
                       </div>
                       
@@ -858,8 +866,7 @@ function savePreferences(that){
                         url:base_url+"/match/saveBadmintonPreferences",
                         data:data,
                         type:'post',
-                        success : function(){
-                            
+                        success : function(){                         
                             window.location=window.location              
                         },
                         error: function(){
@@ -1168,6 +1175,11 @@ function addButtonSet(set_index){
 }
 
 addButtonSet({{$current_set}});
+
+</script>
+
+
+<script type="text/javascript">
 
 </script>
 @endsection
