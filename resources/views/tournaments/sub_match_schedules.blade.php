@@ -92,9 +92,10 @@
 									<br>
 					@if(isset($schedule['winner_text']))
                                   <a href="{{ url('match/scorecard/edit/'.$schedule['id']) }}">{{$schedule['winner_text']}}</a>
-                                 </div>
+                               
       
-          @endif
+         		    @endif
+         			  </div>
 
 
 								<div class="col-md-3 col-sm-4">
