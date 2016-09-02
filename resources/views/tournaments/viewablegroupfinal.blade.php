@@ -28,7 +28,8 @@
                                  @else 
 
                                  @if(count($bracketTeamArray))
-                                     @foreach($bracketTeamArray as $brk => $bracketTeam)                    
+                                     @foreach($bracketTeamArray as $brk => $bracketTeam) 
+                                      <?php $i++;?>
                                         <?php $firstRoundBracketArray=$bracketTeam;?>
                                         @include('tournaments.sub_match_schedules')
                                      @endforeach
@@ -39,6 +40,9 @@
                     </div>
       @endforeach
 
+</div>
+</div>
+
 @endif
 
 @else
@@ -46,6 +50,9 @@
 <div class="row group-flex-content">
  <div class="sj-alert sj-alert-info">
  {{ trans('message.tournament.final.nofinalstageteams') }}
+ </div>
+ </div>
+ </div>
 @endif
 
 <script type="text/javascript">

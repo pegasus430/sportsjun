@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 //use Illuminate\Http\Request;
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\User\InvitePlayerController;
 use App\Http\Requests;
 use App\Model\City;
 use App\Model\Country;
@@ -329,6 +330,7 @@ class TournamentsController extends Controller
 	{
 		$enum = config('constants.ENUM.TOURNAMENTS.TYPE');
 		$schedule_type_enum = config('constants.ENUM.TOURNAMENTS.SCHEDULE_TYPE');
+		$game_type_enum = config('constants.ENUM.TOURNAMENTS.GAME_TYPE');
 //		$sports = Sport::where('isactive','=',1)->lists('sports_name', 'id')->all();
 		$sports = Helper::getDevelopedSport(1,1);
 		$cities = array();
@@ -343,6 +345,7 @@ class TournamentsController extends Controller
 			'type'               => 'create',
 			'roletype'           => 'user',
 			'schedule_type_enum' => $schedule_type_enum,
+			'game_type_enum'	 => $game_type_enum,
 			'organization'      => ['' => 'Select Organization'] + $organizations,
 		]);
 	}
@@ -680,6 +683,7 @@ class TournamentsController extends Controller
 	{
 		$enum = config('constants.ENUM.TOURNAMENTS.TYPE');
 		$schedule_type_enum = config('constants.ENUM.TOURNAMENTS.SCHEDULE_TYPE');
+		$game_type_enum = config('constants.ENUM.TOURNAMENTS.GAME_TYPE');
 //		   $sports = Sport::where('isactive','=',1)->lists('sports_name', 'id')->all();
 		$sports = Helper::getDevelopedSport(1,1);
 		/** @var TournamentParent $tournament */
@@ -773,6 +777,7 @@ class TournamentsController extends Controller
             'type'                => 'create',
             'roletype'            => 'user',
             'schedule_type_enum'  => $schedule_type_enum,
+            'game_type_enum'	  => $game_type_enum,
             'subTournamentArray'  => $sub_tour_details,
             'parent_id'           => $id,
             'tournament_name'     => $tournament['name'],
@@ -792,6 +797,7 @@ class TournamentsController extends Controller
 		$id=Request::get('id');
 		$enum = config('constants.ENUM.TOURNAMENTS.TYPE');
 		$schedule_type_enum = config('constants.ENUM.TOURNAMENTS.SCHEDULE_TYPE');
+		$game_type_enum = config('constants.ENUM.TOURNAMENTS.GAME_TYPE');
 //		   $sports = Sport::where('isactive','=',1)->lists('sports_name', 'id')->all();
 		$sports = Helper::getDevelopedSport(1,1);
 		$tournament = Tournaments::findOrFail($id);
@@ -849,7 +855,10 @@ class TournamentsController extends Controller
 		$countries = Country::orderBy('country_name')->lists('country_name', 'id')->all();
 		$states = State::where('country_id', $tournament->country_id)->orderBy('state_name')->lists('state_name', 'id')->all();
 		$cities = City::where('state_id',  $tournament->state_id)->orderBy('city_name')->lists('city_name', 'id')->all();
-		return view('tournaments.edit',compact('tournament'))->with(array('sports'=> [''=>'Select Sport']+$sports,'id'=>$id,'countries' =>  [''=>'Select Country']+$countries,'states' =>  [''=>'Select State']+$states,'cities' =>  [''=>'Select City']+$cities,'enum'=>['' => 'Tournament Type'] + $enum,'tournament'=>$tournament,'type'=>'edit','roletype'=>'user','schedule_type_enum'=>$schedule_type_enum,'parent_id'=>$id,'tournament_name'=>$tournament['name'],'logo'=>$tournament['logo'],'manager_name'=>$manager_name,'matchTypes'=>$matchTypes,'playerTypes'=>$playerTypes,'match_types'=>['' => 'Select Match Type'] +$match_types,'player_types'=>['' => 'Select Player Type'] +$player_types,'matchScheduleCount'=>$matchScheduleCount,'tournamentGroupCount'=>$tournamentGroupCount));
+		return view('tournaments.edit',compact('tournament'))->with(array('sports'=> [''=>'Select Sport']+$sports,'id'=>$id,'countries' =>  [''=>'Select Country']+$countries,'states' =>  [''=>'Select State']+$states,'cities' =>  [''=>'Select City']+$cities,'enum'=>['' => 'Tournament Type'] + $enum,'tournament'=>$tournament,'type'=>'edit','roletype'=>'user',
+			'schedule_type_enum'=>$schedule_type_enum,
+			'game_type_enum' 	=>$game_type_enum,
+			'parent_id'=>$id,'tournament_name'=>$tournament['name'],'logo'=>$tournament['logo'],'manager_name'=>$manager_name,'matchTypes'=>$matchTypes,'playerTypes'=>$playerTypes,'match_types'=>['' => 'Select Match Type'] +$match_types,'player_types'=>['' => 'Select Player Type'] +$player_types,'matchScheduleCount'=>$matchScheduleCount,'tournamentGroupCount'=>$tournamentGroupCount));
 	}
 	//function to display tournament groups
 	public function groups($tournament_id,$type='', $from_api=false) {
@@ -1579,14 +1588,34 @@ class TournamentsController extends Controller
 	public function addteamtotournament()
 	{
 		$team_id = Request::get('response');
+		$flag 	 = !empty(Request::get('flag'))?Request::get('flag'):null;
+		$tournament_id = Request::get('tournament_id');//tournament group team count		
+		$team_name = Request::get('team_name');
+
+			if($flag=='invite'){
+				$invite_player=new InvitePlayerController;
+				$name = !empty(Request::get('name'))?Request::get('name'):null;
+				$email = !empty(Request::get('email'))?Request::get('email'):'';
+				$user=$invite_player->invitePlayerToTournament($tournament_id,$email, $name);
+					if(!$user){
+						return [
+							'result'=>'error',
+							'message'=>'This Email already exist!'
+						];
+					}	
+
+				$team_id=[$user->id];		
+				$team_name=$user->id;		
+				
+			}
 
 		$team_id_array = array();
-		if($team_id!='' && count($team_id))
+		if($team_id!='' && count($team_id ))
 			$team_id_array = array_filter($team_id);
-		$group_id = Request::get('group_id');
-		$team_name = Request::get('team_name');
+		
+		
 		$team_count = Request::get('team_count');//tournament group team count
-		$tournament_id = Request::get('tournament_id');//tournament group team count
+		$group_id = Request::get('group_id');
 		$team_details = array();
 		$groupTeamsArray = array();
 		$groupTeamsFinalArray = array();
@@ -1603,8 +1632,9 @@ class TournamentsController extends Controller
 				if($schedule_type=='team')
 					$team_name = Team::where('id', $teamId)->pluck('name');
 				else
-					$team_name = User::where('id', $teamId)->pluck('name');
+					$team_name = User::where('id', $teamId)->pluck('name');			
 
+	
 				$TournamentGroups = new TournamentGroupTeams();
 				$TournamentGroups->tournament_group_id = $group_id;
 				$TournamentGroups->team_id = $teamId;
@@ -2168,6 +2198,31 @@ class TournamentsController extends Controller
 			}
 		}
 
+		if($flag=='invite'){
+
+			$invite_player=new InvitePlayerController;
+			$name = !empty(Request::get('name'))?Request::get('name'):null;
+			$email = !empty(Request::get('email'))?Request::get('email'):'';
+
+			$user=$invite_player->invitePlayerToTournament($tournamentId,$email, $name);
+
+			if(!$user){
+				return [
+					'result'=>'error',
+					'message'=>'This Email already exist!'
+				];
+
+			}
+			
+				$finalTeamsmodel = new TournamentFinalTeams();
+				$finalTeamsmodel->tournament_id = $tournamentId;
+				$finalTeamsmodel->team_id = $user->id;
+				$finalTeamsmodel->save();
+				$result['result']='success';
+			
+			
+		}
+
 		$tournamentFinalTeams = $this->getFinalStageAddedTeams($tournamentId, $scheduleType);
 		$result['tournamentTeams'] = View::make('tournaments.addedknocoutteams')
 			->with(array('tournamentTeams'=>$tournamentFinalTeams['requestedWithPhotos'],'tournamentId'=>$tournamentId, 'scheduleType'=>$scheduleType))->render();
@@ -2435,11 +2490,22 @@ class TournamentsController extends Controller
 				 			$next_ga_points=$group_teams[$j]['gf'];
 				 			$next_points=$group_teams[$j]['points'];
 
+				 			$gf_points=$group_teams[$i]['ga'];
+				 			$next_gf_points=$group_teams[$j]['ga'];
+
 				 			if( $points == $next_points){
 				 					if($next_ga_points<$ga_points){
 				 							$temp_team=$group_teams[$i];
 				 							$group_teams[$i]=$group_teams[$j];
 				 							$group_teams[$j]=$temp_team;
+				 					}
+
+				 					if($next_ga_points==$ga_points){
+				 						if($next_gf_points>$gf_points){
+				 							$temp_team=$group_teams[$i];
+				 							$group_teams[$i]=$group_teams[$j];
+				 							$group_teams[$j]=$temp_team;
+				 						}
 				 					}
 				 			}
 

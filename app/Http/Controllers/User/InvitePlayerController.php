@@ -16,6 +16,7 @@ use App\Helpers\Helper;
 use App\Helpers\AllRequests;
 use App\Model\UserStatistic;
 use App\Model\Sport;
+use App\Model\Tournaments;
 
 class InvitePlayerController extends Controller
 {
@@ -306,5 +307,54 @@ class InvitePlayerController extends Controller
 
     	return ['message'=>'Email Added', 
     			'error'=>'no'];
+    }
+
+    public function invitePlayerToTournament($tournament_id, $email, $name){
+
+		 $user = new User();
+		 $user->name =  $name;
+		 $user->firstname =  $name;
+		 $tournament=Tournaments::find($tournament_id);
+		 if($email!="")
+		 {
+		    $check_user=User::where('email', $email)->first();
+
+		   if(count($check_user)) return false;
+
+			 $generatedPassword= str_random(6);
+			 $password=  bcrypt( $generatedPassword);
+			$user->email =  $email; 
+			$user->password = $password;
+			$user->verification_key = md5($email);
+			$user->is_verified =1;
+		 }
+		 $last_inserted_id = 0;
+		 $last_inserted_player_id = 0;
+	
+  	      if($user->save())
+		  {
+		    $last_inserted_id = $user->id;
+		  }	
+
+	    if($last_inserted_id>0)
+		{		
+			
+			
+			if($user->email!="")				{	
+
+				$to_user_id = $user->id;
+				$to_email_id=  $user->email;
+				$user_name = $user->name;
+				$subject =  trans('message.inviteplayer.subject');
+				$view_data = array('email'=>$to_email_id,'password'=>$generatedPassword ,'user_name'=>$user_name,'team_name'=>$tournament->name);
+				$view = 'emails.invitePlayers';
+				$data = array('view'=>$view,'subject'=>$subject,'to_email_id'=>$to_email_id,'view_data'=>$view_data,'to_user_id'=>  $to_user_id,'flag'=>'user','send_flag'=>1);
+				SendMail::sendmail($data);	
+			}
+		return $user;		    
+		}
+
+		return false;
+
     }
 }

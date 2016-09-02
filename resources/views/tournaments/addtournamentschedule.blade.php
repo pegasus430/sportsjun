@@ -161,6 +161,22 @@
 					</div>
                     	</div>
                     </div>
+
+                    <div class="row" >
+                    	<div class="col-sm-12" style="display:none" id='hideNumberOfGames'>
+                        	<div class="section">
+                        	<div class='col-sm-12 alert alert-info'> Multiple games tournament. Enter the number of games</div>
+                            <label class="form_label">{{   trans('message.schedule.fields.number_of_games') }} </label>                
+                            <label class="field">
+                                {!! Form::text('number_of_games',null,['class'=>'gui-input','placeholder'=>trans('message.schedule.fields.number_of_games'),'id'=>'number_of_games']
+                                ) !!}					
+                                @if ($errors->has('number_of_games')) <p class="help-block">{{ $errors->first('number_of_games') }}</p> @endif
+                                <i class="arrow double"></i> 
+                            </label>
+                        </div>
+                    	</div>                       
+                    </div>
+
                                                             
 					<div class="section">
                                   <label class="form_label">{{   trans('message.schedule.fields.venue') }}<span  class='required'>*</span> </label>               
@@ -173,6 +189,8 @@
 						</label>
 					</div>
 					@include ('common.address',['mandatory' => ''])
+
+					{!! Form::hidden('game_type',$tournamentDetails[0]['game_type'],['id'=>'game_type'] ) !!}
                     
 				</div>
 	        </div>
@@ -182,7 +200,8 @@
 			<button type="button" class="button btn-secondary" data-dismiss="modal">Close</button>
 		</div>
 	  </div>
-	  
+	
+
 	</div>
 </div>
 {!! Form::close() !!}
@@ -452,6 +471,18 @@
             }
         });    	
     }
+
+
+
+   //show number of games fields
+    var game_type=$('#game_type').val();
+
+    if(game_type==='rubber') {
+    		$('#hideNumberOfGames').show();
+    		$('.alert-success').show();
+    		}    
+    else 
+    		$('#hideNumberOfGames').hide();
 
 
     

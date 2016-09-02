@@ -53,8 +53,8 @@ if(!empty($matchScheduleCount) && $matchScheduleCount>0)
 </div>
 
 <div class="row">
-    <div class="col-sm-12">
-        <div class="section" id="show_hide_div" style="display:none;">
+    <div class="col-sm-6">
+        <div class="section show_hide_div" id="show_hide_div" style="display:none;">
         <label class="form_label">{{  trans('message.tournament.fields.schedule_type') }} <span  class='required'>*</span></label>
             <label class="field select">
              {!! Form::select('schedule_type', $schedule_type_enum, null,array('id'=>'schedule_type','class'=>'gui-input',$disable)) !!}
@@ -63,7 +63,18 @@ if(!empty($matchScheduleCount) && $matchScheduleCount>0)
             </label>
         </div>
     </div>
-</div>	
+
+    <div class="col-sm-6">
+        <div class="section show_hide_div" id="show_hide_div" style="display:none;">
+        <label class="form_label">{{  trans('message.tournament.fields.game_type') }} <span  class='required'>*</span></label>
+            <label class="field select">
+             {!! Form::select('game_type', $game_type_enum, null,array('id'=>'game_type','class'=>'gui-input',$disable)) !!}
+            
+             <i class="arrow double"></i>      
+            </label>
+        </div>
+    </div>
+</div>  
 
 
 <div class="row">
@@ -365,10 +376,12 @@ $(function () {
 		if(sport_name.toLowerCase()=='tennis' || sport_name.toLowerCase()=='table tennis' || sport_name.toLowerCase()=='badminton' || sport_name.toLowerCase()=='squash')
 		{
 			$('#show_hide_div').show();
+            $('.show_hide_div').show();
 			$("#schedule_type").val('team');
 		}else
 		{
 			$('#show_hide_div').hide();
+            $('.show_hide_div').hide();
 		}
 		var selected_sport = $("#sports_id option:selected").text();
 		selected_sport = selected_sport.toUpperCase();

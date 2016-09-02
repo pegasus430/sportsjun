@@ -3,8 +3,14 @@
   @foreach($firstRoundBracketArray as $key => $schedule)
   	    @if((isset($schedule['tournament_round_number']) && $schedule['tournament_round_number']==$round) && isset($schedule['id'])  )
 
-  	    <?php 
-  	    	$i++;
+  	  
+                <div class="col-sm-12 match_set " style="">             	
+                  
+                       <?php $match=Helper::getMatchDetails($schedule['id']); ?>
+      @if(($match['a_id']!='' && $match['b_id']) ) 
+
+        <?php 
+  	    	$i=$i+1;;
 								$class='schedule_new_req_nor';	
 								if($i % 2 == 0)
 								{
@@ -15,13 +21,8 @@
 									$class='schedule_new_req_nor';	
 								}
 		?>
-                <div class="col-sm-12 match_set " style="">             	
-                  
-                       <?php $match=Helper::getMatchDetails($schedule['id']); ?>
-
-
-      @if(($match['a_id']!='' && $match['b_id']) ) 
       		<br>
+      		
 				@if($match['schedule_type']=='team' )
 							<div class="row row_to_filter_ {{$class}}">
 						
@@ -114,10 +115,8 @@
 					
 					 	@endif							
 								
-								</div>						
-								
-								
-								
+								</div>				
+														
 
 							</div>
 				@else
@@ -147,25 +146,25 @@
                   									
                   									<span class="match-detail-score">{{ Helper::displayDateTime($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""), 1) }}</span>
                   									<span class='sports_text'>{{ isset($sport_name)?$sport_name:'' }}</span>
-                	@if($match['match_type']!='other')
-                											<span class='match_type_text'>({{ $match['match_type']=='odi'?strtoupper($match['match_type']):ucfirst($match['match_type']) }})</span>
-                	@endif
+	                	@if($match['match_type']!='other')
+	                			<span class='match_type_text'>({{ $match['match_type']=='odi'?strtoupper($match['match_type']):ucfirst($match['match_type']) }})</span>
+	                	@endif
 									<br/>
 
 									<span class=''>{{$match['address']}}</span><br>
 									Status: <span class='event_date'>{{ ucfirst($match['match_status']) }}</span> <br>
 									Scores: <span class='blue'>{{Helper::getMatchDetails($match['id'])->scores}} </span> <br>
-					@if(!is_null($match['winner_id']))
-							<span class='red'>Winner: {{Helper::getMatchDetails($match['id'])->winner}} </span>								
-					@endif
-						<br>
-							@if(isset($schedule['winner_text']))
+						@if(!is_null($match['winner_id']))
+								<span class='red'>Winner: {{Helper::getMatchDetails($match['id'])->winner}} </span>								
+						@endif
+							<br>
+						@if(isset($schedule['winner_text']))
 	                          <a href="{{ url('match/scorecard/edit/'.$schedule['id']) }}">{{$schedule['winner_text']}}</a>
-                  @else
+                 		@else
 		                    @if($isOwner)
 		                            <a href="javascript:void(0)" id="scheduleEdit_{{$schedule['id']}}"  onclick="editMatchSchedule({{$schedule['id']}},1,'','myModal')">Edit</a>
 		                    @endif
-                  @endif
+                 		@endif
 								</div>
 
 
@@ -193,7 +192,7 @@
 								
 								
 	
-							  @endif
+				@endif
 
 
 
@@ -202,14 +201,14 @@
 
 
    
-                                    @endif
+          @endif
                  </div>
 
 
 
-        @endif
+    @endif
               
-                 @endforeach
+   @endforeach
 
-                 @endif
+ @endif
         

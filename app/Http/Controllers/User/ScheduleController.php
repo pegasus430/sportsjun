@@ -15,6 +15,7 @@ use App\Model\Facilityprofile;
 use App\Model\Country;
 use App\Model\TournamentGroupTeams;
 use App\Model\Tournaments;
+use App\Model\RubberSchedule;
 use App\User;
 use DB;
 use Request;
@@ -1077,7 +1078,11 @@ class ScheduleController extends Controller {
         $b_id = Request::get('opp_team_id');
         /*        $match_start_date = $this->getdatetime(date(config("constants.DATE_FORMAT.PHP_DATE_FORMAT"), strtotime(Request::get('match_start_date'))), 'd');*/
         $match_start_date = Helper::storeDate(Request::get('match_start_date'),'date');
-        $match_start_time = !empty(Request::get('match_start_time'))?$this->getdatetime(date(config("constants.DATE_FORMAT.PHP_TIME_FORMAT"), strtotime(Request::get('match_start_time'))), 't'):'00:00:00';        
+        $match_start_time = !empty(Request::get('match_start_time'))?$this->getdatetime(date(config("constants.DATE_FORMAT.PHP_TIME_FORMAT"), strtotime(Request::get('match_start_time'))), 't'):'00:00:00';   
+
+
+        $game_type = !empty(Request::get('game_type')) ? Request::get('game_type') : 'normal';
+        $number_of_games = !empty(Request::get('number_of_games')) ? Request::get('number_of_games') : NULL;    
 
         $facility_name = Request::get('venue');
         $facility_id = Request::get('facility_id');
@@ -1163,6 +1168,9 @@ class ScheduleController extends Controller {
             'player_a_ids' => $player_a_ids,
             'player_b_ids' => $player_b_ids,
 			'match_invite_status'=>$match_invite_status,
+            'game_type'     => $game_type,
+            'number_of_games' => $number_of_games
+
         );
         if(!empty($bye) && $bye==2) {
                 $schedule_data['winner_id']=$a_id;
@@ -1206,13 +1214,19 @@ class ScheduleController extends Controller {
                   //insert into request and notifications table
                   if(!empty($tournament_id)) {
                       AllRequests::sendMatchNotifications($tournament_id,$schedule_type,$a_id,$b_id,$match_start_date);
+
+                      if($game_type=='rubber' && (is_numeric($number_of_games) && $number_of_games>0)){
+                            $this->insertGroupRubber($match_schedule_id);
+                      }
+
+
                   }else {
                     $request_array = array('flag'=>'TEAM_TO_TEAM','player_tournament_id'=>$a_id,'team_ids'=>array($b_id),'match_schedule_id'=>$match_schedule_id);
                     AllRequests::saverequest($request_array);
                   }
                 $results['success'] = 'Match scheduled successfully.';
             } else {
-                $results['failure'] = 'Failed to schedule the match.';
+                $results['success'] = 'Match scheduled successfully.';
             }
         } else {
             $results['failure'] = 'Failed to schedule the match.';
@@ -1253,6 +1267,10 @@ class ScheduleController extends Controller {
         $country_id = config('constants.COUNTRY_INDIA');
         $country = Country::where('id', config('constants.COUNTRY_INDIA'))->first()->country_name;
         $match_location = rtrim($country . ', ' . $state . ', ' . $city, ', ');
+
+        $game_type = !empty(Request::get('game_type')) ? Request::get('game_type') : 'normal';
+        $number_of_games = !empty(Request::get('number_of_games')) ? Request::get('number_of_games') : NULL;
+        
         $player_a_ids = $a_id;
         $player_b_ids = $b_id;
         $scheduleId = Request::get('main_schedule_id');
@@ -1297,6 +1315,8 @@ class ScheduleController extends Controller {
             'b_id' => $b_id,
             'player_a_ids' => $player_a_ids,
             'player_b_ids' => $player_b_ids,
+            'game_type'     => $game_type,
+            'number_of_games' => $number_of_games
         );
 
         $results = array();
@@ -1556,12 +1576,35 @@ $matchScheduleData = MatchSchedule::where('tournament_id',$matchScheduleDetails[
                 'a_id' => $matchScheduleDetails['winner_id'],
                 'player_a_ids' => !empty($player_a_ids)?(','.trim($player_a_ids).','):NULL,
                 'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
+                'updated_at' => Carbon::now(),
+                'game_type'     => $matchScheduleDetails->game_type
             ];
 
             MatchSchedule::insert($scheduleArray);
 
         }
             
+    }
+
+    public function insertGroupRubber($match_id){
+        $match_model=MatchSchedule::find($match_id);
+        $number_of_games = $match_model->number_of_games;
+
+        for($i=1; $i<=$number_of_games; $i++){
+            $rubber      = new RubberSchedule;
+
+            $rubber->match_id       =   $match_id;
+            $rubber->sports_id      =   $match_model->sports_id;
+            $rubber->created_at     =   $match_model->created_at;
+            $rubber->match_category       =   $match_model->match_category;
+            $rubber->match_status   =   'scheduled';
+            $rubber->a_id           =   $match_model->a_id;
+            $rubber->b_id           =   $match_model->b_id;
+            $rubber->player_a_ids   =   $match_model->player_a_ids;
+            $rubber->player_b_ids   =   $match_model->player_b_ids;
+            $rubber->game_number    =   $i;
+            $rubber->save();
+        }           
+       
     }
 }

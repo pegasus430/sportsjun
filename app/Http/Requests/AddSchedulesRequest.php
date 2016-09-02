@@ -41,6 +41,7 @@ class AddSchedulesRequest extends Request {
       'state_id' => 'required|numeric',			
       'city_id' => 'required|numeric',
       'zip' => 'required|alpha_num|max:12',
+//      'number_of_games'=>'required|numeric|min:0',
 //      'player_type' => 'required',
 //      'match_type' => 'required'
         ];

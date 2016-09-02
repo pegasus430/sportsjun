@@ -126,14 +126,26 @@ $(function() {
 			{
 				$('#all_teams_div_'+groupId).show();
 				$('#req_teams_div_'+groupId).hide();
+                $('#invite_player_div_'+groupId).hide();
                                 $('#requested_teams_div').hide();
+                                $('#invite_player_div').hide();
                                 $('#auto_teams_div').show();
-			}else
+			}else if(clicked_value=='invite_player'){
+                $('#req_teams_div_'+groupId).hide();
+                $('#all_teams_div_'+groupId).hide();
+                $('#invite_player_div_'+groupId).show();
+                                $('#requested_teams_div').hide();
+                                $('#auto_teams_div').hide();
+                                $('#invite_player_div').show();
+            }
+            else
 			{
 				$('#req_teams_div_'+groupId).show();
 				$('#all_teams_div_'+groupId).hide();
+                $('#invite_player_div_'+groupId).hide();
                                 $('#requested_teams_div').show();
                                 $('#auto_teams_div').hide();
+                                $('#invite_player_div').hide();
 			}
 		});
 		

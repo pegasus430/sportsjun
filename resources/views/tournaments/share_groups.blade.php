@@ -1,7 +1,7 @@
 <?php
 
 $t_url=url("/viewpublic/tournaments/groups/{$tournamentDetails[0]['id']}/group");
-$t_text="{$tournamentDetails[0]['name']} is a match tournament with {$tournamentDetails[0]['prize_money']} worth. {$tournamentDetails[0]['name']} starts from {$tournamentDetails[0]['start_date']} to {$tournamentDetails[0]['end_date']} at {$tournamentDetails[0]['location']}  {$tournamentDetails[0]['description']}";
+$t_text=   (string)"{$tournamentDetails[0]['name']} is a match tournament with {$tournamentDetails[0]['prize_money']} worth. {$tournamentDetails[0]['name']} starts from {$tournamentDetails[0]['start_date']} to {$tournamentDetails[0]['end_date']} at {$tournamentDetails[0]['location']}  {$tournamentDetails[0]['description']}";
 
 $t_title="Tournament Group Details for {$tournamentDetails[0]['name']}";
 
@@ -11,6 +11,8 @@ $gp_url = 'https://plus.google.com/share?url=' . $t_url;
 $t_img_path=!empty($left_menu_data['logo'])?$left_menu_data['logo']:'';
 $data_image=url("/uploads/tournaments/$t_img_path");
 
+
+ 
 ?>
 
 <div class="row">
@@ -22,7 +24,7 @@ $data_image=url("/uploads/tournaments/$t_img_path");
                 <tbody>
                 <tr>
                     <td class="sj-social-td">
-                        <a href="javascript:void(0);" onclick="SJ.GLOBAL.shareFacebook('{{$t_url}}','{{$t_title}}','{{$data_image}}', '{{$t_text}}');" class="sj-social-ancr sj-social-ancr-fb" rel="noreferrer">
+                        <a href="javascript:void(0);" onclick='SJ.GLOBAL.shareFacebook("{{$t_url}}","{{$t_title}}","{{$data_image}}", "{{$t_text}}");' class="sj-social-ancr sj-social-ancr-fb" rel="noreferrer">
                             <span class="sj-ico sj-fb-share "></span>
                             <span class="sj-font-12">Share</span>
                         </a>

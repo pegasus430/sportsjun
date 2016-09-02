@@ -43,16 +43,30 @@
                 @else
 
                     <div class="action-btns">
-                        	<label>
+                         @if($tournamentDetails[0]['schedule_type']=='team')
+                          	<label>
                             	<input type="radio" name="team_selection_radio" class="selectTeamClass"  checked="true" value="reqested_teams"/>{{ trans('message.tournament.addteam.requestedteam') }}</label>
                             <label>
                             	<input type="radio" name="team_selection_radio" class="selectTeamClass"  value="all_teams"/>{{ trans('message.tournament.addteam.allteam') }}
                             </label>
+                         @else
+                            <label>
+                                <input type="radio" name="team_selection_radio" class="selectTeamClass"  checked="true" value="reqested_teams"/>{{ trans('message.tournament.addteam.requestedteam') }}</label>
+                            <label>
+                                <input type="radio" name="team_selection_radio" class="selectTeamClass"  value="all_teams"/>Add Player
+                             </label>
+                             <label>
+                                <input type="radio" name="team_selection_radio" class="selectTeamClass"  value="invite_player"/>Invite Player
+                            </label>
+                        @endif
 						</div>
 
 
 
                     <div class="ui-widget" id="auto_teams_div" style="display:none;">
+                           @if($tournamentDetails[0]['schedule_type']!='team')
+                                 <span class="tab_new_label_txt" style="font-size:13px"><b>Registered User</b></span>
+                           @endif
                         <div class="form-group"><input type="text" id="auto_user" class="gui-input" placeholder="Add Team"></div>
                         <input id="auto_response" name="auto_response" class="form-control" type="hidden">
                         <button type="button" name="add_team_button" id="add_team_button" onClick="addFinalStageTeam('auto');" class="button btn-primary">Save</button>
@@ -64,6 +78,36 @@
                                 </span>
                         <button type="button" name="requested_teams_button" id="requested_teams_button" onClick="addFinalStageTeam('select');" class="button btn-primary">Save</button>
                     </div>
+
+                @if($tournamentDetails[0]['schedule_type']!='team')
+                     <div id="invite_player_div" style="display:none;" >
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <label class="tab_new_label_txt"><b>Non-Registered User</b></label>
+                                <div class="form-group">
+                                    <input type="text" id="player_name" class="gui-input" placeholder="Player name">
+                                </div>    
+                        
+                                <div class="form-group" >
+                                    <input type="text" id="player_email" class="gui-input" placeholder="Email">
+                                </div>
+                            </div>
+
+                            <div class='col-sm-3'>
+                            <br><br>
+                            <button type="button" name="invite_team_button" id="invite_team_button" onClick="addFinalStageTeam('invite');" class="button btn-primary">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+<br>
+
+<p>
+<div id="displayNotification">
+
+</div>
+<br>
                 <table class="table table-striped">
                 <thead>
                     <tr></tr>
@@ -88,6 +132,7 @@
                 @endif
                 </tbody>
 		</table>
+    <br>
                 <button type="button" class="button btn-primary" onclick="finalStageTeams('ko')">Submit </button>
               @endif
             </div>
@@ -148,10 +193,38 @@
     function addFinalStageTeam(label) {
         var response='';
         var content ='';
+        var email='';
+        var name='';
         if(label=='auto')
         {
             response = $('#auto_response').val();
             content = 'Selec a team.'
+        }
+        else if(label=='invite'){
+             
+             var content ='Selet a player';
+             var email=$('#player_email').val();
+             var name=$('#player_name').val();
+             var response=email;
+
+             if(name=='')
+                {
+                        $.alert({
+                                        title: 'Alert!',
+                                        content: "Enter the Player's name"
+                                });
+                        $('#player_name').focus();
+                        return false;
+                }
+            if(email=='')
+                {
+                        $.alert({
+                                        title: 'Alert!',
+                                        content: "Enter Player's email"
+                                });
+                        $('#player_email').focus();
+                        return false;
+                }
         }
         else
         {
@@ -171,7 +244,7 @@
         $.ajax({
             type: 'POST',
             url: base_url + '/tournament/addfinalstageteams',
-            data: {tournamentId:tournamentId, teamId:response, scheduleType:scheduleType, flag:label},
+            data: {tournamentId:tournamentId, teamId:response, scheduleType:scheduleType, flag:label, name:name, email:email},
             dataType: 'json',
             beforeSend: function() {
                 $.blockUI({width: '50px', message: $("#spinner").html()});
@@ -179,6 +252,11 @@
             success: function(response) {
                 $.unblockUI();
                 if(response['result']=='error') {
+
+        if(typeof(response['message'])!=='undefined'){
+            $('#displayNotification').html("<div class='alert alert-danger'>"+response['message']+"</div>");
+            setTimeout(function(){ $('#displayNotification').html('') }, 2000);
+            }
                     return false;
                 }
 
@@ -194,6 +272,9 @@
                 $('#auto_response').val('');
                 $('#auto_user').val('');
                 $('#requested_teams').selectMultiple('refresh');
+
+                $('#player_email').val('');
+                $('#player_name').val('')
 
             }
         });

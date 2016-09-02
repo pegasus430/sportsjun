@@ -41,11 +41,22 @@
 					<div class="tab-pane fade active in" id="teams_{{ $group->id }}">
                     <div class="action-panel group-multiselect">
                     	<div class="action-btns">
-                        	<label>
-                            	<input type="radio" name="team_selection" class="selectTeamClass" groupId="{{$group->id}}" checked="true" value="reqested_teams"/>Requested Teams</label>
-                            <label>
-                            	<input type="radio" name="team_selection" class="selectTeamClass" groupId="{{$group->id}}" value="all_teams"/>All Teams
-                            </label>
+                    		 @if($tournamentDetails[0]['schedule_type']=='team')
+	                        	<label>
+	                            	<input type="radio" name="team_selection" class="selectTeamClass" groupId="{{$group->id}}" checked="true" value="reqested_teams"/>Requested Teams</label>
+	                            <label>
+	                            	<input type="radio" name="team_selection" class="selectTeamClass" groupId="{{$group->id}}" value="all_teams"/>All Teams
+	                            </label>
+	                        @else
+	                            <label>
+	                            	<input type="radio" name="team_selection" class="selectTeamClass" groupId="{{$group->id}}" checked="true" value="reqested_teams"/>Requested Teams</label>
+	                            <label>
+	                            	<input type="radio" name="team_selection" class="selectTeamClass" groupId="{{$group->id}}" value="all_teams"/>Add Player
+	                            </label>
+	                             <label>
+	                                <input type="radio" name="team_selection" class="selectTeamClass" groupId="{{$group->id}}"  value="invite_player"/>Invite Player
+	                            </label>
+                       		 @endif
 						</div>
                         <div class="ui-widget" id="all_teams_div_{{$group->id}}" style="display:none;">
 							<div class="form-group"><input type="text" id="user" class="gui-input test" placeholder="Add Team"></div>
@@ -54,8 +65,31 @@
 							<button type="button" name="add_team" id="add_team" onClick="addTeam({{ $group->id }},'auto',{{$table_count}});" class="btn-link btn-primary-link" style="margin:-5px 0 0 0;">
 							Save
 							</button>
-							
-							</div>
+					</div>
+
+			 @if($tournamentDetails[0]['schedule_type']!='team')
+                     <div id="invite_player_div_{{$group->id}}" style="display:none;" >
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <label class="tab_new_label_txt"><b>Non-Registered User</b></label>
+                                <div class="form-group">
+                                    <input type="text" id="player_name_{{$group->id}}" class="gui-input" placeholder="Player name">
+                                </div>    
+                        
+                                <div class="form-group" >
+                                    <input type="text" id="player_email_{{$group->id}}" class="gui-input" placeholder="Email">
+                                </div>
+                            </div>
+
+                            <div class='col-sm-3'>
+                            <br><br>
+                            <button type="button" name="invite_team_button" id="invite_team_button" onClick="addTeam({{ $group->id }},'invite',{{$table_count}});" class="btn-link btn-primary-link">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+						
                             <div id="req_teams_div_{{$group->id}}">
 								<span style="margin-right: 15px;">{!! Form::select('req_team[]',$requestedTeams,null, array('multiple'=>true,'class'=>'multiselect req_team_class','id'=>$group->id.'_req_team')) !!}
 								<i class="arrow double"></i></span>
@@ -292,7 +326,7 @@
                                 
 								@else
 							<!--	<img  class="fa fa-user fa-fw fa-2x" height="42" width="42" src="{{ asset('/images/default-profile-pic.jpg') }}">-->
-                            	<div class="team_player_sj_img">
+                             	<div class="team_player_sj_img">
                                 	{!! Helper::Images('default-profile-pic.jpg','images',array('class'=>'img-circle img-border ','height'=>52,'width'=>52) )!!}
                                 </div>	
 					
@@ -320,13 +354,27 @@
                                         {{ 'VS' }}                                        
                                         {{ $user_name[$match['b_id']] }}
                                     </h4>
+                                    <br>
 									
-									<span class="event-date">{{ Helper::displayDateTime($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""), 1) }}</span>
+									<span class="match-detail-score">{{ Helper::displayDateTime($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""), 1) }}</span>
 									<span class='sports_text'>{{ isset($sport_name)?$sport_name:'' }}</span>
+
+
 									@if($match['match_type']!='other')
 											<span class='match_type_text'>({{ $match['match_type']=='odi'?strtoupper($match['match_type']):ucfirst($match['match_type']) }})</span>
 									@endif
-									<br/>
+
+
+											<br/>
+
+									<span class=''>{{$match['address']}}</span><br>
+									Status: <span class='event_date'>{{ ucfirst($match['match_status']) }}</span> <br>
+									Scores: <span class='blue'>{{Helper::getMatchDetails($match['id'])->scores}} </span> <br>
+				@if(!is_null($match['winner_id']))
+						<span class='red'>Winner: {{Helper::getMatchDetails($match['id'])->winner}} </span>								
+				@endif
+					<br>
+
 									@if(!empty($add_score_link[$match['id']]))
 										@if($add_score_link[$match['id']]==trans('message.schedule.viewscore'))
 											<span class="tournament_score"><a href="{{ url('match/scorecard/view/'.$match['id']) }}">{{$add_score_link[$match['id']]}}</a></span>
@@ -399,6 +447,9 @@
         var token = "<?php echo csrf_token(); ?>";
         var tournament_id = "{{$tournament_id}}";
 		var schedule_type = $('#schedule_type').val();
+		var name='';
+		var email='';
+		var flag='';
 		response='';
 		team_name='';
 		if(label=='auto')
@@ -406,6 +457,35 @@
 			str_val = $('#response').val();
 			response = $.makeArray( str_val );
 			team_name = $('#team_name').val();
+		}
+
+		if(label=='invite')
+		{
+			name= $('#player_name_'+group_id).val();
+			email= $('#player_email_'+group_id).val();
+
+			str_val = $('#response').val();
+			response='invite_player';
+			team_name = $('#team_name').val();
+
+			 if(name=='')
+                {
+                        $.alert({
+                                        title: 'Alert!',
+                                        content: "Enter the Player's name"
+                                });
+                        $('#player_name_'+group_id).focus();
+                        return false;
+                }
+            if(email=='')
+                {
+                        $.alert({
+                                        title: 'Alert!',
+                                        content: "Enter Player's email"
+                                });
+                        $('#player_email_'+group_id).focus();
+                        return false;
+                }
 		}
 		else
 		{
@@ -435,7 +515,7 @@
             url: base_url+'/tournaments/addteamtotournament',
             type: "post",
             dataType: 'JSON',
-            data: {'_token': token, 'response': response,'group_id':group_id,'team_name':team_name,'team_count':team_count,'tournament_id':tournament_id},
+            data: {'_token': token, 'response': response,'group_id':group_id,'team_name':team_name,'team_count':team_count,'name':name, 'email':email, 'tournament_id':tournament_id, 'flag':label},
             success: function(response) {
 				if(response.length>0)
 				{
@@ -461,6 +541,8 @@
 					$('#no_teams_'+group_id).hide();
 					 $('#response').val('');
 					 $('.test').val('');
+					 $('#player_name_'+group_id).val('');
+					 $('#player_email_'+group_id).val('');
 					 
 					 
 					 
@@ -481,7 +563,17 @@
 							}
 					});
 					 
-				}else
+				}
+				else if(typeof(response.result!=='undefined')){
+					$.alert({
+						title: 'Alert!',
+						content: response.message
+					});
+					 $('#response').val('');
+					 $('.test').val('');
+					
+				}
+				else
 				{
 					//$( "#msg" ).append( data.success );
 					$.alert({

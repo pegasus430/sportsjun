@@ -56,7 +56,8 @@ return [
                 'TOURNAMENTS'  =>
                 ['TYPE'          => ['league' => 'Group Tournament', 'knockout' => 'Knock-Out',
                                 'multistage' => 'Groups + Knock-Out'],
-                        'SCHEDULE_TYPE' => ['team' => 'TEAM', 'individual' => 'INDIVIDUAL']
+                        'SCHEDULE_TYPE' => ['team' => 'TEAM', 'individual' => 'INDIVIDUAL'],
+                        'GAME_TYPE'     => ['normal'    =>'NORMAL - ONE GAME',     'rubber'   =>   'RUBBER - MULTIPLE GAMES']
                 ]
                 ,
                 'SCHEDULE'     => 
