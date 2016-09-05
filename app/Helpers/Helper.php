@@ -2137,6 +2137,14 @@ class Helper {
         return $details;
     }
 
+
+    public static function displayEmptyDash($number){
+            if($number>0){
+                return $number;
+            }
+            else return '-';
+    }
+
    
 
 }

@@ -33,11 +33,11 @@
                     {{$statistic->player_name}}</a></td>                
                 <td><a href='/team/members/{{$statistic->team_id}}' class="text-primary">{{$statistic->team_name}}</a></td>
                 <td>{{$statistic->matches}}</td>
-                <td>{{$statistic->points_1}}</td>
-                <td>{{$statistic->points_2}}</td>
-                <td>{{$statistic->points_3}}</td>
-                <td>{{$statistic->total_points}}</td>
-                <td {{$statistic->fouls>0?"class=red":''}}>{{$statistic->fouls}}</td>
+                <td>{{Helper::displayEmptyDash($statistic->points_1)}}</td>
+                <td>{{Helper::displayEmptyDash($statistic->points_2)}}</td>
+                <td>{{Helper::displayEmptyDash($statistic->points_3)}}</td>
+                <td>{{Helper::displayEmptyDash($statistic->total_points)}}</td>
+                <td {{$statistic->fouls>0?"class=red":''}}>{{Helper::displayEmptyDash($statistic->fouls)}}</td>
 <!--                <td>{{$statistic->goals_saved}}</td>
                 <td>{{$statistic->goal_assist}}</td>
                 <td>{{$statistic->goal_penalties}}</td>-->

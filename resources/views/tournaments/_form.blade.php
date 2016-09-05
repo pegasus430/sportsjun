@@ -53,7 +53,7 @@ if(!empty($matchScheduleCount) && $matchScheduleCount>0)
 </div>
 
 <div class="row">
-    <div class="col-sm-6">
+    <div class="col-sm-12">
         <div class="section show_hide_div" id="show_hide_div" style="display:none;">
         <label class="form_label">{{  trans('message.tournament.fields.schedule_type') }} <span  class='required'>*</span></label>
             <label class="field select">
@@ -64,7 +64,8 @@ if(!empty($matchScheduleCount) && $matchScheduleCount>0)
         </div>
     </div>
 
-    <div class="col-sm-6">
+    {{--
+        <div class="col-sm-6">
         <div class="section show_hide_div" id="show_hide_div" style="display:none;">
         <label class="form_label">{{  trans('message.tournament.fields.game_type') }} <span  class='required'>*</span></label>
             <label class="field select">
@@ -74,6 +75,8 @@ if(!empty($matchScheduleCount) && $matchScheduleCount>0)
             </label>
         </div>
     </div>
+    --}}
+
 </div>  
 
 

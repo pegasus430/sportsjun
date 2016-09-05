@@ -77,13 +77,13 @@
                                 </div>    
                         
                                 <div class="form-group" >
-                                    <input type="text" id="player_email_{{$group->id}}" class="gui-input" placeholder="Email">
+                                    <input type="text" id="player_email_{{$group->id}}" class="gui-input" placeholder="Email (optional)">
                                 </div>
                             </div>
 
                             <div class='col-sm-3'>
                             <br><br>
-                            <button type="button" name="invite_team_button" id="invite_team_button" onClick="addTeam({{ $group->id }},'invite',{{$table_count}});" class="btn-link btn-primary-link">Save</button>
+                            <button type="button" name="invite_team_button" id="invite_team_button" onClick="addTeam({{ $group->id }},'invite',{{$table_count}});" class="btn-link btn-primary-link">Invite</button>
                             </div>
                         </div>
                     </div>
@@ -477,15 +477,7 @@
                         $('#player_name_'+group_id).focus();
                         return false;
                 }
-            if(email=='')
-                {
-                        $.alert({
-                                        title: 'Alert!',
-                                        content: "Enter Player's email"
-                                });
-                        $('#player_email_'+group_id).focus();
-                        return false;
-                }
+           
 		}
 		else
 		{
@@ -501,7 +493,7 @@
 			}
 			
 		}
-		if(response=='' || response==null)
+		if((response=='' || response==null) && response != 'invite')
 		{
 			$.alert({
 						title: 'Alert!',

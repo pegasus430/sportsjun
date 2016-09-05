@@ -89,13 +89,13 @@
                                 </div>    
                         
                                 <div class="form-group" >
-                                    <input type="text" id="player_email" class="gui-input" placeholder="Email">
+                                    <input type="text" id="player_email" class="gui-input" placeholder="Email (optional))">
                                 </div>
                             </div>
 
                             <div class='col-sm-3'>
                             <br><br>
-                            <button type="button" name="invite_team_button" id="invite_team_button" onClick="addFinalStageTeam('invite');" class="button btn-primary">Save</button>
+                            <button type="button" name="invite_team_button" id="invite_team_button" onClick="addFinalStageTeam('invite');" class="button btn-primary">Invite</button>
                             </div>
                         </div>
                     </div>
@@ -205,7 +205,7 @@
              var content ='Selet a player';
              var email=$('#player_email').val();
              var name=$('#player_name').val();
-             var response=email;
+             var response='invite';
 
              if(name=='')
                 {
@@ -215,16 +215,7 @@
                                 });
                         $('#player_name').focus();
                         return false;
-                }
-            if(email=='')
-                {
-                        $.alert({
-                                        title: 'Alert!',
-                                        content: "Enter Player's email"
-                                });
-                        $('#player_email').focus();
-                        return false;
-                }
+                }           
         }
         else
         {
@@ -232,7 +223,7 @@
             content = 'All requested teams have been added.'
         }
 
-        if(response=='')
+        if(response=='' && response != 'invite')
         {
                 $.alert({
                                 title: 'Alert!',

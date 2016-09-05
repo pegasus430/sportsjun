@@ -91,8 +91,7 @@
 
 									<br>
 					@if(isset($schedule['winner_text']))
-                                  <a href="{{ url('match/scorecard/edit/'.$schedule['id']) }}">{{$schedule['winner_text']}}</a>
-                               
+                                  <a href="{{ url('match/scorecard/edit/'.$schedule['id']) }}">{{$schedule['winner_text']}}</a>                            
       
          		    @endif
          			  </div>
@@ -195,21 +194,13 @@
 	
 				@endif
 
-
-
-
-              @else
-
-
-   
+              @else  
           @endif
                  </div>
-
-
 
     @endif
               
    @endforeach
 
- @endif
+@endif
         

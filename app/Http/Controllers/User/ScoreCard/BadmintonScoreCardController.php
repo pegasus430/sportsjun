@@ -540,12 +540,7 @@ class BadmintonScoreCardController extends parentScoreCardController
             if(!empty($user_id)){
             $double_faults_count = '';
 
-            $player_match_details = BadmintonPlayerMatchScore::where('user_id_a',$user_id)->orWhere('user_id_b', $user_id)->get();
-
-            if($match_type=='singles')
-            {
-                // $double_faults_count = (!empty($player_match_details[0]['double_faults_count']))?$player_match_details[0]['double_faults_count']:'';
-            }
+            $player_match_details = BadmintonPlayerMatchScore::where('user_id_a',$user_id)->orWhere('user_id_b', $user_id)->get();           
 
             //check already user id exists or not
             $badminton_statistics= BadmintonStatistic::whereUserId($user_id)->whereMatchType($match_type)->first();

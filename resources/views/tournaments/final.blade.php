@@ -120,10 +120,20 @@
                     <?php
                         if(empty($minHeight)) {
                             $minHeight = 150;
+                            $height=$minHeight*2;
                         }else{
-                            $minHeight = $height;
+                            //$minHeight = $height;
+                            if($round<4) $minHeight=150 * ($round-1) * 2;
+                            else {
+                              if($round % 4==0)
+                                $minHeight=( 150* ($round)) + 75 ;
+                              else $minHeight = 150 * (($round * 2)-1);
+                            }
+
+                              
+                            $height = $minHeight;
                         }
-                        $height = $minHeight*2;
+                        
                         $actualHeigh = $height.'px';
                     ?>
                     @foreach($bracketTeamArray as $brk => $bracketTeam)
