@@ -173,7 +173,7 @@ class MyScheduleController extends Controller {
 				->whereNotNull('match_start_date')
                 ->first(['id', 'match_start_date', 'match_start_time', 'match_end_date',
             'match_end_time', 'winner_id', 'a_id', 'b_id', 'sports_id', 'facility_name', 'match_category',
-            'match_type', 'match_status', 'match_invite_status', 'schedule_type','scoring_status','score_added_by','created_by']);
+            'match_type', 'match_status', 'match_invite_status', 'schedule_type','scoring_status','score_added_by','created_by', 'address']);
 
         if (count($matchScheduleData)) {
             $matchScheduleData = $matchScheduleData->toArray();

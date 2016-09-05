@@ -58,6 +58,13 @@
                             <span class='match_type_text'>({{ $schedule['match_type']=='odi'?strtoupper($schedule['match_type']):ucfirst($schedule['match_type']) }})</span>
                     @endif
                 </p>  
+                       <span class=''>{{Helper::getMatchDetails($schedule['id'])->address}}</span><br>
+                    Status: <span class='event_date'><b>{{ ucfirst($schedule['match_status']) }}</b></span> <br>
+                    Scores: <span class='blue'><b>{{Helper::getMatchDetails($schedule['id'])->scores}}</b> </span> <br>
+                    @if(!is_null(Helper::getMatchDetails($schedule['id'])->winner_id))
+                            <span class='red'>Winner: {{Helper::getMatchDetails($schedule['id'])->winner}} </span>
+                                
+                    @endif
                 
                 <?php 
                         if (strpos($schedule['match_start_date'], ':') == false) {
@@ -129,6 +136,14 @@
                     {!! Helper::Images($schedule['b_logo'],config('constants.PHOTO_PATH.USERS_PROFILE'),array('class'=>'img-circle img-border','height'=>'90','width'=>90) )!!}
                     @endif   
                 </p>
+
+                       <span class=''>{{Helper::getMatchDetails($schedule['id'])->address}}</span><br>
+                    Status: <span class='event_date'><b>{{ ucfirst($schedule['match_status']) }}</b></span> <br>
+                    Scores: <span class='blue'><b>{{Helper::getMatchDetails($schedule['id'])->scores}}</b> </span> <br>
+                    @if(!is_null(Helper::getMatchDetails($schedule['id'])->winner_id))
+                            <span class='red'>Winner: {{Helper::getMatchDetails($schedule['id'])->winner}} </span>
+                                
+                    @endif
                 <!--<p class="vs_text"><span>{{isset($schedule['b_name'])?$schedule['b_name']:trans('message.bye')}}</span></p>--> 
                 <p class="vs_text">
                     <span>
