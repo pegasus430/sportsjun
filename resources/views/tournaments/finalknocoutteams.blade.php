@@ -223,7 +223,7 @@
             content = 'All requested teams have been added.'
         }
 
-        if(response=='' && response != 'invite')
+        if(response=='' )
         {
                 $.alert({
                                 title: 'Alert!',

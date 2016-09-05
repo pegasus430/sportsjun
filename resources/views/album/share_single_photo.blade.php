@@ -19,7 +19,7 @@ switch ($action) {
 }
 $data_url='';
 $data_text=$sharingKit->sharingString;
-$data_title="Photo Album of $action $sharingKit->name - Add a new photo";
+$data_title="$sharingKit->name Added a new photo to his Album";
 $data_image=url("/uploads/gallery_$action/$action_id/$sharingKit->logo");
 
 

@@ -450,16 +450,18 @@
 		var name='';
 		var email='';
 		var flag='';
-		response='';
+		var response='';
+
 		team_name='';
 		if(label=='auto')
 		{
 			str_val = $('#response').val();
 			response = $.makeArray( str_val );
 			team_name = $('#team_name').val();
+
 		}
 
-		if(label=='invite')
+		else if(label=='invite')
 		{
 			name= $('#player_name_'+group_id).val();
 			email= $('#player_email_'+group_id).val();
@@ -493,7 +495,7 @@
 			}
 			
 		}
-		if((response=='' || response==null) && response != 'invite')
+		if(response=='' || response==null)
 		{
 			$.alert({
 						title: 'Alert!',
@@ -514,6 +516,7 @@
 					 var trHTML = '';
 					 $.each(response, function (i, item) {
 						 trHTML = '<tr id="row_'+item.id+'">'+
+						 		 '<td></td>'+
                                  '<td>' + item.name + '</td>'+
                                  '<td>' + item.match_id + '</td>'+
                                  '<td>' + item.won + '</td>'+
@@ -524,7 +527,6 @@
                                  '<td> </td>'+
                               @endif
                                  '<td>' + item.points + '</td>'+
-                                 '<td></td>'+
                                  '<td><a href="#" class="btn btn-danger btn-circle btn-sm" onclick="deleteTeam('+tournament_id+','+item.tournament_group_id+','+item.id+','+item.team_id+');"><i class="fa fa-remove"></i></a></td>'+
                                  '</tr>';
 						 $('#records_table_'+group_id).append(trHTML);
