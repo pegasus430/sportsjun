@@ -10,6 +10,8 @@ use App\Model\MatchSchedule;
 use App\Model\TournamentParent;
 use App\Model\Tournaments;
 use App\Model\TeamPlayers;
+use App\Model\volleyballScore;
+use App\Model\VolleyballPlayerMatchwiseStats;
 use App\Helpers\AllRequests;
 use App\User;
 use App\Model\Organization;
@@ -2143,6 +2145,33 @@ class Helper {
                 return $number;
             }
             else return '-';
+    }
+
+    public static function getVolleyballServer($match_id){
+      
+        $team_server=volleyballScore::whereMatchId($match_id)->where('elected', 'serve')->first();
+        if(isset($team_server)){
+                $team_id=$team_server->team_id;
+        $player_serving=VolleyballPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_id)->where('serving_order', 1)->first();
+        $serving_array=json_decode(json_encode(
+                ['team_id'=>$team_id,
+                 'player_id'=>$player_serving->user_id,
+                 'team_name'=>Team::find($team_id)->name,
+                 'player_name'=>User::find($player_serving->user_id)->name]
+
+            ));
+        
+        }
+        else{
+                $serving_array=json_decode(json_encode(
+                ['team_id'=>0,
+                 'player_id'=>0,
+                 'team_name'=>'',
+                 'player_name'=>'']
+            ));
+        }
+        
+        return $serving_array;
     }
 
    

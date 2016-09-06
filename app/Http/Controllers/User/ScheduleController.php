@@ -814,6 +814,7 @@ class ScheduleController extends Controller {
                  case config('constants.SPORT_ID.Squash'):
                     $statsArray = Helper::getTennisTableTennisStats($teamStats,$teamId);
                     break;
+                 
                 default:
                     $statsArray = Helper::getHockeyStats($teamStats,$teamId);
             }  

@@ -277,7 +277,7 @@
 
 							      @include('tournaments.match_stats.match_summary')
 								@endif
-						--}}							
+							--}}							
 
 
 

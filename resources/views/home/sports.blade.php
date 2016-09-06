@@ -110,6 +110,7 @@
 				<div class="col-lg-2 col-md-3 col-sm-6 col-xs-6 sports_list">
                   <div class="sport_icon_bg"><img src="{{ asset('/home/extra-images/Squash.png') }}" height="60" width="60" alt="Squash"></div>
                   <h4>Squash</h4>
+                  <span class="scorecard_avila">Scorecard Available</span>
                 </div>   
                 
 				<div class="col-lg-2 col-md-3 col-sm-6 col-xs-6 sports_list">

@@ -122,7 +122,7 @@
                         @endif  
                     </span>
                 </p>
-            </div>    
+            </div>     
     
             <div id="center_div" class="col-xs-2">
                  <span style="position: absolute; margin-top: 25px;">vs</span>
@@ -137,13 +137,7 @@
                     @endif   
                 </p>
 
-                       <span class=''>{{Helper::getMatchDetails($schedule['id'])->address}}</span><br>
-                    Status: <span class='event_date'><b>{{ ucfirst($schedule['match_status']) }}</b></span> <br>
-                    Scores: <span class='blue'><b>{{Helper::getMatchDetails($schedule['id'])->scores}}</b> </span> <br>
-                    @if(!is_null(Helper::getMatchDetails($schedule['id'])->winner_id))
-                            <span class='red'>Winner: {{Helper::getMatchDetails($schedule['id'])->winner}} </span>
-                                
-                    @endif
+                    
                 <!--<p class="vs_text"><span>{{isset($schedule['b_name'])?$schedule['b_name']:trans('message.bye')}}</span></p>--> 
                 <p class="vs_text">
                     <span>
@@ -169,6 +163,14 @@
                             <span class='match_type_text'>({{ $schedule['match_type']=='odi'?strtoupper($schedule['match_type']):ucfirst($schedule['match_type']) }})</span>
                     @endif
                 </p>  
+
+                   <span class=''>{{Helper::getMatchDetails($schedule['id'])->address}}</span><br>
+                    Status: <span class='event_date'><b>{{ ucfirst($schedule['match_status']) }}</b></span> <br>
+                    Scores: <span class='blue'><b>{{Helper::getMatchDetails($schedule['id'])->scores}}</b> </span> <br>
+                    @if(!is_null(Helper::getMatchDetails($schedule['id'])->winner_id))
+                            <span class='red'>Winner: {{Helper::getMatchDetails($schedule['id'])->winner}} </span>
+                                
+                    @endif
                 @if(isset($schedule['winner_text']))
                     @if($schedule['winner_text']=='Edit') 
                         <p><span><a href="#" id="scheduleEdit_{{$schedule['id']}}" onclick="editMatchSchedule({{$schedule['id']}}, 1, '', 'mainmatchschedule')" class="add_score_but">Edit</a></span></p>

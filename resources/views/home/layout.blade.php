@@ -12,6 +12,17 @@ $js_version     = config('constants.JS_VERSION');
 $css_version    = config('constants.CSS_VERSION');
 ?>
 <!-- Css Files -->
+        <link href="{{ asset('/css/jquery-ui.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
+        <link href="{{ asset('/css/sportsjun.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
+        <link href="{{ asset('/css/album-popup.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
+        <link href="{{ asset('/css/marketplace-showdetails.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
+       
+        <link href="{{ asset('/css/teams.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
+        <link href="{{ asset('/css/green.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
+        <link href="{{ asset('/css/_all.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
+
+
+
         <link href="{{ asset('/home/css/bootstrap.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
         <link href="{{ asset('/home/css/font-awesome.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
         <link href="{{ asset('/home/css/themetypo.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
@@ -24,14 +35,7 @@ $css_version    = config('constants.CSS_VERSION');
         <link href="{{ asset('/home/css/prettyphoto.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
         <link href="{{ asset('/home/css/responsive.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
 
-      <link href="{{ asset('/css/jquery-ui.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
-        <link href="{{ asset('/css/sportsjun.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
-        <link href="{{ asset('/css/album-popup.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
-        <link href="{{ asset('/css/marketplace-showdetails.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
-       
-        <link href="{{ asset('/css/teams.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
-        <link href="{{ asset('/css/green.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
-        <link href="{{ asset('/css/_all.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
+        
 
 
 

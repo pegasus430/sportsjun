@@ -183,7 +183,9 @@
     <div class="form-inline">
     @if($match_data[0]['hasSetupSquad'] && $match_data[0]['match_status']!='completed' )
           <br>
-          <button class="btn btn-danger soccer_buttons_disabled" onclick="return SJ.SCORECARD.soccerSetTimes(this)"></i>End Match</button>
+          <div id='end_match_button'>
+          <button class="btn btn-danger soccer_buttons_disabled" onclick="return SJ.SCORECARD.soccerSetTimes(this)">End Match</button>
+          </div>
     @endif
  @if($isValidUser && $isForApprovalExist && ($match_data[0]['winner_id']>0 || $match_data[0]['is_tied']>0 || $match_data[0]['has_result'] == 0))    
       <button style="text-align:center;" type="button" onclick="forApproval();" class=" btn btn-primary">Send Score for Approval</button>
@@ -975,6 +977,7 @@ function getTeamPlayers(that){
                 $('.tennis_input_new').removeAttr('readonly');
                 $('.tennis_input_new').focus();
                 $('#real_time_scoring').hide();
+                $('#end_match_button').hide();
                 $('#saveButton').show();
                 manual=true;
             }, 
@@ -992,6 +995,7 @@ function getTeamPlayers(that){
 
                  $('.tennis_input_new').attr('readonly', 'readonly');
                  $('#real_time_scoring').show();
+                 $('#end_match_button').show();
                  $('#saveButton').hide();
                  manual=false;
             }, 
