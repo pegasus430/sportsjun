@@ -2520,7 +2520,7 @@ class TournamentsController extends Controller
 	public function settings($tournament_id){
 		$t_settings=Settings::where('tournament_id', $tournament_id)->first();
 		$t_model = Tournaments::find($tournament_id);
-		$sports_name = $t_model->sport->sports_name;
+		$sports_name = strtolower($t_model->sport->sports_name);
 
 		if(count($t_settings)) $settings=$t_settings->settings;
 		else{
