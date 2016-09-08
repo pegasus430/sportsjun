@@ -15,7 +15,7 @@ use App\Model\Facilityprofile;
 use App\Model\Country;
 use App\Model\TournamentGroupTeams;
 use App\Model\Tournaments;
-use App\Model\RubberSchedule;
+use App\Model\MatchScheduleRubber;
 use App\User;
 use DB;
 use Request;
@@ -1083,7 +1083,7 @@ class ScheduleController extends Controller {
 
 
         $game_type = !empty(Request::get('game_type')) ? Request::get('game_type') : 'normal';
-        $number_of_games = !empty(Request::get('number_of_games')) ? Request::get('number_of_games') : NULL;    
+        $number_of_rubber = !empty(Request::get('number_of_rubber')) ? Request::get('number_of_rubber') : NULL;    
 
         $facility_name = Request::get('venue');
         $facility_id = Request::get('facility_id');
@@ -1170,7 +1170,7 @@ class ScheduleController extends Controller {
             'player_b_ids' => $player_b_ids,
 			'match_invite_status'=>$match_invite_status,
             'game_type'     => $game_type,
-            'number_of_games' => $number_of_games
+            'number_of_rubber' => $number_of_rubber
 
         );
         if(!empty($bye) && $bye==2) {
@@ -1216,8 +1216,8 @@ class ScheduleController extends Controller {
                   if(!empty($tournament_id)) {
                       AllRequests::sendMatchNotifications($tournament_id,$schedule_type,$a_id,$b_id,$match_start_date);
 
-                      if($game_type=='rubber' && (is_numeric($number_of_games) && $number_of_games>0)){
-                            $this->insertGroupRubber($match_schedule_id);
+                      if($game_type=='rubber' && (is_numeric($number_of_rubber) && $number_of_rubber>0)){
+                            //$this->insertGroupRubber($match_schedule_id);
                       }
 
 
@@ -1270,7 +1270,7 @@ class ScheduleController extends Controller {
         $match_location = rtrim($country . ', ' . $state . ', ' . $city, ', ');
 
         $game_type = !empty(Request::get('game_type')) ? Request::get('game_type') : 'normal';
-        $number_of_games = !empty(Request::get('number_of_games')) ? Request::get('number_of_games') : NULL;
+        $number_of_rubber = !empty(Request::get('number_of_rubber')) ? Request::get('number_of_rubber') : NULL;
         
         $player_a_ids = $a_id;
         $player_b_ids = $b_id;
@@ -1317,7 +1317,7 @@ class ScheduleController extends Controller {
             'player_a_ids' => $player_a_ids,
             'player_b_ids' => $player_b_ids,
             'game_type'     => $game_type,
-            'number_of_games' => $number_of_games
+            'number_of_rubber' => $number_of_rubber
         );
 
         $results = array();
@@ -1526,6 +1526,8 @@ class ScheduleController extends Controller {
             $roundNumber = $matchScheduleDetails['tournament_round_number'];
             $matchNumber = $matchScheduleDetails['tournament_match_number'];
             $matchNumberToCheck = ceil($matchNumber / 2);
+
+            $tournamentDetails=Tournaments::find($matchScheduleDetails['tournament_id']);
            
                        //check if corresponding player is there.
 $matchScheduleData = MatchSchedule::where('tournament_id',$matchScheduleDetails['tournament_id'])
@@ -1578,10 +1580,11 @@ $matchScheduleData = MatchSchedule::where('tournament_id',$matchScheduleDetails[
                 'player_a_ids' => !empty($player_a_ids)?(','.trim($player_a_ids).','):NULL,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
-                'game_type'     => $matchScheduleDetails->game_type
+                'game_type'     => $tournamentDetails->game_type,
+                'number_of_rubber' => $tournamentDetails->number_of_rubber
             ];
 
-            MatchSchedule::insert($scheduleArray);
+            $match=MatchSchedule::insert($scheduleArray);
 
         }
             
@@ -1589,11 +1592,15 @@ $matchScheduleData = MatchSchedule::where('tournament_id',$matchScheduleDetails[
 
     public function insertGroupRubber($match_id){
         $match_model=MatchSchedule::find($match_id);
-        $number_of_games = $match_model->number_of_games;
+        $number_of_rubber = $match_model->number_of_rubber;
 
-        for($i=1; $i<=$number_of_games; $i++){
-            $rubber      = new RubberSchedule;
+        for($i=1; $i<=$number_of_rubber; $i++){
+            $rubber      = new MatchScheduleRubber;
 
+            $rubber->tournament_id  = $match_model->tournament_id;
+            $rubber->tournament_group_id    = $match_model->tournament_group_id;
+            $rubber->tournament_round_number = $match_model->tournament_round_number;
+            $rubber->tournament_match_number = $match_model->tournament_match_number;
             $rubber->match_id       =   $match_id;
             $rubber->sports_id      =   $match_model->sports_id;
             $rubber->created_at     =   $match_model->created_at;
@@ -1603,9 +1610,14 @@ $matchScheduleData = MatchSchedule::where('tournament_id',$matchScheduleDetails[
             $rubber->b_id           =   $match_model->b_id;
             $rubber->player_a_ids   =   $match_model->player_a_ids;
             $rubber->player_b_ids   =   $match_model->player_b_ids;
-            $rubber->game_number    =   $i;
+            $rubber->rubber_number    =   $i;
             $rubber->save();
-        }           
+
+            // $match_model->hasSetupSquad = 1; 
+            // $match_model->save();
+        }  
+
+        return MatchScheduleRubber::whereMatchId($match_id)->get();        
        
     }
 }

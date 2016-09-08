@@ -299,6 +299,15 @@
 	border-radius: 0;
 	color: #a2a9b4;
 	}
+
+.col_standard .nav-tabs.nav-justified > .scheduled > a,
+.col_standard .nav-tabs.nav-justified > .scheduled > a:hover,
+.col_standard .nav-tabs.nav-justified > .scheduled > a:focus {
+    border-bottom: 1px solid #1B926C;
+    background: #84cd93;
+    color: #fff;
+}
+
 .col_standard .nav-tabs.nav-justified > .active > a,
 .col_standard .nav-tabs.nav-justified > .active > a:hover,
 .col_standard .nav-tabs.nav-justified > .active > a:focus {
@@ -306,6 +315,15 @@
     background: #1B926C;
     color: #fff;
 }
+
+.col_standard .nav-tabs.nav-justified > .completed > a,
+.col_standard .nav-tabs.nav-justified > .completed > a:hover,
+.col_standard .nav-tabs.nav-justified > .completed > a:focus {
+    border-bottom: 1px solid #1B926C;
+    background: #266393;
+    color: #fff;
+}
+
 
 .col_standard .nav-tabs.nav-justified > .active > a:after{
 	content: '';

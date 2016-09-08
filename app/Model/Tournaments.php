@@ -65,7 +65,8 @@ class Tournaments extends Model
         'manager_id',
         'match_type',
         'player_type',
-        'game_type'
+        'game_type',
+        'number_of_rubber'
     ];
 
 

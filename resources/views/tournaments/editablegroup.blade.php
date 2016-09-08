@@ -558,14 +558,13 @@
 					});
 					 
 				}
-				else if(typeof(response.result!=='undefined')){
+				else if(response.message){
 					$.alert({
 						title: 'Alert!',
 						content: response.message
 					});
 					 $('#response').val('');
-					 $('.test').val('');
-					
+					 $('.test').val('');					
 				}
 				else
 				{

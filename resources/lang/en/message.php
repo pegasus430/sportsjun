@@ -289,6 +289,7 @@ return [
 		'player_type' =>'Player Type',
 		'match_type' =>'Match Type',
 		'game_type' =>'Game Type',
+		'rubber_number'		=> 'How many rubbers in a Match?'
 		],
             'group' => [
 		'nomatchschedules' => 'No matches scheduled yet.',

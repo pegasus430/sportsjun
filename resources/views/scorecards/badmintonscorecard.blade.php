@@ -10,13 +10,24 @@
     $team_a_name = $user_a_name;
 		$team_b_name = $user_b_name;
 
+    $match_data[0]['tournament_id']!=null?$disabled='readonly':'';
+    $match_settings   =   Helper::getMatchSettings($match_data[0]['tournament_id'],$match_data[0]['sports_id']);
+
     $team_a_id=$match_data[0]['a_id'];
     $team_b_id=$match_data[0]['b_id'];
 
     $player_a_ids=$match_data[0]['player_a_ids'];
     $player_b_ids=$match_data[0]['player_b_ids'];
 
+
+
     $match_details=json_decode($match_data[0]['match_details']);
+    $old_match_details=$match_details;
+      if($match_data[0]['game_type']=='rubber'){
+          if(count($rubber_details))
+            $match_details=json_decode($rubber_details['match_details']);
+            isset($match_details->preferences)? $match_details = $match_details: $match_details = $old_match_details;
+      }
 
     isset($match_details->preferences)?$preferences=$match_details->preferences:[];
     
@@ -32,13 +43,13 @@
     if(isset($preferences)){
     $current_set=$match_details->current_set;
 
-    $player_or_team_left_button_add= "<button class='btn button_add btn-circle btn-sm  btn-circle btn-sm pull-left' id='score_team_a' team_id='$preferences->left_team_id' table_score_id='{$score_a_array['id']}' onclick='return addScore(this)'> <i class='fa fa-plus'></i></button>";
+    $player_or_team_left_button_add= "<button class='arm_a btn button_add btn-circle btn-sm arm btn-circle btn-sm pull-left' id='score_team_a' team_id='$preferences->left_team_id' table_score_id='{$score_a_array['id']}' onclick='return addScore(this)' class=''> <i class='fa fa-plus'></i></button>";
 
-    $player_or_team_left_button_remove="  <button team_id='$preferences->left_team_id' table_score_id='{$score_a_array['id']}' onclick='return removeScore(this)'class='btn button_remove btn-circle btn-sm pull-right'> <i class='fa fa-minus'></i> </button>";
+    $player_or_team_left_button_remove="  <button team_id='$preferences->left_team_id' table_score_id='{$score_a_array['id']}' onclick='return removeScore(this)'class='arm_a btn button_remove btn-circle btn-sm pull-right' class=''> <i class='fa fa-minus'></i> </button>";
 
-    $player_or_team_right_button_add= "<button class='btn button_add btn-circle btn-sm  btn-circle btn-sm pull-left' id='score_team_b' team_id='$preferences->right_team_id' table_score_id='{$score_b_array['id']}' onclick='return addScore(this)'> <i class='fa fa-plus'></i></button>";
+    $player_or_team_right_button_add= "<button class='arm_b btn button_add btn-circle btn-sm arm btn-circle btn-sm pull-left' id='score_team_b' team_id='$preferences->right_team_id' table_score_id='{$score_b_array['id']}' onclick='return addScore(this)' class='arm_b'> <i class='fa fa-plus'></i></button>";
 
-    $player_or_team_right_button_remove=" <button team_id='$preferences->right_team_id' table_score_id=    '{$score_b_array['id']}' onclick='return removeScore(this)'class='btn button_remove btn-circle btn-sm pull-right'> <i class='fa fa-minus'></i> </button>";
+    $player_or_team_right_button_remove=" <button team_id='$preferences->right_team_id' arm table_score_id=    '{$score_b_array['id']}' onclick='return removeScore(this)'class=' arm_b btn button_remove btn-circle btn-sm pull-right' class='arm_b'> <i class='fa fa-minus'></i> </button>";
 
   ${'team_'.$preferences->left_team_id.'_score'}=$match_details->scores->{$preferences->left_team_id.'_score'}.' sets';
   ${'team_'.$preferences->right_team_id.'_score'}=$match_details->scores->{$preferences->right_team_id.'_score'}.' sets';
@@ -48,6 +59,12 @@
     $player_or_team_right_button_remove='';
     $player_or_team_right_button_add='';
     $current_set='';
+  }
+
+  if($match_data[0]['game_type']=='rubber'){
+  ${'team_'.$team_a_id.'_score'}=$match_data[0]['a_score'];
+  ${'team_'.$team_b_id.'_score'}=$match_data[0]['b_score'];
+
   }
 ?>
 
@@ -210,7 +227,7 @@
     <!--<a onclick="createnewset({{ $i=1 }});" style="float:right;">(Add More Sets)</a>-->
  
 <!-- Set Preferences -->
-  @if(!$match_data[0]['hasSetupSquad'])
+  @if(!$match_data[0]['hasSetupSquad'] || $match_data[0]['game_type']!='rubber')
     <div class='row'>
       <div class='col-sm-10 col-sm-offset-1'>
           <div class=''>
@@ -319,7 +336,7 @@
               <div class='row'>
                    <div class='col-sm-6'>
                         <label>Number of Sets</label>
-                        <select class=' form-control select-picker field select' name='number_of_sets'>
+                        <select class=' form-control select-picker field select' name='number_of_sets' {{$disabled}}>
                           <option value='1'>1</option>
                           <option value='2'>2</option>
                           <option value='3' selected="">3</option>
@@ -328,17 +345,17 @@
                         </select>
 
                         <br>
-                        <input type='checkbox' name='enable_two_points' checked="" id='enable_two_points'> <label for='enable_two_points'>Enable Two points clear pattern</label>
+                        <input type='checkbox' name='enable_two_points' checked="" id='enable_two_points' {{$disabled}} > <label for='enable_two_points'>Enable Two points clear pattern</label>
                     </div>
 
                     <div class='col-sm-6'>
                       <div class="section">
                         <label class="form_label">Score to Win <span  class='required'>*</span> </label>
-                        <input placeholder="eg. 21" type='number' name='score_to_win' min="0" class="form-control" required="">
+                        <input placeholder="eg. 21" type='number' name='score_to_win' min="0" class="form-control" required="" {{$disabled}} value="{{$match_settings->score_to_win}}">
 
                         <br>
                         <label class="form_label">Set End Point <span  class='required'>*</span></label>
-                        <input placeholder="eg. 29" type='number' name='set_end_point' min='0' class="form-control gui-input" required="">
+                        <input placeholder="eg. 29" type='number' name='set_end_point' min='0' class="form-control gui-input" required="" {{$disabled}} value="{{$match_settings->end_point}}">
 
 
                     </div>
@@ -365,20 +382,9 @@
 
   @else
 
-   {!! Form::open(array('url' => '', 'method' => 'POST','id'=>'badminton', 'onsubmit'=>'return manualScoring(this)')) !!}
-
+ 
    <!-- show alert for no results -->
 
-@if(!$match_data[0]['has_result'])
-    <div class='row' >
-      <div class="col-sm-8 col-sm-offset-2" style="background:#ffeeee">
-        <div class='col-sm-12 alert alert-danger'>
-                    This match has  been saved as 'no result'. All the changes and records for this match shall be discarded after approval.
-                </div>
-      </div>
-    </div>  
-
-@endif
 
   <div class="row">
     <div class='col-sm-12'>
@@ -390,6 +396,12 @@
     </span>
     </div>
   </div>
+
+@if($match_data[0]['game_type']!='rubber' )
+
+  {!! Form::open(array('url' => '', 'method' => 'POST','id'=>'badminton', 'onsubmit'=>'return manualScoring(this)')) !!}
+
+<!-- Start of normal match -->
   <div class="row">
     <div class="col-sm-12">
    <div class='table-responsive'>
@@ -439,10 +451,11 @@
   </div>
 </div>
 
+
 <input type='hidden' value='{{$set}}' name="number_of_sets">
 <input type='hidden' value="{{$match_data[0]['id']}}" name='match_id'>
-<input type='hidden' value="{{$score_a_array['id']}}" name='score_a_id'>
-<input type='hidden' value="{{$score_b_array['id']}}" name='score_b_id'>
+<input type='hidden' value="{{$score_a_array['id']}}" name='score_a_id' class='arm_a_val'>
+<input type='hidden' value="{{$score_b_array['id']}}" name='score_b_id' class='arm_b_val'>
 
 <div class="row" id='saveButton'>
     <div class='col-sm-12'>
@@ -451,11 +464,37 @@
 </div>
 
 </form>
+<!-- End of normal match -->
+
+@else 
+  <!-- Start of Rubber -->
+
+ @foreach($rubbers as $rubber)
+    <?php
+         $rubber_players = ScoreCard::getRubberPlayers($rubber->id);
+         $rubber_a_array = $rubber_players['a'];
+         $rubber_b_array = $rubber_players['b'];
+    ?>
+
+
+      @if($rubber->rubber_number==$active_rubber)
+         @include('scorecards.badmintonrubber')
+      @else
+         @include('scorecards.badmintonrubberview')
+      @endif
+      <hr>
+ @endforeach
+ 
+ @endif
+
+ <!-- End of Rubber -->
+
+
 
  {!! Form::open(array('url' => '', 'method' => 'POST','id'=>'endMatchForm', 'onsubmit'=>'return endMatch(this)')) !!}
 
 
-
+<!-- If normal Match -->
 
 @if($match_data[0]['match_type']!='singles' )
 
@@ -544,8 +583,13 @@
     </div>
 </div>
 
-
  @endif
+ <!-- End of Normal Match -->
+    
+ <!-- Start of Rubber -->
+
+
+ <!-- End of Rubber -->
 
 
 <!-- End match modal -->
@@ -649,7 +693,7 @@
                      <div class="col-sm-12"><center><h3>Update Preferences</h3> </center></div>
                     <div class='col-sm-4'>
                         <label>Number of Sets</label>
-                        <select class='form-control select-picker' name='number_of_sets' readonly>
+                        <select class='form-control select-picker' name='number_of_sets' readonly {{$disabled}}>
                             <option value=1  {{$preferences->number_of_sets==1?'selected':''}}>1</option>
                             <option value=2  {{$preferences->number_of_sets==2?'selected':''}}>2</option>
                             <option value=3 {{$preferences->number_of_sets==3?'selected':''}}>3</option>
@@ -663,20 +707,20 @@
 
                     <div class='col-sm-4'>
                         <label>Score to Win</label>
-                        <input type='text' name='score_to_win' class="form-control gui-input allownumericwithdecimal" required="" value="{{$preferences->score_to_win}}" readonly="">
+                        <input type='text' name='score_to_win' class="form-control gui-input allownumericwithdecimal" required="" value="{{$preferences->score_to_win}}" readonly="" {{$disabled}}>
 
                     </div>
 
                     <div class='col-sm-4'>
                         <label>Set End Point</label>
-                        <input type='text' name='set_end_point' class="form-control gui-input allownumewithdecimal" required="" value="{{$preferences->end_point}}" readonly="">
+                        <input type='text' name='set_end_point' class="form-control gui-input allownumewithdecimal" required="" value="{{$preferences->end_point}}" readonly="" {{$disabled}}>
 
                     </div>
 
                                                     
                     <div class='col-sm-12'>
                       <br><br>
-                      <input type='checkbox' name='enable_two_points' readonly="readonly" {{$preferences->enable_two_points=='on'?'checked':''}} id='enable_two_points'> 
+                      <input type='checkbox' name='enable_two_points' readonly="readonly" {{$preferences->enable_two_points=='on'?'checked':''}} id='enable_two_points' {{$disabled}}> 
                         <label for='enable_two_points'>Enable Two points clear pattern</label>
                       </div>
                       
@@ -855,10 +899,11 @@ var team_b_name="{{$team_b_name}}";
 var match_id="{{ $match_data[0]['id'] }}";
 
 var manual=false;
+var active_rubber="{{$active_rubber}}"
      
 
 function savePreferences(that){
-      var data=$('#form_preferences').serialize();
+      var data=$('#form_preferences').serialize();      
 
     $.confirm({
         title:"Alert",
@@ -1142,6 +1187,7 @@ function getTeamPlayers(that){
             type:'post', 
             data:data,
             success:function(response){
+
                 window.location=window.location;
             }
         })
@@ -1175,6 +1221,12 @@ function addButtonSet(set_index){
     $('.left_button_add_set_'+set_index).html(player_or_team_left_button_add);
     $('.right_button_remove_set_'+set_index).html(player_or_team_right_button_remove);
     $('.right_button_add_set_'+set_index).html(player_or_team_right_button_add);
+
+    $('.arm_b').attr('table_score_id', $('.arm_b_val').val());
+    $('.arm_a').attr('table_score_id', $('.arm_a_val').val());
+
+
+
 
 }
 

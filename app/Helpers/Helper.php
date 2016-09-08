@@ -12,6 +12,7 @@ use App\Model\Tournaments;
 use App\Model\TeamPlayers;
 use App\Model\volleyballScore;
 use App\Model\VolleyballPlayerMatchwiseStats;
+use App\Model\TournamentMatchPreference;
 use App\Helpers\AllRequests;
 use App\User;
 use App\Model\Organization;
@@ -2172,6 +2173,26 @@ class Helper {
         }
         
         return $serving_array;
+    }
+
+    public static function getMatchSettings($tournament_id, $sports_id=5 ){
+        if(is_null($tournament_id)){
+            $settings= json_encode(config('constants.SPORTS_PREFERENCES.'.$sports_id));
+        }
+        else{
+            $sports_id=Tournaments::find($tournament_id)->sports_id;
+            $settings=TournamentMatchPreference::where('tournament_id',$tournament_id)->first();
+            if(count($settings)) $settings= $settings->settings;
+            else{
+                $settings=json_encode(config('constants.SPORTS_PREFERENCES.'.$sports_id));
+                $tmp    = new TournamentMatchPreference;
+                $tmp->tournament_id=$tournament_id;
+                $tmp->sports_id     = $sports_id;
+                $tmp->settings      = $settings;
+                $tmp->save();
+            }
+          return json_decode($settings);
+       }
     }
 
    

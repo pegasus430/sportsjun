@@ -160,22 +160,7 @@
 						</label>
 					</div>
                     	</div>
-                    </div>
-
-                    <div class="row" >
-                    	<div class="col-sm-12" style="display:none" id='hideNumberOfGames'>
-                        	<div class="section">
-                        	<div class='col-sm-12 alert alert-info'> Multiple games tournament. Enter the number of games</div>
-                            <label class="form_label">{{   trans('message.schedule.fields.number_of_games') }} </label>                
-                            <label class="field">
-                                {!! Form::text('number_of_games',null,['class'=>'gui-input','placeholder'=>trans('message.schedule.fields.number_of_games'),'id'=>'number_of_games']
-                                ) !!}					
-                                @if ($errors->has('number_of_games')) <p class="help-block">{{ $errors->first('number_of_games') }}</p> @endif
-                                <i class="arrow double"></i> 
-                            </label>
-                        </div>
-                    	</div>                       
-                    </div>
+                    </div>            
 
                                                             
 					<div class="section">
@@ -190,7 +175,8 @@
 					</div>
 					@include ('common.address',['mandatory' => ''])
 
-					{!! Form::hidden('game_type',$tournamentDetails[0]['game_type'],['id'=>'game_type'] ) !!}
+			{!! Form::hidden('game_type',$tournamentDetails[0]['game_type'],['id'=>'game_type'] ) !!}
+			{!! Form::hidden('number_of_rubber',$tournamentDetails[0]['number_of_rubber'],['id'=>'number_games'] ) !!}
                     
 				</div>
 	        </div>

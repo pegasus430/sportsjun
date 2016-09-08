@@ -276,5 +276,15 @@ return [
                 'ZIPCODE'            => 'regex:/^([0-9]{6})$/',
                 'PHONE'              => 'regex:/^([*\d\s\-\+\(\)]{8,15})$/',
                 'PHONEMP'            => 'regex:/^([0-9]{10})$/'
+        ],
+        'SPORTS_PREFERENCES'      => [
+                1 => [],
+                2 => [],
+                5 => [
+                    'number_of_sets'=>3,
+                    'score_to_win'  =>21,
+                    'end_point'     =>29,
+                    'enable_two_points'     => 'on'
+                ]
         ]
 ];
