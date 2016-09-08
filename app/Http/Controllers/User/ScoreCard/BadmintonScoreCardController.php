@@ -878,7 +878,10 @@ class BadmintonScoreCardController extends parentScoreCardController
 //                                Helper::printQueries();
                
                 if($rubber_completed && $match_status=='completed'){
-                    $winners_from_rubber = ScoreCard::getWinnerInRubber($match_id,$match_model->sports_id);
+                    $winners_from_rubber = ScoreCard::getWinnerInRubber($match_id,$match_model->sports_id);             
+                    $winner_team_id = $winners_from_rubber['winner'];
+                    $looser_team_id = $winners_from_rubber['looser'];
+
                                     MatchSchedule::where('id',$match_id)->update([
                                     'match_status'=>$match_status,
                                     'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
@@ -886,8 +889,6 @@ class BadmintonScoreCardController extends parentScoreCardController
                                      'match_result'   => $match_result,
                                     'score_added_by'=>$json_score_status]);
 
-                    $winner_team_id = $winners_from_rubber['winner'];
-                    $looser_team_id = $winners_from_rubber['looser'];
                     if(!empty($matchScheduleDetails['tournament_round_number'])) {
                         $this->updateBracketDetails($match_model,$tournamentDetails,$winner_team_id);
                     }
@@ -938,6 +939,9 @@ class BadmintonScoreCardController extends parentScoreCardController
                                             'score_added_by'=>$json_score_status]);                    
 
                     if($rubber_completed && $match_status=='completed'){
+                     $winners_from_rubber = ScoreCard::getWinnerInRubber($match_id, $match_model->sports_id);
+                        $winner_team_id = $winners_from_rubber['winner'];
+                        $looser_team_id = $winners_from_rubber['looser'];
                                         MatchSchedule::where('id',$match_id)->update([
                                             'match_status'=>$match_status,
                                             'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
@@ -948,9 +952,7 @@ class BadmintonScoreCardController extends parentScoreCardController
                                             'scoring_status'=>$approved]);
 
 
-                        $winners_from_rubber = ScoreCard::getWinnerInRubber($match_id, $match_model->sports_id);
-                        $winner_team_id = $winners_from_rubber['winner'];
-                        $looser_team_id = $winners_from_rubber['looser'];
+                       
                         if(!empty($matchScheduleDetails['tournament_round_number'])) {
                             $this->updateBracketDetails($match_model,$tournamentDetails,$winner_team_id);
                         }
