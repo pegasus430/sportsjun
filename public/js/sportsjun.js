@@ -1250,6 +1250,17 @@ function follow_unfollow(id,val,flag)
 //END
 
 
+function getTournamentSettings(tournament_id){
+        $.ajax({
+            url:"/tournaments/settings/"+tournament_id,
+            data:{},
+            success:function(response){
+                $('#tournamentSettings').html(response);
+            }
+        })
+}
+
+
 function autofillsubtournamentdetails(tournamentDetails) {
         $(".modal-body #player_type").val(tournamentDetails['player_type']);
         $(".modal-body #match_type").val(tournamentDetails['match_type']);

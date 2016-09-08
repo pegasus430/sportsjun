@@ -218,6 +218,14 @@ Route::resource('gallery', 'User\GalleryController');
 Route::resource('user/album', 'User\AlbumController');
 //End Gallery
 //Tournamets
+Route::get('tournaments/settings/{id}/', [
+    'as'   => 'Tournament Settings',
+    'uses' => 'User\TournamentsController@settings',
+]);
+Route::post('tournaments/settings/{id}/update', [
+    'as'   => 'Tournament Settings Update',
+    'uses' => 'User\TournamentsController@updateSettings',
+]);
 Route::get('tournaments/groups/{id}/player_standing', [
     'as'   => 'groups',
     'uses' => 'User\TournamentsController@playerStanding',

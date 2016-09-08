@@ -521,5 +521,11 @@ return [
         'added_message' => 'Staff Invited Successfully!',
         'already_exists_message' => 'Staff Already exists!',
     ], 
-    'settings' 	=> 'Settings'
+    'settings' 	=> 'Settings',
+    'sports_settings'	=> [
+    		'number_of_sets'	=> 'Number of Sets',
+    		'score_to_win' 		=> 'Win Score',
+    		'end_point'	 		=> 'End Point',
+    		'enable_two_points' => 'Enable Two Points Clear?'
+    ]
 ];

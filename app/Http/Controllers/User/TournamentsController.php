@@ -23,6 +23,7 @@ use App\Model\TournamentGroupTeams;
 use App\Model\TournamentParent;
 use App\Model\Tournaments;
 use App\Model\UserStatistic;
+use App\Model\TournamentMatchPreference as Settings;
 use App\User;
 use Auth;
 use Carbon\Carbon;
@@ -2514,5 +2515,35 @@ class TournamentsController extends Controller
 			}
 
 			return $group_teams;
+	}
+
+	public function settings($tournament_id){
+		$t_settings=Settings::where('tournament_id', $tournament_id)->first();
+		$t_model = Tournaments::find($tournament_id);
+		$sports_name = $t_model->sport->sports_name;
+
+		if(count($t_settings)) $settings=$t_settings->settings;
+		else{
+			 $settings=json_encode(config('constants.SPORTS_PREFERENCES.'.$t_model->sports_id));
+                $tmp    = new Settings;
+                $tmp->tournament_id=$tournament_id;
+                $tmp->sports_id     = $t_model->sports_id;
+                $tmp->settings      = $settings;
+                $tmp->save();
+		}
+
+		$settings=json_decode($settings);
+
+		return view('tournaments.settings.'.$sports_name, compact('settings'));
+	}
+
+	public function updateSettings($tournament_id){
+		$t_settings=Settings::where('tournament_id', $tournament_id)->first();
+		$settings=json_encode(Request::all());
+		$t_settings->settings=$settings;
+		$t_settings->save();
+
+		return redirect()->back();
+
 	}
 }
