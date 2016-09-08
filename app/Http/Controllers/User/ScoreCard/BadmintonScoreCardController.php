@@ -856,7 +856,7 @@ class BadmintonScoreCardController extends parentScoreCardController
                          'match_result'   => $match_result,
                         'score_added_by'=>$json_score_status]);
                     if(!empty($matchScheduleDetails['tournament_round_number'])) {
-                        $this->updateBracketDetails($matchScheduleDetails,$tournamentDetails,$winner_team_id);
+                        $this->updateBracketDetails($match_model,$tournamentDetails,$winner_team_id);
                     }
                      if($match_status=='completed')            {
 
