@@ -321,7 +321,7 @@
 .col_standard .nav-tabs.nav-justified > .completed > a:focus {
     border-bottom: 1px solid #1B926C;
     background: #266393;
-    color: #fff;
+    color: yellow;
 }
 
 

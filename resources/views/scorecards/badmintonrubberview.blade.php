@@ -1,8 +1,12 @@
  <ul class="nav nav-tabs nav-justified">
   <li class="{{$rubber->rubber_number==$active_rubber?'active':$rubber->match_status}}">
-        <a > Rubber {{$rubber->rubber_number}} </a>
-  </li>
+        <a > RUBBER {{$rubber->rubber_number}} 
+        <span class='pull-right'>{{strtoupper($rubber->rubber_number==$active_rubber?'PLAYING':$rubber->match_status)}}
+        </span>
+        </a>
 </ul>
+
+{{$rubber->rubber_number==$active_rubber?"<br>":''}}
 
 
     <div class="row">

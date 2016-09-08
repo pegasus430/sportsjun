@@ -1961,6 +1961,7 @@ class Helper {
             $a_id=$match_model->a_id;
             $b_id=$match_model->b_id;
 
+
             switch ($match_model->sports_id) {
                 case '5':           //badminton
                     $scores=$match_details->scores;
@@ -2005,6 +2006,10 @@ class Helper {
         }
         else{
                 $match_model->scores='0 - 0';
+        }
+
+        if($match_model->game_type!='normal'){
+                $match_model->scores = $match_model->a_score. ' - '. $match_model->b_score;
         }
         return $match_model;
     }
