@@ -12,11 +12,14 @@
     $player_b_ids=$match_data[0]['player_b_ids'];
 
     $match_details=json_decode($match_data[0]['match_details']);
+    $match_settings   =   Helper::getMatchSettings($match_data[0]['tournament_id'],$match_data[0]['sports_id']);
 
     isset($match_details->preferences)?$preferences=$match_details->preferences:[];
     
-    if(isset($preferences->number_of_sets))$set=$preferences->number_of_sets ;
-    else $set=3;
+    // if(isset($preferences->number_of_sets))$set=$preferences->number_of_sets ;
+    // else $set=3;
+
+     $set=$match_settings->number_of_sets;
 
     ${'team_'.$match_data[0]['a_id'].'_score'}='0 sets';
     ${'team_'.$match_data[0]['b_id'].'_score'}='0 sets'; 

@@ -31,8 +31,10 @@
 
     isset($match_details->preferences)?$preferences=$match_details->preferences:[];
     
-    if(isset($preferences->number_of_sets))$set=$preferences->number_of_sets ;
-    else $set=3;
+    // if(isset($preferences->number_of_sets))$set=$preferences->number_of_sets ;
+    // else $set=$match_settings->number_of_sets;
+
+    $set=$match_settings->number_of_sets;
 
     ${'team_'.$match_data[0]['a_id'].'_score'}='0 sets';
     ${'team_'.$match_data[0]['b_id'].'_score'}='0 sets'; 
@@ -337,11 +339,11 @@
                    <div class='col-sm-6'>
                         <label>Number of Sets</label>
                         <select class=' form-control select-picker field select' name='number_of_sets' {{$disabled}}>
-                          <option value='1'>1</option>
-                          <option value='2'>2</option>
-                          <option value='3' selected="">3</option>
-                          <option value='4'>4</option>
-                          <option value='5'>5</option>
+                          <option value='1' {{$set==1?"selected":''}}>1</option>
+                          <option value='2' {{$set==2?"selected":''}}>2</option>
+                          <option value='3' {{$set==3?"selected":''}}>3</option>
+                          <option value='4' {{$set==4?"selected":''}}>4</option>
+                          <option value='5' {{$set==5?"selected":''}}>5</option>
                         </select>
 
                         <br>

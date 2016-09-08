@@ -88,8 +88,8 @@ class ScoreCard {
 		$match_model->b_score=$score_b;
 		$match_model->save();
 
-		if($score_a>$score_b) return ['winner'=>$score_a, 'looser'=> $score_b];
-		else return ['winner'=>$score_b, 'looser'=> $score_a];
+		if($score_a>$score_b) return ['winner'=>$a_id, 'looser'=> $b_id];
+		else return ['winner'=>$b_d, 'looser'=> $a_id];
 
 	}
 
