@@ -46,9 +46,12 @@ else $check_user='';
                 <li><a class="sidemenu_5" href="{{ url($check_user.'/tournaments/groups').'/'.$action_id.'/player_standing'}}"><span class="ico ico-user"></span> Player Standing</a></li>
             @endif
 
+        @if(Helper::isTournamentOwner($tournamentDetails[0]['manager_id'],$tournamentDetails[0]['tournament_parent_id']))
+
             @if(in_array($left_menu_data['sub_tournament_details']['sports_id'], [5]))
-                <li><a class="sidemenu_5" href="{{ url($check_user.'/tournaments/settings').'/'.$action_id}}"><span class="ico ico-settings"></span> Settings</a></li>
+                <li><a class="" href="javascript:void(0)"><span class="ico ico-settings"></span> Settings</a></li>
             @endif
+        @endif
         </ul>
     </div>
 </div>

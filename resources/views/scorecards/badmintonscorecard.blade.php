@@ -227,7 +227,7 @@
     <!--<a onclick="createnewset({{ $i=1 }});" style="float:right;">(Add More Sets)</a>-->
  
 <!-- Set Preferences -->
-  @if(!$match_data[0]['hasSetupSquad'] || $match_data[0]['game_type']!='rubber')
+  @if(!$match_data[0]['hasSetupSquad'] )
     <div class='row'>
       <div class='col-sm-10 col-sm-offset-1'>
           <div class=''>

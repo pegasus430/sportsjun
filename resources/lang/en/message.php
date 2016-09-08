@@ -520,5 +520,6 @@ return [
 		'invite_subject' => 'SportsJun Staff Invite.',
         'added_message' => 'Staff Invited Successfully!',
         'already_exists_message' => 'Staff Already exists!',
-    ]
+    ], 
+    'settings' 	=> 'Settings'
 ];

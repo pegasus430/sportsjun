@@ -66,6 +66,7 @@ class BadmintonScoreCardController extends parentScoreCardController
             else{
                 $active_rubber=null;
                 $rubber_details=null;
+                $rubbers=[];
             }
 
         
@@ -146,8 +147,8 @@ class BadmintonScoreCardController extends parentScoreCardController
         $scores_b = BadmintonPlayerMatchScore::select()->where('match_id',$match_data[0]['id'])->skip(1)->first();
     }
     else{
-         $scores_a = BadmintonPlayerRubberScore::select()->where('match_id',$match_data[0]['id'])->first();
-        $scores_b = BadmintonPlayerRubberScore::select()->where('match_id',$match_data[0]['id'])->skip(1)->first();
+       // $scores_a = BadmintonPlayerRubberScore::select()->where('match_id',$match_data[0]['id'])->first();
+       // $scores_b = BadmintonPlayerRubberScore::select()->where('match_id',$match_data[0]['id'])->skip(1)->first();
     }
 
        
@@ -462,7 +463,7 @@ class BadmintonScoreCardController extends parentScoreCardController
         if($game_type=='normal'){
             $match_model=MatchSchedule::find($match_id);
      $left_player_model=BadmintonPlayerMatchScore::find($table_score_id);
-     $right_player_model=BadmintonPlayerMatchScore::where('match_id', $match_id)->where('id', '!=', $table_score_id);
+     $right_player_model=BadmintonPlayerMatchScore::where('match_id', $match_id)->where('id', '!=', $table_score_id)->first();
           }
         else {
 
