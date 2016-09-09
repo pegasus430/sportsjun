@@ -8,7 +8,7 @@
     position:relative
 } 
 /*.alert{display: none;}*/
-</style>
+</style> 
 <script src="http://malsup.github.com/jquery.form.js"></script>
 <!-- Modal -->
 {!! Form::open(['route' => 'addschedule','class'=>'form-horizontal','method' => 'POST','id' => 'frm_add_schedule']) !!} 

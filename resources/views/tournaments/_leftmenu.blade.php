@@ -46,6 +46,8 @@ else $check_user='';
                 <li><a class="sidemenu_5" href="{{ url($check_user.'/tournaments/groups').'/'.$action_id.'/player_standing'}}"><span class="ico ico-user"></span> Player Standing</a></li>
             @endif
 
+    @if(!empty($tournamentDetails))
+
         @if(Helper::isTournamentOwner($tournamentDetails[0]['manager_id'],$tournamentDetails[0]['tournament_parent_id']))
 
             @if(in_array($left_menu_data['sub_tournament_details']['sports_id'], [5]))
@@ -54,6 +56,7 @@ else $check_user='';
 
             @include('tournaments.settings')
         @endif
+    @endif
         </ul>
     </div>
 </div>
