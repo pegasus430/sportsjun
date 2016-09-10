@@ -487,7 +487,7 @@
       @else
          @include('scorecards.badmintonrubberview')
       @endif
-      <hr>
+    
  @endforeach
  
  @endif
