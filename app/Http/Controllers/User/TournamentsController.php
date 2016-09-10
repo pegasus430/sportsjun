@@ -1147,6 +1147,9 @@ class TournamentsController extends Controller
 							{
 								$matchScheduleData[$key]['winner_text'] = trans('message.schedule.addscore');
 							}
+							else{
+								$matchScheduleData[$key]['winner_text'] = trans('message.schedule.viewscore');
+							}
 						}
 //                            $matchScheduleData[$key]['match_start_date'] = $matchStartDate->toDayDateTimeString();
 						$matchScheduleData[$key]['match_start_date'] = Helper::getFormattedTimeStamp($schedule);

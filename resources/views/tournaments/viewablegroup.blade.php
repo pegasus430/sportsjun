@@ -167,6 +167,8 @@
 															@else
 																<span class="tournament_score pull-left"><a href="{{ url('match/scorecard/edit/'.$match['id']) }}" class="btn-primary " style="padding: .3em 1em;">{{$add_score_link[$match['id']]}}</a></span>
 															@endif
+
+													 	@else 
 														@endif
 
 						@if($match['game_type']=='rubber')

@@ -8,7 +8,7 @@
         </a>
 </ul>
 
-{{$rubber->rubber_number==$active_rubber?"<br>":''}}
+{!!$rubber->rubber_number==$active_rubber?"<br>":''!!}
 
 
     <div class="row">
