@@ -388,7 +388,11 @@
    <!-- show alert for no results -->
 
 
-  <div class="row">
+  
+
+@if($match_data[0]['game_type']!='rubber' )
+
+<div class="row">
     <div class='col-sm-12'>
      <span class='pull-right'>   
         <a href='javascript:void(0)' onclick="enableManualEditing(this)" style="color:#123456;">edit <i class='fa fa-pencil'></i></a> 
@@ -399,9 +403,8 @@
     </div>
   </div>
 
-@if($match_data[0]['game_type']!='rubber' )
-
   {!! Form::open(array('url' => '', 'method' => 'POST','id'=>'badminton', 'onsubmit'=>'return manualScoring(this)')) !!}
+
 
 <!-- Start of normal match -->
   <div class="row">

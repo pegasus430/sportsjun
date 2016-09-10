@@ -12,6 +12,7 @@ use App\Model\Country;
 use App\Model\Facilityprofile;
 use App\Model\Followers;
 use App\Model\MatchSchedule;
+use App\Model\MatchScheduleRubber;
 use App\Model\Photo;
 use App\Model\Requestsmodel;
 use App\Model\Sport;
@@ -793,6 +794,8 @@ class TournamentsController extends Controller
             'groupId'         => $orgGroupIds,
         ]);
     }
+
+
 	public function subTournamentEdit()
 	{
 		$id=Request::get('id');
@@ -2544,6 +2547,96 @@ class TournamentsController extends Controller
 		$t_settings->save();
 
 		return redirect()->back();
+
+	}
+
+    public function rubberEdit(){
+	$id 	= Request::get('id');
+	$rubber = MatchScheduleRubber::find($id);
+
+		//check if match has started
+	if(!empty($rubber->match_details)) $readonly='disabled';
+	else $readonly='';
+
+
+	$match_types = array();
+	$player_types = array();
+
+	$match_types = Helper::getMatchTypes(strtoupper($rubber->sport->sports_name));
+	foreach (config('constants.ENUM.SCHEDULE.PLAYER_TYPE') as $key => $val) {
+		$player_types[$key] = $val;
+	}
+
+	if($rubber->schedule_type=='team'){
+		$team_a=$rubber->scheduleteamone;
+		$team_b=$rubber->scheduleteamtwo;
+	}
+	else{
+		$team_a=$rubber->scheduleuserone;
+		$team_b=$rubber->scheduleusertwo;
+	}
+
+
+return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'match_types', 'player_types', 'readonly'));
+}
+
+	// Update rubber schedule
+
+	public function addRubber($match_id){
+		\App\Http\Controllers\User\ScheduleController::insertGroupRubber($match_id);
+
+		return $this->rubberUpdateSchedule(null, $match_id);
+	}
+
+	public function rubberUpdateSchedule($id, $match_id=false){
+
+		if($match_id!=false){
+			$match=MatchSchedule::find($match_id);
+		}
+		else{
+			$request = Request::all();
+			$rubber = MatchScheduleRubber::find($id);
+			
+			$rubber->match_start_time=empty($request['match_start_time'])?$rubber->match_start_time:Helper::storeDate($request['match_start_time'],'time');
+			$rubber->match_start_date=empty($request['match_start_date'])?$rubber->match_start_date:Helper::storeDate($request['match_start_date'],'date');
+			$rubber->match_category=empty($request['player_type'])?$rubber->match_category:$request['player_type'];
+			$rubber->match_type=empty($request['match_type'])?$rubber->match_type:$request['match_type'];
+			$rubber->match_location=empty($request['venue'])?$rubber->match_location:$request['venue'];
+			$rubber->save();
+			$match=$rubber->match;
+		}
+
+		$team_logo       = array();
+		$user_name       = array();
+		$user_profile    = array();
+		$team_name_array = array();
+		if ($match->schedule_type == 'team')
+		{
+			$teams = Team::select('id', 'name')->where('sports_id', $match->sports_id)->get()->toArray(); //get teams
+			foreach ($teams as $team)
+			{
+				$team_name_array[$team['id']] = $team['name']; //get team names
+				$team_logo[$team['id']]       = Photo::select()->where('imageable_id', $team['id'])->where('imageable_type', config('constants.PHOTO.TEAM_PHOTO'))->orderBy('id', 'desc')->first(); //get team logo
+			}
+		}
+		else
+		{
+			$users = User::select('id', 'name')->get()->toArray(); //if scheduled type is player
+			foreach ($users as $user)
+			{
+				$user_name[$user['id']]    = $user['name']; //get team names
+				$user_profile[$user['id']] = Photo::select()->where('imageable_id', $user['id'])->where('imageable_type', config('constants.PHOTO.USER_PHOTO'))->orderBy('id', 'desc')->first(); //get team logo
+			}
+		}
+
+		$isOwner = 0;
+		
+		if(Helper::isTournamentOwner($match->tournament->manager_id,$match->tournament->tournament_parent_id)) {
+				$isOwner=1;
+	    }
+       	
+
+		return view('tournaments.sub_match_schedules_rubber', compact('match', 'team_logo', 'team_name_array', 'isOwner') );
 
 	}
 }

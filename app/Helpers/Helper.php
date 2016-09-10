@@ -7,6 +7,7 @@ use App\Model\Sport;
 use App\Model\UserStatistic;
 use App\Model\Notifications;
 use App\Model\MatchSchedule;
+use App\Model\MatchScheduleRubber;
 use App\Model\TournamentParent;
 use App\Model\Tournaments;
 use App\Model\TeamPlayers;
@@ -1939,8 +1940,10 @@ class Helper {
 
     }   
 
-    public static function getMatchDetails($match_id){
-            $match_model=MatchSchedule::find($match_id);
+    public static function getMatchDetails($match_id, $game_type='normal'){
+
+            if($game_type=='normal')  $match_model=MatchSchedule::find($match_id);
+            if($game_type=='rubber')  $match_model=MatchScheduleRubber::find($match_id);
 
             //get the winner
             if(!empty($match_model->winner_id)){
@@ -2005,7 +2008,7 @@ class Helper {
             }
         }
         else{
-                $match_model->scores='0 - 0';
+                $match_model->scores=' - ';
         }
 
         if($match_model->game_type!='normal'){

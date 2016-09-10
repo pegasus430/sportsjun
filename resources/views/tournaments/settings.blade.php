@@ -14,8 +14,7 @@
 	<form action='/tournaments/settings/{{$tournament_id}}/update' method="post">
 		{!!csrf_field()!!}
 
-		<div class="alert alert-success" id="div_success_tourney" style="display:none;"></div>
-		<div class="alert alert-danger" id="div_failure_tourney" style="display:none;"></div>
+		
 		<div class="modal-body">
 	        <div class="sportsjun-forms sportsjun-container sportsjun-forms-modal">
 		        <div class="form-body" id='tournamentSettings'>

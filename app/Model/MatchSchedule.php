@@ -36,4 +36,12 @@ class MatchSchedule extends Model {
     public function sport() {
         return $this->belongsTo('App\Model\Sport', 'sports_id');
     }
+
+    public function rubbers(){
+        return $this->hasMany('App\Model\MatchScheduleRubber', 'match_id');
+    }
+
+    public function tournament(){
+        return $this->belongsTo('App\Model\Tournaments', 'tournament_id');
+    }
 }

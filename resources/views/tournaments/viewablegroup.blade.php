@@ -91,6 +91,8 @@
 									
 									$class='schedule_new_req_nor';	
 								}
+
+								$match=Helper::getMatchDetails($match['id']);
 							?>	
 										@if($match['a_id']!='' && $match['b_id'])
 											@if($match['schedule_type']=='team')
@@ -161,11 +163,18 @@
 														<br>
 														@if(!empty($add_score_link[$match['id']]))
 															@if($add_score_link[$match['id']]==trans('message.schedule.viewscore'))
-																<span class="tournament_score"><a href="{{ url('match/scorecard/view/'.$match['id']) }}">{{$add_score_link[$match['id']]}}</a></span>
+																<span class="tournament_score pull-left"><a href="{{ url('match/scorecard/view/'.$match['id']) }}" class="btn-primary " style="padding: .3em 1em;">{{$add_score_link[$match['id']]}}</a></span>
 															@else
-																<span class="tournament_score"><a href="{{ url('match/scorecard/edit/'.$match['id']) }}">{{$add_score_link[$match['id']]}}</a></span>
+																<span class="tournament_score pull-left"><a href="{{ url('match/scorecard/edit/'.$match['id']) }}" class="btn-primary " style="padding: .3em 1em;">{{$add_score_link[$match['id']]}}</a></span>
 															@endif
 														@endif
+
+						@if($match['game_type']=='rubber')
+                 				<span class="pull-right">
+                 			  <a href="#" class="show_sub_field show_sub_tournament " parent_field_id = "{{$match['id']}}">View Rubber</a>
+                 			  	</span>
+                 		@endif
+
 						{{--
 														@if($match['sports_id']==1)
 									<span class=""><a href="javascript:void(0)" class="text-primary" data-toggle="modal" data-target="#match_summary">Match Summary</a></span>
@@ -253,12 +262,18 @@
 														<br/>
 														@if(!empty($add_score_link[$match['id']]))
 															@if($add_score_link[$match['id']]==trans('message.schedule.viewscore'))
-																<span class="tournament_score"><a href="{{ url('match/scorecard/view/'.$match['id']) }}">{{$add_score_link[$match['id']]}}</a></span>
+																<span class="tournament_score pull-left"><a href="{{ url('match/scorecard/view/'.$match['id']) }}" class="btn-primary " style="padding: .3em 1em;">{{$add_score_link[$match['id']]}}</a></span>
 															@else
-																<span class="tournament_score"><a href="{{ url('match/scorecard/edit/'.$match['id']) }}">{{$add_score_link[$match['id']]}}</a></span>
+																<span class="tournament_score pull-left"><a href="{{ url('match/scorecard/edit/'.$match['id']) }}" class="btn-primary " style="padding: .3em 1em;">{{$add_score_link[$match['id']]}}</a></span>
 															@endif
 
 														@endif
+
+						@if($match['game_type']=='rubber')						
+                 				<span class="pull-right">
+                 			  <a href="#" class="show_sub_field show_sub_tournament " parent_field_id = "{{$match['id']}}">View Rubber</a>
+                 			  	</span>
+                 		@endif
 													</div>
 
 
@@ -270,6 +285,17 @@
 												</div>>
 
 											@endif
+							<!-- Show Rubbers -->
+
+				@if($match['game_type']=='rubber')
+					<div id="subfield_{{$match['id']}}" class="row" style="display:none;">
+							@include('tournaments.sub_match_schedules_rubber')
+					</div>
+
+				@endif
+
+					<!-- End of Rubber -->
+
 										@else
 											No Scheduled Matches.
 										@endif

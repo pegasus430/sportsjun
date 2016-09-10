@@ -291,6 +291,9 @@ return [
 		'game_type' =>'Game Type',
 		'rubber_number'		=> 'How many rubbers in a Match?'
 		],
+			'rubber'=>[
+		'edit_schedule' 	=> 'Update Schedule'
+			],
             'group' => [
 		'nomatchschedules' => 'No matches scheduled yet.',
 		],

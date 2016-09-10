@@ -1590,7 +1590,7 @@ $matchScheduleData = MatchSchedule::where('tournament_id',$matchScheduleDetails[
             
     }
 
-    public function insertGroupRubber($match_id){
+    public static function insertGroupRubber($match_id){
         $match_model=MatchSchedule::find($match_id);
         $number_of_rubber = $match_model->number_of_rubber;
 
@@ -1605,6 +1605,13 @@ $matchScheduleData = MatchSchedule::where('tournament_id',$matchScheduleDetails[
             $rubber->sports_id      =   $match_model->sports_id;
             $rubber->created_at     =   $match_model->created_at;
             $rubber->match_category       =   $match_model->match_category;
+            $rubber->schedule_type  =   $match_model->schedule_type;
+            $rubber->match_type     =   $match_model->match_type;
+            $rubber->match_start_date     =   $match_model->match_start_date;
+            $rubber->match_start_time     =   $match_model->match_start_time;
+            $rubber->match_end_date     =   $match_model->match_start_date;
+            $rubber->match_end_time     =   $match_model->match_start_time;
+            $rubber->match_location       =   $match_model->match_location;
             $rubber->match_status   =   'scheduled';
             $rubber->a_id           =   $match_model->a_id;
             $rubber->b_id           =   $match_model->b_id;

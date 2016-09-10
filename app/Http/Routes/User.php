@@ -292,6 +292,18 @@ Route::get('tournaments/subTournamentEdit', [
     'as'   => 'subTournamentEdit',
     'uses' => 'User\TournamentsController@subTournamentEdit',
 ]);
+Route::get('tournaments/rubberEdit', [
+    'as'   => 'rubberEdit',
+    'uses' => 'User\TournamentsController@rubberEdit',
+]);
+Route::post('tournaments/rubber/{id}/update_schedule', [
+    'as'   => 'rubberUpdateSchedule',
+    'uses' => 'User\TournamentsController@rubberUpdateSchedule',
+]);
+Route::post('tournaments/match/{id}/add_rubber', [
+    'as'   => 'addRubber',
+    'uses' => 'User\TournamentsController@addRubber',
+]);
 Route::get('tournaments/getRequestedTeams', [
     'as'   => 'getRequestedTeams',
     'uses' => 'User\TournamentsController@getRequestedTeams',

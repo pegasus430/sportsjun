@@ -12,6 +12,12 @@
 
 <div id="round_div_1">
 </div>    -->
+
+<!-- Display rubber modal -->
+
+<div id='displayrubber'> </div>
+
+
 <div class="col-sm-12">
 <div class="row group-flex-content">
 <?php $i=0;?>

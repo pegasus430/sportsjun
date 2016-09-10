@@ -1069,6 +1069,34 @@ function subTournamentEdit(id)
         }
     });
 }
+
+function rubberEdit(id)
+{
+     $.ajax({
+        url: base_url + '/tournaments/rubberEdit',
+        type: 'GET',
+        data: {id: id},
+        dataType: 'html',
+        success: function(response) {
+            $("#displayrubber").html(response);
+           $("#editrubber").modal('show');
+            $('.modal .modal-body').css('overflow-y', 'auto'); 
+    $('.modal .modal-body').css('max-height', $(window).height() * 0.7);
+        }
+    });
+}
+
+  function addRubber(match_id){
+        $.ajax({
+            url:'/tournaments/match/'+match_id+'/add_rubber',            
+            type:'post',
+            success:function(response){                
+                $('#subfield_'+match_id).html(response);
+            }
+        });
+    }
+            
+
 $(window).load(function(){
     //$('form').dontJustLeaveMe();
     var selected = $('#service').find("option:selected").val();
@@ -1340,4 +1368,14 @@ function filterDiv(that, index){
         });
 
 }
-    
+
+
+
+    $(document).ready(function(){
+        $(".show_sub_field").click(function(){
+            parent_id = $(this).attr('parent_field_id');
+            $("#subfield_"+parent_id).slideToggle("1500");
+        });
+    });
+
+

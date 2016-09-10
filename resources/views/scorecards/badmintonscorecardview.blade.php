@@ -35,6 +35,11 @@
 } else {
   $current_set=0;
 }
+
+if($match_data[0]['game_type']=='rubber'){
+  ${'team_'.$team_a_id.'_score'}=$match_data[0]['a_score'];
+  ${'team_'.$team_b_id.'_score'}=$match_data[0]['b_score'];
+  }
   
 ?>
 

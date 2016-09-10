@@ -1,6 +1,18 @@
+ <div class="row">
+    <div class='col-sm-12'>
+     <span class='pull-right'>   
+        <a href='javascript:void(0)' onclick="enableManualEditing(this)" style="color:#123456;">edit <i class='fa fa-pencil'></i></a> 
+        <span> &nbsp; &nbsp; </span>
+        <a href='javascript:void(0)' onclick="updatePreferences(this)" style='color:#123456;'> settings <i class='fa fa-gear fa-danger'></i></a>
+        <span> &nbsp; &nbsp; </span>
+    </span>
+    </div>
+  </div>
  <ul class="nav nav-tabs nav-justified">
   <li class="active">
-        <a > RUBBER {{$rubber->rubber_number}} 
+       <a > 
+        <span class="pull-left hidden-xs">{{date('jS F , Y',strtotime($rubber['match_start_date'])).' - '.date("g:i a", strtotime($rubber['match_start_time']))}}</span>
+         RUBBER {{$rubber->rubber_number}} 
         <span class='pull-right'>{{strtoupper($rubber->rubber_number==$active_rubber?'PLAYING':$rubber->match_status)}}
         </span>
         </a>
@@ -38,7 +50,7 @@
 
                         <!-- if doubles select another player -->
 
-                        @if($match_data[0]['match_type']=='doubles')
+                        @if($rubber['match_type']=='doubles')
                           <br>
                         <label>Select Player 2</label>
                         <select name='select_player_2_left' class="form-control select-picker" id='select_player_2_left'>                     
@@ -77,7 +89,7 @@
                         </select>
                         <!-- if doubles select another player -->
                    
-                        @if($match_data[0]['match_type']=='doubles')
+                        @if($rubber['match_type']=='doubles')
                               <br>
                             <label>Select Player 2</label>
                             <select name='select_player_2_right' class="form-control select-picker" id='select_player_2_right'>      

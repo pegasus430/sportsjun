@@ -82,7 +82,7 @@
 									<!-- match_details -->
 									
 									<span class=''>{{$match['address']}}</span><br>
-									Status: <span class='event_date'>{{ ucfirst($match['match_status']) }}</span> <br>
+									Status: <span class='event_date sports_text'>{{ ucfirst($match['match_status']) }}</span> <br>
 									Scores: <span class='blue'>{{Helper::getMatchDetails($match['id'])->scores}} </span> <br>
 					@if(!is_null($match['winner_id']))
 								<span class='red'>Winner: {{Helper::getMatchDetails($match['id'])->winner}} </span>
@@ -91,9 +91,19 @@
 
 									<br>
 					@if(isset($schedule['winner_text']))
-                                  <a href="{{ url('match/scorecard/edit/'.$schedule['id']) }}">{{$schedule['winner_text']}}</a>                            
+							<span class="pull-left">
+								<br>
+                                  <a href="{{ url('match/scorecard/edit/'.$schedule['id']) }}" class="btn-primary " style="padding: .3em 1em;">{{$schedule['winner_text']}}</a>   
+                            </span>                         
       
          		    @endif
+
+         		    @if($match['game_type']=='rubber')
+         		    			<span class="pull-right">
+         		    			<br>
+                 			  <a href="javascript:void(0)" class="show_sub_field show_sub_tournament" parent_field_id = "{{$match['id']}}">View Rubbers</a>
+                 			  	</span>
+                 	@endif
          			  </div>
 
 
@@ -115,7 +125,7 @@
 					
 					 	@endif							
 								
-								</div>				
+								</div>			
 														
 
 							</div>
@@ -152,18 +162,28 @@
 									<br/>
 
 									<span class=''>{{$match['address']}}</span><br>
-									Status: <span class='event_date'>{{ ucfirst($match['match_status']) }}</span> <br>
+									Status: <span class='event_date sports_text'>{{ ucfirst($match['match_status']) }}</span> <br>
 									Scores: <span class='blue'>{{Helper::getMatchDetails($match['id'])->scores}} </span> <br>
 						@if(!is_null($match['winner_id']))
 								<span class='red'>Winner: {{Helper::getMatchDetails($match['id'])->winner}} </span>								
 						@endif
 							<br>
 						@if(isset($schedule['winner_text']))
-	                          <a href="{{ url('match/scorecard/edit/'.$schedule['id']) }}">{{$schedule['winner_text']}}</a>
+							<span class="pull-left">
+	                          <a href="{{ url('match/scorecard/edit/'.$schedule['id']) }}" class="btn-primary" style="padding: .3em 1em;">{{$schedule['winner_text']}}</a>
+	                         </span>
                  		@else
 		                    @if($isOwner)
+		                     <span class="pull-left">
 		                            <a href="javascript:void(0)" id="scheduleEdit_{{$schedule['id']}}"  onclick="editMatchSchedule({{$schedule['id']}},1,'','myModal')">Edit</a>
+		                      </span>
 		                    @endif
+                 		@endif
+
+                 		@if($match['game_type']=='rubber')
+                 				<span class="pull-right">
+                 			  <a href="#" class="show_sub_field show_sub_tournament " parent_field_id = "{{$match['id']}}">View Rubber</a>
+                 			  	</span>
                  		@endif
 								</div>
 
@@ -188,11 +208,21 @@
 									 	@endif							
 								
 								</div>	
-							</div>
-								
+						</div>					
 								
 	
 				@endif
+
+					<!-- Show Rubbers -->
+
+				@if($match['game_type']=='rubber')
+					<div id="subfield_{{$match['id']}}" class="row" style="display:none;">
+							@include('tournaments.sub_match_schedules_rubber')
+					</div>
+
+				@endif
+
+					<!-- End of Rubber -->
 
               @else  
           @endif

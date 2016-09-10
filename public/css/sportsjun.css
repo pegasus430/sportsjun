@@ -2731,6 +2731,7 @@ fieldset[disabled] .btn-sj-secondary.active {
 .clear_filter{ padding:0 5px; cursor:pointer; color:#8e9bd0;}
 .selectpicker_cal{ background:#f6f6f6 !important; }
 .schedule_but_new{ background:#f27676 !important;}
+
 .score_link{ color:#333333;}
 .score_link:hover{ color:#333333; text-decoration:underline;}
 .sb_join_team_main{ display:inline-block; margin-right:5px;}
@@ -2981,3 +2982,9 @@ div#tournament_details_cover img {
     border: inset 1px #000000;
     padding: 5px;
 }
+
+.bg-white {
+   background: #fff;
+}
+
+.bg-grey {background-color: #fdfdfd !important;}
