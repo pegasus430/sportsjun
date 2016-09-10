@@ -20,6 +20,7 @@
 }
 
 </style>
+
 @if(count($tournamentDetails[0]['final_stage_teams']))
 <!--<div>
     Add Round

@@ -1,4 +1,4 @@
-<div id='displayrubber'> </div>
+<!-- <div id='displayrubber'> </div> -->
 <p class="help-block" id="msg"></p> 
 				    @if (session('status'))
                     <div class="alert alert-success" >

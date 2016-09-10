@@ -1080,11 +1080,11 @@ class ScheduleController extends Controller {
         /*        $match_start_date = $this->getdatetime(date(config("constants.DATE_FORMAT.PHP_DATE_FORMAT"), strtotime(Request::get('match_start_date'))), 'd');*/
         $match_start_date = Helper::storeDate(Request::get('match_start_date'),'date');
         $match_start_time = !empty(Request::get('match_start_time'))?$this->getdatetime(date(config("constants.DATE_FORMAT.PHP_TIME_FORMAT"), strtotime(Request::get('match_start_time'))), 't'):'00:00:00';   
+        $game_type = 'normal';
+        $number_of_rubber =  null;
 
 
-        $game_type = !empty(Request::get('game_type')) ? Request::get('game_type') : 'normal';
-        $number_of_rubber = !empty(Request::get('number_of_rubber')) ? Request::get('number_of_rubber') : NULL;    
-
+       
         $facility_name = Request::get('venue');
         $facility_id = Request::get('facility_id');
         $address = Request::get('address');
@@ -1128,13 +1128,18 @@ class ScheduleController extends Controller {
 		 $match_invite_status = 'pending';
          
          if(!empty($tournament_id)) {
-             $tournamentDetails = Tournaments::where('id',$tournament_id)->first(['match_type','player_type','sports_id']);
+             $tournamentDetails = Tournaments::where('id',$tournament_id)->first(['match_type','player_type','sports_id','game_type', 'number_of_rubber']);
              if(count($tournamentDetails)) {
         $player_type = $tournamentDetails->player_type=='any'?Request::get('player_type'):$tournamentDetails->player_type;
         $match_type = $tournamentDetails->match_type=='any'?Request::get('match_type'):$tournamentDetails->match_type;
                 $sports_id = $tournamentDetails->sports_id;
+                $game_type = $tournamentDetails->game_type;
+                $number_of_rubber =  $tournamentDetails->number_of_rubber;
              }
 			$match_invite_status = 'accepted';
+
+   
+
 			 
          }
         //prepare an array to insert
@@ -1269,8 +1274,8 @@ class ScheduleController extends Controller {
         $country = Country::where('id', config('constants.COUNTRY_INDIA'))->first()->country_name;
         $match_location = rtrim($country . ', ' . $state . ', ' . $city, ', ');
 
-        $game_type = !empty(Request::get('game_type')) ? Request::get('game_type') : 'normal';
-        $number_of_rubber = !empty(Request::get('number_of_rubber')) ? Request::get('number_of_rubber') : NULL;
+       $game_type = 'normal';
+        $number_of_rubber =  null;
         
         $player_a_ids = $a_id;
         $player_b_ids = $b_id;
@@ -1285,6 +1290,14 @@ class ScheduleController extends Controller {
         $request_type = ($schedule_type == 'team')?'TEAM_TO_TEAM':'PLAYER_TO_PLAYER';
          $player_a_ids = !empty($player_a_ids)?(','.trim($player_a_ids).','):NULL;
          $player_b_ids = !empty($player_b_ids)?(','.trim($player_b_ids).','):NULL;
+
+         if(!empty($tournament_id)){
+                $tournamentDetails=Tournaments::find($tournament_id);
+                if(count($tournamentDetails)){
+                    $game_type = $tournamentDetails->game_type;
+                    $number_of_rubber = $tournamentDetails->number_of_rubber;
+                }
+         }
         //prepare an array to insert
         $schedule_data = array(
             'tournament_id' => $tournament_id,
@@ -1594,6 +1607,8 @@ $matchScheduleData = MatchSchedule::where('tournament_id',$matchScheduleDetails[
         $match_model=MatchSchedule::find($match_id);
         $number_of_rubber = $match_model->number_of_rubber;
 
+        if(!count($match_model->rubbers)){
+
         for($i=1; $i<=$number_of_rubber; $i++){
             $rubber      = new MatchScheduleRubber;
 
@@ -1623,6 +1638,7 @@ $matchScheduleData = MatchSchedule::where('tournament_id',$matchScheduleDetails[
             // $match_model->hasSetupSquad = 1; 
             // $match_model->save();
         }  
+    }
 
         return MatchScheduleRubber::whereMatchId($match_id)->get();        
        

@@ -14,8 +14,8 @@
 </div>    -->
 
 <!-- Display rubber modal -->
-
-<div id='displayrubber'> </div>
+<!-- 
+<div id='displayrubber'> </div> -->
 
 
 <div class="col-sm-12">

@@ -2,6 +2,13 @@
 @section('content')
 @include ('tournaments._leftmenu')
 <div id="content-team" class="col-sm-10 group_stage">
+
+
+<!-- Display rubber modal -->
+
+<div id='displayrubber'> </div>
+
+
     <div class="col-sm-12 group-stage sportsjun-forms">
     @include('tournaments.share_groups')
         @if($dispViewFlag=='group')
@@ -23,6 +30,9 @@
         
         @if($dispViewFlag=='final')
             @if($tournament_type=='knockout' || $tournament_type=='multistage')
+
+
+
                  <div id="final_stage">
                  	<div class="group_no"><h4 class="stage_head">FINAL STAGE</h4></div>
                     <div class="cstmpanel-tabs">
