@@ -205,7 +205,7 @@
           @for($set_index=1; $set_index<=$set; $set_index++)
             <td>
                 <span class='hidden-xs pull-left remove_button_left left_button_remove_set_{{$set_index}}'></span>
-                 <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set{{$set_index}}" value="{{$rubber_a_array['set'.$set_index]}}" name='a_set{{$set_index}}'>
+                 <input  readonly class="gui-input validation allownumericwithdecimal runs_new a_set{{$set_index}}" value="{{$rubber_a_array['set'.$set_index]}}" name='a_set{{$set_index}}'>
                 <span class='hidden-xs pull-right add_button_left left_button_add_set_{{$set_index}}'></span>
             </td>
           @endfor
@@ -220,7 +220,7 @@
             @for($set_index=1; $set_index<=$set; $set_index++)
               <td>
                 <span class='hidden-xs pull-left remove_button_right right_button_remove_set_{{$set_index}}'></span>
-                  <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new b_set{{$set_index}}" value="{{$rubber_b_array['set'.$set_index]}}" name='b_set{{$set_index}}'>
+                  <input  readonly class="gui-input validation allownumericwithdecimal runs_new b_set{{$set_index}}" value="{{$rubber_b_array['set'.$set_index]}}" name='b_set{{$set_index}}'>
                 <span class='hidden-xs pull-right add_button_right right_button_add_set_{{$set_index}}'></span>
               </td>
             @endfor

@@ -430,7 +430,7 @@
           @for($set_index=1; $set_index<=$set; $set_index++)
             <td>
                 <span class='hidden-xs pull-left remove_button_left left_button_remove_set_{{$set_index}}'></span>
-                 <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set{{$set_index}}" value="{{$score_a_array['set'.$set_index]}}" name='a_set{{$set_index}}'>
+                 <input  readonly class="gui-input validation allownumericwithdecimal runs_new a_set{{$set_index}}" value="{{$score_a_array['set'.$set_index]}}" name='a_set{{$set_index}}'>
                 <span class='hidden-xs pull-right add_button_left left_button_add_set_{{$set_index}}'></span>
             </td>
           @endfor
@@ -442,7 +442,7 @@
             @for($set_index=1; $set_index<=$set; $set_index++)
               <td>
                 <span class='hidden-xs pull-left remove_button_right right_button_remove_set_{{$set_index}}'></span>
-                  <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new b_set{{$set_index}}" value="{{$score_b_array['set'.$set_index]}}" name='b_set{{$set_index}}'>
+                  <input  readonly class="gui-input validation allownumericwithdecimal runs_new b_set{{$set_index}}" value="{{$score_b_array['set'.$set_index]}}" name='b_set{{$set_index}}'>
                 <span class='hidden-xs pull-right add_button_right right_button_add_set_{{$set_index}}'></span>
               </td>
             @endfor
@@ -1035,8 +1035,8 @@ function getTeamPlayers(that){
             title:"Alert",
             content:"Do you want to enter points manually?",
             confirm:function(){
-                $('.tennis_input_new').removeAttr('readonly');
-                $('.tennis_input_new').focus();
+                $('.runs_new').removeAttr('readonly');
+                $('.runs_new').focus();
                 $('#real_time_scoring').hide();
                 $('#end_match_button').hide();
                 $('#saveButton').show();
@@ -1054,7 +1054,7 @@ function getTeamPlayers(that){
             content:"Do you want to enter points automatically?",
             confirm:function(){    
 
-                 $('.tennis_input_new').attr('readonly', 'readonly');
+                 $('.runs_new').attr('readonly', 'readonly');
                  $('#real_time_scoring').show();
                  $('#end_match_button').show();
                  $('#saveButton').hide();
