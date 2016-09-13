@@ -2,7 +2,7 @@
 
 <style>
 	a{
-		color: #34495e;
+		/*color: #34495e;*/
 	}
 </style>
 

@@ -1370,6 +1370,12 @@ function filterDiv(that, index){
 }
 
 
+$(".allownumericwithdecimal").on('keydown', function(){
+        if($(this).length()>=2) return false;
+})
+ 
+
+
 
     $(document).ready(function(){
         $(".show_sub_field").click(function(){

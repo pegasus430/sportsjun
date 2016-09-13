@@ -484,6 +484,12 @@
          $rubber_b_array = $rubber_players['b'];
     ?>
 
+    <?php 
+    if($rubber->rubber_number==$active_rubber){
+        $score_a_array=$rubber_a_array;
+        $score_b_array=$rubber_b_array;
+      }
+  ?>
 
       @if($rubber->rubber_number==$active_rubber)
          @include('scorecards.badmintonrubber')
@@ -503,12 +509,7 @@
 
 
 <!-- If normal Match -->
-  <?php 
-    if(isset($rubber_a_array)){
-        $score_a_array=$rubber_a_array;
-        $score_b_array=$rubber_b_array;
-    }
-  ?>
+ 
 @if($match_data[0]['match_type']!='singles' )
 
 <div class="row visible-xs-block" id='real_time_scoring'>
