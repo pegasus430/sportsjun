@@ -508,7 +508,7 @@
 
 <!-- If normal Match -->
  
-@if($match_data[0]['match_type']!='singles' )
+@if($match_data[0]['match_type']!='singles' && isset($score_a_array['team_name']))
 
 <div class="row visible-xs-block" id='real_time_scoring'>
   <div class="col-sm-6 col-xs-12 table-striped ">
