@@ -605,7 +605,7 @@
 
  <!-- End of Rubber -->
 
-
+</div>
 <!-- End match modal -->
   <div id="end_match" class="modal fade">
             <div class="modal-dialog sj_modal sportsjun-forms">

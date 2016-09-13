@@ -253,7 +253,7 @@ if($match_data[0]['game_type']=='rubber'){
 
  <!-- End of Rubber -->
 
-    @if($match_data[0]['match_status']=='completed')
+    @if($match_data[0]['match_status']=='completed' && isset($display_users))
 
 
 @if($match_data[0]['match_type']!='singles' )

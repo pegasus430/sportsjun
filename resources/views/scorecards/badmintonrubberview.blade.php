@@ -2,7 +2,7 @@
   <li class="{{$rubber->rubber_number==$active_rubber?'active':$rubber->match_status}}">
       <a>
      <span class="pull-left hidden-xs">{{date('jS F , Y',strtotime($rubber['match_start_date'])).' - '.date("g:i a", strtotime($rubber['match_start_time']))}}</span>
-        RUBBER {{$rubber->rubber_number}}   &nbsp; &nbsp; [ {{$rubber->match_category}} , {{$rubber->match_type}} ]
+        RUBBER {{$rubber->rubber_number}}   &nbsp; &nbsp; <span style='color:white'> [ {{$rubber->match_category}} , {{$rubber->match_type}} ]</span>
         <span class='pull-right'>{{strtoupper($rubber->rubber_number==$active_rubber?'PLAYING':$rubber->match_status)}}
         </span>
         </a>
