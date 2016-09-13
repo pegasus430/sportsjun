@@ -30,9 +30,9 @@
         </tbody>
     </table>
     </div>
-    @else
-    
-    <div class="sj-alert sj-alert-info">
-                      {{ trans('message.sports.nostats')}}
+@else
+
+<div class="sj-alert sj-alert-info">
+                  {{ trans('message.sports.nostats')}}
 </div>
-    @endif
+@endif

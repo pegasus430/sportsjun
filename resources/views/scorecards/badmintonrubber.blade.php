@@ -12,7 +12,7 @@
   <li class="active">
        <a > 
         <span class="pull-left hidden-xs">{{date('jS F , Y',strtotime($rubber['match_start_date'])).' - '.date("g:i a", strtotime($rubber['match_start_time']))}}</span>
-         RUBBER {{$rubber->rubber_number}} 
+         RUBBER {{$rubber->rubber_number}}  &nbsp; &nbsp; [ {{$rubber->match_category}} , {{$rubber->match_type}} ]
         <span class='pull-right'>{{strtoupper($rubber->rubber_number==$active_rubber?'PLAYING':$rubber->match_status)}}
         </span>
         </a>
@@ -187,6 +187,7 @@
       <table class='table table-striped table-bordered'>
         <thead>
           <tr class='team_bat team_title_head'>
+     {{--   @if(!is_null($rubber_a_array['team_id']))  <th><b>TEAMS</b></th> @endif --}}
              <th>PLAYERS</th>
              
             @for($set_index=1; $set_index<=$set; $set_index++)
@@ -197,8 +198,9 @@
         </thead>
         <tbody>
           <tr>
-
-            <td>{{$rubber_a_array['player_name_a']}} / {{$rubber_a_array['player_name_b']}}</td>
+           
+            <td>
+            @if(!is_null($rubber_a_array['team_id']))<b>{{$rubber_a_array['team_name']}}</b><br>@endif {{$rubber_a_array['player_name_a']}} / {{$rubber_a_array['player_name_b']}}</td>
             
           @for($set_index=1; $set_index<=$set; $set_index++)
             <td>
@@ -210,7 +212,10 @@
         </tr>
 
           <tr>
-            <td>{{$rubber_b_array['player_name_a']}} / {{$rubber_b_array['player_name_b']}}</td>
+    
+            <td>
+             @if(!is_null($rubber_b_array['team_id']))<b>{{$rubber_b_array['team_name']}}</b><br>@endif 
+             {{$rubber_b_array['player_name_a']}} / {{$rubber_b_array['player_name_b']}}</td>
 
             @for($set_index=1; $set_index<=$set; $set_index++)
               <td>

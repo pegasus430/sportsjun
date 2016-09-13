@@ -67,9 +67,13 @@
 								</div>
 								<div class="col-md-6 col-sm-8 schedule_new_team_txt">
                                 	<h4 class="tour-title">
-                                    	{{ $team_name_array[$match['a_id']] }}
-                                        {{ 'VS' }}                                        
-                                        {{ $team_name_array[$match['b_id']] }}
+                                    	<a href="/team/members/{{$match['a_id']}}" class="primary">	
+															{{ $team_name_array[$match['a_id']] }}
+														</a>
+															{{ 'VS' }}
+														<a href="/team/members/{{$match['b_id']}}" class="primary">	
+															{{ $team_name_array[$match['b_id']] }}
+														</a>
                                     </h4>
                                     <br>									
 									<span class="match-detail-score">{{ Helper::displayDateTime($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""), 1) }}</span>
@@ -148,9 +152,13 @@
 					</div>                               
                                                   <div class="col-md-6 schedule_new_team_txt">
                                                   	<h4 class="tour-title">
-                                                      	{{ $user_name[$match['a_id']] }}
-                                                          {{ 'VS' }}                                        
-                                                          {{ $user_name[$match['b_id']] }}
+                                                      	<a href="/team/members/{{$match['a_id']}}" class="primary">	
+															{{ $user_name[$match['a_id']] }}
+														</a>
+															{{ 'VS' }}
+														<a href="/team/members/{{$match['b_id']}}" class="primary">	
+															{{ $user_name[$match['b_id']] }}
+														</a>
                                                       </h4>
                                                   <br>
                   									

@@ -130,7 +130,9 @@
                                     
                                     <tr id="row_{{$team['id']}}" class="group_row_{{$group->id}}">
                                     <td>{{ ($key_team + 1) }}</td>
-                                    <td>{{ $team['name'] }}</td>
+                                    <td>
+                                    	<a href="/team/members/{{$team['team_id']}}" class="primary">{{ $team['name'] }}</a>
+                                    </td>
                                     <td>{{ !empty($match_count[$group->id][$team['team_id']])?$match_count[$group->id][$team['team_id']]:0 }}</td>
                                     <td>{{ !empty($team['won'])?$team['won']:0 }}</td>
                                     <td>{{ !empty($team['lost'])?$team['lost']:0 }}</td>
@@ -243,9 +245,13 @@
 								<div class="col-md-6 col-sm-8 schedule_new_team_txt">
 									
                                 	<h4 class="tour-title">
+                                    	<a href="/team/members/{{$match['a_id']}}" class="primary">	
                                     	{{ $team_name_array[$match['a_id']] }}
-                                        {{ 'VS' }}                                        
-                                        {{ $team_name_array[$match['b_id']] }}
+										</a>
+															{{ 'VS' }}
+										<a href="/team/members/{{$match['b_id']}}" class="primary">
+											{{ $team_name_array[$match['b_id']] }}
+										</a>
                                     </h4>
                                     <br>									
 									<span class="match-detail-score">{{ Helper::displayDateTime($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""), 1) }}</span>
@@ -259,7 +265,7 @@
 									<!-- match_details -->
 									
 									<span class=''>{{$match['address']}}</span><br>
-									Status: <span class='event_date'>{{ ucfirst($match['match_status']) }}</span> <br>
+									Status: <span class='event_date '>{{ ucfirst($match['match_status']) }}</span> <br>
 									Scores: <span class='blue'>{{Helper::getMatchDetails($match['id'])->scores}} </span> <br>
 									@if(!is_null($match['winner_id']))
 								<span class='red'>Winner: {{Helper::getMatchDetails($match['id'])->winner}} </span>
@@ -360,9 +366,13 @@
                                 
                                 <div class="col-md-6 schedule_new_team_txt">
                                 	<h4 class="tour-title">
-                                    	{{ $user_name[$match['a_id']] }}
-                                        {{ 'VS' }}                                        
-                                        {{ $user_name[$match['b_id']] }}
+                                   						<a href="/team/members/{{$match['a_id']}}" class="primary">	
+															{{ $user_name[$match['a_id']] }}
+														</a>
+															{{ 'VS' }}
+														<a href="/team/members/{{$match['b_id']}}" class="primary">	
+															{{ $user_name[$match['b_id']] }}
+														</a>
                                     </h4>
                                     <br>
 									

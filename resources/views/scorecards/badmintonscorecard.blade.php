@@ -5,6 +5,9 @@
         color:red;
         font-weight: normal;
     }
+    a{
+      color: inherit;
+    }
   </style>
 <?php 
     $team_a_name = $user_a_name;
@@ -500,10 +503,15 @@
 
 
 <!-- If normal Match -->
-
+  <?php 
+    if(isset($rubber_a_array)){
+        $score_a_array=$rubber_a_array;
+        $score_b_array=$rubber_b_array;
+    }
+  ?>
 @if($match_data[0]['match_type']!='singles' )
 
-<div class="row" id='real_time_scoring'>
+<div class="row visible-xs-block" id='real_time_scoring'>
   <div class="col-sm-6 col-xs-12 table-striped ">
         <h3 class='team_bat team_title_head'>{{$score_a_array['team_name']}}</h3>
        <div class='col-xs-9'>       
@@ -549,7 +557,7 @@
 
 
  @else
-<div class="row" id='real_time_scoring'>
+<div class="row visible-xs-block" id='real_time_scoring'>
   <div class="col-sm-6 col-xs-12">
     <h3 class='team_bat team_title_head'>&nbsp;</h3>
       

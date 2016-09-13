@@ -36,15 +36,23 @@
                                                     	<div class="pull-left">
                     @if($match['schedule_type']=='team' )
                     	<h4 class="tour-title">
-	                    	{{ $team_name_array[$rubber['a_id']] }}
-	                        {{ 'VS' }}                                        
-	                        {{ $team_name_array[$rubber['b_id']] }}
+	                    	<a href="/team/members/{{$match['a_id']}}" class="primary">	
+								{{ $team_name_array[$match['a_id']] }}
+							</a>
+								{{ 'VS' }}
+							<a href="/team/members/{{$match['b_id']}}" class="primary">	
+								{{ $team_name_array[$match['b_id']] }}
+							</a>
                         </h4>
                     @else
                        <h4 class="tour-title">
-                      	  {{ $user_name[rubber['a_id']] }}
-                          {{ 'VS' }}                                        
-                          {{ $user_name[$rubber['b_id']] }}
+                      								<a href="/team/members/{{$match['a_id']}}" class="primary">	
+															{{ $user_name[$match['a_id']] }}
+														</a>
+															{{ 'VS' }}
+														<a href="/team/members/{{$match['b_id']}}" class="primary">	
+															{{ $user_name[$match['b_id']] }}
+														</a>
                       </h4>
                     @endif
 

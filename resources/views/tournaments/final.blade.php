@@ -21,6 +21,8 @@
 
 </style>
 
+<!--  <button class="btn btn-danger" onclick="printToPdf('canvas')"> Download</button> -->
+
 @if(count($tournamentDetails[0]['final_stage_teams']))
 <!--<div>
     Add Round
@@ -36,6 +38,7 @@
 </div>    -->
 <div class="col-sm-12">
 <div class="row group-flex-content flowchart-object flowchart-action " id='canvas'>
+   
 @if(count($roundArray))
         @foreach($roundArray as $round)
         @if($round==1)
@@ -228,6 +231,7 @@
             </div>
         </div>
 @endif
+
 </div>
 </div>
 @else
@@ -248,9 +252,14 @@
 </script>
 <script type="text/javascript" src="/js/jsplumb/jsPlumb-2.1.5-min.js"></script>
 <script type="text/javascript" src="/js/jsplumb/drawlines.js">  </script>
+<script type="text/javascript" src="/js/jsplumb/jsPlumb-2.1.5-min.js"></script>
+<script type="text/javascript" src="/js/jspdf.js">  </script>
+
 
 
 <script type="text/javascript">
+
+
 function finalStageTeams(flag) {
 //    var finalStageTeams = $("#final_stage_teams").val();
     var finalStageTeams = $('select#final_stage_teams').val();
@@ -357,4 +366,16 @@ function addRoundMatchesSchedule(tournamentId,roundNumber, matchNumber) {
     });
 }
 
+</script>
+
+<script type="text/javascript">
+    function printToPdf(id){
+        var doc= new jsPDF();
+
+        doc.fromHTML($('#'+id).get(0), 15, 15, {
+          'width': 170         
+        });
+
+        doc.save('Test.pdf');
+    }
 </script>

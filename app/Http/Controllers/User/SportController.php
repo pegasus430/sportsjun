@@ -262,7 +262,10 @@ class SportController extends Controller {
                 }
                 $sportsPlayerStatistics= $stats->get();
             }
+
             $statsview = 'sportprofile.'.preg_replace('/\s+/', '',strtolower(config('constants.SPORT_NAME.'.$sportsId))).'statsview';
+
+            
 
             // by default insert user to Interested to join teams? and Interested to play matches?
             //$this->updateUserStatistics();
@@ -284,6 +287,8 @@ class SportController extends Controller {
 
 
         } catch (\Exception $e) {
+
+
             return view('sportprofile.'.$dispView, ['sportsQuestions' => $questions, 'sportsPlayerStatistics' => $sportsPlayerStatistics, 'sportsId' => $sportsId,
                 'userId'=>$userId,'existingAllowedSportsArray' => !empty($existingAllowedSportsArray)?$existingAllowedSportsArray:[],'existingAllowedMatchesArray' => !empty($existingAllowedMatchesArray)?$existingAllowedMatchesArray:[],
                 'statsview'=>!empty($statsview)?$statsview:'', 'matchScheduleData'=>!empty($matchScheduleData)?$matchScheduleData:[],

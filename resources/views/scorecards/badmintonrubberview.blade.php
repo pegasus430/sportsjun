@@ -2,7 +2,7 @@
   <li class="{{$rubber->rubber_number==$active_rubber?'active':$rubber->match_status}}">
       <a>
      <span class="pull-left hidden-xs">{{date('jS F , Y',strtotime($rubber['match_start_date'])).' - '.date("g:i a", strtotime($rubber['match_start_time']))}}</span>
-        RUBBER {{$rubber->rubber_number}} 
+        RUBBER {{$rubber->rubber_number}}   &nbsp; &nbsp; [ {{$rubber->match_category}} , {{$rubber->match_type}} ]
         <span class='pull-right'>{{strtoupper($rubber->rubber_number==$active_rubber?'PLAYING':$rubber->match_status)}}
         </span>
         </a>
@@ -31,7 +31,7 @@
         <tbody>
              <tr>
              <!-- Show teams if schedule type is team -->
-            @if(!is_null($rubber_a_array['team_id']))<td><b>{{$rubber_a_array['team_name']}}</b></td>@endif
+            @if(!is_null($rubber_a_array['team_id']))<td><a href="/team/members/{{$rubber_a_array['team_id']}}">{{$rubber_a_array['team_name']}}</a></td>@endif
 
             <td><b>{{$rubber_a_array['player_name_a']}} / {{$rubber_a_array['player_name_b']}}</b></td>
 
@@ -48,7 +48,7 @@
 
           <tr>
           <!-- Show teams if schedule type is team -->
-          @if(!is_null($rubber_b_array['team_id']))<td><b>{{$rubber_b_array['team_name']}}</b></td>@endif
+          @if(!is_null($rubber_b_array['team_id']))<td><a href="/team/members/{{$rubber_a_array['team_id']}}">{{$rubber_b_array['team_name']}}</a></td>@endif
 
             <td><b>{{$rubber_b_array['player_name_a']}} / {{$rubber_b_array['player_name_b']}}</b></td>
             @for($set_index=1; $set_index<=$set; $set_index++)
