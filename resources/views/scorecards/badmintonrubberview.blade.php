@@ -19,7 +19,7 @@
       <table class='table table-striped table-bordered'>
         <thead>
           <tr class='team_fall team_title_head'>
-           @if(!is_null($rubber_a_array['team_id']))  <th><b>TEAMS</b></th> @endif
+        
              <th>PLAYERS</th>
 
              @for($set_index=1; $set_index<=$set; $set_index++)
@@ -30,10 +30,10 @@
         </thead>
         <tbody>
              <tr>
-             <!-- Show teams if schedule type is team -->
-            @if(!is_null($rubber_a_array['team_id']))<td><a href="/team/members/{{$rubber_a_array['team_id']}}">{{$rubber_a_array['team_name']}}</a></td>@endif
+           
 
-            <td><b>{{$rubber_a_array['player_name_a']}} / {{$rubber_a_array['player_name_b']}}</b></td>
+            <td>  
+             @if(!is_null($rubber_a_array['team_id']))<b>{{$rubber_a_array['team_name']}}</b><br>@endif {{$rubber_a_array['player_name_a']}} / {{$rubber_a_array['player_name_b']}}</td>
 
           @for($set_index=1; $set_index<=$set; $set_index++)
                  
@@ -47,10 +47,10 @@
           </tr>
 
           <tr>
-          <!-- Show teams if schedule type is team -->
-          @if(!is_null($rubber_b_array['team_id']))<td><a href="/team/members/{{$rubber_a_array['team_id']}}">{{$rubber_b_array['team_name']}}</a></td>@endif
-
-            <td><b>{{$rubber_b_array['player_name_a']}} / {{$rubber_b_array['player_name_b']}}</b></td>
+         
+            <td>
+            @if(!is_null($rubber_b_array['team_id']))<b>{{$rubber_b_array['team_name']}}</b><br>@endif 
+            {{$rubber_b_array['player_name_a']}} / {{$rubber_b_array['player_name_b']}}</td>
             @for($set_index=1; $set_index<=$set; $set_index++)
                   
                <td class='b_set{{$set_index}}  '>

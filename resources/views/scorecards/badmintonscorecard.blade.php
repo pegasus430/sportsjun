@@ -5,9 +5,7 @@
         color:red;
         font-weight: normal;
     }
-    a{
-      color: inherit;
-    }
+    
   </style>
 <?php 
     $team_a_name = $user_a_name;
