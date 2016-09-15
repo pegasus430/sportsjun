@@ -32,7 +32,7 @@ use App\Helpers\AllRequests;
 use Session;
 use Request;
 
-class KabaddiScoreCardController extends parentScoreCardController
+class KabaddiscoreCardController extends parentScoreCardController
 {
  
  public function kabaddiScoreCard($match_data,$sportsDetails=[],$tournamentDetails=[],$is_from_view=0)
@@ -57,7 +57,7 @@ class KabaddiScoreCardController extends parentScoreCardController
         $match_id=$match_data[0]['id'];
 
         //get kabaddi scores for team a
-        $team_a_kabaddi_scores = KabaddiPlayerMatchwiseStats::select()->where('match_id',$match_data[0]['id'])->where('team_id',$team_a_id)->get();
+        $team_a_kabaddi_scores = kabaddiPlayerMatchwiseStats::select()->where('match_id',$match_data[0]['id'])->where('team_id',$team_a_id)->get();
 
         $team_a_kabaddi_scores_array = array();
         if(count($team_a_kabaddi_scores)>0)
@@ -66,7 +66,7 @@ class KabaddiScoreCardController extends parentScoreCardController
         }
 
         //get kabaddi scores for team b
-        $team_b_kabaddi_scores = KabaddiPlayerMatchwiseStats::select()->where('match_id',$match_data[0]['id'])->where('team_id',$team_b_id)->get();
+        $team_b_kabaddi_scores = kabaddiPlayerMatchwiseStats::select()->where('match_id',$match_data[0]['id'])->where('team_id',$team_b_id)->get();
         $team_b_kabaddi_scores_array = array();
         if(count($team_b_kabaddi_scores)>0)
         {
@@ -78,12 +78,12 @@ class KabaddiScoreCardController extends parentScoreCardController
         $b_team_players = User::select()->whereIn('id',$team_b_playerids)->get();
 
         //get players statistics
-        $team_a_players_stat=KabaddiPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_a_id)->get();
-        $team_b_players_stat=KabaddiPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_b_id)->get();
+        $team_a_players_stat=kabaddiPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_a_id)->get();
+        $team_b_players_stat=kabaddiPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_b_id)->get();
 
 
-        $active_players_a=KabaddiPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_a_id)->wherePlayingStatus('P')->lists('player_name', 'user_id')->toArray();
-        $active_players_b=KabaddiPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_b_id)->wherePlayingStatus('P')->lists('player_name', 'user_id')->toArray();
+        $active_players_a=kabaddiPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_a_id)->wherePlayingStatus('P')->lists('player_name', 'user_id')->toArray();
+        $active_players_b=kabaddiPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_b_id)->wherePlayingStatus('P')->lists('player_name', 'user_id')->toArray();
 
         //get team names
         $team_a_name = Team::where('id',$team_a_id)->pluck('name');
@@ -251,6 +251,10 @@ class KabaddiScoreCardController extends parentScoreCardController
         
         //insert the default match_details for the match
         $match_model=MatchSchedule::find($match_id);
+    $match_settings   =   Helper::getMatchSettings($match_model['tournament_id'],$match_model['sports_id']);
+
+    $set=$match_settings->number_of_sets;
+    $maximum_points = $match_settings->maximum_points;
         $match_details=[
             "team_a"=>[
                 "id"=>$team_a_id,
@@ -263,8 +267,8 @@ class KabaddiScoreCardController extends parentScoreCardController
              "preferences"=>[
                         "left_team_id"=>$team_a_id,
                         "right_team_id"=>$team_b_id,                        
-                        "number_of_sets"=>5 ,
-                        "end_point"=>25,                       
+                        "number_of_sets"=>$set,                        
+                        "end_point"=>$maximum_points,                       
                     ],
             "match_details"=>[
                 "set1"=>[
@@ -305,7 +309,7 @@ class KabaddiScoreCardController extends parentScoreCardController
 
       public function insertkabaddiscore($user_id,$tournament_id,$match_id,$team_id,$player_name,$team_name,$playing_status='S')
     {
-        $kabaddi_model = new KabaddiPlayerMatchwiseStats();
+        $kabaddi_model = new kabaddiPlayerMatchwiseStats();
         $kabaddi_model->user_id          = $user_id;
         $kabaddi_model->tournament_id    = $tournament_id;
         $kabaddi_model->match_id         = $match_id;
@@ -321,14 +325,17 @@ class KabaddiScoreCardController extends parentScoreCardController
     public function manualScoring(ObjectRequest $request){
             $match_id=$request->match_id;
 
-            $number_of_sets=5;
+           
 
             $match_model=Matchschedule::find($match_id);
             $match_details=json_decode($match_model->match_details);
 
             $team_a=$match_model->a_id;
             $team_b=$match_model->b_id;
-            $end_point=25;
+
+
+            $end_point=$match_details->preferences->end_point;
+            $number_of_sets=$match_details->preferences->number_of_sets;
 
 
             $score_a_model=kabaddiScore::whereMatchId($match_id)->whereTeamId($team_a)->first();
@@ -378,9 +385,10 @@ class KabaddiScoreCardController extends parentScoreCardController
         $last_index=$request['last_index'];
         $match_data=matchSchedule::find($match_id);
         $match_details=$match_data['match_details'];
-        $kabaddi_player=KabaddiPlayerMatchwiseStats::whereMatchId($match_id)->first();
+        $kabaddi_player=kabaddiPlayerMatchwiseStats::whereMatchId($match_id)->first();
         $delted_ids=$request['delted_ids'];
         $match_result=$request['match_result'];
+        $match_report=$request['match_report'];
         $winner_team_id = !empty(Request::get('winner_team_id'))?Request::get('winner_team_id'):NULL;//winner_id
         $player_of_the_match=isset($request['player_of_the_match'])?$request['player_of_the_match']:NULL;
 
@@ -450,8 +458,9 @@ class KabaddiScoreCardController extends parentScoreCardController
                         'winner_id'=>$winner_team_id ,
                         'looser_id'=>$looser_team_id,
                         'has_result'     => $has_result,
+                        'match_report'=>$match_report,
                         'match_result'   => $match_result,
-                        'is_tied'=>$is_tie,
+                        'is_tied'=>$is_tie, 'match_report'=>$match_report,
                         'score_added_by'=>$json_score_status]);
 //                                Helper::printQueries();
 
@@ -481,6 +490,7 @@ class KabaddiScoreCardController extends parentScoreCardController
                     'winner_id'      => $winner_team_id,
                      'looser_id'      => $looser_team_id,
                     'is_tied'        => $is_tie,
+                    'match_report'=>$match_report,
                      'has_result'     => $has_result,
                      'match_result'   => $match_result,
                      'score_added_by' => $json_score_status,'scoring_status'=>$approved]);
@@ -501,7 +511,7 @@ class KabaddiScoreCardController extends parentScoreCardController
         else
             {
                 MatchSchedule::where('id',$match_id)->update(['winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
-                    'is_tied'=>$is_tie,
+                    'is_tied'=>$is_tie, 'match_report'=>$match_report,
                     'has_result'     => $has_result,
                      'match_result'   => $match_result,
                      'score_added_by'=>$json_score_status]);
@@ -516,7 +526,7 @@ class KabaddiScoreCardController extends parentScoreCardController
         //check already player has record or not
         $user_kabaddi_details = kabaddiStatistic::select()->where('user_id',$user_id)->get();
 
-        $kabaddi_details = KabaddiPlayerMatchwiseStats::join('match_schedules', 'match_schedules.id', '=', 'kabaddi_player_matchwise_stats.match_id')->selectRaw('count(match_id) as match_count')->selectRaw(' as points_1')->selectRaw('sum(points_2) as points_2')->selectRaw('sum(points_3) as points_3')->selectRaw('sum(total_points) as total_points')->selectRaw('sum(fouls) as fouls')->where('user_id',$user_id)->groupBy('user_id')->get();
+        $kabaddi_details = kabaddiPlayerMatchwiseStats::join('match_schedules', 'match_schedules.id', '=', 'kabaddi_player_matchwise_stats.match_id')->selectRaw('count(match_id) as match_count')->selectRaw(' as points_1')->selectRaw('sum(points_2) as points_2')->selectRaw('sum(points_3) as points_3')->selectRaw('sum(total_points) as total_points')->selectRaw('sum(fouls) as fouls')->where('user_id',$user_id)->groupBy('user_id')->get();
 
 
         if(count($user_kabaddi_details)>0)
@@ -548,14 +558,22 @@ class KabaddiScoreCardController extends parentScoreCardController
         $team_id=$request['team_id'];
         $time_substituted=$request['time_substituted'];
         $match_model=MatchSchedule::find($match_id);
-        $kabaddi_model=KabaddiPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_id)->get();
+        $kabaddi_model=kabaddiPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_id)->get();
 
         $playing=[];
         $subst=[];
 
+        //get match settings
+        $match_settings = Helper::getMatchSettings($match_model['tournament_id'],$match_model['sports_id']);
+        $maximum_substitutes = $match_settings->maximum_substitutes;
+
         foreach ($kabaddi_model as $sm ){
             $sm_id=$sm->id;
             $sm_status=$sm->playing_status;
+
+$check_maximum_substitute=SubstituteRecord::whereMatchId($match_id)->whereUserId($sm->user_id)->get()->count();
+
+            if($check_maximum_substitute<=$maximum_substitutes){
 
             if(isset($request["substitute_a_".$sm_id]) && ($request["substitute_a_".$sm_id]=='on')){
                 if($sm_status=='P'){
@@ -568,6 +586,8 @@ class KabaddiScoreCardController extends parentScoreCardController
                     }             
                
                 $sm->save();
+
+                }
             }
         }
 
@@ -583,8 +603,8 @@ class KabaddiScoreCardController extends parentScoreCardController
                   $substitute_record->substituted_at=$time_substituted;
                   $substitute_record->save();
 
-  KabaddiPlayerMatchwiseStats::find($playing[$j]['id'])->update(['serving_order'=>null]);
-  KabaddiPlayerMatchwiseStats::find($subst[$j]['id'])->update(['serving_order'=>$playing[$j]['serving_order']]);
+  kabaddiPlayerMatchwiseStats::find($playing[$j]['id'])->update(['serving_order'=>null]);
+  kabaddiPlayerMatchwiseStats::find($subst[$j]['id'])->update(['serving_order'=>$playing[$j]['serving_order']]);
 
             }     
 
@@ -645,9 +665,9 @@ class KabaddiScoreCardController extends parentScoreCardController
 
 
          for($i=1; $i<=6; $i++){
-                $player_model=KabaddiPlayerMatchwiseStats::whereUserId($request->{'serving_a_'.$i})->whereTeamId($team_a)->whereMatchId($request->match_id)->first()->update(['serving_order'=>$i]);               
+                $player_model=kabaddiPlayerMatchwiseStats::whereUserId($request->{'serving_a_'.$i})->whereTeamId($team_a)->whereMatchId($request->match_id)->first()->update(['serving_order'=>$i]);               
 
-                $player_model=KabaddiPlayerMatchwiseStats::whereUserId($request->{'serving_b_'.$i})->whereTeamId($team_b)->whereMatchId($request->match_id)->first()->update(['serving_order'=>$i]);
+                $player_model=kabaddiPlayerMatchwiseStats::whereUserId($request->{'serving_b_'.$i})->whereTeamId($team_b)->whereMatchId($request->match_id)->first()->update(['serving_order'=>$i]);
          }
 
          return 'success';

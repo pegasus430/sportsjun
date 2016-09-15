@@ -305,13 +305,24 @@ return [
                     'enable_two_points'     => 'on'
                 ], 
                 7 => [
-                    'number_of_players' => 6
+                   'number_of_sets' => 5,
+                    'active_players' => 6,
+                    'substitute'     => 6,
+                    'maximum_points' => 25,
+                    'maximum_substitutes' => 3,
                 ],
                 17 => [
+                    'number_of_sets' => 3,
+                    'active_players' => 7,
+                    'substitute'     => 3,
+                    'maximum_points' => 15,
+                    'maximum_substitutes' => 3,
+                ],
+                14 => [
                     'number_of_sets' => 5,
                     'active_players' => 6,
                     'substitute'     => 6,
-                    'maximum_points' => 15,
+                    'maximum_points' => 25,
                     'maximum_substitutes' => 3,
                 ]
 

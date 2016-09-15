@@ -130,7 +130,7 @@ input:read-only {
   ${'team_'.$team_b_id.'_score'}=$match_details->scores->{$team_b_id.'_score'}.' sets';
     }
 
-	$serving_array=Helper::getvolleyballServer($match_id);		
+	$serving_array=Helper::getvolleyballServer($match_id, 'throwball');		
 	?>
 
 	<?php 

@@ -130,11 +130,18 @@ input:read-only {
   ${'team_'.$team_b_id.'_score'}=$match_details->scores->{$team_b_id.'_score'}.' sets';
     }
 
-	$serving_array=Helper::getVolleyballServer($match_id);
+	$serving_array=Helper::getvolleyballServer($match_id);		
+	?>
 
-	
-	
+	<?php 
 
+    $match_data[0]['tournament_id']!=null?$disabled='readonly':'';
+    $match_settings   =   Helper::getMatchSettings($match_data[0]['tournament_id'],$match_data[0]['sports_id']);
+	$a_count = 1;
+	$set=$match_settings->number_of_sets;
+	$active_players = $match_settings->active_players;
+	$maximum_substitute = $match_settings->maximum_substitutes;
+	
 	?>
 
 	<div class="col_standard soccer_scorecard">
@@ -409,9 +416,7 @@ input:read-only {
 
 			@else
 			<!-- Scoring Start -->
-				<?php $a_count = 1;
-					  $set=5;
-				?>
+
 
 
 			@if(!count($volleyball_a_score))
@@ -885,16 +890,25 @@ input:read-only {
 									</div>
 
 
-									<div class='row' style="padding-bottom:20px;">
-										<center class='col-sm-6 col-sm-offset-3'> <button class='btn btn-primary full-width ' onclick="" type='submit'> Save</button></center>
-									</div>
+<!--********* MATCH REPORT Start **************!-->
+<div class="summernote_wrapper form-group">
+        <h3 class="brown1 table_head">Match Report</h3>
+        <textarea id="match_report" class="summernote" name="match_report" title="Match Report"></textarea>
+</div>
+</div>
+<!--********* MATCH REPORT End **************!-->
+
+
+
+									
 
 									<div class="modal-footer">
+										<button class='btn btn-primary ' onclick="" type='submit'> Save</button>
 										<button type="button" class="button btn-secondary" data-dismiss="modal">Cancel</button>
 									</div>
 								</div>
 							</div>
-						</div>
+					
 
 	<input type='hidden' id='selected_player_id_value' value='0' player_id='0' player_name=''>
 	<input type='hidden' id='half_time' value='quarter_1'>
@@ -915,6 +929,9 @@ input:read-only {
 	<input type="hidden" name="winner_team_id" value="" id="winner_team_id">
 	<input type="hidden" name="delted_ids" value="" id="delted_ids">
 	<input type='hidden' name='serving_user_id' value="" id="serving_user_id">
+
+
+
 	</form>
 					</div>
 				</div>
@@ -1141,7 +1158,14 @@ input:read-only {
 
 
 	<script>
-		$(document).ready(function(){
+
+
+	var active_players = {{$active_players}}
+	var max_substitutes = {{$maximum_substitute}}
+	var active_players_letters = '{{Helper::convert_number_to_words($active_players)}}'
+	var max_substitutes_letters = '{{Helper::convert_number_to_words($maximum_substitute)}}'
+
+$(document).ready(function(){
 			getTeam();
 		});
 		function getTeam()
@@ -1503,19 +1527,37 @@ input:read-only {
 			var substitute_players_a=tempSquadData.team_a.substitute.length;
 			var substitute_players_b=tempSquadData.team_b.substitute.length;
 
-			if(playing_players_a!=6){
+			if(playing_players_a!=active_players){
 					$.alert({
 						title:"Alert",
-						content:"Choose six players for Team A"
+						content:"Choose " + active_players_letters + " players for Team A"
 					})
 
 					return false;
 			}
 
-			if(playing_players_b!=6){
+			if(playing_players_b!=active_players){
 					$.alert({
 						title:"Alert",
-						content:"Choose six players for Team B"
+						content:"Choose " +active_players_letters+ " players for Team B"
+					})
+
+				return false;
+			}
+
+			if(substitute_players_a>max_substitutes){
+					$.alert({
+						title:"Alert",
+						content:"You can only select a maximum of " + active_players + " substitutes for Team A"
+					})
+
+					return false;
+			}
+
+			if(substitute_players_b>max_substitutes){
+					$.alert({
+						title:"Alert",
+						content:"You can only select a maximum of " + max_substitutes + " substitute for Team B"
 					})
 
 				return false;
@@ -1743,7 +1785,7 @@ var manual=false;
 			
 			var data=$(that).serialize();
 			$.ajax({
-				url:'/match/submitServingPlayersVolleyball',
+				url:'/match/submitServingPlayersvolleyball',
 				type:'post',
 				data:data,
 				success:function(response){

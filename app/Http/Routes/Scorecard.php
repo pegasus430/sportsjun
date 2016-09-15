@@ -31,7 +31,7 @@ Route::group(['prefix'=>'match'], function(){
          ['as'=>'match/confirmSquadVolleyball', 
          'uses'=>'User\ScoreCard\VolleyballScoreCardController@confirmSquad']);
 
-    Route::post('submitServingPlayersVolleyball',         
+    Route::post('submitServingPlayersvolleyball',         
         ['as'=>'match/submitServingPlayersVolleyball', 
         'uses'=>'User\ScoreCard\VolleyballScoreCardController@submitServingPlayers']);
 

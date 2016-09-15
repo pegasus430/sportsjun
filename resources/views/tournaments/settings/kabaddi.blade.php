@@ -30,7 +30,7 @@
 					{{trans('message.sports_settings.score_to_win')}}
 				</label>
 				<label class="field">
-					<input type='text' name='score_to_win' value="{{$settings->score_to_win}}">
+					<input type='text' name='maximum_points' value="{{$settings->maximum_points}}" class="gui-input">
 				</label>
 			</div>
 			</div>
@@ -40,23 +40,36 @@
 			<div class="col-sm-6">
 				<div class="section">
 				<label class="form_label">
-					{{trans('message.sports_settings.end_point')}}
+					{{trans('message.sports_settings.active_players')}}
 				</label>
 
 				<label class="field">
-					<input type='text' name='end_point' value="{{$settings->end_point}}" placeholder="e.g 29" class='gui-input'>
+					<input type='text' name='active_players' value="{{$settings->active_players}}" placeholder="e.g 6" class='gui-input'>
 				</label>
 				</div>
+			</div>
+
+			
+			<div class="col-sm-6">
+				<div class="section">
+				<label class="form_label">
+					{{trans('message.sports_settings.substitutes')}}
+				</label>
+
+				<label class="field">
+						<input type='text' name='substitute' value="{{$settings->substitute}}" placeholder="e.g 6" class='gui-input'>
+				</label>
+			</div>
 			</div>
 
 			<div class="section">
 				<div class="col-sm-6">
 				<label class="form_label">
-					{{trans('message.sports_settings.enable_two_points')}}
+					{{trans('message.sports_settings.max_substitutes')}}
 				</label>
 
 				<label class="field">
-					<input type='checkbox' name='enable_two_points' {{isset($settings->enable_two_points)?'checked':''}} class='gui-input'>
+						<input type='text' name='maximum_substitutes' value="{{$settings->maximum_substitutes}}" placeholder="e.g 6" class='gui-input'>
 				</label>
 			</div>
 			</div>

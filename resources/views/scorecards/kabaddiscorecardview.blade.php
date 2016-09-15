@@ -18,7 +18,7 @@
     isset($match_details->preferences)?$preferences=$match_details->preferences:[];
     
     if(isset($preferences->number_of_sets))$set=$preferences->number_of_sets ;
-    else $set=3;
+    else $set=5;
 
     ${'team_'.$match_data[0]['a_id'].'_score'}='0 sets';
     ${'team_'.$match_data[0]['b_id'].'_score'}='0 sets'; 
@@ -145,7 +145,7 @@
 
             <div class="panel panel-default">
                 <div class="col-md-12">
-                    <h5 class="scoreboard_title">Kabbadi Scorecard 
+                    <h5 class="scoreboard_title">kabaddi Scorecard 
                             @if(!empty($match_data[0]['match_category']))
                              <span class='match_type_text'>
                              ({{ucfirst($match_data[0]['match_category']) }})
@@ -368,6 +368,18 @@
                         </div>
                     </div>
                 </div>
+
+
+@if(!empty($match_data[0]['match_report']))
+
+        <div class="clearfix"></div>
+            <div id="match_report_view" class="summernote_wrapper tab-content col-sm-10 col-sm-offset-1">
+                <h3 class="brown1 table_head brown1">Match Report</h3>
+                    <div id="match_report_view_inner">
+                            {!!$match_data[0]['match_report']!!}
+                    </div>
+            </div>
+@endif
 
 
    

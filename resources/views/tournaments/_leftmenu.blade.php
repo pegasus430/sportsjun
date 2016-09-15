@@ -50,7 +50,7 @@ else $check_user='';
 
         @if(Helper::isTournamentOwner($tournamentDetails[0]['manager_id'],$tournamentDetails[0]['tournament_parent_id']))
 
-            @if(in_array($left_menu_data['sub_tournament_details']['sports_id'], [5, 17]))
+            @if(in_array($left_menu_data['sub_tournament_details']['sports_id'], [5,7,14, 17]))
                 <li><a class="" href="javascript:void(0)" data-toggle="modal" data-target="#settings"  onclick="getTournamentSettings({{$tournamentDetails[0]['id']}})"><span class="ico ico-settings"></span> Settings</a></li>
             @endif
 

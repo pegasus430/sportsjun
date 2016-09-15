@@ -562,23 +562,33 @@ class ThrowballscoreCardController extends parentScoreCardController
 
         $playing=[];
         $subst=[];
+        $errors=[];
 
+        //get match settings
+        $match_settings = Helper::getMatchSettings($match_model['tournament_id'],$match_model['sports_id']);
+        $maximum_substitutes = $match_settings->maximum_substitutes;
+    
+        //start swapping process
         foreach ($throwball_model as $sm ){
             $sm_id=$sm->id;
             $sm_status=$sm->playing_status;
 
-            if(isset($request["substitute_a_".$sm_id]) && ($request["substitute_a_".$sm_id]=='on')){
-                if($sm_status=='P'){
-                array_push($playing, ['user_id'=>$sm->user_id, 'id'=>$sm->id, 'serving_order'=>$sm->serving_order]);
-                    $sm->playing_status='S';
+$check_maximum_substitute=SubstituteRecord::whereMatchId($match_id)->whereUserId($sm->user_id)->get()->count();
+
+            if($check_maximum_substitute<=$maximum_substitutes){
+                if(isset($request["substitute_a_".$sm_id]) && ($request["substitute_a_".$sm_id]=='on')){
+                    if($sm_status=='P'){
+                    array_push($playing, ['user_id'=>$sm->user_id, 'id'=>$sm->id, 'serving_order'=>$sm->serving_order]);
+                        $sm->playing_status='S';
+                    }
+                    else {
+                    array_push($subst, ['user_id'=>$sm->user_id, 'id'=>$sm->id]);
+                        $sm->playing_status='P'; 
+                        }             
+                   
+                    $sm->save();
                 }
-                else {
-                array_push($subst, ['user_id'=>$sm->user_id, 'id'=>$sm->id]);
-                    $sm->playing_status='P'; 
-                    }             
-               
-                $sm->save();
-            }
+             }
         }
 
          for($j=0; $j<count($playing); $j++){
@@ -951,7 +961,7 @@ class ThrowballscoreCardController extends parentScoreCardController
 
 
        $match_details=json_decode($match_details);
-       $match_details->server=Helper::getthrowballServer($match_id);
+       $match_details->server=Helper::getVolleyballServer($match_id, 'throwball');
 
         return json_encode($match_details);
     }

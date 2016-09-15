@@ -2167,7 +2167,7 @@ class Helper {
         $team_server=volleyballScore::whereMatchId($match_id)->where('elected', 'serve')->first(); 
         $player_stats= new VolleyballPlayerMatchwiseStats;
           break;
-         case 'throwballball':
+         case 'throwball':
         $team_server=throwballScore::whereMatchId($match_id)->where('elected', 'serve')->first();  
         $player_stats= new ThrowballPlayerMatchwiseStats;
           break;
@@ -2223,8 +2223,9 @@ class Helper {
                 $tmp->settings      = $settings;
                 $tmp->save();
             }
-          return json_decode($settings);
+         
        }
+        return json_decode($settings);
     }
 
     public static function getThirdPosition($tournament_id, $round){
