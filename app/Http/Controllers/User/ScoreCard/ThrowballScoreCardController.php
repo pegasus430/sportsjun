@@ -251,6 +251,10 @@ class ThrowballscoreCardController extends parentScoreCardController
         
         //insert the default match_details for the match
         $match_model=MatchSchedule::find($match_id);
+    $match_settings   =   Helper::getMatchSettings($match_model['tournament_id'],$match_model['sports_id']);
+
+    $set=$match_settings->number_of_sets;
+    $maximum_points = $match_settings->maximum_points;
         $match_details=[
             "team_a"=>[
                 "id"=>$team_a_id,
@@ -263,8 +267,8 @@ class ThrowballscoreCardController extends parentScoreCardController
              "preferences"=>[
                         "left_team_id"=>$team_a_id,
                         "right_team_id"=>$team_b_id,                        
-                        "number_of_sets"=>5 ,
-                        "end_point"=>25,                       
+                        "number_of_sets"=>$set,                        
+                        "end_point"=>$maximum_points,                       
                     ],
             "match_details"=>[
                 "set1"=>[
@@ -321,14 +325,17 @@ class ThrowballscoreCardController extends parentScoreCardController
     public function manualScoring(ObjectRequest $request){
             $match_id=$request->match_id;
 
-            $number_of_sets=5;
+           
 
             $match_model=Matchschedule::find($match_id);
             $match_details=json_decode($match_model->match_details);
 
             $team_a=$match_model->a_id;
             $team_b=$match_model->b_id;
-            $end_point=25;
+
+
+            $end_point=$match_details->preferences->end_point;
+            $number_of_sets=$match_details->preferences->number_of_sets;
 
 
             $score_a_model=throwballScore::whereMatchId($match_id)->whereTeamId($team_a)->first();
@@ -381,6 +388,7 @@ class ThrowballscoreCardController extends parentScoreCardController
         $throwball_player=throwballPlayerMatchwiseStats::whereMatchId($match_id)->first();
         $delted_ids=$request['delted_ids'];
         $match_result=$request['match_result'];
+        $match_report=$request['match_report'];
         $winner_team_id = !empty(Request::get('winner_team_id'))?Request::get('winner_team_id'):NULL;//winner_id
         $player_of_the_match=isset($request['player_of_the_match'])?$request['player_of_the_match']:NULL;
 
@@ -450,8 +458,9 @@ class ThrowballscoreCardController extends parentScoreCardController
                         'winner_id'=>$winner_team_id ,
                         'looser_id'=>$looser_team_id,
                         'has_result'     => $has_result,
+                        'match_report'=>$match_report,
                         'match_result'   => $match_result,
-                        'is_tied'=>$is_tie,
+                        'is_tied'=>$is_tie, 'match_report'=>$match_report,
                         'score_added_by'=>$json_score_status]);
 //                                Helper::printQueries();
 
@@ -481,6 +490,7 @@ class ThrowballscoreCardController extends parentScoreCardController
                     'winner_id'      => $winner_team_id,
                      'looser_id'      => $looser_team_id,
                     'is_tied'        => $is_tie,
+                    'match_report'=>$match_report,
                      'has_result'     => $has_result,
                      'match_result'   => $match_result,
                      'score_added_by' => $json_score_status,'scoring_status'=>$approved]);
@@ -501,7 +511,7 @@ class ThrowballscoreCardController extends parentScoreCardController
         else
             {
                 MatchSchedule::where('id',$match_id)->update(['winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
-                    'is_tied'=>$is_tie,
+                    'is_tied'=>$is_tie, 'match_report'=>$match_report,
                     'has_result'     => $has_result,
                      'match_result'   => $match_result,
                      'score_added_by'=>$json_score_status]);

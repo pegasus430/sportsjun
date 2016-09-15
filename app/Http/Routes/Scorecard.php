@@ -62,19 +62,22 @@ Route::group(['prefix'=>'match'], function(){
       Route::post('kabaddiAddScore', ['as'=>'match/volleyballAddScore', 'uses'=>'User\ScoreCard\KabaddiScoreCardController@addScore']);
 
         //routes for Throwball
-    Route::post('confirmSquadvolleyball',        
-         ['as'=>'match/confirmSquadVolleyball', 
-         'uses'=>'User\ScoreCard\VolleyballScoreCardController@confirmSquad']);
+    Route::post('confirmSquadthrowball',        
+         ['as'=>'match/confirmSquadThrowball', 
+         'uses'=>'User\ScoreCard\ThrowballScoreCardController@confirmSquad']);
 
-    Route::post('submitServingPlayersVolleyball',         
-        ['as'=>'match/submitServingPlayersVolleyball', 
-        'uses'=>'User\ScoreCard\VolleyballScoreCardController@submitServingPlayers']);
+    Route::post('submitServingPlayersthrowball',         
+        ['as'=>'match/submitServingPlayersThrowball', 
+        'uses'=>'User\ScoreCard\ThrowballScoreCardController@submitServingPlayers']);
 
-    Route::post('volleyballSwapPlayers',    ['as'=>'match/volleyballSwapPlayersVolleyball', 'uses'=>'User\ScoreCard\VolleyballScoreCardController@volleyballSwapPlayers']);
-    Route::post('/endMatchRecordvolleyball', 'User\ScoreCard\VolleyballScoreCardController@volleyballStoreRecord');
-    Route::post('/saveMatchRecordVolleyball', 'User\ScoreCard\BasketballScoreCardController@volleyballSaveRecord');
-    Route::post('manualScoringvolleyball', ['as'=>'match/manualScoringVolleyball', 'uses'=>'User\ScoreCard\VolleyballScoreCardController@manualScoring']);
-      Route::post('volleyballAddScore', ['as'=>'match/volleyballAddScore', 'uses'=>'User\ScoreCard\VolleyballScoreCardController@addScore']);
+    Route::post('ThrowballSwapPlayers',    ['as'=>'match/volleyballSwapPlayersThrowball', 'uses'=>'User\ScoreCard\hrowballcoreCardController@volleyballSwapPlayers']);
+    Route::post('/endMatchRecordthrowball', 'User\ScoreCard\ThrowballScoreCardController@throwballStoreRecord');
+
+    Route::post('/saveMatchRecordthrowball', 'User\ScoreCard\BasketballScoreCardController@throwballSaveRecord');
+
+    Route::post('manualScoringthrowball', ['as'=>'match/manualScoringThrowball', 'uses'=>'User\ScoreCard\ThrowballScoreCardController@manualScoring']);
+
+      Route::post('throwballAddScore', ['as'=>'match/throwballAddScore', 'uses'=>'User\ScoreCard\ThrowballScoreCardController@addScore']);
 
 
 

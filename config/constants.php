@@ -306,6 +306,14 @@ return [
                 ], 
                 7 => [
                     'number_of_players' => 6
+                ],
+                17 => [
+                    'number_of_sets' => 5,
+                    'active_players' => 6,
+                    'substitute'     => 6,
+                    'maximum_points' => 15,
+                    'maximum_substitutes' => 3,
                 ]
+
         ]
 ];

@@ -529,6 +529,9 @@ return [
     		'number_of_sets'	=> 'Number of Sets',
     		'score_to_win' 		=> 'Win Score',
     		'end_point'	 		=> 'End Point',
-    		'enable_two_points' => 'Enable Two Points Clear?'
+    		'enable_two_points' => 'Enable Two Points Clear?',
+    		'active_players' 	=> 'Active Players',
+    		'substitutes'			=> 'Substitute Players',
+    		'max_substitutes' 	=> 'Maximum Substitute per Player'
     ]
 ];
