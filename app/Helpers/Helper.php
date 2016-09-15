@@ -11,8 +11,12 @@ use App\Model\MatchScheduleRubber;
 use App\Model\TournamentParent;
 use App\Model\Tournaments;
 use App\Model\TeamPlayers;
+use App\Model\throwballScore;
+use App\Model\kabaddiScore;
 use App\Model\volleyballScore;
 use App\Model\VolleyballPlayerMatchwiseStats;
+use App\Model\KabaddiPlayerMatchwiseStats;
+use App\Model\ThrowballPlayerMatchwiseStats;
 use App\Model\TournamentMatchPreference;
 use App\Helpers\AllRequests;
 use App\User;
@@ -1972,7 +1976,7 @@ class Helper {
 
                 break;
 
-                 case '13':           //squash
+                 case in_array($match_model->sports_id, ['13', '14', '17','7']):           //squash
                     $scores=$match_details->scores;
             $match_model->scores=$scores->{$a_id.'_score'}.' sets - '. $scores->{$b_id.'_score'}.' sets';
 
@@ -2156,12 +2160,32 @@ class Helper {
             else return '-';
     }
 
-    public static function getVolleyballServer($match_id){
-      
-        $team_server=volleyballScore::whereMatchId($match_id)->where('elected', 'serve')->first();
+    public static function getVolleyballServer($match_id, $sports_name='volleyball'){
+        
+        switch ($sports_name) {
+            case 'volleyball':
+        $team_server=volleyballScore::whereMatchId($match_id)->where('elected', 'serve')->first(); 
+        $player_stats= new VolleyballPlayerMatchwiseStats;
+          break;
+         case 'throwballball':
+        $team_server=throwballScore::whereMatchId($match_id)->where('elected', 'serve')->first();  
+        $player_stats= new ThrowballPlayerMatchwiseStats;
+          break;
+            
+             case 'kabaddi':
+        $team_server=kabaddiScore::whereMatchId($match_id)->where('elected', 'serve')->first();  
+        $player_stats= new KabaddiPlayerMatchwiseStats ;
+        break;           
+            
+            default:
+                # code...
+                break;
+        }
+
         if(isset($team_server)){
-                $team_id=$team_server->team_id;
-        $player_serving=VolleyballPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_id)->where('serving_order', 1)->first();
+            $team_id=$team_server->team_id;
+                    $player_serving=$player_stats::whereMatchId($match_id)->whereTeamId($team_id)->where('serving_order', 1)->first();
+       
         $serving_array=json_decode(json_encode(
                 ['team_id'=>$team_id,
                  'player_id'=>$player_serving->user_id,
@@ -2201,6 +2225,66 @@ class Helper {
             }
           return json_decode($settings);
        }
+    }
+
+    public static function getThirdPosition($tournament_id, $round){
+            $check_schedule=MatchSchedule::whereTournamentId($tournament_id)
+                                         ->whereTournamentRoundNumber($round)
+                                         ->whereTournamentMatchNumber(2)
+                                         ->first();
+
+            if(!$check_schedule){
+                $semi_final_schedule=MatchSchedule::whereTournamentId($tournament_id)
+                                                ->whereTournamentRoundNumber($round - 1)
+                                                ->take(2)->get();
+
+            $matchScheduleDetails=$semi_final_schedule[0];
+
+            if ($matchScheduleDetails['schedule_type'] == 'team') {
+                $player_a_ids = TeamPlayers::select(DB::raw('GROUP_CONCAT(DISTINCT user_id) AS player_a_ids'))->where('team_id', $semi_final_schedule[0]->looser_id)->pluck('player_a_ids');
+                 $player_b_ids = TeamPlayers::select(DB::raw('GROUP_CONCAT(DISTINCT user_id) AS player_b_ids'))->where('team_id', $semi_final_schedule[1]->looser_id)->pluck('player_b_ids');
+            }else {
+                 $player_a_ids = $semi_final_schedule[0]->looser_id;
+                $player_b_ids = $semi_final_schedule[1]->looser_id;
+
+            }
+
+            
+            $scheduleArray[] = [
+                'tournament_id' => $matchScheduleDetails['tournament_id'],
+                'tournament_round_number' => $round,
+                'tournament_match_number' => 2,
+                'sports_id' => $matchScheduleDetails['sports_id'],
+                'facility_id' => $matchScheduleDetails['facility_id'],
+                'facility_name' => $matchScheduleDetails['facility_name'],
+                'created_by' => $matchScheduleDetails['created_by'],
+                'match_category' => $matchScheduleDetails['match_category'],
+                'schedule_type' => $matchScheduleDetails['schedule_type'],
+                'match_type' => $matchScheduleDetails['match_type'],
+                'match_location' => $matchScheduleDetails['match_location'],
+                'city_id' => $matchScheduleDetails['city_id'],
+                'city' => $matchScheduleDetails['city'],
+                'state_id' => $matchScheduleDetails['state_id'],
+                'state' => $matchScheduleDetails['state'],
+                'country_id' => $matchScheduleDetails['country_id'],
+                'country' => $matchScheduleDetails['country'],
+                'zip' => $matchScheduleDetails['zip'],
+                'match_status' => 'scheduled',
+                'a_id' => $semi_final_schedule[0]->looser_id,
+                'b_id' => $semi_final_schedule[1]->looser_id,
+                'player_a_ids' => !empty($player_a_ids)?(','.trim($player_a_ids).','):NULL,
+                'player_b_ids' => !empty($player_b_ids)?(','.trim($player_b_ids).','):NULL,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+                'game_type'     => $matchScheduleDetails['game_type'],
+                'number_of_rubber' => $matchScheduleDetails['number_of_rubber']
+            ];
+
+            $check_schedule=MatchSchedule::insert($scheduleArray);
+            }
+
+
+            return $check_schedule;
     }
 
    

@@ -118,7 +118,7 @@
         @else
         <div class="col-sm-2">
             <div class="round-{{Helper::convert_number_to_words($round)}}">
-                <div class="round"><p>{{Helper::getRoundStage($tournament_id, $round)}}</p></div>
+                <div class="round"><p>{{$bracket_name=Helper::getRoundStage($tournament_id, $round)}}</p></div>
 
                  @if(count($bracketTeamArray))
                     <?php
@@ -197,6 +197,67 @@
                         </div>
                     @endforeach
                  @endif
+
+                 <!-- Third Place -->
+
+              @if($bracket_name=='FINAL')
+
+              <div class="round"><p> THIRD POSITION    </p></div>
+
+                <?php $bracket  = Helper::getThirdPosition($tournament_id, $round);
+                              
+                          ?>                    
+                                
+
+              <div class="match_set" >
+                        <ul  id="tour_{{$round}}_match_{{($brk+1)}}"> 
+                          @if(isset($bracket['match_start_date']))
+                                            <div class="clearfix">
+                                               <span class="tour_match_date fa fa-info"  data-toggle="tooltip" data-placement="left" title="{{(isset($bracket['winner_text'])&&$bracket['winner_text']!='edit')?$bracket['match_start_date'].$sport_name.' '.$bracket['match_type']:trans('message.tournament.final.editscheduletoaddscore')}}"></span>
+                                               <span class="tour_score">
+                                               @if(isset($bracket['winner_text']))
+                                                    @if($bracket['winner_text']=='edit')
+                                                        @if(isset($bracket['id']))
+                                                            <a href="javascript:void(0)" id="scheduleEdit_{{$bracket['id']}}" onclick="editMatchSchedule({{$bracket['schdule_id']}},1,{{$round}},'myModal')">Edit</a>
+                                                        @endif    
+                                                    @else
+                                                        @if(isset($bracket['id']))
+                                                            <a href="{{ url('match/scorecard/edit/'.$bracket['id']) }}">{{$bracket['winner_text']}}</a>
+                                                        @endif    
+                                                    @endif
+                                               @else
+                                                    @if($isOwner)
+                                                        @if(isset($bracket['id']))
+                                                            <a href="javascript:void(0)" id="scheduleEdit_{{$bracket['id']}}" onclick="editMatchSchedule({{$bracket['schdule_id']}},1,{{$round}},'myModal')">Edit</a>
+                                                        @endif    
+                                                    @endif
+                                               @endif
+                                               </span>
+                                            </div>
+                                        @endif                                
+
+
+                                   <li title="{{isset($bracket['name'])?$bracket['name']:''}}"  data-toggle="tooltip" data-placement="top">
+                                       {!! Helper::Images($bracket['url'],config('constants.PHOTO_PATH.TEAMS_FOLDER_PATH'),array('class'=>'img-circle img-border','height'=>30,'width'=>30) )!!}
+                        @if(isset($bracket['name']))
+                                                <span>
+                                                   <a href="{{ url($linkUrl,[$bracket['team_or_player_id']]) }}">
+                                                    {{Helper::get_first_20_letters($bracket['name'])}}
+                                                   </a>
+                                                </span>
+                                        @else
+                                                <span></span>
+                                        @endif
+                                    </li>
+                              
+                          
+                        </ul>
+                        </div>  
+                @endif
+
+          <!-- End of third Position -->
+
+
             </div>
        </div>
         @endif
@@ -372,7 +433,7 @@ function addRoundMatchesSchedule(tournamentId,roundNumber, matchNumber) {
     function printToPdf(id){
         var doc= new jsPDF();
 
-        doc.fromHTML($('#'+id).get(0), 15, 15, {
+        doc.addHTML($('#'+id).get(0), 15, 15, {
           'width': 170         
         });
 

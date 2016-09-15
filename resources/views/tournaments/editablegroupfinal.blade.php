@@ -20,16 +20,28 @@
 
 <div class="col-sm-12">
 <div class="row group-flex-content">
+
+
+
 <?php $i=0;?>
 @if(count($roundArray))
+
 	<br>
-    <div class="pull-left half-width col-xs-12 col-sm-6 col-sm-offset-3"> <center><input class='full-width form-control dark-border' placeholder="filter match e.g team name, date" onkeyup="filterDiv(this)"></center></div>
+	<div class="col-sm-12">
+    <div class="pull-left half-width col-xs-12 col-sm-6 "> <center><input class='full-width form-control dark-border' placeholder="filter match e.g team name, date" onkeyup="filterDiv(this)"></center>
+    </div>
+@if($isOwner)
+<span class="pull-right">
+<a href='/download/schedules?tournament_id={{$tournament_id}}' class="btn-danger btn"><i class="fa fa-download"></i> Download Schedule </a>
+</span>
+@endif
+   </div>
 
         @foreach($roundArray as $round)
 
           <div class="col-sm-12">
                 <div class="round-{{Helper::convert_number_to_words($round)}}">
-                    <div class="round"><p>    {{Helper::getRoundStage($tournament_id, $round)}} </p></div>
+                    <div class="round"><p>    {{$bracket_name=Helper::getRoundStage($tournament_id, $round)}} </p></div>
                           @if($round==1)             
                                  @include('tournaments.sub_match_schedules')               
                          @else 
@@ -40,7 +52,18 @@
                                 <?php $firstRoundBracketArray=$bracketTeam;?>
                                 @include('tournaments.sub_match_schedules')
                              @endforeach
-                         @endif        
+
+
+                           @if($bracket_name=='FINAL')
+                           <?php $bracket  = Helper::getThirdPosition($tournament_id, $round);  
+                           		 $firstRoundBracketArray=$bracket;  
+                          ?> 
+                          	     @include('tournaments.sub_match_schedules')
+                          	     
+                           @endif
+                         @endif 
+
+
   
                      @endif
                 </div>

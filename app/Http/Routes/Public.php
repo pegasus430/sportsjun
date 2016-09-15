@@ -111,3 +111,11 @@ Route::get('/whatsapp/', function(){
     });
 
 });	
+
+
+
+// Downloads
+
+Route::group(['prefix'=>'download'], function(){
+	Route::get('schedules', 'User\PdfController@print_schedules');
+});

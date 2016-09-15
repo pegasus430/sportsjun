@@ -1,3 +1,4 @@
+/vendor
 nbproject/
 public/uploads/
 public/mailoutput/
@@ -9,3 +10,4 @@ config/database.php
 *.sublime-*
 .DS_Store
 Thumbs.db
+

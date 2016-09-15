@@ -725,7 +725,7 @@ class ScheduleController extends Controller {
                 ->orderby('match_start_date', 'desc')
                 ->orderby('match_start_time', 'desc')
                 ->limit($limit)->offset($offset)
-                ->get(['id', 'match_start_date', 'match_start_time','winner_id', 'a_id', 'b_id','match_type','sports_id']);
+                ->get(['id', 'match_start_date', 'match_start_time','winner_id', 'a_id', 'b_id','match_type','sports_id', 'match_status']);
 
         $matchScheduleDataTotalCount = MatchSchedule::where(function($query) use ($teamId) {
                     $query->where('a_id', $teamId)->orWhere('b_id', $teamId);
@@ -872,7 +872,7 @@ class ScheduleController extends Controller {
                 ->orderby('match_start_date', 'desc')
                 ->orderby('match_start_time', 'desc')        
                 ->limit($limit)->offset($offset)
-                ->get(['id', 'match_start_date', 'match_start_time','winner_id', 'a_id', 'b_id','match_type','sports_id']);
+                ->get(['id', 'match_start_date', 'match_start_time','winner_id', 'a_id', 'b_id','match_type','sports_id', 'match_status']);
 
         if (count($matchScheduleData)) {
             foreach ($matchScheduleData->toArray() as $key => $schedule) {

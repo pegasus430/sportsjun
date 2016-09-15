@@ -192,11 +192,32 @@ class ScoreCardController extends Controller {
 						$hockey= new ScoreCard\HockeyScorecardController;
 					return $hockey->hockeyScoreCard($match_data,$sportsDetails,$tournamentDetails);
 				}
+				else if(strtolower($sport_name)==strtolower('Ultimate Frisbee'))
+				{
+						$hockey= new ScoreCard\UltimateFrisbeeScorecardController;
+					return $hockey->hockeyScoreCard($match_data,$sportsDetails,$tournamentDetails);
+				}
+				else if(strtolower($sport_name)==strtolower('Water Polo'))
+				{
+						$hockey= new ScoreCard\WaterPoloScorecardController;
+				  return $hockey->waterpoloScoreCard($match_data,$sportsDetails,$tournamentDetails);
+				}
 				else if(strtolower($sport_name)==strtolower('volleyball'))
 				{
 					$volleyball = new ScoreCard\VolleyballScoreCardController;
 					return $volleyball->volleyballScoreCard($match_data,$sportsDetails,$tournamentDetails);
 				}
+				else if(strtolower($sport_name)==strtolower('Throw ball'))
+				{
+					$volleyball = new ScoreCard\ThrowballScoreCardController;
+					return $volleyball->throwballScoreCard($match_data,$sportsDetails,$tournamentDetails);
+				}
+				else if(strtolower($sport_name)==strtolower('Kabaddi'))
+				{
+					$volleyball = new ScoreCard\KabaddiScoreCardController;
+					return $volleyball->kabaddiScoreCard($match_data,$sportsDetails,$tournamentDetails);
+				}
+
 				else if(strtolower($sport_name)==strtolower('basketball'))
 				{
 					$basketball = new ScoreCard\BasketballScoreCardController;
@@ -3174,6 +3195,16 @@ class ScoreCardController extends Controller {
 					$squash = new ScoreCard\VolleyballScoreCardController;
 					return $squash->volleyballScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
+				else if(strtolower($sport_name)==strtolower('throw ball'))
+				{
+					$squash = new ScoreCard\ThrowballScoreCardController;
+					return $squash->throwballScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
+				else if(strtolower($sport_name)==strtolower('kabaddi'))
+				{
+					$squash = new ScoreCard\KabaddiScoreCardController;
+					return $squash->kabaddiScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
 				else if(strtolower($sport_name)==strtolower('basketball'))
 				{
 					$squash = new ScoreCard\BasketballScoreCardController;
@@ -3238,6 +3269,16 @@ class ScoreCardController extends Controller {
 				{
 					$squash = new ScoreCard\VolleyballScoreCardController;
 					return $squash->volleyballScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
+				else if(strtolower($sport_name)==strtolower('throw ball'))
+				{
+					$squash = new ScoreCard\ThrowballScoreCardController;
+					return $squash->throwballScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
+				else if(strtolower($sport_name)==strtolower('kabaddi'))
+				{
+					$squash = new ScoreCard\KabaddiScoreCardController;
+					return $squash->kabaddiScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
 				else if(strtolower($sport_name)==strtolower('basketball'))
 				{
