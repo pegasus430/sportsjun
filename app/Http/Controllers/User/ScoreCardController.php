@@ -2803,6 +2803,7 @@ class ScoreCardController extends Controller {
 		$last_index=$request['last_index'];
 		$match_data=matchSchedule::find($match_id);
 		$match_details=$match_data['match_details'];
+		$match_report = $request['match_report'];
 		$soccer_player=SoccerPlayerMatchwiseStats::whereMatchId($match_id)->first();
 		$delted_ids=$request['delted_ids'];
 		$match_result=$request['match_result'];
@@ -2943,6 +2944,7 @@ class ScoreCardController extends Controller {
 						'is_tied'=>$is_tie,
 						 'has_result'     => $has_result,
                          'match_result'   => $match_result,
+                         'match_report'	  => $match_report,
                          'score_added_by'=>$json_score_status]);
 //                                Helper::printQueries();
 
@@ -2973,6 +2975,7 @@ class ScoreCardController extends Controller {
  					'is_tied'        => $is_tie,
                      'has_result'     => $has_result,
                      'match_result'   => $match_result,
+                     'match_report'	  => $match_report,
                      'score_added_by' => $json_score_status,
                      'scoring_status'=>$approved]);
 
@@ -2998,6 +3001,7 @@ class ScoreCardController extends Controller {
 					'is_tied'=>$is_tie,
 					'has_result'     => $has_result,
                     'match_result'   => $match_result,
+                    'match_report'	  => $match_report,
                      'score_added_by'=>$json_score_status]);
 			}
 		}

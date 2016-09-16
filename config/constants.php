@@ -307,6 +307,15 @@ return [
                     'substitute'     => 6,
 
                 ], 
+                6 => [
+                    'number_of_sets' => 5,
+                    'active_players' => 6,
+                    'substitute'     => 6,                   
+                    'maximum_points' => 25,
+                    'maximum_substitutes' => 3,
+                    'number_of_quarters' => 4
+
+                ],
                 7 => [
                    'number_of_sets' => 5,
                     'active_players' => 6,

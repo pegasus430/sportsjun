@@ -14,11 +14,11 @@
 					<input type='text' name='active_players' value="{{$settings->active_players}}" placeholder="e.g 6" class='gui-input'>
 				</label>
 				</div>
-			</div>
-
-			
+			</div>		
 		
 			</div>
+
+			@include('tournaments.settings.points')
 		</div>
-</div> 	
+
 </div>

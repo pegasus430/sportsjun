@@ -612,7 +612,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 										</div>
 								<div class="col-sm-4">
 											<div class="section">
-									<div class="form-group scorescard_stats" style="margin-top:15px;" id='select_winner'> 
+									<div class="form-group scorescard_stats"  id='select_winner'> 
 											<label class="show_teams">Select Winner:</label>
 											<select name="winner_id" id="winner_id" class="show_teams form-control " onchange="selectWinner();">
 												<option <?php if (isset($match_data[0]['winner_id']) && $match_data[0]['winner_id']==$match_data[0]['a_id']) echo ' selected';?> value="{{ $match_data[0]['a_id'] }}" >{{ $team_a_name }}</option>
@@ -639,29 +639,38 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 										</div>
 									</div>
 								</div>
-
-
-									</div>
-
-
-									<div class="form-inline scorescard_stats" style="border:none" >
+							
+								<div class="col-sm-6">
+											<div class="section">									
 										<div class='form-group'>
 											<label> {{$team_a_name}} Ball Percentage </label>
-											<input type='number' class='gui-input ' name='ball_percentage_{{$team_a_id}}' value="{{$ball_percentage_a}}" max="100" onchange="updateBallPercentage(event,this)" >
+											<input type='number' class='form-control ' name='ball_percentage_{{$team_a_id}}' value="{{$ball_percentage_a}}" max="100" onchange="updateBallPercentage(event,this)" >
 										</div>
+									</div>
+								</div>
+
+								<div class="col-sm-6">
+											<div class="section">
 										<div class='form-group'>
 
 											<label>{{$team_b_name}} Ball Percentage  </label>
-											<input type='number' id='updateBallValue' readonly class='gui-input' name='ball_percentage_{{$team_b_id}}' value="{{$ball_percentage_b}}" max="100">
+											<input type='number' id='updateBallValue' readonly class='form-control' name='ball_percentage_{{$team_b_id}}' value="{{$ball_percentage_b}}" max="100">
 										</div>
 										<br>
 									</div>
+								</div>
+							</div>
+					
+
 
 									<!--********* MATCH REPORT Start **************!-->
 <div class="summernote_wrapper form-group">
         <h3 class="brown1 table_head">Match Report</h3>
         <textarea id="match_report" class="summernote" name="match_report" title="Match Report"></textarea>
 </div>
+
+</div>
+
 
 <!--********* MATCH REPORT End **************!-->
 
@@ -1201,7 +1210,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 		function selectWinner()
 		{
 			$('#winner_team_id').val($('#winner_id').val());
-			$("#winner_id").hide();
+			
 		}
 		var team_a_count='{{ (count($team_a_soccer_scores_array)>0)?count($team_a_soccer_scores_array):1 }}';
 		var team_b_count='{{ (count($team_b_soccer_scores_array)>0)?count($team_b_soccer_scores_array):1 }}';
