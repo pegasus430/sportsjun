@@ -149,7 +149,7 @@
                     ?>
                     @foreach($bracketTeamArray as $brk => $bracketTeam)
                       
-                    <div class="match_set remove_if_empty " style="height: <?php echo $height.'px';?>">
+                    <div class="match_set tourn_{{$round}}_remove_{{$brk+1}} " style="height: <?php echo $height.'px';?>">
                         <ul  id="tour_{{$round}}_match_{{($brk+1)}}">
                             @foreach($bracketTeam as $bt => $bracket)
                                 @if(isset($bracket['tournament_round_number']) && $bracket['tournament_round_number']==$round)
@@ -491,13 +491,18 @@ function addRoundMatchesSchedule(tournamentId,roundNumber, matchNumber) {
 
 <script type="text/javascript">
     $(document).ready(function(){
-        var empty_rounds = {{json_encode($empty_rounds)}};  
+        var m=window.matches;
+        var l={{$lastRoundWinner}}
+      
+        // for(i=l; i>=1; i--){
 
-          for(i=0; i<=empty_rounds.length; i++){
-             // $('.remove_if_empty_'+empty_rounds[i]).closest('.match_set').remove();
-          }
+        //     for(j=ml; j>=(i*2); j--){
+        //      $('.tourn_'+i+'_remove_'+j).remove();
+        //     }
+        // }   
 
-          console.log(empty_rounds);
+        $('.tourn_3_remove_2').remove();   
+         
 
     })
 

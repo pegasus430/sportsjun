@@ -61,5 +61,8 @@
 			</div>
 			</div>
 		</div>
+
+		@include('tournaments.settings.points')
+
 </div> 	
 </div>
