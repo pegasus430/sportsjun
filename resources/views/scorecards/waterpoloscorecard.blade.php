@@ -627,13 +627,18 @@ input:read-only {
 									<div class="form-inline">
 										<div class="form-group">
 											<label for="match_result">End of Match Result:</label>
-											<select class="form-control selectpicker" name="match_result" id="match_result" onchange="getTeam();SJ.SCORECARD.selectMatchType(this)">
+												<select class="form-control selectpicker" name="match_result" id="match_result" onchange="getTeam();SJ.SCORECARD.selectMatchType(this)">
 												<option value="" >Select</option>
-												<?php if(empty($match_data[0]['tournament_round_number'])) { ?>
+
+												<?php if(empty($match_data[0]['tournament_round_number'])) { ?>							
 												<option <?php if($match_data[0]['is_tied']>0) echo " selected";?> value="tie" >Tie</option>
 												<?php } ?>
-												<option <?php if($match_data[0]['is_tied']==0 && $match_data[0]['winner_id']>0) echo " selected";?> value="win">win</option>
-												<option value="washout" {{!$match_data[0]['has_result']?'selected':''}}>No Result</option>
+												
+												<option value="walkover" {$match_data[0]['match_result']=='walkover'?'selected':''}} >Walkover</option>
+												
+												<option {{$match_data[0]['match_result']=='win'?'selected':''}}  value="win">Win</option>
+												
+												<option value="washout" {{$match_data[0]['match_result']=='washout'?'selected':''}}>No Result</option>
 											</select>
 										</div>
 										<div class="form-group scorescard_stats" style="margin-top:15px;">
@@ -996,7 +1001,7 @@ input:read-only {
 		function getTeam()
 		{
 			var value = $( "#match_result" ).val();
-			if(value=='win')
+			if(value=='win' || value=='walkover'  )
 			{
 				$("label.show_teams").show();
 				$('#winner_id').selectpicker('show');
