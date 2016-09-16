@@ -535,7 +535,7 @@
                     <div class='col-sm-12'>
                            <div class="form-group col-sm-4 col-sm-offset-2 ">
                                   <label>Match Result</label>
-                                    <select class="form-control selectpicker" name="match_result" id="match_result" onchange="getTeam();SJ.SCORECARD.selectMatchType(this)">
+                                    <select class="form-control " name="match_result" id="match_result" onchange="getTeam();SJ.SCORECARD.selectMatchType(this)">
                         <option value="" >Select</option>
 
                         <?php if(empty($match_data[0]['tournament_round_number'])) { ?>             
@@ -564,9 +564,7 @@
                       
                       
                     </div>
-                    <br>
-
-                    </div>
+                
 
                                       <!--********* MATCH REPORT Start **************!-->
 <div class="summernote_wrapper form-group">

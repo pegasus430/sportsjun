@@ -641,10 +641,13 @@ input:read-only {
 
 
 									<div class="clearfix"></div>
-									<div class="form-inline">
+									<div class="row">
+										<div class="col-sm-4">
+											<div class="section">
+
 										<div class="form-group">
 											<label for="match_result">End of Match Result:</label>
-											<select class="form-control selectpicker" name="match_result" id="match_result" onchange="getTeam();SJ.SCORECARD.selectMatchType(this)">
+											<select class="form-control " name="match_result" id="match_result" onchange="getTeam();SJ.SCORECARD.selectMatchType(this)">
 												<option value="" >Select</option>
 
 												<?php if(empty($match_data[0]['tournament_round_number'])) { ?>							
@@ -658,17 +661,28 @@ input:read-only {
 												<option value="washout" {{$match_data[0]['match_result']=='washout'?'selected':''}}>No Result</option>
 											</select>
 										</div>
-										<div class="form-group scorescard_stats" style="margin-top:15px;">
+										</div>
+										</div>
+
+											<div class="col-sm-4">
+											<div class="section">
+										<div class="form-group scorescard_stats" style="">
 											<label class="show_teams">Select Winner:</label>
-											<select name="winner_id" id="winner_id" class="show_teams form-control selectpicker" onchange="selectWinner();">
+											<select name="winner_id" id="winner_id" class="show_teams form-control " onchange="selectWinner();">
 												<option <?php if (isset($match_data[0]['winner_id']) && $match_data[0]['winner_id']==$match_data[0]['a_id']) echo ' selected';?> value="{{ $match_data[0]['a_id'] }}" >{{ $team_a_name }}</option>
 												<option <?php if (isset($match_data[0]['winner_id']) && $match_data[0]['winner_id']==$match_data[0]['b_id']) echo ' selected';?> value="{{ $match_data[0]['b_id'] }}">{{ $team_b_name }}</option>
 											</select>
 										</div>
+												</div>
+												</div>
+
+											<div class="col-sm-4">
+											<div class="section"> 
+
 										<div class="form-group scorescard_stats">
 
 											<label class="">Select Player of Match:</label>
-											<select name="player_of_the_match" id="player_of_the_match" class=" form-control selectpicker" onchange="">
+											<select name="player_of_the_match" id="player_of_the_match" class=" form-control " onchange="">
 												<option value="0" disabled="">Team A</option>
 												@foreach($team_a_basketball_scores_array as $tm_player)
 													<option value="{{$tm_player['user_id']}}" @if($match_data[0]['player_of_the_match']==$tm_player['user_id'])?'selected':'' @endif >{{$tm_player['player_name']}}</option>
@@ -678,14 +692,17 @@ input:read-only {
 													<option value="{{$tm_player['user_id']}}" @if($match_data[0]['player_of_the_match']==$tm_player['user_id'])?'selected':'' @endif >{{$tm_player['player_name']}}</option>
 												@endforeach
 											</select>
-										</div>
+												</div>
+											</div>
+											</div>
 
 
 									</div>
 		<div class="summernote_wrapper form-group">
         <h3 class="brown1 table_head">Match Report</h3>
         <textarea id="match_report" class="summernote" name="match_report" title="Match Report"></textarea>
-</div>
+	  </div>
+	  </div>
 
 
 
@@ -1014,13 +1031,12 @@ input:read-only {
 			var value = $( "#match_result" ).val();
 			if(value=='win'  || value=='walkover')
 			{
-				$("label.show_teams").show();
-				$('#winner_id').selectpicker('show');
+				$(".show_teams").show();
+				
 					selectWinner();
 			}else
 			{
-				$("label.show_teams").hide();
-				$('#winner_id').selectpicker('hide');
+				$("label.show_teams").hide();		
 				
 				$('#winner_team_id').val('');
 			}
@@ -1028,7 +1044,7 @@ input:read-only {
 		function selectWinner()
 		{
 			$('#winner_team_id').val($('#winner_id').val());
-			$("#winner_id").hide();
+		
 		}
 		var team_a_count='{{ (count($team_a_basketball_scores_array)>0)?count($team_a_basketball_scores_array):1 }}';
 		var team_b_count='{{ (count($team_b_basketball_scores_array)>0)?count($team_b_basketball_scores_array):1 }}';

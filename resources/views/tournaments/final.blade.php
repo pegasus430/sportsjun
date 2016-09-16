@@ -145,6 +145,7 @@
                         
                         $actualHeigh = $height.'px';
                         $has_removed=0;
+                        $w=0;
                     ?>
                     @foreach($bracketTeamArray as $brk => $bracketTeam)
                       
@@ -157,9 +158,22 @@
                     ?>
 
                                     @if($round==($lastRoundWinner+1))
+                                      <?php $w++;?>
+
+                                        @if($w==2)
                                         <div class="clearfix">
+                                          <span class="fa fa-star" style="color:#f27676;"></span>&nbsp;&nbsp;Third Position&nbsp;&nbsp;<span class="fa fa-star" style="color:#f27676;"></span>
+                                        </div>
+                                        @else
+
+                                           <div class="clearfix">
                                             <span class="winner_text"><span class="fa fa-star" style="color:#f27676;"></span>&nbsp;&nbsp;Winner&nbsp;&nbsp;<span class="fa fa-star" style="color:#f27676;"></span></span>
                                         </div>
+
+
+                                        @endif
+
+
                                     @else
 
                                         @if(isset($bracket['match_start_date']))
@@ -201,6 +215,10 @@
                                                 <span></span>
                                         @endif
                                     </li>
+                                     @if($round==($lastRoundWinner+1) && $w==1)
+                                        <div style="height:200px">
+                                        </div>
+                                 @endif
 
                                 @else
                                  
@@ -211,7 +229,8 @@
                                          <div class="remove_if_empty_{{$round}}"></div>
                                     @endif
                                   @endif
-                         
+
+
                             @endforeach
                         </ul>
                         </div>
@@ -280,40 +299,7 @@
           <!-- End of third Position -->
 
           <!-- Third Position Winner -->
-             @if($bracket_name=='WINNER')            
-          <div class="match_set remove_if_empty ">
-                <?php $bracket = Helper::getThirdPosition($tournament_id, $round-1);
-                      $schedule=$bracket;                                            
-                          ?>                    
-                                dfdf
-
-                  @if(!empty($schedule['winner_id']))
-                     
-                        <ul  id="tour_{{$round}}_match_{{($brk+1)}}">
-                                                             
-                                        <div class="clearfix">
-                                            <span class="winner_text"><span class="fa fa-star" style="color:#f27676;"></span>&nbsp;&nbsp;Third Position&nbsp;&nbsp;</span>
-                                        </div>
-                                   
-
-                                   <li title="{{isset($bracket['name'])?$bracket['name']:''}}"  data-toggle="tooltip" data-placement="top">
-                                       {!! Helper::Images($bracket['url'],config('constants.PHOTO_PATH.TEAMS_FOLDER_PATH'),array('class'=>'img-circle img-border','height'=>30,'width'=>30) )!!}
-                        @if(isset($bracket['name']))
-                                                <span>
-                                                   <a href="{{ url($linkUrl,[$bracket['team_or_player_id']]) }}">
-                                                    {{Helper::get_first_20_letters($bracket['name'])}}
-                                                   </a>
-                                                </span>
-                                        @else
-                                                <span></span>
-                                        @endif
-                                    </li>
-
-                    @else
-                           
-                    @endif
-                 </div>
-                @endif
+          
 
           <!-- End of third Position Winner-->
 

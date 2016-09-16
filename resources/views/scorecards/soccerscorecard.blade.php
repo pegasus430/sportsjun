@@ -589,10 +589,12 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 								<div class="modal-body">
 
 									<div class="clearfix"></div>
-									<div class="form-inline">
+										<div class="row">
+										<div class="col-sm-4">
+											<div class="section">
 										<div class="form-group">
 											<label for="match_result">End of Match Result:</label>
-												<select class="form-control selectpicker" name="match_result" id="match_result" onchange="getTeam();SJ.SCORECARD.selectMatchType(this)">
+												<select class="form-control " name="match_result" id="match_result" onchange="getTeam();SJ.SCORECARD.selectMatchType(this)">
 												<option value="" >Select</option>
 
 												<?php if(empty($match_data[0]['tournament_round_number'])) { ?>							
@@ -606,17 +608,25 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 												<option value="washout" {{$match_data[0]['match_result']=='washout'?'selected':''}}>No Result</option>
 											</select>
 										</div>
+										</div>
+										</div>
+								<div class="col-sm-4">
+											<div class="section">
 									<div class="form-group scorescard_stats" style="margin-top:15px;" id='select_winner'> 
 											<label class="show_teams">Select Winner:</label>
-											<select name="winner_id" id="winner_id" class="show_teams form-control selectpicker" onchange="selectWinner();">
+											<select name="winner_id" id="winner_id" class="show_teams form-control " onchange="selectWinner();">
 												<option <?php if (isset($match_data[0]['winner_id']) && $match_data[0]['winner_id']==$match_data[0]['a_id']) echo ' selected';?> value="{{ $match_data[0]['a_id'] }}" >{{ $team_a_name }}</option>
 												<option <?php if (isset($match_data[0]['winner_id']) && $match_data[0]['winner_id']==$match_data[0]['b_id']) echo ' selected';?> value="{{ $match_data[0]['b_id'] }}">{{ $team_b_name }}</option>
 											</select>
 										</div>
+								</div>
+							</div>
+									<div class="col-sm-4">
+											<div class="section">
 										<div class="form-group scorescard_stats">
 
 											<label class="">Select Player of Match:</label>
-											<select name="player_of_the_match" id="player_of_the_match" class=" form-control selectpicker" onchange="">
+											<select name="player_of_the_match" id="player_of_the_match" class=" form-control " onchange="">
 												<option value="0" disabled="">Team A</option>
 												@foreach($team_a_soccer_scores_array as $tm_player)
 													<option value="{{$tm_player['user_id']}}" @if($match_data[0]['player_of_the_match']==$tm_player['user_id'])?'selected':'' @endif >{{$tm_player['player_name']}}</option>
@@ -627,6 +637,8 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 												@endforeach
 											</select>
 										</div>
+									</div>
+								</div>
 
 
 									</div>
@@ -1175,13 +1187,13 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 			var value = $( "#match_result" ).val();
 			if(value=='win' || value=='walkover')
 			{
-				$("label.show_teams").show();
-				$('#winner_id').selectpicker('show');
+				$(".show_teams").show();
+				
 					selectWinner();
 			}else
 			{
-				$("label.show_teams").hide();
-				$('#winner_id').selectpicker('hide');
+				$(".show_teams").hide();
+			
 				
 				$('#winner_team_id').val('');
 			}

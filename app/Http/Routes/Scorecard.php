@@ -1,4 +1,4 @@
-<?php
+ <?php
 //new routes for soccer match
 Route::group(['prefix'=>'match'], function(){
 
@@ -20,7 +20,7 @@ Route::group(['prefix'=>'match'], function(){
 
 
       //routes for waterpolo
-    Route::post('confirmSquadultimateFrisbee',         ['as'=>'match/confirmSquadUltimateFrisbee', 'uses'=>'User\ScoreCard\WaterPoloScorecardController@confirmSquad']);
+    Route::post('confirmSquadultimateFrisbee',         ['as'=>'match/confirmSquadUltimateFrisbee', 'uses'=>'User\ScoreCard\UltimateFrisbeeScorecardController@confirmSquad']);
     Route::post('ultimateFrisbeeSwapPlayers',    ['as'=>'match/hockeySwapPlayersUltimateFrisbee', 'uses'=>'User\ScoreCard\UltimateFrisbeeScorecardController@UltimateFrisbeeSwapPlayers']);
     Route::post('/endMatchRecordultimateFrisbee', 'User\ScoreCard\UltimateFrisbeeScorecardController@UltimateFrisbeeStoreRecord');
     Route::post('/saveMatchRecordultimateFrisbee', 'User\ScoreCard\UltimateFrisbeeScorecardController@UltimateFrisbeeSaveRecord');

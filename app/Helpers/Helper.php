@@ -2235,22 +2235,25 @@ class Helper {
                                          ->whereTournamentMatchNumber(2)
                                          ->first();
 
-            if(!$check_schedule){
-                $semi_final_schedule=MatchSchedule::whereTournamentId($tournament_id)
+         
+                     $semi_final_schedule=MatchSchedule::whereTournamentId($tournament_id)
                                                 ->whereTournamentRoundNumber($round - 1)
-                                                ->get();
+                                                ->get();     
+
+                    //dd($semi_final_schedule);         
 
             $matchScheduleDetails=$semi_final_schedule[0];
 
             if ($matchScheduleDetails['schedule_type'] == 'team') {
                 $player_a_ids = TeamPlayers::select(DB::raw('GROUP_CONCAT(DISTINCT user_id) AS player_a_ids'))->where('team_id', $semi_final_schedule[0]->looser_id)->pluck('player_a_ids');
-                 $player_b_ids = TeamPlayers::select(DB::raw('GROUP_CONCAT(DISTINCT user_id) AS player_b_ids'))->where('team_id', $semi_final_schedule[1]->looser_id)->pluck('player_b_ids');
+                 $player_b_ids = TeamPlayers::select(DB::raw('GROUP_CONCAT(DISTINCT user_id) AS player_b_ids'))->where('team_id',$semi_final_schedule[1]->looser_id)->pluck('player_b_ids');
             }else {
                  $player_a_ids = $semi_final_schedule[0]->looser_id;
                 $player_b_ids = $semi_final_schedule[1]->looser_id;
 
             }
 
+            if(!$check_schedule){
             
             $scheduleArray[] = [
                 'tournament_id' => $matchScheduleDetails['tournament_id'],
@@ -2290,10 +2293,34 @@ class Helper {
                                          ->first();
             }
 
+           else{         
+               //    if(empty($check_schedule->match_start_date) && $check_schedule->match_status!='completed'){
+                $check_schedule->player_a_ids = $player_a_ids; 
+                $check_schedule->player_b_ids = $player_b_ids;
+                $check_schedule->a_id = $semi_final_schedule[0]->looser_id; 
+                $check_schedule->b_id = $semi_final_schedule[1]->looser_id; 
+                $check_schedule->save();
+              //  }
+        }
+
         $isOwner = 0;        
         if(Helper::isTournamentOwner($check_schedule->tournament->manager_id,$check_schedule->tournament->tournament_parent_id)) {
         $isOwner=1;
         }
+
+        if($semi_final_schedule[0]->match_status == 'completed' && empty($semi_final_schedule[0]->looser_id)){
+                    $check_schedule->match_status = 'completed';
+                    $check_schedule->winner_id = $semi_final_schedule[1]->looser_id;
+        }
+
+        if($semi_final_schedule[1]->match_status == 'completed' && empty($semi_final_schedule[1]->looser_id)){
+                    $check_schedule->match_status = 'completed';
+                    $check_schedule->winner_id = $semi_final_schedule[0]->looser_id;
+        }
+
+        $check_schedule->save();
+
+
             if(!empty($check_schedule['match_start_date'])){
               $matchStartDate = Carbon::createFromFormat('Y-m-d', $check_schedule['match_start_date']);
                         if (!empty($check_schedule['winner_id']) && $check_schedule['match_status'] == 'completed')
@@ -2313,6 +2340,10 @@ class Helper {
                             }
                         }
         }
+
+     
+
+
 
             return $check_schedule;
     }

@@ -29,7 +29,7 @@ use App\Helpers\AllRequests;
 use Session;
 use Request;
 
-class UltimateFrisbeeScorecardController extends parentScoreCardController
+class UltimateFrisbeeScoreCardController extends parentScoreCardController
 {
  
  public function ultimateFrisbeeScoreCard($match_data,$sportsDetails=[],$tournamentDetails=[],$is_from_view=0)
@@ -260,31 +260,43 @@ class UltimateFrisbeeScorecardController extends parentScoreCardController
             "quarters_played"=>'',
             "quarter_1"=>[
                     "points_1"=>0,
+                    "points_2"=>0,
+                    "points_3"=>0,
                     "fouls"=>0,
                     "total_points"=>0,
             ],
             "quarter_2"=>[
                     "points_1"=>0,
+                    "points_2"=>0,
+                    "points_3"=>0,
                     "fouls"=>0,
                     "total_points"=>0,
             ],
             "quarter_3"=>[
-                     "points_1"=>0,
+                    "points_1"=>0,
+                    "points_2"=>0,
+                    "points_3"=>0,
                     "fouls"=>0,
                     "total_points"=>0
             ],
             "quarter_4"=>[
                     "points_1"=>0,
+                    "points_2"=>0,
+                    "points_3"=>0,
                     "fouls"=>0,
                     "total_points"=>0,
                 ],
             "quarter_5"=>(object)[
                     "points_1"=>0,
+                    "points_2"=>0,
+                    "points_3"=>0,
                     "fouls"=>0,
                     "total_points"=>0,
                 ],
             "quarter_6"=>(object)[
-                   "points_1"=>0,
+                    "points_1"=>0,
+                    "points_2"=>0,
+                    "points_3"=>0,
                     "fouls"=>0,
                     "total_points"=>0,
                 ]
@@ -469,7 +481,6 @@ class UltimateFrisbeeScorecardController extends parentScoreCardController
         $ultimateFrisbee_player=ultimateFrisbeePlayerMatchwiseStats::whereMatchId($match_id)->first();
         $delted_ids=$request['delted_ids'];
         $match_result=$request['match_result'];
-        $match_report=$request['match_report'];
         $winner_team_id = !empty(Request::get('winner_team_id'))?Request::get('winner_team_id'):NULL;//winner_id
         $player_of_the_match=isset($request['player_of_the_match'])?$request['player_of_the_match']:NULL;
 
@@ -540,7 +551,6 @@ class UltimateFrisbeeScorecardController extends parentScoreCardController
                         'looser_id'=>$looser_team_id,
                         'has_result'     => $has_result,
                         'match_result'   => $match_result,
-                        'match_report'   => $match_report,
                         'is_tied'=>$is_tie,
                         'score_added_by'=>$json_score_status]);
 //                                Helper::printQueries();
@@ -572,7 +582,6 @@ class UltimateFrisbeeScorecardController extends parentScoreCardController
                      'looser_id'      => $looser_team_id,
                     'is_tied'        => $is_tie,
                      'has_result'     => $has_result,
-                     'match_report'   => $match_report,
                      'match_result'   => $match_result,
                      'score_added_by' => $json_score_status,'scoring_status'=>$approved]);
 
@@ -595,7 +604,6 @@ class UltimateFrisbeeScorecardController extends parentScoreCardController
                     'is_tied'=>$is_tie,
                     'has_result'     => $has_result,
                      'match_result'   => $match_result,
-                     'match_report'   => $match_report,
                      'score_added_by'=>$json_score_status]);
             }
         }

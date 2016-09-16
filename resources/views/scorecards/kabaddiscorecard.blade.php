@@ -847,20 +847,22 @@ input:read-only {
 							<div class="modal-content">
 								<div class="alert alert-danger" id="div_failure1"></div>
 								<div class="alert alert-success" id="div_success1" style="display:none;"></div>
-								<div class="modal-body">
-					
+								<div class="modal-body">					
 
 
-									<div class="clearfix"></div>
-									<div class="form-inline">
-										<div class="form-group">
+									<div class="clearfix"></div>		
+									<div class="row">
+										<div class="col-sm-4">
+											<div class="section">
+												<div class="form-group ">
 											<label for="match_result">End of Match Result:</label>
-												<select class="form-control selectpicker" name="match_result" id="match_result" onchange="getTeam();SJ.SCORECARD.selectMatchType(this)">
+												<select class="form-control " name="match_result" id="match_result" onchange="getTeam();SJ.SCORECARD.selectMatchType(this)">
 												<option value="" >Select</option>
 
-												<?php if(empty($match_data[0]['tournament_round_number'])) { ?>							
+												@if(empty($match_data[0]['tournament_round_number'])) 				
 												<option <?php if($match_data[0]['is_tied']>0) echo " selected";?> value="tie" >Tie</option>
-												<?php } ?>
+												 
+												 @endif
 												
 												<option value="walkover" {$match_data[0]['match_result']=='walkover'?'selected':''}} >Walkover</option>
 												
@@ -869,17 +871,25 @@ input:read-only {
 												<option value="washout" {{$match_data[0]['match_result']=='washout'?'selected':''}}>No Result</option>
 											</select>
 										</div>
-										<div class="form-group scorescard_stats" style="margin-top:15px;">
+									</div>
+									</div>
+										<div class="col-sm-4">
+											<div class="section">
+										<div class="form-group scorescard_stats " style="">
 											<label class="show_teams">Select Winner:</label>
-											<select name="winner_id" id="winner_id" class="show_teams form-control selectpicker" onchange="selectWinner();">
+											<select name="winner_id" id="winner_id" class="show_teams form-control " onchange="selectWinner();">
 												<option <?php if (isset($match_data[0]['winner_id']) && $match_data[0]['winner_id']==$match_data[0]['a_id']) echo ' selected';?> value="{{ $match_data[0]['a_id'] }}" >{{ $team_a_name }}</option>
 												<option <?php if (isset($match_data[0]['winner_id']) && $match_data[0]['winner_id']==$match_data[0]['b_id']) echo ' selected';?> value="{{ $match_data[0]['b_id'] }}">{{ $team_b_name }}</option>
 											</select>
 										</div>
+										</div>
+										</div>
+										<div class="col-sm-4">
+											<div class="section">
 										<div class="form-group scorescard_stats">
 
 											<label class="">Select Player of Match:</label>
-											<select name="player_of_the_match" id="player_of_the_match" class=" form-control selectpicker" onchange="">
+											<select name="player_of_the_match" id="player_of_the_match" class=" form-control " onchange="">
 												<option value="0" disabled="">Team A</option>
 												@foreach($team_a_kabaddi_scores_array as $tm_player)
 													<option value="{{$tm_player['user_id']}}" @if($match_data[0]['player_of_the_match']==$tm_player['user_id'])?'selected':'' @endif >{{$tm_player['player_name']}}</option>
@@ -890,9 +900,11 @@ input:read-only {
 												@endforeach
 											</select>
 										</div>
+												</div>
+											</div>
+								</div>
 
 
-									</div>
 
 
 <!--********* MATCH REPORT Start **************!-->
@@ -1178,21 +1190,19 @@ $(document).ready(function(){
 			var value = $( "#match_result" ).val();
 			if(value=='win' || value=='walkover')
 			{
-				$("label.show_teams").show();
-				$('#winner_id').selectpicker('show');
+				$(".show_teams").show();			
+			
 					selectWinner();
 			}else
 			{
-				$("label.show_teams").hide();
-				$('#winner_id').selectpicker('hide');
-				
+				$(".show_teams").hide();							
 				$('#winner_team_id').val('');
 			}
 		}
 		function selectWinner()
 		{
 			$('#winner_team_id').val($('#winner_id').val());
-			$("#winner_id").hide();
+			//$("#winner_id").hide();
 		}
 		var team_a_count='{{ (count($team_a_kabaddi_scores_array)>0)?count($team_a_kabaddi_scores_array):1 }}';
 		var team_b_count='{{ (count($team_b_kabaddi_scores_array)>0)?count($team_b_kabaddi_scores_array):1 }}';
