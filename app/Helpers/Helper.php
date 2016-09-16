@@ -1994,7 +1994,7 @@ class Helper {
 
                 break;
 
-                case '6':           //basketball
+                case in_array($match_model->sports_id, [6,16]):           //basketball
                    
             $match_model->scores=$match_details->{$a_id}->total_points.' - '. $match_details->{$b_id}->total_points;
 
@@ -2086,7 +2086,7 @@ class Helper {
         $diff=$total_rounds- $round_number;
 
         $round_names=[];
-        $round_names[-1]='';
+        $round_names[-1]='WINNER';
         $round_names[-2]='';
         $round_names[0]='FINAL';
         $round_names[1]='SEMI FINAL';
@@ -2229,6 +2229,7 @@ class Helper {
     }
 
     public static function getThirdPosition($tournament_id, $round){
+
             $check_schedule=MatchSchedule::whereTournamentId($tournament_id)
                                          ->whereTournamentRoundNumber($round)
                                          ->whereTournamentMatchNumber(2)
@@ -2237,7 +2238,7 @@ class Helper {
             if(!$check_schedule){
                 $semi_final_schedule=MatchSchedule::whereTournamentId($tournament_id)
                                                 ->whereTournamentRoundNumber($round - 1)
-                                                ->take(2)->get();
+                                                ->get();
 
             $matchScheduleDetails=$semi_final_schedule[0];
 
@@ -2278,15 +2279,44 @@ class Helper {
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
                 'game_type'     => $matchScheduleDetails['game_type'],
-                'number_of_rubber' => $matchScheduleDetails['number_of_rubber']
+                'number_of_rubber' => $matchScheduleDetails['number_of_rubber'],
+                'is_third_position'=> 1,
             ];
 
-            $check_schedule=MatchSchedule::insert($scheduleArray);
+            MatchSchedule::insert($scheduleArray);
+            $check_schedule=MatchSchedule::whereTournamentId($tournament_id)
+                                         ->whereTournamentRoundNumber($round)
+                                         ->whereTournamentMatchNumber(2)
+                                         ->first();
             }
 
+        $isOwner = 0;        
+        if(Helper::isTournamentOwner($check_schedule->tournament->manager_id,$check_schedule->tournament->tournament_parent_id)) {
+        $isOwner=1;
+        }
+            if(!empty($check_schedule['match_start_date'])){
+              $matchStartDate = Carbon::createFromFormat('Y-m-d', $check_schedule['match_start_date']);
+                        if (!empty($check_schedule['winner_id']) && $check_schedule['match_status'] == 'completed')
+                        {
+                            $check_schedule['winner_text'] = trans('message.schedule.matchstats');
+                        }
+            
+//                            else if (Carbon::now()->gte($matchStartDate) && $schedule['match_invite_status']=='accepted') {
+                        else if (Carbon::now()->gte($matchStartDate))
+                        {
+                            if ($isOwner)
+                            {
+                                $check_schedule['winner_text'] = trans('message.schedule.addscore');
+                            }
+                            else{
+                                $check_schedule['winner_text'] = trans('message.schedule.viewscore');
+                            }
+                        }
+        }
 
             return $check_schedule;
     }
+
 
    
 

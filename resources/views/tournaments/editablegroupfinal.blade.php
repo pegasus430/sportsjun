@@ -28,11 +28,11 @@
 
 	<br>
 	<div class="col-sm-12">
-    <div class="pull-left half-width col-xs-12 col-sm-6 "> <center><input class='full-width form-control dark-border' placeholder="filter match e.g team name, date" onkeyup="filterDiv(this)"></center>
+    <div class="pull-left col-xs-12 col-sm-6 "> <center><input  type='text' class=' form-control dark-border' placeholder="filter match e.g team name, date" onkeyup="filterDiv(this)"></center>
     </div>
 @if($isOwner)
-<span class="pull-right">
-<a href='/download/schedules?tournament_id={{$tournament_id}}' class="btn-danger btn"><i class="fa fa-download"></i> Download Schedule </a>
+<div class="pull-right">
+<button type='button' onclick="downloadPdf(this)" link='/download/schedules?tournament_id={{$tournament_id}}' class="btn-danger btn" name='match_schedule_tournament_{{$tournament_id}}'><i class="fa fa-download"></i> Download Schedule </a>
 </span>
 @endif
    </div>
@@ -546,6 +546,35 @@ function addRoundMatchesSchedule(tournamentId,roundNumber, matchNumber) {
 		
 	}
 
+
+
+function downloadPdf(that){
+	var src =$(that); 
+	var link =src.attr('link');
+	var d = new Date();	
+	var name = src.attr('name') + '_'+d.getTime();
+
+	$.ajax({
+		url:link,
+		success:function(response){
+	
+		var specialElementHandlers = {
+				'#bypassme': function(element, renderer) {
+				return true;
+				}
+			}
+
+        var printDoc = new jsPDF('p', 'in', 'letter');
+        printDoc.fromHTML(response, 15, 15, {
+        	'width': 1800,
+            'elementHandlers': specialElementHandlers
+        }, function(){         
+             printDoc.save(name+'.pdf');
+         }); 
+   
+		}
+	})
+}
 	
 
 </script>

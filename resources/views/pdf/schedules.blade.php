@@ -1,12 +1,21 @@
 @extends('layouts.print')
 
 @section('content')
+<style>
+	table{
+		background: white
+	}
+</style>
 
+			<center> 
+			<div style="">
+					<h3>{{$tournament->name}}</h3>
+			</div>
+			  </center>
+
+
+		<table style="width:100%">
 		
-<div class="row">
-	<div class="col-sm-12">
-		<table class="table table-stripped table-bordered">
-				<thead>
 					<tr>
 						<th> Teams </th>
 						<th> Scheduled Date </th>
@@ -16,9 +25,7 @@
 						<th> Winner </th>
 						<th></th>
 					</tr>
-				</thead>
-
-				<tbody>
+				
 							@foreach($schedules as  $match)
 									<?php if($match->match_status=='completed') $match_class='sub_tour';
 										  else $match_class='bg-grey';
@@ -27,16 +34,16 @@
 										  else $match_started=true;
 								    ?>
 
-							 <tr class=" {{$match_class}}" >
+							 <tr  >
 							 	     <td>	
 					@if($match['schedule_type']=='team' )
-						<div class="team_player_sj_img">
-										{!! Helper::Images($team_logo[$match['a_id']]['url'],'teams',array('class'=>'img-circle img-border ','height'=>32,'width'=>32) )!!}
-						</div>
+					
+					{!! Helper::Images($team_logo[$match['a_id']]['url'],'teams',array('class'=>'img-circle img-border ','height'=>32,'width'=>32) )!!}
+
 						{{ $team_name_array[$match['a_id']] }}	{{'VS'}}
-						<div class="team_player_sj_img">
+					
 										{!! Helper::Images($team_logo[$match['b_id']]['url'],'teams',array('class'=>'img-circle img-border ','height'=>32,'width'=>32) )!!}
-						</div>   
+					
 						{{ $team_name_array[$match['b_id']] }}
 
 					@else	              					
@@ -70,11 +77,8 @@
 					</tr>			
 					@endforeach
 
-				</tbody>
 
 		</table>
-	</div>
-</div>
 
 @stop
 

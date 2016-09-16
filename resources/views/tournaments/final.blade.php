@@ -19,6 +19,8 @@
   
 }
 
+<?php $empty_rounds=[];?>
+
 </style>
 
 <!--  <button class="btn btn-danger" onclick="printToPdf('canvas')"> Download</button> -->
@@ -119,7 +121,10 @@
         <div class="col-sm-2">
             <div class="round-{{Helper::convert_number_to_words($round)}}">
                 <div class="round"><p>{{$bracket_name=Helper::getRoundStage($tournament_id, $round)}}</p></div>
-
+                <?php 
+                      $new_index=0;
+                      $max_matches = floor($tournamentDetails[0]['final_stage_teams']/(2 *$round)); 
+                      ?>
                  @if(count($bracketTeamArray))
                     <?php
                         if(empty($minHeight)) {
@@ -139,12 +144,17 @@
                         }
                         
                         $actualHeigh = $height.'px';
+                        $has_removed=0;
                     ?>
                     @foreach($bracketTeamArray as $brk => $bracketTeam)
-                      <div class="match_set" style="height: <?php echo $height.'px';?>">
+                      
+                    <div class="match_set remove_if_empty " style="height: <?php echo $height.'px';?>">
                         <ul  id="tour_{{$round}}_match_{{($brk+1)}}">
                             @foreach($bracketTeam as $bt => $bracket)
                                 @if(isset($bracket['tournament_round_number']) && $bracket['tournament_round_number']==$round)
+                   <?php 
+                        $new_index++;
+                    ?>
 
                                     @if($round==($lastRoundWinner+1))
                                         <div class="clearfix">
@@ -191,7 +201,17 @@
                                                 <span></span>
                                         @endif
                                     </li>
-                                @endif
+
+                                @else
+                                 
+                                  <?php 
+                                    if(!in_array($round, $empty_rounds) ) array_push($empty_rounds, $round);?>
+                                    @if(($new_index*2)>=$max_matches && $has_removed==0)
+                                      <?php $has_removed=1;?>
+                                         <div class="remove_if_empty_{{$round}}"></div>
+                                    @endif
+                                  @endif
+                         
                             @endforeach
                         </ul>
                         </div>
@@ -204,38 +224,77 @@
 
               <div class="round"><p> THIRD POSITION    </p></div>
 
-                <?php $bracket  = Helper::getThirdPosition($tournament_id, $round);
-                              
+                <?php $schedule  = Helper::getThirdPosition($tournament_id, $round);                                                 
                           ?>                    
                                 
+ <div class="match_set" style="height: 10px;">
+                    @if(isset($schedule['tournament_round_number']) && $schedule['tournament_round_number']==$round)
+                           <ul class="window jtk-node">
+                               <div class="clearfix">
+                                  <span class="tour_match_date fa fa-info" data-toggle="tooltip" data-placement="left" title="{{$schedule['match_start_date'].$sport_name.' '.$schedule['match_type']}}"></span>
+                                  <span class="tour_score">
 
-              <div class="match_set" >
-                        <ul  id="tour_{{$round}}_match_{{($brk+1)}}"> 
-                          @if(isset($bracket['match_start_date']))
-                                            <div class="clearfix">
-                                               <span class="tour_match_date fa fa-info"  data-toggle="tooltip" data-placement="left" title="{{(isset($bracket['winner_text'])&&$bracket['winner_text']!='edit')?$bracket['match_start_date'].$sport_name.' '.$bracket['match_type']:trans('message.tournament.final.editscheduletoaddscore')}}"></span>
-                                               <span class="tour_score">
-                                               @if(isset($bracket['winner_text']))
-                                                    @if($bracket['winner_text']=='edit')
-                                                        @if(isset($bracket['id']))
-                                                            <a href="javascript:void(0)" id="scheduleEdit_{{$bracket['id']}}" onclick="editMatchSchedule({{$bracket['schdule_id']}},1,{{$round}},'myModal')">Edit</a>
-                                                        @endif    
-                                                    @else
-                                                        @if(isset($bracket['id']))
-                                                            <a href="{{ url('match/scorecard/edit/'.$bracket['id']) }}">{{$bracket['winner_text']}}</a>
-                                                        @endif    
-                                                    @endif
-                                               @else
-                                                    @if($isOwner)
-                                                        @if(isset($bracket['id']))
-                                                            <a href="javascript:void(0)" id="scheduleEdit_{{$bracket['id']}}" onclick="editMatchSchedule({{$bracket['schdule_id']}},1,{{$round}},'myModal')">Edit</a>
-                                                        @endif    
-                                                    @endif
-                                               @endif
-                                               </span>
-                                            </div>
-                                        @endif                                
+                                  @if(isset($schedule['winner_text']))
+                                  <a href="{{ url('match/scorecard/edit/'.$schedule['id']) }}">{{$schedule['winner_text']}}</a>
+                                  @else
+                                      @if($isOwner)
+                                          <a href="javascript:void(0)" id="scheduleEdit_{{$schedule['id']}}"  onclick="editMatchSchedule({{$schedule['id']}},1,{{$round}},'myModal')">Edit</a>
+                                      @endif
+                                  @endif
+                                  </span>
+                               </div>
+                          <div  id="tour_{{$round}}_match_{{$schedule['tournament_match_number']}}">
+                              <li title="{{isset($schedule[$scheduleTypeOne]['name'])?$schedule[$scheduleTypeOne]['name']:'Bye'}}"  data-toggle="tooltip" data-placement="top">
+                                {!! Helper::Images($schedule[$scheduleTypeOne]['url'],config('constants.PHOTO_PATH.TEAMS_FOLDER_PATH'),array('class'=>'img-circle img-border','height'=>30,'width'=>30) )!!}
+                                @if(isset($schedule[$scheduleTypeOne]['name']))
+                                    <span>
+                                        <a href="{{ url($linkUrl,[$schedule[$scheduleTypeOne]['id']]) }}">
+                                            {{Helper::get_first_20_letters($schedule[$scheduleTypeOne]['name'])}}
 
+                                        </a>
+                                    </span>
+                                @else
+                                   <span>{{trans('message.bye')}}</span>
+                                @endif
+                              </li>
+                              <li title="{{isset($schedule[$scheduleTypeTwo]['name'])?$schedule[$scheduleTypeTwo]['name']:'Bye'}}"  data-toggle="tooltip" data-placement="top">
+                                {!! Helper::Images($schedule[$scheduleTypeTwo]['url'],config('constants.PHOTO_PATH.TEAMS_FOLDER_PATH'),array('class'=>'img-circle img-border','height'=>30,'width'=>30) )!!}
+                                @if(isset($schedule[$scheduleTypeTwo]['name']))
+                                   <span>
+                                        <a href="{{ url($linkUrl,[$schedule[$scheduleTypeTwo]['id']]) }}">
+                                            {{Helper::get_first_20_letters($schedule[$scheduleTypeTwo]['name'])}}                                          
+                                        </a>
+                                   </span>
+                                @else
+                                   <span>{{trans('message.bye')}}</span>
+                                @endif
+                              </li>
+                            </div>
+                          </ul>
+                    @else
+                          
+                    @endif
+                 </div>
+                @endif
+
+          <!-- End of third Position -->
+
+          <!-- Third Position Winner -->
+             @if($bracket_name=='WINNER')            
+          <div class="match_set remove_if_empty ">
+                <?php $bracket = Helper::getThirdPosition($tournament_id, $round-1);
+                      $schedule=$bracket;                                            
+                          ?>                    
+                                dfdf
+
+                  @if(!empty($schedule['winner_id']))
+                     
+                        <ul  id="tour_{{$round}}_match_{{($brk+1)}}">
+                                                             
+                                        <div class="clearfix">
+                                            <span class="winner_text"><span class="fa fa-star" style="color:#f27676;"></span>&nbsp;&nbsp;Third Position&nbsp;&nbsp;</span>
+                                        </div>
+                                   
 
                                    <li title="{{isset($bracket['name'])?$bracket['name']:''}}"  data-toggle="tooltip" data-placement="top">
                                        {!! Helper::Images($bracket['url'],config('constants.PHOTO_PATH.TEAMS_FOLDER_PATH'),array('class'=>'img-circle img-border','height'=>30,'width'=>30) )!!}
@@ -249,13 +308,15 @@
                                                 <span></span>
                                         @endif
                                     </li>
-                              
-                          
-                        </ul>
-                        </div>  
+
+                    @else
+                           
+                    @endif
+                 </div>
                 @endif
 
-          <!-- End of third Position -->
+          <!-- End of third Position Winner-->
+
 
 
             </div>
@@ -439,4 +500,19 @@ function addRoundMatchesSchedule(tournamentId,roundNumber, matchNumber) {
 
         doc.save('Test.pdf');
     }
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        var empty_rounds = {{json_encode($empty_rounds)}};  
+
+          for(i=0; i<=empty_rounds.length; i++){
+             // $('.remove_if_empty_'+empty_rounds[i]).closest('.match_set').remove();
+          }
+
+          console.log(empty_rounds);
+
+    })
+
 </script>
