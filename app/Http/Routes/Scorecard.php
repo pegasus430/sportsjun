@@ -19,6 +19,14 @@ Route::group(['prefix'=>'match'], function(){
     Route::get('/getHockeyDetails', 'User\ScoreCard\HockeyScorecardController@getHockeyDetails');
 
 
+      //routes for waterpolo
+    Route::post('confirmSquadultimateFrisbee',         ['as'=>'match/confirmSquadUltimateFrisbee', 'uses'=>'User\ScoreCard\WaterPoloScorecardController@confirmSquad']);
+    Route::post('ultimateFrisbeeSwapPlayers',    ['as'=>'match/hockeySwapPlayersUltimateFrisbee', 'uses'=>'User\ScoreCard\UltimateFrisbeeScorecardController@UltimateFrisbeeSwapPlayers']);
+    Route::post('/endMatchRecordultimateFrisbee', 'User\ScoreCard\UltimateFrisbeeScorecardController@UltimateFrisbeeStoreRecord');
+    Route::post('/saveMatchRecordultimateFrisbee', 'User\ScoreCard\UltimateFrisbeeScorecardController@UltimateFrisbeeSaveRecord');
+    Route::post('manualScoringultimateFrisbee', ['as'=>'match/manualScoringUltimateFrisbee', 'uses'=>'User\ScoreCard\UltimateFrisbeeScorecardController@manualScoring']);
+
+
      //routes for basketball
     Route::post('confirmSquadbasketball',         ['as'=>'match/confirmSquadBasketball', 'uses'=>'User\ScoreCard\BasketballScoreCardController@confirmSquad']);
     Route::post('basketballSwapPlayers',    ['as'=>'match/hockeySwapPlayersBasketball', 'uses'=>'User\ScoreCard\BasketballScoreCardController@basketballSwapPlayers']);
@@ -26,12 +34,13 @@ Route::group(['prefix'=>'match'], function(){
     Route::post('/saveMatchRecordBasketball', 'User\ScoreCard\BasketballScoreCardController@basketballSaveRecord');
     Route::post('manualScoringBasketball', ['as'=>'match/manualScoringBasketball', 'uses'=>'User\ScoreCard\BasketballScoreCardController@manualScoring']);
 
-      //routes for basketball
+      //routes for waterpolo
     Route::post('confirmSquadwaterpolo',         ['as'=>'match/confirmSquadwaterpolo', 'uses'=>'User\ScoreCard\WaterPoloScorecardController@confirmSquad']);
     Route::post('waterpoloSwapPlayers',    ['as'=>'match/hockeySwapPlayersWaterpolo', 'uses'=>'User\ScoreCard\WaterPoloScorecardController@waterpoloSwapPlayers']);
     Route::post('/endMatchRecordwaterpolo', 'User\ScoreCard\WaterPoloScorecardController@waterpoloStoreRecord');
     Route::post('/saveMatchRecordwaterpolo', 'User\ScoreCard\WaterPoloScorecardController@waterpoloSaveRecord');
     Route::post('manualScoringwaterpolo', ['as'=>'match/manualScoringwaterpolo', 'uses'=>'User\ScoreCard\WaterPoloScorecardController@manualScoring']);
+
 
      //routes for volleyball
     Route::post('confirmSquadvolleyball',        

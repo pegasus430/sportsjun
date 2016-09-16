@@ -166,5 +166,9 @@ class Tournaments extends Model
             return $this->hasMany('App\Model\MatchSchedule')->where('tournament_round_number','!=', null);
     }
 
+    function settings(){
+            return $this->hasOne('App\Model\TournamentMatchPreference','tournament_id');
+    }
+
     
 }

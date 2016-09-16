@@ -2547,6 +2547,7 @@ class TournamentsController extends Controller
 		$t_settings=Settings::where('tournament_id', $tournament_id)->first();
 		$settings=json_encode(Request::all());
 		$t_settings->settings=$settings;
+		$t_settings->has_setup_details=1;
 		$t_settings->save();
 
 		return redirect()->back();

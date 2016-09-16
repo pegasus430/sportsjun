@@ -114,7 +114,7 @@
                     </p>
                             <span class=''>{{Helper::getMatchDetails($schedule['id'])->address}}</span><br>
                    Status: <span class='sports_text'>{{ ucfirst($schedule['match_status']) }}</span> <br>
-                    Scores: <span class='sports_text'>{{Helper::getMatchDetails($schedule['id'])->scores}} </span> <br>
+                    Scores: <span class=''>{{Helper::getMatchDetails($schedule['id'])->scores}} </span> <br>
                     @if(!is_null(Helper::getMatchDetails($schedule['id'])->winner_id))
                             <span class='red'>Winner: {{Helper::getMatchDetails($schedule['id'])->winner}} </span>
                                 

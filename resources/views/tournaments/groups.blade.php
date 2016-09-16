@@ -104,4 +104,16 @@ $(function() {
         });
 });    
 </script>
+
+@if(Helper::getTournamentDetails($tournamentDetails[0]['id'])->settings->has_setup_details==0)
+    <script>
+    $(document).ready(function(){
+         getTournamentSettings({{$tournamentDetails[0]['id']}});
+        $('#settings').modal('show');
+    })
+   
+    </script>    
+@endif
+
+
 @endsection

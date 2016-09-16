@@ -1,9 +1,11 @@
 <?php
-
 namespace App\Http\Controllers\User\ScoreCard;
+
+use Illuminate\Http\Request as ObjectRequest;       //get all my requests data as object
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Model\Tournaments;
 use App\Http\Controllers\User\ScoreCardController as parentScoreCardController;
 use App\Model\MatchSchedule;
 use App\Model\UserStatistic;
@@ -12,8 +14,9 @@ use App\Model\City;
 use App\Model\Team;
 use App\Model\TeamPlayers;
 use App\Model\Sport;
-use App\Model\HockeyPlayerMatchwiseStats;
-use App\Model\HockeyStatistic;
+use App\Model\UltimateFrisbeePlayerMatchwiseStats;
+use App\Model\UltimateFrisbeePlayerMatchScore;
+use App\Model\UltimateFrisbeeStatistic;
 use App\Model\Photo;
 use App\User;
 use DB;
@@ -25,13 +28,11 @@ use DateTime;
 use App\Helpers\AllRequests;
 use Session;
 use Request;
-use App\Model\Tournaments;
 
-class HockeyScorecardController extends parentScoreCardController
+class UltimateFrisbeeScorecardController extends parentScoreCardController
 {
-    
-
-    public function hockeyScoreCard($match_data,$sportsDetails=[],$tournamentDetails=[],$is_from_view=0)
+ 
+ public function ultimateFrisbeeScoreCard($match_data,$sportsDetails=[],$tournamentDetails=[],$is_from_view=0)
     {
         $loginUserId = '';
         $loginUserRole = '';
@@ -44,29 +45,32 @@ class HockeyScorecardController extends parentScoreCardController
 
         $team_a_players = array();
         $team_b_players = array();
+       
         $team_a_id = $match_data[0]['a_id'];
         $team_b_id = $match_data[0]['b_id'];
         $team_a_playerids = explode(',',$match_data[0]['player_a_ids']);
         $team_b_playerids = explode(',',$match_data[0]['player_b_ids']);
 
+       
         //get match id
         $match_id=$match_data[0]['id'];
+        $match_players = ultimateFrisbeePlayerMatchwiseStats::whereMatchId($match_id)->get(['user_id'])->toArray();
 
-        //get hockey scores for team a
-        $team_a_hockey_scores = HockeyPlayerMatchwiseStats::select()->where('match_id',$match_data[0]['id'])->where('team_id',$team_a_id)->get();
+        //get ultimateFrisbee scores for team a
+        $team_a_ultimateFrisbee_scores = ultimateFrisbeePlayerMatchwiseStats::select()->where('match_id',$match_data[0]['id'])->where('team_id',$team_a_id)->get();
 
-        $team_a_hockey_scores_array = array();
-        if(count($team_a_hockey_scores)>0)
+        $team_a_ultimateFrisbee_scores_array = array();
+        if(count($team_a_ultimateFrisbee_scores)>0)
         {
-            $team_a_hockey_scores_array = $team_a_hockey_scores->toArray();
+            $team_a_ultimateFrisbee_scores_array = $team_a_ultimateFrisbee_scores->toArray();
         }
 
-        //get hockey scores for team b
-        $team_b_hockey_scores = HockeyPlayerMatchwiseStats::select()->where('match_id',$match_data[0]['id'])->where('team_id',$team_b_id)->get();
-        $team_b_hockey_scores_array = array();
-        if(count($team_b_hockey_scores)>0)
+        //get ultimateFrisbee scores for team b
+        $team_b_ultimateFrisbee_scores = ultimateFrisbeePlayerMatchwiseStats::select()->where('match_id',$match_data[0]['id'])->where('team_id',$team_b_id)->get();
+        $team_b_ultimateFrisbee_scores_array = array();
+        if(count($team_b_ultimateFrisbee_scores)>0)
         {
-            $team_b_hockey_scores_array = $team_b_hockey_scores->toArray();
+            $team_b_ultimateFrisbee_scores_array = $team_b_ultimateFrisbee_scores->toArray();
         }
 
         //get player names
@@ -74,8 +78,8 @@ class HockeyScorecardController extends parentScoreCardController
         $b_team_players = User::select()->whereIn('id',$team_b_playerids)->get();
 
         //get players statistics
-        $team_a_players_stat=HockeyPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_a_id)->get();
-        $team_b_players_stat=HockeyPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_b_id)->get();
+        $team_a_players_stat=ultimateFrisbeePlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_a_id)->get();
+        $team_b_players_stat=ultimateFrisbeePlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_b_id)->get();
 
         //get team names
         $team_a_name = Team::where('id',$team_a_id)->pluck('name');
@@ -108,7 +112,7 @@ class HockeyScorecardController extends parentScoreCardController
         //bye match
         if($match_data[0]['b_id']=='' && $match_data[0]['match_status']=='completed')
         {
-            $sport_class = 'hockey_scorecard ss_bg';
+            $sport_class = 'bascketball_scorecard ss_bg';
             $upload_folder = 'teams';
             return view('scorecards.byematchview',array('team_a_name'=>$team_a_name,'team_a_logo'=>$team_a_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'sport_class'=>$sport_class));
         }
@@ -197,9 +201,9 @@ class HockeyScorecardController extends parentScoreCardController
 
         $team_a_city = Helper::getTeamCity($match_data[0]['a_id']);
         $team_b_city = Helper::getTeamCity($match_data[0]['b_id']);
-        $form_id = 'hockey';
+        $form_id = 'bascketball';
 
-        if($is_from_view==1 || (!empty($score_status_array['added_by']) && $score_status_array['added_by']!=$loginUserId && $match_data[0]['scoring_status']!='rejected') || $match_data[0]['match_status']=='completed' || $match_data[0]['scoring_status']=='approval_pending' || $match_data[0]['scoring_status']=='approved' || !$isValidUser)//hockey score view only
+        if($is_from_view==1 || (!empty($score_status_array['added_by']) && $score_status_array['added_by']!=$loginUserId && $match_data[0]['scoring_status']!='rejected') || $match_data[0]['match_status']=='completed' || $match_data[0]['scoring_status']=='approval_pending' || $match_data[0]['scoring_status']=='approved' || !$isValidUser)//ultimateFrisbee score view only
         {
             $player_name_array = array();
             $users = User::select('id', 'name')->get()->toArray(); //get player names
@@ -209,18 +213,250 @@ class HockeyScorecardController extends parentScoreCardController
             $player_of_the_match=$match_data[0]['player_of_the_match'];
             if($player_of_the_match_model=User::find($player_of_the_match))$player_of_the_match=$player_of_the_match_model;
             else $player_of_the_match=NULL;
-            return view('scorecards.hockeyscorecardview',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'team_a'=>[''=>'Select Player']+$team_a,'team_b'=>[''=>'Select Player']+$team_b,'match_data'=>$match_data,'team_a_name'=>$team_a_name,'team_b_name'=>$team_b_name,'team_a_hockey_scores_array'=>$team_a_hockey_scores_array,'team_b_hockey_scores_array'=>$team_b_hockey_scores_array,'team_a_count'=>$team_a_count,'team_b_count'=>$team_b_count,'team_a_logo'=>$team_a_logo,'team_b_logo'=>$team_b_logo,'team_a_goals'=>$team_a_goals,'team_b_goals'=>$team_b_goals,'player_name_array'=> $player_name_array,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'team_a_red_count'=>$team_a_red_count,'team_a_yellow_count'=>$team_a_yellow_count,'team_b_red_count'=>$team_b_red_count,'team_b_yellow_count'=>$team_b_yellow_count,'form_id'=>$form_id,'team_a_players'=>$team_a_players, 'team_b_players'=>$team_b_players, 'player_of_the_match'=>$player_of_the_match));
-        }else //hockey score view and edit
+            return view('scorecards.ultimateFrisbeescorecardview',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'team_a'=>[''=>'Select Player']+$team_a,'team_b'=>[''=>'Select Player']+$team_b,'match_data'=>$match_data,'team_a_name'=>$team_a_name,'team_b_name'=>$team_b_name,'team_a_ultimateFrisbee_scores_array'=>$team_a_ultimateFrisbee_scores_array,'team_b_ultimateFrisbee_scores_array'=>$team_b_ultimateFrisbee_scores_array,'team_a_count'=>$team_a_count,'team_b_count'=>$team_b_count,'team_a_logo'=>$team_a_logo,'team_b_logo'=>$team_b_logo,'team_a_goals'=>$team_a_goals,'team_b_goals'=>$team_b_goals,'player_name_array'=> $player_name_array,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'team_a_red_count'=>$team_a_red_count,'team_a_yellow_count'=>$team_a_yellow_count,'team_b_red_count'=>$team_b_red_count,'team_b_yellow_count'=>$team_b_yellow_count,'form_id'=>$form_id,'team_a_players'=>$team_a_players, 'team_b_players'=>$team_b_players, 'player_of_the_match'=>$player_of_the_match, 'match_players'=>$match_players));
+        }else //ultimateFrisbee score view and edit
         {
-            return view('scorecards.hockeyscorecard',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'team_a'=>[''=>'Select Player']+$team_a,'team_b'=>[''=>'Select Player']+$team_b,'match_data'=>$match_data,'team_a_name'=>$team_a_name,'team_b_name'=>$team_b_name,'team_a_hockey_scores_array'=>$team_a_hockey_scores_array,'team_b_hockey_scores_array'=>$team_b_hockey_scores_array,'team_a_count'=>$team_a_count,'team_b_count'=>$team_b_count,'team_a_logo'=>$team_a_logo,'team_b_logo'=>$team_b_logo,'team_a_goals'=>$team_a_goals,'team_b_goals'=>$team_b_goals,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'team_a_red_count'=>$team_a_red_count,'team_a_yellow_count'=>$team_a_yellow_count,'team_b_red_count'=>$team_b_red_count,'team_b_yellow_count'=>$team_b_yellow_count,'form_id'=>$form_id, 'team_a_players'=>$team_a_players, 'team_b_players'=>$team_b_players));
+            return view('scorecards.ultimateFrisbeescorecard',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'team_a'=>[''=>'Select Player']+$team_a,'team_b'=>[''=>'Select Player']+$team_b,'match_data'=>$match_data,'team_a_name'=>$team_a_name,'team_b_name'=>$team_b_name,'team_a_ultimateFrisbee_scores_array'=>$team_a_ultimateFrisbee_scores_array,'team_b_ultimateFrisbee_scores_array'=>$team_b_ultimateFrisbee_scores_array,'team_a_count'=>$team_a_count,'team_b_count'=>$team_b_count,'team_a_logo'=>$team_a_logo,'team_b_logo'=>$team_b_logo,'team_a_goals'=>$team_a_goals,'team_b_goals'=>$team_b_goals,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'team_a_red_count'=>$team_a_red_count,'team_a_yellow_count'=>$team_a_yellow_count,'team_b_red_count'=>$team_b_red_count,'team_b_yellow_count'=>$team_b_yellow_count,'form_id'=>$form_id, 'team_a_players'=>$team_a_players, 'team_b_players'=>$team_b_players, 'match_players'=>$match_players));
         }
 
     }
 
-
-    public function insertAndUpdateHockeyScoreCard(){
-
+        //select players for the match, substitute and playing. 
+    public function confirmSquad(){
         $request=Request::all();
+        $match_id       =$request['match_id'];
+
+        $tournament_id  =isset($request['tournament_id'])?$request['tournament_id']:null;
+        $team_a_id      =$request['team_a_id'];
+        $team_b_id      =$request['team_b_id'];
+
+        $match_model=MatchSchedule::find($match_id);
+        $match_model->hasSetupSquad=1;
+        $match_model->save();
+
+        $number_of_quarters=$request['preferences']['number_of_quarters'];
+        $quarter_time=$request['preferences']['quarter_time'];
+        $max_fouls=$request['preferences']['max_fouls'];
+
+        $team_a_name=$request['team_a_name'];
+        $team_b_name=$request['team_b_name'];
+        $team_a_playing_players=isset($request['team_a']['playing'])?$request['team_a']['playing']:[];
+        $team_b_playing_players=isset($request['team_b']['playing'])?$request['team_b']['playing']:[];
+
+        $team_a_substitute_players=isset($request['team_a']['substitute'])?$request['team_a']['substitute']:[];
+        $team_b_substitute_players=isset($request['team_b']['substitute'])?$request['team_b']['substitute']:[];
+
+        $players_a_details=[];
+        $players_b_details=[];
+
+        $default_player_details=[           //default player info
+            "points_1"=>0,
+            "points_2"=>0,
+            "points_3"=>0,
+            "fouls"=>0,
+            "total_points"=>0,
+            "playing_status"=>0,
+            "dismissed"=>0, 
+            "quarters_played"=>'',
+            "quarter_1"=>[
+                    "points_1"=>0,
+                    "fouls"=>0,
+                    "total_points"=>0,
+            ],
+            "quarter_2"=>[
+                    "points_1"=>0,
+                    "fouls"=>0,
+                    "total_points"=>0,
+            ],
+            "quarter_3"=>[
+                     "points_1"=>0,
+                    "fouls"=>0,
+                    "total_points"=>0
+            ],
+            "quarter_4"=>[
+                    "points_1"=>0,
+                    "fouls"=>0,
+                    "total_points"=>0,
+                ],
+            "quarter_5"=>(object)[
+                    "points_1"=>0,
+                    "fouls"=>0,
+                    "total_points"=>0,
+                ],
+            "quarter_6"=>(object)[
+                   "points_1"=>0,
+                    "fouls"=>0,
+                    "total_points"=>0,
+                ]
+        ];
+
+        foreach($team_a_playing_players as $p){
+
+            $player_name=User::find($p)->name;
+            $default_player_details['playing_status']=1;
+            $this->insertultimateFrisbeeScore($p, $tournament_id, $match_id, $team_a_id,$player_name, $team_a_name,'P');
+            $players_a_details['player_'.$p]=$default_player_details;
+        }
+        foreach($team_a_substitute_players as $p){
+            $player_name=User::find($p)->name;
+            $this->insertultimateFrisbeeScore($p, $tournament_id, $match_id, $team_a_id,$player_name, $team_a_name,'S');
+            $players_a_details['player_'.$p]=$default_player_details; 
+        }
+        foreach($team_b_playing_players as $p){
+
+            $player_name=User::find($p)->name;
+             $default_player_details['playing_status']=1;
+            $this->insertultimateFrisbeeScore($p, $tournament_id, $match_id, $team_b_id,$player_name, $team_b_name,'P');
+            $players_b_details['player_'.$p]=$default_player_details;
+        }
+        foreach($team_b_substitute_players as $p){          
+            $player_name=User::find($p)->name;
+            $this->insertultimateFrisbeeScore($p, $tournament_id, $match_id, $team_b_id,$player_name, $team_b_name,'S');
+            $players_b_details['player_'.$p]=$default_player_details;     
+        }
+        
+        //insert the default match_details for the match
+        $match_model=MatchSchedule::find($match_id);
+        $match_details=[
+            "team_a"=>[
+                "id"=>$team_a_id,
+                "name"=>$team_a_name
+                    ],
+            "team_b"=>[
+                "id"=>$team_b_id,
+                "name"=>$team_b_name
+                    ],
+            "{$team_a_id}"  =>  [
+                "id"=>$team_a_id,
+                "total_points"=>0,
+                "fouls"=>0,
+                "players"=>$players_a_details,
+                ],
+            "{$team_b_id}"=>[
+                "id"=>$team_b_id,
+                "total_points"=>0,
+                "fouls"=>0,
+                "players"=>$players_b_details
+                ] ,           
+            "first_half"=>[
+
+            ],
+            "second_half"=>[
+               
+            ],          
+            "preferences"=>[
+                    'number_of_quarters'=>$number_of_quarters,
+                    'quarter_time'=>$quarter_time,
+                    'max_fouls'=>$max_fouls
+                 ],
+            
+            
+        ];
+
+        $match_model->match_details=json_encode($match_details);
+        $match_model->save();
+    }
+
+
+      public function insertultimateFrisbeeScore($user_id,$tournament_id,$match_id,$team_id,$player_name,$team_name,$playing_status='S')
+    {
+        $ultimateFrisbee_model = new ultimateFrisbeePlayerMatchwiseStats();
+        $ultimateFrisbee_model->user_id          = $user_id;
+        $ultimateFrisbee_model->tournament_id    = $tournament_id;
+        $ultimateFrisbee_model->match_id         = $match_id;
+        $ultimateFrisbee_model->team_id          = $team_id;
+        $ultimateFrisbee_model->player_name      = $player_name;
+        $ultimateFrisbee_model->team_name        = $team_name;
+        $ultimateFrisbee_model->playing_status   = $playing_status;
+        $ultimateFrisbee_model->save();
+    }
+
+
+    public function manualScoring(ObjectRequest $request){
+            $match_id=$request->match_id;
+            $match_model=MatchSchedule::find($match_id);
+            $match_details=json_decode($match_model->match_details);
+            $team_a_id=$match_model->a_id;
+            $team_b_id=$match_model->b_id;
+
+            ${$team_a_id.'_fouls'}=0;
+            ${$team_b_id.'_fouls'}=0;
+
+            ${$team_a_id.'_points'}=0;
+            ${$team_b_id.'_points'}=0;
+
+            $preferences=$match_details->preferences;
+            $number_of_quarters=$preferences->number_of_quarters;
+            $max_fouls=$preferences->max_fouls;
+
+            $players_stats=ultimateFrisbeePlayerMatchwiseStats::whereMatchId($match_id)->get();
+
+            foreach ($players_stats as $key => $player) {
+                //stores quarters played
+                        //$player->quarters_played=$request->{'quarters_'.$player->id};
+                        //$match_details->{$player->team_id}->players->{'player_'.$player->user_id}->quarters_played=$request->{'quarters_'.$player->id};
+
+                //number of points type
+                    $player->points_1=$request->{'points_1_'.$player->id};
+                    $player->points_2=$request->{'points_2_'.$player->id};
+                    $player->points_3=$request->{'points_3_'.$player->id};
+
+                $match_details->{$player->team_id}->players->{'player_'.$player->user_id}->points_1=$player->points_1;
+                $match_details->{$player->team_id}->players->{'player_'.$player->user_id}->points_2=$player->points_2;
+                $match_details->{$player->team_id}->players->{'player_'.$player->user_id}->points_3=$player->points_3;
+                
+
+                                //if player fouls is greater than max, return max to the player.
+                        if($request->{'fouls_'.$player->id}>$max_fouls) $request->{'fouls_'.$player->id}=$max_fouls;
+
+                                    //stores fouls per player
+                        $player->fouls=$request->{'fouls_'.$player->id};
+
+                        $match_details->{$player->team_id}->players->{'player_'.$player->user_id}->fouls=$request->{'fouls_'.$player->id};
+                        $match_details->{$player->team_id}->players->{'player_'.$player->user_id}->dismissed=1;
+
+                            
+                                    //stores points per player
+                        $total_points_per_player=0;
+                                for($i=1; $i<=$number_of_quarters; $i++){
+
+                            $total_points_per_player+=$request->{'quarters_'.$i.'_player_'.$player->id};
+                            $match_details->{$player->team_id}->players->{'player_'.$player->user_id}->{'quarter_'.$i}->total_points=$request->{'quarters_'.$i.'_player_'.$player->id};
+
+                            $player['quarter_'.$i]=$request->{'quarters_'.$i.'_player_'.$player->id};
+                        
+
+                                }
+
+                        //stores players total points
+                            $player->total_points=$total_points_per_player;
+                            $player->save();
+
+                        //store points to team
+                        ${$player->team_id.'_points'}+=$player->total_points;
+                                //stores fouls to teams
+                        ${$player->team_id.'_fouls'}+=$player->fouls;
+
+            }
+
+        $match_details->{$team_a_id}->fouls=${$team_a_id.'_fouls'};
+        $match_details->{$team_b_id}->fouls=${$team_b_id.'_fouls'};
+
+        $match_details->{$team_a_id}->total_points=${$team_a_id.'_points'};
+        $match_details->{$team_b_id}->total_points=${$team_b_id.'_points'};
+
+        $match_details=json_encode($match_details);
+
+        $match_model->match_details=$match_details;
+        $match_model->save();
+
+        return $match_details;
+    
+    }
+
+     public function ultimateFrisbeeStoreRecord(ObjectRequest $Objrequest){
+
+       $request=Request::all();
 
         $match_id=$request['match_id'];
         $first_half=isset($request['first_half'])?$request['first_half']:[];
@@ -230,9 +466,10 @@ class HockeyScorecardController extends parentScoreCardController
         $last_index=$request['last_index'];
         $match_data=matchSchedule::find($match_id);
         $match_details=$match_data['match_details'];
-        $hockey_player=HockeyPlayerMatchwiseStats::whereMatchId($match_id)->first();
+        $ultimateFrisbee_player=ultimateFrisbeePlayerMatchwiseStats::whereMatchId($match_id)->first();
         $delted_ids=$request['delted_ids'];
         $match_result=$request['match_result'];
+        $match_report=$request['match_report'];
         $winner_team_id = !empty(Request::get('winner_team_id'))?Request::get('winner_team_id'):NULL;//winner_id
         $player_of_the_match=isset($request['player_of_the_match'])?$request['player_of_the_match']:NULL;
 
@@ -240,84 +477,6 @@ class HockeyScorecardController extends parentScoreCardController
 
         $deleted_ids=explode(',',$delted_ids);
 
-
-        if(empty($match_details) || !isset(json_decode($match_details)->first_half)){
-            $match_details=[
-                "team_a"=>[
-                    "id"=>$team_a_id,
-                    "name"=>$team_a_name
-                    ],
-                "team_b"=>[
-                    "id"=>$team_b_id,
-                    "name"=>$team_b_name
-                    ],        
-                "{$team_a_id}"  =>  [
-                    "id"=>$team_a_id,
-                    "goals"=>0,
-                    "red_card_count"=>0,
-                    "yellow_card_count"=>0,
-                    "ball_percentage"=>0],
-                "{$team_b_id}"=>[
-                    "id"=>$team_b_id,
-                    "goals"=>0,
-                    "red_card_count"=>0,
-                    "yellow_card_count"=>0,
-                    "ball_percentage"=>0],
-                "first_half"=>[
-                    "goals"=>0,
-                    "team_{$team_a_id}_goals"=>0,
-                    "team_{$team_b_id}_goals"=>0,
-                    "team_{$team_a_id}_yellow_card_count"=>0,
-                    "team_{$team_b_id}_yellow_card_count"=>0,
-                    "team_{$team_a_id}_red_card_count"=>0,
-                    "team_{$team_b_id}_red_card_count"=>0,
-                    "red_card_count"=>0,
-                    "yellow_card_count"=>0,
-                    "goals_details"=>[],
-                    "red_card_details"=>[],
-                    "yellow_card_details"=>[]
-                ],
-                "second_half"=>[
-                    "goals"=>0,
-                    "team_{$team_a_id}_goals"=>0,
-                    "team_{$team_b_id}_goals"=>0,
-                    "team_{$team_a_id}_yellow_card_count"=>0,
-                    "team_{$team_b_id}_yellow_card_count"=>0,
-                    "team_{$team_a_id}_red_card_count"=>0,
-                    "team_{$team_b_id}_red_card_count"=>0,
-                    "red_card_count"=>0,
-                    "yellow_card_count"=>0,
-                    "goals_details"=>[],
-                    "red_card_details"=>[],
-                    "yellow_card_details"=>[]
-                ],
-                "penalties"=>[
-                    'score'=>'',
-                    'team_a'=>[
-                        'players'=>[],
-                        'goals'=>0,
-                    ],
-                    'team_b'=>[
-                        'players'=>[],
-                        'goals'=>0,
-                    ]
-                ]
-            ];
-            $match_details=json_decode(json_encode($match_details));
-        }
-        else $match_details=json_decode($match_details);
-
-        //set ball percentage statistics
-        $match_details->{$team_a_id}->ball_percentage=$request['ball_percentage_'.$team_a_id];
-        $match_details->{$team_b_id}->ball_percentage=$request['ball_percentage_'.$team_b_id];
-
-        $match_data->match_details=json_encode($match_details);
-        $match_data->save();
-
-
-
-
-        //get previous scorecard status data
         $loginUserId = Auth::user()->id;
         $scorecardDetails = MatchSchedule::where('id',$match_id)->pluck('score_added_by');
         $decode_scorecard_data = json_decode($scorecardDetails,true);
@@ -381,6 +540,7 @@ class HockeyScorecardController extends parentScoreCardController
                         'looser_id'=>$looser_team_id,
                         'has_result'     => $has_result,
                         'match_result'   => $match_result,
+                        'match_report'   => $match_report,
                         'is_tied'=>$is_tie,
                         'score_added_by'=>$json_score_status]);
 //                                Helper::printQueries();
@@ -395,7 +555,7 @@ class HockeyScorecardController extends parentScoreCardController
                         $this->insertPlayerStatistics($sportName,$match_id);
 
                         //notification ocde
-                        Helper::sendEmailPlayers($matchScheduleDetails, 'Soccer');      
+                        Helper::sendEmailPlayers($matchScheduleDetails, 'ultimateFrisbee');      
 
                     }
 
@@ -412,6 +572,7 @@ class HockeyScorecardController extends parentScoreCardController
                      'looser_id'      => $looser_team_id,
                     'is_tied'        => $is_tie,
                      'has_result'     => $has_result,
+                     'match_report'   => $match_report,
                      'match_result'   => $match_result,
                      'score_added_by' => $json_score_status,'scoring_status'=>$approved]);
 
@@ -422,7 +583,7 @@ class HockeyScorecardController extends parentScoreCardController
                     $this->insertPlayerStatistics($sportName,$match_id);
 
                     //send mail to players
-                    Helper::sendEmailPlayers($matchScheduleDetails, 'Hockey');      
+                    Helper::sendEmailPlayers($matchScheduleDetails, 'ultimateFrisbee');      
 
 
                     //notification ocde
@@ -434,270 +595,67 @@ class HockeyScorecardController extends parentScoreCardController
                     'is_tied'=>$is_tie,
                     'has_result'     => $has_result,
                      'match_result'   => $match_result,
+                     'match_report'   => $match_report,
                      'score_added_by'=>$json_score_status]);
             }
         }
         return $match_data->match_details;
-    }
-
-    public function hockeyStoreRecord(){
-            $request=Request::all();
-            $match_id=$request['match_id'];
-        $first_half=isset($request['first_half'])?$request['first_half']:[];
-        $second_half=isset($request['second_half'])?$request['second_half']:[];
-        $team_a_id=$request['team_a_id'];
-        $team_b_id=$request['team_b_id'];
-        $i=$request['index'];
-        $match_data=matchSchedule::find($match_id);
-        $match_details=json_decode($match_data['match_details']);
-        $hockey_player=HockeyPlayerMatchwiseStats::whereMatchId($match_id)->first();
-
-        $match_details=(array)$match_details;
-
-                $half_time=$request['half_time_'.$i];
-                $team_id=$request['team_'.$i];
-                $player_stat_id=$request['player_'.$i];
-                $user_id=$request['user_'.$i];
-                $record_type=$request['record_type_'.$i];
-                $time=$request['time_'.$i];
-                $player_name=$request['player_name_'.$i];
-                $team_type=$request['team_type_'.$i];
-
-                $record_type_count=$record_type=='goals'?$record_type:$record_type.'_count';
-
-
-                $match_details[$half_time]=(array)$match_details[$half_time];
-                $match_details[$half_time][$record_type.'_details']=(array)$match_details[$half_time][$record_type.'_details'];
-
-
-                $hockey_model=HockeyPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_id)->whereUserId($user_id)->first();
-                $goals_count=$hockey_model['goals_scored'];
-                $yellow_card_count=$hockey_model['yellow_cards'];
-                $red_card_count=$hockey_model['red_cards'];
-
-                ${$record_type.'_count'}++;
-                $match_details=(object)$match_details;      //temporally convert to object to get numeric property
-                $match_details->$team_id->{$record_type_count} +=1;
-                $score=$match_details->{$team_a_id}->goals. '-'. $match_details->{$team_b_id}->goals;
-
-                $match_details=(array)$match_details;
-                $record_type_details=[
-                    'player_id'=>$user_id,
-                    'player_name'=>$player_name,
-                    'time'=>$time,
-                    'team_id'=>$team_id,
-                    'current_score'=>$score,
-                    'number'=>1,
-                    'team_type'=>$team_type,
-
-                ];
-                //if players has 2 yellow cards -> 1 red card
-                if($record_type_count=='yellow_card_count'){
-                    if($yellow_card_count>0 && $red_card_count==0){
-                        $hockey_model->red_cards=1;
-                    }
-                }
-
-                $match_details[$half_time][$record_type_count]+=1;
-                $match_details[$half_time]['team_'.$team_id.'_'.$record_type_count]+=1;     //increments value for goal or yellow card or red card for team in specified halftime
-
-                array_push($match_details[$half_time][$record_type.'_details'], $record_type_details);
-
-                $hockey_model->save();
-
-                $this->updateHockeyScore($user_id,$match_id,$team_id,$player_name,$yellow_card_count,$red_card_count,$goals_count);
-                $this->hockeyStatistics($user_id);          
-
-
-        $match_data->match_details=json_encode($match_details);
-        $match_data->save();
-            return $match_data->match_details;
 
     }
 
-    public function getHockeyDetails(){
-        $request=Request::all();
-        $match_id=$request['match_id'];
-        $team_a_id=$request['team_a_id'];
-        $team_b_id=$request['team_b_id'];
-        $match_details=matchSchedule::find($match_id)->match_details;
-        return view('scorecards.hockeyscorecarddetails', compact('match_details','team_a_id', 'team_b_id'));
-    }
-
-
-    //function to update player scores if already exist
-    public function updateHockeyScore($user_id,$match_id,$team_id,$player_name,$yellow_card_count,$red_card_count,$goal_count, $goals_details=[])
-    {
-        $player_stat=HockeyPlayerMatchwiseStats::where('user_id',$user_id)->where('match_id',$match_id)->where('team_id',$team_id)->update(['user_id'=>$user_id,'player_name'=>$player_name,'yellow_cards'=>$yellow_card_count,'red_cards'=>$red_card_count,'goals_scored'=>$goal_count]);
-        //hockeyStatistic::where('user_id',$user_id)->update(['yellow_cards'=>$yellow_card_count,'red_cards'=>$red_card_count,'goals_scored'=>$goal_count]);
-    }
-    //hockey statistics function player wise
-    public function hockeyStatistics($user_id)
+        public function ultimateFrisbeeStatistics($user_id)
     {
         //check already player has record or not
-        $user_hockey_details = HockeyStatistic::select()->where('user_id',$user_id)->get();
+        $user_ultimateFrisbee_details = ultimateFrisbeeStatistic::select()->where('user_id',$user_id)->get();
 
-        $hockey_details = HockeyPlayerMatchwiseStats::selectRaw('count(match_id) as match_count')->selectRaw('sum(yellow_cards) as yellow_cards')->selectRaw('sum(red_cards) as red_cards')->selectRaw('sum(goals_scored) as goals_scored')->where('user_id',$user_id)->groupBy('user_id')->get();
-        $yellow_card_cnt = (!empty($hockey_details[0]['yellow_cards']))?$hockey_details[0]['yellow_cards']:0;
-        $red_card_cnt = (!empty($hockey_details[0]['red_cards']))?$hockey_details[0]['red_cards']:0;
-        $goals_cnt = (!empty($hockey_details[0]['goals_scored']))?$hockey_details[0]['goals_scored']:0;
-        if(count($user_hockey_details)>0)
+        $ultimateFrisbee_details = ultimateFrisbeePlayerMatchwiseStats::selectRaw('count(match_id) as match_count')->selectRaw('sum(points_1) as points_1')->selectRaw('sum(points_2) as points_2')->selectRaw('sum(points_3) as points_3')->selectRaw('sum(total_points) as total_points')->selectRaw('sum(fouls) as fouls')->where('user_id',$user_id)->groupBy('user_id')->get();
+
+
+
+        $points_1 = (!empty($ultimateFrisbee_details[0]['points_1']))?$ultimateFrisbee_details[0]['points_1']:0;
+        $points_2 = (!empty($ultimateFrisbee_details[0]['points_2']))?$ultimateFrisbee_details[0]['points_2']:0;
+        $points_3 = (!empty($ultimateFrisbee_details[0]['points_3']))?$ultimateFrisbee_details[0]['points_3']:0;
+        $fouls = (!empty($ultimateFrisbee_details[0]['fouls']))?$ultimateFrisbee_details[0]['fouls']:0;
+        $total_points = (!empty($ultimateFrisbee_details[0]['total_points']))?$ultimateFrisbee_details[0]['total_points']:0;
+
+        if(count($user_ultimateFrisbee_details)>0)
         {
-            $match_count = (!empty($hockey_details[0]['match_count']))?$hockey_details[0]['match_count']:0;
-            HockeyStatistic::where('user_id',$user_id)->update(['matches'=>$match_count,'yellow_cards'=>$yellow_card_cnt,'red_cards'=>$red_card_cnt,'goals_scored'=>$goals_cnt]);
+            $match_count = (!empty($ultimateFrisbee_details[0]['match_count']))?$ultimateFrisbee_details[0]['match_count']:0;
+
+            ultimateFrisbeeStatistic::where('user_id',$user_id)
+                ->update([  'matches'=>$match_count,
+                            'points_1'=>$points_1,
+                            'points_2'=>$points_2,
+                            'points_3'=>$points_3,
+                            'fouls'=>$fouls,
+                            'total_points'=>$total_points
+                         ]);
         }else
         {
-            $hockey_statistics = new HockeyStatistic();
-            $hockey_statistics->user_id = $user_id;
-            $hockey_statistics->matches = 1;
-            $hockey_statistics->yellow_cards = $yellow_card_cnt;
-            $hockey_statistics->red_cards = $red_card_cnt;
-            $hockey_statistics->goals_scored = $goals_cnt;
-            $hockey_statistics->save();
-        }
-    }
-    //check is score enter for match
-    public function isScoreEntered($user_id,$match_id,$team_id)
-    {
-        $request_array = HockeyPlayerMatchwiseStats::where('user_id',$user_id)->where('match_id',$match_id)->where('team_id',$team_id)->first();
-        if(count($request_array)>0)
-        {
-            return 1;
-        }
-        else
-        {
-            return 0;
+            $ultimateFrisbee_statistic = new ultimateFrisbeeStatistic();
+            $ultimateFrisbee_statistic->user_id = $user_id;
+            $ultimateFrisbee_statistic->matches = 1;
+            $ultimateFrisbee_statistic->{'points_1'} = $points_1;
+            $ultimateFrisbee_statistic->{'points_2'} = $points_2;
+            $ultimateFrisbee_statistic->{'points_3'} = $points_3;
+            $ultimateFrisbee_statistic->fouls = $fouls;
+            $ultimateFrisbee_statistic->total_points = $total_points;
+            $ultimateFrisbee_statistic->save();
         }
     }
 
-    //select players for the match, substitute and playing. 
-    public function confirmSquad(){
-        $request=Request::all();
-        $match_id       =$request['match_id'];
-
-        $tournament_id  =isset($request['tournament_id'])?$request['tournament_id']:null;
-        $team_a_id      =$request['team_a_id'];
-        $team_b_id      =$request['team_b_id'];
-
-        $match_model=MatchSchedule::find($match_id);
-        $match_model->hasSetupSquad=1;
-        $match_model->save();
-
-        $team_a_name=$request['team_a_name'];
-        $team_b_name=$request['team_b_name'];
-        $team_a_playing_players=isset($request['team_a']['playing'])?$request['team_a']['playing']:[];
-        $team_b_playing_players=isset($request['team_b']['playing'])?$request['team_b']['playing']:[];
-
-        $team_a_substitute_players=isset($request['team_a']['substitute'])?$request['team_a']['substitute']:[];
-        $team_b_substitute_players=isset($request['team_b']['substitute'])?$request['team_b']['substitute']:[];
-
-        foreach($team_a_playing_players as $p){
-            $player_name=User::find($p)->name;
-            $this->insertHockeyScore($p, $tournament_id, $match_id, $team_a_id,$player_name, $team_a_name,0,0,0,'P');
-        }
-        foreach($team_a_substitute_players as $p){
-            $player_name=User::find($p)->name;
-            $this->insertHockeyScore($p, $tournament_id, $match_id, $team_a_id,$player_name, $team_a_name,0,0,0,'S');
-                
-        }
-        foreach($team_b_playing_players as $p){
-            $player_name=User::find($p)->name;
-            $this->insertHockeyScore($p, $tournament_id, $match_id, $team_b_id,$player_name, $team_b_name,0,0,0,'P');
-        }
-        foreach($team_b_substitute_players as $p){          
-            $player_name=User::find($p)->name;
-            $this->insertHockeyScore($p, $tournament_id, $match_id, $team_b_id,$player_name, $team_b_name,0,0,0,'S');
-                
-        }
-        
-        //insert the default match_details for the match
-        $match_model=MatchSchedule::find($match_id);
-        $match_details=[
-            "team_a"=>[
-                "id"=>$team_a_id,
-                "name"=>$team_a_name
-                    ],
-            "team_b"=>[
-                "id"=>$team_b_id,
-                "name"=>$team_b_name
-                    ],
-            "{$team_a_id}"  =>  [
-                "id"=>$team_a_id,
-                "goals"=>0,
-                "red_card_count"=>0,
-                "yellow_card_count"=>0,
-                "ball_percentage"=>0],
-            "{$team_b_id}"=>[
-                "id"=>$team_b_id,
-                "goals"=>0,
-                "red_card_count"=>0,
-                "yellow_card_count"=>0,
-                "ball_percentage"=>0],
-            "first_half"=>[
-                "goals"=>0,
-                "team_{$team_a_id}_goals"=>0,
-                "team_{$team_b_id}_goals"=>0,
-                "team_{$team_a_id}_yellow_card_count"=>0,
-                "team_{$team_b_id}_yellow_card_count"=>0,
-                "team_{$team_a_id}_red_card_count"=>0,
-                "team_{$team_b_id}_red_card_count"=>0,
-                "red_card_count"=>0,
-                "yellow_card_count"=>0,
-                "goals_details"=>[],
-                "red_card_details"=>[],
-                "yellow_card_details"=>[]
-            ],
-            "second_half"=>[
-                "goals"=>0,
-                "team_{$team_a_id}_goals"=>0,
-                "team_{$team_b_id}_goals"=>0,
-                "team_{$team_a_id}_yellow_card_count"=>0,
-                "team_{$team_b_id}_yellow_card_count"=>0,
-                "team_{$team_a_id}_red_card_count"=>0,
-                "team_{$team_b_id}_red_card_count"=>0,
-                "red_card_count"=>0,
-                "yellow_card_count"=>0,
-                "goals_details"=>[],
-                "red_card_details"=>[],
-                "yellow_card_details"=>[]
-            ],
-            "penalties"=>[
-                'score'=>'',
-                'team_a'=>[
-                    'players'=>[],
-                    'goals'=>0,
-                    'players_ids'=>[]
-                ],
-                'team_b'=>[
-                    'players'=>[],
-                    'goals'=>0,
-                    'players_ids'=>[]
-                ]
-            ]
-        ];
-
-        $match_model->match_details=json_encode($match_details);
-        $match_model->save();
-    }
-
-
-
-    /**Swap Player status from substitute to playing vice versa.
-     *
-     * @return Response
-     */
-    public function hockeySwapPlayers(){
+        public function ultimateFrisbeeSwapPlayers(){
         $request=Request::all();
         $match_id=$request['match_id'];
         $team_id=$request['team_id'];
         $time_substituted=$request['time_substituted'];
-        $hockey_model=HockeyPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_id)->get();
+        $ultimateFrisbee_model=ultimateFrisbeePlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_id)->get();
 
-        foreach ($hockey_model as $sm ){
+        foreach ($ultimateFrisbee_model as $sm ){
             $sm_id=$sm->id;
             $sm_status=$sm->playing_status;
 
-            if(isset($request["substitute_a_".$sm_id]) && $request["substitute_a_".$sm_id]=='on'){
+            if(isset($request["substitute_a_".$sm_id]) && ($request["substitute_a_".$sm_id]=='on')){
                 if($sm_status=='P'){
                     $sm->playing_status='S';
                 }
@@ -706,159 +664,141 @@ class HockeyScorecardController extends parentScoreCardController
                 $sm->has_substituted=1;
                 $sm->time_substituted=$time_substituted;
                 $sm->save();
-
             }
 
         }
-        return $hockey_model;
+        return $ultimateFrisbee_model;
 
     }
 
-    /**
-     * Select penalties players
-     *
-     * @param  Request players
-     * @return Response
-     */
-
-    public function choosePenaltyPlayers(){
-        $request=Request::all();
-        $index_a=$request['p_index_a'];
-        $index_b=$request['p_index_b'];
-        $team_a_id=$request['team_a_id'];
-        $team_b_id=$request['team_b_id'];
-        $match_id=$request['match_id'];
-
-        $match_model=matchSchedule::find($match_id);
-        $match_details=json_decode($match_model['match_details'],true);
-
-if(!isset($match_details['penalties']['team_a']['players_ids']))$match_details['penalties']['team_a']['players_ids']=[];
-if(!isset($match_details['penalties']['team_b']['players_ids']))$match_details['penalties']['team_b']['players_ids']=[];
-
-        $penalties=$match_details['penalties'];         
-
-        $response_a="";
-        $response_b="";
-        for($i=0; $i<$index_a; $i++){
-
-          if(isset($request['penalty_player_a_'.$i]) ){
-
-             if(!in_array($request['penalty_player_user_id_a_'.$i], $penalties['team_a']['players_ids'])){
-                array_push($penalties['team_a']['players_ids'], $request['penalty_player_user_id_a_'.$i]);
-                
-                $player_id=$request['penalty_player_id_a_'.$i];
-                $matchwise_model=HockeyPlayerMatchwiseStats::find($player_id);
-                $matchwise_model->penalty=1;
-                $matchwise_model->save();
-                $player=[
-                    'name'=>$request['penalty_player_name_a_'.$i],
-                    'stat_id'=>$request['penalty_player_id_a_'.$i],
-                    'goal'=>'',
-                    'user_id'=>$request['penalty_player_user_id_a_'.$i],
-                ];
-                array_push($penalties['team_a']['players'], $player);
-
-                $response_a.="
-                        <tr>
-                        <td colspan=2>{$player['name']}</td><td> 
-                        0 <button class='btn-red-card btn-card btn-circle btn-penalty btn_team_a_$i' value='0' name='penalty_goal_a_$i' index='$i' team_id='$team_a_id' team_type='team_a' onclick='return scorePenalty(this)' > </button> 
-                        1 <button class='btn-green-card btn-card btn-circle btn-penalty btn_team_a_$i' value='1' name='penalty_goal_a_$i' index='$i' team_id='$team_a_id' team_type='team_a' onclick='return scorePenalty(this)' >  
-                        <input type='hidden' name='penalty_goal_player_a_$i' value='$player_id' > </button>
-                        <tr>
-                    ";
-                }
-            }
-        }
-
-        for($i=0; $i<$index_b; $i++){
-            if(isset($request['penalty_player_b_'.$i])){
-             if(!in_array($request['penalty_player_user_id_b_'.$i], $penalties['team_b']['players_ids'])){
-
-                array_push($penalties['team_b']['players_ids'], $request['penalty_player_user_id_b_'.$i]);
-                
-                $player_id=$request['penalty_player_id_b_'.$i];
-                $matchwise_model=HockeyPlayerMatchwiseStats::find($player_id);
-                $matchwise_model->penalty=1;
-                $matchwise_model->save();
-                $player=[
-                    'name'=>$request['penalty_player_name_b_'.$i],
-                    'stat_id'=>$request['penalty_player_id_b_'.$i],
-                    'goal'=>'',
-                    'user_id'=>$request['penalty_player_user_id_b_'.$i],
-                ];
-                array_push($penalties['team_b']['players'], $player);
-
-                $response_b.="
-                        <tr>
-                        <td colspan=2>{$player['name']}</td><td> 
-                        0 <button class='btn-red-card btn-card btn-circle btn-penalty btn_team_b_$i'  value='0' name='penalty_goal_b_$i' index='$i' team_type='team_b'  team_id='$team_b_id' onclick='return scorePenalty(this)'> </button>
-                        1 <button class='btn-green-card btn-card btn-circle btn-penalty btn_team_b_$i'  value='1'  name='penalty_goal_b_$i' index='$i' team_id='$team_b_id' team_type='team_b'  onclick='return scorePenalty(this)'> </button> 
-                        <input type='hidden' name='penalty_goal_player_b_$i' value='$player_id'>
-                        <tr>
-                    ";
-                }
-            }
-        }
-
-        $match_details['penalties']=$penalties;
-        $index_a--;
-
-        $match_model['match_details']=json_encode($match_details);
-        $match_model->save();
-        $response_a.="<input type='hidden' value='$index_a' name='penalty_goal_index_a'>";
-        $response_b.="<input type='hidden' value='$index_b' name='penalty_goal_index_b'><input type='hidden' name='set_penalty'>";
-
-
-        return [
-            "message"=>"Players have been Chosen Succesffuly!",
-            "response_a"=>$response_a,
-            "response_b"=>$response_b
-        ];
-
-    }
-
-    public function scorePenalty(){
+     public function ultimateFrisbeeSaveRecord(){
             $request=Request::all();
             $match_id=$request['match_id'];
-            $team_type=$request['team_type'];
-            $index=$request['index'];
-            $value=$request['value'];
+        
+     
+        $team_a_id=$request['team_a_id'];
+        $team_b_id=$request['team_b_id'];
+        $i=$request['index'];
+        $match_data=matchSchedule::find($match_id);
+        $match_details=json_decode($match_data['match_details']);
+        $max_fouls=$match_details->preferences->max_fouls;
+        $ultimateFrisbee_players=ultimateFrisbeePlayerMatchwiseStats::whereMatchId($match_id)->first();
 
-            $match_model=MatchSchedule::find($match_id);
-            $match_details=json_decode($match_model->match_details, true);
 
-            $match_details['penalties'][$team_type]['players'][$index]['goal']=$value;
+                $quarter=$request['quarter_'.$i];
+                $team_id=$request['team_'.$i];
+                $player_stat_id=$request['player_'.$i];
+                $user_id=$request['user_'.$i];
+                $record_type=$request['record_type_'.$i];
+               // $time=$request['time_'.$i];
+                $player_name=$request['player_name_'.$i];
+                $team_type=$request['team_type_'.$i];
 
-            $team_a_penalty_goals=0;
-            $team_b_penalty_goals=0;
+       $ultimateFrisbee_model= ultimateFrisbeePlayerMatchwiseStats::find($player_stat_id);
+       $team_id=$ultimateFrisbee_model->team_id;
 
-            foreach ($match_details['penalties'][$team_type]['players'] as $key => $value) {
-                    ${$team_type.'_penalty_goals'}+=$value['goal'];                 
-            }
+                
 
-            $match_details['penalties'][$team_type]['goals']=${$team_type.'_penalty_goals'};
-            $match_details=json_encode($match_details);
-            $match_model->match_details=$match_details;
-            $match_model->save();
-            return $match_details;
+                switch ($record_type) {
+                    case 'points_1':
+
+          $ultimateFrisbee_model->points_1++;
+          $ultimateFrisbee_model->{$quarter}++;
+          
+          $match_details->{$team_id}->players->{'player_'.$ultimateFrisbee_model->user_id}->points_1++;
+          $match_details->{$team_id}->players->{'player_'.$ultimateFrisbee_model->user_id}->{$quarter}->points_1++;
+          $match_details->{$team_id}->players->{'player_'.$ultimateFrisbee_model->user_id}->{$quarter}->total_points=$ultimateFrisbee_model->{$quarter};
+          
+          $ultimateFrisbee_model->total_points=$this->getTotal($ultimateFrisbee_model);
+
+      $match_details->{$team_id}->total_points++;
+      $match_details->{$team_id}->players->{'player_'.$ultimateFrisbee_model->user_id}->total_points=$ultimateFrisbee_model->total_points;
+
+                        break;
+
+                    case 'points_2':
+           $ultimateFrisbee_model->points_2++;
+           $ultimateFrisbee_model->{$quarter}+=2;
+
+    
+       $match_details->{$team_id}->players->{'player_'.$ultimateFrisbee_model->user_id}->points_2++;
+       $match_details->{$team_id}->players->{'player_'.$ultimateFrisbee_model->user_id}->{$quarter}->points_2++;
+       $match_details->{$team_id}->players->{'player_'.$ultimateFrisbee_model->user_id}->{$quarter}->total_points=$ultimateFrisbee_model->{$quarter};
+
+          $match_details->{$team_id}->total_points+=2;
+          $ultimateFrisbee_model->total_points=$this->getTotal($ultimateFrisbee_model);
+      $match_details->{$team_id}->players->{'player_'.$ultimateFrisbee_model->user_id}->total_points=$ultimateFrisbee_model->total_points;
+
+
+                    break;
+
+                    case 'points_3':
+           $ultimateFrisbee_model->points_3++;
+           $ultimateFrisbee_model->{$quarter}+=3;
+          $match_details->{$team_id}->players->{'player_'.$ultimateFrisbee_model->user_id}->total_points+=3;
+            $match_details->{$team_id}->players->{'player_'.$ultimateFrisbee_model->user_id}->points_3++;;
+          $match_details->{$team_id}->players->{'player_'.$ultimateFrisbee_model->user_id}->{$quarter}->points=$ultimateFrisbee_model->points_3;
+
+               $match_details->{$team_id}->players->{'player_'.$ultimateFrisbee_model->user_id}->{$quarter}->total_points=$ultimateFrisbee_model->{$quarter};
+               
+          $match_details->{$team_id}->total_points+=3;
+          $ultimateFrisbee_model->total_points=$this->getTotal($ultimateFrisbee_model);
+
+      $match_details->{$team_id}->players->{'player_'.$ultimateFrisbee_model->user_id}->total_points=$ultimateFrisbee_model->total_points;
+
+                    break;
+
+                    case 'fouls':
+               if($ultimateFrisbee_model->fouls>=$max_fouls){
+                   $match_details->{$team_id}->players->{'player_'.$user_id}->dismissed=1;
+                   $ultimateFrisbee_model->playing_status='S';
+               }
+
+          $ultimateFrisbee_model->fouls++;
+          $match_details->{$team_id}->players->{'player_'.$user_id}->fouls ++; 
+          $match_details->{$team_id}->players->{'player_'.$user_id}->{$quarter}->fouls++;
+          $match_details->{$team_id}->fouls++;
+        
+                    break;
+                    
+                    default:
+                        # code...
+                        break;
+                }
+
+              $ultimateFrisbee_model->save();
+
+        //$this->updateultimateFrisbeeScore($user_id,$match_id,$team_id,$player_name,$points_1, $points_2, $points_3, $total_points, $fouls);
+        $this->ultimateFrisbeeStatistics($user_id);          
+
+
+        $match_data->match_details=json_encode($match_details);
+        $match_data->save();
+            return $match_data->match_details;
+
     }
 
-    //insert choosen players in match statistics
-    public function insertHockeyScore($user_id,$tournament_id,$match_id,$team_id,$player_name,$team_name,$yellow_card_count,$red_card_count,$goal_count, $playing_status='S')
+    public function updateultimateFrisbeeScore($user_id,$match_id,$team_id,$player_name,$points_1,$points_2,$points_3, $total_points, $fouls)
     {
-        $hockey_model = new HockeyPlayerMatchwiseStats();
-        $hockey_model->user_id          = $user_id;
-        $hockey_model->tournament_id    = $tournament_id;
-        $hockey_model->match_id         = $match_id;
-        $hockey_model->team_id          = $team_id;
-        $hockey_model->player_name      = $player_name;
-        $hockey_model->team_name        = $team_name;
-        $hockey_model->yellow_cards     = $yellow_card_count;
-        $hockey_model->red_cards        = $red_card_count;
-        $hockey_model->goals_scored     = $goal_count;
-        $hockey_model->playing_status   = $playing_status;
-        $hockey_model->save();
+        $player_stat=ultimateFrisbeePlayerMatchwiseStats::where('user_id',$user_id)->where('match_id',$match_id)->where('team_id',$team_id)->update(['user_id'=>$user_id,
+            'points_1'=>$points_1,
+            'points_2'=>$points_2,
+            'points_3'=>$points_3,
+            'total_points'=>$total_points,
+            'fouls'=>$fouls
+            ]);
+        //ultimateFrisbeeStatistic::where('user_id',$user_id)->update(['yellow_cards'=>$yellow_card_count,'red_cards'=>$red_card_count,'goals_scored'=>$goal_count]);
+    }
+    //
+
+    public function getTotal($player_model){
+        $total=0; 
+        for($i=1; $i<=6; $i++){
+                $total+=$player_model->{'quarter_'.$i};
+        }
+        return $total;
     }
 
 
-}
+
+ }

@@ -1,8 +1,5 @@
-
 @extends('layouts.app')
 @section('content')
-
-
 	<style type="text/css">
 input:read-only { 
     background-color: #f4f4f4;
@@ -74,8 +71,8 @@ input:read-only {
 		.btn-penalty{
             opacity: .2;
         }
-        .btn-green-card, .btn-green-card:hover, .btn-green-card:active{
-            background: #6Bc26C;
+        .btn-green-card{
+            background: #1B926C;
         }
         .btn-penalty-chosen{
         	opacity: 1;
@@ -94,10 +91,6 @@ input:read-only {
 
         }
 
-        .btn-link:disabled{
-        	background: #f8f8f8;
-        	background-color: #f8f8f8;
-        }
 
 
 
@@ -121,26 +114,20 @@ input:read-only {
 	$b_points=0;
 	$a_fouls=0;
 	$b_fouls=0;
+	$number_of_quarters=0;
 
-	 ${'team_'.$match_data[0]['a_id'].'_score'}='0 sets';
-    ${'team_'.$match_data[0]['b_id'].'_score'}='0 sets'; 
 
-   	if(count($preferences)){
-  ${'team_'.$team_a_id.'_score'}=$match_details->scores->{$team_a_id.'_score'}.' sets';
-  ${'team_'.$team_b_id.'_score'}=$match_details->scores->{$team_b_id.'_score'}.' sets';
-    }
+	if(isset($preferences->number_of_quarters)){
+		$number_of_quarters=$preferences->number_of_quarters;
+		$quarter_time=$preferences->quarter_time;
+		$max_fouls=$preferences->max_fouls;
 
-	$serving_array=Helper::getvolleyballServer($match_id, 'kabaddi');		
-	?>
+		$a_points=$match_details->{$team_a_id}->total_points;
+		$b_points=$match_details->{$team_b_id}->total_points;
 
-	<?php 
-
-    $match_data[0]['tournament_id']!=null?$disabled='readonly':'';
-    $match_settings   =   Helper::getMatchSettings($match_data[0]['tournament_id'],$match_data[0]['sports_id']);
-	$a_count = 1;
-	$set=$match_settings->number_of_sets;
-	$active_players = $match_settings->active_players;
-	$maximum_substitute = $match_settings->maximum_substitutes;
+		$a_fouls=$match_details->{$team_a_id}->fouls;
+		$b_fouls=$match_details->{$team_b_id}->fouls;		
+	}
 	
 	?>
 
@@ -170,7 +157,7 @@ input:read-only {
 								<div class="team_detail">
 									<div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['a_id'] }}">{{ $team_a_name }}</a></div>
 									<div class="team_city">{{ $team_a_city }}</div>
-									<div class="team_score team_a_score" id="team_a_score">{{${'team_'.$team_a_id.'_score'} }} </div>
+									<div class="team_score team_a_score" id="team_a_score">{{$a_points}} <span id='team_a_fouls'  class='fouls team_a_fouls'>{{$a_fouls}}</span></div>
 									
 								</div>
 							</div>
@@ -185,7 +172,7 @@ input:read-only {
 								<div class="team_detail">
 									<div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['b_id'] }}">{{ $team_b_name }}</a></div>
 									<div class="team_city">{{ $team_b_city }}</div>
-									<div class="team_score team_b_score" id="team_b_score">{{${'team_'.$team_b_id.'_score'} }} </div>
+									<div class="team_score team_b_score" id="team_b_score">{{$b_points}} <span id='team_b_count' class='fouls team_b_fouls' >{{$b_fouls}}</span></div>
 									
 								</div>
 							</div>
@@ -210,7 +197,7 @@ input:read-only {
 								<div class="team_detail">
 									<div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['b_id'] }}">{{ $team_b_name }}</a></div>
 									<div class="team_city">{{ $team_b_city }}</div>
-									<div class="team_score team_b_score" id="team_b_score">{{${'team_'.$team_b_id.'_score'} }} </div>
+									<div class="team_score team_b_score" id="team_b_score">{{$b_points}} <span id='team_b_count' class='fouls team_b_fouls' >{{$b_fouls}}</span></div>
 								</div>
 							</div>
 						</div>
@@ -221,9 +208,10 @@ input:read-only {
                 <div class='row'>
                     <div class='col-xs-12'>
                         <div class='match_loc'>
-                    <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
-                            {{$tournamentDetails['name']}} Tournament
-                   </a>   
+				                 <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
+				                 		{{$tournamentDetails['name']}} Tournament
+				                  </a>
+                                
                         </div>
                     </div>
                 </div>
@@ -244,7 +232,7 @@ input:read-only {
 
 			<div class="row">
 				<div class="col-md-12">
-					<h5 class="scoreboard_title">kabaddi Scorecard
+					<h5 class="scoreboard_title">ultimateFrisbee Scorecard
 					@if(!empty($match_data[0]['match_category']))
                              <span class='match_type_text'>
                              ({{ucfirst($match_data[0]['match_category']) }})
@@ -273,9 +261,7 @@ input:read-only {
 								<p></p>
 								<br>
 								@if($match_data[0]['hasSetupSquad'])
-									<div id='end_match_button'>
 									<button class="btn btn-danger " onclick="return SJ.SCORECARD.soccerSetTimes(this)"></i>End Match</button>
-									</div>
 								@endif
 				 @if($isValidUser && $isForApprovalExist && ($match_data[0]['winner_id']>0 || $match_data[0]['is_tied']>0 || $match_data[0]['has_result'] == 0))  
 
@@ -416,250 +402,23 @@ input:read-only {
 
 			@else
 			<!-- Scoring Start -->
-
-
-
-			@if(!count($kabaddi_a_score))
-
-			 <div class="row">
-                <!-- Selecting Squads Start-->
-                <div class="col-sm-10 col-sm-offset-1">
-                    <h3 class="team_bat team_title_head">Playing Squad</h3>
-
-                    <div class='row'>
-                        <div class='col-sm-6 col-xs-12'>
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-
-                                    <tbody id="team_tr_a" >
-                                    @foreach($team_a_kabaddi_scores_array as $player_a)
-                                    	
-                                        @if($player_a['playing_status']=='P')
-                                            <tr class="team_a_playing_row " >
-                                                <td>
-                                                    {{ $player_a['player_name']   }} 
-                                                </td>                                         
-
-                                            </tr>
-                                        @endif
-                                    @endforeach
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <div class='col-sm-6 col-xs-12'>
-
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-
-                                    <tbody id="team_tr_b" >
-                                    @foreach($team_b_kabaddi_scores_array  as $player_b)
-                                        @if($player_b['playing_status']=='P')
-                                            <tr class="team_b_playing_row ">
-
-                                                <td>
-                                                    {{ $player_b['player_name']   }} 
-                                                </td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <!-- Team A Goals End-->
-
-                <div class="col-sm-10 col-sm-offset-1">
-                    <h3 id='team_' class="team_fall team_title_head">Substitute Squad</h3>
-
-                    <div class='row'>
-                        <div class='col-sm-6 col-xs-12'>
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-
-                                    <tbody id="team_tr_a" >
-                                    @foreach($team_a_kabaddi_scores_array  as $player_a)
-                                        @if($player_a['playing_status']=='S')
-                                            <tr class="team_a_playing_row  ">
-                                                <td>
-                                                    {{ $player_a['player_name']   }} 
-                                                 </td>
-
-                                            </tr>
-                                        @endif
-                                    @endforeach
-
-                                    </tbody>
-                                </table>
-                            </div>
-
-                        </div>
-
-                        <div class='col-sm-6 col-xs-12'>
-
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-
-                                    <tbody id="team_tr_b" >
-                                    @foreach($team_b_kabaddi_scores_array  as $player_b)
-                                        @if($player_b['playing_status']=='S' )
-                                            <tr class="team_a_playing_row">
-                                                <td>
-                                                    {{ $player_b['player_name']   }} 
-                                                </td>
-
-                                            </tr>
-                                        @endif
-                                    @endforeach
-
-                                    </tbody>
-                                </table>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-
-              <form id='serving_order_form' onsubmit=" return submitServingPlayers(this)">
-                <div class="col-sm-10 col-sm-offset-1">
-                    <h3 id='team_' class="team_fall team_title_head">Serving Order</h3>
-
-                    <div class='row'>
-                        <div class='col-sm-6 col-xs-12'>
-                            <div class="table-responsive">
-                                <table class="table ">
-                            
-                                    <tbody id="team_tr_a" >
-                                    @foreach($team_a_kabaddi_scores_array  as $k=>$player_a)
-                                        @if($player_a['playing_status']=='P')
-                                            <tr class="team_a_playing_row  ">
-                                                <td>
-                                                 	<div class='col-xs-2'>  {{ $k +1 }} </div>
-                                                 	<div class='col-xs-10'>
-	               {!!Form::select("serving_a_".($k+1), $active_players_a, $player_a['user_id'], ['class'=>'form-control','id'=>"serving_a_".($k+1)]) !!}
-	                                                 </div>
-                                                </td>
-
-                                            </tr>
-                                        @endif
-                                    @endforeach
-
-                                    </tbody>
-                                </table>
-                            </div>
-
-                        </div>
-
-                        <div class='col-sm-6 col-xs-12'>
-
-                            <div class="table-responsive">
-                                <table class="table ">
-
-                                    <tbody id="team_tr_b" >
-                                    @foreach($team_b_kabaddi_scores_array  as $k=>$player_b)
-                                        @if($player_b['playing_status']=='P' )
-                                            <tr class="team_a_playing_row">
-                                                <td>
-                                                 <div class='col-xs-2'>  {{ $k +1 }} </div>
-                                                 	<div class='col-xs-10'>
-	                  {!!Form::select("serving_b_".($k+1), $active_players_b, $player_b['user_id'], ['class'=>'form-control', 'id'=>"serving_b_".($k+1)]) !!}
-	                                                 </div>
-                                                 
-                                                </td>
-
-                                            </tr>
-                                        @endif
-                                    @endforeach
-
-                                    </tbody>
-                                </table>
-                            </div>
-
-
-                        </div>
-                    </div>
-
-                    <input type='hidden' name="match_id" value="{{$match_id}}">
-
-                    <div class='col-sm-12'>
-                    	<div class='col-sm-4 col-sm-offset-4'><button class="btn btn-primary form-control" type='button' data-toggle="modal" data-target="#chooseModal">Done </button> </div>
-                    </div>
-             
-            </div>
-
-               <div class="modal fade  tossDetail"    id="chooseModal" >
-                    <div class="vertical-alignment-helper">
-                       <div class="modal-dialog modal-lg vertical-align-center">
-                          <div class="modal-content create-team-model create-album-popup model-align">
-                            <div class="modal-header text-center">
-                                 <button type="button" class="close" data-dismiss="modal">×</button>
-                                         <h4>TOSS DETAILS</h4>
-                                     </div>
-                                  <div class="modal-body">
-                                   
-                                      <div id="tossWonByRadio" class="form-group">
-                                       <div class="toss-detail">
-                                         <span class="head">TOSS WON BY</span>
-                                          <div class="radio-box">
-                                            <div class="radio">
-                                                 <input name="team" type="radio" value="{{ $match_data[0]['a_id'] }}" id="{{ $match_data[0]['a_id'] }}" checked="">
-                                                <label for="{{ $match_data[0]['a_id'] }}">{{ $team_a_name }}</label>
-                                                                                 </div>
-                                                                   <div class="radio">
-                                     <input name="team" type="radio" value="{{ $match_data[0]['b_id'] }}" id="{{ $match_data[0]['b_id'] }}">
-                                          <label for="{{ $match_data[0]['b_id'] }}">{{ $team_b_name }}</label>
-                                                                                       </div>
-                                                                 </div>
-                                                            </div>
-                                                       </div>
-                                           <div id="batRadio" class="form-group">
-                                             <div class="toss-detail">
-                                                      <span class="head">ELECTED</span>
-                                                           <div class="radio-box">
-                                                                           <div class="radio">
-                                <input name="elected" type="radio" value="serve" id="bat" checked="">
-                                                   <label for="bat">SERVE</label>
-                                            </div>
-                                          <div class="radio">
-                   <input name="elected" type="radio" value="receive" id="bowl">
-                                                      <label for="bowl">RECEIVE</label>
-                                                                                        </div>
-                                                    </div>
-                                              </div>
-                                        </div>
-                                                                              
-                                                                        </div>
-                            <div class="modal-footer">
-                             <button type="submit" class="button btn-primary">Done</button>
-                            <button type="button" class="button btn-secondary" data-dismiss="modal">Cancel</button>
-                                                                        </div>
-                                                                </div>
-                                                        </div>
-                                                </div>
-                                        </div>
-                               </form>
-
-
-			@else
-
-
+				<?php $a_count = 1;?>
 
 <!-- show alert for no results -->
 
 				<div class="row">
 					<!-- Team A Goals Start-->
-					<div class="col-sm-10 col-lg-10 col-sm-offset-1">
-   <form id='kabaddi' onsubmit='return manualScoring(this)'>
+					<div class="col-sm-12 col-lg-12">
+   <form id='ultimateFrisbee' onsubmit='return manualScoring(this)'>
    				{!!csrf_field()!!}
    					 <div class="row">
 					    <div class='col-sm-12'>
-					    
+					    <span>
+					    	&nbsp; 
+					     <button class='selected-player-button-show' disabled="">&nbsp;</button> Selected Player
+					     <button class='substituted-player-button-show' disabled="">&nbsp;</button> Substituted or dismissed player
+					      &nbsp; &nbsp;
+					    </span>
 					     <span class='pull-right'>   
 					     
 
@@ -671,52 +430,138 @@ input:read-only {
 
 						<div class='row'>
 							<div class='col-sm-12'>
+								<h3 id='team_a' class="team_bat team_title_head">{{$team_a_name}}</h3>
+								<div class="table-responsive">
+									<table class="table table-striped table-bordered">
+										<thead class="thead ">
+											<tr>
+												<th >Player</th>
+												<th> Goals </th>
+												<th> </th>																
+												<th >Fouls</th>
+												
+										@for($index=1; $index<=$number_of_quarters; $index++)
+												<th>Half  {{$index}}</th>
+										@endfor
 
-							 <div class='table-responsive'>
-      <table class='table table-striped table-bordered'>
-        <thead>
-          <tr class='team_fall team_title_head'>
-             <th></th>
-             
-            @for($set_index=1; $set_index<=$set; $set_index++)
-              <th>SET {{$set_index}}</th>
-            @endfor
-             
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
+																								
 
-            <td>{{$kabaddi_a_score['team_name']}}</td>
-            
-          @for($set_index=1; $set_index<=$set; $set_index++)
-            <td>
-               
-                 <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set{{$set_index}}" value="{{$kabaddi_a_score['set'.$set_index]}}" name='a_set{{$set_index}}'>
+											</tr>
+										</thead>
+										<tbody id="team_tr_a" >
+											@foreach($team_a_ultimateFrisbee_scores_array as $player)
 
-            </td>
-          @endfor
-        </tr>
+										<?php
+											if($player['playing_status']=='S'){
+												$attr="playing_status='S'";
+												$class_ps='not_playing';
+											}
+											else{
+												$attr="";
+												$class_ps='';
+											}
 
-          <tr>
-            <td>{{$kabaddi_b_score['team_name']}} </td>
+										?>
 
-            @for($set_index=1; $set_index<=$set; $set_index++)
-              <td>
-               
-                  <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new b_set{{$set_index}}" value="{{$kabaddi_b_score['set'.$set_index]}}" name='b_set{{$set_index}}'>
-                
-              </td>
-            @endfor
-        </tr>
+										<tr id="team_a_row_{{$player['id']}}"  class="team_a_goal_row player_select {{$class_ps}} " player_id="{{$player['id']}} " player_name="{{$player['player_name']}}" team_id="{{$team_a_id}}" team_type='team_a' user_id="{{$player['user_id']}}" {!!$attr!!}>
 
-        </tbody>
+												<td>
+														{{$player['player_name']}}								
+                                                </td>
+                                                <td> 
+      <input type='text' class="tennis_input_new gui-input  points_1_player_{{$player['user_id']}}" readonly="" name="points_1_{{$player['id']}}" value="{{$player['points_1']}}" >
+                                                </td>
+                                                <td>
+
+                                                </td>
+                                           
+                                              
+                                                <td class="{{$player['id']}}_fouls">
+                                               			 <input type='text' class="tennis_input_new gui-input validation allownumericwithdecimal fouls_player_{{$player['user_id']}}" readonly="" name="fouls_{{$player['id']}}" value="{{$player['fouls']}}">
+                                                </td>
+      											
+
+                                              @for($index=1; $index<=$number_of_quarters; $index++)
+                                                <td><input type='text' class="tennis_input_new gui-input validation allownumericwithdecimal quarters_{{$index}}_player_{{$player['user_id']}}" readonly="" name="quarters_{{$index}}_player_{{$player['id']}}" value="{{$player['quarter_'.$index]}}"></td>
+                                              @endfor
+
+                                         </tr>
+											@endforeach
+										</tbody>
+									</table>
+
+								</div>
+							</div>
+							<!-- End LineUp Team A -->
+							<!-- Start LineUp Team B -->
+							<div class='col-sm-12'>
+								<h3 id='team_a' class="team_fall team_title_head">{{$team_b_name}}</h3>
+								<div class="table-responsive">
+									<table class="table table-striped">	
+										<thead class="thead ">
+											<tr>
+												<th >Player</th>
+												<th> Goals </th>
+												<th> </th>
+												<th >Fouls</th>											
+												
+										@for($index=1; $index<=$number_of_quarters; $index++)
+												<th>Half  {{$index}}</th>
+										@endfor
+											
 
 
+											</tr>
+										</thead>									
+										<tbody id="team_tr_b" >
+									
+											@foreach($team_b_ultimateFrisbee_scores_array as $player)
 
-      </table>
-    </div>
-							
+											<?php
+											if($player['playing_status']=='S'){
+												$attr="playing_status='S'";
+												$class_ps='not_playing';
+											}
+											else{
+												$attr="";
+												$class_ps='';
+											}
+										?>
+
+
+										<tr id="team_a_row_{{$player['id']}}"  class="team_a_goal_row player_select {{$class_ps}}" player_id="{{$player['id']}} " player_name="{{$player['player_name']}}" team_id="{{$team_b_id}}" team_type='team_a' user_id="{{$player['user_id']}}" {!!$attr!!}>
+
+												
+												<td>
+														{{$player['player_name']}}								
+                                                </td>
+                                                <td> 
+      <input type='text' class="tennis_input_new gui-input  points_1_player_{{$player['user_id']}}" readonly="" name="points_1_{{$player['id']}}" value="{{$player['points_1']}}" >
+                                                </td>
+                                            	<td>
+
+                                            	</td>
+                                                                                 
+                                              
+                                                <td class="{{$player['id']}}_fouls">
+                                               			 <input type='text' class="tennis_input_new gui-input validation allownumericwithdecimal fouls_player_{{$player['user_id']}}" readonly="" name="fouls_{{$player['id']}}" value="{{$player['fouls']}}">
+                                                </td>      											
+
+                                              @for($index=1; $index<=$number_of_quarters; $index++)
+                                                <td><input type='text' class="tennis_input_new gui-input validation allownumericwithdecimal quarters_{{$index}}_player_{{$player['user_id']}}" readonly="" name="quarters_{{$index}}_player_{{$player['id']}}" value="{{$player['quarter_'.$index]}}"></td>
+                                              @endfor
+   											
+                                         </tr>
+									
+
+											@endforeach
+										</tbody>
+									</table>
+
+								</div>
+							</div>
+
+						</div>
 
 								<input type='hidden' value="{{$match_data[0]['id']}}" name='match_id'>
 								
@@ -725,115 +570,42 @@ input:read-only {
 								       <center> <input type='submit' class="btn btn-primary" value="Save"></center>
 								    </div>
 								</div>
-							</form>
+		</form>
 						</div>
 					
 
 					<div id='real_time_scoring'  class="col-sm-12">
+						<center class=" sportsjun-forms "  >
+							<button href="javascript:void(0);" data-toggle="modal" data-target="#ultimateFrisbeeSubstituteModalA" class='btn-link btn-other btn-secondary-link  request pull-left' onclick="return false">Substitute A</button>
 
+							<label class="col-sm-3 col-xs-5">
+								<select name='select_half_time' class='form-control ' data-style="" onclick="return SJ.SCORECARD.soccerChooseTime(this)">
+								@for($i=1; $i<=$number_of_quarters; $i++)
+									<option value="quarter_{{$i}}">Half {{$i}}</option>
+								@endfor
+								</select>
+							</label>
+
+
+							<button class="btn-link  btn-goal-card-select  "  onclick="return SJ.SCORECARD.basketballAddPoint(this)" value='1' type='points_1' type="button"> Goal </button>
+
+							
+							<button  class="btn-link request btn-red-card-select  "   onclick="return SJ.SCORECARD.basketballAddPoint(this)" type='fouls' value='3' type="button">Fouls</button>
+
+							
+							<button data-toggle="modal" data-target="#ultimateFrisbeeSubstituteModalB" class='btn-link btn-secondary-link  request pull-right' onclick="return false">Substitute  B</button>
+						</center>
 						<div class='row'>
-							<div class='col-sm-6'>
-								<div class='table-responsive'>
-									<table class="table table-striped">
-										<thead>
-											<tr class="thead">
-												<th class=""><b>{{$team_a_name}}</b> </th>
-											</tr>
-										</thead>
-										<tbody>
-											    @foreach($team_a_kabaddi_scores_array  as $player_a)
-			                                        @if($player_a['playing_status']=='P' )
-			                                            <tr class="team_a_playing_row">
-			                                                <td class="player_{{$player_a['user_id']}} server_player">
-			                                                {{ $player_a['serving_order']}}  &nbsp;  
-			                                                {{ $player_a['player_name']   }} 
-			                                                </td>
-
-			                                            </tr>
-			                                        @endif
-			                                    @endforeach
-										</tbody>
-									</table>
-								</div>
-
-							<center class=" sportsjun-forms "  >
-							<button href="javascript:void(0);" data-toggle="modal" data-target="#kabaddiSubstituteModalA" class='btn-link btn-other btn-secondary-link  request pull-left' onclick="return false">Substitute A</button>
-
-
-
-							<button class="btn-link  btn-green-card serve_{{$team_a_id}} serve "  onclick="return addScore(this)" value='won'  type="button" team_id={{$team_a_id}}>Won Rally</button>
-
-							<button class="btn-link btn-red-card-select serve_{{$team_a_id}} serve"   onclick="return addScore(this)"  value='lost' type="button" team_id={{$team_a_id}}>Lost Rally</button>
-								</center>
-							</div>
-
-
-							<div class='col-sm-6'>
-								<div class='table-responsive'>
-									<table class="table table-striped">
-										<thead>
-											<tr class="thead">
-												<th><b>{{$team_b_name}}</b> </th>
-											</tr>
-										</thead>
-										<tbody>
-											    @foreach($team_b_kabaddi_scores_array  as $player_b)
-			                                        @if($player_b['playing_status']=='P' )
-			                                            <tr class="team_a_playing_row">
-			                                                <td class="player_{{$player_b['user_id']}} server_player">
-			                                                	{{ $player_b['serving_order'] }}  &nbsp; 
-			                                                    {{ $player_b['player_name']   }} 
-			                                                </td>
-
-			                                            </tr>
-			                                        @endif
-			                                    @endforeach
-										</tbody>									
-
-
-									</table>
-								</div>
-
-
-						<div class="sportsjun-forms">						
-							
-							<button  class="btn-link request btn-green-card serve_{{$team_b_id}} serve"   onclick="return addScore(this)" value='won' type="button" team_id={{$team_b_id}}>Won Rally</button>
-
-							<button  class="btn-link request btn-red-card-select serve_{{$team_b_id}} serve "   onclick="return addScore(this)"  value='lost' type="button" team_id={{$team_b_id}}>Lost Rally</button>
-
-							
-							<button data-toggle="modal" data-target="#kabaddiSubstituteModalB" class='btn-link btn-secondary-link  request pull-right' onclick="return false">Substitute  B</button>
+							<p><br>
 						</div>
-
-
-							</div>
-
 
 					</div>
 				</div>
 
 <!-- Temporal Data -->
-					<div class="col-sm-10 col-sm-offset-1 " style="display:none">
-						<h3 id='team_b' class="team_bowl team_title_head">New Records</h3>
-						<div class="">
-							<div class='row table-stripped'>						
-								
-								<div class="col-lg-12 col-sm-12 visible-md visible-sm visible-lg not-visible-xs">
-									<h5 class="col-sm-3 team_a ">Player</h5>
-									<h5 class="col-sm-2 team_a ">Quarter</h5>
-									<h5 class="col-sm-2 team_a ">Type</h5>
-									<h5 class="col-sm-2 team_a ">Time</h5>									
-									<h5 class="col-sm-3 team_a ">Action</h5>
-								</div>
-								
-								<div id="displayGoalsFirstHalfTemporal" class="col-lg-12 col-sm-12" >
-								
-								</div>
-
-							</div>
-							
+					<div class="col-sm-10 col-sm-offset-1 " id='new_records_match'>
+						<div id="displayGoalsFirstHalfTemporal" class="col-lg-12 col-sm-12" >								
 						</div>
-
 					</div>
 
 
@@ -876,11 +648,11 @@ input:read-only {
 											<label class="">Select Player of Match:</label>
 											<select name="player_of_the_match" id="player_of_the_match" class=" form-control selectpicker" onchange="">
 												<option value="0" disabled="">Team A</option>
-												@foreach($team_a_kabaddi_scores_array as $tm_player)
+												@foreach($team_a_ultimateFrisbee_scores_array as $tm_player)
 													<option value="{{$tm_player['user_id']}}" @if($match_data[0]['player_of_the_match']==$tm_player['user_id'])?'selected':'' @endif >{{$tm_player['player_name']}}</option>
 												@endforeach
 												<option value="0" disabled="">Team B</option>
-												@foreach($team_b_kabaddi_scores_array as $tm_player)
+												@foreach($team_b_ultimateFrisbee_scores_array as $tm_player)
 													<option value="{{$tm_player['user_id']}}" @if($match_data[0]['player_of_the_match']==$tm_player['user_id'])?'selected':'' @endif >{{$tm_player['player_name']}}</option>
 												@endforeach
 											</select>
@@ -889,8 +661,7 @@ input:read-only {
 
 									</div>
 
-
-<!--********* MATCH REPORT Start **************!-->
+									<!--********* MATCH REPORT Start **************!-->
 <div class="summernote_wrapper form-group">
         <h3 class="brown1 table_head">Match Report</h3>
         <textarea id="match_report" class="summernote" name="match_report" title="Match Report"></textarea>
@@ -899,16 +670,16 @@ input:read-only {
 <!--********* MATCH REPORT End **************!-->
 
 
-
 									
+										
 
 									<div class="modal-footer">
-										<button class='btn btn-primary ' onclick="" type='submit'> Save</button>
+									<button class='btn btn-primary ' onclick="" type='submit'> Save</button>
 										<button type="button" class="button btn-secondary" data-dismiss="modal">Cancel</button>
 									</div>
 								</div>
 							</div>
-					
+						</div>
 
 	<input type='hidden' id='selected_player_id_value' value='0' player_id='0' player_name=''>
 	<input type='hidden' id='half_time' value='quarter_1'>
@@ -917,9 +688,9 @@ input:read-only {
 
 	<input type='hidden' id='total_players_a' value="{{count($team_a_players)}}">
 	<input type='hidden' id='total_players_b' value="{{count($team_b_players)}}">
-	<input type="hidden" id="kabaddi_form_data" value="">
-	<input type="hidden" name="team_a_count" value="{{ (count($team_a_kabaddi_scores_array)>0)?count($team_a_kabaddi_scores_array):1 }}" id="team_a_count">
-	<input type="hidden" name="team_b_count" value="{{ (count($team_b_kabaddi_scores_array)>0)?count($team_b_kabaddi_scores_array):1 }}" id="team_b_count">
+	<input type="hidden" id="ultimateFrisbee_form_data" value="">
+	<input type="hidden" name="team_a_count" value="{{ (count($team_a_ultimateFrisbee_scores_array)>0)?count($team_a_ultimateFrisbee_scores_array):1 }}" id="team_a_count">
+	<input type="hidden" name="team_b_count" value="{{ (count($team_b_ultimateFrisbee_scores_array)>0)?count($team_b_ultimateFrisbee_scores_array):1 }}" id="team_b_count">
 	<input type="hidden" name="tournament_id" value="{{ $match_data[0]['tournament_id'] }}">
 	<input type="hidden" name="team_a_id" value="{{ $match_data[0]['a_id'] }}" id="team_a_id">
 	<input type="hidden" name="team_b_id" value="{{ $match_data[0]['b_id'] }}" id="team_b_id">
@@ -928,10 +699,6 @@ input:read-only {
 	<input type="hidden" name="team_a_name" value="{{ $team_a_name }}" id="team_a_name">
 	<input type="hidden" name="winner_team_id" value="" id="winner_team_id">
 	<input type="hidden" name="delted_ids" value="" id="delted_ids">
-	<input type='hidden' name='serving_user_id' value="" id="serving_user_id">
-
-
-
 	</form>
 					</div>
 				</div>
@@ -954,9 +721,6 @@ input:read-only {
 	@endif
 
 
-	@endif
-
-
 
 	<div class="sportsjun-forms text-center scorecards-buttons">
 		<center>
@@ -965,7 +729,7 @@ input:read-only {
 					<li>
 
 						@if(!$match_data[0]['hasSetupSquad'])
-							<button type='button' class='btn-danger btn .' onclick="return confirmSquad()"><i class="fa fa-floppy-o"></i> Confirm Squad</button>
+							<button type='button' class='btn-danger btn .' onclick="$('#ultimateFrisbeePreferences').modal('show')" ><i class="fa fa-floppy-o"></i> Confirm Squad</button>
 						@else
 
 
@@ -982,13 +746,13 @@ input:read-only {
 
 	<!-- Start Modals -->
 
-	<div id="kabaddiSubstituteModalA" class="modal fade">
+	<div id="ultimateFrisbeeSubstituteModalA" class="modal fade">
 		<div class="modal-dialog sj_modal sportsjun-forms">
 			<div class="modal-content">
 				<div class="alert alert-danger" id="div_failure1"></div>
 				<div class="alert alert-success" id="div_success1" style="display:none;"></div>
 				<div class="modal-body">
-					<form  onsubmit="return kabaddiSwapPlayers('form_substitute_a')" id='form_substitute_a'>
+					<form  onsubmit="return ultimateFrisbeeSwapPlayers('form_substitute_a')" id='form_substitute_a'>
 						{!!csrf_field()!!}
 						<input type='hidden' name='match_id' value="{{$match_id}}">
 						<input type='hidden' name='team_id' value="{{$team_a_id}}">
@@ -1003,18 +767,19 @@ input:read-only {
 											<th colspan="4">Playing Squad</th>
 										</tr>
 										<tbody id="">
-										@foreach($team_a_kabaddi_scores_array as $key=>$team_a_kabaddi)
-											@if($team_a_kabaddi['playing_status']=="P" )
-												<tr class="player_details_{{$team_a_kabaddi['id']}}">
-													<td colspan="3" class='select_left' class="team_a_goal_row player_select " player_id="{{$team_a_kabaddi['id']}} "  player_name="{{$team_a_kabaddi['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_kabaddi['player_name']}}
-													
+										@foreach($team_a_ultimateFrisbee_scores_array as $key=>$team_a_ultimateFrisbee)
+											@if($team_a_ultimateFrisbee['playing_status']=="P" )
+												<tr class="player_details_{{$team_a_ultimateFrisbee['id']}}">
+													<td colspan="3" class='select_left' class="team_a_goal_row player_select " player_id="{{$team_a_ultimateFrisbee['id']}} "  player_name="{{$team_a_ultimateFrisbee['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_ultimateFrisbee['player_name']}}
+														{!! $team_a_ultimateFrisbee['has_substituted']==1?"<i class='fa fa-share'></i>":''!!}
 													</td>
 													<td colspan="1" >
-														<input type='checkbox' name="substitute_a_{{$team_a_kabaddi['id']}}"  >
+														<input type='checkbox' name="substitute_a_{{$team_a_ultimateFrisbee['id']}}"  >
 													</td>
 												</tr>
 											@endif
 										@endforeach
+
 										</tbody>
 									</table>
 									<!-- End of substitute of Team B -->
@@ -1027,17 +792,17 @@ input:read-only {
 											<th colspan="4">Substitute Squad</th>
 										</tr>
 										<tbody id="">
-										@foreach($team_a_kabaddi_scores_array as $key=>$team_a_kabaddi)
-											@if($team_a_kabaddi['playing_status']=="S" )
+										@foreach($team_a_ultimateFrisbee_scores_array as $key=>$team_a_ultimateFrisbee)
+											@if($team_a_ultimateFrisbee['playing_status']=="S" )
 
-												<tr class="player_details_{{$team_a_kabaddi['id']}}">
-													<td colspan="3" class='select_left' class="team_a_goal_row player_select" player_id="{{$team_a_kabaddi['id']}} "  player_name="{{$team_a_kabaddi['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_kabaddi['player_name']}}
-														
+												<tr class="player_details_{{$team_a_ultimateFrisbee['id']}}">
+													<td colspan="3" class='select_left' class="team_a_goal_row player_select" player_id="{{$team_a_ultimateFrisbee['id']}} "  player_name="{{$team_a_ultimateFrisbee['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_ultimateFrisbee['player_name']}}
+														{!!$team_a_ultimateFrisbee['has_substituted']==1?"<i class='fa fa-reply'></i> {$team_a_ultimateFrisbee['time_substituted']} \"":'' !!}
 
 
 													</td>
 													<td colspan="1" >
-														<input type='checkbox' name="substitute_a_{{$team_a_kabaddi['id']}}" >
+														<input type='checkbox' name="substitute_a_{{$team_a_ultimateFrisbee['id']}}" >
 													</td>
 												</tr>
 											@endif
@@ -1067,14 +832,14 @@ input:read-only {
 	</div>
 
 
-	<div id="kabaddiSubstituteModalB" class="modal fade">
+	<div id="ultimateFrisbeeSubstituteModalB" class="modal fade">
 		<div class="modal-dialog sj_modal sportsjun-forms">
 			<div class="modal-content">
 				<div class="alert alert-danger" id="div_failure1"></div>
 				<div class="alert alert-success" id="div_success1" style="display:none;"></div>
 				<div class="modal-body">
 					<div class='row'>
-						<form  onsubmit="return kabaddiSwapPlayers('form_substitute_b')" id='form_substitute_b'>
+						<form  onsubmit="return ultimateFrisbeeSwapPlayers('form_substitute_b')" id='form_substitute_b'>
 							{!!csrf_field()!!}
 							<div class="table-responsive">
 								<center class='table_head'> {{$team_b_name}} Substitute</center>
@@ -1089,14 +854,14 @@ input:read-only {
 											<th colspan="4">Playing Squad</th>
 										</tr>
 										<tbody id="">
-										@foreach($team_b_kabaddi_scores_array as $team_a_kabaddi)
-											@if($team_a_kabaddi['playing_status']=="P" )
-												<tr class="player_details_{{$team_a_kabaddi['id']}}">
-													<td colspan="3" class='select_left' class="team_a_goal_row player_select" player_id="{{$team_a_kabaddi['id']}} "  player_name="{{$team_a_kabaddi['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_kabaddi['player_name']}}
-													
+										@foreach($team_b_ultimateFrisbee_scores_array as $team_a_ultimateFrisbee)
+											@if($team_a_ultimateFrisbee['playing_status']=="P" )
+												<tr class="player_details_{{$team_a_ultimateFrisbee['id']}}">
+													<td colspan="3" class='select_left' class="team_a_goal_row player_select" player_id="{{$team_a_ultimateFrisbee['id']}} "  player_name="{{$team_a_ultimateFrisbee['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_ultimateFrisbee['player_name']}}
+														{!! $team_a_ultimateFrisbee['has_substituted']==1?"<i class='fa fa-share'></i> {$team_a_ultimateFrisbee['time_substituted']}\"":'' !!}
 													</td>
 													<td colspan="1" >
-														<input type='checkbox' name="substitute_a_{{$team_a_kabaddi['id']}}" >
+														<input type='checkbox' name="substitute_a_{{$team_a_ultimateFrisbee['id']}}" >
 													</td>
 												</tr>
 											@endif
@@ -1114,14 +879,14 @@ input:read-only {
 											<th colspan="4">Substitute Squad</th>
 										</tr>
 										<tbody id="">
-										@foreach($team_b_kabaddi_scores_array as $team_a_kabaddi)
-											@if($team_a_kabaddi['playing_status']=="S" )
-												<tr class="player_details_{{$team_a_kabaddi['id']}}">
-													<td colspan="3" class='select_left' class="team_a_goal_row player_select" player_id="{{$team_a_kabaddi['id']}} "  player_name="{{$team_a_kabaddi['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_kabaddi['player_name']}}
-														
+										@foreach($team_b_ultimateFrisbee_scores_array as $team_a_ultimateFrisbee)
+											@if($team_a_ultimateFrisbee['playing_status']=="S" )
+												<tr class="player_details_{{$team_a_ultimateFrisbee['id']}}">
+													<td colspan="3" class='select_left' class="team_a_goal_row player_select" player_id="{{$team_a_ultimateFrisbee['id']}} "  player_name="{{$team_a_ultimateFrisbee['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_ultimateFrisbee['player_name']}}
+														{!! $team_a_ultimateFrisbee['has_substituted']==1?"<i class='fa fa-reply'></i>":'' !!}
 													</td>
 													<td colspan="1" >
-														<input type='checkbox' name="substitute_a_{{$team_a_kabaddi['id']}}" >
+														<input type='checkbox' name="substitute_a_{{$team_a_ultimateFrisbee['id']}}" >
 													</td>
 												</tr>
 											@endif
@@ -1150,22 +915,82 @@ input:read-only {
 	</div>
 
 
->
+	
+
+
+	<div id="ultimateFrisbeePreferences" class="modal fade">
+		<div class="modal-dialog sj_modal sportsjun-forms">
+			<div class="modal-content">
+				<div class="alert alert-danger" id="div_failure1"></div>
+				<div class="alert alert-success" id="div_success1" style="display:none;"></div>
+				<div class="modal-body">
+					<div class='row'>
+						<form  onsubmit="return confirmSquad()" >
+							{!!csrf_field()!!}
+							<div class="table-responsive">
+								<center class='table_head'> Game Preferences</center>
+								<hr>
+								<div class='col-sm-12'>								
+									<div class='row'>
+										<div class='col-sm-4'>
+											Number of Quarters
+										</div>
+										<div class="col-sm-5">
+											<input type='text' required="" placeholder="eg. 2" name='number_of_quarters' id='number_of_quarters'>
+										</div>
+									</div>
+									<br>
+									<div class='row'>
+										<div class='col-sm-4'>
+											Each Half time
+										</div>
+										<div class="col-sm-5">
+											<input type='text' required="" placeholder="eg. 30" name='quarter_time' id='quarter_time'>
+										</div>
+									</div>
+
+									<br>
+									<div class='row'>
+										<div class='col-sm-4'>
+											Player max fouls
+										</div>
+										<div class="col-sm-5">
+											<input type='text' required="" placeholder="eg. 3" name='max_fould' id='max_fouls'>
+										</div>
+									</div>
+
+									<br>
+
+					
+						
+								</div>
+
+							</div>
+
+						
+
+						
+					</div>
+
+				</div>
+
+			</div>
+			<div class="modal-footer">
+						<button class='btn btn-primary' type="submit" >Save</button>
+				<button type="button" class="button btn-secondary" data-dismiss="modal">Close</button>
+				</form>
+			</div>
+		</div>
+	</div>
+	</div>
 
 
 
 
-
+<input type='hidden' id='match_players' value="{{json_encode($match_players)}}">
 
 	<script>
-
-
-	var active_players = {{$active_players}}
-	var max_substitutes = {{$maximum_substitute}}
-	var active_players_letters = '{{Helper::convert_number_to_words($active_players)}}'
-	var max_substitutes_letters = '{{Helper::convert_number_to_words($maximum_substitute)}}'
-
-$(document).ready(function(){
+		$(document).ready(function(){
 			getTeam();
 		});
 		function getTeam()
@@ -1189,8 +1014,8 @@ $(document).ready(function(){
 			$('#winner_team_id').val($('#winner_id').val());
 			$("#winner_id").hide();
 		}
-		var team_a_count='{{ (count($team_a_kabaddi_scores_array)>0)?count($team_a_kabaddi_scores_array):1 }}';
-		var team_b_count='{{ (count($team_b_kabaddi_scores_array)>0)?count($team_b_kabaddi_scores_array):1 }}';
+		var team_a_count='{{ (count($team_a_ultimateFrisbee_scores_array)>0)?count($team_a_ultimateFrisbee_scores_array):1 }}';
+		var team_b_count='{{ (count($team_b_ultimateFrisbee_scores_array)>0)?count($team_b_ultimateFrisbee_scores_array):1 }}';
 		allownumericwithdecimal();
 		checkDuplicatePlayers('select_player_a');
 		checkDuplicatePlayers('select_player_b');
@@ -1460,9 +1285,6 @@ $(document).ready(function(){
 			}
 
 
-
-			//console.log(window.tempSquadData);
-
 			Array.prototype.remove = function() {
 				var what, a = arguments, L = a.length, ax;
 				while (L && this.length) {
@@ -1527,43 +1349,10 @@ $(document).ready(function(){
 			var substitute_players_a=tempSquadData.team_a.substitute.length;
 			var substitute_players_b=tempSquadData.team_b.substitute.length;
 
-			if(playing_players_a!=active_players){
-					$.alert({
-						title:"Alert",
-						content:"Choose " + active_players + " players for Team A"
-					})
+			tempSquadData.preferences.number_of_quarters=$('#number_of_quarters').val();
+			tempSquadData.preferences.quarter_time=$('#quarter_time').val();
+			tempSquadData.preferences.max_fouls=$('#max_fouls').val();
 
-					return false;
-			}
-
-			if(playing_players_b!=active_players){
-					$.alert({
-						title:"Alert",
-						content:"Choose " +active_players+ " players for Team B"
-					})
-
-				return false;
-			}
-
-			if(substitute_players_a>max_substitutes){
-					$.alert({
-						title:"Alert",
-						content:"You can only select a maximum of " + max_substitutes+ " substitutes for Team A"
-					})
-
-					return false;
-			}
-
-			if(substitute_players_b>max_substitutes){
-					$.alert({
-						title:"Alert",
-						content:"You can only select a maximum of " + max_substitutes + " substitute for Team B"
-					})
-
-				return false;
-			}
-
-			
 			//show errors if all players are not choosen
 
 			$.confirm({
@@ -1572,7 +1361,7 @@ $(document).ready(function(){
 				confirm:function(){
 					$(this).attr('disabled', true);
 					$.ajax({
-						url:base_url+'/match/confirmSquadkabaddi',
+						url:base_url+'/match/confirmSquadultimateFrisbee',
 						data:tempSquadData,
 						type:'post',
 						success:function(response){
@@ -1594,9 +1383,9 @@ $(document).ready(function(){
 		}
 
 		function saveMatchDetails(){
-			var data=$('#kabaddi').serialize();
+			var data=$('#ultimateFrisbee').serialize();
 			$.ajax({
-				url:base_url+'/match/insertAndUpdatekabaddiCard',
+				url:base_url+'/match/insertAndUpdateultimateFrisbeeCard',
 				data:data,
 				method:'post',
 				success:function(response){
@@ -1610,9 +1399,100 @@ $(document).ready(function(){
 			return false;
 		}
 
+		function saveRecord(i, record_type,player_id){
+			
+			var form=$('#form_record_'+i);
+			var data=form.serializeArray();	
+			var team_a_id={{$team_a_id}}
+			var team_b_id={{$team_b_id}}
+
+			$.ajax({
+				url:base_url+'/match/saveMatchRecordultimateFrisbee',
+				data:data,
+				method:'post',
+				dataType:'json',
+				success:function(response){
+					//setTimeout(getultimateFrisbeeDetails,2000);
+					var tem_a=response[team_a_id];
+					var tem_b=response[team_b_id];
+					var number_of_quarters=response.preferences.number_of_quarters;
 
 
-		function getkabaddiDetails(){
+
+					$('.team_a_score').html(tem_a.total_points + " <span class='fouls'>"+tem_a.fouls+"</span>")
+					$('.team_b_score').html(tem_b.total_points + " <span class='fouls'>"+tem_b.fouls+"</span>")
+
+
+					$.each(tem_a.players, function(key, value){							
+							
+							var fouls=value.fouls;
+							var points_1=value.points_1;
+							var points_2=value.points_2;
+							var points_3=value.points_3;
+							var total_points=value.total_points;
+
+							$('.fouls_'+key).val(fouls);
+							$('.points_1_'+key).val(points_1);
+							$('.points_2_'+key).val(points_2);
+							$('.points_3_'+key).val(points_3);
+							$('.total_points_'+key).val(total_points)
+
+
+							for(i=1; i<=number_of_quarters; i++){
+								var fouls_per_quarter=value['quarter_'+i].fouls;
+								var total_points_per_quarter=value['quarter_'+i].total_points;
+								$('.quarters_'+i+'_'+key).val(total_points_per_quarter);
+							}
+					});
+					$.each(tem_b.players, function(key, value){
+
+							var fouls=value.fouls;
+							var points_1=value.points_1;
+							var points_2=value.points_2;
+							var points_3=value.points_3;
+							var total_points=value.total_points;
+
+							$('.fouls_'+key).val(fouls);
+							$('.points_1_'+key).val(points_1);
+							$('.points_2_'+key).val(points_2);
+							$('.points_3_'+key).val(points_3);
+							$('.total_points_'+key).val(total_points)
+
+
+							for(i=1; i<=number_of_quarters; i++){
+								var fouls_per_quarter=value['quarter_'+i].fouls;
+								var total_points_per_quarter=value['quarter_'+i].total_points;
+								$('.quarters_'+i+'_'+key).val(total_points_per_quarter);
+							}
+					});
+
+					
+					//hide the player if player is dismissed
+					if(record_type=='fouls'){
+
+						 var player_content=$('#team_a_row_'+player_id);
+						 var user_id=player_content.attr('user_id');
+						 var team_id=player_content.attr('team_id');
+							
+
+						 var dismiss_status=response[team_id].players['player_'+user_id].dismissed;
+
+						 if(dismiss_status==1){
+						 		player_content.hide();
+						 }                             
+					}
+				
+				form.remove();				
+				},
+				error:function(x,y,z){
+
+				}
+
+			});
+			return false;
+		}
+
+		function getultimateFrisbeeDetails(){
 			//load details
 				var data={
 					match_id:$('#match_id').val(),
@@ -1621,7 +1501,7 @@ $(document).ready(function(){
 				}
 
 					$.ajax({
-						url:base_url+'/match/getkabaddiDetails',
+						url:base_url+'/match/getultimateFrisbeeDetails',
 						method:'get',
 						data:data,
 						success:function(response){
@@ -1631,13 +1511,13 @@ $(document).ready(function(){
 		}
 
 		
-		function kabaddiSwapPlayers(ser_id){
+		function ultimateFrisbeeSwapPlayers(ser_id){
 			var data=$('#'+ser_id).serialize();
 			$.ajax({
-				url:base_url+'/match/kabaddiSwapPlayers',
+				url:base_url+'/match/ultimateFrisbeeSwapPlayers',
 				data:data,
 				method:'post',
-				success:function(response){					
+				success:function(response){
 					window.location=window.location;
 				},
 				error:function(x,y,z){
@@ -1652,6 +1532,115 @@ $(document).ready(function(){
 
 	</script>
 
+	<script type="text/javascript">
+		$('.player_select').css({background:'none'});
+		$('.team_a_goal_row').click(function(){
+			var player_id=$(this).attr('player_id');
+			var player_name=$(this).attr('player_name');
+			var team_id=$(this).attr('team_id');
+			var team_name=$(this).attr('team_name');
+
+
+			if($(this).hasClass('player_selected')){ $(this).removeClass('player_selected').css({background:'none'}); $('#selected_player_id_value').val(0);}
+			else {
+				$('.player_select').removeClass('player_selected').css({background:'none'})
+				$(this).addClass('player_selected').css({background:'#ffddee'})
+				$('#selected_player_id_value').val(player_id);
+			}
+		$('.not_playing').css({ background:'#f9f9f9', cursor:'text'});
+			return false;
+		})
+
+
+
+		function displayGoals(match_details){
+			var first_half=match_details.first_half;
+			var second_half=match_details.second_half;
+
+			for(i=0; i<first_half.length ;i++){
+				if(first_half.goals_details.team_type=='team_a')
+					$('#displayGoalsFirstHalf').append("<tr><td></td><td></td><td></td><td></td>");
+				else $('#displayGoalsFirstHalf').append("<tr><td></td><td></td><td></td><td></td>");
+			}
+
+			for(i=0; i<first_half.length; i++){
+				if(first_half.goals_details.team_type=='team_a')
+					$('#displayGoalsSecondHalf').append("<tr><td></td><td></td><td></td><td></td>");
+				else $('#displayGoalsSecondHalf').append("<tr><td></td><td></td><td></td><td></td>");
+			}
+		}
+
+
+
+		//Choose players for penalty
+		function ultimateFrisbeeChoosePenaltiesPlayers(form_id){
+			$('#display_penalty_players').show();
+			var data=$('#'+form_id).serialize();
+			$.ajax({
+				url:base_url+'/match/choosePenaltyPlayersultimateFrisbee',
+				data:data,
+				method:'post',
+				dataType:'json',
+				success:function(response){
+					var message=response.message;
+					var response_a=response.response_a;
+					var response_b=response.response_b;
+					$('#penalty_players_a').append(response_a);
+					$('#penalty_players_b').append(response_b);
+					$('#ultimateFrisbeePenaltiesModal').modal('hide');
+
+				},
+				error:function(x,y,z){
+
+				}
+			})
+
+		}
+
+		// Add penalty goal to player
+
+		function updateBallPercentage(event,that){
+			if($(that).val()>100) return false;
+			var val=$(that).val();
+			$('#updateBallValue').val(100-val);
+		}
+
+		function scorePenalty(that){
+				var team_type 	=	$(that).attr('team_type');
+				var index 	 	=	$(that).attr('index');
+				var val 		= 	$(that).attr('value')
+			var data={
+					match_id:$('#match_id').val(),
+					team_type:team_type,
+					index:index,
+					value:val,
+				}
+			$('.btn_'+team_type+'_'+index).removeClass('btn-penalty-chosen');
+
+			$.ajax({
+				url:base_url+'/match/scorePenaltyultimateFrisbee',
+				type:'post',
+				data:data,
+				dataType:'json',
+				success:function(response){
+					$(that).addClass('btn-penalty-chosen');
+					//$('.btn_'+team_type+'_'+index).attr('disabled', true);
+					var match_details=response;
+					var penalties=match_details.penalties;
+
+					$('#penalty_a').html('Penalties : '+penalties.team_a.goals);
+					$('#penalty_b').html('Penalties : '+penalties.team_b.goals);
+					return false;
+				}, 
+				error:function(){
+					return false;
+				}
+			})
+			return false;
+		}
+
+
+	</script>
 
 
 
@@ -1681,7 +1670,6 @@ var manual=false;
                 $('.tennis_input_new').removeAttr('readonly');
                 $('.tennis_input_new').focus();
                 $('#real_time_scoring').hide();
-                $('#end_match_button').hide();
                 $('#saveButton').show();
                 manual=true;
             }, 
@@ -1699,7 +1687,6 @@ var manual=false;
 
                  $('.tennis_input_new').attr('readonly', 'readonly');
                  $('#real_time_scoring').show();
-                 $('#end_match_button').show();
                  $('#saveButton').hide();
                  manual=false;
             }, 
@@ -1713,17 +1700,19 @@ var manual=false;
     }
 
      function manualScoring(that){
-        var data=$('#kabaddi').serialize();
+        var data=$('#ultimateFrisbee').serialize();
+        var match_players=$('#match_players').val();
+        var number_of_quarters={{$number_of_quarters}}
+        var check_inputs=false;
 
         $.ajax({
-            url:base_url+"/match/manualScoringkabaddi",
+            url:base_url+"/match/manualScoringultimateFrisbee",
             type:'post',
             data:data,
             success:function(response){
                 window.location=window.location;
             }
         })
-
 
         return false;
      }
@@ -1733,7 +1722,7 @@ var manual=false;
         var data=$('#endMatchForm').serialize();
 
         $.ajax({
-            url:base_url+"/match/endMatchRecordkabaddi",
+            url:base_url+"/match/endMatchRecordultimateFrisbee",
             type:'post', 
             data:data,
             success:function(response){
@@ -1747,119 +1736,5 @@ var manual=false;
 
    
     </script>
-
-
-
-<script type="text/javascript">
-	
-	function submitServingPlayers(that){
-
-		var p_arrays=[];
-			for(i=1; i<=6; i++){
-				var val=$("#serving_a_"+i).val();
-			    if(p_arrays.indexOf(val)!=-1){
-			    	$.alert({
-			    		title:"Alert!",
-			    		content:"Please select one player for each number"
-			    	})
-			  
-			    	$("#serving_a_"+i).focus();
-			    	return false;
-			    }
-				p_arrays.push(val);
-			}
-			p_arrays=[];
-			for(i=1; i<=6; i++){
-				var val=$("#serving_b_"+i).val();
-			    if(p_arrays.indexOf(val)!=-1){
-			    	$.alert({
-			    		title:"Alert!",
-			    		content:"Please select one player for each number"
-			    	})
-			    	$("#serving_b_"+i).focus();
-			    	return false;
-			    }
-				p_arrays.push(val);
-			}
-
-			
-			var data=$(that).serialize();
-			$.ajax({
-				url:'/match/submitServingPlayerskabaddi',
-				type:'post',
-				data:data,
-				success:function(response){
-					window.location=window.location;
-				},
-				error:function(){
-					return false;
-				}
-			})
-
-		return false;
-	}
-</script>
-
-
-<script type="text/javascript">
-	//highlight team serving
-	$('.serve').attr('disabled', 'disabled');
-
-	teamServing({{$serving_array->team_id}}, {{$serving_array->player_id}})
-
-	function teamServing(team_id, player_id){
-		$('.serve').attr('disabled', 'disabled');
-		$('.serve_'+team_id).removeAttr('disabled');
-		$('.server_player').css({'font-weight':'normal'}).css({background:'transparent'})
-		$('.player_'+player_id).css({'font-weight':'bolder'}).css({background:'#ffddee'})
-		$('#serving_user_id').val(player_id);
-			
-	}
-
-</script>
-
-<script>
- function addScore(that){
-        var team_id=$(that).attr('team_id');
-        var val=$(that).attr('value');
-        var player_id=$(that).attr('#serving_user_id');    
-
-          data={
-              team_id:team_id,
-              player_id:player_id,              
-              match_id:match_id,
-              action:'add',
-              val:val
-              }
-
-                    $.ajax({
-                        url:'/match/kabaddiAddScore',
-                        data:data,
-                        method:'post',
-                        dataType:'json',
-                        success:function(response){
-                          var left_team_id={{$team_a_id}};
-                          var right_team_id={{$team_b_id}}
-
-                            $.each(response.match_details, function(key, value){
-
-                                $('.a_'+key).val(value[left_team_id+'_score']);
-                                $('.b_'+key).val(value[right_team_id+'_score']);
-                            })
-
-                          
-
-              $('#team_a_score').html(response.scores[left_team_id+"_score"] + ' sets');
-              $('#team_b_score').html(response.scores[right_team_id+"_score"] + ' sets');
-
-              	teamServing(response.server.team_id, response.server.player_id)
-
-
-                        }
-
-                       });
-                  return false;
-              } 
-       </script>
 
 @endsection

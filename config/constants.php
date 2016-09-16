@@ -324,6 +324,11 @@ return [
                     'substitute'     => 6,
                     'maximum_points' => 25,
                     'maximum_substitutes' => 3,
+                ],
+                15 => [
+                    'active_players' => 5,
+                    'number_of_halves' =>2,
+                    'walk_over_points' =>13,
                 ]
 
         ]

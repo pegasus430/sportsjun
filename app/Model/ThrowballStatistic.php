@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class ThrowballStatistic extends Model
 {
     //
-      protected $table = 'throwball_statistic';
+      protected $table = 'throwball_statistics';
 }

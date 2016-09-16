@@ -195,7 +195,7 @@ class ScoreCardController extends Controller {
 				else if(strtolower($sport_name)==strtolower('Ultimate Frisbee'))
 				{
 						$hockey= new ScoreCard\UltimateFrisbeeScorecardController;
-					return $hockey->hockeyScoreCard($match_data,$sportsDetails,$tournamentDetails);
+					return $hockey->ultimateFrisbeeScoreCard($match_data,$sportsDetails,$tournamentDetails);
 				}
 				else if(strtolower($sport_name)==strtolower('Water Polo'))
 				{
@@ -3214,7 +3214,7 @@ class ScoreCardController extends Controller {
 				else if(strtolower($sport_name)==strtolower('Ultimate Frisbee'))
 				{
 						$hockey= new ScoreCard\UltimateFrisbeeScorecardController;
-					return $hockey->hockeyScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
+					return $hockey->ultimateFrisbeeScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
 				else if(strtolower($sport_name)==strtolower('Water Polo'))
 				{

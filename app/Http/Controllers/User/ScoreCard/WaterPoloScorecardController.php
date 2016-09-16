@@ -259,32 +259,32 @@ class WaterPoloScorecardController extends parentScoreCardController
             "dismissed"=>0, 
             "quarters_played"=>'',
             "quarter_1"=>[
-                   
+                   "points_1"=>0,
                     "fouls"=>0,
                     "total_points"=>0,
             ],
             "quarter_2"=>[
-                    
+                    "points_1"=>0,
                     "fouls"=>0,
                     "total_points"=>0,
             ],
             "quarter_3"=>[
-                    
+                    "points_1"=>0,
                     "fouls"=>0,
                     "total_points"=>0
             ],
             "quarter_4"=>[
-                   
+                    "points_1"=>0,
                     "fouls"=>0,
                     "total_points"=>0,
                 ],
             "quarter_5"=>(object)[
-                    
+                    "points_1"=>0,
                     "fouls"=>0,
                     "total_points"=>0,
                 ],
             "quarter_6"=>(object)[
-                   
+                   "points_1"=>0,
                     "fouls"=>0,
                     "total_points"=>0,
                 ]
