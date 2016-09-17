@@ -42,7 +42,7 @@
           <div class="col-sm-12">
                 <div class="round-{{Helper::convert_number_to_words($round)}}">
                     <div class="round"><p>    {{$bracket_name=Helper::getRoundStage($tournament_id, $round)}} </p></div>
-                          @if($round==1)             
+                       @if($round==1)             
                                  @include('tournaments.sub_match_schedules')               
                          @else 
 
@@ -51,20 +51,8 @@
                                       <?php $i++;?>
                                 <?php $firstRoundBracketArray=$bracketTeam;?>
                                 @include('tournaments.sub_match_schedules')
-                             @endforeach
-
-
-                           @if($bracket_name=='FINAL')
-                           <?php $bracket  = Helper::getThirdPosition($tournament_id, $round);  
-                           		 $firstRoundBracketArray=$bracket;  
-                          ?> 
-                          	     @include('tournaments.sub_match_schedules')
-                          	     
-                           @endif
-                         @endif 
-
-
-  
+                             @endforeach                          
+                         @endif   
                      @endif
                 </div>
             </div>
