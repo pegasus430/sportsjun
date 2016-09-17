@@ -21,4 +21,4 @@
 			@include('tournaments.settings.points')
 		</div>
 
-</div>
+< /div>

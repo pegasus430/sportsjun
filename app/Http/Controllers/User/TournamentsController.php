@@ -1324,12 +1324,12 @@ class TournamentsController extends Controller
 		    	$second_position=$first_position_model->looser_id;
 
 		    	if(!empty($tournamentObj->p_1)){
-		    		TournamentGroupTeams::whereTournamentId($tournament_id)->whereTeamId($first_position)->update(['points'=>$tournamentObj->p_1]);
+		    		//TournamentGroupTeams::whereTournamentId($tournament_id)->whereTeamId($first_position)->update(['points'=>$tournamentObj->p_1]);
 		    		TournamentFinalTeams::whereTournamentId($tournament_id)->whereTeamId($first_position)->update(['points'=>$tournamentObj->p_1]);
 		    	}
 
 		    	if(!empty($tournamentObj->p_2)){
-		    		TournamentGroupTeams::whereTournamentId($tournament_id)->whereTeamId($second_position)->update(['points'=>$tournamentObj->p_2]);
+		    		//TournamentGroupTeams::whereTournamentId($tournament_id)->whereTeamId($second_position)->update(['points'=>$tournamentObj->p_2]);
 		    		TournamentFinalTeams::whereTournamentId($tournament_id)->whereTeamId($second_position)->update(['points'=>$tournamentObj->p_3]);
 		    	}
 
@@ -1341,12 +1341,12 @@ class TournamentsController extends Controller
 
 
 		    	if(!empty($tournamentObj->p_3)){
-		    		TournamentGroupTeams::whereTournamentId($tournament_id)->whereTeamId($third_position)->update(['points'=>$tournamentObj->p_3]);
+		    		//TournamentGroupTeams::whereTournamentId($tournament_id)->whereTeamId($third_position)->update(['points'=>$tournamentObj->p_3]);
 		    		TournamentFinalTeams::whereTournamentId($tournament_id)->whereTeamId($third_position)->update(['points'=>$tournamentObj->p_3]);
 		    	}
 
 		    	if(!empty($tournamentObj->p_4)){
-		    		TournamentGroupTeams::whereTournamentId($tournament_id)->whereTeamId($fourth_position)->update(['points'=>$tournamentObj->p_4]);
+		    		//TournamentGroupTeams::whereTournamentId($tournament_id)->whereTeamId($fourth_position)->update(['points'=>$tournamentObj->p_4]);
 		    		TournamentFinalTeams::whereTournamentId($tournament_id)->whereTeamId($fourth_position)->update(['points'=>$tournamentObj->p_4]);
 		    	}
 		    }
