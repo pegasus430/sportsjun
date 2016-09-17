@@ -43,6 +43,9 @@
 											@if ( $tour['sports_id'] == 1 )
 												<th>Net Run Rate</th>
 											@endif
+								@if($match_is_completed)
+                                	<th> Final Points </th> 
+                                @endif
 										</tr>
 										</thead>
 										<tbody>
@@ -62,6 +65,9 @@
 												@if ( $tour['sports_id'] == 1 )
 													<td>{{ !empty($net_run_rate[$team['team_id']])?$net_run_rate[$team['team_id']]:"--" }}</td>
 												@endif
+								@if($match_is_completed)
+                                	 <td>{{ !empty($team['final_points'])?$team['final_points']:'-' }}</td>
+                                @endif
 											</tr>
 										@endforeach
 										</tbody>

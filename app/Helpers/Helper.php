@@ -30,6 +30,7 @@ use Route;
 use PDO;
 use App\Helpers\SendMail;
 use App\Model\TournamentGroupTeams;
+use App\Model\TournamentFinalTeams;
 use App\Model\OrganizationGroupTeamPoint;
 
 class Helper {

@@ -152,9 +152,9 @@
                                     @endif
 
                                 @if($match_is_completed)
-                                	<td>
-                                	{{ Helper::getFinalPoints($tournament_id, $team['team_id']) }}
-                                	</td>
+                                	
+                                	 <td>{{ !empty($team['final_points'])?$team['final_points']:'-' }}</td>   
+                                	
                                 @endif
                                     <td><a href="#" class="btn btn-danger btn-circle btn-sm" onclick="deleteTeam({{$tournament_id}},{{$team['tournament_group_id']}},{{$team['id']}},{{$team['team_id']}});"><i class="fa fa-remove"></i></a></td>
                                     </tr>	
