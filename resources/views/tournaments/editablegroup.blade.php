@@ -118,6 +118,9 @@
                                     @if ( $tour['sports_id'] == 1 )
                                     <th>Net Run Rate</th>
                                     @endif
+                                @if($match_is_completed)
+                                	<th> Final Points </th> 
+                                @endif
                                     <th></th>
                                     </tr>
                                     </thead>
@@ -147,6 +150,12 @@
                                     @if ( $tour['sports_id'] == 1 )
                                     <td>{{ !empty($net_run_rate[$team['team_id']])?$net_run_rate[$team['team_id']]:"--" }}</td>
                                     @endif
+
+                                @if($match_is_completed)
+                                	<td>
+                                	{{ Helper::getFinalPoints($tournament_id, $team['team_id']) }}
+                                	</td>
+                                @endif
                                     <td><a href="#" class="btn btn-danger btn-circle btn-sm" onclick="deleteTeam({{$tournament_id}},{{$team['tournament_group_id']}},{{$team['id']}},{{$team['team_id']}});"><i class="fa fa-remove"></i></a></td>
                                     </tr>	
                                     @endforeach

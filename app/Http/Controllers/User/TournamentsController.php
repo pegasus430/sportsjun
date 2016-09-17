@@ -1307,6 +1307,7 @@ class TournamentsController extends Controller
 			}
 		}
 
+		$match_is_completed = 0; 
 		//update Points; 
 		if($lastRoundWinner){
 			$first_position_model = MatchSchedule::whereTournamentId($tournament_id)
@@ -1322,7 +1323,7 @@ class TournamentsController extends Controller
 		    if($first_position_model){
 		    	$first_position=$first_position_model->winner_id;
 		    	$second_position=$first_position_model->looser_id;
-
+		    		$match_is_completed =1; 
 		    	if(!empty($tournamentObj->p_1)){
 		    		//TournamentGroupTeams::whereTournamentId($tournament_id)->whereTeamId($first_position)->update(['points'=>$tournamentObj->p_1]);
 		    		TournamentFinalTeams::whereTournamentId($tournament_id)->whereTeamId($first_position)->update(['points'=>$tournamentObj->p_1]);
@@ -1439,6 +1440,7 @@ class TournamentsController extends Controller
 			'sport_name'               => $sport_name,
 			'match_startdate_array'    => $match_startdate_array,
 			'match_count'              => $match_count,
+			'match_is_completed'	   => $match_is_completed
 			
 		))
 			->with('match_types', ['' => 'Select Match Type'] + $match_types)
@@ -2572,6 +2574,8 @@ class TournamentsController extends Controller
 
 			return $group_teams;
 	}
+
+	
 
 	public function settings($tournament_id){
 		$t_settings=Settings::where('tournament_id', $tournament_id)->first();

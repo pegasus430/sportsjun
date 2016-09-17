@@ -2349,6 +2349,15 @@ class Helper {
     }
 
 
+    public static function getFinalPoints($tournament_id, $team_id){
+            $final_team = TournamentFinalTeams::whereTournamentId($tournament_id)
+                                              ->whereTeamId($team_id)
+                                              ->first();
+            if($final_team) return $final_team->points;
+            else return '-';
+    }
+
+
    
 
 }
