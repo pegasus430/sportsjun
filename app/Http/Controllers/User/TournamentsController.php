@@ -2580,6 +2580,7 @@ class TournamentsController extends Controller
 	public function settings($tournament_id){
 		$t_settings=Settings::where('tournament_id', $tournament_id)->first();
 		$t_model = Tournaments::find($tournament_id);
+
 		$tournament=$t_model;
 		$sports_name = strtolower($t_model->sport->sports_name);
 
@@ -2595,7 +2596,15 @@ class TournamentsController extends Controller
 
 		$settings=json_decode($settings);
 
-		return view('tournaments.settings.'.$sports_name, compact('settings','tournament') );
+		if($tournament->matches->count()){
+			$readonly = 'readonly';
+		}
+		else {
+			$readonly = '';
+		}
+
+
+		return view('tournaments.settings.'.$sports_name, compact('settings','tournament', 'readonly') );
 	}
 
 	public function updateSettings($tournament_id){

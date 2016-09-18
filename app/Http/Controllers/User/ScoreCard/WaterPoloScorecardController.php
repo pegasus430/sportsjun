@@ -413,8 +413,11 @@ class WaterPoloScorecardController extends parentScoreCardController
                         $player->fouls=$request->{'fouls_'.$player->id};
 
                         $match_details->{$player->team_id}->players->{'player_'.$player->user_id}->fouls=$request->{'fouls_'.$player->id};
-                        $match_details->{$player->team_id}->players->{'player_'.$player->user_id}->dismissed=1;
-
+                        
+                 if($player->fouls>=$max_fouls){
+                     $match_details->{$player->team_id}->players->{'player_'.$player->user_id}->dismissed=1;
+                           $player->playing_status = 'S';
+                            }
                             
                                     //stores points per player
                         $total_points_per_player=0;

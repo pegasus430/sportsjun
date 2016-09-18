@@ -170,6 +170,10 @@ class Tournaments extends Model
             return $this->hasOne('App\Model\TournamentMatchPreference','tournament_id');
     }
 
+    function matches(){
+            return $this->hasMany('App\Model\MatchSchedule' , 'tournament_id');
+    }
+
   
 
     
