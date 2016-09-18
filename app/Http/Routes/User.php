@@ -301,6 +301,10 @@ Route::post('tournaments/rubber/{id}/update_schedule', [
     'as'   => 'rubberUpdateSchedule',
     'uses' => 'User\TournamentsController@rubberUpdateSchedule',
 ]);
+Route::get('tournaments/end_tournament/{id}', [
+    'as'   => 'endTournament',
+    'uses' => 'User\TournamentsController@endTournament',
+]);
 Route::post('tournaments/match/{id}/add_rubber', [
     'as'   => 'addRubber',
     'uses' => 'User\TournamentsController@addRubber',

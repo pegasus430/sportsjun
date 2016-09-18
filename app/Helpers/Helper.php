@@ -1995,7 +1995,7 @@ class Helper {
 
                 break;
 
-                case in_array($match_model->sports_id, [6,16]):           //basketball
+                case in_array($match_model->sports_id, [6,15,16]):           //basketball
                    
             $match_model->scores=$match_details->{$a_id}->total_points.' - '. $match_details->{$b_id}->total_points;
 
@@ -2356,6 +2356,25 @@ class Helper {
                                               ->first();
             if($final_team) return $final_team->points;
             else return '-';
+    }
+
+    //update group points after group level is completed
+
+    public static function updateGroupPoints($tournament_id, $group_id, $team_id, $position){
+            $tournament=Tournaments::find($tournament_id);
+            $group_teams =tournamentgroupteams::whereTournamentId($tournament_id)
+                                                ->whereTournamentGroupId($group_id)
+                                                ->whereTeamId($team_id)
+                                                ->first();
+
+            if($tournament->group_is_ended && !count($tournament->tournament_final_teams)){
+
+                if($tournament->{'p_'.$position}){
+                   $group_teams->final_points = $tournament->{'p_'.$position}; 
+                   $group_teams->save();
+                }
+
+            }
     }
 
 

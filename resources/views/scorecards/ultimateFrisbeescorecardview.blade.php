@@ -197,7 +197,7 @@
 
             <div class="panel panel-default">
                 <div class="col-md-12">
-                    <h5 class="scoreboard_title">ultimateFrisbee Scorecard
+                    <h5 class="scoreboard_title">Ultimate Frisbee Scorecard
                             @if(!empty($match_data[0]['match_category']))
                              <span class='match_type_text'>
                              ({{ucfirst($match_data[0]['match_category']) }})
@@ -269,7 +269,7 @@
                                                 <th >Fouls</th>
                                                 
                                         @for($index=1; $index<=$number_of_quarters; $index++)
-                                                <th>Qtr {{$index}}</th>
+                                                <th>Half {{$index}}</th>
                                         @endfor
 
                                                                                                
@@ -326,7 +326,7 @@
                                                 <th >Fouls</th>
                                                 
                                         @for($index=1; $index<=$number_of_quarters; $index++)
-                                                <th>Qtr {{$index}}</th>
+                                                <th>Half {{$index}}</th>
                                         @endfor
 
                                               

@@ -16,7 +16,7 @@
         @if($tournament_type=='league' || $tournament_type=='multistage')
         <div id="group_stage">
         <!-- /.panel-heading -->
-            @if(count($tournamentDetails[0]['final_stage_teams']))
+            @if(count($tournamentDetails[0]['final_stage_teams']) || $tournamentDetails[0]['group_is_ended'] )
                     @include ('tournaments.viewablegroup')
             @else
 				@if($isOwner)

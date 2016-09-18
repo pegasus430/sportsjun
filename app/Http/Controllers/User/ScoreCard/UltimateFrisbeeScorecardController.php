@@ -425,8 +425,10 @@ class UltimateFrisbeeScoreCardController extends parentScoreCardController
                         $player->fouls=$request->{'fouls_'.$player->id};
 
                         $match_details->{$player->team_id}->players->{'player_'.$player->user_id}->fouls=$request->{'fouls_'.$player->id};
-                        $match_details->{$player->team_id}->players->{'player_'.$player->user_id}->dismissed=1;
-
+                        if($player->fouls>=$max_fouls){
+                     $match_details->{$player->team_id}->players->{'player_'.$player->user_id}->dismissed=1;
+                           $player->playing_status = 'S';
+                            }
                             
                                     //stores points per player
                         $total_points_per_player=0;
@@ -481,6 +483,7 @@ class UltimateFrisbeeScoreCardController extends parentScoreCardController
         $ultimateFrisbee_player=ultimateFrisbeePlayerMatchwiseStats::whereMatchId($match_id)->first();
         $delted_ids=$request['delted_ids'];
         $match_result=$request['match_result'];
+        $match_report= $request['match_report'];
         $winner_team_id = !empty(Request::get('winner_team_id'))?Request::get('winner_team_id'):NULL;//winner_id
         $player_of_the_match=isset($request['player_of_the_match'])?$request['player_of_the_match']:NULL;
 
@@ -550,6 +553,7 @@ class UltimateFrisbeeScoreCardController extends parentScoreCardController
                         'winner_id'=>$winner_team_id ,
                         'looser_id'=>$looser_team_id,
                         'has_result'     => $has_result,
+                        'match_report'   => $match_report,
                         'match_result'   => $match_result,
                         'is_tied'=>$is_tie,
                         'score_added_by'=>$json_score_status]);
@@ -582,6 +586,7 @@ class UltimateFrisbeeScoreCardController extends parentScoreCardController
                      'looser_id'      => $looser_team_id,
                     'is_tied'        => $is_tie,
                      'has_result'     => $has_result,
+                     'match_report'   => $match_report,
                      'match_result'   => $match_result,
                      'score_added_by' => $json_score_status,'scoring_status'=>$approved]);
 
@@ -604,6 +609,7 @@ class UltimateFrisbeeScoreCardController extends parentScoreCardController
                     'is_tied'=>$is_tie,
                     'has_result'     => $has_result,
                      'match_result'   => $match_result,
+                     'match_report'   => $match_report,
                      'score_added_by'=>$json_score_status]);
             }
         }

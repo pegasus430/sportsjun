@@ -5,6 +5,11 @@
                         {{ session('status') }}
                     </div>
                     @endif
+
+                 <div class="col-sm-12">
+     <center> <a href='/tournaments/end_tournament/{{$tournament_id}}' class="btn btn-danger btn-event" onclick="return confirm('Do you want to end group stage?')">  End Group Stage </a>
+     </center>
+                 </div>
                         <!-- /.panel-heading -->
 			@foreach($tournament as $tour)
 			@foreach($tour->groups as $group)

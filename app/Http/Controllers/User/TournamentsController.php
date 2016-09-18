@@ -2704,4 +2704,11 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
 		return view('tournaments.sub_match_schedules_rubber', compact('match', 'team_logo', 'team_name_array', 'isOwner') );
 
 	}
+
+	public function endTournament($id){
+		$tournament = Tournaments::find($id);
+		$tournament->group_is_ended = 1; 
+		$tournament->save();
+		return redirect()->back()->with('message', 'Group Closed');
+	}
 }

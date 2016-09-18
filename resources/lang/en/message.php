@@ -530,7 +530,7 @@ return [
     		'score_to_win' 		=> 'Win Score',
     		'end_point'	 		=> 'End Point',
     		'enable_two_points' => 'Enable Two Points Clear?',
-    		'active_players' 	=> 'Active Players',
+    		'active_players' 	=> 'Playing Players Count',
     		'substitutes'			=> 'Substitute Players',
     		'max_substitutes' 	=> 'Maximum Substitute per Player'
     ]

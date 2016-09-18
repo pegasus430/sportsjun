@@ -261,7 +261,7 @@ input:read-only {
 								<p></p>
 								<br>
 								@if($match_data[0]['hasSetupSquad'])
-									<button class="btn btn-danger " onclick="return SJ.SCORECARD.soccerSetTimes(this)"></i>End Match</button>
+									<button class="btn btn-danger " id='end_match_btn' onclick="return SJ.SCORECARD.soccerSetTimes(this)"></i>End Match</button>
 								@endif
 				 @if($isValidUser && $isForApprovalExist && ($match_data[0]['winner_id']>0 || $match_data[0]['is_tied']>0 || $match_data[0]['has_result'] == 0))  
 
@@ -948,7 +948,7 @@ input:read-only {
 								<div class='col-sm-12'>								
 									<div class='row'>
 										<div class='col-sm-4'>
-											Number of Quarters
+											Number of Halfs
 										</div>
 										<div class="col-sm-5">
 											<input type='text' required="" placeholder="eg. 2" name='number_of_quarters' id='number_of_quarters'>
@@ -1685,6 +1685,7 @@ var manual=false;
                 $('.tennis_input_new').focus();
                 $('#real_time_scoring').hide();
                 $('#saveButton').show();
+                $('#end_match_btn').hide();
                 manual=true;
             }, 
             cancel:function(){
@@ -1702,6 +1703,7 @@ var manual=false;
                  $('.tennis_input_new').attr('readonly', 'readonly');
                  $('#real_time_scoring').show();
                  $('#saveButton').hide();
+                 $('#end_match_btn').show();
                  manual=false;
             }, 
             cancel:function(){

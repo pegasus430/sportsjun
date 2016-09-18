@@ -1,12 +1,14 @@
 <div class='row'>
+	<fieldset style="border:inset 1px #eee; border-radius:5px">
 		<div class="col-sm-12">
-		<center><label><h4>Points Structure </h4></label> </center>
+		<center><label><h4>Final Points </h4></label> </center>
+		<p><span class="winner"><i>Optional : This feature is for organizers who assigns points to W, L, 3rd and 4th position</i></span>
 		</div>
 		<div class="clearfix">
 			<div class="col-sm-3">
 				<div class="section">
 				<label class="form_label">
-					P 1
+					Winner
 				</label>
 
 				<label class="field">
@@ -19,7 +21,7 @@
 			<div class="section">
 				
 				<label class="form_label">
-					P 2
+					Runner
 				</label>
 
 				<label class="field">
@@ -32,7 +34,7 @@
 			<div class="section">
 				
 				<label class="form_label">
-					P 3
+					3rd Position
 				</label>
 
 				<label class="field">
@@ -45,7 +47,7 @@
 			<div class="section">
 				
 				<label class="form_label">
-					P 4
+					4th Position
 				</label>
 
 				<label class="field">
@@ -53,4 +55,5 @@
 				</label>
 			</div>
 			</div>
+		</fieldset>
 </div>
