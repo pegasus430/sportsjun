@@ -268,7 +268,8 @@ class ThrowballscoreCardController extends parentScoreCardController
                         "left_team_id"=>$team_a_id,
                         "right_team_id"=>$team_b_id,                        
                         "number_of_sets"=>$set,                        
-                        "end_point"=>$maximum_points,                       
+                        "end_point"=>$maximum_points,   
+                        'score_to_win'=>$maximum_points                    
                     ],
             "match_details"=>[
                 "set1"=>[
@@ -664,7 +665,7 @@ $check_maximum_substitute=SubstituteRecord::whereMatchId($match_id)->whereUserId
          }
 
 
-         for($i=1; $i<=6; $i++){
+         for($i=1; $i<=7; $i++){
                 $player_model=throwballPlayerMatchwiseStats::whereUserId($request->{'serving_a_'.$i})->whereTeamId($team_a)->whereMatchId($request->match_id)->first()->update(['serving_order'=>$i]);               
 
                 $player_model=throwballPlayerMatchwiseStats::whereUserId($request->{'serving_b_'.$i})->whereTeamId($team_b)->whereMatchId($request->match_id)->first()->update(['serving_order'=>$i]);
@@ -751,8 +752,8 @@ $check_maximum_substitute=SubstituteRecord::whereMatchId($match_id)->whereUserId
 
     public function checkSet($set, $match_score_model, $match_score_model_other, $preferences , $stw=0){
             $end_point = 1000;
-            $score_to_win = 25;
-            $number_of_sets = 5;            
+            $score_to_win = $preferences->end_point;
+            $number_of_sets = $preferences->number_of_sets;
             $enable_two_points = 'on';
 
             if($stw!=0) $score_to_win =15; 
@@ -826,7 +827,7 @@ $check_maximum_substitute=SubstituteRecord::whereMatchId($match_id)->whereUserId
                     } 
 
             //Exchange player positions
-        DB::statement("UPDATE throwball_player_matchwise_stats SET serving_order = (serving_order %6) +1 WHERE match_id=$match_id AND playing_status='P'");
+        DB::statement("UPDATE throwball_player_matchwise_stats SET serving_order = (serving_order %7) +1 WHERE match_id=$match_id AND playing_status='P'");
 
                 }
            

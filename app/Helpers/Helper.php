@@ -2189,9 +2189,10 @@ class Helper {
        
         $serving_array=json_decode(json_encode(
                 ['team_id'=>$team_id,
-                 'player_id'=>$player_serving->user_id,
+                 'player_id'=>empty($player_serving)?0:$player_serving->user_id,
                  'team_name'=>Team::find($team_id)->name,
-                 'player_name'=>User::find($player_serving->user_id)->name]
+                 'player_name'=>empty($player_serving)?'':User::find($player_serving->user_id)->name
+                 ]
 
             ));
         

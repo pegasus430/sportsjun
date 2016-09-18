@@ -86,7 +86,7 @@ Route::group(['prefix'=>'match'], function(){
         ['as'=>'match/submitServingPlayersThrowball', 
         'uses'=>'User\ScoreCard\ThrowballScoreCardController@submitServingPlayers']);
 
-    Route::post('ThrowballSwapPlayers',    ['as'=>'match/volleyballSwapPlayersThrowball', 'uses'=>'User\ScoreCard\hrowballcoreCardController@volleyballSwapPlayers']);
+    Route::post('throwballSwapPlayers',    ['as'=>'match/volleyballSwapPlayersThrowball', 'uses'=>'User\ScoreCard\ThrowballScoreCardController@throwballSwapPlayers']);
     Route::post('/endMatchRecordthrowball', 'User\ScoreCard\ThrowballScoreCardController@throwballStoreRecord');
 
     Route::post('/saveMatchRecordthrowball', 'User\ScoreCard\BasketballScoreCardController@throwballSaveRecord');
