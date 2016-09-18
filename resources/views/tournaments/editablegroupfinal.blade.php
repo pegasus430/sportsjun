@@ -20,17 +20,29 @@
 
 <div class="col-sm-12">
 <div class="row group-flex-content">
+
+
+
 <?php $i=0;?>
 @if(count($roundArray))
+
 	<br>
-    <div class="pull-left half-width col-xs-12 col-sm-6 col-sm-offset-3"> <center><input class='full-width form-control dark-border' placeholder="filter match e.g team name, date" onkeyup="filterDiv(this)"></center></div>
+	<div class="col-sm-12">
+    <div class="pull-left col-xs-12 col-sm-6 "> <center><input  type='text' class=' form-control dark-border' placeholder="filter match e.g team name, date" onkeyup="filterDiv(this)"></center>
+    </div>
+@if($isOwner)
+<div class="pull-right">
+<button type='button' onclick="downloadPdf(this)" link='/download/schedules?tournament_id={{$tournament_id}}' class="btn-danger btn" name='match_schedule_tournament_{{$tournament_id}}'><i class="fa fa-download"></i> Download Schedule </a>
+</span>
+@endif
+   </div>
 
         @foreach($roundArray as $round)
 
           <div class="col-sm-12">
                 <div class="round-{{Helper::convert_number_to_words($round)}}">
-                    <div class="round"><p>    {{Helper::getRoundStage($tournament_id, $round)}} </p></div>
-                          @if($round==1)             
+                    <div class="round"><p>    {{$bracket_name=Helper::getRoundStage($tournament_id, $round)}} </p></div>
+                       @if($round==1)             
                                  @include('tournaments.sub_match_schedules')               
                          @else 
 
@@ -39,9 +51,8 @@
                                       <?php $i++;?>
                                 <?php $firstRoundBracketArray=$bracketTeam;?>
                                 @include('tournaments.sub_match_schedules')
-                             @endforeach
-                         @endif        
-  
+                             @endforeach                          
+                         @endif   
                      @endif
                 </div>
             </div>
@@ -185,7 +196,12 @@ function addRoundMatchesSchedule(tournamentId,roundNumber, matchNumber) {
 
 
 				
-					
+	
+<div id='response_to_download' style="display:none">
+
+</div>			
+<div id='by_pass'>
+</div>	
 							
 
 			<!-- /.panel-body -->
@@ -523,6 +539,39 @@ function addRoundMatchesSchedule(tournamentId,roundNumber, matchNumber) {
 		
 	}
 
+
+
+function downloadPdf(that){
+	var src =$(that); 
+	var link =src.attr('link');
+	var d = new Date();	
+	var name = src.attr('name') + '_'+d.getTime();
+
+	$.ajax({
+		url:link,
+		success:function(response){
+		
+		$('#response_to_download').html(response);
+		var specialElementHandlers = {
+				'#by_pass': function(element, renderer) {
+				return false;
+				}
+			}
+
+        var printDoc = new jsPDF('p', 'pt', 'a4');
+        printDoc.fromHTML($('#response_to_download').html(), 15, 15, {
+        	'width': 800,
+        	'elementHandlers': specialElementHandlers
+           
+        }, function(){      
+        	
+         printDoc.save(name+'.pdf');    
+            
+         }); 
+   
+		}
+	})
+}
 	
 
 </script>

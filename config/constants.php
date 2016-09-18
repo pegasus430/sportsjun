@@ -128,7 +128,12 @@ return [
                 6 => 'BasketballStatistic',
                 7 => 'VolleyballStatistic',
                 11=> 'HockeyStatistic',
-                13=> 'SquashStatistic'
+                13=> 'SquashStatistic',
+                14=> 'KabaddiStatistic',
+                15=> 'UltimatefrisbeeStatistic',
+                16=> 'WaterpoloStatistic',
+                17=> 'ThrowballStatistic'
+
         ],
         'SPORT_NAME'               => [
                 1 => 'Cricket',
@@ -139,7 +144,11 @@ return [
                 6 => 'BasketBall',
                 7 => 'VolleyBall',
                 11 => 'Hockey',
-                13 => 'Squash'
+                13 => 'Squash',
+                14 => 'Kabaddi',
+                15 => 'Ultimate Frisbee',
+                16 => 'Water Polo',
+                17 => 'Throw Ball'
 
         ],
         'SPORT_ID'                 => [
@@ -151,7 +160,11 @@ return [
                 'BasketBall'   => 6,
                 'VolleyBall'   => 7,
                 'Hockey'       => 11,
-                'Squash'       => 13
+                'Squash'       => 13, 
+                'Kabaddi'      => 14,
+                'Ultimate Frisbee'      => 15,
+                'Water Polo'   => 16,
+                'Throw Ball'   => 17
 
         ],
         'SERVICES'                 => [
@@ -212,7 +225,9 @@ return [
                 'GOALS_ASSIST'      => 'GOALS ASSIST',
                 'GOALS_PENALTIES'   => 'GOALS PENALTIES',
                 'SOCCER_STATISTICS' => 'SOCCER',
-                'HOCKEY_STATISTICS' => 'HOCKEY'
+                'HOCKEY_STATISTICS' => 'HOCKEY',
+                'WATERPOLO_STATISTICS'          => 'WATER POLO',
+                'ULTIMATEFRISBEE_STATISTICS'    => 'ULTIMATE FRISBEE'
         ],
         'BADMINTON_STATS'       => [
                 'WON'               => 'WON',
@@ -221,7 +236,10 @@ return [
                 'WON_PERCENTAGE'    => 'WON PERCENTAGE',
                 'POINTS'            => 'POINTS',                
                 'BADMINTON_STATISTICS' => 'BADMINTON', 
-                'SQUASH_STATISTICS' => 'SQUASH',                
+                'SQUASH_STATISTICS' => 'SQUASH',  
+                'VOLLEYBALL_STATISTICS'     => 'VOLLEYBALL',
+                'THROWBALL_STATISTICS'      => 'THROWBALL',
+                'KABADDI'                   => 'KABADDI'              
         ],
         'BASKETBALL_STATS'       => [
                 'WON'               => 'WON',
@@ -284,7 +302,47 @@ return [
                     'number_of_sets'=>3,
                     'score_to_win'  =>21,
                     'end_point'     =>29,
-                    'enable_two_points'     => 'on'
+                    'enable_two_points'     => 'on',
+                    'active_players' => 6,
+                    'substitute'     => 6,
+
+                ], 
+                6 => [
+                    'number_of_sets' => 5,
+                    'active_players' => 6,
+                    'substitute'     => 6,                   
+                    'maximum_points' => 25,
+                    'maximum_substitutes' => 3,
+                    'number_of_quarters' => 4
+
+                ],
+                7 => [
+                   'number_of_sets' => 5,
+                    'active_players' => 6,
+                    'substitute'     => 6,                   
+                    'maximum_points' => 25,
+                    'maximum_substitutes' => 3,
+
+                ],
+                17 => [
+                    'number_of_sets' => 3,
+                    'active_players' => 7,
+                    'substitute'     => 3,
+                    'maximum_points' => 15,
+                    'maximum_substitutes' => 3,
+                ],
+                14 => [
+                    'number_of_sets' => 5,
+                    'active_players' => 6,
+                    'substitute'     => 6,
+                    'maximum_points' => 25,
+                    'maximum_substitutes' => 3,
+                ],
+                15 => [
+                    'active_players' => 5,
+                    'number_of_halves' =>2,
+                    'walk_over_points' =>13,
                 ]
+
         ]
 ];

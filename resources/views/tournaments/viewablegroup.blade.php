@@ -4,6 +4,9 @@
 	a{
 		/*color: #34495e;*/
 	}
+	td{
+		margin-left: 55px;
+	}
 </style>
 
 <div id='content_to_share'>
@@ -43,14 +46,20 @@
 											@if ( $tour['sports_id'] == 1 )
 												<th>Net Run Rate</th>
 											@endif
+								@if($match_is_completed || $tournamentDetails[0]['group_is_ended'])
+                                	<th> Final Points </th> 
+                                @endif
 										</tr>
 										</thead>
 										<tbody>
-										@foreach($team_details[$group->id] as $key_point=>$team)				 
+										@foreach($team_details[$group->id] as $key_point=>$team)
+
+						<!-- Update Group Points -->
+		<?php Helper::updateGroupPoints($tournament_id, $group->id, $team['team_id'], $key_point+1);?>
 											<tr>
 												<td>{{ ($key_point + 1) }}</td>
 												<td><a href="/team/members/{{$team['team_id']}}" class="primary">{{ $team['name'] }}</a></td>
-												<td>{{ !empty($match_count[$group->id][$team['team_id']])?$match_count[$group->id][$team['team_id']]:0 }}</td>
+										<center>		<td>{{ !empty($match_count[$group->id][$team['team_id']])?$match_count[$group->id][$team['team_id']]:0 }}</td>
 												<td>{{ !empty($team['won'])?$team['won']:0 }}</td>
 												<td>{{ !empty($team['lost'])?$team['lost']:0 }}</td>
 									<td>{{ !empty($team['tie'])?$team['tie']:0 }}</td>
@@ -62,6 +71,10 @@
 												@if ( $tour['sports_id'] == 1 )
 													<td>{{ !empty($net_run_rate[$team['team_id']])?$net_run_rate[$team['team_id']]:"--" }}</td>
 												@endif
+								@if($match_is_completed || $tournamentDetails[0]['group_is_ended'])
+                                	 <td>{{ !empty($team['final_points'])?$team['final_points']:'-' }}</td>
+                                @endif
+
 											</tr>
 										@endforeach
 										</tbody>
@@ -70,6 +83,7 @@
 									No Teams.
 								@endif
 							</div>
+							<
 						</div>
 						<div class="tab-pane fade " id="matches_{{ $group->id }}">
 						<div class="action-panel">

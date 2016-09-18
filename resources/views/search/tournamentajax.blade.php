@@ -22,16 +22,23 @@
 							<div class="pull-left"><a href="{{ url('/gettournamentdetails').'/'.$lis['id'] }}" id="{{'touname_'.$lis['id']}}">{{ $lis['name'] }}</a></div>
 							<p class="search_location t_by">{{ $lis['location'] }}</p>
                         </div>
+                       <div class="clearfix"></div>
+                        @if(isset($lis['winnerName']))
+                        <div class="m-y-10 red search-results-tournament-winner">Winner: <span>{{ $lis['winnerName'] }}</span></div>
+                        @endif
+                        <div class="m-y-10 {{ $lis['statusColor'] }}">{{ Helper::displayDate($lis['start_date'],1) }} to {{ Helper::displayDate($lis['end_date'],1) }}</div>
                         <ul class="t_tags">
-                        	<li>Sport:
-                            	<span class="green">
-                            	@if(isset($sports_array[$lis['sports_id']]))
-									{{$sports_array[$lis['sports_id']]}} 
-								@endif</span>
+                            <li>
+                                Status: <span class="green">{{ $lis['status'] }}</span>
                             </li>
+                            @if(isset($sports_array[$lis['sports_id']]))
+                            <li>
+                                Sport: <span class="green">{{$sports_array[$lis['sports_id']]}}</span>
+                            </li>
+                            @endif
                             @if($lis['enrollment_fee']) 
                             <li>
-								Enrollment fee <span class="green">{{$lis['enrollment_fee']}}</span>
+                                Enrollment Fee: <span class="green">{{$lis['enrollment_fee']}}</span>
                             </li>
                             @endif
                         </ul>

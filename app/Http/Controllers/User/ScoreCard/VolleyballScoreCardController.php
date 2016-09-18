@@ -57,7 +57,7 @@ class VolleyballscoreCardController extends parentScoreCardController
         $match_id=$match_data[0]['id'];
 
         //get volleyball scores for team a
-        $team_a_volleyball_scores = VolleyballPlayerMatchwiseStats::select()->where('match_id',$match_data[0]['id'])->where('team_id',$team_a_id)->get();
+        $team_a_volleyball_scores = volleyballPlayerMatchwiseStats::select()->where('match_id',$match_data[0]['id'])->where('team_id',$team_a_id)->get();
 
         $team_a_volleyball_scores_array = array();
         if(count($team_a_volleyball_scores)>0)
@@ -66,7 +66,7 @@ class VolleyballscoreCardController extends parentScoreCardController
         }
 
         //get volleyball scores for team b
-        $team_b_volleyball_scores = VolleyballPlayerMatchwiseStats::select()->where('match_id',$match_data[0]['id'])->where('team_id',$team_b_id)->get();
+        $team_b_volleyball_scores = volleyballPlayerMatchwiseStats::select()->where('match_id',$match_data[0]['id'])->where('team_id',$team_b_id)->get();
         $team_b_volleyball_scores_array = array();
         if(count($team_b_volleyball_scores)>0)
         {
@@ -78,12 +78,12 @@ class VolleyballscoreCardController extends parentScoreCardController
         $b_team_players = User::select()->whereIn('id',$team_b_playerids)->get();
 
         //get players statistics
-        $team_a_players_stat=VolleyballPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_a_id)->get();
-        $team_b_players_stat=VolleyballPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_b_id)->get();
+        $team_a_players_stat=volleyballPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_a_id)->get();
+        $team_b_players_stat=volleyballPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_b_id)->get();
 
 
-        $active_players_a=VolleyballPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_a_id)->wherePlayingStatus('P')->lists('player_name', 'user_id')->toArray();
-        $active_players_b=VolleyballPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_b_id)->wherePlayingStatus('P')->lists('player_name', 'user_id')->toArray();
+        $active_players_a=volleyballPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_a_id)->wherePlayingStatus('P')->lists('player_name', 'user_id')->toArray();
+        $active_players_b=volleyballPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_b_id)->wherePlayingStatus('P')->lists('player_name', 'user_id')->toArray();
 
         //get team names
         $team_a_name = Team::where('id',$team_a_id)->pluck('name');
@@ -229,28 +229,32 @@ class VolleyballscoreCardController extends parentScoreCardController
         foreach($team_a_playing_players as $p){
 
             $player_name=User::find($p)->name;            
-            $this->insertVolleyballscore($p, $tournament_id, $match_id, $team_a_id,$player_name, $team_a_name,'P');        }
+            $this->insertvolleyballscore($p, $tournament_id, $match_id, $team_a_id,$player_name, $team_a_name,'P');        }
         foreach($team_a_substitute_players as $p){
 
             $player_name=User::find($p)->name;
-            $this->insertVolleyballscore($p, $tournament_id, $match_id, $team_a_id,$player_name, $team_a_name,'S');
+            $this->insertvolleyballscore($p, $tournament_id, $match_id, $team_a_id,$player_name, $team_a_name,'S');
             
         }
         foreach($team_b_playing_players as $p){
 
             $player_name=User::find($p)->name;
            
-            $this->insertVolleyballscore($p, $tournament_id, $match_id, $team_b_id,$player_name, $team_b_name,'P');
+            $this->insertvolleyballscore($p, $tournament_id, $match_id, $team_b_id,$player_name, $team_b_name,'P');
           
         }
         foreach($team_b_substitute_players as $p){          
             $player_name=User::find($p)->name;
-            $this->insertVolleyballscore($p, $tournament_id, $match_id, $team_b_id,$player_name, $team_b_name,'S');
+            $this->insertvolleyballscore($p, $tournament_id, $match_id, $team_b_id,$player_name, $team_b_name,'S');
               
         }
         
         //insert the default match_details for the match
         $match_model=MatchSchedule::find($match_id);
+    $match_settings   =   Helper::getMatchSettings($match_model['tournament_id'],$match_model['sports_id']);
+
+    $set=$match_settings->number_of_sets;
+    $maximum_points = $match_settings->maximum_points;
         $match_details=[
             "team_a"=>[
                 "id"=>$team_a_id,
@@ -263,8 +267,8 @@ class VolleyballscoreCardController extends parentScoreCardController
              "preferences"=>[
                         "left_team_id"=>$team_a_id,
                         "right_team_id"=>$team_b_id,                        
-                        "number_of_sets"=>5 ,
-                        "end_point"=>25,                       
+                        "number_of_sets"=>$set,                        
+                        "end_point"=>$maximum_points,                       
                     ],
             "match_details"=>[
                 "set1"=>[
@@ -303,9 +307,9 @@ class VolleyballscoreCardController extends parentScoreCardController
     }
 
 
-      public function insertVolleyballscore($user_id,$tournament_id,$match_id,$team_id,$player_name,$team_name,$playing_status='S')
+      public function insertvolleyballscore($user_id,$tournament_id,$match_id,$team_id,$player_name,$team_name,$playing_status='S')
     {
-        $volleyball_model = new VolleyballPlayerMatchwiseStats();
+        $volleyball_model = new volleyballPlayerMatchwiseStats();
         $volleyball_model->user_id          = $user_id;
         $volleyball_model->tournament_id    = $tournament_id;
         $volleyball_model->match_id         = $match_id;
@@ -321,14 +325,17 @@ class VolleyballscoreCardController extends parentScoreCardController
     public function manualScoring(ObjectRequest $request){
             $match_id=$request->match_id;
 
-            $number_of_sets=5;
+           
 
             $match_model=Matchschedule::find($match_id);
             $match_details=json_decode($match_model->match_details);
 
             $team_a=$match_model->a_id;
             $team_b=$match_model->b_id;
-            $end_point=25;
+
+
+            $end_point=$match_details->preferences->end_point;
+            $number_of_sets=$match_details->preferences->number_of_sets;
 
 
             $score_a_model=volleyballScore::whereMatchId($match_id)->whereTeamId($team_a)->first();
@@ -378,9 +385,10 @@ class VolleyballscoreCardController extends parentScoreCardController
         $last_index=$request['last_index'];
         $match_data=matchSchedule::find($match_id);
         $match_details=$match_data['match_details'];
-        $volleyball_player=VolleyballPlayerMatchwiseStats::whereMatchId($match_id)->first();
+        $volleyball_player=volleyballPlayerMatchwiseStats::whereMatchId($match_id)->first();
         $delted_ids=$request['delted_ids'];
         $match_result=$request['match_result'];
+        $match_report=$request['match_report'];
         $winner_team_id = !empty(Request::get('winner_team_id'))?Request::get('winner_team_id'):NULL;//winner_id
         $player_of_the_match=isset($request['player_of_the_match'])?$request['player_of_the_match']:NULL;
 
@@ -450,8 +458,9 @@ class VolleyballscoreCardController extends parentScoreCardController
                         'winner_id'=>$winner_team_id ,
                         'looser_id'=>$looser_team_id,
                         'has_result'     => $has_result,
+                        'match_report'=>$match_report,
                         'match_result'   => $match_result,
-                        'is_tied'=>$is_tie,
+                        'is_tied'=>$is_tie, 'match_report'=>$match_report,
                         'score_added_by'=>$json_score_status]);
 //                                Helper::printQueries();
 
@@ -465,7 +474,7 @@ class VolleyballscoreCardController extends parentScoreCardController
                         $this->insertPlayerStatistics($sportName,$match_id);
 
                         //notification ocde
-                        Helper::sendEmailPlayers($matchScheduleDetails, 'Volleyball');      
+                        Helper::sendEmailPlayers($matchScheduleDetails, 'volleyball');      
 
                     }
 
@@ -481,6 +490,7 @@ class VolleyballscoreCardController extends parentScoreCardController
                     'winner_id'      => $winner_team_id,
                      'looser_id'      => $looser_team_id,
                     'is_tied'        => $is_tie,
+                    'match_report'=>$match_report,
                      'has_result'     => $has_result,
                      'match_result'   => $match_result,
                      'score_added_by' => $json_score_status,'scoring_status'=>$approved]);
@@ -492,7 +502,7 @@ class VolleyballscoreCardController extends parentScoreCardController
                     $this->insertPlayerStatistics($sportName,$match_id);
 
                     //send mail to players
-                    Helper::sendEmailPlayers($matchScheduleDetails, 'Volleyball');      
+                    Helper::sendEmailPlayers($matchScheduleDetails, 'volleyball');      
 
 
                     //notification ocde
@@ -501,7 +511,7 @@ class VolleyballscoreCardController extends parentScoreCardController
         else
             {
                 MatchSchedule::where('id',$match_id)->update(['winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
-                    'is_tied'=>$is_tie,
+                    'is_tied'=>$is_tie, 'match_report'=>$match_report,
                     'has_result'     => $has_result,
                      'match_result'   => $match_result,
                      'score_added_by'=>$json_score_status]);
@@ -514,16 +524,16 @@ class VolleyballscoreCardController extends parentScoreCardController
         public function volleyballStatistics($user_id)
     {
         //check already player has record or not
-        $user_volleyball_details = VolleyballStatistic::select()->where('user_id',$user_id)->get();
+        $user_volleyball_details = volleyballStatistic::select()->where('user_id',$user_id)->get();
 
-        $volleyball_details = VolleyballPlayerMatchwiseStats::join('match_schedules', 'match_schedules.id', '=', 'volleyball_player_matchwise_stats.match_id')->selectRaw('count(match_id) as match_count')->selectRaw(' as points_1')->selectRaw('sum(points_2) as points_2')->selectRaw('sum(points_3) as points_3')->selectRaw('sum(total_points) as total_points')->selectRaw('sum(fouls) as fouls')->where('user_id',$user_id)->groupBy('user_id')->get();
+        $volleyball_details = volleyballPlayerMatchwiseStats::join('match_schedules', 'match_schedules.id', '=', 'volleyball_player_matchwise_stats.match_id')->selectRaw('count(match_id) as match_count')->selectRaw(' as points_1')->selectRaw('sum(points_2) as points_2')->selectRaw('sum(points_3) as points_3')->selectRaw('sum(total_points) as total_points')->selectRaw('sum(fouls) as fouls')->where('user_id',$user_id)->groupBy('user_id')->get();
 
 
         if(count($user_volleyball_details)>0)
         {
             $match_count = (!empty($volleyball_details[0]['match_count']))?$volleyball_details[0]['match_count']:0;
 
-            VolleyballStatistic::where('user_id',$user_id)
+            volleyballStatistic::where('user_id',$user_id)
                 ->update([  'matches'=>$match_count,
                             'won'=>$won,
                             'lost'=>$lost,
@@ -532,7 +542,7 @@ class VolleyballscoreCardController extends parentScoreCardController
                          ]);
         }else
         {
-            $volleyball_statistic = new VolleyballStatistic();
+            $volleyball_statistic = new volleyballStatistic();
             $volleyball_statistic->user_id = $user_id;
             $volleyball_statistic->matches = 1;
             $volleyball_statistic->won = 0;
@@ -548,14 +558,22 @@ class VolleyballscoreCardController extends parentScoreCardController
         $team_id=$request['team_id'];
         $time_substituted=$request['time_substituted'];
         $match_model=MatchSchedule::find($match_id);
-        $volleyball_model=VolleyballPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_id)->get();
+        $volleyball_model=volleyballPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_id)->get();
 
         $playing=[];
         $subst=[];
 
+        //get match settings
+        $match_settings = Helper::getMatchSettings($match_model['tournament_id'],$match_model['sports_id']);
+        $maximum_substitutes = $match_settings->maximum_substitutes;
+
         foreach ($volleyball_model as $sm ){
             $sm_id=$sm->id;
             $sm_status=$sm->playing_status;
+
+
+$check_maximum_substitute=SubstituteRecord::whereMatchId($match_id)->whereUserId($sm->user_id)->get()->count();
+            if($check_maximum_substitute<=$maximum_substitutes){
 
             if(isset($request["substitute_a_".$sm_id]) && ($request["substitute_a_".$sm_id]=='on')){
                 if($sm_status=='P'){
@@ -569,7 +587,9 @@ class VolleyballscoreCardController extends parentScoreCardController
                
                 $sm->save();
             }
+
         }
+    }
 
          for($j=0; $j<count($playing); $j++){
 
@@ -583,8 +603,8 @@ class VolleyballscoreCardController extends parentScoreCardController
                   $substitute_record->substituted_at=$time_substituted;
                   $substitute_record->save();
 
-  VolleyballPlayerMatchwiseStats::find($playing[$j]['id'])->update(['serving_order'=>null]);
-  VolleyballPlayerMatchwiseStats::find($subst[$j]['id'])->update(['serving_order'=>$playing[$j]['serving_order']]);
+  volleyballPlayerMatchwiseStats::find($playing[$j]['id'])->update(['serving_order'=>null]);
+  volleyballPlayerMatchwiseStats::find($subst[$j]['id'])->update(['serving_order'=>$playing[$j]['serving_order']]);
 
             }     
 
@@ -645,9 +665,9 @@ class VolleyballscoreCardController extends parentScoreCardController
 
 
          for($i=1; $i<=6; $i++){
-                $player_model=VolleyballPlayerMatchwiseStats::whereUserId($request->{'serving_a_'.$i})->whereTeamId($team_a)->whereMatchId($request->match_id)->first()->update(['serving_order'=>$i]);               
+                $player_model=volleyballPlayerMatchwiseStats::whereUserId($request->{'serving_a_'.$i})->whereTeamId($team_a)->whereMatchId($request->match_id)->first()->update(['serving_order'=>$i]);               
 
-                $player_model=VolleyballPlayerMatchwiseStats::whereUserId($request->{'serving_b_'.$i})->whereTeamId($team_b)->whereMatchId($request->match_id)->first()->update(['serving_order'=>$i]);
+                $player_model=volleyballPlayerMatchwiseStats::whereUserId($request->{'serving_b_'.$i})->whereTeamId($team_b)->whereMatchId($request->match_id)->first()->update(['serving_order'=>$i]);
          }
 
          return 'success';
@@ -930,7 +950,7 @@ class VolleyballscoreCardController extends parentScoreCardController
 
         //insert record;
 
-        $setDetails=VolleyballSetDetails::whereMatchId($match_id)->whereTeamId($original_team_id)->whereSetNumber($set_number)->whereServerId($player_id);
+        $setDetails=volleyballSetDetails::whereMatchId($match_id)->whereTeamId($original_team_id)->whereSetNumber($set_number)->whereServerId($player_id);
 
         if($val=='won'){                        
                 
@@ -941,7 +961,7 @@ class VolleyballscoreCardController extends parentScoreCardController
 
 
        $match_details=json_decode($match_details);
-       $match_details->server=Helper::getVolleyballServer($match_id);
+       $match_details->server=Helper::getvolleyballServer($match_id);
 
         return json_encode($match_details);
     }

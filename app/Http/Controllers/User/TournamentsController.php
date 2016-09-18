@@ -869,12 +869,15 @@ class TournamentsController extends Controller
 		$tournaments           = Tournaments::with('groups')->where('id', '=', $tournament_id)->get(); //get tournaments which having the type as league
 		$tournament_type       = $tournaments[0]['type'];
 		$team_details          = array();
+		$tournamentObj 		   = Tournaments::find($tournament_id);
 		$match_details         = array();
 		$add_score_link        = array();
 		$match_startdate_array = array();
 		$match_count           = array();
 		$team_stats   = [];   // team stats array containing team wise stats needed for its calculation
 		$net_run_rate = [];   // net run rate array
+
+		$this->settings($tournament_id);
 
 		foreach ($tournaments as $tournament)
 		{
@@ -1304,6 +1307,54 @@ class TournamentsController extends Controller
 			}
 		}
 
+		$match_is_completed = 0; 
+		//update Points; 
+		if($lastRoundWinner){
+			$first_position_model = MatchSchedule::whereTournamentId($tournament_id)
+									  ->where('tournament_round_number', $lastRoundWinner)
+									  ->where('tournament_match_number', 1)
+									  ->where('match_status', 'completed')->first();
+		    $second_position_model = MatchSchedule::whereTournamentId($tournament_id)
+		    						  ->where('tournament_round_number', $lastRoundWinner)
+		    						  ->where('tournament_match_number', 2)
+		    						  ->where('match_status', 'completed')
+		    						  ->first();
+
+		    if($first_position_model){
+		    	$first_position=$first_position_model->winner_id;
+		    	$second_position=$first_position_model->looser_id;
+		    		$match_is_completed =1; 
+		    	if(!empty($tournamentObj->p_1)){
+		    		TournamentGroupTeams::whereTournamentId($tournament_id)->whereTeamId($first_position)->update(['final_points'=>$tournamentObj->p_1]);
+		    		TournamentFinalTeams::whereTournamentId($tournament_id)->whereTeamId($first_position)->update(['points'=>$tournamentObj->p_1]);
+		    	}
+
+		    	if(!empty($tournamentObj->p_2)){
+		    		TournamentGroupTeams::whereTournamentId($tournament_id)->whereTeamId($second_position)->update(['final_points'=>$tournamentObj->p_2]);
+		    		TournamentFinalTeams::whereTournamentId($tournament_id)->whereTeamId($second_position)->update(['points'=>$tournamentObj->p_3]);
+		    	}
+
+		    }
+
+		    if($second_position_model){
+		    	$third_position=$second_position_model->winner_id;
+		    	$fourth_position=$second_position_model->looser_id;
+
+
+		    	if(!empty($tournamentObj->p_3)){
+		    		TournamentGroupTeams::whereTournamentId($tournament_id)->whereTeamId($third_position)->update(['final_points'=>$tournamentObj->p_3]);
+		    		TournamentFinalTeams::whereTournamentId($tournament_id)->whereTeamId($third_position)->update(['points'=>$tournamentObj->p_3]);
+		    	}
+
+		    	if(!empty($tournamentObj->p_4)){
+		    		TournamentGroupTeams::whereTournamentId($tournament_id)->whereTeamId($fourth_position)->update(['final_points'=>$tournamentObj->p_4]);
+		    		TournamentFinalTeams::whereTournamentId($tournament_id)->whereTeamId($fourth_position)->update(['points'=>$tournamentObj->p_4]);
+		    	}
+		    }
+
+		}
+		
+
 
 		//left menu
 		$parent_tournamet_id = $tournaments[0]['tournament_parent_id'];
@@ -1389,6 +1440,7 @@ class TournamentsController extends Controller
 			'sport_name'               => $sport_name,
 			'match_startdate_array'    => $match_startdate_array,
 			'match_count'              => $match_count,
+			'match_is_completed'	   => $match_is_completed
 			
 		))
 			->with('match_types', ['' => 'Select Match Type'] + $match_types)
@@ -2523,9 +2575,13 @@ class TournamentsController extends Controller
 			return $group_teams;
 	}
 
+	
+
 	public function settings($tournament_id){
 		$t_settings=Settings::where('tournament_id', $tournament_id)->first();
 		$t_model = Tournaments::find($tournament_id);
+
+		$tournament=$t_model;
 		$sports_name = strtolower($t_model->sport->sports_name);
 
 		if(count($t_settings)) $settings=$t_settings->settings;
@@ -2540,15 +2596,30 @@ class TournamentsController extends Controller
 
 		$settings=json_decode($settings);
 
-		return view('tournaments.settings.'.$sports_name, compact('settings'));
+		if($tournament->matches->count()){
+			$readonly = 'readonly';
+		}
+		else {
+			$readonly = '';
+		}
+
+
+		return view('tournaments.settings.'.$sports_name, compact('settings','tournament', 'readonly') );
 	}
 
 	public function updateSettings($tournament_id){
 		$t_settings=Settings::where('tournament_id', $tournament_id)->first();
 		$settings=json_encode(Request::all());
 		$t_settings->settings=$settings;
+		$t_settings->has_setup_details=1;
 		$t_settings->save();
 
+		$tournament=Tournaments::find($tournament_id);
+		$tournament->p_1 = Request::get('p_1');
+		$tournament->p_2 = Request::get('p_2');
+		$tournament->p_3 = Request::get('p_3');
+		$tournament->p_4 = Request::get('p_4');
+		$tournament->save();
 		return redirect()->back();
 
 	}
@@ -2641,5 +2712,12 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
 
 		return view('tournaments.sub_match_schedules_rubber', compact('match', 'team_logo', 'team_name_array', 'isOwner') );
 
+	}
+
+	public function endTournament($id){
+		$tournament = Tournaments::find($id);
+		$tournament->group_is_ended = 1; 
+		$tournament->save();
+		return redirect()->back()->with('message', 'Group Closed');
 	}
 }

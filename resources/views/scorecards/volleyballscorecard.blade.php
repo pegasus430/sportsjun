@@ -130,11 +130,18 @@ input:read-only {
   ${'team_'.$team_b_id.'_score'}=$match_details->scores->{$team_b_id.'_score'}.' sets';
     }
 
-	$serving_array=Helper::getVolleyballServer($match_id);
+	$serving_array=Helper::getvolleyballServer($match_id);		
+	?>
 
-	
-	
+	<?php 
 
+    $match_data[0]['tournament_id']!=null?$disabled='readonly':'';
+    $match_settings   =   Helper::getMatchSettings($match_data[0]['tournament_id'],$match_data[0]['sports_id']);
+	$a_count = 1;
+	$set=$match_settings->number_of_sets;
+	$active_players = $match_settings->active_players;
+	$maximum_substitute = $match_settings->maximum_substitutes;
+	
 	?>
 
 	<div class="col_standard soccer_scorecard">
@@ -409,9 +416,7 @@ input:read-only {
 
 			@else
 			<!-- Scoring Start -->
-				<?php $a_count = 1;
-					  $set=5;
-				?>
+
 
 
 			@if(!count($volleyball_a_score))
@@ -847,29 +852,42 @@ input:read-only {
 
 
 									<div class="clearfix"></div>
-									<div class="form-inline">
+									<div class="row">
+										<div class="col-sm-4">
+											<div class="section">
 										<div class="form-group">
 											<label for="match_result">End of Match Result:</label>
-											<select class="form-control selectpicker" name="match_result" id="match_result" onchange="getTeam();SJ.SCORECARD.selectMatchType(this)">
+											<select class="form-control " name="match_result" id="match_result" onchange="getTeam();SJ.SCORECARD.selectMatchType(this)">
 												<option value="" >Select</option>
-												<?php if(empty($match_data[0]['tournament_round_number'])) { ?>
+
+												<?php if(empty($match_data[0]['tournament_round_number'])) { ?>							
 												<option <?php if($match_data[0]['is_tied']>0) echo " selected";?> value="tie" >Tie</option>
 												<?php } ?>
-												<option <?php if($match_data[0]['is_tied']==0 && $match_data[0]['winner_id']>0) echo " selected";?> value="win">win</option>
-												<option value="washout" {{!$match_data[0]['has_result']?'selected':''}}>No Result</option>
+												
+												<option value="walkover" {$match_data[0]['match_result']=='walkover'?'selected':''}} >Walkover</option>
+												
+												<option {{$match_data[0]['match_result']=='win'?'selected':''}}  value="win">win</option>
+												
+												<option value="washout" {{$match_data[0]['match_result']=='washout'?'selected':''}}>No Result</option>
 											</select>
 										</div>
-										<div class="form-group scorescard_stats" style="margin-top:15px;">
+										</div></div>
+										<div class="col-sm-4">
+											<div class="section">
+										<div class="form-group scorescard_stats" >
 											<label class="show_teams">Select Winner:</label>
-											<select name="winner_id" id="winner_id" class="show_teams form-control selectpicker" onchange="selectWinner();">
+											<select name="winner_id" id="winner_id" class="show_teams form-control " onchange="selectWinner();">
 												<option <?php if (isset($match_data[0]['winner_id']) && $match_data[0]['winner_id']==$match_data[0]['a_id']) echo ' selected';?> value="{{ $match_data[0]['a_id'] }}" >{{ $team_a_name }}</option>
 												<option <?php if (isset($match_data[0]['winner_id']) && $match_data[0]['winner_id']==$match_data[0]['b_id']) echo ' selected';?> value="{{ $match_data[0]['b_id'] }}">{{ $team_b_name }}</option>
 											</select>
 										</div>
+										</div></div>
+										<div class="col-sm-4">
+											<div class="section">
 										<div class="form-group scorescard_stats">
 
 											<label class="">Select Player of Match:</label>
-											<select name="player_of_the_match" id="player_of_the_match" class=" form-control selectpicker" onchange="">
+											<select name="player_of_the_match" id="player_of_the_match" class=" form-control " onchange="">
 												<option value="0" disabled="">Team A</option>
 												@foreach($team_a_volleyball_scores_array as $tm_player)
 													<option value="{{$tm_player['user_id']}}" @if($match_data[0]['player_of_the_match']==$tm_player['user_id'])?'selected':'' @endif >{{$tm_player['player_name']}}</option>
@@ -880,21 +898,31 @@ input:read-only {
 												@endforeach
 											</select>
 										</div>
+										</div></div>
 
 
 									</div>
 
 
-									<div class='row' style="padding-bottom:20px;">
-										<center class='col-sm-6 col-sm-offset-3'> <button class='btn btn-primary full-width ' onclick="" type='submit'> Save</button></center>
-									</div>
+<!--********* MATCH REPORT Start **************!-->
+<div class="summernote_wrapper form-group">
+        <h3 class="brown1 table_head">Match Report</h3>
+        <textarea id="match_report" class="summernote" name="match_report" title="Match Report"></textarea>
+</div>
+</div>
+<!--********* MATCH REPORT End **************!-->
+
+
+
+									
 
 									<div class="modal-footer">
+										<button class='btn btn-primary ' onclick="" type='submit'> Save</button>
 										<button type="button" class="button btn-secondary" data-dismiss="modal">Cancel</button>
 									</div>
 								</div>
 							</div>
-						</div>
+					
 
 	<input type='hidden' id='selected_player_id_value' value='0' player_id='0' player_name=''>
 	<input type='hidden' id='half_time' value='quarter_1'>
@@ -915,6 +943,9 @@ input:read-only {
 	<input type="hidden" name="winner_team_id" value="" id="winner_team_id">
 	<input type="hidden" name="delted_ids" value="" id="delted_ids">
 	<input type='hidden' name='serving_user_id' value="" id="serving_user_id">
+
+
+
 	</form>
 					</div>
 				</div>
@@ -1141,21 +1172,26 @@ input:read-only {
 
 
 	<script>
-		$(document).ready(function(){
+
+
+	var active_players = {{$active_players}}
+	var max_substitutes = {{$maximum_substitute}}
+	var active_players_letters = '{{Helper::convert_number_to_words($active_players)}}'
+	var max_substitutes_letters = '{{Helper::convert_number_to_words($maximum_substitute)}}'
+
+$(document).ready(function(){
 			getTeam();
 		});
 		function getTeam()
 		{
 			var value = $( "#match_result" ).val();
-			if(value=='win')
+			if(value=='win' || value=='walkover')
 			{
-				$("label.show_teams").show();
-				$('#winner_id').selectpicker('show');
+				$(".show_teams").show();			
 					selectWinner();
 			}else
 			{
-				$("label.show_teams").hide();
-				$('#winner_id').selectpicker('hide');
+				$(".show_teams").hide();			
 				
 				$('#winner_team_id').val('');
 			}
@@ -1163,7 +1199,7 @@ input:read-only {
 		function selectWinner()
 		{
 			$('#winner_team_id').val($('#winner_id').val());
-			$("#winner_id").hide();
+			//$("#winner_id").hide();
 		}
 		var team_a_count='{{ (count($team_a_volleyball_scores_array)>0)?count($team_a_volleyball_scores_array):1 }}';
 		var team_b_count='{{ (count($team_b_volleyball_scores_array)>0)?count($team_b_volleyball_scores_array):1 }}';
@@ -1503,19 +1539,37 @@ input:read-only {
 			var substitute_players_a=tempSquadData.team_a.substitute.length;
 			var substitute_players_b=tempSquadData.team_b.substitute.length;
 
-			if(playing_players_a!=6){
+			if(playing_players_a!=active_players){
 					$.alert({
 						title:"Alert",
-						content:"Choose six players for Team A"
+						content:"Choose " + active_players_letters + " players for Team A"
 					})
 
 					return false;
 			}
 
-			if(playing_players_b!=6){
+			if(playing_players_b!=active_players){
 					$.alert({
 						title:"Alert",
-						content:"Choose six players for Team B"
+						content:"Choose " +active_players_letters+ " players for Team B"
+					})
+
+				return false;
+			}
+
+			if(substitute_players_a>max_substitutes){
+					$.alert({
+						title:"Alert",
+						content:"You can only select a maximum of " + active_players + " substitutes for Team A"
+					})
+
+					return false;
+			}
+
+			if(substitute_players_b>max_substitutes){
+					$.alert({
+						title:"Alert",
+						content:"You can only select a maximum of " + max_substitutes + " substitute for Team B"
 					})
 
 				return false;
@@ -1743,7 +1797,7 @@ var manual=false;
 			
 			var data=$(that).serialize();
 			$.ajax({
-				url:'/match/submitServingPlayersVolleyball',
+				url:'/match/submitServingPlayersvolleyball',
 				type:'post',
 				data:data,
 				success:function(response){

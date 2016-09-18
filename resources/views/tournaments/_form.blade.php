@@ -83,7 +83,7 @@ if(!empty($matchScheduleCount) && $matchScheduleCount>0)
         <div class="section show_hide_rubber "  style="display:none;">
         <label class="form_label">{{  trans('message.tournament.fields.rubber_number') }} <span  class='required'>*</span></label>
             <label class="field select">
-             {!! Form::select('number_of_rubber', [3=>3, 5=>5,7=>7, 9=>9], 1,array('id'=>'rubber_number','class'=>'gui-input',$disable)) !!}
+             {!! Form::select('number_of_rubber', [3=>3, 5=>5,7=>7, 9=>9], null,array('id'=>'rubber_number','class'=>'gui-input',$disable)) !!}
             
              <i class="arrow double"></i>      
             </label>

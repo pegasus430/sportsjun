@@ -616,35 +616,52 @@
                 <div class="alert alert-success" id="div_success1" style="display:none;"></div>
                 <div class="modal-body">
 
+                 
                   <div class='row'>
                  
                     <div class='col-sm-12'>
-                          <div class="form-group col-sm-4 col-sm-offset-2 ">
+                           <div class="form-group col-sm-4 col-sm-offset-2 ">
                                   <label>Match Result</label>
-                                  <select name='match_result' required="" class='form-control ' onchange='SJ.SCORECARD.selectMatchType(this)'>
-                                  <option value="" disabled>Select</option>
-                                  <option value="win">Win</option>
+                                    <select class="form-control " name="match_result" id="match_result" onchange="getTeam();SJ.SCORECARD.selectMatchType(this)">
+                        <option value="" >Select</option>
 
-                                  <option value='washout' {{$match_data[0]['has_result']==0?'selected':''}}>No Result</option>
-                                  </select>                           
+                        <?php if(empty($match_data[0]['tournament_round_number'])) { ?>             
+                        <option <?php if($match_data[0]['is_tied']>0) echo " selected";?> value="tie" >Tie</option>
+                        <?php } ?>
+                        
+                        <option value="walkover" {$match_data[0]['match_result']=='walkover'?'selected':''}} >Walkover</option>
+                        
+                        <option {{$match_data[0]['match_result']=='win'?'selected':''}}  value="win">win</option>
+                        
+                        <option value="washout" {{$match_data[0]['match_result']=='washout'?'selected':''}}>No Result</option>
+                      </select>
+                           
                           </div>
+                      
                      
-                          <div class="form-group col-sm-4  " id='select_winner'>
+                          <div class="form-group col-sm-4 " id='select_winner'>
                             <label>Select Winner:</label>
-                            <select name="winner_id" id="winner_id" class="form-control " onchange="selectWinner();">
-                            <option value="">Select Winner</option>
+                            <select name="winner_id" id="winner_id" class="form-control gui-input" onchange="selectWinner();">
+                            <option value="">Select</option>
                             <option value="{{ $match_data[0]['a_id'] }}" <?php if (isset($match_data[0]['winner_id']) && $match_data[0]['winner_id']==$match_data[0]['a_id']) echo ' selected';?>>{{ $user_a_name }}</option>
                             <option value="{{ $match_data[0]['b_id'] }}" <?php if (isset($match_data[0]['winner_id']) && $match_data[0]['winner_id']==$match_data[0]['b_id']) echo ' selected';?>>{{ $user_b_name }}</option>
                             </select>
                           </div>
-                      </div>
+                          </div>
                       
                       
                     </div>
-                    <br>
+                
+        
+        
+<!--********* MATCH REPORT Start **************!-->
+<div class="summernote_wrapper form-group">
+        <h3 class="brown1 table_head">Match Report</h3>
+        <textarea id="match_report" class="summernote" name="match_report" title="Match Report"></textarea>
+</div>
+</div>
+<!--********* MATCH REPORT End **************!-->
 
-                    </div>
-                   
 
                   <div class="modal-footer">
                     <button class='btn btn-primary  ' onclick="" type='submit'> Save</button>

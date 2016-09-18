@@ -9,13 +9,14 @@
 <div id='displayrubber'> </div>
 
 
+
     <div class="col-sm-12 group-stage sportsjun-forms">
     @include('tournaments.share_groups')
         @if($dispViewFlag=='group')
         @if($tournament_type=='league' || $tournament_type=='multistage')
         <div id="group_stage">
         <!-- /.panel-heading -->
-            @if(count($tournamentDetails[0]['final_stage_teams']))
+            @if(count($tournamentDetails[0]['final_stage_teams']) || $tournamentDetails[0]['group_is_ended'] )
                     @include ('tournaments.viewablegroup')
             @else
 				@if($isOwner)
@@ -103,4 +104,17 @@ $(function() {
         });
 });    
 </script>
+
+<?php $settings = Helper::getTournamentDetails($tournamentDetails[0]['id'])->settings; ?>
+@if(isset($settings) && $settings->has_setup_details==0)
+    <script>
+    $(document).ready(function(){
+         getTournamentSettings({{$tournamentDetails[0]['id']}});
+        $('#settings').modal('show');
+    })
+   
+    </script>    
+@endif
+
+
 @endsection

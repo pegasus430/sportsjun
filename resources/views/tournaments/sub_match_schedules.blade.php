@@ -177,6 +177,7 @@
 						@endif
 							<br>
 						@if(isset($schedule['winner_text']))
+							<br>
 							<span class="pull-left">
 	                          <a href="{{ url('match/scorecard/edit/'.$schedule['id']) }}" class="btn-primary" style="padding: .3em 1em;">{{$schedule['winner_text']}}</a>
 	                         </span>
@@ -189,6 +190,7 @@
                  		@endif
 
                  		@if($match['game_type']=='rubber')
+                 			<br>
                  				<span class="pull-right">
                  			  <a href="#" class="show_sub_field show_sub_tournament " parent_field_id = "{{$match['id']}}">View Rubber</a>
                  			  	</span>

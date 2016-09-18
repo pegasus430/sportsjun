@@ -23,6 +23,7 @@ class SubstituteRecords extends Migration
             $table->integer('sub_set_number')->nullable();
             $table->string('substituted_at');
             $table->timestamps();
+            $table->date('deleted_at');
         });
     }
 

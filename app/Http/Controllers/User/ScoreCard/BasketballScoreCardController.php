@@ -425,7 +425,11 @@ class BasketballScoreCardController extends parentScoreCardController
 						$player->fouls=$request->{'fouls_'.$player->id};
 
 						$match_details->{$player->team_id}->players->{'player_'.$player->user_id}->fouls=$request->{'fouls_'.$player->id};
-						$match_details->{$player->team_id}->players->{'player_'.$player->user_id}->dismissed=1;
+
+				 if($player->fouls>=$max_fouls){
+                     $match_details->{$player->team_id}->players->{'player_'.$player->user_id}->dismissed=1;
+                           $player->playing_status = 'S';
+                   };
 
 							
 									//stores points per player
@@ -481,6 +485,7 @@ class BasketballScoreCardController extends parentScoreCardController
         $basketball_player=BasketballPlayerMatchwiseStats::whereMatchId($match_id)->first();
         $delted_ids=$request['delted_ids'];
         $match_result=$request['match_result'];
+        $match_report= $request['match_report'];
         $winner_team_id = !empty(Request::get('winner_team_id'))?Request::get('winner_team_id'):NULL;//winner_id
         $player_of_the_match=isset($request['player_of_the_match'])?$request['player_of_the_match']:NULL;
 
@@ -551,6 +556,7 @@ class BasketballScoreCardController extends parentScoreCardController
                         'looser_id'=>$looser_team_id,
                         'has_result'     => $has_result,
                         'match_result'   => $match_result,
+                        'match_report'   => $match_report,
                         'is_tied'=>$is_tie,
                         'score_added_by'=>$json_score_status]);
 //                                Helper::printQueries();
@@ -583,6 +589,7 @@ class BasketballScoreCardController extends parentScoreCardController
                     'is_tied'        => $is_tie,
                      'has_result'     => $has_result,
                      'match_result'   => $match_result,
+                     'match_report'   => $match_report,
                      'score_added_by' => $json_score_status,'scoring_status'=>$approved]);
 
                 if($match_status=='completed')
@@ -604,6 +611,7 @@ class BasketballScoreCardController extends parentScoreCardController
                     'is_tied'=>$is_tie,
                     'has_result'     => $has_result,
                      'match_result'   => $match_result,
+                     'match_report'   => $match_report,
                      'score_added_by'=>$json_score_status]);
             }
         }

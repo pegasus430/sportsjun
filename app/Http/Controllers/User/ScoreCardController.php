@@ -192,11 +192,32 @@ class ScoreCardController extends Controller {
 						$hockey= new ScoreCard\HockeyScorecardController;
 					return $hockey->hockeyScoreCard($match_data,$sportsDetails,$tournamentDetails);
 				}
+				else if(strtolower($sport_name)==strtolower('Ultimate Frisbee'))
+				{
+						$hockey= new ScoreCard\UltimateFrisbeeScorecardController;
+					return $hockey->ultimateFrisbeeScoreCard($match_data,$sportsDetails,$tournamentDetails);
+				}
+				else if(strtolower($sport_name)==strtolower('Water Polo'))
+				{
+						$hockey= new ScoreCard\WaterPoloScorecardController;
+				  return $hockey->waterpoloScoreCard($match_data,$sportsDetails,$tournamentDetails);
+				}
 				else if(strtolower($sport_name)==strtolower('volleyball'))
 				{
 					$volleyball = new ScoreCard\VolleyballScoreCardController;
 					return $volleyball->volleyballScoreCard($match_data,$sportsDetails,$tournamentDetails);
 				}
+				else if(strtolower($sport_name)==strtolower('Throw ball'))
+				{
+					$volleyball = new ScoreCard\ThrowballScoreCardController;
+					return $volleyball->throwballScoreCard($match_data,$sportsDetails,$tournamentDetails);
+				}
+				else if(strtolower($sport_name)==strtolower('Kabaddi'))
+				{
+					$volleyball = new ScoreCard\KabaddiScoreCardController;
+					return $volleyball->kabaddiScoreCard($match_data,$sportsDetails,$tournamentDetails);
+				}
+
 				else if(strtolower($sport_name)==strtolower('basketball'))
 				{
 					$basketball = new ScoreCard\BasketballScoreCardController;
@@ -2782,6 +2803,7 @@ class ScoreCardController extends Controller {
 		$last_index=$request['last_index'];
 		$match_data=matchSchedule::find($match_id);
 		$match_details=$match_data['match_details'];
+		$match_report = $request['match_report'];
 		$soccer_player=SoccerPlayerMatchwiseStats::whereMatchId($match_id)->first();
 		$delted_ids=$request['delted_ids'];
 		$match_result=$request['match_result'];
@@ -2922,6 +2944,7 @@ class ScoreCardController extends Controller {
 						'is_tied'=>$is_tie,
 						 'has_result'     => $has_result,
                          'match_result'   => $match_result,
+                         'match_report'	  => $match_report,
                          'score_added_by'=>$json_score_status]);
 //                                Helper::printQueries();
 
@@ -2952,6 +2975,7 @@ class ScoreCardController extends Controller {
  					'is_tied'        => $is_tie,
                      'has_result'     => $has_result,
                      'match_result'   => $match_result,
+                     'match_report'	  => $match_report,
                      'score_added_by' => $json_score_status,
                      'scoring_status'=>$approved]);
 
@@ -2977,6 +3001,7 @@ class ScoreCardController extends Controller {
 					'is_tied'=>$is_tie,
 					'has_result'     => $has_result,
                     'match_result'   => $match_result,
+                    'match_report'	  => $match_report,
                      'score_added_by'=>$json_score_status]);
 			}
 		}
@@ -3174,11 +3199,33 @@ class ScoreCardController extends Controller {
 					$squash = new ScoreCard\VolleyballScoreCardController;
 					return $squash->volleyballScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
+				else if(strtolower($sport_name)==strtolower('throw ball'))
+				{
+					$squash = new ScoreCard\ThrowballScoreCardController;
+					return $squash->throwballScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
+				else if(strtolower($sport_name)==strtolower('kabaddi'))
+				{
+					$squash = new ScoreCard\KabaddiScoreCardController;
+					return $squash->kabaddiScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
 				else if(strtolower($sport_name)==strtolower('basketball'))
 				{
 					$squash = new ScoreCard\BasketballScoreCardController;
 					return $squash->basketballScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
+
+				else if(strtolower($sport_name)==strtolower('Ultimate Frisbee'))
+				{
+						$hockey= new ScoreCard\UltimateFrisbeeScorecardController;
+					return $hockey->ultimateFrisbeeScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
+				else if(strtolower($sport_name)==strtolower('Water Polo'))
+				{
+						$hockey= new ScoreCard\WaterPoloScorecardController;
+				  return $hockey->waterpoloScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
+				
 			}
 		}
 	}
@@ -3238,6 +3285,16 @@ class ScoreCardController extends Controller {
 				{
 					$squash = new ScoreCard\VolleyballScoreCardController;
 					return $squash->volleyballScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
+				else if(strtolower($sport_name)==strtolower('throw ball'))
+				{
+					$squash = new ScoreCard\ThrowballScoreCardController;
+					return $squash->throwballScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
+				else if(strtolower($sport_name)==strtolower('kabaddi'))
+				{
+					$squash = new ScoreCard\KabaddiScoreCardController;
+					return $squash->kabaddiScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
 				else if(strtolower($sport_name)==strtolower('basketball'))
 				{
@@ -3654,7 +3711,9 @@ class ScoreCardController extends Controller {
 				'updated_at' => Carbon::now()
 			];
 
-			$matchSchedule = MatchSchedule::create($scheduleArray);
+			if(!$matchScheduleDetails['is_third_position']){
+				$matchSchedule = MatchSchedule::create($scheduleArray);
+			}
 
 			// Update the winner Id of the for the winner team.
 			$maxRoundNumber = MatchSchedule::

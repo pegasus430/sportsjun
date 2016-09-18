@@ -68,6 +68,8 @@
 
 
     <script src="{{ asset('/js/sidebar-menu.js') }}?v=<?php echo $js_version;?>"></script>
+    <script type="text/javascript" src="/js/jspdf.js">  </script>
+    
 
     <script type="text/javascript">
         var base_url = "{{URL::to('/')}}";
