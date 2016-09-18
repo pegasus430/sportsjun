@@ -91,24 +91,25 @@ return [
         'invitationrejected' => 'Invitation Rejected',
         'viewscore' => 'View Score',
         'edit' => 'Edit',
-			'fields' => [
-			'calendarview' => 'Calendar View',
-			'listview' => 'List View',
-			'schedulematch' => 'Schedule a Match',
-			'scheduletype' => 'Schedule Type',
-			'heading' => 'Schedule Match',
-			'myteam' => 'My Team',
-			'opponentteam' => 'Opponent Team',
-			'start_date' => 'Start Date',
-			'start_time' => 'Start Time',
-			'end_time' => 'End Time',
-			'venue' => 'Venue',
-			'playertype' => 'Player Type',
-			'matchtype' => 'Match Type',
-			'match' => 'Match',
-			'selectteam' => 'Select A Team',
-			'selectpalyer' => 'Select A Player',
-			],
+		'fields' => [
+				'calendarview' => 'Calendar View',
+				'listview' => 'List View',
+				'schedulematch' => 'Schedule a Match',
+				'scheduletype' => 'Schedule Type',
+				'heading' => 'Schedule Match',
+				'myteam' => 'My Team',
+				'opponentteam' => 'Opponent Team',
+				'start_date' => 'Start Date',
+				'start_time' => 'Start Time',
+				'end_time' => 'End Time',
+				'venue' => 'Venue',
+				'playertype' => 'Player Type',
+				'matchtype' => 'Match Type',
+				'number_of_games' => 'Number of Games',			
+				'match' => 'Match',
+				'selectteam' => 'Select A Team',
+				'selectpalyer' => 'Select A Player',
+		],
     ],
 	'users' => [
 		'userprofilecreate' => 'User Profile Created Successfully.',
@@ -287,7 +288,12 @@ return [
 		'owner_name' =>'Owner Name',
 		'player_type' =>'Player Type',
 		'match_type' =>'Match Type',
+		'game_type' =>'Game Type',
+		'rubber_number'		=> 'How many rubbers in a Match?'
 		],
+			'rubber'=>[
+		'edit_schedule' 	=> 'Update Schedule'
+			],
             'group' => [
 		'nomatchschedules' => 'No matches scheduled yet.',
 		],
@@ -517,5 +523,12 @@ return [
 		'invite_subject' => 'SportsJun Staff Invite.',
         'added_message' => 'Staff Invited Successfully!',
         'already_exists_message' => 'Staff Already exists!',
+    ], 
+    'settings' 	=> 'Settings',
+    'sports_settings'	=> [
+    		'number_of_sets'	=> 'Number of Sets',
+    		'score_to_win' 		=> 'Win Score',
+    		'end_point'	 		=> 'End Point',
+    		'enable_two_points' => 'Enable Two Points Clear?'
     ]
 ];

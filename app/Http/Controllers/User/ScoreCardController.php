@@ -3,6 +3,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Model\MatchSchedule;
+use App\Model\MatchScheduleRubber;
 use App\Model\UserStatistic;
 use App\Model\State;
 use App\Model\City;
@@ -191,11 +192,11 @@ class ScoreCardController extends Controller {
 						$hockey= new ScoreCard\HockeyScorecardController;
 					return $hockey->hockeyScoreCard($match_data,$sportsDetails,$tournamentDetails);
 				}
-				// else if(strtolower($sport_name)==strtolower('volleyball'))
-				// {
-				// 	$volleyball = new ScoreCard\VolleyballScoreCardController;
-				// 	return $volleyball->volleyballScoreCard($match_data,$sportsDetails,$tournamentDetails);
-				// }
+				else if(strtolower($sport_name)==strtolower('volleyball'))
+				{
+					$volleyball = new ScoreCard\VolleyballScoreCardController;
+					return $volleyball->volleyballScoreCard($match_data,$sportsDetails,$tournamentDetails);
+				}
 				else if(strtolower($sport_name)==strtolower('basketball'))
 				{
 					$basketball = new ScoreCard\BasketballScoreCardController;
@@ -3168,11 +3169,11 @@ class ScoreCardController extends Controller {
 					$squash = new ScoreCard\SquashScoreCardController;
 					return $squash->squashScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
-				// else if(strtolower($sport_name)==strtolower('volleyball'))
-				// {
-				// 	$squash = new ScoreCard\VolleyballScoreCardController;
-				// 	return $squash->volleyballScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
-				// }
+				else if(strtolower($sport_name)==strtolower('volleyball'))
+				{
+					$squash = new ScoreCard\VolleyballScoreCardController;
+					return $squash->volleyballScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
 				else if(strtolower($sport_name)==strtolower('basketball'))
 				{
 					$squash = new ScoreCard\BasketballScoreCardController;
@@ -3233,11 +3234,11 @@ class ScoreCardController extends Controller {
 					$squash = new ScoreCard\SquashScoreCardController;
 					return $squash->squashScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
-				// else if(strtolower($sport_name)==strtolower('volleyball'))
-				// {
-				// 	$squash = new ScoreCard\VolleyballScoreCardController;
-				// 	return $squash->volleyballScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
-				// }
+				else if(strtolower($sport_name)==strtolower('volleyball'))
+				{
+					$squash = new ScoreCard\VolleyballScoreCardController;
+					return $squash->volleyballScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
 				else if(strtolower($sport_name)==strtolower('basketball'))
 				{
 					$squash = new ScoreCard\BasketballScoreCardController;
@@ -3646,6 +3647,8 @@ class ScoreCardController extends Controller {
 				'zip' => $matchScheduleDetails['zip'],
 				'match_status' => 'scheduled',
 				'a_id' => $winner_team_id,
+				'game_type' => $matchScheduleDetails['game_type'],
+				'number_of_rubber' => $matchScheduleDetails['number_of_rubber'],
 				'player_a_ids' => !empty($player_a_ids)?(','.trim($player_a_ids).','):NULL,
 				'created_at' => Carbon::now(),
 				'updated_at' => Carbon::now()
@@ -4001,5 +4004,17 @@ if(!isset($match_details['penalties']['team_b']['players_ids']))$match_details['
 				//$ps->delete();
 			}
 	}
+
+
+//get the active rubber
+	public function getActiveRubber($match_id){
+	$match_model=MatchSchedule::find($match_id);
+			
+	$active_rubber=MatchScheduleRubber::whereMatchId($match_id)->orderBy('id', 'asc')->where('match_status', '=', 'scheduled')->first();
+
+
+		return $active_rubber;
+	}
+
 }
 ?>

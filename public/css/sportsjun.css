@@ -1497,18 +1497,18 @@ margin: 200px 0px 0px !important;
 margin: 145px 0px 0px !important;
 }
 
-.round-four ul{
-margin: 315px 0px 0px 0px;
-}
 
+.round-four ul{
+margin: 545px 0px 0px 0px;
+}
 
 
 .round-five ul{
-margin: 745px 0px 0px 0px;
+margin: 1145px 0px 0px 0px;
 }
 
 .round-six ul{
-margin: 900px 0px 0px 0px;
+margin: 2345px 0px 0px 0px;
 }
 
 .round p{margin: 8px 0px 7px 0px;padding: 3px; font-size: 14px; font-weight: 600;letter-spacing: .5px;text-align: center;color: #455A64;}
@@ -1537,9 +1537,14 @@ margin: 230px 0px 0px !important;
 .round-three ul {
 margin: 180px 0px 0px !important;
 }
-.round-four ul {
-margin: 370px 0px 0px;
+
+.round-four > ul:nth-child(2) {
+margin: 600px 0px 0px !important;
 }
+.round-four ul{
+margin: 565px 0px 0px 0px;
+}
+
 }
 @media only screen and (min-width:769px)and (max-width: 925px){
 .round-two ul {
@@ -2726,6 +2731,7 @@ fieldset[disabled] .btn-sj-secondary.active {
 .clear_filter{ padding:0 5px; cursor:pointer; color:#8e9bd0;}
 .selectpicker_cal{ background:#f6f6f6 !important; }
 .schedule_but_new{ background:#f27676 !important;}
+
 .score_link{ color:#333333;}
 .score_link:hover{ color:#333333; text-decoration:underline;}
 .sb_join_team_main{ display:inline-block; margin-right:5px;}
@@ -2975,4 +2981,14 @@ div#tournament_details_cover img {
 .dark-border{
     border: inset 1px #000000;
     padding: 5px;
+}
+
+.bg-white {
+   background: #fff;
+}
+
+.bg-grey {background-color: #fdfdfd !important;}
+
+.bluewish{
+  color:#123456;
 }

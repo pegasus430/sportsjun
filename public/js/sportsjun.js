@@ -126,14 +126,26 @@ $(function() {
 			{
 				$('#all_teams_div_'+groupId).show();
 				$('#req_teams_div_'+groupId).hide();
+                $('#invite_player_div_'+groupId).hide();
                                 $('#requested_teams_div').hide();
+                                $('#invite_player_div').hide();
                                 $('#auto_teams_div').show();
-			}else
+			}else if(clicked_value=='invite_player'){
+                $('#req_teams_div_'+groupId).hide();
+                $('#all_teams_div_'+groupId).hide();
+                $('#invite_player_div_'+groupId).show();
+                                $('#requested_teams_div').hide();
+                                $('#auto_teams_div').hide();
+                                $('#invite_player_div').show();
+            }
+            else
 			{
 				$('#req_teams_div_'+groupId).show();
 				$('#all_teams_div_'+groupId).hide();
+                $('#invite_player_div_'+groupId).hide();
                                 $('#requested_teams_div').show();
                                 $('#auto_teams_div').hide();
+                                $('#invite_player_div').hide();
 			}
 		});
 		
@@ -1057,6 +1069,34 @@ function subTournamentEdit(id)
         }
     });
 }
+
+function rubberEdit(id)
+{
+     $.ajax({
+        url: base_url + '/tournaments/rubberEdit',
+        type: 'GET',
+        data: {id: id},
+        dataType: 'html',
+        success: function(response) {
+            $("#displayrubber").html(response);
+           $("#editrubber").modal('show');
+            $('.modal .modal-body').css('overflow-y', 'auto'); 
+    $('.modal .modal-body').css('max-height', $(window).height() * 0.7);
+        }
+    });
+}
+
+  function addRubber(match_id){
+        $.ajax({
+            url:'/tournaments/match/'+match_id+'/add_rubber',            
+            type:'post',
+            success:function(response){                
+                $('#subfield_'+match_id).html(response);
+            }
+        });
+    }
+            
+
 $(window).load(function(){
     //$('form').dontJustLeaveMe();
     var selected = $('#service').find("option:selected").val();
@@ -1238,6 +1278,17 @@ function follow_unfollow(id,val,flag)
 //END
 
 
+function getTournamentSettings(tournament_id){
+        $.ajax({
+            url:"/tournaments/settings/"+tournament_id,
+            data:{},
+            success:function(response){
+                $('#tournamentSettings').html(response);
+            }
+        })
+}
+
+
 function autofillsubtournamentdetails(tournamentDetails) {
         $(".modal-body #player_type").val(tournamentDetails['player_type']);
         $(".modal-body #match_type").val(tournamentDetails['match_type']);
@@ -1317,4 +1368,18 @@ function filterDiv(that, index){
         });
 
 }
-    
+
+
+
+
+
+
+
+    $(document).ready(function(){
+        $(".show_sub_field").click(function(){
+            parent_id = $(this).attr('parent_field_id');
+            $("#subfield_"+parent_id).slideToggle("1500");
+        });
+    });
+
+

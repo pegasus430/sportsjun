@@ -216,7 +216,7 @@
                             <BR>
                         @if(!empty($match_data[0]['player_of_the_match']))
                             <div class="form-group">
-                                <label class="" style="color:red">Player of the Match</label>
+                                <label class="" style="color:red">PLAYER OF THE MATCH</label>
                                 <h4 class="win_team">{{ Helper::getUserDetails($match_data[0]['player_of_the_match'])->name }}</h4>
 
                             </div>

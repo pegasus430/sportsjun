@@ -7,9 +7,13 @@ use App\Model\Sport;
 use App\Model\UserStatistic;
 use App\Model\Notifications;
 use App\Model\MatchSchedule;
+use App\Model\MatchScheduleRubber;
 use App\Model\TournamentParent;
 use App\Model\Tournaments;
 use App\Model\TeamPlayers;
+use App\Model\volleyballScore;
+use App\Model\VolleyballPlayerMatchwiseStats;
+use App\Model\TournamentMatchPreference;
 use App\Helpers\AllRequests;
 use App\User;
 use App\Model\Organization;
@@ -1936,8 +1940,10 @@ class Helper {
 
     }   
 
-    public static function getMatchDetails($match_id){
-            $match_model=MatchSchedule::find($match_id);
+    public static function getMatchDetails($match_id, $game_type='normal'){
+
+            if($game_type=='normal')  $match_model=MatchSchedule::find($match_id);
+            if($game_type=='rubber')  $match_model=MatchScheduleRubber::find($match_id);
 
             //get the winner
             if(!empty($match_model->winner_id)){
@@ -1957,6 +1963,7 @@ class Helper {
             $match_details=json_decode($match_model->match_details);
             $a_id=$match_model->a_id;
             $b_id=$match_model->b_id;
+
 
             switch ($match_model->sports_id) {
                 case '5':           //badminton
@@ -2001,7 +2008,11 @@ class Helper {
             }
         }
         else{
-                $match_model->scores='0 - 0';
+                $match_model->scores=' - ';
+        }
+
+        if($match_model->game_type!='normal'){
+                $match_model->scores = $match_model->a_score. ' - '. $match_model->b_score;
         }
         return $match_model;
     }
@@ -2135,6 +2146,61 @@ class Helper {
         }
 
         return $details;
+    }
+
+
+    public static function displayEmptyDash($number){
+            if($number>0){
+                return $number;
+            }
+            else return '-';
+    }
+
+    public static function getVolleyballServer($match_id){
+      
+        $team_server=volleyballScore::whereMatchId($match_id)->where('elected', 'serve')->first();
+        if(isset($team_server)){
+                $team_id=$team_server->team_id;
+        $player_serving=VolleyballPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_id)->where('serving_order', 1)->first();
+        $serving_array=json_decode(json_encode(
+                ['team_id'=>$team_id,
+                 'player_id'=>$player_serving->user_id,
+                 'team_name'=>Team::find($team_id)->name,
+                 'player_name'=>User::find($player_serving->user_id)->name]
+
+            ));
+        
+        }
+        else{
+                $serving_array=json_decode(json_encode(
+                ['team_id'=>0,
+                 'player_id'=>0,
+                 'team_name'=>'',
+                 'player_name'=>'']
+            ));
+        }
+        
+        return $serving_array;
+    }
+
+    public static function getMatchSettings($tournament_id, $sports_id=5 ){
+        if(is_null($tournament_id)){
+            $settings= json_encode(config('constants.SPORTS_PREFERENCES.'.$sports_id));
+        }
+        else{
+            $sports_id=Tournaments::find($tournament_id)->sports_id;
+            $settings=TournamentMatchPreference::where('tournament_id',$tournament_id)->first();
+            if(count($settings)) $settings= $settings->settings;
+            else{
+                $settings=json_encode(config('constants.SPORTS_PREFERENCES.'.$sports_id));
+                $tmp    = new TournamentMatchPreference;
+                $tmp->tournament_id=$tournament_id;
+                $tmp->sports_id     = $sports_id;
+                $tmp->settings      = $settings;
+                $tmp->save();
+            }
+          return json_decode($settings);
+       }
     }
 
    

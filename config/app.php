@@ -211,6 +211,7 @@ return [
         'Form'      => 'Illuminate\Html\FormFacade',
         'HTML'      => 'Illuminate\Html\HtmlFacade',
 		'Helper'	=> App\Helpers\Helper::class,
+        'ScoreCard' => App\Helpers\ScoreCard::class,
 //        'URL'       => 'IlluminateSupportFacadesURL',
 //        'Validator' => 'IlluminateSupportFacadesValidator',
 //        'View'      => 'IlluminateSupportFacadesView',

@@ -12,13 +12,19 @@
 
 <div id="round_div_1">
 </div>    -->
+
+<!-- Display rubber modal -->
+<!-- 
+<div id='displayrubber'> </div> -->
+
+
 <div class="col-sm-12">
 <div class="row group-flex-content">
-
+<?php $i=0;?>
 @if(count($roundArray))
 	<br>
     <div class="pull-left half-width col-xs-12 col-sm-6 col-sm-offset-3"> <center><input class='full-width form-control dark-border' placeholder="filter match e.g team name, date" onkeyup="filterDiv(this)"></center></div>
-<?php $i=0;?>
+
         @foreach($roundArray as $round)
 
           <div class="col-sm-12">
@@ -29,7 +35,8 @@
                          @else 
 
                          @if(count($bracketTeamArray))
-                             @foreach($bracketTeamArray as $brk => $bracketTeam)                    
+                             @foreach($bracketTeamArray as $brk => $bracketTeam)  
+                                      <?php $i++;?>
                                 <?php $firstRoundBracketArray=$bracketTeam;?>
                                 @include('tournaments.sub_match_schedules')
                              @endforeach
@@ -39,6 +46,9 @@
                 </div>
             </div>
 @endforeach
+</div>
+</div>
+
 
 @endif
 
@@ -47,6 +57,9 @@
 <div class="row group-flex-content">
  <div class="sj-alert sj-alert-info">
  {{ trans('message.tournament.final.nofinalstageteams') }}
+ </div>
+ </div>
+ </div>
 @endif
 
 <script type="text/javascript">

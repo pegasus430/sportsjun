@@ -1,7 +1,7 @@
 nbproject/
 public/uploads/
 public/mailoutput/
-vendor/
+vendor/*
 storage/*
 config/database.php
 .env

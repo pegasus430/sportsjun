@@ -32,9 +32,9 @@
                 {{$statistic->player_name}}</a></td>                
                 <td><a href='/team/members/{{$statistic->team_id}}' class="text-primary">{{$statistic->team_name}}</a></td>                
                 <td>{{$statistic->matches}}</td>
-                <td>{{$statistic->yellow_cards}}</td>
-                <td>{{$statistic->red_cards}}</td>
-                <td>{{$statistic->goals}}</td>
+                <td>{{Helper::displayEmptyDash($statistic->yellow_cards)}}</td>
+                <td>{{Helper::displayEmptyDash($statistic->red_cards)}}</td>
+                <td>{{Helper::displayEmptyDash($statistic->goals)}}</td>
 <!--                <td>{{$statistic->goals_saved}}</td>
                 <td>{{$statistic->goal_assist}}</td>
                 <td>{{$statistic->goal_penalties}}</td>-->

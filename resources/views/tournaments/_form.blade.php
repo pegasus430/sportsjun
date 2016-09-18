@@ -53,8 +53,8 @@ if(!empty($matchScheduleCount) && $matchScheduleCount>0)
 </div>
 
 <div class="row">
-    <div class="col-sm-12">
-        <div class="section" id="show_hide_div" style="display:none;">
+    <div class="col-sm-6">
+        <div class="section show_hide_div" id="show_hide_div" style="display:none;">
         <label class="form_label">{{  trans('message.tournament.fields.schedule_type') }} <span  class='required'>*</span></label>
             <label class="field select">
              {!! Form::select('schedule_type', $schedule_type_enum, null,array('id'=>'schedule_type','class'=>'gui-input',$disable)) !!}
@@ -63,7 +63,33 @@ if(!empty($matchScheduleCount) && $matchScheduleCount>0)
             </label>
         </div>
     </div>
-</div>	
+
+
+    <div class="col-sm-6">
+        <div class="section show_hide_div show_hide_game_type"  style="display:none;">
+        <label class="form_label">{{  trans('message.tournament.fields.game_type') }} <span  class='required'>*</span></label>
+            <label class="field select">
+             {!! Form::select('game_type', $game_type_enum, null,array('id'=>'game_type','class'=>'gui-input',$disable)) !!}
+            
+             <i class="arrow double"></i>      
+            </label>
+        </div>
+    </div> 
+
+</div>  
+
+<div class="row">
+     <div class="col-sm-12">
+        <div class="section show_hide_rubber "  style="display:none;">
+        <label class="form_label">{{  trans('message.tournament.fields.rubber_number') }} <span  class='required'>*</span></label>
+            <label class="field select">
+             {!! Form::select('number_of_rubber', [3=>3, 5=>5,7=>7, 9=>9], 1,array('id'=>'rubber_number','class'=>'gui-input',$disable)) !!}
+            
+             <i class="arrow double"></i>      
+            </label>
+        </div>
+    </div>
+</div>
 
 
 <div class="row">
@@ -365,16 +391,19 @@ $(function () {
 		if(sport_name.toLowerCase()=='tennis' || sport_name.toLowerCase()=='table tennis' || sport_name.toLowerCase()=='badminton' || sport_name.toLowerCase()=='squash')
 		{
 			$('#show_hide_div').show();
+            $('.show_hide_div').show();
 			$("#schedule_type").val('team');
 		}else
 		{
 			$('#show_hide_div').hide();
+            $('.show_hide_div').hide();
+            $('.show_hide_rubber').hide();
 		}
 		var selected_sport = $("#sports_id option:selected").text();
 		selected_sport = selected_sport.toUpperCase();
 		buildmatchtypedivs(selected_sport);
 	}
-	function buildmatchtypedivs(selected_sport)
+	function buildmatchtypedivs(selected_sport, div_type)
     {
      //get match type and schedules
       $.get(base_url+"/schedule/getmatchandplayertypes",{'sport_name':selected_sport,'from_tournament':'no'},function(response,status){
@@ -397,6 +426,27 @@ $(function () {
         }
         $("#main_match_typee").html(match_type_html);
         $("#main_player_typee").html(player_type_html);
+      });      
+    }
+
+    function buildmatchtypedivsOnly(selected_sport)
+    {
+     //get match type and schedules
+      $.get(base_url+"/schedule/getmatchandplayertypes",{'sport_name':selected_sport,'from_tournament':'no'},function(response,status){
+        var match_type_html = "<option value=''>Select Match Type</option>";
+       
+        if(status == 'success')
+        {
+          if(response.matchTypes)
+          {
+             $.each(response.matchTypes, function(key, value) {
+              match_type_html += "<option value='"+key+"'>"+value+"</option>";
+             });
+          }
+         
+        }
+        $("#main_match_typee").html(match_type_html);
+       
       });      
     }
 	  //schedule type on chanage
@@ -439,6 +489,102 @@ $(function () {
 			$('#hide_groups').show();
 		}
 	}
+
+
+    $('#game_type').change(function(){
+            if($(this).val()=='rubber'){
+                $('.show_hide_rubber').show();
+                $('#rubber_number').val(5);
+            }
+            else{
+                $('.show_hide_rubber').hide();
+                 $('#rubber_number').val(1);
+            } 
+    })
+
+    $("#schedule_type").change(function(){
+            if($(this).val()=='individual'){
+                 $('#rubber_number').val(1);
+                 $('#game_type').val('normal');
+                 $('.show_hide_rubber').hide();
+                 $('.show_hide_game_type').hide()
+            }
+            else{
+                 $('#rubber_number').val(3);
+                 $('#game_type').val('normal');
+                 $('.show_hide_show').hide();
+                 $('.show_hide_game_type').show()
+            }
+    })
+
+    $("#main_player_typee").change(function(){
+            if($(this).val()=='mixed'){
+                 $('#main_match_typee').val('doubles');
+                 $('#main_match_typee').attr('readonly', true);                 
+            }
+            else{              
+               $('#main_match_typee').removeAttr('readonly');
+
+            }
+    })
+
+    $("#main_player_typee").change(function(){
+    
+      if($(this).val()==='mixed')
+      {
+          // $('#main_myteam').attr('readonly', true);
+          $("#main_match_typee option[value='singles']").remove();         
+          $("#main_match_typee option[value='any']").remove();
+      }
+      else
+      {
+        var selected_sport = $("#sports_id option:selected").text();
+        selected_sport = selected_sport.toUpperCase();
+        buildmatchtypedivsOnly(selected_sport);
+      }
+    });
+
+
+    $(document).ready(function(){
+        var sport_name = $( "#sports_id option:selected" ).text();
+        if(sport_name.toLowerCase()=='tennis' || sport_name.toLowerCase()=='table tennis' || sport_name.toLowerCase()=='badminton' || sport_name.toLowerCase()=='squash')
+        {
+            $('#show_hide_div').show();
+            $('.show_hide_div').show();
+            $("#schedule_type").val('team');
+        }else
+        {
+            $('#show_hide_div').hide();
+            $('.show_hide_div').hide();
+            $('.show_hide_rubber').hide();
+        }
+
+
+
+            // if($("#schedule_type").val()=='individual'){
+            //      $('#rubber_number').val(1);
+            //      $('#game_type').val('normal');
+            //      $('.show_hide_rubber').hide();
+            //      $('.show_hide_game_type').hide()
+            // }
+            // else{
+            //      $('#rubber_number').val(3);
+            //      $('#game_type').val('normal');
+            //      $('.show_hide_show').hide();
+            //      $('.show_hide_game_type').show()
+            // }
+
+
+             if($('#game_type').val()=='rubber'){
+                $('.show_hide_rubber').show();
+                
+            }
+            else{
+                $('.show_hide_rubber').hide();
+               
+            } 
+   
+    })
 
 
 </script>    

@@ -12,11 +12,14 @@
     $player_b_ids=$match_data[0]['player_b_ids'];
 
     $match_details=json_decode($match_data[0]['match_details']);
+    $match_settings   =   Helper::getMatchSettings($match_data[0]['tournament_id'],$match_data[0]['sports_id']);
 
     isset($match_details->preferences)?$preferences=$match_details->preferences:[];
     
-    if(isset($preferences->number_of_sets))$set=$preferences->number_of_sets ;
-    else $set=3;
+    // if(isset($preferences->number_of_sets))$set=$preferences->number_of_sets ;
+    // else $set=3;
+
+     $set=$match_settings->number_of_sets;
 
     ${'team_'.$match_data[0]['a_id'].'_score'}='0 sets';
     ${'team_'.$match_data[0]['b_id'].'_score'}='0 sets'; 
@@ -32,6 +35,11 @@
 } else {
   $current_set=0;
 }
+
+if($match_data[0]['game_type']=='rubber'){
+  ${'team_'.$team_a_id.'_score'}=$match_data[0]['a_score'];
+  ${'team_'.$team_b_id.'_score'}=$match_data[0]['b_score'];
+  }
   
 ?>
 
@@ -171,24 +179,9 @@
     </div>
 
        <!-- Match has no results -->
-@if(!$match_data[0]['has_result'])
-        <div class='row' >
-            <div class="col-sm-8 col-sm-offset-2" style="background:#ffeeee">
-                
-                    <div class='col-sm-12'>
-                @if($match_data[0]['scoring_status']!='approved')
-                    This match has  been saved as 'no result'. All the changes and records for this match shall be discarded after approval.
-                @else
-                  No results found
-                @endif
 
-                </div>
-            
-            
-            </div>
-        </div>  
-@endif
-
+@if($match_data[0]['game_type']!='rubber')
+<!-- Start of normal match -->
 
   <div class="row">
     <div class="col-sm-12">
@@ -242,8 +235,25 @@
         </tbody>
       </table>
     </div>
+  <!-- End of normal match -->
 
-    @if($match_data[0]['match_status']=='completed')
+@else 
+  <!-- Start of Rubber -->
+
+ @foreach($rubbers as $rubber)
+    <?php
+         $rubber_players = ScoreCard::getRubberPlayers($rubber->id);
+         $rubber_a_array = $rubber_players['a'];
+         $rubber_b_array = $rubber_players['b'];
+    ?>
+         @include('scorecards.badmintonrubberview')
+ @endforeach
+ 
+ @endif
+
+ <!-- End of Rubber -->
+
+    @if($match_data[0]['match_status']=='completed' && isset($display_users))
 
 
 @if($match_data[0]['match_type']!='singles' )
@@ -254,9 +264,9 @@
         <h3 class='team_bat team_title_head'>{{$score_a_array['team_name']}}</h3>
             
             <div class='col-xs-12'>&nbsp;</div>
-            <div class='col-xs-12'>{{$score_a_array['player_name_a']}}</div>
+            <div class='col-xs-12'> <a href="/editsportprofile/{{$score_a_array['user_id_a']}}" class="text-primary"> {{$score_a_array['player_name_a']}}</a></div>
             <div class='col-xs-12'>&nbsp;</div>
-            <div class='col-xs-12'>{{$score_a_array['player_name_b']}}</div>
+            <div class='col-xs-12'><a href="/editsportprofile/{{$score_a_array['user_id_b']}}" class="text-primary"> {{$score_a_array['player_name_b']}}</a></div>
             <div class='col-xs-12'>&nbsp;</div>
         
       </div>
@@ -266,9 +276,9 @@
      <h3 class='team_fall team_title_head'>{{$score_a_array['team_name']}}</h3>
          
             <div class='col-xs-12'>&nbsp;</div>
-            <div class='col-xs-12'>{{$score_b_array['player_name_a']}}</div>
+            <div class='col-xs-12'><a href="/editsportprofile/{{$score_b_array['user_id_a']}}" class="text-primary"> {{$score_b_array['player_name_a']}}</a></div>
             <div class='col-xs-12'>&nbsp;</div>
-            <div class='col-xs-12'>{{$score_b_array['player_name_b']}}</div>
+            <div class='col-xs-12'><a href="/editsportprofile/{{$score_b_array['user_id_b']}}" class="text-primary"> {{$score_b_array['player_name_b']}}</a></div>
             <div class='col-xs-12'>&nbsp;</div>
       </div>
       
@@ -279,14 +289,14 @@
   <div class="col-sm-6 col-xs-12">
     <h3 class='team_bat team_title_head'>&nbsp;</h3> 
             <div class='col-xs-12'>&nbsp;</div>
-            <div class='col-xs-12'><b>{{$score_a_array['player_name_a']}}</b></div>
+            <div class='col-xs-12'><a href="/editsportprofile/{{$score_a_array['user_id_a']}}" class="text-primary"> {{$score_a_array['player_name_a']}}</a></div>
             <div class='col-xs-12'>&nbsp;</div>    
   </div>
 
   <div class='col-xs-12 col-sm-6'>
     <h3 class='team_fall team_title_head'>&nbsp;</h3>      
                 <div class='col-xs-12'>&nbsp;</div>
-                <div class='col-xs-12'>{{$score_b_array['player_name_a']}}</div>    
+                <div class='col-xs-12'><a href="/editsportprofile/{{$score_b_array['user_id_a']}}" class="text-primary"> {{$score_b_array['player_name_a']}}</a></div>    
     
   </div>
 </div>

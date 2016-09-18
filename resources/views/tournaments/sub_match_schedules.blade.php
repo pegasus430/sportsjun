@@ -3,8 +3,14 @@
   @foreach($firstRoundBracketArray as $key => $schedule)
   	    @if((isset($schedule['tournament_round_number']) && $schedule['tournament_round_number']==$round) && isset($schedule['id'])  )
 
-  	    <?php 
-  	    	$i++;
+  	  
+                <div class="col-sm-12 match_set " style="">             	
+                  
+                       <?php $match=Helper::getMatchDetails($schedule['id']); ?>
+      @if(($match['a_id']!='' && $match['b_id']) ) 
+
+        <?php 
+  	    	$i=$i+1;;
 								$class='schedule_new_req_nor';	
 								if($i % 2 == 0)
 								{
@@ -15,13 +21,8 @@
 									$class='schedule_new_req_nor';	
 								}
 		?>
-                <div class="col-sm-12 match_set " style="">             	
-                  
-                       <?php $match=Helper::getMatchDetails($schedule['id']); ?>
-
-
-      @if(($match['a_id']!='' && $match['b_id']) ) 
       		<br>
+      		
 				@if($match['schedule_type']=='team' )
 							<div class="row row_to_filter_ {{$class}}">
 						
@@ -66,9 +67,13 @@
 								</div>
 								<div class="col-md-6 col-sm-8 schedule_new_team_txt">
                                 	<h4 class="tour-title">
-                                    	{{ $team_name_array[$match['a_id']] }}
-                                        {{ 'VS' }}                                        
-                                        {{ $team_name_array[$match['b_id']] }}
+                                    	<a href="/team/members/{{$match['a_id']}}" class="primary">	
+															{{ $team_name_array[$match['a_id']] }}
+														</a>
+															{{ 'VS' }}
+														<a href="/team/members/{{$match['b_id']}}" class="primary">	
+															{{ $team_name_array[$match['b_id']] }}
+														</a>
                                     </h4>
                                     <br>									
 									<span class="match-detail-score">{{ Helper::displayDateTime($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""), 1) }}</span>
@@ -81,7 +86,7 @@
 									<!-- match_details -->
 									
 									<span class=''>{{$match['address']}}</span><br>
-									Status: <span class='event_date'>{{ ucfirst($match['match_status']) }}</span> <br>
+									Status: <span class='event_date sports_text'>{{ ucfirst($match['match_status']) }}</span> <br>
 									Scores: <span class='blue'>{{Helper::getMatchDetails($match['id'])->scores}} </span> <br>
 					@if(!is_null($match['winner_id']))
 								<span class='red'>Winner: {{Helper::getMatchDetails($match['id'])->winner}} </span>
@@ -90,10 +95,20 @@
 
 									<br>
 					@if(isset($schedule['winner_text']))
-                                  <a href="{{ url('match/scorecard/edit/'.$schedule['id']) }}">{{$schedule['winner_text']}}</a>
-                                 </div>
+							<span class="pull-left">
+								<br>
+                                  <a href="{{ url('match/scorecard/edit/'.$schedule['id']) }}" class="btn-primary " style="padding: .3em 1em;">{{$schedule['winner_text']}}</a>   
+                            </span>                         
       
-          @endif
+         		    @endif
+
+         		    @if($match['game_type']=='rubber')
+         		    			<span class="pull-right">
+         		    			<br>
+                 			  <a href="javascript:void(0)" class="show_sub_field show_sub_tournament" parent_field_id = "{{$match['id']}}">View Rubbers</a>
+                 			  	</span>
+                 	@endif
+         			  </div>
 
 
 								<div class="col-md-3 col-sm-4">
@@ -114,10 +129,8 @@
 					
 					 	@endif							
 								
-								</div>						
-								
-								
-								
+								</div>			
+														
 
 							</div>
 				@else
@@ -139,33 +152,47 @@
 					</div>                               
                                                   <div class="col-md-6 schedule_new_team_txt">
                                                   	<h4 class="tour-title">
-                                                      	{{ $user_name[$match['a_id']] }}
-                                                          {{ 'VS' }}                                        
-                                                          {{ $user_name[$match['b_id']] }}
+                                                      	<a href="/team/members/{{$match['a_id']}}" class="primary">	
+															{{ $user_name[$match['a_id']] }}
+														</a>
+															{{ 'VS' }}
+														<a href="/team/members/{{$match['b_id']}}" class="primary">	
+															{{ $user_name[$match['b_id']] }}
+														</a>
                                                       </h4>
                                                   <br>
                   									
                   									<span class="match-detail-score">{{ Helper::displayDateTime($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""), 1) }}</span>
                   									<span class='sports_text'>{{ isset($sport_name)?$sport_name:'' }}</span>
-                	@if($match['match_type']!='other')
-                											<span class='match_type_text'>({{ $match['match_type']=='odi'?strtoupper($match['match_type']):ucfirst($match['match_type']) }})</span>
-                	@endif
+	                	@if($match['match_type']!='other')
+	                			<span class='match_type_text'>({{ $match['match_type']=='odi'?strtoupper($match['match_type']):ucfirst($match['match_type']) }})</span>
+	                	@endif
 									<br/>
 
 									<span class=''>{{$match['address']}}</span><br>
-									Status: <span class='event_date'>{{ ucfirst($match['match_status']) }}</span> <br>
+									Status: <span class='event_date sports_text'>{{ ucfirst($match['match_status']) }}</span> <br>
 									Scores: <span class='blue'>{{Helper::getMatchDetails($match['id'])->scores}} </span> <br>
-					@if(!is_null($match['winner_id']))
-							<span class='red'>Winner: {{Helper::getMatchDetails($match['id'])->winner}} </span>								
-					@endif
-						<br>
-							@if(isset($schedule['winner_text']))
-	                          <a href="{{ url('match/scorecard/edit/'.$schedule['id']) }}">{{$schedule['winner_text']}}</a>
-                  @else
+						@if(!is_null($match['winner_id']))
+								<span class='red'>Winner: {{Helper::getMatchDetails($match['id'])->winner}} </span>								
+						@endif
+							<br>
+						@if(isset($schedule['winner_text']))
+							<span class="pull-left">
+	                          <a href="{{ url('match/scorecard/edit/'.$schedule['id']) }}" class="btn-primary" style="padding: .3em 1em;">{{$schedule['winner_text']}}</a>
+	                         </span>
+                 		@else
 		                    @if($isOwner)
+		                     <span class="pull-left">
 		                            <a href="javascript:void(0)" id="scheduleEdit_{{$schedule['id']}}"  onclick="editMatchSchedule({{$schedule['id']}},1,'','myModal')">Edit</a>
+		                      </span>
 		                    @endif
-                  @endif
+                 		@endif
+
+                 		@if($match['game_type']=='rubber')
+                 				<span class="pull-right">
+                 			  <a href="#" class="show_sub_field show_sub_tournament " parent_field_id = "{{$match['id']}}">View Rubber</a>
+                 			  	</span>
+                 		@endif
 								</div>
 
 
@@ -189,27 +216,29 @@
 									 	@endif							
 								
 								</div>	
-							</div>
-								
+						</div>					
 								
 	
-							  @endif
+				@endif
 
+					<!-- Show Rubbers -->
 
+				@if($match['game_type']=='rubber')
+					<div id="subfield_{{$match['id']}}" class="row" style="display:none;">
+							@include('tournaments.sub_match_schedules_rubber')
+					</div>
 
+				@endif
 
-              @else
+					<!-- End of Rubber -->
 
-
-   
-                                    @endif
+              @else  
+          @endif
                  </div>
 
-
-
-        @endif
+    @endif
               
-                 @endforeach
+   @endforeach
 
-                 @endif
+@endif
         

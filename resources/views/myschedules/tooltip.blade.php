@@ -3,21 +3,21 @@
 <div class="row">
     <div class="schedule_list clearfix">
         <div id="teamone" class="col-xs-3">
-            @if(isset($matchScheduleData[$scheduleTypeOne]['name']))
+            @if(isset($matchScheduleData[$matchScheduleDataTypeOne]['name']))
             <p>
                 @if($matchScheduleData['schedule_type']=='team') 
-                {!! Helper::Images($matchScheduleData[$scheduleTypeOne]['url'],config('constants.PHOTO_PATH.TEAMS_FOLDER_PATH'),array('height'=>30,'width'=>30) )!!}
+                {!! Helper::Images($matchScheduleData[$matchScheduleDataTypeOne]['url'],config('constants.PHOTO_PATH.TEAMS_FOLDER_PATH'),array('height'=>30,'width'=>30) )!!}
                 @else
-                {!! Helper::Images($matchScheduleData[$scheduleTypeOne]['url'],config('constants.PHOTO_PATH.USERS_PROFILE'),array('height'=>30,'width'=>30) )!!}
+                {!! Helper::Images($matchScheduleData[$matchScheduleDataTypeOne]['url'],config('constants.PHOTO_PATH.USERS_PROFILE'),array('height'=>30,'width'=>30) )!!}
                 @endif    
             </p>
             @endif
-            <!--<p class="vs_text">{{isset($matchScheduleData[$scheduleTypeOne]['name'])?$matchScheduleData[$scheduleTypeOne]['name']:''}}</p>-->
+            <!--<p class="vs_text">{{isset($matchScheduleData[$matchScheduleDataTypeOne]['name'])?$matchScheduleData[$matchScheduleDataTypeOne]['name']:''}}</p>-->
             <p class="vs_text">
                 @if($matchScheduleData['schedule_type']=='team')
-                    <a href="{{ url('/team/members',[$matchScheduleData['a_id']]) }}">{{$matchScheduleData[$scheduleTypeOne]['name']}}</a>
+                    <a href="{{ url('/team/members',[$matchScheduleData['a_id']]) }}">{{$matchScheduleData[$matchScheduleDataTypeOne]['name']}}</a>
                 @else
-                    <a href="{{ url('/showsportprofile',[$matchScheduleData['a_id']]) }}">{{$matchScheduleData[$scheduleTypeOne]['name']}}</a>
+                    <a href="{{ url('/showsportprofile',[$matchScheduleData['a_id']]) }}">{{$matchScheduleData[$matchScheduleDataTypeOne]['name']}}</a>
                 @endif
             </p>
         </div>    
@@ -27,28 +27,29 @@
         </div>
 
         <div id="teamtwo" class="col-xs-3">
-            @if(isset($matchScheduleData[$scheduleTypeTwo]['name']))
+            @if(isset($matchScheduleData[$matchScheduleDataTypeTwo]['name']))
             <p>
                 @if($matchScheduleData['schedule_type']=='team') 
-                {!! Helper::Images($matchScheduleData[$scheduleTypeTwo]['url'],config('constants.PHOTO_PATH.TEAMS_FOLDER_PATH'),array('height'=>30,'width'=>30) )!!}
+                {!! Helper::Images($matchScheduleData[$matchScheduleDataTypeTwo]['url'],config('constants.PHOTO_PATH.TEAMS_FOLDER_PATH'),array('height'=>30,'width'=>30) )!!}
                 @else
-                {!! Helper::Images($matchScheduleData[$scheduleTypeTwo]['url'],config('constants.PHOTO_PATH.USERS_PROFILE'),array('height'=>30,'width'=>30) )!!}
+                {!! Helper::Images($matchScheduleData[$matchScheduleDataTypeTwo]['url'],config('constants.PHOTO_PATH.USERS_PROFILE'),array('height'=>30,'width'=>30) )!!}
                 @endif
             </p>
             @endif
-            <!--<p class="vs_text">{{isset($matchScheduleData[$scheduleTypeTwo]['name'])?$matchScheduleData[$scheduleTypeTwo]['name']:''}}</p>-->
+            <!--<p class="vs_text">{{isset($matchScheduleData[$matchScheduleDataTypeTwo]['name'])?$matchScheduleData[$matchScheduleDataTypeTwo]['name']:''}}</p>-->
             <p class="vs_text">
-                @if(isset($matchScheduleData[$scheduleTypeTwo]['name']))
+                @if(isset($matchScheduleData[$matchScheduleDataTypeTwo]['name']))
                     @if($matchScheduleData['schedule_type']=='team')
-                        <a href="{{ url('/team/members',[$matchScheduleData['b_id']]) }}">{{$matchScheduleData[$scheduleTypeTwo]['name']}}</a>
+                        <a href="{{ url('/team/members',[$matchScheduleData['b_id']]) }}">{{$matchScheduleData[$matchScheduleDataTypeTwo]['name']}}</a>
                     @else
-                        <a href="{{ url('/showsportprofile',[$matchScheduleData['b_id']]) }}">{{$matchScheduleData[$scheduleTypeTwo]['name']}}</a>
+                        <a href="{{ url('/showsportprofile',[$matchScheduleData['b_id']]) }}">{{$matchScheduleData[$matchScheduleDataTypeTwo]['name']}}</a>
                     @endif
                 @else  
                     {{trans('message.bye')}}
                 @endif  
             </p>
         </div>
+
         <div class="clearfix"></div>
                 <div class="col-xs-12">
                     <p>
@@ -58,6 +59,15 @@
                             <span class='match_type_text'>({{ $matchScheduleData['match_type']=='odi'?strtoupper($matchScheduleData['match_type']):ucfirst($matchScheduleData['match_type']) }})</span>
                         @endif
                     </p>  
+
+                           <span class=''>{{Helper::getMatchDetails($matchScheduleData['id'])->address}}</span><br>
+                    Status: <span class='event_date'><b>{{ ucfirst($matchScheduleData['match_status']) }}</b></span> <br>
+                    Scores: <span class='blue'><b>{{Helper::getMatchDetails($matchScheduleData['id'])->scores}}</b> </span> <br>
+                    @if(!is_null(Helper::getMatchDetails($matchScheduleData['id'])->winner_id))
+                            <span class='red'>Winner: {{Helper::getMatchDetails($matchScheduleData['id'])->winner}} </span>
+                                
+                    @endif
+                    
                     @if(isset($matchScheduleData['winner_text']))
                         @if($matchScheduleData['winner_text']=='Edit') 
                             <p><span><a href="#" id="scheduleEdit_{{$matchScheduleData['id']}}" onclick="editMatchSchedule({{$matchScheduleData['id']}}, 1, '','mainmatchschedule')" class="add_score_but">Edit</a></span></p>
