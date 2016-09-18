@@ -196,7 +196,12 @@ function addRoundMatchesSchedule(tournamentId,roundNumber, matchNumber) {
 
 
 				
-					
+	
+<div id='response_to_download' style="display:none">
+
+</div>			
+<div id='by_pass'>
+</div>	
 							
 
 			<!-- /.panel-body -->
@@ -545,19 +550,23 @@ function downloadPdf(that){
 	$.ajax({
 		url:link,
 		success:function(response){
-	
+		
+		$('#response_to_download').html(response);
 		var specialElementHandlers = {
-				'#bypassme': function(element, renderer) {
-				return true;
+				'#by_pass': function(element, renderer) {
+				return false;
 				}
 			}
 
-        var printDoc = new jsPDF('p', 'in', 'letter');
-        printDoc.fromHTML(response, 15, 15, {
-        	'width': 1800,
-            'elementHandlers': specialElementHandlers
-        }, function(){         
-             printDoc.save(name+'.pdf');
+        var printDoc = new jsPDF('p', 'pt', 'a4');
+        printDoc.fromHTML($('#response_to_download').html(), 15, 15, {
+        	'width': 800,
+        	'elementHandlers': specialElementHandlers
+           
+        }, function(){      
+        	
+         printDoc.save(name+'.pdf');    
+            
          }); 
    
 		}
