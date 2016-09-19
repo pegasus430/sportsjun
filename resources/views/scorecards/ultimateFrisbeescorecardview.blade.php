@@ -207,7 +207,7 @@
 
                     <div class="clearfix"></div>
                     <div class="form-inline">
-                        @if($match_data[0]['winner_id']>0)
+                        @if($match_data[0]['winner_id']>0 && $match_data[0]['match_result']!='walkover')
 
                             <div class="form-group">
                                 <label class="win_head">Winner</label>
@@ -230,10 +230,10 @@
                                     <h3 class="win_team">{{ 'Tie' }}</h3>
 
                                 </div>
-                            @elseif($match_data[0]['match_result'] == "washout")
+                            @elseif($match_data[0]['match_result'] == "washout" || $match_data[0]['match_result'] == "walkover" )
                                                      <div class="form-group">
                                                          <label>MATCH ENDED DUE TO</label>
-                                                         <h3 class="win_team">Washout</h3>
+                                                         <h3 class="win_team">{{$match_data[0]['match_result']}}</h3>
                                                      </div>
                             @else
 

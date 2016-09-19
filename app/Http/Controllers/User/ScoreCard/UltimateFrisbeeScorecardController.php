@@ -513,9 +513,12 @@ class UltimateFrisbeeScoreCardController extends parentScoreCardController
        $is_tie         = ($match_result == 'tie')      ? 1 : 0;
          $is_washout     = ($match_result == 'washout')  ? 1 : 0;
          $has_result     = ($is_washout == 1) ? 0 : 1;
-        $match_result   = ( !in_array( $match_result, ['tie','win','washout'] ) ) ? NULL : $match_result;
+        $match_result   = ( !in_array( $match_result, ['tie','win','washout', 'walkover'] ) ) ? NULL : $match_result;
         
         $matchScheduleDetails = MatchSchedule::where('id',$match_id)->first();
+
+
+
         if(count($matchScheduleDetails)) {
             $looser_team_id = NULL;
             $match_status='scheduled';
@@ -541,10 +544,18 @@ class UltimateFrisbeeScoreCardController extends parentScoreCardController
 
             }
 
+        if($match_result=='walkover'){
+                    $sub_match_details = json_decode($matchScheduleDetails->match_details);
+                    $sub_match_details->{$winner_team_id}->total_points=13;
+                    $sub_match_details->{$looser_team_id}->total_points=0;
+                    $matchScheduleDetails->match_details=json_encode($sub_match_details);
+                    $matchScheduleDetails->save();
+        }
+
             if(!empty($matchScheduleDetails['tournament_id'])) {
 //                        dd($winner_team_id.'<>'.$looser_team_id);
                 $tournamentDetails = Tournaments::where('id', '=', $matchScheduleDetails['tournament_id'])->first();
-                if (($is_tie == 1 || $match_result == "washout") && !empty($matchScheduleDetails['tournament_group_id'])){
+                if (($is_tie == 1 || $match_result == "washout" || $match_result =='walkover') && !empty($matchScheduleDetails['tournament_group_id'])){
 
                     $match_status = 'completed';
                 }
