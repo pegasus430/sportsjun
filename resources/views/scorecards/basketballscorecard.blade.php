@@ -593,13 +593,13 @@ input:read-only {
 
 						<div class='col-xs-12 panel' style="padding-top : 20px; padding-bottom:20px; border:inset #ddd 1px; ">
 							<div class='hidden-xs col-sm-3'>
-								<label>Choose Half Time </label>
+								<label>Choose Quarter </label>
 							</div>
 
 							@for($i=1; $i<=$number_of_quarters; $i++)
 					
 							<div class='col-xs-6 col-sm-{{floor(12/($number_of_quarters + 1))}}'>
-								<label for='quarter_{{$i}}_id' class="label_half_time" > Half {{$i}} &nbsp;</label>
+								<label for='quarter_{{$i}}_id' class="label_half_time" > Quarter {{$i}} &nbsp;</label>
 							    <input type='radio' name='choose_half_time' value='quarter_{{$i}}' {{$i==1?'checked':''}}  id='quarter_{{$i}}_id' class='checkbox_half_time' > 
 							</div>
 							@endfor
