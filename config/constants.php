@@ -342,6 +342,7 @@ return [
                     'active_players' => 5,
                     'number_of_halves' =>2,
                     'walk_over_points' =>13,
+                    'max_fouls'        =>5,
                 ]
 
         ]

@@ -128,6 +128,8 @@ input:read-only {
 		$a_fouls=$match_details->{$team_a_id}->fouls;
 		$b_fouls=$match_details->{$team_b_id}->fouls;		
 	}
+
+	 $match_settings   =   Helper::getMatchSettings($match_data[0]['tournament_id'],$match_data[0]['sports_id']);
 	
 	?>
 
@@ -658,7 +660,7 @@ input:read-only {
 												
 												<option value="walkover" {$match_data[0]['match_result']=='walkover'?'selected':''}} >Walkover</option>
 												
-												<option {{$match_data[0]['match_result']=='win'?'selected':''}}  value="win">win</option>
+												<option {{$match_data[0]['match_result']=='win'?'selected':''}}  value="win">Win</option>
 												
 												<option value="washout" {{$match_data[0]['match_result']=='washout'?'selected':''}}>No Result</option>
 											</select>
@@ -971,7 +973,7 @@ input:read-only {
 											Number of Halfs
 										</div>
 										<div class="col-sm-5">
-											<input type='text' required="" placeholder="eg. 2" name='number_of_quarters' id='number_of_quarters'>
+											<input type='text' required="" placeholder="eg. 2" name='number_of_quarters' id='number_of_quarters' value="{{$match_settings->number_of_halves}}">
 										</div>
 									</div>
 									<br>
@@ -990,7 +992,7 @@ input:read-only {
 											Player max fouls
 										</div>
 										<div class="col-sm-5">
-											<input type='text' required="" placeholder="eg. 3" name='max_fould' id='max_fouls'>
+											<input type='text' required="" placeholder="eg. 3" name='max_fouls' id='max_fouls' value="{{$match_settings->max_fouls}}">
 										</div>
 									</div>
 
