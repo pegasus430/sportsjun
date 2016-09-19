@@ -209,7 +209,7 @@ input:read-only {
                     <div class='col-xs-12'>
                         <div class='match_loc'>
 				                 <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
-				                 		{{$tournamentDetails['name']}} Tournament
+				                 	<h4>	{{$tournamentDetails['name']}} Tournament </h4>
 				                  </a>
                                 
                         </div>
@@ -261,7 +261,7 @@ input:read-only {
 								<p></p>
 								<br>
 								@if($match_data[0]['hasSetupSquad'])
-									<button class="btn btn-danger " onclick="return SJ.SCORECARD.soccerSetTimes(this)"></i>End Match</button>
+									<button class="btn btn-danger " id="end_match_btn" onclick="return SJ.SCORECARD.soccerSetTimes(this)"></i>End Match</button>
 								@endif
 				 @if($isValidUser && $isForApprovalExist && ($match_data[0]['winner_id']>0 || $match_data[0]['is_tied']>0 || $match_data[0]['has_result'] == 0))  
 
@@ -589,9 +589,26 @@ input:read-only {
 					
 
 					<div id='real_time_scoring'  class="col-sm-12">
+
+
+						<div class='col-xs-12 panel' style="padding-top : 20px; padding-bottom:20px; border:inset #ddd 1px; ">
+							<div class='hidden-xs col-sm-3'>
+								<label>Choose Half Time </label>
+							</div>
+
+							@for($i=1; $i<=$number_of_quarters; $i++)
+					
+							<div class='col-xs-6 col-sm-{{floor(12/($number_of_quarters + 1))}}'>
+								<label for='quarter_{{$i}}_id' class="label_half_time" > Half {{$i}} &nbsp;</label>
+							    <input type='radio' name='choose_half_time' value='quarter_{{$i}}' {{$i==1?'checked':''}}  id='quarter_{{$i}}_id' class='checkbox_half_time' > 
+							</div>
+							@endfor
+							
+						</div>
+
 						<center class=" sportsjun-forms "  >
 							<button href="javascript:void(0);" data-toggle="modal" data-target="#basketballSubstituteModalA" class='btn-link btn-other btn-secondary-link  request pull-left' onclick="return false">Substitute A</button>
-
+						{{--
 							<label class="col-sm-3 col-xs-5">
 								<select name='select_half_time' class='form-control ' data-style="" onclick="return SJ.SCORECARD.soccerChooseTime(this)">
 								@for($i=1; $i<=$number_of_quarters; $i++)
@@ -599,6 +616,7 @@ input:read-only {
 								@endfor
 								</select>
 							</label>
+						--}}
 
 
 							<button class="btn-link  btn-goal-card-select  "  onclick="return SJ.SCORECARD.basketballAddPoint(this)" value='1' type='points_1' type="button">1 Ptr</button>
@@ -1703,6 +1721,7 @@ var manual=false;
                 $('.tennis_input_new').focus();
                 $('#real_time_scoring').hide();
                 $('#saveButton').show();
+                 $('#end_match_btn').hide();
                 manual=true;
             }, 
             cancel:function(){
@@ -1720,6 +1739,7 @@ var manual=false;
                  $('.tennis_input_new').attr('readonly', 'readonly');
                  $('#real_time_scoring').show();
                  $('#saveButton').hide();
+                  $('#end_match_btn').show();
                  manual=false;
             }, 
             cancel:function(){
@@ -1819,5 +1839,11 @@ function send(){
 
    
     </script>
+
+       <script type="text/javascript">
+        $(document).on('ifChecked', '.checkbox_half_time', function(){
+            return SJ.SCORECARD.soccerChooseTime(this);
+        });
+	</script>
 
 @endsection

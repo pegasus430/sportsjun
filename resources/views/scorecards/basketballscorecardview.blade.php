@@ -174,7 +174,7 @@
                     <div class='col-xs-12'>
                         <div class='match_loc'>
                           <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
-                                        {{$tournamentDetails['name']}} Tournament
+                                    <h4>    {{$tournamentDetails['name']}} Tournament </h4>
                                   </a>
                                 
                         </div>
