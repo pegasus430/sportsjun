@@ -1,4 +1,4 @@
- <?php
+<?php
 //new routes for soccer match
 Route::group(['prefix'=>'match'], function(){
 
