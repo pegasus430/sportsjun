@@ -32,7 +32,11 @@
     </div>
 @if($isOwner)
 <div class="pull-right">
-<button type='button' onclick="downloadPdf(this)" link='/download/schedules?tournament_id={{$tournament_id}}' class="btn-danger btn" name='match_schedule_tournament_{{$tournament_id}}'><i class="fa fa-download"></i> Download Schedule </a>
+{{--
+<a type='button' onclick="downloadPdf(this)" link='/download/schedules?tournament_id={{$tournament_id}}' class="btn-danger btn" name='match_schedule_tournament_{{$tournament_id}}'><i class="fa fa-download"></i> Download Schedule </a>
+--}}
+
+<a   href='/download_pdf/schedules?tournament_id={{$tournament_id}}' class="btn-danger btn" name='match_schedule_tournament_{{$tournament_id}}'><i class="fa fa-download"></i> Download Schedule </a>
 </span>
 @endif
    </div>

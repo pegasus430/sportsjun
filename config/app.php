@@ -154,7 +154,7 @@ return [
         Mews\Captcha\CaptchaServiceProvider::class,
         'Sofa\Eloquence\ServiceProvider',
 
-		Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+		//Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 		SKAgarwal\Generators\GeneratorsServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
         'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',

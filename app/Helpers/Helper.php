@@ -840,13 +840,17 @@ class Helper {
         }
         return $sportName;
     }
-    public static function Images($imgsrc,$imgtype,$details='')
+    public static function Images($imgsrc,$imgtype,$details='', $from_local=false)
     {
+
+    
 
         $img='';
         $id='';
         $uploads='uploads';
-        $globalurl = url();
+    if($from_local) $globalurl = public_path().'/';
+    else $globalurl = url();
+        
         //$globalurl = 'http://localhost/sportsjun/public/';
         if(isset($details['width']))
         {
@@ -877,6 +881,8 @@ class Helper {
         else{
             $title='';
         }
+
+
 
         switch ($imgtype) {
             case 'tournaments':

@@ -297,20 +297,20 @@
 						dataType:'json',
 						success:function(response){
 							if(response.error=='no'){
-								parentDiv.addClass('alert').addClass('alert-success');
+								parentDiv.addClass('green');
 								parentDiv.html(response.message);
 
 								setTimeout(function(){
-									parentDiv.removeClass('alert').removeClass('alert-success');
+									parentDiv.removeClass('green');
 									parentDiv.html('');
 								}, 3000)
 							}
 							else if(response.error=='yes'){
-								parentDiv.addClass('alert').addClass('alert-danger');
+								parentDiv.addClass('red');
 								parentDiv.html(response.message);
 
 								setTimeout(function(){
-									parentDiv.removeClass('alert').removeClass('alert-danger');
+									parentDiv.removeClass('red');
 									parentDiv.html(oldContent);
 								}, 3000)
 							}

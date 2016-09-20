@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use PDF;
+//use PDF;
 use App\Helpers\Helper;
 use App\Http\Controllers\User\InvitePlayerController;
 use App\Model\City;
@@ -35,6 +35,9 @@ use PDO;
 use Response;
 use Session;
 use View;
+use Dompdf \ Dompdf as PDF;
+use Dompdf\Options;
+
 
 class PdfController extends Controller
 {
@@ -117,7 +120,7 @@ class PdfController extends Controller
     public function print_schedules(Request $request){
             $tournament_id=$request->tournament_id;
             $tournament=Tournaments::find($tournament_id);
-            $schedules=MatchSchedule::whereTournamentId($tournament_id)->get();      
+            $schedules=MatchSchedule::whereTournamentId($tournament_id)->orderBy('match_start_date')->get();      
 
         $team_logo       = array();
         $user_name       = array();
@@ -142,12 +145,23 @@ class PdfController extends Controller
        
           
         }
-            //  $pdf = PDF::loadView('pdf.schedules', compact('schedules', 'tournament', 'team_logo', 'user_name', 'team_name_array', 'user_profile'));
+        
 
+         $view=view('pdf.schedules', compact('schedules', 'tournament', 'team_logo', 'user_name', 'team_name_array', 'user_profile'));
+        
+        return $view;
+
+     
+
+         $pdf = new PDF;         
+         $pdf ->load_html($view->render());
+         $pdf->setPaper('a3', 'landscape');
+
+         $pdf->render();
              
-            // return $pdf->stream('invoice.pdf');
+         return $pdf->stream('download.pdf');
 
-        return view('pdf.schedules', compact('schedules', 'tournament', 'team_logo', 'user_name', 'team_name_array', 'user_profile'));
+        //return view('pdf.schedules', compact('schedules', 'tournament', 'team_logo', 'user_name', 'team_name_array', 'user_profile'));
        
 
     }
