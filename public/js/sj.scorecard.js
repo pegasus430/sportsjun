@@ -423,6 +423,10 @@ if (typeof SJ.SCORECARD === 'undefined')
                                                 }
                                              })
                                         }
+                                        else if(val=='walkover'){
+                                          $('.scorescard_stats').show();
+                                          $('#player_of_the_match').parent('.scorescard_stats').hide();
+                                        }
                                         else{
                                           $('#select_winner').show();
                                           $('.scorescard_stats').show();

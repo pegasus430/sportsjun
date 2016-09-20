@@ -222,7 +222,7 @@ input:read-only {
                     <div class='col-xs-12'>
                         <div class='match_loc'>
                     <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
-                            {{$tournamentDetails['name']}} Tournament
+                          <h4>  {{$tournamentDetails['name']}} Tournament </h4>
                    </a>   
                         </div>
                     </div>
@@ -866,7 +866,7 @@ input:read-only {
 												
 												<option value="walkover" {$match_data[0]['match_result']=='walkover'?'selected':''}} >Walkover</option>
 												
-												<option {{$match_data[0]['match_result']=='win'?'selected':''}}  value="win">win</option>
+												<option {{$match_data[0]['match_result']=='win'?'selected':''}}  value="win">Win</option>
 												
 												<option value="washout" {{$match_data[0]['match_result']=='washout'?'selected':''}}>No Result</option>
 											</select>
