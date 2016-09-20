@@ -37,7 +37,7 @@ Route::group(['prefix'=>'/api/v1','middleware' => 'cors'], function($router){
                 $router->get('/send_feedback',               'Api\FunctionsApiController@sendFeedback');
                 $router->get('/search',                      'Api\FunctionsApiController@search');
 
-       			$router->get('logout', 'Api\AuthController@logout');
+       			$router->get('logout', 'Api\AuthApiController@logout');
 			    
     });
 });
