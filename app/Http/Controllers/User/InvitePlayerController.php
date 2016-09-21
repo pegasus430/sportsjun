@@ -65,26 +65,40 @@ class InvitePlayerController extends Controller
     public function invitePlayers(Request $request)
     {
 		   //'password' => bcrypt($data['password']),
-		 
-	     $email=$request->email;
+	     $email=trim($request->email);
 	     $name=$request->name;
 		 $teamid=$request->teamid;
-		 $user = new User();
-		 $user->name =  $name;
-		  $user->firstname =  $name;
-		 $teamname=Team::select('name')->where('id',$teamid)->get()->toArray();
-		 if($email!="")
-		 {
-			 $generatedPassword= str_random(6);
-			 $password=  bcrypt( $generatedPassword);
-			$user->email =  $email; 
-			$user->password = $password;
-			$user->verification_key = md5($email);
-			$user->is_verified =1;
-		 }
+
+         $rules = array( 'name' => 'required|max:50|'.config('constants.VALIDATION.CHARACTERSANDSPACE'));
+         $generatedPassword = false;
+         if ($email){
+             $user = User::where('email',$email)->first();
+         }
+
+        if (!$user) {
+            $user = new User();
+            $user->name = $name;
+            $user->firstname = $name;
+            $rules['email'] = 'email|unique:users,email';
+
+            if($email!="")
+            {
+                $generatedPassword= str_random(6);
+                $password=  bcrypt( $generatedPassword);
+                $user->email =  $email;
+                $user->password = $password;
+                $user->verification_key = md5($email);
+                $user->is_verified =1;
+            }
+
+        } else {
+            $rules['email'] = 'email';
+        }
+
+         $teamname=Team::select('name')->where('id',$teamid)->get()->toArray();
 		 $last_inserted_id = 0;
 		 $last_inserted_player_id = 0;
-		 $rules = array( 'name' => 'required|max:50|'.config('constants.VALIDATION.CHARACTERSANDSPACE'),'email' => 'email|unique:users,email');
+
          $validator = Validator::make($request->all(), $rules);
 
 		if ($validator->fails())
@@ -102,10 +116,14 @@ class InvitePlayerController extends Controller
 
 	    if($last_inserted_id>0)
 		{
-			
-			$player = new TeamPlayers();
-			$player->team_id= $teamid;
-			$player->user_id=$user->id;
+			$player = TeamPlayers::where(['team_id'=>$teamid,'user_id'=>$user->id])->first();
+
+            if (!$player) {
+                $player = new TeamPlayers([
+                    'team_id'=>$teamid,
+                    'user_id'=>$user->id
+                ]);
+            }
 			
 			if($player->save())
 			{
