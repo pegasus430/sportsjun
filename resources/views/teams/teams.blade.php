@@ -24,26 +24,59 @@
 							<th>{{   trans('message.organization.fields.altcontactnumber') }}</th>
 							<td>{{ $orgInfo[0]['alternate_contact_number']}}</td>							
 						</tr>
-						@endif					
+						@endif
+						@if ( $orgInfo[0]['contact_name'])
+						<tr>
+							<th>{{   trans('message.organization.fields.contactpersonname') }}</th>
+							<td> {{ $orgInfo[0]['contact_name'] }}</td>
+						</tr>
+						@endif
 						<tr>
 							<th>{{   trans('message.organization.fields.email') }}</th>
 							<td>{{ $orgInfo[0]['email']}}</td>
-							
 						</tr>
 						<tr>
 							<th>{{   trans('message.organization.fields.organizationtype') }}</th>
 							<td>{{ $orgInfo[0]['organization_type']}}</td>
-							
 						</tr>
-					   <tr>
-							<th>{{   trans('message.organization.fields.location') }}</th>
-							<td>{{ $orgInfo[0]['location']}}</td>
-							
+						@if ( $orgInfo[0]['social_facebook'])
+						<tr>
+							<th>{{   trans('message.organization.fields.facebook') }}</th>
+							<td>{{ $orgInfo[0]['social_facebook']}}</td>
 						</tr>
+						@endif
+						@if ( $orgInfo[0]['social_twitter'])
+						<tr>
+							<th>{{   trans('message.organization.fields.twitter') }}</th>
+							<td>{{ $orgInfo[0]['social_twitter']}}</td>
+						</tr>
+						@endif
+						@if ( $orgInfo[0]['social_linkedin'])
+						<tr>
+							<th>{{   trans('message.organization.fields.linkedin') }}</th>
+							<td>{{ $orgInfo[0]['social_linkedin']}}</td>
+						</tr>
+						@endif
+						@if ( $orgInfo[0]['social_googleplus'])
+						<tr>
+							<th>{{   trans('message.organization.fields.googleplus') }}</th>
+							<td>{{ $orgInfo[0]['social_googleplus']}}</td>
+						</tr>
+						@endif
+						@if ( $orgInfo[0]['website_url'])
+						<tr>
+							<th>{{   trans('message.organization.fields.websiteurl') }}</th>
+							<td>{{ $orgInfo[0]['website_url']}}</td>
+						</tr>
+						@endif
 						  <tr>
 							<th>{{   trans('message.organization.fields.about') }}</th>
 							<td>{{ $orgInfo[0]['about']}}</td>
-							
+						</tr>
+						<tr>
+							<th>{{   trans('message.organization.fields.location') }}</th>
+							<td>{{ $orgInfo[0]['location']}}</td>
+
 						</tr>
 						
 				</tbody>
