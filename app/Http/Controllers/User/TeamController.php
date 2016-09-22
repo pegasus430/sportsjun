@@ -253,8 +253,9 @@ class TeamController extends Controller
 
 	 if(isset($request['organization_group_id'])){
 		$organization_group_id=$request['organization_group_id'];
-			if(is_numeric($organization_group_id)){
-				$this->attachOrganizationGroupToTeam($team_details, $organization_group_id);				 
+			if(is_numeric($organization_group_id) && $team_details){
+			    /* @var Team $team_details */
+			    $team_details->organizationGroups()->sync([$organization_group_id]);
 		}
 	 }
 				if(!empty($request['filelist_logo']))
