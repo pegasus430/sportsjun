@@ -149,7 +149,7 @@ class PdfController extends Controller
 
          $view=view('pdf.schedules', compact('schedules', 'tournament', 'team_logo', 'user_name', 'team_name_array', 'user_profile'));
         
-        return $view;
+        //return $view;
 
      
 
