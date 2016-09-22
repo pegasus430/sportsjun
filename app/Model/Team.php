@@ -171,5 +171,4 @@ class Team extends Model
     {
         return $this->hasMany('App\Model\RequestsModel', 'to_id', 'id');
     }
-
 }

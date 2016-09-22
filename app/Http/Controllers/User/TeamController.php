@@ -525,19 +525,26 @@ class TeamController extends Controller
 
 		return view('teams.teams')->with(array( 'teams'=>$teams,'photo'=>$photo,'orgInfo'=>$orgInfo,'id'=>$id, 'userId' => $user_id ));
 	}
-	function organizationTeamlist($id)
+	function organizationTeamlist($id,$group_id = false)
 	{
 
 		   // $teams = Team::select('id','name','logo','description')->where('organization_id',$id)->get()->toArray();
+
+
     	$user_id = (isset(Auth::user()->id)?Auth::user()->id:0);
-		   $teams = DB::table('teams')
-        ->join('users', 'users.id', '=', 'teams.team_owner_id')
-       
+
+        $teamsQuery = DB::table('teams')
+        ->join('users', 'users.id', '=', 'teams.team_owner_id');
+        if ($group_id){
+            $teamsQuery->join('organization_group_teams', 'organization_group_teams.team_id', '=', 'teams.id')
+                       ->where('organization_group_teams.organization_group_id','=',$group_id);
+        }
         // ->join('organization_group_teams', 'organization_group_teams.team_id', '=', 'teams.id')
         // ->join('organization_groups', 'organization_groups.id', '=', 'organization_group_teams.organization_group_id')
-        ->select('teams.id','teams.name as teamname','teams.team_owner_id','teams.logo','teams.description','users.name','teams.isactive', 'teams.sports_id')
+        $teams = $teamsQuery->select('teams.id','teams.name as teamname','teams.team_owner_id','teams.logo','teams.description','users.name','teams.isactive', 'teams.sports_id')
 		->where('teams.organization_id',$id)
         ->orderBy('isactive','desc')->get();
+
 		// $photo= Photo::select('url')->where('imageable_id', '=', $id)->where('imageable_type', '=', config('constants.PHOTO.TEAM_PHOTO'))->where('user_id', (isset(Auth::user()->id)?Auth::user()->id:0))->get()->toArray();
 		$orgInfo= Organization::select()->where('id',$id)->get()->toArray();
 	
