@@ -273,4 +273,8 @@ class User extends Model implements AuthenticatableContract,
 			return false;
 		}
 	}
+
+	public function getUserNameEmailAttribute(){
+	    return $this->name ? $this->name.' ('.$this->email.')' : $this->email;
+    }
 }

@@ -28,7 +28,7 @@ class OrganizationGroupsController extends Controller
     {
         $organization = Organization::findOrFail($id);
 
-        $staffList = $organization->staff->pluck('email', 'id');
+        $staffList = $organization->staff()->get()->unique('email')->pluck('userNameEmail', 'id');
 
         $groups = $organization->groups;
 
