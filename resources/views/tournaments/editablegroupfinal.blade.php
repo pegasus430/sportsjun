@@ -30,15 +30,11 @@
 	<div class="col-sm-12">
     <div class="pull-left col-xs-12 col-sm-6 "> <center><input  type='text' class=' form-control dark-border' placeholder="filter match e.g team name, date" onkeyup="filterDiv(this)"></center>
     </div>
-@if($isOwner)
+{{--@if($isOwner)--}}
 <div class="pull-right">
-{{--
-<a type='button' onclick="downloadPdf(this)" link='/download/schedules?tournament_id={{$tournament_id}}' class="btn-danger btn" name='match_schedule_tournament_{{$tournament_id}}'><i class="fa fa-download"></i> Download Schedule </a>
---}}
-
-<a   href='/download_pdf/schedules?tournament_id={{$tournament_id}}' class="btn-danger btn" name='match_schedule_tournament_{{$tournament_id}}'><i class="fa fa-download"></i> Download Schedule </a>
+<a href='/download/schedules?tournament_id={{$tournament_id}}' class="btn-danger btn" name='match_schedule_tournament_{{$tournament_id}}'><i class="fa fa-download"></i> Download Schedule </a>
 </span>
-@endif
+{{--@endif--}}
    </div>
 
         @foreach($roundArray as $round)

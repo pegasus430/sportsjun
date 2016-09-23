@@ -167,10 +167,15 @@ class PdfController extends Controller
 ======= **/
 
         }
-        $pdf = PDF::loadView('pdf.schedules', compact('schedules', 'tournament', 'team_logo', 'user_name', 'team_name_array', 'user_profile'));
 
-        return $pdf->stream('schedule.pdf');
+        $tournament_details = TournamentParent::where('id',$tournament_id)->first();
+        $logo = array_get($tournament_details ,'logo','');
+
+        $pdf = PDF::loadView('pdf.schedules', compact('schedules', 'tournament', 'team_logo', 'user_name', 'team_name_array', 'user_profile','logo'));
+
+
+        return $pdf->stream('match_schedule_tournament_'.$tournament_id.'_'.time().'.pdf');
         return view('pdf.schedules',
-            compact('schedules', 'tournament', 'team_logo', 'user_name', 'team_name_array', 'user_profile'));
+            compact('schedules', 'tournament', 'team_logo', 'user_name', 'team_name_array', 'user_profile','logo'));
     }
 }
