@@ -8,8 +8,10 @@
         <h2>{{strtoupper($tournament->name)}}
             <br/>
             <span class="small">
-            @if ($is_group)
-                    Group Stage Schedule: {{$tournament->groups->first()->name}}
+            @if ($group_id)
+                    Group Stage Schedule: {{ $tournament_groups }}
+            @else
+                    Matches Schedule
             @endif
             </span>
         </h2>
@@ -31,7 +33,7 @@
     <table style="width:100%;text-align:center;">
         <thead>
         <tr>
-            @if (!$is_group)
+            @if (!$group_id)
             <th>STAGE</th>
             @endif
             <th>DATE</th>
@@ -53,8 +55,12 @@
                 else $match_started = true;
                 ?>
                 <tr class="{{ ($i % 2) ? 'second':'' }}">
-                    @if (!$is_group)
-                        <td>{{ array_get($tournament_groups,$match['tournament_group_id'])}}</td>
+                    @if (!$group_id)
+                        <?php
+
+                                $groups = array_get($tournament_groups,$match['tournament_group_id']);
+                        ?>
+                        <td>{{ is_string($groups) ? $groups: 'KNOCK OUT' }}</td>
                     @endif
                     <td>
                         {{ Helper::displayDate($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""), 1) }}
