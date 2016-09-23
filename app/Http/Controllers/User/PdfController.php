@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-//use PDF;
+use PDF;
 use App\Helpers\Helper;
 use App\Http\Controllers\User\InvitePlayerController;
 use App\Model\City;
@@ -35,8 +35,8 @@ use PDO;
 use Response;
 use Session;
 use View;
-use Dompdf \ Dompdf as PDF;
-use Dompdf\Options;
+//use Dompdf \ Dompdf as PDF;
+//use Dompdf\Options;
 
 
 class PdfController extends Controller
@@ -117,33 +117,34 @@ class PdfController extends Controller
         //
     }
 
-    public function print_schedules(Request $request){
-            $tournament_id=$request->tournament_id;
-            $tournament=Tournaments::find($tournament_id);
-            $schedules=MatchSchedule::whereTournamentId($tournament_id)->orderBy('match_start_date')->get();      
+    public function print_schedules(Request $request)
+    {
+        $tournament_id = $request->tournament_id;
+        $tournament = Tournaments::find($tournament_id);
+        $schedules = MatchSchedule::whereTournamentId($tournament_id)->orderBy('match_start_date')->get();
 
-        $team_logo       = array();
-        $user_name       = array();
-        $user_profile    = array();
-        $team_name_array = array(); 
-        
-        if(count($schedules)){
-            $match=$schedules[0];
+        $team_logo = array();
+        $user_name = array();
+        $user_profile = array();
+        $team_name_array = array();
+
+        if (count($schedules)) {
+            $match = $schedules[0];
             $teams = Team::select('id', 'name')->where('sports_id', $match->sports_id)->get()->toArray(); //get teams
-            foreach ($teams as $team)
-            {
+            foreach ($teams as $team) {
                 $team_name_array[$team['id']] = $team['name']; //get team names
-                $team_logo[$team['id']]       = Photo::select()->where('imageable_id', $team['id'])->where('imageable_type', config('constants.PHOTO.TEAM_PHOTO'))->orderBy('id', 'desc')->first(); //get team logo
+                $team_logo[$team['id']] = Photo::select()->where('imageable_id', $team['id'])->where('imageable_type',
+                    config('constants.PHOTO.TEAM_PHOTO'))->orderBy('id', 'desc')->first(); //get team logo
             }
-       
+
             $users = User::select('id', 'name')->get()->toArray(); //if scheduled type is player
-            foreach ($users as $user)
-            {
-                $user_name[$user['id']]    = $user['name']; //get team names
-                $user_profile[$user['id']] = Photo::select()->where('imageable_id', $user['id'])->where('imageable_type', config('constants.PHOTO.USER_PHOTO'))->orderBy('id', 'desc')->first(); //get team logo
+            foreach ($users as $user) {
+                $user_name[$user['id']] = $user['name']; //get team names
+                $user_profile[$user['id']] = Photo::select()->where('imageable_id',
+                    $user['id'])->where('imageable_type', config('constants.PHOTO.USER_PHOTO'))->orderBy('id',
+                    'desc')->first(); //get team logo
             }
-       
-          
+/***
         }
         
 
@@ -163,6 +164,18 @@ class PdfController extends Controller
 
         //return view('pdf.schedules', compact('schedules', 'tournament', 'team_logo', 'user_name', 'team_name_array', 'user_profile'));
        
+======= **/
 
+        }
+
+        $tournament_details = TournamentParent::where('id',$tournament_id)->first();
+        $logo = array_get($tournament_details ,'logo','');
+
+        $pdf = PDF::loadView('pdf.schedules', compact('schedules', 'tournament', 'team_logo', 'user_name', 'team_name_array', 'user_profile','logo'));
+
+
+        return $pdf->stream('match_schedule_tournament_'.$tournament_id.'_'.time().'.pdf');
+        return view('pdf.schedules',
+            compact('schedules', 'tournament', 'team_logo', 'user_name', 'team_name_array', 'user_profile','logo'));
     }
 }

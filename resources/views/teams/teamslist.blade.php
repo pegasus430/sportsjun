@@ -64,7 +64,7 @@
                                                                    <div class="t_tltle">
 
                                                                     <div class="pull-left">
-                                                                           <a href="{{ url('organizationTeamlist/'.$managedOrg['id']) }}">{{ !empty($managedOrg['name'])?$managedOrg['name']:'' }}</a>
+                                                                           <a href="{{ url('getorgteamdetails/'.$managedOrg['id']) }}">{{ !empty($managedOrg['name'])?$managedOrg['name']:'' }}</a>
                                                                             <p class="t_by">By <a target="_blank" href="{{ url('/editsportprofile/'.(!empty($id)?$id:0))}}">{{ !empty($managedOrg['user']['name'])?$managedOrg['user']['name']:'' }}</a></p>
                                                                      </div>
                                                                     @if(isset($userId) && ($userId == Auth::user()->id))

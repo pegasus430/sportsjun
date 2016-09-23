@@ -46,22 +46,26 @@ class OrganizationStaffController extends Controller
         OrganizationStaffService $service
     ) {
         $this->validate($request, [
-            'email'      => 'required|email',
+            'name' => 'required|string',
+            'email'      => 'email',
             'staff_role' => 'required|exists:organization_roles,id',
         ]);
-
         $organization = Organization::findOrFail($id);
-
         $user = $service->addStaff($request, $organization);
-
         $redirect = redirect()->route('organization.staff', [$id]);
 
         if ($user instanceof User) {
             return $redirect->with('status',
                 trans('message.staff.added_message'));
         } else {
-            return $redirect->with('alert',
-                trans('message.staff.already_exists_message'));
+            switch($user){
+                case User::$USER_EXISTS:
+                    return $redirect->with('alert',
+                        trans('message.staff.already_exists_message'));
+                case USER::$USER_EMAIL_REQUIRED:
+                    return $redirect->with('alert',
+                        trans('message.staff.user_create_email_required'));
+            }
         }
 
         return $redirect;

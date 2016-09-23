@@ -7,8 +7,11 @@ use App\Http\Requests;
 use App\Http\Requests\CreateOrganizationGroupRequest;
 use App\Http\Services\OrganizationGroupService;
 use App\Model\Organization;
+use App\Model\Team;
 use Illuminate\Http\Request;
 use App\Model\OrganizationGroup;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class OrganizationGroupsController extends Controller
 {
@@ -23,17 +26,25 @@ class OrganizationGroupsController extends Controller
 
     public function index($id)
     {
-        $organization = Organization::findOrFail($id);
+        $organization = Organization::with('staff')->findOrFail($id);
 
-        $staffList = $organization->staff->pluck('email', 'id');
+        $staffList = $organization->staff->pluck('name', 'id');
 
         $groups = $organization->groups;
-        $groups->load('manager', 'teams');
 
-        $orgInfo= Organization::select()->where('id',$id)->get()->toArray();
+        $groups->load('manager', 'teams');
+        $orgInfo = Organization::select()->where('id', $id)->get()->toArray();
+
+        $user_id = (isset(Auth::user()->id)?Auth::user()->id:0);
+        $teams = Team::whereDoesntHave('organizationGroups')
+                    ->join('users', 'users.id', '=', 'teams.team_owner_id')
+                    ->where('teams.organization_id',$id)
+                    ->select('teams.id','teams.name as teamname','teams.team_owner_id','teams.logo','teams.description','users.name','teams.isactive', 'teams.sports_id')
+                    ->orderBy('isactive','desc')->get();
 
         return view('organization.groups.list',
-            compact('id', 'staffList', 'groups', 'organization', 'orgInfo'));
+            compact('id', 'staffList', 'groups', 'organization', 'orgInfo','teams'),['userId'=>$user_id]);
+
     }
 
     /**

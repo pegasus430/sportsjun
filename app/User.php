@@ -20,6 +20,10 @@ class User extends Model implements AuthenticatableContract,
 									AuthorizableContract,
 									CanResetPasswordContract
 {
+    static $USER_EXISTS = -1;
+    static $USER_EMAIL_REQUIRED = -2;
+
+
 
 	use Authenticatable,
 		Authorizable,
@@ -273,4 +277,5 @@ class User extends Model implements AuthenticatableContract,
 			return false;
 		}
 	}
+
 }

@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Sofa\Eloquence\Eloquence;
@@ -22,7 +23,7 @@ class Tournaments extends Model
     ];
 
     protected $morphClass = 'tournaments';
-    
+
     protected $fillable = [
         'id',
         'name',
@@ -83,7 +84,7 @@ class Tournaments extends Model
     {
         return $this->hasMany('App\Model\Sport', 'id', 'sports_id');
     }
-    
+
     public function logo()
     {
         return $this->hasOne('App\Model\Photo', 'imageable_id', 'tournament_parent_id')->where('imageable_type', 'tournaments')->where('is_album_cover', 1)->select('imageable_id','url');
@@ -153,7 +154,25 @@ class Tournaments extends Model
     function getGroupPoints($tournament_id,$organization_group_id){
             $points=OrganizationGroupTeamPoint::whereTournamentId($tournament_id)->whereOrganizationGroupId($organization_group_id)->first();
             if(empty($points)){
-                $points=0;
+                $team_id = DB::table('organization_group_teams')->where('organization_group_id',$organization_group_id)->pluck('team_id');
+                $teams = null;
+                if ($team_id) {
+                    $teams = TournamentGroupTeams::whereTournamentId($tournament_id);
+                    if (is_array($team_id)) {
+                        $teams->whereIn('team_id', $team_id);
+                    }
+                    else {
+                        $teams->where('team_id', $team_id);
+                    }
+                    $teams = $teams->get();
+                }
+                if (!$teams) {
+                    return 0;
+                }
+
+                $final_points = $teams->sum('final_points');
+                $points = $final_points ? $final_points : $teams->sum('points');
+                return $points;
             }
             else{
                 $points=$points->points;
@@ -174,7 +193,7 @@ class Tournaments extends Model
             return $this->hasMany('App\Model\MatchSchedule' , 'tournament_id');
     }
 
-  
 
-    
+
+
 }

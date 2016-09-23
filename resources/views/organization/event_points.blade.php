@@ -72,8 +72,8 @@
                                     <th>Mat</th>
                                     <th>Won</th>
                                     <th>Lost</th>
-                                    <th>Pts</th>
-                                  
+									<th>Draw</th>
+									<th>Pts</th>
                                     </tr>
                                     </thead>
                                 <tbody>
@@ -84,8 +84,8 @@
                                     <td>{{ !empty($match_count[$group->id][$team['team_id']])?$match_count[$group->id][$team['team_id']]:0 }}</td>
                                     <td>{{ !empty($team['won'])?$team['won']:0 }}</td>
                                     <td>{{ !empty($team['lost'])?$team['lost']:0 }}</td>
-                                    <td>{{ !empty($team['points'])?$team['points']:0 }}</td>
-                                   
+									<td>{{ !empty($team['tie'])?$team['tie']:0 }}</td>
+									<td>{{ !empty($team['points'])?$team['points']:0 }}</td>
                                   	
                                     @endforeach
                                 @else
