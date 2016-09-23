@@ -597,10 +597,10 @@ input:read-only {
 					
 
 
-							<button class="btn-link  btn-goal-card-select  "  onclick="return SJ.SCORECARD.basketballAddPoint(this)" value='1' type='points_1' type="button"> Goal </button>
+							<button class="btn-link  btn-goal-card-select  "  onclick="return SJ.SCORECARD.waterpoloAddPoint(this)" value='1' type='points_1' type="button"> Goal </button>
 
 							
-							<button  class="btn-link request btn-red-card-select  "   onclick="return SJ.SCORECARD.basketballAddPoint(this)" type='fouls' value='3' type="button">Fouls</button>
+							<button  class="btn-link request btn-red-card-select  "   onclick="return SJ.SCORECARD.waterpoloAddPoint(this)" type='fouls' value='3' type="button">Fouls</button>
 
 							
 							<button data-toggle="modal" data-target="#waterpoloSubstituteModalB" class='btn-link btn-secondary-link  request pull-right' onclick="return false">Substitute  B</button>
@@ -633,13 +633,15 @@ input:read-only {
 					
 
 
+								
 									<div class="clearfix"></div>
-									<div class="form-inline">
-										<div class="row">
-											<div class="col-sm-4">
+									<div class="row">
+										<div class="col-sm-4">
 											<div class="section">
+
+										<div class="form-group">
 											<label for="match_result">End of Match Result:</label>
-												<select class="form-control " name="match_result" id="match_result" onchange="getTeam();SJ.SCORECARD.selectMatchType(this)">
+											<select class="form-control " name="match_result" id="match_result" onchange="getTeam();SJ.SCORECARD.selectMatchType(this)">
 												<option value="" >Select</option>
 
 												<?php if(empty($match_data[0]['tournament_round_number'])) { ?>							
@@ -648,26 +650,29 @@ input:read-only {
 												
 												<option value="walkover" {$match_data[0]['match_result']=='walkover'?'selected':''}} >Walkover</option>
 												
-												<option {{$match_data[0]['match_result']=='win'?'selected':''}}  value="win">Win</option>
+												<option {{$match_data[0]['match_result']=='win'?'selected':''}}  value="win">win</option>
 												
 												<option value="washout" {{$match_data[0]['match_result']=='washout'?'selected':''}}>No Result</option>
 											</select>
 										</div>
-											</div>
 										</div>
-										<div class="col-sm-4">
+										</div>
+
+											<div class="col-sm-4">
 											<div class="section">
-										<div class="form-group scorescard_stats" style="margin-top:15px;">
+										<div class="form-group scorescard_stats" style="">
 											<label class="show_teams">Select Winner:</label>
 											<select name="winner_id" id="winner_id" class="show_teams form-control " onchange="selectWinner();">
 												<option <?php if (isset($match_data[0]['winner_id']) && $match_data[0]['winner_id']==$match_data[0]['a_id']) echo ' selected';?> value="{{ $match_data[0]['a_id'] }}" >{{ $team_a_name }}</option>
 												<option <?php if (isset($match_data[0]['winner_id']) && $match_data[0]['winner_id']==$match_data[0]['b_id']) echo ' selected';?> value="{{ $match_data[0]['b_id'] }}">{{ $team_b_name }}</option>
 											</select>
 										</div>
-										</div>
-										</div>
-										<div class="col-sm-4">
-											<div class="section">
+												</div>
+												</div>
+
+											<div class="col-sm-4">
+											<div class="section"> 
+
 										<div class="form-group scorescard_stats">
 
 											<label class="">Select Player of Match:</label>
@@ -681,20 +686,19 @@ input:read-only {
 													<option value="{{$tm_player['user_id']}}" @if($match_data[0]['player_of_the_match']==$tm_player['user_id'])?'selected':'' @endif >{{$tm_player['player_name']}}</option>
 												@endforeach
 											</select>
-										</div>
-										</div>
-										</div>
+												</div>
+											</div>
+											</div>
 
 
 									</div>
-
-									<!--********* MATCH REPORT Start **************!-->
-<div class="summernote_wrapper form-group">
+		<div class="summernote_wrapper form-group">
         <h3 class="brown1 table_head">Match Report</h3>
         <textarea id="match_report" class="summernote" name="match_report" title="Match Report"></textarea>
-</div>
-</div>
-<!--********* MATCH REPORT End **************!-->									
+	  </div>
+	  </div>
+
+							
 										
 
 									<div class="modal-footer">
