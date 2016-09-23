@@ -29,25 +29,25 @@
 						<div class="tab-pane fade active in table-responsive" id="teams_{{ $group->id }}">
 							<div class="action-panel">
 								@if(!empty($team_details[$group->id]))
-									<table class="table table-striped">
+									<table class="table table-striped text-center">
 										<thead class="thead">
 										<tr>
-											<th>Rank</th>
-											<th>Name</th>
-											<th>Matches</th>
-											<th>Won</th>
-											<th>Lost</th>
-								    <th>Draw</th>
+											<th class="text-center">Rank</th>
+											<th class="text-center">Name</th>
+											<th class="text-center">Matches</th>
+											<th class="text-center">Won</th>
+											<th class="text-center">Lost</th>
+								    <th class="text-center">Draw</th>
                                 @if(in_array($sports_id, [4,11]))                               		
-                                    <th>GF</th>
-                                    <th>GA</th>
+                                    <th class="text-center">GF</th>
+                                    <th class="text-center">GA</th>
                                 @endif
-											<th>Points</th>
+											<th class="text-center">Points</th>
 											@if ( $tour['sports_id'] == 1 )
-												<th>Net Run Rate</th>
+												<th class="text-center">Net Run Rate</th>
 											@endif
 								@if($match_is_completed || $tournamentDetails[0]['group_is_ended'])
-                                	<th> Final Points </th> 
+                                	<th class="text-center"> Final Points </th>
                                 @endif
 										</tr>
 										</thead>
