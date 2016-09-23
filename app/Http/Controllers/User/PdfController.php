@@ -120,13 +120,14 @@ class PdfController extends Controller
         $group_id = $request->group_id;
         $tournament = Tournaments::where('id',$tournament_id)->with('groups')->first();
         $schedules = MatchSchedule::whereTournamentId($tournament_id);
-        $is_group = false;
         if ($group_id) {
             $schedules->where('tournament_group_id',$group_id);
-            $is_group = true;
+            $tournament_groups = $tournament->groups()->whereId($group_id)->pluck('name','id');
+        } else {
+            $tournament_groups = $tournament->groups->pluck('name','id');
         }
         $schedules = $schedules->get();
-        $tournament_groups = $tournament->groups->pluck('name','id');
+
         $team_logo = array();
         $user_name = array();
         $user_profile = array();
@@ -159,7 +160,7 @@ class PdfController extends Controller
         }
 
         $pdf = PDF::loadView('pdf.schedules',
-            compact('schedules', 'tournament', 'team_logo', 'user_name', 'team_name_array', 'user_profile', 'logo','is_group','tournament_groups'));
+            compact('schedules', 'tournament', 'team_logo', 'user_name', 'team_name_array', 'user_profile', 'logo','group_id','tournament_groups'));
 
 
         return $pdf->stream('match_schedule_tournament_' . $tournament_id . '_' . time() . '.pdf');
