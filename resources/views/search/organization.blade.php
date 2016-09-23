@@ -16,7 +16,7 @@
 					</div>
                                         <div class="col-md-10 col-sm-9 col-xs-12">
                                                 <div class="t_tltle">
-                                                        <div class="pull-left"><a href="{{ url('/organizationTeamlist').'/'.$lis['id'] }}" id="{{'tname_'.$lis['id']}}">{{ $lis['name'] }}</a></div>
+                                                        <div class="pull-left"><a href="{{ url('/getorgteamdetails').'/'.$lis['id'] }}" id="{{'tname_'.$lis['id']}}">{{ $lis['name'] }}</a></div>
                                                                                 <p class="search_location t_by">{{ $lis['location'] }}</p>
                                                 </div>
                                                    <ul class="t_tags">
