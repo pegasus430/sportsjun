@@ -8,7 +8,25 @@
         @foreach($matchScheduleData as $schedule)
         <div id="schedule_{{$schedule['id']}}" class="schedule_list clearfix">
         	<div class="deskview hidden-xs">
-                <div id="teamone" class="col-sm-3 score_view_img">
+                <div class="col-md-2 col-sm-12">
+
+                    <?php
+                    $schedule['match_start_date'] = trim($schedule['match_start_date']);
+                    if (strpos($schedule['match_start_date'], ':') == false)
+                    {
+                        $schedule['match_start_date'] = DateTime::createFromFormat('d/m/Y', $schedule['match_start_date'])->format('jS F, Y');
+                    }
+                    else
+                    {
+                        $schedule['match_start_date'] = DateTime::createFromFormat('d/m/Y g:i A', $schedule['match_start_date'])->format('jS F, Y g:i A');
+                    }
+                    ?>
+
+                    <p class="vs_date">
+                        <span><b>{{ $schedule['match_start_date'] }}</b></span>
+                    </p>
+                </div>
+                <div id="teamone" class="col-sm-3 col-md-2 score_view_img">
                     <p>
                         @if($schedule['schedule_type']=='team')
                         {!! Helper::Images($schedule['a_logo'],config('constants.PHOTO_PATH.TEAMS_FOLDER_PATH'),array('class'=>'img-circle img-border','height'=>90,'width'=>90) )!!}
@@ -16,10 +34,8 @@
                         {!! Helper::Images($schedule['a_logo'],config('constants.PHOTO_PATH.USERS_PROFILE'),array('class'=>'img-circle img-border','height'=>90,'width'=>90) )!!}
                         @endif    
                     </p>
-    
-                </div>    
-    
-                <div id="center_div" class="col-sm-6">
+                </div>
+                <div id="center_div" class="col-sm-6 col-md-3">
 <!--                    <p class="vs_text"><span>{{$schedule['a_name']}}</span> 
                        vs 
                        <span>{{isset($schedule['b_name'])?$schedule['b_name']:trans('message.bye')}}</span>
@@ -45,41 +61,22 @@
                                 @endif  
                             </span>
                      </p>
-                     
-                    <?php 
-                        $schedule['match_start_date'] = trim($schedule['match_start_date']);
-                        if (strpos($schedule['match_start_date'], ':') == false)
-                        {
-                                $schedule['match_start_date'] = DateTime::createFromFormat('d/m/Y', $schedule['match_start_date'])->format('jS F, Y');
-                        }
-                        else
-                        {
-                                $schedule['match_start_date'] = DateTime::createFromFormat('d/m/Y g:i A', $schedule['match_start_date'])->format('jS F, Y g:i A');
-                        }
-                    ?>
-                     
-                    <p class="vs_date">                       
-                        <span><b>{{ $schedule['match_start_date'] }}</b></span>
-                        <span class='sports_text'>{{ isset($schedule['sport']['sports_name'])?$schedule['sport']['sports_name']:'' }}</span>
-                        @if($schedule['match_type']!='other')
-                            <span class='match_type_text'>({{ $schedule['match_type']=='odi'?strtoupper($schedule['match_type']):ucfirst($schedule['match_type']) }})</span>
-                        @endif
+                     <p class="vs_date">
+                         <span class='sports_text'>{{ isset($schedule['sport']['sports_name'])?$schedule['sport']['sports_name']:'' }}</span>
+                         @if($schedule['match_type']!='other')
+                             <span class='match_type_text'>({{ $schedule['match_type']=='odi'?strtoupper($schedule['match_type']):ucfirst($schedule['match_type']) }})</span>
+                         @endif
+                     </p>
 
-                    </p>
                             <span class=''>{{Helper::getMatchDetails($schedule['id'])->address}}</span><br>
-                    Status: <span class='sports_text'>{{ ucfirst($schedule['match_status']) }}</span> <br>
-                    Scores: <span class='blue'>{{Helper::getMatchDetails($schedule['id'])->scores}} </span> <br>
-                    @if(!is_null(Helper::getMatchDetails($schedule['id'])->winner_id))
-                            <span class='red'>Winner: {{Helper::getMatchDetails($schedule['id'])->winner}} </span>
-                                
-                    @endif
+                    <?php
+                    if (strpos($schedule['match_start_date'], ':') == false) {
+                        $schedule['match_start_date'] .= ' 00:00 AM';
+                    }
+                    ?>
               
                     
-                        <?php 
-                                if (strpos($schedule['match_start_date'], ':') == false) {
-                                        $schedule['match_start_date'] .= ' 00:00 AM'; 
-                                }
-                        ?>
+
                     
                     @if(isset($schedule['winner_text']))
                         @if($schedule['winner_text']=='Edit') 
@@ -98,15 +95,23 @@
                     
                 </div>
     
-                <div id="teamtwo" class="col-sm-3 score_view_img">
-                <p>
-                    @if($schedule['schedule_type']=='team')
-                    {!! Helper::Images($schedule['b_logo'],config('constants.PHOTO_PATH.TEAMS_FOLDER_PATH'),array('class'=>'img-circle img-border','height'=>90,'width'=>90) )!!}
-                    @else    
-                    {!! Helper::Images($schedule['b_logo'],config('constants.PHOTO_PATH.USERS_PROFILE'),array('class'=>'img-circle img-border','height'=>90,'width'=>90) )!!}
-                    @endif    
-                </p>
-            </div>
+                <div id="teamtwo" class="col-sm-3 col-md-2 score_view_img">
+                    <p>
+                        @if($schedule['schedule_type']=='team')
+                        {!! Helper::Images($schedule['b_logo'],config('constants.PHOTO_PATH.TEAMS_FOLDER_PATH'),array('class'=>'img-circle img-border','height'=>90,'width'=>90) )!!}
+                        @else
+                        {!! Helper::Images($schedule['b_logo'],config('constants.PHOTO_PATH.USERS_PROFILE'),array('class'=>'img-circle img-border','height'=>90,'width'=>90) )!!}
+                        @endif
+                    </p>
+                </div>
+                <div class="col-md-2 col-sm-12">
+                    Status: <span class='sports_text'>{{ ucfirst($schedule['match_status']) }}</span> <br>
+                    Scores: <span class='blue'>{{Helper::getMatchDetails($schedule['id'])->scores}} </span> <br>
+                    @if(!is_null(Helper::getMatchDetails($schedule['id'])->winner_id))
+                        <span class='red'>Winner: {{Helper::getMatchDetails($schedule['id'])->winner}} </span>
+
+                    @endif
+                </div>
 			</div>			
             <div class="mobview hidden-sm hidden-lg">
                 <div class="row">

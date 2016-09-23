@@ -158,7 +158,7 @@ return [
 		SKAgarwal\Generators\GeneratorsServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
         'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
-        //Barryvdh\DomPDF\ServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
         //'Xaamin\Whatsapi\WhatsapiServiceProvider'
     ],
 
@@ -223,7 +223,7 @@ return [
         'JWTFactory'    => 'Tymon\JWTAuth\Facades\JWTFactory',
         //'Whatsapi'      => 'Xaamin\Whatsapi\Facades\Laravel\Whatsapi',
         //'WhatsapiTool'  => 'Xaamin\Whatsapi\Facades\Laravel\Registration',
-        //'PDF' => Barryvdh\DomPDF\Facade::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
 
     ],
 

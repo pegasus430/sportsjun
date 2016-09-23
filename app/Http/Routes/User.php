@@ -20,7 +20,7 @@ Route::get('gettournamentdetails/{id}', [
     'as'   => 'gettournamentdetails',
     'uses' => 'User\TournamentsController@getTournamentDetails',
 ]);
-Route::get('organizationTeamlist/{id}', [
+Route::get('organizationTeamlist/{id}/{group_id?}', [
     'as'   => 'organizationTeamlist',
     'uses' => 'User\TeamController@organizationTeamlist',
 ]);

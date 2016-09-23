@@ -1148,6 +1148,11 @@ class Helper {
         return  $img ;
 
     }
+
+    public static function ImageCheck($path){
+        return File::exists(public_path($path)) ? $path : 'images/default-profile-pic.jpg';
+    }
+
     //getting the current route
     public static function getcurrentroute()
     {
