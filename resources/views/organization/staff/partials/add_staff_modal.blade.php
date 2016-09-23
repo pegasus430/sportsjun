@@ -13,7 +13,14 @@
                 </div>
                 <div class = "modal-body">
                     <div class = "content">
-
+                        <div class="form-group">
+                            <span class = "head">{{ trans('message.staff.fields.name') }}</span>
+                            {!! Form::text('name', null, [
+                                   'class' => 'form-control',
+                                   'placeholder' => 'Enter Your Staff Name',
+                                   'id' => 'staff_name'
+                               ]) !!}
+                        </div>
 
                         <div class = "form-group">
                             <div>
@@ -21,7 +28,7 @@
 
                                 {!! Form::text('email', null, [
                                     'class' => 'form-control',
-                                    'placeholder' => 'Enter Your Staff Email',
+                                    'placeholder' => 'Enter Your Staff Email (optional)',
                                     'id' => 'staff_email'
                                 ]) !!}
                             </div>

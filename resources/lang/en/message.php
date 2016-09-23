@@ -516,6 +516,7 @@ return [
         ],
 
         'fields' => [
+            'name' => 'Name',
             'email' => 'Email',
             'role' => 'Staff Role'
         ],
@@ -523,6 +524,7 @@ return [
 		'invite_subject' => 'SportsJun Staff Invite.',
         'added_message' => 'Staff Invited Successfully!',
         'already_exists_message' => 'Staff Already exists!',
+        'user_create_email_required' => 'User not exists in database. Please, provide email to register new'
     ], 
     'settings' 	=> 'Settings',
     'sports_settings'	=> [

@@ -12,7 +12,7 @@
         <tbody>
         @foreach($staffList as $staff)
             <tr>
-                <td>{{ $staff->userNameEmail}}</td>
+                <td>{{ $staff->name}}</td>
                 <td>{{ $staff->roleForOrganization($id)->name }}</td>
                 <td>{{ $staff->pivot->created_at->format('M d, Y') }}</td>
                 <td>
