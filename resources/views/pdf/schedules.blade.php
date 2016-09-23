@@ -2,10 +2,17 @@
 
 @section('content')
     <div id="header">
-        <h2>{{strtoupper($tournament->name)}}</h2>
         @if ($logo)
-            <img src="uploads/tournaments/{{$logo}}" height="50px"/>
+            <img src="uploads/tournaments/{{$logo}}" style="float:left;" height="80px"/>
         @endif
+        <h2>{{strtoupper($tournament->name)}}
+            <br/>
+            <span class="small">
+            @if ($is_group)
+                    Group Stage Schedule: {{$tournament->groups->first()->name}}
+            @endif
+            </span>
+        </h2>
     </div>
     <style>
         table, td, tr, th {
@@ -24,7 +31,9 @@
     <table style="width:100%;text-align:center;">
         <thead>
         <tr>
-            {{--<th>STAGE</th>--}}
+            @if (!$is_group)
+            <th>STAGE</th>
+            @endif
             <th>DATE</th>
             <th>TIME</th>
             <th style="width:40%">MATCHES</th>
@@ -44,7 +53,9 @@
                 else $match_started = true;
                 ?>
                 <tr class="{{ ($i % 2) ? 'second':'' }}">
-                    {{--<td>                   </td>--}}
+                    @if (!$is_group)
+                        <td>{{ array_get($tournament_groups,$match['tournament_group_id'])}}</td>
+                    @endif
                     <td>
                         {{ Helper::displayDate($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""), 1) }}
                     </td>
