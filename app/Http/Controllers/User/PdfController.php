@@ -141,12 +141,16 @@ class PdfController extends Controller
                     $user['id'])->where('imageable_type', config('constants.PHOTO.USER_PHOTO'))->orderBy('id',
                     'desc')->first(); //get team logo
             }
-
         }
-        $pdf = PDF::loadView('pdf.schedules', compact('schedules', 'tournament', 'team_logo', 'user_name', 'team_name_array', 'user_profile'));
+
+        $tournament_details = TournamentParent::where('id',$tournament_id)->first();
+        $logo = array_get($tournament_details ,'logo','');
+
+        $pdf = PDF::loadView('pdf.schedules', compact('schedules', 'tournament', 'team_logo', 'user_name', 'team_name_array', 'user_profile','logo'));
+
 
         return $pdf->stream('schedule.pdf');
         return view('pdf.schedules',
-            compact('schedules', 'tournament', 'team_logo', 'user_name', 'team_name_array', 'user_profile'));
+            compact('schedules', 'tournament', 'team_logo', 'user_name', 'team_name_array', 'user_profile','logo'));
     }
 }
