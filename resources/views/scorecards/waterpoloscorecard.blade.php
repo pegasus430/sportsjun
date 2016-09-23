@@ -597,10 +597,10 @@ input:read-only {
 					
 
 
-							<button class="btn-link  btn-goal-card-select  "  onclick="return SJ.SCORECARD.waterpoloAddPoint(this)" value='1' type='points_1' type="button"> Goal </button>
+							<button class="btn-link  btn-goal-card-select  "  onclick="return SJ.SCORECARD.basketballAddPoint(this)" value='1' type='points_1' type="button"> Goal </button>
 
 							
-							<button  class="btn-link request btn-red-card-select  "   onclick="return SJ.SCORECARD.waterpoloAddPoint(this)" type='fouls' value='3' type="button">Fouls</button>
+							<button  class="btn-link request btn-red-card-select  "   onclick="return SJ.SCORECARD.basketballAddPoint(this)" type='fouls' value='3' type="button">Fouls</button>
 
 							
 							<button data-toggle="modal" data-target="#waterpoloSubstituteModalB" class='btn-link btn-secondary-link  request pull-right' onclick="return false">Substitute  B</button>
