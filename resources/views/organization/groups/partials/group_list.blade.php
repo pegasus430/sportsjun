@@ -26,7 +26,7 @@
                                 </li>
                                 <li>
                                     <label>Manager:</label>
-                                    <span>{{ $group->manager->name ? $group->manager->name . ' - ' : '' }} {{ $group->manager->email }}</span>
+                                    <span>{{ $group->manager->name }} </span>
                                 </li>
                             </ul>
                         </div>
