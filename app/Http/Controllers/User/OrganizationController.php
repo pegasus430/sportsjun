@@ -16,7 +16,7 @@ use Auth;
 use App\Model\Photo;
 use App\Model\Sport;
 use App\Http\Controllers\User\SearchController;
-
+use DB;
 use App\Model\TournamentGroupTeams;
 use App\Model\OrganizationGroupTeamPoint;
 
