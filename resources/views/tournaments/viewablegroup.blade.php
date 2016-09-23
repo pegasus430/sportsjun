@@ -93,6 +93,10 @@
 
 							@if(!empty($match_details[$group->id]))	
 						<div class="pull-left half-width col-xs-12 col-sm-4 "> <input class='full-width form-control dark-border' placeholder="filter match e.g team name, date" onkeyup="filterDiv(this, {{$group->id}})"></div>
+						<div class="pull-right">
+							<a href='/download/schedules?tournament_id={{$tournament_id}}&group_id={{$group->id}}' class="btn-danger btn" name='match_schedule_tournament_{{$tournament_id}}'><i class="fa fa-download"></i> Download Schedule </a>
+						</div>
+
 						<div class="clearfix"></div>
 							<br>
 									<?php $i=0;?>				

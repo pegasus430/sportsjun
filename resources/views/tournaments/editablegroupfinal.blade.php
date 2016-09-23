@@ -33,7 +33,7 @@
 {{--@if($isOwner)--}}
 <div class="pull-right">
 <a href='/download/schedules?tournament_id={{$tournament_id}}' class="btn-danger btn" name='match_schedule_tournament_{{$tournament_id}}'><i class="fa fa-download"></i> Download Schedule </a>
-</span>
+</div>
 {{--@endif--}}
    </div>
 

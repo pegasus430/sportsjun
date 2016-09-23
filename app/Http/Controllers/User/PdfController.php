@@ -61,7 +61,7 @@ class PdfController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -72,7 +72,7 @@ class PdfController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -83,7 +83,7 @@ class PdfController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -94,8 +94,8 @@ class PdfController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -106,7 +106,7 @@ class PdfController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -117,9 +117,16 @@ class PdfController extends Controller
     public function print_schedules(Request $request)
     {
         $tournament_id = $request->tournament_id;
-        $tournament = Tournaments::find($tournament_id);
-        $schedules = MatchSchedule::whereTournamentId($tournament_id)->get();
-
+        $group_id = $request->group_id;
+        $tournament = Tournaments::where('id',$tournament_id)->with('groups')->first();
+        $schedules = MatchSchedule::whereTournamentId($tournament_id);
+        $is_group = false;
+        if ($group_id) {
+            $schedules->where('tournament_group_id',$group_id);
+            $is_group = true;
+        }
+        $schedules = $schedules->get();
+        $tournament_groups = $tournament->groups->pluck('name','id');
         $team_logo = array();
         $user_name = array();
         $user_profile = array();
@@ -142,15 +149,21 @@ class PdfController extends Controller
                     'desc')->first(); //get team logo
             }
         }
+        $tournamentParent = null;
+        if ($tournament) {
+            $tournamentParent = TournamentParent::where('id', $tournament->tournament_parent_id)->first();
+        }
+        $logo = object_get($tournament, 'logo', '');
+        if (!$logo ){
+            $logo = object_get($tournamentParent,'logo','');
+        }
 
-        $tournament_details = TournamentParent::where('id',$tournament_id)->first();
-        $logo = array_get($tournament_details ,'logo','');
-
-        $pdf = PDF::loadView('pdf.schedules', compact('schedules', 'tournament', 'team_logo', 'user_name', 'team_name_array', 'user_profile','logo'));
+        $pdf = PDF::loadView('pdf.schedules',
+            compact('schedules', 'tournament', 'team_logo', 'user_name', 'team_name_array', 'user_profile', 'logo','is_group','tournament_groups'));
 
 
-        return $pdf->stream('match_schedule_tournament_'.$tournament_id.'_'.time().'.pdf');
+        return $pdf->stream('match_schedule_tournament_' . $tournament_id . '_' . time() . '.pdf');
         return view('pdf.schedules',
-            compact('schedules', 'tournament', 'team_logo', 'user_name', 'team_name_array', 'user_profile','logo'));
+            compact('schedules', 'tournament', 'team_logo', 'user_name', 'team_name_array', 'user_profile', 'logo'));
     }
 }
