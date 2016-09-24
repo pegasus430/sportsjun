@@ -73,7 +73,8 @@ class InvitePlayerController extends Controller
          $generatedPassword = false;
          if ($email){
              $user = User::where('email',$email)->first();
-         }
+         } else
+             $user = false;
 
         if (!$user) {
             $user = new User();
