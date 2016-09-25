@@ -44,12 +44,12 @@
                                 @endif
 
                                  @if(in_array($sports_id, [6,15,16]))                               		
-                                    <th>PS</th>
-                                    <th>PA</th>
+                                    <th class="text-center">PS</th>
+                                    <th class="text-center">PA</th>
                                 @endif
                                 @if(in_array($sports_id, [5,13, 17, 14, 7]))                               		
-                                    <th>SW</th>
-                                    <th>SL</th>
+                                    <th class="text-center">SW</th>
+                                    <th class="text-center"> SL</th>
                                 @endif
 
 
