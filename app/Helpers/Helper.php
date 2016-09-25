@@ -2155,6 +2155,47 @@ class Helper {
 
 
                 break;
+
+             case ($sports_id==5||$sports_id==13 || $sports_id==17||$sports_id==14 || $sports_id==7):
+            //die(json_encode($team_id));
+            foreach ($match_models as $key => $match) {
+                if($match->a_id==$team_id){         //sets the home and againts team
+                    $gf_team=$match->a_id; 
+                    $ga_team=$match->b_id;                 
+                }
+                elseif ($match->b_id==$team_id) {
+                    $gf_team=$match->b_id; 
+                    $ga_team=$match->a_id;
+                }
+                $match_details=json_decode($match->match_details);
+                        if(!empty($match->match_details)){
+                            $details['gf']+=$match_details->scores->{$gf_team.'_score'};
+                            $details['ga']+=$match_details->scores->{$ga_team.'_score'};
+                        }
+
+            }
+
+         break;
+
+       
+            case ($sports_id==6||$sports_id==15 || $sports_id==16):
+            foreach ($match_models as $key => $match) {
+                if($match->a_id==$team_id){         //sets the home and againts team
+                    $gf_team=$match->a_id; 
+                    $ga_team=$match->b_id;                 
+                }
+                elseif ($match->b_id==$team_id) {
+                    $gf_team=$match->b_id; 
+                    $ga_team=$match->a_id;
+                }
+                $match_details=json_decode($match->match_details);
+                        if(!empty($match->match_details)){
+                            $details['gf']+=$match_details->{$gf_team}->total_points;
+                            $details['ga']+=$match_details->{$ga_team}->total_points;
+                        }
+
+            }
+            break;
             
             default:
                

@@ -907,17 +907,19 @@ class TournamentsController extends Controller
 
 					//calculate ga, gf and tie.
 						$scheduled_teams['tie']=$match_count_details['tie'];
-			     			if(in_array($tournaments[0]['sports_id'], [4,11])){
+			     			if(in_array($tournaments[0]['sports_id'], [4,5,6,2,3,7,13,14,15,16,17,11])){
 			     				
 									$scheduled_teams['ga']=$match_count_details['ga'];
 									$scheduled_teams['gf']=$match_count_details['gf'];
 							 }
 
+
+
 				 	$team_details[$group_id][$key]=$scheduled_teams;
 
 				 		}
 
-				 	if(in_array($tournaments[0]['sports_id'], [4,11])){
+				 	if(in_array($tournaments[0]['sports_id'], [4,5,6,2,3,7,13,14,15,16,17,11])){
 				 		$team_details[$group_id]=$this->sortGroupTeams($team_details[$group_id]);
 				 	}
 
