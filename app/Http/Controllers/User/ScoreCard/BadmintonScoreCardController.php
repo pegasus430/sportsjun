@@ -39,7 +39,7 @@ class BadmintonScoreCardController extends parentScoreCardController
  
 
   public function badmintonScoreCard($match_data,$match,$sportsDetails=[],$tournamentDetails=[],$is_from_view=0)
-    {
+    { 
 
         $game_type=$match_data[0]['game_type'];
             if($game_type=='rubber'){              

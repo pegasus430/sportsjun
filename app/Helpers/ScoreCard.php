@@ -32,37 +32,64 @@ use App\Model\BadmintonPlayerMatchScore;
 use App\Model\BadmintonPlayerRubberScore;
 use App\Model\BadmintonStatistic;
 
+use App\Model\TennisPlayerMatchwiseStats;
+use App\Model\TennisPlayerMatchScore;
+use App\Model\TennisPlayerRubberScore;
+use App\Model\TennisStatistic;
+
+use App\Model\TtPlayerMatchwiseStats;
+use App\Model\TtPlayerMatchScore;
+use App\Model\TtPlayerRubberScore;
+use App\Model\TtStatistic;
+
+
 class ScoreCard {
 
 		//get rubber player statictics
  	public static function	getRubberPlayers($rubber_id, $sports_id=5){
  		$score_a_array=[];
  		$score_b_array=[];
+ 		$scores_a=[];
+ 		$scores_b=[];
 
  		switch ($sports_id) {
  			case 5:		
 
  		$scores_a = BadmintonPlayerRubberScore::select()->where('rubber_id',$rubber_id)->first();
-        $scores_b = BadmintonPlayerRubberScore::select()->where('rubber_id',$rubber_id)->skip(1)->first();             
-            if(count($scores_a)>0)
-                $score_a_array = $scores_a->toArray();
-
-            if(count($scores_b)>0)
-                $score_b_array = $scores_b->toArray();
-
-        return [
-        	'a'=>$score_a_array,
-        	'b'=>$score_b_array
-        ];
+        $scores_b = BadmintonPlayerRubberScore::select()->where('rubber_id',$rubber_id)->skip(1)->first();
 
         # code...
  				break;
+ 			case 2:
+				$scores_a = TennisPlayerRubberScore::select()->where('rubber_id',$rubber_id)->first();
+				$scores_b = TennisPlayerRubberScore::select()->where('rubber_id',$rubber_id)->skip(1)->first();		
+
+ 			break;
+
+ 			case 3:
+ 				$scores_a = TtPlayerRubberScore::select()->where('rubber_id',$rubber_id)->first();
+				$scores_b = TtPlayerRubberScore::select()->where('rubber_id',$rubber_id)->skip(1)->first();
+
+ 			break;
 
 
         default:
  				# code...
  				break;
  		}
+
+
+        if(count($scores_a)>0)
+            $score_a_array = $scores_a->toArray();
+
+        if(count($scores_b)>0)
+            $score_b_array = $scores_b->toArray();
+
+
+        return [
+        	'a'=>$score_a_array,
+        	'b'=>$score_b_array
+        ];
 	}
 
 //get the winner in rubbers;
@@ -75,7 +102,7 @@ class ScoreCard {
 			$score_b=0;
 
 			switch ($sports_id) {
-				case '5':
+				case in_array($sports_id, [5,2,3]):
 			$score_a=MatchScheduleRubber::where('winner_id', $a_id)->whereMatchId($match_id)->get()->count();
 			$score_b=MatchScheduleRubber::where('winner_id', $b_id)->whereMatchId($match_id)->get()->count();
 					break;

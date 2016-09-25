@@ -83,7 +83,7 @@
                     <div class='col-xs-12'>
                         <div class='match_loc'>
                            <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
-                            {{$tournamentDetails['name']}} Tournament
+                           <h4>   {{$tournamentDetails['name']}} Tournament </h4>
                           </a>  
                         </div>
                     </div>
@@ -133,6 +133,7 @@
         <p class="match-status">@include('scorecards.scorecardstatus')</p>
     </div>
 
+@if($match_data[0]['game_type']=='normal')
     <!--<a onclick="createnewset({{ $i=1 }});" style="float:right;">(Add More Sets)</a>-->
     {!! Form::open(array('url' => 'match/insertTableTennisScoreCard', 'method' => 'POST','id'=>'tabletennis')) !!}
     <div class="table-responsive">
@@ -304,6 +305,38 @@
 	    
 		  
     {!!Form::close()!!}
+
+
+  @else
+
+     @foreach($rubbers as $rubber)
+    <?php
+         $rubber_players = ScoreCard::getRubberPlayers($rubber->id,3);
+         $rubber_a_array = $rubber_players['a'];
+         $rubber_b_array = $rubber_players['b'];
+    ?>
+
+    <?php 
+    if($rubber->rubber_number==$active_rubber){
+        $score_a_array=$rubber_a_array;
+        $score_b_array=$rubber_b_array;
+      }
+
+  ?>
+
+      @if($rubber->rubber_number==$active_rubber)
+         @include('scorecards.tabletennisscorecardrubber')
+      @else
+         @include('scorecards.tabletennisscorecardrubberview')
+      @endif
+    
+ @endforeach
+
+
+  @endif
+
+  <!-- End Rubber -->
+
 	@if($isValidUser && $match_data[0]['schedule_type']=='team')
 				<!-- Adding already existing player-->
 				@include('scorecards.addplayer') 

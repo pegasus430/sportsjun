@@ -78,7 +78,7 @@
                     <div class='col-xs-12'>
                         <div class='match_loc'>
                             <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
-                            {{$tournamentDetails['name']}} Tournament
+                         <h4>   {{$tournamentDetails['name']}} Tournament </h4>
                           </a>  
                         </div>
                     </div>
@@ -123,6 +123,7 @@
         <p class="match-status">@include('scorecards.scorecardstatus')</p>
     </div>
 
+@if($match_data[0]['game_type']=='normal')
     <div class="table-responsive">
     	<table class="table table-striped">
         <thead class="thead">
@@ -273,6 +274,21 @@
 	</div>
 	
 	@endif
+
+
+  @else
+
+   @foreach($rubbers as $rubber)
+    <?php
+         $rubber_players = ScoreCard::getRubberPlayers($rubber->id, 3);
+         $rubber_a_array = $rubber_players['a'];
+         $rubber_b_array = $rubber_players['b'];
+
+    ?>
+         @include('scorecards.tennisscorecardrubberview')
+ @endforeach
+
+  @endif
 	<!-- end -->
 	
     <div class="sportsjun-forms text-center scorecards-buttons">

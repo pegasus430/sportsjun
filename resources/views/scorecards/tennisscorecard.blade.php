@@ -82,7 +82,7 @@
                     <div class='col-xs-12'>
                         <div class='match_loc'>
                             <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
-                            {{$tournamentDetails['name']}} Tournament
+                   <h4>         {{$tournamentDetails['name']}} Tournament </h4>
                           </a> 
                         </div>
                     </div>
@@ -134,6 +134,7 @@
         <p class="match-status">@include('scorecards.scorecardstatus')</p>
     </div>
 
+@if($match_data[0]['game_type']!='rubber')
 
 {!! Form::open(array('url' => 'match/insertTennisScoreCard', 'method' => 'POST','id'=>'tennis')) !!}
   <div class="table-responsive simplebar">
@@ -345,40 +346,71 @@
 	
 	@endif
 	<!-- end -->
-	
-	
- <input type="hidden" id="tennis_form_data" value="">
-	{!! Form::hidden('user_id_a',$match_data[0]['a_id'],array('class'=>'gui-input validation')) !!}
-	{!! Form::hidden('player_ids_a',$match_data[0]['player_a_ids'],array('class'=>'gui-input validation')) !!}
-	{!! Form::hidden('player_ids_b',$match_data[0]['player_b_ids'],array('class'=>'gui-input validation')) !!}
-	{!! Form::hidden('user_id_b',$match_data[0]['b_id'],array('class'=>'gui-input validation')) !!}
-	{!! Form::hidden('match_type',$match_data[0]['match_type'],array('class'=>'gui-input validation')) !!}
-	{!! Form::hidden('tournament_id',$match_data[0]['tournament_id'],array('class'=>'gui-input validation')) !!}
-	{!! Form::hidden('match_id',$match_data[0]['id'],array('class'=>'gui-input validation','id'=>'match_id')) !!}
-	{!! Form::hidden('player_name_b', $user_b_name,array('class'=>'gui-input validation')) !!}
-	{!! Form::hidden('player_name_a',$user_a_name,array('class'=>'gui-input validation')) !!}
-	{!! Form::hidden('schedule_type',$match_data[0]['schedule_type'],array('class'=>'gui-input')) !!}
-	{!! Form::hidden('is_singles',$is_singles,array('class'=>'gui-input validation')) !!}
+
+   <input type="hidden" id="tennis_form_data" value="">
+  {!! Form::hidden('user_id_a',$match_data[0]['a_id'],array('class'=>'gui-input validation')) !!}
+  {!! Form::hidden('player_ids_a',$match_data[0]['player_a_ids'],array('class'=>'gui-input validation')) !!}
+  {!! Form::hidden('player_ids_b',$match_data[0]['player_b_ids'],array('class'=>'gui-input validation')) !!}
+  {!! Form::hidden('user_id_b',$match_data[0]['b_id'],array('class'=>'gui-input validation')) !!}
+  {!! Form::hidden('match_type',$match_data[0]['match_type'],array('class'=>'gui-input validation', 'id'=>'match_type_test')) !!}
+  {!! Form::hidden('tournament_id',$match_data[0]['tournament_id'],array('class'=>'gui-input validation')) !!}
+  {!! Form::hidden('match_id',$match_data[0]['id'],array('class'=>'gui-input validation','id'=>'match_id')) !!}
+  {!! Form::hidden('player_name_b', $user_b_name,array('class'=>'gui-input validation')) !!}
+  {!! Form::hidden('player_name_a',$user_a_name,array('class'=>'gui-input validation')) !!}
+  {!! Form::hidden('schedule_type',$match_data[0]['schedule_type'],array('class'=>'gui-input', 'id'=>'player_type_test')) !!}
+  {!! Form::hidden('is_singles',$is_singles,array('class'=>'gui-input validation')) !!}
     
-	<input type="hidden" id="winner_team_id" name="winner_team_id" value="">
-	<input type="hidden" id="is_winner_inserted" name="is_winner_inserted" value="{{$match_data[0]['winner_id']}}">
+  <input type="hidden" id="winner_team_id" name="winner_team_id" value="">
+  <input type="hidden" id="is_winner_inserted" name="is_winner_inserted" value="{{$match_data[0]['winner_id']}}">
     
-	<div class="sportsjun-forms text-center scorecards-buttons">
-	<center>
-	<ul class="list-inline">
-	<li>
-	@if($isValidUser)
-		<li>
-			<button style="text-align:center;" type="button" onclick="checkPlayers();" class="button btn-primary">Save</button>
-		</li>
-	@endif	
-        @if($isValidUser && $isForApprovalExist)		
-			<button style="text-align:center;" type="button" onclick="forApproval();" class="button green">Send Score for Approval</button>    
+  <div class="sportsjun-forms text-center scorecards-buttons">
+  <center>
+  <ul class="list-inline">
+  <li>
+  @if($isValidUser)
+    <li>
+      <button style="text-align:center;" type="button" onclick="checkPlayers();" class="button btn-primary">Save</button>
+    </li>
+  @endif  
+        @if($isValidUser && $isForApprovalExist)    
+      <button style="text-align:center;" type="button" onclick="forApproval();" class="button green">Send Score for Approval</button>    
         @endif
-	
-	 
+  
+
 
 {!!Form::close()!!}
+
+  @else
+
+     @foreach($rubbers as $rubber)
+    <?php
+         $rubber_players = ScoreCard::getRubberPlayers($rubber->id,2);
+         $rubber_a_array = $rubber_players['a'];
+         $rubber_b_array = $rubber_players['b'];
+    ?>
+
+    <?php 
+    if($rubber->rubber_number==$active_rubber){
+        $score_a_array=$rubber_a_array;
+        $score_b_array=$rubber_b_array;
+      }
+  ?>
+
+      @if($rubber->rubber_number==$active_rubber)
+         @include('scorecards.tennisscorecardrubber')
+      @else
+         @include('scorecards.tennisscorecardrubberview')
+      @endif
+    
+ @endforeach
+
+
+  @endif
+
+  <!-- End Rubber -->
+	
+	
+
 @if($isValidUser && $match_data[0]['schedule_type']=='team')
 			<li>
 				<!-- Adding already existing player-->
@@ -432,8 +464,8 @@ $(".team_b_checkbox").on("ifChecked",function(e){
 });
 function checkPlayers()
 {
-	var type = "{{$match_data[0]['schedule_type']}}";
-	var match_type = "{{$match_data[0]['match_type']}}";
+	var type = $('#schedule_type_test').val();
+	var match_type = $('#match_type_test').val();
 	if(type=='player' || match_type=='singles')
 	{
 		$('#tennis').submit();
