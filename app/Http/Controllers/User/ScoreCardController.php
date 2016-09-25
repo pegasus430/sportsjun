@@ -15,8 +15,10 @@ use App\Model\Country;
 use App\Model\Photo;
 use App\Model\Tournaments;
 use App\Model\TennisPlayerMatchScore;
+use App\Model\TennisPlayerRubberScore;
 use App\Model\TournamentGroupTeams;
 use App\Model\TtPlayerMatchScore;
+use App\Model\TtPlayerRubberScore;
 use App\Model\CricketStatistic;
 use App\Model\TennisStatistic;
 use App\Model\TtStatistic;
@@ -48,6 +50,7 @@ use App\Helpers\Helper;
 use DateTime;
 use App\Helpers\AllRequests;
 use Session;
+use ScoreCard as ScoreCardHelper;
 class ScoreCardController extends Controller {
 	/**
 	 * Display a listing of the resource.
@@ -169,7 +172,9 @@ class ScoreCardController extends Controller {
 					return  $this->tennisOrTableTennisScoreCard($match_data,$match='Tennis',$sportsDetails,$tournamentDetails);
 				}else if(strtolower($sport_name)==strtolower('Table Tennis'))//if match is related to table tennis
 				{
-					return $this->tennisOrTableTennisScoreCard($match_data,$match='Table Tennis',$sportsDetails,$tournamentDetails);
+					//return $this->tennisOrTableTennisScoreCard($match_data,$match='Table Tennis',$sportsDetails,$tournamentDetails);
+					$tt= new ScoreCard\TabletennisScoreCardController;
+					return $tt->tabletennisScoreCard($match_data,$match='Table Tennis',$sportsDetails,$tournamentDetails);
 				}else if(strtolower($sport_name)==strtolower('Cricket'))
 				{
 					return $this->cricketScoreCard($match_data,$sportsDetails,$tournamentDetails);
@@ -242,6 +247,34 @@ class ScoreCardController extends Controller {
 
 		if(isset(Auth::user()->role))
 			$loginUserRole = Auth::user()->role;
+
+		 $game_type=$match_data[0]['game_type'];
+            if($game_type=='rubber'){              
+                $rubbers=MatchscheduleRubber::whereMatchId($match_data[0]['id'])->get();
+
+                if(!count($rubbers)){
+                    $scheduleController = new ScheduleController;
+                    $rubbers            = $scheduleController->insertGroupRubber($match_data[0]['id']);
+                }
+
+                $active_rubber=$this->getActiveRubber($match_data[0]['id']);
+
+                if(count($active_rubber)){
+                   
+                    $rubber_details=$active_rubber;
+                     $active_rubber=$active_rubber->rubber_number;
+                }
+                else {
+                    $active_rubber=null;
+                    $rubber_details = null;
+                }
+
+            }
+            else{
+                $active_rubber=null;
+                $rubber_details=null;
+                $rubbers=[];
+            }
 
 		//!empty($matchScheduleDetails['tournament_id'])
 		//if($match_data[0]['match_status']=='scheduled')//match should be already scheduled
@@ -390,11 +423,11 @@ class ScoreCardController extends Controller {
 		{
 			if($match=='Tennis')
 			{
-				return view('scorecards.tennisscorecardview',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'user_a_name'=>$user_a_name,'user_b_name'=>$user_b_name,'user_a_logo'=>$user_a_logo,'user_b_logo'=>$user_b_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'is_singles'=>$is_singles,'score_a_array'=>$score_a_array,'score_b_array'=>$score_b_array,'b_players'=>$b_players,'a_players'=>$a_players,'team_a_player_images'=>$team_a_player_images,'team_b_player_images'=>$team_b_player_images,'decoded_match_details'=>$decoded_match_details,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city));
+				return view('scorecards.tennisscorecardview',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'user_a_name'=>$user_a_name,'user_b_name'=>$user_b_name,'user_a_logo'=>$user_a_logo,'user_b_logo'=>$user_b_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'is_singles'=>$is_singles,'score_a_array'=>$score_a_array,'score_b_array'=>$score_b_array,'b_players'=>$b_players,'a_players'=>$a_players,'team_a_player_images'=>$team_a_player_images,'team_b_player_images'=>$team_b_player_images,'decoded_match_details'=>$decoded_match_details,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'rubbers'=>$rubbers,'active_rubber'=>$active_rubber, 'rubber_details'=>$rubber_details));
 			}else
 			{
 
-				return view('scorecards.tabletennisscorecardview',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'user_a_name'=>$user_a_name,'user_b_name'=>$user_b_name,'user_a_logo'=>$user_a_logo,'user_b_logo'=>$user_b_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'is_singles'=>$is_singles,'score_a_array'=>$score_a_array,'score_b_array'=>$score_b_array,'b_players'=>$b_players,'a_players'=>$a_players,'team_a_player_images'=>$team_a_player_images,'team_b_player_images'=>$team_b_player_images,'decoded_match_details'=>$decoded_match_details,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city));
+				return view('scorecards.tabletennisscorecardview',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'user_a_name'=>$user_a_name,'user_b_name'=>$user_b_name,'user_a_logo'=>$user_a_logo,'user_b_logo'=>$user_b_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'is_singles'=>$is_singles,'score_a_array'=>$score_a_array,'score_b_array'=>$score_b_array,'b_players'=>$b_players,'a_players'=>$a_players,'team_a_player_images'=>$team_a_player_images,'team_b_player_images'=>$team_b_player_images,'decoded_match_details'=>$decoded_match_details,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'rubbers'=>$rubbers,'active_rubber'=>$active_rubber, 'rubber_details'=>$rubber_details));
 			}
 		}
 		else //to view and edit tennis/table tennis score card
@@ -403,12 +436,12 @@ class ScoreCardController extends Controller {
 			{
 				//for form submit pass id from controller
 				$form_id = 'tennis';
-				return view('scorecards.tennisscorecard',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'user_a_name'=>$user_a_name,'user_b_name'=>$user_b_name,'user_a_logo'=>$user_a_logo,'user_b_logo'=>$user_b_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'is_singles'=>$is_singles,'score_a_array'=>$score_a_array,'score_b_array'=>$score_b_array,'b_players'=>$b_players,'a_players'=>$a_players,'team_a_player_images'=>$team_a_player_images,'team_b_player_images'=>$team_b_player_images,'decoded_match_details'=>$decoded_match_details,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'form_id'=>$form_id));
+				return view('scorecards.tennisscorecard',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'user_a_name'=>$user_a_name,'user_b_name'=>$user_b_name,'user_a_logo'=>$user_a_logo,'user_b_logo'=>$user_b_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'is_singles'=>$is_singles,'score_a_array'=>$score_a_array,'score_b_array'=>$score_b_array,'b_players'=>$b_players,'a_players'=>$a_players,'team_a_player_images'=>$team_a_player_images,'team_b_player_images'=>$team_b_player_images,'decoded_match_details'=>$decoded_match_details,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'form_id'=>$form_id,'rubbers'=>$rubbers,'active_rubber'=>$active_rubber, 'rubber_details'=>$rubber_details));
 			}else
 			{
 				//for form submit pass id from controller
 				$form_id = 'tabletennis';
-				return view('scorecards.tabletennisscorecard',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'user_a_name'=>$user_a_name,'user_b_name'=>$user_b_name,'user_a_logo'=>$user_a_logo,'user_b_logo'=>$user_b_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'is_singles'=>$is_singles,'score_a_array'=>$score_a_array,'score_b_array'=>$score_b_array,'b_players'=>$b_players,'a_players'=>$a_players,'team_a_player_images'=>$team_a_player_images,'team_b_player_images'=>$team_b_player_images,'decoded_match_details'=>$decoded_match_details,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'form_id'=>$form_id));
+				return view('scorecards.tabletennisscorecard',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'user_a_name'=>$user_a_name,'user_b_name'=>$user_b_name,'user_a_logo'=>$user_a_logo,'user_b_logo'=>$user_b_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'is_singles'=>$is_singles,'score_a_array'=>$score_a_array,'score_b_array'=>$score_b_array,'b_players'=>$b_players,'a_players'=>$a_players,'team_a_player_images'=>$team_a_player_images,'team_b_player_images'=>$team_b_player_images,'decoded_match_details'=>$decoded_match_details,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'form_id'=>$form_id,'rubbers'=>$rubbers,'active_rubber'=>$active_rubber, 'rubber_details'=>$rubber_details));
 			}
 		}
 
@@ -476,7 +509,29 @@ class ScoreCardController extends Controller {
 		$aces_b = !empty(Request::get('aces_b'))?Request::get('aces_b'):NULL;
 		$double_faults_b = !empty(Request::get('double_faults_b'))?Request::get('double_faults_b'):NULL;
 
+		$match_model=Matchschedule::find($match_id);
+        $game_type = $match_model->game_type; 
+		 if($game_type=='rubber'){
+            $number_of_rubber = $match_model->number_of_rubber;
+            $active_rubber = $this->getActiveRubber($match_id);
+            $rubber_number= $active_rubber->rubber_number;
 
+            if($number_of_rubber==$rubber_number) $rubber_completed=1;
+            else $rubber_completed=0;
+            $rubber_id=$active_rubber->id;
+        }        
+        else {
+            $rubber_completed=0;
+            $rubber_id=1;
+            $active_rubber=0;
+        }
+
+		//get previous scorecard status data
+		if($game_type=='normal')  $scorecardDetails = MatchSchedule::where('id',$match_id)->pluck('score_added_by');
+        else  $scorecardDetails = MatchScheduleRubber::where('id',$rubber_id)->pluck('score_added_by');
+
+
+       if($game_type=='normal'){
 		if($is_singles=='yes')
 		{
 			$team_a_records = TennisPlayerMatchScore::select()->where('match_id',$match_id)->where('user_id_a',$user_id_a)->get();
@@ -490,16 +545,24 @@ class ScoreCardController extends Controller {
 			$users_a = $player_ids_a;
 			$users_b = $player_ids_b;
 		}
+	}
+
+	 else{
+	 	$team_a_records = TennisPlayerRubberScore::select()->where('rubber_id',$rubber_id)->where('team_id',$user_id_a)->get();
+			$team_b_records = TennisPlayerRubberScore::select()->where('rubber_id',$rubber_id)->where('team_id',$user_id_b)->get();
+			$users_a = $player_ids_a;
+			$users_b = $player_ids_b;
+	 }
 
 
 		//insert match a details
 		if(count($team_a_records)>0)//if team a record is already exist
 		{
-			$this->updateTennisScore($user_id_a,$match_id,$set1_a,$set2_a,$set3_a,$set4_a,$set5_a,$set1_tie_breaker_a,$set2_tie_breaker_a,$set3_tie_breaker_a,$set4_tie_breaker_a,$set5_tie_breaker_a,$is_singles,$aces_a,$double_faults_a,$team_a_players,$schedule_type,$match_type);
+			$this->updateTennisScore($user_id_a,$match_id,$set1_a,$set2_a,$set3_a,$set4_a,$set5_a,$set1_tie_breaker_a,$set2_tie_breaker_a,$set3_tie_breaker_a,$set4_tie_breaker_a,$set5_tie_breaker_a,$is_singles,$aces_a,$double_faults_a,$team_a_players,$schedule_type,$match_type, $game_type, $rubber_id);
 
 		}else
 		{
-			$this->insertTennisScore($user_id_a,$tournament_id,$match_id,$player_name_a,$set1_a,$set2_a,$set3_a,$set4_a,$set5_a,$set1_tie_breaker_a,$set2_tie_breaker_a,$set3_tie_breaker_a,$set4_tie_breaker_a,$set5_tie_breaker_a,$is_singles,$aces_a,$double_faults_a,$team_a_players,$schedule_type,$match_type);
+			$this->insertTennisScore($user_id_a,$tournament_id,$match_id,$player_name_a,$set1_a,$set2_a,$set3_a,$set4_a,$set5_a,$set1_tie_breaker_a,$set2_tie_breaker_a,$set3_tie_breaker_a,$set4_tie_breaker_a,$set5_tie_breaker_a,$is_singles,$aces_a,$double_faults_a,$team_a_players,$schedule_type,$match_type,$game_type, $rubber_id, $rubber_number);
 
 		}
 
@@ -507,11 +570,11 @@ class ScoreCardController extends Controller {
 		//insert match b details
 		if(count($team_b_records)>0)//if team b record is already exist
 		{
-			$this->updateTennisScore($user_id_b,$match_id,$set1_b,$set2_b,$set3_b,$set4_b,$set5_b,$set1_tie_breaker_b,$set2_tie_breaker_b,$set3_tie_breaker_b,$set4_tie_breaker_b,$set5_tie_breaker_b,$is_singles,$aces_b,$double_faults_b,$team_b_players,$schedule_type,$match_type);
+			$this->updateTennisScore($user_id_b,$match_id,$set1_b,$set2_b,$set3_b,$set4_b,$set5_b,$set1_tie_breaker_b,$set2_tie_breaker_b,$set3_tie_breaker_b,$set4_tie_breaker_b,$set5_tie_breaker_b,$is_singles,$aces_b,$double_faults_b,$team_b_players,$schedule_type,$match_type ,$game_type, $rubber_id);
 
 		}else
 		{
-			$this->insertTennisScore($user_id_b,$tournament_id,$match_id,$player_name_b,$set1_b,$set2_b,$set3_b,$set4_b,$set5_b,$set1_tie_breaker_b,$set2_tie_breaker_b,$set3_tie_breaker_b,$set4_tie_breaker_b,$set5_tie_breaker_b,$is_singles,$aces_b,$double_faults_b,$team_b_players,$schedule_type,$match_type);
+			$this->insertTennisScore($user_id_b,$tournament_id,$match_id,$player_name_b,$set1_b,$set2_b,$set3_b,$set4_b,$set5_b,$set1_tie_breaker_b,$set2_tie_breaker_b,$set3_tie_breaker_b,$set4_tie_breaker_b,$set5_tie_breaker_b,$is_singles,$aces_b,$double_faults_b,$team_b_players,$schedule_type,$match_type,$game_type, $rubber_id, $rubber_number);
 
 		}
 
@@ -529,8 +592,9 @@ class ScoreCardController extends Controller {
 		$match_details = $team_a_details+$team_b_details;
 		$json_match_details_array = json_encode($match_details);
 
-		//get previous scorecard status data
-		$scorecardDetails = MatchSchedule::where('id',$match_id)->pluck('score_added_by');
+		
+
+		
 		$decode_scorecard_data = json_decode($scorecardDetails,true);
 
 		$modified_users = !empty($decode_scorecard_data['modified_users'])?$decode_scorecard_data['modified_users']:'';
@@ -544,79 +608,225 @@ class ScoreCardController extends Controller {
 
 		$json_score_status = json_encode($score_status);
 
+
+        if($game_type=='normal')$matchScheduleDetails = MatchSchedule::where('id',$match_id)->first();
+        else $matchScheduleDetails = MatchScheduleRubber::where('id',$rubber_id)->first();
+
 		//update winner id
-		$matchScheduleDetails = MatchSchedule::where('id',$match_id)->first();
-		if(count($matchScheduleDetails)) {
-			$looser_team_id = NULL;
-			$match_status = 'scheduled';
-			$approved = '';
-			if(isset($winner_team_id)) {
-				if($winner_team_id==$matchScheduleDetails['a_id']) {
-					$looser_team_id=$matchScheduleDetails['b_id'];
-				}else{
-					$looser_team_id=$matchScheduleDetails['a_id'];
-				}
-				$match_status = 'completed';
-				$approved = 'approved';
-			}
+	
+// 		if(count($matchScheduleDetails)) {
+// 			$looser_team_id = NULL;
+// 			$match_status = 'scheduled';
+// 			$approved = '';
+// 			if(isset($winner_team_id)) {
+// 				if($winner_team_id==$matchScheduleDetails['a_id']) {
+// 					$looser_team_id=$matchScheduleDetails['b_id'];
+// 				}else{
+// 					$looser_team_id=$matchScheduleDetails['a_id'];
+// 				}
+// 				$match_status = 'completed';
+// 				$approved = 'approved';
+// 			}
 
-			if(!empty($matchScheduleDetails['tournament_id'])) {
-				$tournamentDetails = Tournaments::where('id', '=', $matchScheduleDetails['tournament_id'])->first();
-				if(Helper::isTournamentOwner($tournamentDetails['manager_id'],$tournamentDetails['tournament_parent_id'])) {
-					MatchSchedule::where('id',$match_id)->update(['match_details'=>$json_match_details_array,'match_status'=>$match_status,
-						'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
-						'score_added_by'=>$json_score_status]);
+// 			if(!empty($matchScheduleDetails['tournament_id'])) {
+// 				$tournamentDetails = Tournaments::where('id', '=', $matchScheduleDetails['tournament_id'])->first();
+// 				if(Helper::isTournamentOwner($tournamentDetails['manager_id'],$tournamentDetails['tournament_parent_id'])) {
+// 					MatchSchedule::where('id',$match_id)->update(['match_details'=>$json_match_details_array,'match_status'=>$match_status,
+// 						'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
+// 						'score_added_by'=>$json_score_status]);
+// //                                Helper::printQueries();
+
+// 					if(!empty($matchScheduleDetails['tournament_round_number'])) {
+// 						$this->updateBracketDetails($matchScheduleDetails,$tournamentDetails,$winner_team_id);
+// 					}
+// 					if($match_status=='completed')
+// 					{
+// 						$sportName = Sport::where('id',$matchScheduleDetails['sports_id'])->pluck('sports_name');
+// 						$this->insertPlayerStatistics($sportName,$match_id);
+
+// 						Helper::sendEmailPlayers($matchScheduleDetails, 'Tennis');	
+
+// 						//notification code
+// 					}
+
+// 				}
+
+// 			}else if(Auth::user()->role=='admin')
+// 			{
+
+// 				MatchSchedule::where('id',$match_id)->update(['match_details'=>$json_match_details_array,'match_status'=>$match_status,
+// 					'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
+// 					'score_added_by'=>$json_score_status,'scoring_status'=>$approved]);
+// 				if($match_status=='completed')
+// 				{
+// 					$sportName = Sport::where('id',$matchScheduleDetails['sports_id'])->pluck('sports_name');
+// 					$this->insertPlayerStatistics($sportName,$match_id);
+
+// 					Helper::sendEmailPlayers($matchScheduleDetails, 'Tennis');	
+
+// 					//notification code
+// 				}
+
+// 			}
+// 			else
+// 			{
+// 				MatchSchedule::where('id',$match_id)->update(['match_details'=>$json_match_details_array,'winner_id'=>$winner_team_id ,
+// 					'looser_id'=>$looser_team_id,'score_added_by'=>$json_score_status]);
+// 			}
+// 		}
+
+		 if(count($matchScheduleDetails)) {
+            $looser_team_id = NULL;
+            $match_status = 'scheduled';
+            $approved='';
+                   
+                        if(isset($winner_team_id )) {
+                            if($winner_team_id==$matchScheduleDetails['a_id']) {
+                                $looser_team_id=$matchScheduleDetails['b_id'];
+                            }else{
+                                $looser_team_id=$matchScheduleDetails['a_id'];
+                            }
+                            $match_status = 'completed';
+                            $approved = 'approved';
+                     
+                    }
+
+            if(!empty($matchScheduleDetails['tournament_id'])) {
+                $tournamentDetails = Tournaments::where('id', '=', $matchScheduleDetails['tournament_id'])->first();
+                //  $match_status = 'completed';
+                if(Helper::isTournamentOwner($tournamentDetails['manager_id'],$tournamentDetails['tournament_parent_id'])) {
+
+                if($game_type=='normal'){
+                    MatchSchedule::where('id',$match_id)->update([
+                        'match_status'=>$match_status,
+                        'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,                       
+                          'match_result'   => $match_result,
+                        'score_added_by'=>$json_score_status]);
+                    if(!empty($matchScheduleDetails['tournament_round_number'])) {
+                        $this->updateBracketDetails($match_model,$tournamentDetails,$winner_team_id);
+                    }
+                     if($match_status=='completed')            {
+
+                    $sportName = Sport::where('id',$matchScheduleDetails['sports_id'])->pluck('sports_name');
+                    $this->insertPlayerStatistics($sportName,$match_id);
+                  //  $this->updateStatitics($match_id, $winner_team_id, $looser_team_id); 
+                     }
+
+                    }
+                else {
+                                        MatchScheduleRubber::where('id',$rubber_id)->update([
+                                            'match_status'=>$match_status,
+                                            'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
+                                            
+                                             //'match_result'   => $match_result,
+                                            'score_added_by'=>$json_score_status]);
+                    
 //                                Helper::printQueries();
+               
+                if($rubber_completed && $match_status=='completed'){
+                    $winners_from_rubber = ScoreCardHelper::getWinnerInRubber($match_id,$match_model->sports_id);             
+                    $winner_team_id = $winners_from_rubber['winner'];
+                    $looser_team_id = $winners_from_rubber['looser'];
 
-					if(!empty($matchScheduleDetails['tournament_round_number'])) {
-						$this->updateBracketDetails($matchScheduleDetails,$tournamentDetails,$winner_team_id);
-					}
-					if($match_status=='completed')
-					{
-						$sportName = Sport::where('id',$matchScheduleDetails['sports_id'])->pluck('sports_name');
-						$this->insertPlayerStatistics($sportName,$match_id);
+                                    MatchSchedule::where('id',$match_id)->update([
+                                    'match_status'=>$match_status,
+                                    'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
+                                   
+                                    //'match_result'   => $match_result,
+                                    'score_added_by'=>$json_score_status]);
 
-						Helper::sendEmailPlayers($matchScheduleDetails, 'Tennis');	
+                    if(!empty($matchScheduleDetails['tournament_round_number'])) {
+                        $this->updateBracketDetails($match_model,$tournamentDetails,$winner_team_id);
+                    }
+                     
+                        $sportName = Sport::where('id',$match_model->sports_id)->pluck('sports_name');
+                        $this->insertPlayerStatistics($sportName,$match_id);
+                       // $this->updateStatitics($match_id, $winner_team_id, $looser_team_id);                      
+                    }   
+                }         
 
-						//notification code
-					}
 
-				}
+                }
 
-			}else if(Auth::user()->role=='admin')
-			{
 
-				MatchSchedule::where('id',$match_id)->update(['match_details'=>$json_match_details_array,'match_status'=>$match_status,
-					'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
-					'score_added_by'=>$json_score_status,'scoring_status'=>$approved]);
-				if($match_status=='completed')
-				{
-					$sportName = Sport::where('id',$matchScheduleDetails['sports_id'])->pluck('sports_name');
-					$this->insertPlayerStatistics($sportName,$match_id);
+            }
+            else if(Auth::user()->role=='admin')
+            {
 
-					Helper::sendEmailPlayers($matchScheduleDetails, 'Tennis');	
 
-					//notification code
-				}
+                 if($game_type=='normal'){
+                    MatchSchedule::where('id',$match_id)->update([
+                        'match_status'=>$match_status,
+                        'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
+                        //'match_result'   => $match_result,
+                        'score_added_by'=>$json_score_status, 'scoring_status'=>$approved]);
+                   
+                        if($match_status=='completed')
+                        {
+                            $sportName = Sport::where('id',$matchScheduleDetails['sports_id'])->pluck('sports_name');
+                            $this->insertPlayerStatistics($sportName,$match_id);
+                          //  $this->updateStatitics($match_id, $winner_team_id, $looser_team_id); 
 
-			}
-			else
-			{
-				MatchSchedule::where('id',$match_id)->update(['match_details'=>$json_match_details_array,'winner_id'=>$winner_team_id ,
-					'looser_id'=>$looser_team_id,'score_added_by'=>$json_score_status]);
-			}
-		}
-		//MatchSchedule::where('id',$match_id)->update(['winner_id'=>$winner_team_id,'match_details'=>$json_match_details_array,'score_added_by'=>$json_score_status]);
-		//if($winner_team_id>0)
-		//return redirect()->route('match/scorecard/view', [$match_id])->with('status', trans('message.scorecard.scorecardmsg'));
+                        }
+                 }
+                else {
+                                        MatchScheduleRubber::where('id',$rubber_id)->update([
+                                            'match_status'=>$match_status,
+                                            'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
+                                            
+                                             //'match_result'   => $match_result,
+                                            'score_added_by'=>$json_score_status]);                    
 
+                    if($rubber_completed && $match_status=='completed'){
+                     $winners_from_rubber = ScoreCardHelper::getWinnerInRubber($match_id, $match_model->sports_id);
+                        $winner_team_id = $winners_from_rubber['winner'];
+                        $looser_team_id = $winners_from_rubber['looser'];
+                                        MatchSchedule::where('id',$match_id)->update([
+                                            'match_status'=>$match_status,
+                                            'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
+                                             
+                                            // 'match_result'   => $match_result,
+                                            'score_added_by'=>$json_score_status, 
+                                            'scoring_status'=>$approved]);
+
+
+                       
+                        if(!empty($matchScheduleDetails['tournament_round_number'])) {
+                            $this->updateBracketDetails($match_model,$tournamentDetails,$winner_team_id);
+                        }
+                     
+                        $sportName = Sport::where('id',$match_model->sports_id)->pluck('sports_name');
+                        $this->insertPlayerStatistics($sportName,$match_id);
+                      //  $this->updateStatitics($match_id, $winner_team_id, $looser_team_id);                      
+                    }
+                 }
+            }
+            else
+            {
+                MatchSchedule::where('id',$match_id)->update(['winner_id'=>$winner_team_id ,
+                    'looser_id'=>$looser_team_id,
+                  
+                    // 'match_result'   => $match_result,
+                     'score_added_by'=>$json_score_status]);
+
+                   //$this->updateStatitics($match_id,$winner_team_id, $looser_team_id);
+            }
+        }
+        //MatchSchedule::where('id',$match_id)->update(['winner_id'=>$winner_team_id,'match_details'=>$json_match_details_array,'score_added_by'=>$json_score_status ]);
+        //if($winner_team_id>0)
+        //return redirect()->route('match/scorecard/view', [$match_id])->with('status', trans('message.scorecard.scorecardmsg'));
+
+        ScoreCardHelper::getWinnerInRubber($match_id, $sports_id=5);
+	
 		return redirect()->back()->with('status', trans('message.scorecard.scorecardmsg'));
 	}
 
 	//function to insert tennis score card
-	public function insertTennisScore($user_id,$tournament_id,$match_id,$player_name,$set1,$set2,$set3,$set4,$set5,$set1_tie_breaker,$set2_tie_breaker,$set3_tie_breaker,$set4_tie_breaker,$set5_tie_breaker,$is_singles,$aces,$double_faults,$team_players,$schedule_type,$match_type)
+	public function insertTennisScore($user_id,$tournament_id,$match_id,$player_name,$set1,$set2,$set3,$set4,$set5,$set1_tie_breaker,$set2_tie_breaker,$set3_tie_breaker,$set4_tie_breaker,$set5_tie_breaker,$is_singles,$aces,$double_faults,$team_players,$schedule_type,$match_type, $game_type, $rubber_id, $rubber_number)
 	{
-		$model = new TennisPlayerMatchScore();
+		if($game_type=='normal')		$model = new TennisPlayerMatchScore();
+		else 							$model = new TennisPlayerRubberScore();
+
 		if($is_singles=='yes')
 		{
 			$model->user_id_a = $user_id;
@@ -645,11 +855,17 @@ class ScoreCardController extends Controller {
 		$model->set5_tie_breaker = $set5_tie_breaker;
 		$model->aces = $aces;
 		$model->double_faults = $double_faults;
+
+		if($game_type=='rubber'){
+			$model->rubber_id=$rubber_id;
+			$model->rubber_number=$rubber_number;
+		}
 		$model->save();
 	}
 	//function to update tennis score
-	public function updateTennisScore($user_id,$match_id,$set1,$set2,$set3,$set4,$set5,$set1_tie_breaker,$set2_tie_breaker,$set3_tie_breaker,$set4_tie_breaker,$set5_tie_breaker,$is_singles,$aces,$double_faults,$team_players,$schedule_type,$match_type)
+	public function updateTennisScore($user_id,$match_id,$set1,$set2,$set3,$set4,$set5,$set1_tie_breaker,$set2_tie_breaker,$set3_tie_breaker,$set4_tie_breaker,$set5_tie_breaker,$is_singles,$aces,$double_faults,$team_players,$schedule_type,$match_type,$game_type='normal', $rubber_id=0)
 	{
+	  if($game_type=='normal'){
 		if($is_singles=='yes')
 		{
 			TennisPlayerMatchScore::where('match_id',$match_id)->where('user_id_a',$user_id)->update(['set1'=>$set1,'set2'=>$set2,'set3'=>$set3,'set4'=>$set4,'set5'=>$set5,'set1_tie_breaker'=>$set1_tie_breaker,'set2_tie_breaker'=>$set2_tie_breaker,'set3_tie_breaker'=>$set3_tie_breaker,'set4_tie_breaker'=>$set4_tie_breaker,'set5_tie_breaker'=>$set5_tie_breaker,'aces'=>$aces,'double_faults'=>$double_faults]);
@@ -662,6 +878,16 @@ class ScoreCardController extends Controller {
 			}
 			TennisPlayerMatchScore::where('match_id',$match_id)->where('team_id',$user_id)->update(['set1'=>$set1,'set2'=>$set2,'set3'=>$set3,'set4'=>$set4,'set5'=>$set5,'set1_tie_breaker'=>$set1_tie_breaker,'set2_tie_breaker'=>$set2_tie_breaker,'set3_tie_breaker'=>$set3_tie_breaker,'set4_tie_breaker'=>$set4_tie_breaker,'set5_tie_breaker'=>$set5_tie_breaker,'aces'=>$aces,'double_faults'=>$double_faults,'user_id_a'=>$user_id_a]);
 		}
+	  }
+
+	  else{
+	  		$user_id_a='';
+			if($schedule_type=='team' && $match_type=='singles')
+			{
+				$user_id_a = (!empty($team_players[0]))?$team_players[0]:'';
+			}
+	  		TennisPlayerRubberScore::where('rubber_id',$rubber_id)->where('team_id',$user_id)->update(['set1'=>$set1,'set2'=>$set2,'set3'=>$set3,'set4'=>$set4,'set5'=>$set5,'set1_tie_breaker'=>$set1_tie_breaker,'set2_tie_breaker'=>$set2_tie_breaker,'set3_tie_breaker'=>$set3_tie_breaker,'set4_tie_breaker'=>$set4_tie_breaker,'set5_tie_breaker'=>$set5_tie_breaker,'aces'=>$aces,'double_faults'=>$double_faults,'user_id_a'=>$user_id_a]);
+	  }
 
 	}
 	//function to insert tennis statitistics
@@ -773,29 +999,56 @@ class ScoreCardController extends Controller {
 		$set5_b = !empty(Request::get('set_5_b'))?Request::get('set_5_b'):NULL;
 		$double_faults_b = !empty(Request::get('double_faults_b'))?Request::get('double_faults_b'):NULL;
 
-		if($is_singles=='yes')
-		{
-			$team_a_records = TtPlayerMatchScore::select()->where('match_id',$match_id)->where('user_id_a',$user_id_a)->get();
-			$team_b_records = TtPlayerMatchScore::select()->where('match_id',$match_id)->where('user_id_a',$user_id_b)->get();
-			$users_a = $user_id_a; //if singles
-			$users_b = $user_id_b;
-		}else
-		{
-			$team_a_records = TtPlayerMatchScore::select()->where('match_id',$match_id)->where('team_id',$user_id_a)->get();
-			$team_b_records = TtPlayerMatchScore::select()->where('match_id',$match_id)->where('team_id',$user_id_b)->get();
-			$users_a = $player_ids_a;
-			$users_b = $player_ids_b;
+		$match_model=Matchschedule::find($match_id);
+        $game_type = $match_model->game_type; 
+		 if($game_type=='rubber'){
+            $number_of_rubber = $match_model->number_of_rubber;
+            $active_rubber = $this->getActiveRubber($match_id);
+            $rubber_number= $active_rubber->rubber_number;
+
+            if($number_of_rubber==$rubber_number) $rubber_completed=1;
+            else $rubber_completed=0;
+            $rubber_id=$active_rubber->id;
+        }        
+        else {
+            $rubber_completed=0;
+            $rubber_id=1;
+            $rubber_number=0;
+        }
+
+        if($game_type=='normal'){
+			if($is_singles=='yes')
+			{
+				$team_a_records = TtPlayerMatchScore::select()->where('match_id',$match_id)->where('user_id_a',$user_id_a)->get();
+				$team_b_records = TtPlayerMatchScore::select()->where('match_id',$match_id)->where('user_id_a',$user_id_b)->get();
+				$users_a = $user_id_a; //if singles
+				$users_b = $user_id_b;
+			}else
+			{
+				$team_a_records = TtPlayerRubberScore::select()->where('match_id',$match_id)->where('team_id',$user_id_a)->get();
+				$team_b_records = TtPlayerRubberScore::select()->where('match_id',$match_id)->where('team_id',$user_id_b)->get();
+				$users_a = $player_ids_a;
+				$users_b = $player_ids_b;
+			}
 		}
+		else{
+			$team_a_records = TtPlayerRubberScore::select()->where('rubber_id',$rubber_id)->where('team_id',$user_id_a)->get();
+				$team_b_records = TtPlayerRubberScore::select()->where('rubber_id',$rubber_id)->where('team_id',$user_id_b)->get();
+				$users_a = $player_ids_a;
+				$users_b = $player_ids_b;
+		}
+
+
 
 
 		//insert match a details
 		if(count($team_a_records)>0)//if team a record is already exist
 		{
-			$this->updateTableTennisScore($user_id_a,$match_id,$set1_a,$set2_a,$set3_a,$set4_a,$set5_a,$is_singles,$team_a_players,$schedule_type,$match_type,$double_faults_a);
+			$this->updateTableTennisScore($user_id_a,$match_id,$set1_a,$set2_a,$set3_a,$set4_a,$set5_a,$is_singles,$team_a_players,$schedule_type,$match_type,$double_faults_a, $game_type, $rubber_id);
 
 		}else
 		{
-			$this->insertTableTennisScore($user_id_a,$tournament_id,$match_id,$player_name_a,$set1_a,$set2_a,$set3_a,$set4_a,$set5_a,$is_singles,$team_a_players,$schedule_type,$match_type,$double_faults_a);
+			$this->insertTableTennisScore($user_id_a,$tournament_id,$match_id,$player_name_a,$set1_a,$set2_a,$set3_a,$set4_a,$set5_a,$is_singles,$team_a_players,$schedule_type,$match_type,$double_faults_a, $game_type, $rubber_id, $rubber_number);
 
 		}
 
@@ -803,11 +1056,11 @@ class ScoreCardController extends Controller {
 		//insert match b details
 		if(count($team_b_records)>0)//if team b record is already exist
 		{
-			$this->updateTableTennisScore($user_id_b,$match_id,$set1_b,$set2_b,$set3_b,$set4_b,$set5_b,$is_singles,$team_b_players,$schedule_type,$match_type,$double_faults_b);
+			$this->updateTableTennisScore($user_id_b,$match_id,$set1_b,$set2_b,$set3_b,$set4_b,$set5_b,$is_singles,$team_b_players,$schedule_type,$match_type,$double_faults_b, $game_type, $rubber_id);
 
 		}else
 		{
-			$this->insertTableTennisScore($user_id_b,$tournament_id,$match_id,$player_name_b,$set1_b,$set2_b,$set3_b,$set4_b,$set5_b,$is_singles,$team_b_players,$schedule_type,$match_type,$double_faults_b);
+			$this->insertTableTennisScore($user_id_b,$tournament_id,$match_id,$player_name_b,$set1_b,$set2_b,$set3_b,$set4_b,$set5_b,$is_singles,$team_b_players,$schedule_type,$match_type,$double_faults_b,$game_type, $rubber_id, $rubber_number);
 
 		}
 
@@ -839,77 +1092,159 @@ class ScoreCardController extends Controller {
 
 		$json_score_status = json_encode($score_status);
 
-		//update winner id
-		$matchScheduleDetails = MatchSchedule::where('id',$match_id)->first();
-		if(count($matchScheduleDetails)) {
-			$looser_team_id = NULL;
-			$match_status = 'scheduled';
-			$approved='';
-			if(isset($winner_team_id)) {
-				if($winner_team_id==$matchScheduleDetails['a_id']) {
-					$looser_team_id=$matchScheduleDetails['b_id'];
-				}else{
-					$looser_team_id=$matchScheduleDetails['a_id'];
-				}
-				$match_status = 'completed';
-				$approved = 'approved';
-			}
+	 	if($game_type=='normal')$matchScheduleDetails = MatchSchedule::where('id',$match_id)->first();
+        else $matchScheduleDetails = MatchScheduleRubber::where('id',$rubber_id)->first();
 
-			if(!empty($matchScheduleDetails['tournament_id'])) {
-				$tournamentDetails = Tournaments::where('id', '=', $matchScheduleDetails['tournament_id'])->first();
-				if(Helper::isTournamentOwner($tournamentDetails['manager_id'],$tournamentDetails['tournament_parent_id'])) {
-					MatchSchedule::where('id',$match_id)->update(['match_details'=>$json_match_details_array,'match_status'=>$match_status,
-						'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
-						'score_added_by'=>$json_score_status]);
+		 if(count($matchScheduleDetails)) {
+            $looser_team_id = NULL;
+            $match_status = 'scheduled';
+            $approved='';
+                   
+                        if(isset($winner_team_id )) {
+                            if($winner_team_id==$matchScheduleDetails['a_id']) {
+                                $looser_team_id=$matchScheduleDetails['b_id'];
+                            }else{
+                                $looser_team_id=$matchScheduleDetails['a_id'];
+                            }
+                            $match_status = 'completed';
+                            $approved = 'approved';
+                     
+                    }
+
+            if(!empty($matchScheduleDetails['tournament_id'])) {
+                $tournamentDetails = Tournaments::where('id', '=', $matchScheduleDetails['tournament_id'])->first();
+                //  $match_status = 'completed';
+                if(Helper::isTournamentOwner($tournamentDetails['manager_id'],$tournamentDetails['tournament_parent_id'])) {
+
+                if($game_type=='normal'){
+                    MatchSchedule::where('id',$match_id)->update([
+                        'match_status'=>$match_status,
+                        'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,                       
+                          //'match_result'   => $match_result,
+                        'score_added_by'=>$json_score_status]);
+                    if(!empty($matchScheduleDetails['tournament_round_number'])) {
+                        $this->updateBracketDetails($match_model,$tournamentDetails,$winner_team_id);
+                    }
+                     if($match_status=='completed')            {
+
+                    $sportName = Sport::where('id',$matchScheduleDetails['sports_id'])->pluck('sports_name');
+                    $this->insertPlayerStatistics($sportName,$match_id);
+                  //  $this->updateStatitics($match_id, $winner_team_id, $looser_team_id); 
+                     }
+
+                    }
+                else {
+                                        MatchScheduleRubber::where('id',$rubber_id)->update([
+                                            'match_status'=>$match_status,
+                                            'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
+                                            
+                                             //'match_result'   => $match_result,
+                                            'score_added_by'=>$json_score_status]);
+                    
 //                                Helper::printQueries();
+               
+                if($rubber_completed && $match_status=='completed'){
+                    $winners_from_rubber = ScoreCardHelper::getWinnerInRubber($match_id,$match_model->sports_id);             
+                    $winner_team_id = $winners_from_rubber['winner'];
+                    $looser_team_id = $winners_from_rubber['looser'];
 
-					if(!empty($matchScheduleDetails['tournament_round_number'])) {
-						$this->updateBracketDetails($matchScheduleDetails,$tournamentDetails,$winner_team_id);
-					}
-					if($match_status=='completed')
-					{
-						$sportName = Sport::where('id',$matchScheduleDetails['sports_id'])->pluck('sports_name');
-						$this->insertPlayerStatistics($sportName,$match_id);
+                                    MatchSchedule::where('id',$match_id)->update([
+                                    'match_status'=>$match_status,
+                                    'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
+                                   
+                                    //'match_result'   => $match_result,
+                                    'score_added_by'=>$json_score_status]);
 
-						Helper::sendEmailPlayers($matchScheduleDetails, 'Table Tennis');	
+                    if(!empty($matchScheduleDetails['tournament_round_number'])) {
+                        $this->updateBracketDetails($match_model,$tournamentDetails,$winner_team_id);
+                    }
+                     
+                        $sportName = Sport::where('id',$match_model->sports_id)->pluck('sports_name');
+                        $this->insertPlayerStatistics($sportName,$match_id);
+                       // $this->updateStatitics($match_id, $winner_team_id, $looser_team_id);                      
+                    }   
+                }         
 
-						//notification code
-					}
 
-				}
+                }
 
-			}else if(Auth::user()->role=='admin')
-			{
 
-				MatchSchedule::where('id',$match_id)->update(['match_details'=>$json_match_details_array,'match_status'=>$match_status,
-					'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
-					'score_added_by'=>$json_score_status,'scoring_status'=>$approved]);
-				if($match_status=='completed')
-				{
-					$sportName = Sport::where('id',$matchScheduleDetails['sports_id'])->pluck('sports_name');
-					$this->insertPlayerStatistics($sportName,$match_id);
+            }
+            else if(Auth::user()->role=='admin')
+            {
 
-					//notification code
-					Helper::sendEmailPlayers($matchScheduleDetails, 'Table Tennis');	
-				}
-			}
-			else
-			{
-				MatchSchedule::where('id',$match_id)->update(['match_details'=>$json_match_details_array,'winner_id'=>$winner_team_id ,
-					'looser_id'=>$looser_team_id,'score_added_by'=>$json_score_status]);
-			}
-		}
-		//MatchSchedule::where('id',$match_id)->update(['winner_id'=>$winner_team_id,'match_details'=>$json_match_details_array,'score_added_by'=>$json_score_status ]);
-		//if($winner_team_id>0)
-		//return redirect()->route('match/scorecard/view', [$match_id])->with('status', trans('message.scorecard.scorecardmsg'));
+                 if($game_type=='normal'){
+                    MatchSchedule::where('id',$match_id)->update([
+                        'match_status'=>$match_status,
+                        'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
+                        //'match_result'   => $match_result,
+                        'score_added_by'=>$json_score_status, 'scoring_status'=>$approved]);
+                   
+                        if($match_status=='completed')
+                        {
+                            $sportName = Sport::where('id',$matchScheduleDetails['sports_id'])->pluck('sports_name');
+                            $this->insertPlayerStatistics($sportName,$match_id);
+                          //  $this->updateStatitics($match_id, $winner_team_id, $looser_team_id); 
 
+                        }
+                 }
+                else {
+                                        MatchScheduleRubber::where('id',$rubber_id)->update([
+                                            'match_status'=>$match_status,
+                                            'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
+                                            
+                                             //'match_result'   => $match_result,
+                                            'score_added_by'=>$json_score_status]);                    
+
+                    if($rubber_completed && $match_status=='completed'){
+                     $winners_from_rubber = ScoreCardHelper::getWinnerInRubber($match_id, $match_model->sports_id);
+                        $winner_team_id = $winners_from_rubber['winner'];
+                        $looser_team_id = $winners_from_rubber['looser'];
+                                        MatchSchedule::where('id',$match_id)->update([
+                                            'match_status'=>$match_status,
+                                            'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
+                                             
+                                            // 'match_result'   => $match_result,
+                                            'score_added_by'=>$json_score_status, 
+                                            'scoring_status'=>$approved]);
+
+
+                       
+                        if(!empty($matchScheduleDetails['tournament_round_number'])) {
+                            $this->updateBracketDetails($match_model,$tournamentDetails,$winner_team_id);
+                        }
+                     
+                        $sportName = Sport::where('id',$match_model->sports_id)->pluck('sports_name');
+                        $this->insertPlayerStatistics($sportName,$match_id);
+                      //  $this->updateStatitics($match_id, $winner_team_id, $looser_team_id);                      
+                    }
+                 }
+            }
+            else
+            {
+                MatchSchedule::where('id',$match_id)->update(['winner_id'=>$winner_team_id ,
+                    'looser_id'=>$looser_team_id,
+                  
+                    // 'match_result'   => $match_result,
+                     'score_added_by'=>$json_score_status]);
+
+                   //$this->updateStatitics($match_id,$winner_team_id, $looser_team_id);
+            }
+        }
+        //MatchSchedule::where('id',$match_id)->update(['winner_id'=>$winner_team_id,'match_details'=>$json_match_details_array,'score_added_by'=>$json_score_status ]);
+        //if($winner_team_id>0)
+        //return redirect()->route('match/scorecard/view', [$match_id])->with('status', trans('message.scorecard.scorecardmsg'));
+
+        ScoreCardHelper::getWinnerInRubber($match_id, $sports_id=5);
 		return redirect()->back()->with('status', trans('message.scorecard.scorecardmsg'));
 	}
 	//function to save table tennis score
-	public function insertTableTennisScore($user_id,$tournament_id,$match_id,$player_name,$set1,$set2,$set3,$set4,$set5,$is_singles,$team_players,$schedule_type,$match_type,$double_faults)
+	public function insertTableTennisScore($user_id,$tournament_id,$match_id,$player_name,$set1,$set2,$set3,$set4,$set5,$is_singles,$team_players,$schedule_type,$match_type,$double_faults, $game_type='normal', $rubber_id=0, $rubber_number=0)
 	{
 		//insert match a details
-		$model = new TtPlayerMatchScore();
+		if($game_type=='normal') $model = new TtPlayerMatchScore();
+		else 					 $model = new TtPlayerRubberScore();
+
 		if($is_singles=='yes')
 		{
 			$model->user_id_a = $user_id;
@@ -931,11 +1266,19 @@ class ScoreCardController extends Controller {
 		$model->set4 = $set4;
 		$model->set5 = $set5;
 		$model->double_faults = $double_faults;
+
+		if($game_type=='rubber'){
+			$model->rubber_id=$rubber_id;
+			$model->rubber_number=$rubber_number;
+		}
+
 		$model->save();
 	}
 	//function to update table tennis
-	public function updateTableTennisScore($user_id,$match_id,$set1,$set2,$set3,$set4,$set5,$is_singles,$team_players,$schedule_type,$match_type,$double_faults)
+	public function updateTableTennisScore($user_id,$match_id,$set1,$set2,$set3,$set4,$set5,$is_singles,$team_players,$schedule_type,$match_type,$double_faults, $game_type, $rubber_id)
 	{
+
+	  if($game_type=='normal'){
 		if($is_singles=='yes')
 		{
 			TtPlayerMatchScore::where('match_id',$match_id)->where('user_id_a',$user_id)->update(['set1'=>$set1,'set2'=>$set2,'set3'=>$set3,'set4'=>$set4,'set5'=>$set5,'double_faults'=>$double_faults]);
@@ -948,10 +1291,22 @@ class ScoreCardController extends Controller {
 			}
 			TtPlayerMatchScore::where('match_id',$match_id)->where('team_id',$user_id)->update(['set1'=>$set1,'set2'=>$set2,'set3'=>$set3,'set4'=>$set4,'set5'=>$set5,'user_id_a'=>$user_id_a,'double_faults'=>$double_faults]);
 		}
+	  } 
+
+	  else{ 
+
+	  	$user_id_a='';
+			if($schedule_type=='team' && $match_type=='singles')
+			{
+				$user_id_a = (!empty($team_players[0]))?$team_players[0]:'';
+			}
+			TtPlayerRubberScore::where('rubber_id',$rubber_id)->where('team_id',$user_id)->update(['set1'=>$set1,'set2'=>$set2,'set3'=>$set3,'set4'=>$set4,'set5'=>$set5,'user_id_a'=>$user_id_a,'double_faults'=>$double_faults]);	
+
+	  }
 	}
 
 	//function to insert tennis statitistics
-	public function tableTennisStatistics($player_ids_array,$match_type,$is_win='')
+	public function tableTennisStatisticsOld($player_ids_array,$match_type,$is_win='')
 	{
 		//$player_ids_array = explode(',',$player_ids);
 		foreach($player_ids_array as $user_id)
@@ -3170,7 +3525,10 @@ class ScoreCardController extends Controller {
 					return  $this->tennisOrTableTennisScoreCard($match_data,$match='Tennis',$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}else if(strtolower($sport_name)==strtolower('Table Tennis'))//if match is related to table tennis
 				{
-					return $this->tennisOrTableTennisScoreCard($match_data,$match='Table Tennis',$sportsDetails,$tournamentDetails,$is_from_view=1);
+					//return $this->tennisOrTableTennisScoreCard($match_data,$match='Table Tennis',$sportsDetails,$tournamentDetails,$is_from_view=1);
+
+					$tt = new ScoreCard\TabletennisScoreCardController;
+					return $tt->tabletennisScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}else if(strtolower($sport_name)==strtolower('Cricket'))
 				{
 					return $this->cricketScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
@@ -3256,7 +3614,10 @@ class ScoreCardController extends Controller {
 					return  $this->tennisOrTableTennisScoreCard($match_data,$match='Tennis',$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}else if(strtolower($sport_name)==strtolower('Table Tennis'))//if match is related to table tennis
 				{
-					return $this->tennisOrTableTennisScoreCard($match_data,$match='Table Tennis',$sportsDetails,$tournamentDetails,$is_from_view=1);
+					//return $this->tennisOrTableTennisScoreCard($match_data,$match='Table Tennis',$sportsDetails,$tournamentDetails,$is_from_view=1);
+
+					$tt = new ScoreCard\TabletennisScoreCardController;
+					return $tt->tabletennisScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}else if(strtolower($sport_name)==strtolower('Cricket'))
 				{
 					return $this->cricketScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
@@ -3300,6 +3661,17 @@ class ScoreCardController extends Controller {
 				{
 					$squash = new ScoreCard\BasketballScoreCardController;
 					return $squash->basketballScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
+
+				else if(strtolower($sport_name)==strtolower('Ultimate Frisbee'))
+				{
+						$hockey= new ScoreCard\UltimateFrisbeeScorecardController;
+					return $hockey->ultimateFrisbeeScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
+				else if(strtolower($sport_name)==strtolower('Water Polo'))
+				{
+						$hockey= new ScoreCard\WaterPoloScorecardController;
+				  return $hockey->waterpoloScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
 			}
 		}
@@ -3502,8 +3874,9 @@ class ScoreCardController extends Controller {
 					}
 					if($sport_name=='Tennis')
 						$this->tennisStatistics($players,$match_type,$is_win);
-					else if($sport_name=='Table Tennis')
-						$this->tableTennisStatistics($players,$match_type,$is_win);
+					else if($sport_name=='Table Tennis'){
+						//$this->tableTennisStatistics($players,$match_type,$is_win);
+					}
 				}
 			}
 
@@ -3548,6 +3921,62 @@ class ScoreCardController extends Controller {
 			}
 
 		}
+
+		// else if($sport_name=='Water Polo')//basketball statistics 
+		// {
+		// 	$basketball_details = BasketballPlayerMatchwiseStats::where('match_id',$match_id)->get(['user_id']);
+		// 	if(!empty($basketball_details) && count($basketball_details)>0)
+		// 	{
+		// 		foreach($basketball_details as $user_id)
+		// 		{
+		// 			$this->waterpoloStatistics($user_id['user_id']);
+		// 		}
+
+		// 	}
+
+		// }
+
+		// else if($sport_name=='Kabaddi')//kabaddi statistics 
+		// {
+		// 	$basketball_details = BasketballPlayerMatchwiseStats::where('match_id',$match_id)->get(['user_id']);
+		// 	if(!empty($basketball_details) && count($basketball_details)>0)
+		// 	{
+		// 		foreach($basketball_details as $user_id)
+		// 		{
+		// 			$this->kabaddiStatistics($user_id['user_id']);
+		// 		}
+
+		// 	}
+
+		// }
+
+		// else if($sport_name=='Volleyball')//volleyball statistics 
+		// {
+		// 	$basketball_details = BasketballPlayerMatchwiseStats::where('match_id',$match_id)->get(['user_id']);
+		// 	if(!empty($basketball_details) && count($basketball_details)>0)
+		// 	{
+		// 		foreach($basketball_details as $user_id)
+		// 		{
+		// 			$this->volleyballStatistics($user_id['user_id']);
+		// 		}
+
+		// 	}
+
+		// }
+
+		// else if($sport_name=='Ultimate Frisbee')//volleyball statistics 
+		// {
+		// 	$basketball_details = BasketballPlayerMatchwiseStats::where('match_id',$match_id)->get(['user_id']);
+		// 	if(!empty($basketball_details) && count($basketball_details)>0)
+		// 	{
+		// 		foreach($basketball_details as $user_id)
+		// 		{
+		// 			$this->volleyballStatistics($user_id['user_id']);
+		// 		}
+
+		// 	}
+
+		// }
 
 
 		else if($sport_name=='Cricket')//cricket statistics

@@ -787,7 +787,13 @@ class ScheduleController extends Controller {
         // Team Stats
         $teamStats = MatchSchedule::where(function($query) use ($teamId) {
                             $query->where('a_id', $teamId)->orWhere('b_id', $teamId);
-                        })
+                        })                       
+                        ->where('match_status', 'completed')
+                        ->get(['id','winner_id', 'looser_id', 'is_tied','match_type']);
+
+        $rubberStats = MatchScheduleRubber::where(function($query) use ($teamId) {
+                            $query->where('a_id', $teamId)->orWhere('b_id', $teamId);
+                        })                       
                         ->where('match_status', 'completed')
                         ->get(['id','winner_id', 'looser_id', 'is_tied','match_type']);
         if(count($teamStats)) {    
@@ -821,12 +827,18 @@ class ScheduleController extends Controller {
 
         }
 
+        if(count($rubberStats)) {      
+   
+            $rubberStats = Helper::getTennisTableTennisStats($rubberStats,$teamId);
+        
+        }
+
         $statsview = 'schedules.'.preg_replace('/\s+/', '',strtolower(config('constants.SPORT_NAME.'.$sportsId))).'statsview';
 
         Helper::leftMenuVariables($teamId);
         return view('schedules.statsview', ['matchScheduleData' => $matchScheduleData, 'matchScheduleDataTotalCount' => $matchScheduleDataTotalCount,
             'sportsId' => $sportsId, 'teamId' => $teamId, 'fromDate' => $fromDate,
-            'toDate' => $toDate, 'statsArray' => !empty($statsArray)?$statsArray:[], 'limit' => $limit, 'offset' => $limit + $offset, 'statsview'=>$statsview]);
+            'toDate' => $toDate, 'statsArray' => !empty($statsArray)?$statsArray:[], 'limit' => $limit, 'offset' => $limit + $offset, 'statsview'=>$statsview, 'rubberStats'=>$rubberStats]);
     }
 
     function viewMoreStats() {

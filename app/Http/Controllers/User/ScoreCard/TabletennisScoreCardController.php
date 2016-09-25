@@ -16,10 +16,10 @@ use App\Model\City;
 use App\Model\Team;
 use App\Model\TeamPlayers;
 use App\Model\Sport;
-use App\Model\BadmintonPlayerMatchwiseStats;
-use App\Model\BadmintonPlayerMatchScore;
-use App\Model\BadmintonPlayerRubberScore;
-use App\Model\BadmintonStatistic;
+use App\Model\TabletennisPlayerMatchwiseStats;
+use App\Model\TtPlayerMatchScore as tabletennisPlayerMatchScore;
+use App\Model\TtPlayerRubberScore as tabletennisPlayerRubberScore;
+use App\Model\TtStatistic as tabletennisStatistic;
 use App\Model\MatchScheduleRubber;
 use App\Model\Photo;
 use App\User;
@@ -34,11 +34,11 @@ use App\Helpers\AllRequests;
 use Session;
 use Request;
 
-class BadmintonScoreCardController extends parentScoreCardController
+class TabletennisScoreCardController extends parentScoreCardController
 {
  
 
-  public function badmintonScoreCard($match_data,$match,$sportsDetails=[],$tournamentDetails=[],$is_from_view=0)
+  public function tabletennisScoreCard($match_data,$match,$sportsDetails=[],$tournamentDetails=[],$is_from_view=0)
     { 
 
         $game_type=$match_data[0]['game_type'];
@@ -143,12 +143,12 @@ class BadmintonScoreCardController extends parentScoreCardController
             $is_singles = 'yes';
                     
     if($game_type=='normal'){
-        $scores_a = BadmintonPlayerMatchScore::select()->where('match_id',$match_data[0]['id'])->first();
-        $scores_b = BadmintonPlayerMatchScore::select()->where('match_id',$match_data[0]['id'])->skip(1)->first();
+        $scores_a = tabletennisPlayerMatchScore::select()->where('match_id',$match_data[0]['id'])->first();
+        $scores_b = tabletennisPlayerMatchScore::select()->where('match_id',$match_data[0]['id'])->skip(1)->first();
     }
     else{
-       // $scores_a = BadmintonPlayerRubberScore::select()->where('match_id',$match_data[0]['id'])->first();
-       // $scores_b = BadmintonPlayerRubberScore::select()->where('match_id',$match_data[0]['id'])->skip(1)->first();
+       // $scores_a = tabletennisPlayerRubberScore::select()->where('match_id',$match_data[0]['id'])->first();
+       // $scores_b = tabletennisPlayerRubberScore::select()->where('match_id',$match_data[0]['id'])->skip(1)->first();
     }
 
        
@@ -172,12 +172,12 @@ class BadmintonScoreCardController extends parentScoreCardController
             $is_singles = 'no';            
 
     if($game_type=='normal'){
-        $scores_a = BadmintonPlayerMatchScore::select()->where('match_id',$match_data[0]['id'])->first();
-        $scores_b = BadmintonPlayerMatchScore::select()->where('match_id',$match_data[0]['id'])->skip(1)->first();
+        $scores_a = tabletennisPlayerMatchScore::select()->where('match_id',$match_data[0]['id'])->first();
+        $scores_b = tabletennisPlayerMatchScore::select()->where('match_id',$match_data[0]['id'])->skip(1)->first();
     }
     else{
-         $scores_a = BadmintonPlayerRubberScore::select()->where('match_id',$match_data[0]['id'])->first();
-        $scores_b = BadmintonPlayerRubberScore::select()->where('match_id',$match_data[0]['id'])->skip(1)->first();
+         $scores_a = tabletennisPlayerRubberScore::select()->where('match_id',$match_data[0]['id'])->first();
+        $scores_b = tabletennisPlayerRubberScore::select()->where('match_id',$match_data[0]['id'])->skip(1)->first();
     }
             
             if(count($scores_a)>0)
@@ -193,7 +193,7 @@ class BadmintonScoreCardController extends parentScoreCardController
         //bye match
         if($match_data[0]['b_id']=='' && $match_data[0]['match_status']=='completed')
         {
-            $sport_class = 'badminton_scorcard';
+            $sport_class = 'tabletennis_scorcard';
             return view('scorecards.byematchview',array('team_a_name'=>$user_a_name,'team_a_logo'=>$user_a_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'sport_class'=>$sport_class));
         }
 
@@ -233,17 +233,17 @@ class BadmintonScoreCardController extends parentScoreCardController
         if($is_from_view==1 || (!empty($score_status_array['added_by']) && $score_status_array['added_by']!=$loginUserId && $match_data[0]['scoring_status']!='rejected') || $match_data[0]['match_status']=='completed' || $match_data[0]['scoring_status']=='approval_pending' || $match_data[0]['scoring_status']=='approved' || !$isValidUser)
         {
             
-                return view('scorecards.badmintonscorecardview',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'user_a_name'=>$user_a_name,'user_b_name'=>$user_b_name,'user_a_logo'=>$user_a_logo,'user_b_logo'=>$user_b_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'is_singles'=>$is_singles,'score_a_array'=>$score_a_array,'score_b_array'=>$score_b_array,'b_players'=>$b_players,'a_players'=>$a_players,'team_a_player_images'=>$team_a_player_images,'team_b_player_images'=>$team_b_player_images,'decoded_match_details'=>$decoded_match_details,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,
+                return view('scorecards.tabletennisscorecardview',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'user_a_name'=>$user_a_name,'user_b_name'=>$user_b_name,'user_a_logo'=>$user_a_logo,'user_b_logo'=>$user_b_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'is_singles'=>$is_singles,'score_a_array'=>$score_a_array,'score_b_array'=>$score_b_array,'b_players'=>$b_players,'a_players'=>$a_players,'team_a_player_images'=>$team_a_player_images,'team_b_player_images'=>$team_b_player_images,'decoded_match_details'=>$decoded_match_details,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,
                     'rubbers'=>$rubbers,'active_rubber'=>$active_rubber, 'rubber_details'=>$rubber_details));
             
 
         }
-        else //to view and edit badminton/table badminton score card
+        else //to view and edit tabletennis/table tabletennis score card
         {
           
                 //for form submit pass id from controller
-                $form_id = 'badminton';
-                return view('scorecards.badmintonscorecard',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'user_a_name'=>$user_a_name,'user_b_name'=>$user_b_name,'user_a_logo'=>$user_a_logo,'user_b_logo'=>$user_b_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'is_singles'=>$is_singles,'score_a_array'=>$score_a_array,'score_b_array'=>$score_b_array,'b_players'=>$b_players,'a_players'=>$a_players,'team_a_player_images'=>$team_a_player_images,'team_b_player_images'=>$team_b_player_images,'decoded_match_details'=>$decoded_match_details,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'form_id'=>$form_id,
+                $form_id = 'tabletennis';
+                return view('scorecards.tabletennisscorecard',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'user_a_name'=>$user_a_name,'user_b_name'=>$user_b_name,'user_a_logo'=>$user_a_logo,'user_b_logo'=>$user_b_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'is_singles'=>$is_singles,'score_a_array'=>$score_a_array,'score_b_array'=>$score_b_array,'b_players'=>$b_players,'a_players'=>$a_players,'team_a_player_images'=>$team_a_player_images,'team_b_player_images'=>$team_b_player_images,'decoded_match_details'=>$decoded_match_details,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'form_id'=>$form_id,
                     'rubbers'=>$rubbers,'active_rubber'=>$active_rubber, 'rubber_details'=>$rubber_details));
            
         }
@@ -397,9 +397,9 @@ class BadmintonScoreCardController extends parentScoreCardController
         $match_details=json_encode($match_details);
 
         //enter choosen players in the database
-        $this->insertBadmintonPlayer($left_player_1, $left_player_2, $tournament_id, $left_team_id, $left_team_name, $match_id, $left_player_1_name, $left_player_2_name, $game_type, $rubber_number,$rubber_id);
+        $this->inserttabletennisPlayer($left_player_1, $left_player_2, $tournament_id, $left_team_id, $left_team_name, $match_id, $left_player_1_name, $left_player_2_name, $game_type, $rubber_number,$rubber_id);
 
-        $this->insertBadmintonPlayer($right_player_1, $right_player_2, $tournament_id, $right_team_id,$right_team_name, $match_id, $right_player_1_name, $right_player_2_name, $game_type, $rubber_number,$rubber_id);
+        $this->inserttabletennisPlayer($right_player_1, $right_player_2, $tournament_id, $right_team_id,$right_team_name, $match_id, $right_player_1_name, $right_player_2_name, $game_type, $rubber_number,$rubber_id);
 
         $match_model->hasSetupSquad=1;
         $match_model->match_details=$match_details;
@@ -411,11 +411,11 @@ class BadmintonScoreCardController extends parentScoreCardController
     }
 
         //insert selected players in the database
-    public function insertBadmintonPlayer($player_1_id, $player_2_id, $tournament_id, $team_id, $team_name, $match_id, $player_1_name, $player_2_name, $game_type='normal', $rubber_number, $rubber_id){
+    public function inserttabletennisPlayer($player_1_id, $player_2_id, $tournament_id, $team_id, $team_name, $match_id, $player_1_name, $player_2_name, $game_type='normal', $rubber_number, $rubber_id){
 
 
-        if($game_type!='rubber')   $match_score_model=new BadmintonPlayerMatchScore; 
-        else    $match_score_model=new BadmintonPlayerRubberScore; 
+        if($game_type!='rubber')   $match_score_model=new tabletennisPlayerMatchScore; 
+        else    $match_score_model=new tabletennisPlayerRubberScore; 
 
 
             $match_score_model->user_id_a       =$player_1_id;
@@ -462,8 +462,8 @@ class BadmintonScoreCardController extends parentScoreCardController
 
         if($game_type=='normal'){
             $match_model=MatchSchedule::find($match_id);
-     $left_player_model=BadmintonPlayerMatchScore::find($table_score_id);
-     $right_player_model=BadmintonPlayerMatchScore::where('match_id', $match_id)->where('id', '!=', $table_score_id)->first();
+     $left_player_model=tabletennisPlayerMatchScore::find($table_score_id);
+     $right_player_model=tabletennisPlayerMatchScore::where('match_id', $match_id)->where('id', '!=', $table_score_id)->first();
           }
         else {
 
@@ -475,8 +475,8 @@ class BadmintonScoreCardController extends parentScoreCardController
             $match_model=MatchScheduleRubber::find($match_id);
             $match_details=json_decode($match_model->match_details);
             $match_model=MatchScheduleRubber::find($match_id);
-            $left_player_model=BadmintonPlayerRubberScore::find($table_score_id);
-            $right_player_model=BadmintonPlayerRubberScore::where('rubber_id', $match_id)->where('id', '!=', $table_score_id)->first();
+            $left_player_model=tabletennisPlayerRubberScore::find($table_score_id);
+            $right_player_model=tabletennisPlayerRubberScore::where('rubber_id', $match_id)->where('id', '!=', $table_score_id)->first();
         } 
 
 
@@ -586,7 +586,7 @@ class BadmintonScoreCardController extends parentScoreCardController
        if($match_model->match_type!='singles')$player_ids=[$match_score_model->user_id_a, $match_score_model->user_id_b];
        else $player_ids=[$match_score_model->user_id_a];
 
-    $this->badmintonStatistics($player_ids,$match_model->match_type, '', $match_model->schedule_type);
+    $this->tabletennisStatistics($player_ids,$match_model->match_type, '', $match_model->schedule_type);
 
         return $match_details;
   }
@@ -627,7 +627,7 @@ class BadmintonScoreCardController extends parentScoreCardController
 
     }
 
-   public function badmintonStatistics($player_ids_array,$match_type,$is_win='',$schedule_type)
+   public function tabletennisStatistics($player_ids_array,$match_type,$is_win='',$schedule_type)
     {
         //$player_ids_array = explode(',',$player_ids);
         foreach($player_ids_array as $user_id)
@@ -635,14 +635,14 @@ class BadmintonScoreCardController extends parentScoreCardController
             if(!empty($user_id)){
             $double_faults_count = '';
 
-            $player_match_details = BadmintonPlayerMatchScore::where('user_id_a',$user_id)->orWhere('user_id_b', $user_id)->get();           
+            $player_match_details = tabletennisPlayerMatchScore::where('user_id_a',$user_id)->orWhere('user_id_b', $user_id)->get();           
 
             //check already user id exists or not
-            $badminton_statistics= BadmintonStatistic::whereUserId($user_id)->whereMatchType($match_type)->first();
+            $tabletennis_statistics= tabletennisStatistic::whereUserId($user_id)->whereMatchType($match_type)->first();
 
-            if(!is_null($badminton_statistics)){  //if user exist update statistics
-                $won=$badminton_statistics->won;
-                $lost=$badminton_statistics->lost;
+            if(!is_null($tabletennis_statistics)){  //if user exist update statistics
+                $won=$tabletennis_statistics->won;
+                $lost=$tabletennis_statistics->lost;
   
                     if($is_win=='yes'){
                          $won++;                        
@@ -655,11 +655,11 @@ class BadmintonScoreCardController extends parentScoreCardController
                 $matches=count($player_match_details);
                 $won_percentage = number_format((($won+1)/($matches+1))*100,2);
 
-                $badminton_statistics->matches=$matches;
-                $badminton_statistics->won=$won;
-                $badminton_statistics->lost=$lost;
-                $badminton_statistics->won_percentage=$won_percentage;
-                $badminton_statistics->save();
+                $tabletennis_statistics->matches=$matches;
+                $tabletennis_statistics->won=$won;
+                $tabletennis_statistics->lost=$lost;
+                $tabletennis_statistics->won_percentage=$won_percentage;
+                $tabletennis_statistics->save();
             }
            
             else
@@ -675,15 +675,15 @@ class BadmintonScoreCardController extends parentScoreCardController
                 {
                     $lost=1;
                 }
-                $badmintonStatisticsModel = new BadmintonStatistic();
-                $badmintonStatisticsModel->user_id = $user_id;
-                $badmintonStatisticsModel->match_type = $match_type;
-                $badmintonStatisticsModel->matches = 1;
-                $badmintonStatisticsModel->won_percentage = $won_percentage;
-                $badmintonStatisticsModel->won = $won;
-                $badmintonStatisticsModel->lost = $lost;
+                $tabletennisStatisticsModel = new tabletennisStatistic();
+                $tabletennisStatisticsModel->user_id = $user_id;
+                $tabletennisStatisticsModel->match_type = $match_type;
+                $tabletennisStatisticsModel->matches = 1;
+                $tabletennisStatisticsModel->won_percentage = $won_percentage;
+                $tabletennisStatisticsModel->won = $won;
+                $tabletennisStatisticsModel->lost = $lost;
         
-                $badmintonStatisticsModel->save();
+                $tabletennisStatisticsModel->save();
             }
         }
 
@@ -703,15 +703,15 @@ class BadmintonScoreCardController extends parentScoreCardController
 
                               
             if($game_type=='rubber'){
-                $score_a_model=BadmintonPlayerRubberScore::find($score_a_id);
-                $score_b_model=BadmintonPlayerRubberScore::find($score_b_id); 
+                $score_a_model=tabletennisPlayerRubberScore::find($score_a_id);
+                $score_b_model=tabletennisPlayerRubberScore::find($score_b_id); 
                 $match_id=$score_a_model->rubber_id;   
                 $match_model=MatchScheduleRubber::find($match_id);   
                 
             }
             else{
-                $score_a_model=BadmintonPlayerMatchScore::find($score_a_id);
-                $score_b_model=BadmintonPlayerMatchScore::find($score_b_id); 
+                $score_a_model=tabletennisPlayerMatchScore::find($score_a_id);
+                $score_b_model=tabletennisPlayerMatchScore::find($score_b_id); 
                 $match_id=$score_a_model->match_id;    
                 $match_model=Matchschedule::find($match_id);
             }       
@@ -752,7 +752,7 @@ class BadmintonScoreCardController extends parentScoreCardController
 
 
 //get json details;
-    public function getBadmintonDetails(ObjectRequest $request){
+    public function gettabletennisDetails(ObjectRequest $request){
         $match_id=$request->match_id;
         $match_model=matchschedule::find($match_id);
         return $match_model->match_details;
@@ -760,7 +760,7 @@ class BadmintonScoreCardController extends parentScoreCardController
 
 //store final record. When clicked on end match button //sets the winner and loser
 
-    public function badmintonStoreRecord(ObjectRequest $Objrequest){
+    public function tabletennisStoreRecord(ObjectRequest $Objrequest){
 
         $loginUserId = Auth::user()->id;
         $request = Request::all();
@@ -998,7 +998,7 @@ class BadmintonScoreCardController extends parentScoreCardController
         }
         else $is_win='';
 
-    $this->badmintonStatistics($player_ids,$match_model->match_type, $is_win, $match_model->schedule_type);
+    $this->tabletennisStatistics($player_ids,$match_model->match_type, $is_win, $match_model->schedule_type);
 
         $match_model=MatchSchedule::find($match_id);
         $player_ids=explode(',', $match_model->player_b_ids);
@@ -1010,7 +1010,7 @@ class BadmintonScoreCardController extends parentScoreCardController
             $is_win='no';
         }
         else $is_win='';
-    $this->badmintonStatistics($player_ids,$match_model->match_type, $is_win, $match_model->schedule_type);
+    $this->tabletennisStatistics($player_ids,$match_model->match_type, $is_win, $match_model->schedule_type);
 
     }
 
@@ -1045,13 +1045,13 @@ class BadmintonScoreCardController extends parentScoreCardController
 
         if($game_type=='normal'){
             $match_model=MatchSchedule::find($match_id);
-            $left_player_model=BadmintonPlayerMatchScore::where('match_id',$match_id)->first();
-            $right_player_model=BadmintonPlayerMatchScore::where('match_id',$match_id)->skip(1)->first();
+            $left_player_model=tabletennisPlayerMatchScore::where('match_id',$match_id)->first();
+            $right_player_model=tabletennisPlayerMatchScore::where('match_id',$match_id)->skip(1)->first();
           }
         else {
             $match_model=MatchScheduleRubber::find($match_id);
-            $left_player_model=BadmintonPlayerRubberScore::where('rubber_id',$match_id)->first();
-            $right_player_model=BadmintonPlayerRubberScore::where('rubber_id',$match_id)->skip(1)->first();
+            $left_player_model=tabletennisPlayerRubberScore::where('rubber_id',$match_id)->first();
+            $right_player_model=tabletennisPlayerRubberScore::where('rubber_id',$match_id)->skip(1)->first();
         }  
 
             $left_player_score=0;
@@ -1088,13 +1088,13 @@ class BadmintonScoreCardController extends parentScoreCardController
 
         if($game_type=='normal'){
             $match_model=MatchSchedule::find($match_id);
-            $left_player_model=BadmintonPlayerMatchScore::where('match_id',$match_id)->first();
-            $right_player_model=BadmintonPlayerMatchScore::where('match_id',$match_id)->skip(1)->first();
+            $left_player_model=tabletennisPlayerMatchScore::where('match_id',$match_id)->first();
+            $right_player_model=tabletennisPlayerMatchScore::where('match_id',$match_id)->skip(1)->first();
           }
         else {
             $match_model=MatchScheduleRubber::find($match_id);
-            $left_player_model=BadmintonPlayerRubberScore::where('rubber_id',$match_id)->first();
-            $right_player_model=BadmintonPlayerRubberScore::where('rubber_id',$match_id)->skip(1)->first();
+            $left_player_model=tabletennisPlayerRubberScore::where('rubber_id',$match_id)->first();
+            $right_player_model=tabletennisPlayerRubberScore::where('rubber_id',$match_id)->skip(1)->first();
         } 
 
     $match_score_model=$left_player_model;

@@ -40,6 +40,7 @@ use App\Model\SoccerPlayerMatchwiseStats;
 use App\Model\HockeyPlayerMatchwiseStats;
 use App\Model\BasketballPlayerMatchwiseStats;
 use App\Model\CricketPlayerMatchwiseStats;
+use App\Model\WaterpoloPlayerMatchwiseStats;
 
 
 class TournamentsController extends Controller
@@ -906,17 +907,19 @@ class TournamentsController extends Controller
 
 					//calculate ga, gf and tie.
 						$scheduled_teams['tie']=$match_count_details['tie'];
-			     			if(in_array($tournaments[0]['sports_id'], [4,11])){
+			     			if(in_array($tournaments[0]['sports_id'], [3,4,5,6,2,3,7,13,14,15,16,17,11])){
 			     				
 									$scheduled_teams['ga']=$match_count_details['ga'];
 									$scheduled_teams['gf']=$match_count_details['gf'];
 							 }
 
+
+
 				 	$team_details[$group_id][$key]=$scheduled_teams;
 
 				 		}
 
-				 	if(in_array($tournaments[0]['sports_id'], [4,11])){
+				 	if(in_array($tournaments[0]['sports_id'], [3,4,5,6,2,3,7,13,14,15,16,17,11])){
 				 		$team_details[$group_id]=$this->sortGroupTeams($team_details[$group_id]);
 				 	}
 
@@ -2471,6 +2474,23 @@ class TournamentsController extends Controller
 							->selectRaw('count(match_schedules.id) as matches')
 							->selectRaw('sum(points_2) as points_2')
 							->selectRaw('sum(points_3) as points_3')
+							->selectRaw('sum(total_points) as total_points')
+							->selectRaw('sum(fouls) as fouls')
+							->orderBy('total_points', 'desc')
+							->groupBy('user_id')
+							->get();
+
+
+				break;
+
+				case 16:	//water polo
+						$player=WaterpoloPlayerMatchwiseStats::join('match_schedules', 'match_schedules.id', '=', 'waterpolo_player_matchwise_stats.match_id')
+							->join('teams', 'teams.id','=', 'waterpolo_player_matchwise_stats.team_id')
+							->join('users', 'users.id', '=', 'waterpolo_player_matchwise_stats.user_id')
+							->where('match_schedules.tournament_id', $tournament_id)
+							->select('waterpolo_player_matchwise_stats.*','users.*')							
+							->selectRaw('sum(points_1) as points_1')
+							->selectRaw('count(match_schedules.id) as matches')							
 							->selectRaw('sum(total_points) as total_points')
 							->selectRaw('sum(fouls) as fouls')
 							->orderBy('total_points', 'desc')

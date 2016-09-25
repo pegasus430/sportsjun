@@ -1213,3 +1213,7 @@ div#playerOfTheMatchNote {
 	cursor: pointer;
 	background: none;
 }
+
+.winner_set td{
+	background-color: #d4f5af;
+}
