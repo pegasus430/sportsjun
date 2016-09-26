@@ -1,178 +1,254 @@
+ <div class="row">
+    <div class='col-sm-12'>
+     <span class='pull-right'>   
+        <a href='javascript:void(0)' onclick="enableManualEditing(this)" style="color:#123456;">edit <i class='fa fa-pencil'></i></a> 
+        <span> &nbsp; &nbsp; </span>
+        <a href='javascript:void(0)' onclick="updatePreferences(this)" style='color:#123456;'> settings <i class='fa fa-gear fa-danger'></i></a>
+        <span> &nbsp; &nbsp; </span>
+    </span>
+    </div>
+  </div>
  <ul class="nav nav-tabs nav-justified">
   <li class="active">
-      <a>
-     <span class="pull-left hidden-xs">{{date('jS F , Y',strtotime($rubber['match_start_date'])).' - '.date("g:i a", strtotime($rubber['match_start_time']))}}</span>
-        RUBBER {{$rubber->rubber_number}}   &nbsp; &nbsp; <span style='color:white'> [ {{$rubber->match_category}} , {{$rubber->match_type}} ]</span>
+       <a > 
+        <span class="pull-left hidden-xs">{{date('jS F , Y',strtotime($rubber['match_start_date'])).' - '.date("g:i a", strtotime($rubber['match_start_time']))}}</span>
+         RUBBER {{$rubber->rubber_number}}  &nbsp; &nbsp; [ {{$rubber->match_category}} , {{$rubber->match_type}} ]
         <span class='pull-right'>{{strtoupper($rubber->rubber_number==$active_rubber?'PLAYING':$rubber->match_status)}}
         </span>
         </a>
+  </li>
 </ul>
 
 <br>
 
-    <!--<a onclick="createnewset({{ $i=1 }});" style="float:right;">(Add More Sets)</a>-->
-    {!! Form::open(array('url' => 'match/insertTableTennisScoreCard', 'method' => 'POST','id'=>'tabletennis')) !!}
-    <div class="table-responsive">
-    	<table class="table table-striped">
-        <thead class="thead">
-    		<tr id="sets">
-    			  <th>{{ trans('message.scorecard.tennis_fields.team') }}</th>
-    				<th>{{ trans('message.scorecard.tennis_fields.set1') }}</th>
-    				<th>{{ trans('message.scorecard.tennis_fields.set2') }}</th>
-    				<th>{{ trans('message.scorecard.tennis_fields.set3') }}</th>
-    				<th>{{ trans('message.scorecard.tennis_fields.set4') }}</th>
-    				<th>{{ trans('message.scorecard.tennis_fields.set5') }}</th>
-    		</tr>
-      </thead>
-    		<tbody>
-    			<tr id="set_a">
-    				<td>
-              @if($user_a_logo['url']!='')
-              <!--  <img class="fa fa-user fa-fw fa-2x" height="42" width="42" src="{{ url('/uploads/'.$upload_folder.'/'.$user_a_logo['url']) }}" onerror="this.onerror=null;this.src='{{ asset('/images/default-profile-pic.jpg') }}';">-->
-    {!! Helper::Images($user_a_logo['url'],$upload_folder,array('class'=>'fa fa-user fa-fw fa-2x','height'=>42,'width'=>42) )!!}	
-                @else
-               <!-- <img  class="fa fa-user fa-fw fa-2x" height="42" width="42" src="{{ asset('/images/default-profile-pic.jpg') }}">-->
-		    {!! Helper::Images('default-profile-pic.jpg','images',array('class'=>'fa fa-user fa-fw fa-2x','height'=>42,'width'=>42) )!!}	
-              @endif
-              {{ $user_a_name }}
-    				</td>
-    				<td>{!! Form::text('set_1_a',(!(empty($rubber_a_array['set1'])))?$rubber_a_array['set1']:'',array('class'=>'gui-input validation allownumericwithdecimal tennis_input_new')) !!}</td>
-    				<td>{!! Form::text('set_2_a',(!(empty($rubber_a_array['set2'])))?$rubber_a_array['set2']:'',array('class'=>'gui-input validation allownumericwithdecimal tennis_input_new')) !!}</td>
-    				<td>{!! Form::text('set_3_a',(!(empty($rubber_a_array['set3'])))?$rubber_a_array['set3']:'',array('class'=>'gui-input validation allownumericwithdecimal tennis_input_new')) !!}</td>
-    				<td>{!! Form::text('set_4_a',(!(empty($rubber_a_array['set4'])))?$rubber_a_array['set4']:'',array('class'=>'gui-input validation allownumericwithdecimal tennis_input_new')) !!}</td>
-    				<td>{!! Form::text('set_5_a',(!(empty($rubber_a_array['set5'])))?$rubber_a_array['set5']:'',array('class'=>'gui-input validation allownumericwithdecimal tennis_input_new')) !!}</td>
-					</tr>
-    			<tr id="set_b">
-    				<td>
-              @if($user_b_logo['url']!='')
-               <!-- <img class="fa fa-user fa-fw fa-2x" height="42" width="42" src="{{ url('/uploads/'.$upload_folder.'/'.$user_b_logo['url']) }}" onerror="this.onerror=null;this.src='{{ asset('/images/default-profile-pic.jpg') }}';">-->
-		     {!! Helper::Images($user_b_logo['url'],$upload_folder,array('class'=>'fa fa-user fa-fw fa-2x','height'=>42,'width'=>42) )!!}	
-                @else
-               <!-- <img  class="fa fa-user fa-fw fa-2x" height="42" width="42" src="{{ asset('/images/default-profile-pic.jpg') }}">-->
-		    {!! Helper::Images('default-profile-pic.jpg','images',array('class'=>'fa fa-user fa-fw fa-2x','height'=>42,'width'=>42) )!!}	
-              @endif
-              {{ $user_b_name }}
-    				</td>
-    					<td>{!! Form::text('set_1_b',(!(empty($rubber_b_array['set1'])))?$rubber_b_array['set1']:'',array('class'=>'gui-input validation allownumericwithdecimal tennis_input_new')) !!}</td>
-    					<td>{!! Form::text('set_2_b',(!(empty($rubber_b_array['set2'])))?$rubber_b_array['set2']:'',array('class'=>'gui-input validation allownumericwithdecimal tennis_input_new')) !!}</td>
-    					<td>{!! Form::text('set_3_b',(!(empty($rubber_b_array['set3'])))?$rubber_b_array['set3']:'',array('class'=>'gui-input validation allownumericwithdecimal tennis_input_new')) !!}</td>
-    					<td>{!! Form::text('set_4_b',(!(empty($rubber_b_array['set4'])))?$rubber_b_array['set4']:'',array('class'=>'gui-input validation allownumericwithdecimal tennis_input_new')) !!}</td>
-    					<td>{!! Form::text('set_5_b',(!(empty($rubber_b_array['set5'])))?$rubber_b_array['set5']:'',array('class'=>'gui-input validation allownumericwithdecimal tennis_input_new')) !!}</td>
-            </tr>
-    		</tbody>
-    	</table>
+
+   @if(!$rubber['hasSetupSquad'])
+    <div class='row'>
+      <div class='col-sm-12'>
+          <div class=''>
+          <form id='form_preferences' >
+               <h3 class=""><center>Player Preferences</center></h3>
+
+               <div class='row'>
+                  <div class='col-sm-6'>
+                      <!-- Select players for the left side -->
+                    <h3 class="team_bat team_title_head">Left Side</h3>
+                      @if($match_data[0]['schedule_type']=='team')
+                        <label>Select Team</label>
+                        <select class='form-control select-picker' name='team_left' onchange='getTeamPlayers(this)' side='left' id='team_left'>
+                            <option value="{{$match_data[0]['a_id']}}" selected="" >{{$user_a_name}}</option>
+                            <option value="{{$match_data[0]['b_id']}}"  >{{$user_b_name}}</option>
+                        </select>
+
+                        <br>
+                        <label>Select Player</label>
+                        <select name='select_player_1_left' class="form-control select-picker" id='select_player_1_left'>                    
+                         @foreach($a_players as $player)
+                              <option value="{{$player['id']}}">{{$player['name']}}</option>
+                        @endforeach
+                        </select>
+
+                        <!-- if doubles select another player -->
+
+                        @if($rubber['match_type']=='doubles')
+                          <br>
+                        <label>Select Player 2</label>
+                        <select name='select_player_2_left' class="form-control select-picker" id='select_player_2_left'>                     
+                            @foreach($a_players as $player)
+                                  <option value="{{$player['id']}}">{{$player['name']}}</option>
+                            @endforeach
+                        </select>
+                        @endif
+
+
+                      @elseif($match_data[0]['schedule_type']=='player')
+                            <select name='select_player_1_left' class="form-control select-picker">
+                            <option value="{{$match_data[0]['a_id']}}" selected="">{{$user_a_name}}</option>
+                            <option value="{{$match_data[0]['b_id']}}" >{{$user_b_name}}</option>
+                            </select>
+                      @endif
+
+                  </div>
+<!-- Choose right Sight -->
+                  <div class='col-sm-6'>
+                    <h3 class="team_fall team_title_head">Right Side</h3>
+                  @if($match_data[0]['schedule_type']=='team')
+                        <label>Select Team</label>
+                        <select class='form-control select-picker' onchange='getTeamPlayers(this)' side='right' id='team_right' name='team_right' >
+                            <option value="{{$match_data[0]['a_id']}}" >{{$user_a_name}}</option>
+                            <option value="{{$match_data[0]['b_id']}}" selected="" >{{$user_b_name}}</option>
+                        </select>
+
+                        <br>
+
+                        <label>Select Player</label>
+                        <select name='select_player_1_right' class="form-control select-picker" id='select_player_1_right'>                     
+                            @foreach($b_players as $player)
+                                  <option value="{{$player['id']}}">{{$player['name']}}</option>
+                            @endforeach
+                        </select>
+                        <!-- if doubles select another player -->
+                   
+                        @if($rubber['match_type']=='doubles')
+                              <br>
+                            <label>Select Player 2</label>
+                            <select name='select_player_2_right' class="form-control select-picker" id='select_player_2_right'>      
+
+                                @foreach($b_players as $player)
+
+                                      <option value="{{$player['id']}}">{{$player['name']}}</option>
+
+                                @endforeach
+                            </select>
+                        @endif
+
+
+                     @elseif($match_data[0]['schedule_type']=='player')
+                            <select name='select_player_1_right' class="form-control select-picker">
+                            <option value="{{$match_data[0]['a_id']}}">{{$user_a_name}}</option>
+                            <option value="{{$match_data[0]['b_id']}}" selected="">{{$user_b_name}}</option>
+                            </select>
+                      @endif
+                  </div>
+               </div>
+
+              <br>
+              <div class='row'>
+            
+                  <div class='col-sm-4 col-xs-4'><label>Serving Side</label></div>
+                  <div class='col-sm-4 col-xs-4'><input type='radio' name='saving_side' value='left' checked id='choose_left'> Left</div>
+                  <div class='col-sm-4 col-xs-4'><input type='radio' name='saving_side' value='right' id='choose_right'> Right</div>
+               
+              </div>
+
+<!-- Game Preferences -->
+              <div class='row' style="display:none">
+                <div class="col-sm-12">
+                  <h3><center>Game Preferences</center></h3>
+                </div>
+              </div>
+
+              <div class='row' style="display:none">
+                   <div class='col-sm-6'>
+                        <label>Number of Sets</label>
+                        <select class=' form-control select-picker field select' name='number_of_sets' {{$disabled}}>
+                          <option value='1'>1</option>
+                          <option value='2'>2</option>
+                          <option value='3' selected="">3</option>
+                          <option value='4'>4</option>
+                          <option value='5'>5</option>
+                        </select>
+
+                        <br>
+                        <input type='checkbox' name='enable_two_points' checked="" id='enable_two_points' {{$disabled}} > <label for='enable_two_points'>Enable Two points clear pattern</label>
+                    </div>
+
+                    <div class='col-sm-6'>
+                      <div class="section">
+                        <label class="form_label">Score to Win <span  class='required'>*</span> </label>
+                        <input placeholder="eg. 21" type='number' name='score_to_win' min="0" class="form-control" required="" {{$disabled}} value="{{$match_settings->score_to_win}}">
+
+                        <br>
+                        <label class="form_label">Set End Point <span  class='required'>*</span></label>
+                        <input placeholder="eg. 29" type='number' name='set_end_point' min='0' class="form-control gui-input" required="" {{$disabled}} value="{{$match_settings->end_point}}">
+
+
+                    </div>
+                </div>
+              </div>
+<!-- End of Game Preference -->
+
+              <!-- Save -->
+
+                <div class="row">
+                <div class='col-sm-12'><br>
+                <input type='hidden' value="{{$match_data[0]['id']}}" name='match_id'>
+                 <input type='hidden' value="{{$match_data[0]['tournament_id']}}" name='tournament_id'>
+                <input type='hidden' value="{{$team_a_name}}" name='team_a_name'>
+                <input type='hidden' value="{{$team_b_name}}" name='team_b_name'>
+                <center><input type='button' name='submit_preferences' value='SAVE' class="btn btn-primary" onclick="return savePreferences(this)"></center><br>
+                </div>    
+                </div>        
+              </form>
+
+
+          </div>
+      </div>
     </div>
-	
-	
-	<!-- if match schedule type is team -->
-	@if($rubber['schedule_type']!='player')
-	
-	<div class="row">
-    	<div class="col-md-6">			
-        	<h4 class="team_title_head">{{ $user_a_name }} Players</h4>
-			<table class="table table-striped table-bordered team_players_check">
-			<tbody>
-				<?php $i=1;?>
-			@foreach($a_players as $a_player)
-				<?php if(!empty($decoded_match_details[$rubber['a_id']])) {
-					
-					$checed='';
-					$radio='';
-				
-				 } else if($i==1 || $i==2){
-					 $checed="checked='checked'";
-				 } else {
-					 $checed='';
-				 }?>
-				 <?php if($i==1){$radio="checked='checked'";}else{$radio='';}?>
-			
-			<tr>
-			@if($rubber['match_type']=='singles')
-			<td><input type="radio" name="a_player_ids[]" <?php echo $radio;?> <?php if(!empty($decoded_match_details[$rubber['a_id']]) && in_array($a_player['id'],$decoded_match_details[$rubber['a_id']])){echo "checked='checked'";}?> value="{{$a_player['id']}}"/></td>
-			@else
-			@if($rubber['match_type']=='doubles' || $rubber['match_type']=='mixed')
-			<td><input type="checkbox" name="a_player_ids[]" <?php echo $checed;?> <?php if(!empty($decoded_match_details[$rubber['a_id']]) && in_array($a_player['id'],$decoded_match_details[$rubber['a_id']])){echo "checked='checked'";}?> class="team_a_checkbox" onclick="test();" value="{{$a_player['id']}}"/></td>
-			@endif
-			@endif
-			<td>
-			@if($team_a_player_images[$a_player['id']]['url']!='')
-  						
-			{!! Helper::Images($team_a_player_images[$a_player['id']]['url'],'user_profile',array('class'=>'fa fa-user fa-fw fa-2x','height'=>42,'width'=>42) )!!}	
-  			@else
-  							
-			{!! Helper::Images('default-profile-pic.jpg','images',array('class'=>'fa fa-user fa-fw fa-2x','height'=>42,'width'=>42) )!!}	
-  			@endif
-			{{$a_player['name']}}
-			</td>
-			</tr>
-			<?php $i++;?>
-			@endforeach
-				
-			</tbody>
-		</table>
-        </div>
-        <div class="col-md-6">
-        	<h4 class="team_title_head">{{ $user_b_name }} Players</h4>
-			<table class="table table-striped table-bordered team_players_check">
-			<tbody>
-			<?php $j=1;?>
-			@foreach($b_players as $b_player)
-				<?php if(!empty($decoded_match_details[$rubber['b_id']])) {
-					
-					$checed='';
-					$radio='';
-				 } else if($j==1 || $j==2){
-					 $checed="checked='checked'";
-				 } else {
-					 $checed='';
-				 }?>
-				  <?php if($j==1){$radio="checked='checked'";}else{$radio='';}?>
-				<tr>
-					@if($rubber['match_type']=='singles')
-					<td><input type="radio" name="b_player_ids[]"  <?php echo $radio;?> <?php if(!empty($decoded_match_details[$rubber['b_id']]) && in_array($b_player['id'],$decoded_match_details[$rubber['b_id']])){echo "checked='checked'";}?> value="{{$b_player['id']}}"/></td>
-					@else
-					@if($rubber['match_type']=='doubles' || $rubber['match_type']=='mixed')
-					<td><input type="checkbox" name="b_player_ids[]" <?php echo $checed;?> <?php if(!empty($decoded_match_details[$rubber['b_id']]) && in_array($b_player['id'],$decoded_match_details[$rubber['b_id']])){echo "checked='checked'";}?> id="b_player_{{$b_player['id']}}" class="team_b_checkbox" value="{{$b_player['id']}}"/></td>
-					@endif
-					@endif
-				<td>
-				@if($team_b_player_images[$b_player['id']]['url']!='')
-							
-				{!! Helper::Images($team_b_player_images[$b_player['id']]['url'],'user_profile',array('class'=>'fa fa-user fa-fw fa-2x','height'=>42,'width'=>42) )!!}	
-				@else
-								
-				{!! Helper::Images('default-profile-pic.jpg','images',array('class'=>'fa fa-user fa-fw fa-2x','height'=>42,'width'=>42) )!!}	
-				@endif
-				{{$b_player['name']}}
-				</td>
-				</tr>
-				<?php $j++;?>
-			@endforeach
-			</tbody>
-		</table>
-       	</div>
-	</div>
-	
-	@endif
-	<!-- end -->
-		<input type="hidden" id="tabletennis_form_data" value="">
-    	{!! Form::hidden('user_id_a',$rubber['a_id'],array('class'=>'gui-input ')) !!}
-    	{!! Form::hidden('user_id_b',$rubber['b_id'],array('class'=>'gui-input ')) !!}
-    	{!! Form::hidden('player_ids_a',$rubber['player_a_ids'],array('class'=>'gui-input ')) !!}
-    	{!! Form::hidden('player_ids_b',$rubber['player_b_ids'],array('class'=>'gui-input ')) !!}
-    	{!! Form::hidden('match_type',$rubber['match_type'],array('class'=>'gui-input ')) !!}
-    	{!! Form::hidden('tournament_id',$rubber['tournament_id'],array('class'=>'gui-input ')) !!}
-    	{!! Form::hidden('match_id',$rubber['match_id'],array('class'=>'gui-input','id'=>'match_id')) !!}
-    	{!! Form::hidden('player_name_b', $user_b_name,array('class'=>'gui-input ')) !!}
-    	{!! Form::hidden('player_name_a',$user_a_name,array('class'=>'gui-input ')) !!}
-    	{!! Form::hidden('is_singles',$is_singles,array('class'=>'gui-input ')) !!}
-		{!! Form::hidden('schedule_type',$rubber['schedule_type'],array('class'=>'gui-input')) !!}
-    	  <input type="hidden" id="winner_team_id" name="winner_team_id" value="">
-		  <input type="hidden" id="is_winner_inserted" name="is_winner_inserted" value="{{$rubber['winner_id']}}">
-          
-          <div class="sportsjun-forms text-center scorecards-buttons">
-		@if($isValidUser)
-          	<button style="text-align:center;" type="button" onclick="checkPlayers();" class="button btn-primary">Save</button>
-				
-		@endif
-<br><hr>
+
+
+@else
+
+{!! Form::open(array('url' => '', 'method' => 'POST','id'=>'tableTennis', 'onsubmit'=>'return manualScoring(this)')) !!}
+
+  <div class="row ">
+    <div class="col-sm-12">
+   <div class='table-responsive'>
+      <table class='table table-striped table-bordered'>
+        <thead>
+          <tr class='team_bat team_title_head'>
+     {{--   @if(!is_null($rubber_a_array['team_id']))  <th><b>TEAMS</b></th> @endif --}}
+             <th>PLAYERS</th>
+             
+            @for($set_index=1; $set_index<=$set; $set_index++)
+              <th>SET {{$set_index}}</th>
+            @endfor
+             
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+           
+            <td>
+            @if(!is_null($rubber_a_array['team_id']))<b>{{$rubber_a_array['team_name']}}</b><br>@endif {{$rubber_a_array['player_name_a']}} / {{$rubber_a_array['player_name_b']}}</td>
+            
+          @for($set_index=1; $set_index<=$set; $set_index++)
+            <td>
+                <span class='hidden-xs pull-left remove_button_left left_button_remove_set_{{$set_index}}'></span>
+                 <input  readonly class="gui-input validation allownumericwithdecimal runs_new a_set{{$set_index}}" value="{{$rubber_a_array['set'.$set_index]}}" name='a_set{{$set_index}}'>
+                <span class='hidden-xs pull-right add_button_left left_button_add_set_{{$set_index}}'></span>
+            </td>
+          @endfor
+        </tr>
+
+          <tr>
+    
+            <td>
+             @if(!is_null($rubber_b_array['team_id']))<b>{{$rubber_b_array['team_name']}}</b><br>@endif 
+             {{$rubber_b_array['player_name_a']}} / {{$rubber_b_array['player_name_b']}}</td>
+
+            @for($set_index=1; $set_index<=$set; $set_index++)
+              <td>
+                <span class='hidden-xs pull-left remove_button_right right_button_remove_set_{{$set_index}}'></span>
+                  <input  readonly class="gui-input validation allownumericwithdecimal runs_new b_set{{$set_index}}" value="{{$rubber_b_array['set'.$set_index]}}" name='b_set{{$set_index}}'>
+                <span class='hidden-xs pull-right add_button_right right_button_add_set_{{$set_index}}'></span>
+              </td>
+            @endfor
+        </tr>
+
+        </tbody>
+
+
+
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<input type='hidden' value='{{$set}}' name="number_of_sets">
+<input type='hidden' value="{{$match_data[0]['id']}}" name='match_id'>
+<input type='hidden' value="{{$rubber_a_array['id']}}" name='score_a_id' class='arm_a_val'>
+<input type='hidden' value="{{$rubber_b_array['id']}}" name='score_b_id' class='arm_b_val'>
+
+<div class="row" id='saveButton'>
+    <div class='col-sm-12'>
+       <center> <input type='submit' class="btn btn-primary" value="Save"></center>
+    </div>
+</div>
+
+</form>
+
+
+@endif
+

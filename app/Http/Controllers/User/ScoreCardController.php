@@ -50,7 +50,7 @@ use App\Helpers\Helper;
 use DateTime;
 use App\Helpers\AllRequests;
 use Session;
-use ScoreCard;
+use ScoreCard as ScoreCardHelper;
 class ScoreCardController extends Controller {
 	/**
 	 * Display a listing of the resource.
@@ -172,7 +172,9 @@ class ScoreCardController extends Controller {
 					return  $this->tennisOrTableTennisScoreCard($match_data,$match='Tennis',$sportsDetails,$tournamentDetails);
 				}else if(strtolower($sport_name)==strtolower('Table Tennis'))//if match is related to table tennis
 				{
-					return $this->tennisOrTableTennisScoreCard($match_data,$match='Table Tennis',$sportsDetails,$tournamentDetails);
+					//return $this->tennisOrTableTennisScoreCard($match_data,$match='Table Tennis',$sportsDetails,$tournamentDetails);
+					$tt= new ScoreCard\TabletennisScoreCardController;
+					return $tt->tabletennisScoreCard($match_data,$match='Table Tennis',$sportsDetails,$tournamentDetails);
 				}else if(strtolower($sport_name)==strtolower('Cricket'))
 				{
 					return $this->cricketScoreCard($match_data,$sportsDetails,$tournamentDetails);
@@ -722,7 +724,7 @@ class ScoreCardController extends Controller {
 //                                Helper::printQueries();
                
                 if($rubber_completed && $match_status=='completed'){
-                    $winners_from_rubber = ScoreCard::getWinnerInRubber($match_id,$match_model->sports_id);             
+                    $winners_from_rubber = ScoreCardHelper::getWinnerInRubber($match_id,$match_model->sports_id);             
                     $winner_team_id = $winners_from_rubber['winner'];
                     $looser_team_id = $winners_from_rubber['looser'];
 
@@ -776,7 +778,7 @@ class ScoreCardController extends Controller {
                                             'score_added_by'=>$json_score_status]);                    
 
                     if($rubber_completed && $match_status=='completed'){
-                     $winners_from_rubber = ScoreCard::getWinnerInRubber($match_id, $match_model->sports_id);
+                     $winners_from_rubber = ScoreCardHelper::getWinnerInRubber($match_id, $match_model->sports_id);
                         $winner_team_id = $winners_from_rubber['winner'];
                         $looser_team_id = $winners_from_rubber['looser'];
                                         MatchSchedule::where('id',$match_id)->update([
@@ -814,7 +816,7 @@ class ScoreCardController extends Controller {
         //if($winner_team_id>0)
         //return redirect()->route('match/scorecard/view', [$match_id])->with('status', trans('message.scorecard.scorecardmsg'));
 
-        Scorecard::getWinnerInRubber($match_id, $sports_id=5);
+        ScoreCardHelper::getWinnerInRubber($match_id, $sports_id=5);
 	
 		return redirect()->back()->with('status', trans('message.scorecard.scorecardmsg'));
 	}
@@ -1142,7 +1144,7 @@ class ScoreCardController extends Controller {
 //                                Helper::printQueries();
                
                 if($rubber_completed && $match_status=='completed'){
-                    $winners_from_rubber = ScoreCard::getWinnerInRubber($match_id,$match_model->sports_id);             
+                    $winners_from_rubber = ScoreCardHelper::getWinnerInRubber($match_id,$match_model->sports_id);             
                     $winner_team_id = $winners_from_rubber['winner'];
                     $looser_team_id = $winners_from_rubber['looser'];
 
@@ -1195,7 +1197,7 @@ class ScoreCardController extends Controller {
                                             'score_added_by'=>$json_score_status]);                    
 
                     if($rubber_completed && $match_status=='completed'){
-                     $winners_from_rubber = ScoreCard::getWinnerInRubber($match_id, $match_model->sports_id);
+                     $winners_from_rubber = ScoreCardHelper::getWinnerInRubber($match_id, $match_model->sports_id);
                         $winner_team_id = $winners_from_rubber['winner'];
                         $looser_team_id = $winners_from_rubber['looser'];
                                         MatchSchedule::where('id',$match_id)->update([
@@ -1233,7 +1235,7 @@ class ScoreCardController extends Controller {
         //if($winner_team_id>0)
         //return redirect()->route('match/scorecard/view', [$match_id])->with('status', trans('message.scorecard.scorecardmsg'));
 
-        Scorecard::getWinnerInRubber($match_id, $sports_id=5);
+        ScoreCardHelper::getWinnerInRubber($match_id, $sports_id=5);
 		return redirect()->back()->with('status', trans('message.scorecard.scorecardmsg'));
 	}
 	//function to save table tennis score
@@ -1304,7 +1306,7 @@ class ScoreCardController extends Controller {
 	}
 
 	//function to insert tennis statitistics
-	public function tableTennisStatistics($player_ids_array,$match_type,$is_win='')
+	public function tableTennisStatisticsOld($player_ids_array,$match_type,$is_win='')
 	{
 		//$player_ids_array = explode(',',$player_ids);
 		foreach($player_ids_array as $user_id)
@@ -3523,7 +3525,10 @@ class ScoreCardController extends Controller {
 					return  $this->tennisOrTableTennisScoreCard($match_data,$match='Tennis',$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}else if(strtolower($sport_name)==strtolower('Table Tennis'))//if match is related to table tennis
 				{
-					return $this->tennisOrTableTennisScoreCard($match_data,$match='Table Tennis',$sportsDetails,$tournamentDetails,$is_from_view=1);
+					//return $this->tennisOrTableTennisScoreCard($match_data,$match='Table Tennis',$sportsDetails,$tournamentDetails,$is_from_view=1);
+
+					$tt = new ScoreCard\TabletennisScoreCardController;
+					return $tt->tabletennisScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}else if(strtolower($sport_name)==strtolower('Cricket'))
 				{
 					return $this->cricketScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
@@ -3609,7 +3614,10 @@ class ScoreCardController extends Controller {
 					return  $this->tennisOrTableTennisScoreCard($match_data,$match='Tennis',$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}else if(strtolower($sport_name)==strtolower('Table Tennis'))//if match is related to table tennis
 				{
-					return $this->tennisOrTableTennisScoreCard($match_data,$match='Table Tennis',$sportsDetails,$tournamentDetails,$is_from_view=1);
+					//return $this->tennisOrTableTennisScoreCard($match_data,$match='Table Tennis',$sportsDetails,$tournamentDetails,$is_from_view=1);
+
+					$tt = new ScoreCard\TabletennisScoreCardController;
+					return $tt->tabletennisScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}else if(strtolower($sport_name)==strtolower('Cricket'))
 				{
 					return $this->cricketScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
@@ -3855,8 +3863,9 @@ class ScoreCardController extends Controller {
 					}
 					if($sport_name=='Tennis')
 						$this->tennisStatistics($players,$match_type,$is_win);
-					else if($sport_name=='Table Tennis')
-						$this->tableTennisStatistics($players,$match_type,$is_win);
+					else if($sport_name=='Table Tennis'){
+						//$this->tableTennisStatistics($players,$match_type,$is_win);
+					}
 				}
 			}
 

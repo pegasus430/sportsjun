@@ -2156,22 +2156,35 @@ class Helper {
 
                 break;
 
-             case ($sports_id==5||$sports_id==13 || $sports_id==17||$sports_id==14 || $sports_id==7):
+             case in_array($sports_id, [3,5,13,17,14,7]):
             //die(json_encode($team_id));
             foreach ($match_models as $key => $match) {
-                if($match->a_id==$team_id){         //sets the home and againts team
+                
+                if($match->game_type=='normal'){
+                    if($match->a_id==$team_id){         //sets the home and againts team
                     $gf_team=$match->a_id; 
                     $ga_team=$match->b_id;                 
-                }
-                elseif ($match->b_id==$team_id) {
-                    $gf_team=$match->b_id; 
-                    $ga_team=$match->a_id;
-                }
+                    }
+                    elseif ($match->b_id==$team_id) {
+                        $gf_team=$match->b_id; 
+                        $ga_team=$match->a_id;
+                    }
                 $match_details=json_decode($match->match_details);
                         if(!empty($match->match_details)){
                             $details['gf']+=$match_details->scores->{$gf_team.'_score'};
                             $details['ga']+=$match_details->scores->{$ga_team.'_score'};
                         }
+                }
+                else{
+                    if($match->a_id==$team_id){         //sets the home and againts team
+                        $details['gf']+=$match->a_score;
+                        $details['ga']+=$match->b_score;                 
+                    }
+                    elseif ($match->b_id==$team_id) {
+                        $details['gf']+=$match->b_score;
+                        $details['ga']+=$match->a_score;   
+                    }
+                }
 
             }
 

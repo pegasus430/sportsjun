@@ -124,7 +124,7 @@
                                     <th>PS</th>
                                     <th>PA</th>
                                 @endif
-                                 @if(in_array($sports_id, [5,13, 17, 14, 7]))                               		
+                                 @if(in_array($sports_id, [3,5,13, 17, 14, 7]))                               		
                                     <th>SW</th>
                                     <th>SL</th>
                                 @endif
@@ -155,7 +155,7 @@
                                     <td>{{ !empty($team['lost'])?$team['lost']:0 }}</td>
 
                            		    <td>{{ !empty($team['tie'])?$team['tie']:0 }}</td>
-                                @if(in_array($sports_id, [4,11,6,15,16, 5, 13, 17, 14, 7]))                               		
+                                @if(in_array($sports_id, [3,4,11,6,15,16, 5, 13, 17, 14, 7]))                               		
                                     <td>{{ !empty($team['gf'])?$team['gf']:0 }}</td>
                                    <td>{{ !empty($team['ga'])?$team['ga']:0 }}</td>                                
                                 @endif

@@ -29,7 +29,7 @@
           </tr>
         </thead>
         <tbody>
-             <tr>
+             <tr @if(!empty($rubber_a_array['team_id']) && ($rubber_a_array['team_id']==$rubber->winner_id)) class='winner_set' @endif>
            
 
             <td>  
@@ -46,7 +46,7 @@
           
           </tr>
 
-          <tr>
+          <tr @if(!empty($rubber_b_array['team_id']) && ($rubber_b_array['team_id']==$rubber->winner_id)) class='winner_set' @endif>
          
             <td>
             @if(!is_null($rubber_b_array['team_id']))<b>{{$rubber_b_array['team_name']}}</b><br>@endif 

@@ -1,6 +1,50 @@
 @extends(Auth::user() ? 'layouts.app' : 'home.layout')
 @section('content')
 
+<?php 
+    $team_a_name = $user_a_name;
+    $team_b_name = $user_b_name;
+
+    $team_a_id=$match_data[0]['a_id'];
+    $team_b_id=$match_data[0]['b_id'];
+
+    $player_a_ids=$match_data[0]['player_a_ids'];
+    $player_b_ids=$match_data[0]['player_b_ids'];
+
+    $match_details=json_decode($match_data[0]['match_details']);
+    $match_settings   =   Helper::getMatchSettings($match_data[0]['tournament_id'],$match_data[0]['sports_id']);
+
+    isset($match_details->preferences)?$preferences=$match_details->preferences:[];
+    
+    // if(isset($preferences->number_of_sets))$set=$preferences->number_of_sets ;
+    // else $set=3;
+
+     $set=$match_settings->number_of_sets;
+
+    ${'team_'.$match_data[0]['a_id'].'_score'}='0 sets';
+    ${'team_'.$match_data[0]['b_id'].'_score'}='0 sets'; 
+
+    $team_a_info='';
+    $team_b_info='';
+
+    if(isset($preferences)){
+    $current_set=$match_details->current_set;
+
+  ${'team_'.$preferences->left_team_id.'_score'}=$match_details->scores->{$preferences->left_team_id.'_score'} .' sets';
+  ${'team_'.$preferences->right_team_id.'_score'}=$match_details->scores->{$preferences->right_team_id.'_score'} .' sets';
+} else {
+  $current_set=0;
+}
+
+if($match_data[0]['game_type']=='rubber'){
+  ${'team_'.$team_a_id.'_score'}=$match_data[0]['a_score'];
+  ${'team_'.$team_b_id.'_score'}=$match_data[0]['b_score'];
+  }
+  
+?>
+
+
+
 <div class="col_standard table_tennis_scorcard">
     <div id="team_vs" class="tt_bg">
       <div class="container">
@@ -27,6 +71,7 @@
 							<div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['a_id'] }}">{{ $user_a_name }}</a></div>
 						@endif
 							  <div class="team_city">{!! $team_a_city !!}</div>
+                <div class="team_score" id="team_{{$team_a_id}}_score">{{${'team_'.$team_a_id.'_score'} }} </div>
                          	</div>
                         </div>
                     </div>
@@ -44,6 +89,7 @@
 							<div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['b_id'] }}">{{ $user_b_name }}</a></div>
 						@endif
 							 <div class="team_city">{!! $team_b_city !!}</div>
+                <div class="team_score" id="team_{{$team_b_id}}_score">{{${'team_'.$team_b_id.'_score'} }} </div>
                             </div>
                         </div>
                               <div class="col-md-4 col-sm-12">
@@ -67,24 +113,26 @@
                                         <div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['b_id'] }}">{{ $user_b_name }}</a></div>
                                     @endif
                                          <div class="team_city">{!! $team_b_city !!}</div>
+                                          <div class="team_score" id="team_{{$team_b_id}}_score">{{${'team_'.$team_b_id.'_score'} }} </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-             @if(!is_null($match_data[0]['tournament_id']))
+            @if(!is_null($match_data[0]['tournament_id']))
                 <div class='row'>
                     <div class='col-xs-12'>
                         <div class='match_loc'>
-                            <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
-                         <h4>   {{$tournamentDetails['name']}} Tournament </h4>
-                          </a>  
+                          <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
+                            {{$tournamentDetails['name']}} Tournament
+                          </a>
+                                
                         </div>
                     </div>
                 </div>
-                @endif
-                
+            @endif
+            
             <div class="row">
               <div class="col-xs-12">
                   <div class="match_loc">
@@ -92,8 +140,8 @@
                     </div>
                 </div>
             </div>
-			<h5 class="scoreboard_title">TableTennis Scorecard @if($match_data[0]['match_type']!='other')
-											<span class='match_type_text'>({{ $match_data[0]['match_type']=='odi'?strtoupper($match_data[0]['match_type']):ucfirst($match_data[0]['match_type']) }}, {{ucfirst($match_data[0]['match_category']) }})</span>
+			<h5 class="scoreboard_title">tableTennis Scorecard @if($match_data[0]['match_type']!='other')
+											<span class='match_type_text'>({{ $match_data[0]['match_type']=='odi'?strtoupper($match_data[0]['match_type']):ucfirst($match_data[0]['match_type'])}}, {{ucfirst($match_data[0]['match_category']) }})</span>
 									@endif</h5>
         </div>
           @if (session('status'))
@@ -110,6 +158,13 @@
         <label class="win_head">Winner</label>
         <h3 class="win_team">{{ ($match_data[0]['a_id']==$match_data[0]['winner_id'])?$user_a_name:$user_b_name }}</h3>
     </div>
+
+      @elseif($match_data[0]['match_result'] == "washout")
+                                                     <div class="form-group">
+                                                         <label>MATCH ENDED DUE TO</label>
+                                                         <h3 class="win_team">Washout</h3>
+                                                     </div>
+
 	@else
 
       <div class="form-group">
@@ -120,175 +175,139 @@
 	@endif
     <p class="match-status mg"><a href="{{ url('user/album/show').'/match'.'/0'.'/'.$action_id }}"><span class="fa" style="float: left; margin-left: 8px;"><img src="{{ asset('/images/sc-gallery.png') }}" height="18" width="22"></span> <b>Media Gallery</b></a></p>
 	@include('scorecards.share')
-        <p class="match-status">@include('scorecards.scorecardstatus')</p>
+        <p class="match-status">@include('scorecards.scorecardstatusview')</p>
     </div>
 
-@if($match_data[0]['game_type']=='normal')
-    <div class="table-responsive">
-    	<table class="table table-striped">
-        <thead class="thead">
-    		<tr id="sets">
-    			  <th>{{ trans('message.scorecard.tennis_fields.team') }}</th>
-				  @if((!empty($score_a_array[0]) || !empty($score_b_array[0])) && ($score_a_array[0]['set1']!='' || $score_b_array[0]['set1']!='' ))
-    				<th>{{ trans('message.scorecard.tennis_fields.set1') }}</th>
-				@endif
-				@if((!empty($score_a_array[0]) || !empty($score_b_array[0])) && ($score_a_array[0]['set2']!='' || $score_b_array[0]['set2']!=''))
-    				<th>{{ trans('message.scorecard.tennis_fields.set2') }}</th>
-				@endif
-				@if((!empty($score_a_array[0]) || !empty($score_b_array[0])) && ($score_a_array[0]['set3']!='' || $score_b_array[0]['set3']!=''))
-    				<th>{{ trans('message.scorecard.tennis_fields.set3') }}</th>
-				@endif
-				@if((!empty($score_a_array[0]) || !empty($score_b_array[0])) && ($score_a_array[0]['set4']!='' || $score_b_array[0]['set4']!=''))
-    				<th>{{ trans('message.scorecard.tennis_fields.set4') }}</th>
-				@endif
-				@if((!empty($score_a_array[0]) || !empty($score_b_array[0])) && ($score_a_array[0]['set5']!='' || $score_b_array[0]['set5']!=''))
-    				<th>{{ trans('message.scorecard.tennis_fields.set5') }}</th>
-				@endif
-    		</tr>
-      </thead>
-    		<tbody>
-    			<tr id="set_a">
-    				<td>
-              @if($user_a_logo['url']!='')
-             <!--   <img class="fa fa-user fa-fw fa-2x" height="42" width="42" src="{{ url('/uploads/'.$upload_folder.'/'.$user_a_logo['url']) }}" onerror="this.onerror=null;this.src='{{ asset('/images/default-profile-pic.jpg') }}';">-->
-		  {!! Helper::Images($user_a_logo['url'],$upload_folder,array('class'=>'fa fa-user fa-2x','height'=>36,'width'=>36) )!!}	
-                @else
-                <!--<img  class="fa fa-user fa-fw fa-2x" height="42" width="42" src="{{ asset('/images/default-profile-pic.jpg') }}">-->
-			 {!! Helper::Images('default-profile-pic.jpg','images',array('class'=>'fa fa-user  fa-2x','height'=>36,'width'=>36) )!!}	
-              @endif
-              {{ $user_a_name }}
-    				</td>
-					@if((!empty($score_a_array[0]) || !empty($score_b_array[0])) && ($score_a_array[0]['set1']!='' || $score_b_array[0]['set1']!=''))
-    				<td>{{(!(empty($score_a_array[0]['set1'])))?$score_a_array[0]['set1']:''}}</td>
-					@endif
-					@if((!empty($score_a_array[0]) || !empty($score_b_array[0])) && ($score_a_array[0]['set2']!='' || $score_b_array[0]['set2']!=''))
-    				<td>{{(!(empty($score_a_array[0]['set2'])))?$score_a_array[0]['set2']:''}}</td>
-					@endif
-					@if((!empty($score_a_array[0]) || !empty($score_b_array[0])) && ($score_a_array[0]['set3']!='' || $score_b_array[0]['set3']!=''))
-    				<td>{{(!(empty($score_a_array[0]['set3'])))?$score_a_array[0]['set3']:''}}</td>
-					@endif
-					@if((!empty($score_a_array[0]) || !empty($score_b_array[0])) && ($score_a_array[0]['set4']!='' || $score_b_array[0]['set4']!=''))
-    				<td>{{(!(empty($score_a_array[0]['set4'])))?$score_a_array[0]['set4']:''}}</td>
-					@endif
-					@if((!empty($score_a_array[0]) || !empty($score_b_array[0])) && ($score_a_array[0]['set5']!='' || $score_b_array[0]['set5']!=''))
-    				<td>{{(!(empty($score_a_array[0]['set5'])))?$score_a_array[0]['set5']:''}}</td>    
-					@endif
-					</tr>
-    			<tr id="set_b">
-    				<td>
-              @if($user_b_logo['url']!='')
-                <!--<img class="fa fa-user fa-fw fa-2x" height="42" width="42" src="{{ url('/uploads/'.$upload_folder.'/'.$user_b_logo['url']) }}" onerror="this.onerror=null;this.src='{{ asset('/images/default-profile-pic.jpg') }}';">-->
-			 {!! Helper::Images($user_b_logo['url'],$upload_folder,array('class'=>'fa fa-user fa-2x','height'=>36,'width'=>36) )!!}	
-                @else
-                <!--<img  class="fa fa-user fa-fw fa-2x" height="42" width="42" src="{{ asset('/images/default-profile-pic.jpg') }}">-->
-			 {!! Helper::Images('default-profile-pic.jpg','images',array('class'=>'fa fa-user fa-2x','height'=>36,'width'=>36) )!!}	
-              @endif
-              {{ $user_b_name }}
-    				</td>
-					@if((!empty($score_a_array[0]) || !empty($score_b_array[0])) && ($score_a_array[0]['set1']!='' || $score_b_array[0]['set1']!=''))
-    					<td>{{(!(empty($score_b_array[0]['set1'])))?$score_b_array[0]['set1']:''}}</td>
-					@endif
-					@if((!empty($score_a_array[0]) || !empty($score_b_array[0])) && ($score_a_array[0]['set2']!='' || $score_b_array[0]['set2']!=''))
-    					<td>{{(!(empty($score_b_array[0]['set2'])))?$score_b_array[0]['set2']:''}}</td>
-					@endif
-					@if((!empty($score_a_array[0]) || !empty($score_b_array[0])) && ($score_a_array[0]['set3']!='' || $score_b_array[0]['set3']!=''))
-    					<td>{{(!(empty($score_b_array[0]['set3'])))?$score_b_array[0]['set3']:''}}</td>
-					@endif
-					@if((!empty($score_a_array[0]) || !empty($score_b_array[0])) && ($score_a_array[0]['set4']!='' || $score_b_array[0]['set4']!=''))
-    					<td>{{(!(empty($score_b_array[0]['set4'])))?$score_b_array[0]['set4']:''}}</td>
-					@endif
-					@if((!empty($score_a_array[0]) || !empty($score_b_array[0])) && ($score_a_array[0]['set5']!='' || $score_b_array[0]['set5']!=''))
-    					<td>{{(!(empty($score_b_array[0]['set5'])))?$score_b_array[0]['set5']:''}}</td>
-					@endif
-            </tr>
-    		</tbody>
-    	</table>
+       <!-- Match has no results -->
+
+@if($match_data[0]['game_type']!='rubber')
+<!-- Start of normal match -->
+
+  <div class="row">
+    <div class="col-sm-12">
+   <div class='table-responsive'>
+      <table class='table table-striped table-bordered'>
+        <thead>
+          <tr class='team_fall team_title_head'>
+           @if(!is_null($score_a_array['team_id']))  <th><b>TEAMS</b></th> @endif
+             <th>PLAYERS</th>
+
+             @for($set_index=1; $set_index<=$set; $set_index++)
+              <th>SET {{$set_index}}</th>
+             @endfor
+
+          </tr>
+        </thead>
+        <tbody>
+             <tr>
+             <!-- Show teams if schedule type is team -->
+            @if(!is_null($score_a_array['team_id']))<td><b>{{$score_a_array['team_name']}}</b></td>@endif
+
+            <td><b>{{$score_a_array['player_name_a']}} / {{$score_a_array['player_name_b']}}</b></td>
+
+          @for($set_index=1; $set_index<=$set; $set_index++)
+                 
+               <td class='a_set{{$set_index}} ' >
+                  <span class='remove_button_left button_set_{{$set_index}}'></span>
+                      {{$score_a_array['set'.$set_index]}}
+                  <span class='add_button_left button_set_{{$set_index}}'></span>
+               </td>
+          @endfor
+          
+          </tr>
+
+          <tr>
+          <!-- Show teams if schedule type is team -->
+          @if(!is_null($score_b_array['team_id']))<td><b>{{$score_b_array['team_name']}}</b></td>@endif
+
+            <td><b>{{$score_b_array['player_name_a']}} / {{$score_b_array['player_name_b']}}</b></td>
+            @for($set_index=1; $set_index<=$set; $set_index++)
+                  
+               <td class='b_set{{$set_index}}  '>
+                   <span class='remove_button_right button_set_{{$set_index}}'></span>
+                      {{$score_b_array['set'.$set_index]}}
+                   <span class='add_button_right button_set_{{$set_index}}'></span>
+                </td>
+          @endfor
+        </tr>
+
+        </tbody>
+        </tbody>
+      </table>
     </div>
-	
-	<!-- if match schedule type is team -->
-	@if($match_data[0]['schedule_type']!='player')
-	
-	<div class="row">
-    	<div class="col-md-6">			
-        	<h4 class="team_title_head">{{ $user_a_name }} Players</h4>
-			<table class="table table-striped team_players_check">
-			<tbody>
-			
-			@foreach($a_players as $a_player)
-			
-			<tr>
-			@if($match_data[0]['match_type']=='singles')
-			<td></td>
-			@else
-			@if($match_data[0]['match_type']=='doubles')
-			<td></td>
-			@endif
-			@endif
-			<td>
-			@if($team_a_player_images[$a_player['id']]['url']!='')
-  						
-			{!! Helper::Images($team_a_player_images[$a_player['id']]['url'],'user_profile',array('class'=>'fa fa-user fa-2x','height'=>36,'width'=>36) )!!}	
-  			@else
-  							
-			{!! Helper::Images('default-profile-pic.jpg','images',array('class'=>'fa fa-user fa-2x','height'=>36,'width'=>36) )!!}	
-  			@endif
-			
-			<a href="{{ url('/showsportprofile',$a_player['id']) }}">{{$a_player['name']}}</a>
-			</td>
-			</tr>
-			
-			@endforeach
-				
-			</tbody>
-		</table>
-        </div>
-        <div class="col-md-6">
-        	<h4 class="team_title_head">{{ $user_b_name }} Players</h4>
-			<table class="table table-striped team_players_check">
-			<tbody>
-			@foreach($b_players as $b_player)
+  <!-- End of normal match -->
 
-				<tr>
-					@if($match_data[0]['match_type']=='singles')
-					<td></td>
-					@else
-					@if($match_data[0]['match_type']=='doubles')
-					<td></td>
-					@endif
-					@endif
-				<td>
-				@if($team_b_player_images[$b_player['id']]['url']!='')
-							
-				{!! Helper::Images($team_b_player_images[$b_player['id']]['url'],'user_profile',array('class'=>'fa fa-user fa-2x','height'=>36,'width'=>36) )!!}	
-				@else
-								
-				{!! Helper::Images('default-profile-pic.jpg','images',array('class'=>'fa fa-user fa-2x','height'=>36,'width'=>36) )!!}	
-				@endif
-				<a href="{{ url('/showsportprofile',$b_player['id']) }}">{{$b_player['name']}}</a>
-				</td>
-				</tr>
-			@endforeach
-			</tbody>
-		</table>
-       	</div>
-	</div>
-	
-	@endif
+@else 
+  <!-- Start of Rubber -->
 
-
-  @else
-
-   @foreach($rubbers as $rubber)
+ @foreach($rubbers as $rubber)
     <?php
          $rubber_players = ScoreCard::getRubberPlayers($rubber->id, 3);
          $rubber_a_array = $rubber_players['a'];
          $rubber_b_array = $rubber_players['b'];
-
     ?>
-         @include('scorecards.tennisscorecardrubberview')
+         @include('scorecards.tabletennisscorecardrubberview')
  @endforeach
+ 
+ @endif
 
-  @endif
+ <!-- End of Rubber -->
+
+    @if($match_data[0]['match_status']=='completed' && isset($display_users))
+
+
+@if($match_data[0]['match_type']!='singles' )
+
+<div class="row" id='real_time_scoring'>
+
+  <div class="col-sm-6 col-xs-12 table-striped ">
+        <h3 class='team_bat team_title_head'>{{$score_a_array['team_name']}}</h3>
+            
+            <div class='col-xs-12'>&nbsp;</div>
+            <div class='col-xs-12'> <a href="/editsportprofile/{{$score_a_array['user_id_a']}}" class="text-primary"> {{$score_a_array['player_name_a']}}</a></div>
+            <div class='col-xs-12'>&nbsp;</div>
+            <div class='col-xs-12'><a href="/editsportprofile/{{$score_a_array['user_id_b']}}" class="text-primary"> {{$score_a_array['player_name_b']}}</a></div>
+            <div class='col-xs-12'>&nbsp;</div>
+        
+      </div>
+  
+
+  <div class='col-sm-6 col-xs-12 table-striped'>
+     <h3 class='team_fall team_title_head'>{{$score_a_array['team_name']}}</h3>
+         
+            <div class='col-xs-12'>&nbsp;</div>
+            <div class='col-xs-12'><a href="/editsportprofile/{{$score_b_array['user_id_a']}}" class="text-primary"> {{$score_b_array['player_name_a']}}</a></div>
+            <div class='col-xs-12'>&nbsp;</div>
+            <div class='col-xs-12'><a href="/editsportprofile/{{$score_b_array['user_id_b']}}" class="text-primary"> {{$score_b_array['player_name_b']}}</a></div>
+            <div class='col-xs-12'>&nbsp;</div>
+      </div>
+      
+</div> 
+
+ @else
+<div class="row" id='real_time_scoring'>
+  <div class="col-sm-6 col-xs-12">
+    <h3 class='team_bat team_title_head'>&nbsp;</h3> 
+            <div class='col-xs-12'>&nbsp;</div>
+            <div class='col-xs-12'><a href="/editsportprofile/{{$score_a_array['user_id_a']}}" class="text-primary"> {{$score_a_array['player_name_a']}}</a></div>
+            <div class='col-xs-12'>&nbsp;</div>    
+  </div>
+
+  <div class='col-xs-12 col-sm-6'>
+    <h3 class='team_fall team_title_head'>&nbsp;</h3>      
+                <div class='col-xs-12'>&nbsp;</div>
+                <div class='col-xs-12'><a href="/editsportprofile/{{$score_b_array['user_id_a']}}" class="text-primary"> {{$score_b_array['player_name_a']}}</a></div>    
+    
+  </div>
+</div>
+
+
+    @endif
+@endif
+
+	
+	<!-- if match schedule type is team -->
+
 	<!-- end -->
 	
     <div class="sportsjun-forms text-center scorecards-buttons">
@@ -305,6 +324,9 @@
    </div>
   </div>
 </div>
+</div>
+</div>
+
 <script>
 //Send Approve
 function scoreCardStatus(status)
@@ -321,7 +343,7 @@ function scoreCardStatus(status)
 		$.ajax({
             url: base_url+'/match/scoreCardStatus',
             type: "post",
-            data: {'scorecard_status': status,'match_id':match_id,'rej_note':rej_note,'sport_name':'Table Tennis'},
+            data: {'scorecard_status': status,'match_id':match_id,'rej_note':rej_note,'sport_name':'tableTennis'},
             success: function(data) {
                 if(data.status == 'success') {
 					window.location.href = base_url+'/match/scorecard/edit/'+match_id;
@@ -334,5 +356,39 @@ function scoreCardStatus(status)
 		}
 	});
 }
+
+
+function getMatchDetails(){
+
+  var data={
+    match_id:{{$match_data[0]['id']}}
+  }
+
+  var base_url=base_url || secure_url;
+        $.ajax({
+            url:  base_url+'/viewpublic/match/gettableTennisDetails', 
+            type:'get', 
+            dataType:'json',
+            data:data,
+            success:function(response){
+                var left_team_id=response.preferences.left_team_id;
+                var right_team_id=response.preferences.right_team_id;
+
+                  $.each(response.match_details, function(key, value){
+                      $('.a_'+key).html(value[left_team_id+'_score']);
+                      $('.b_'+key).html(value[right_team_id+'_score']);
+                  })
+            }
+        })
+}
+
+@if($match_data[0]['match_status']!='completed')
+//window.setInterval(getMatchDetails, 10000);
+@endif
+
 </script>
+
+
+<!-- Put plus and minus buttons on left and rights of sets -->
+
 @endsection
