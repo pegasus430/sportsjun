@@ -1150,7 +1150,8 @@ class Helper {
     }
 
     public static function ImageCheck($path){
-        return File::exists(public_path($path)) ? $path : 'images/default-profile-pic.jpg';
+
+        return (File::exists(public_path($path)) && File::isFile(public_path($path))) ? $path : 'images/default-profile-pic.jpg';
     }
 
     //getting the current route
