@@ -153,6 +153,24 @@ Sidebar heading:	'Oswald', sans-serif;
 	margin-right: 4px;
 }
 
+.kode-left-top-menu li {
+	list-style: none;
+	display: inline-block;
+	padding: 6px 11px 5px 15px;
+	/*border-left: 1px solid rgba(255,255,255,0.4);*/
+	position: relative;
+}
+
+.btn-left-top-menu{
+	background-color:transparent;
+	color:white;
+}
+.btn-left-top-menu:hover,.btn-left-top-menu:active,.btn-left-top-menu:focus{
+	color:white;
+}
+
+
+
 /* TopBaar Ends */
 
 /* Main Header Starts */
@@ -3615,6 +3633,11 @@ form#home-register-modal-form span.capcha {
     margin-top: 30px;
     margin-bottom: 20px;
     font-style: normal;
+}
+
+#pricing_modal{
+	text-align:center;
+
 }
 
 span#verify-email-id {display: block;margin-top: 10px;font-weight: bold;font-style: normal;}
