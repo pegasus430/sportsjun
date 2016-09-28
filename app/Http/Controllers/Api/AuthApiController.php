@@ -45,8 +45,7 @@ class AuthApiController extends Controller
                 'firstname' => 'required|max:255',
                 'lastname' => 'required|max:255',
                 'email' => 'required|unique:users,email|email|max:255',
-                'password' => 'required|confirmed|min:6',
-                'captcha' => 'required'
+                'password' => 'required|min:6',
             ]);
 
         if (!$validator->fails()){
@@ -57,7 +56,7 @@ class AuthApiController extends Controller
                 'email' => $data['email'],
                 'password' => bcrypt($data['password']),
                 'newsletter'=> !empty($data['newsletter'])?1:0,
-                'verification_key' => md5($data['email'])
+                'verification_key' => md5($data['email']) //TODO:: these thing should be changed across all site
             ]);
             if ($user){
                 \Event::fire(new UserRegistered($user));
@@ -70,7 +69,7 @@ class AuthApiController extends Controller
             $error = $validator->errors();
         }
 
-        return ['errors'=>$error];
+        return response()->json(['error' => $error], 500);
     }
 
 
