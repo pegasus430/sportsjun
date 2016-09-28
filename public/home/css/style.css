@@ -164,6 +164,7 @@ Sidebar heading:	'Oswald', sans-serif;
 .btn-left-top-menu{
 	background-color:transparent;
 	color:white;
+	font-size:13px;
 }
 .btn-left-top-menu:hover,.btn-left-top-menu:active,.btn-left-top-menu:focus{
 	color:white;
@@ -3637,7 +3638,13 @@ form#home-register-modal-form span.capcha {
 
 #pricing_modal{
 	text-align:center;
+}
+#pricing_modal .modal-dialog{
+	width:600px;
+}
 
+#pricing_modal strong{
+	font-size: 1.2em;
 }
 
 span#verify-email-id {display: block;margin-top: 10px;font-weight: bold;font-style: normal;}

@@ -134,7 +134,7 @@ $css_version    = config('constants.CSS_VERSION');
                                             <ul class="kode-left-top-menu">
                                                 <li>
                                                     <button type="button" class="btn btn-left-top-menu" data-toggle="modal" data-target="#pricing_modal">
-                                                        Pricing
+                                                            <i class="fa fa-credit-card" aria-hidden="true"></i> Pricing
                                                     </button>
                                             </ul>
                                                 <!--<ul class="top_slider_bxslider">
@@ -447,7 +447,7 @@ $css_version    = config('constants.CSS_VERSION');
             <div class="modal-body">
                 <p><strong>All sports event organizers (School's, Colleges, corporate's, Organizations, Individual Organizers)</strong></p>
                 <p>Contact us now for pricing your sports events (tournaments/leagues)</p>
-                <p><span class="contact-email"><a href="mailto:contact@sportsjun.com">contact@sportsjun.com</a></span></p>
+                <p><span class="contact-email"><a href="mailto:contact@sportsjun.com"><strong>contact@sportsjun.com</strong></a></span></p>
             </div>
         </div>
     </div>
