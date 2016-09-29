@@ -54,6 +54,10 @@ return [
         'client_secret' => env('GOOGLE_SECRET'),
         'redirect' => env('GOOGLE_REDIRECT_URI'),  
     ],
+    'msg91'=>[
+        'sender_id' => env('MSG91_SENDER_ID'),
+        'application_key' => env('MSG91_APPLICATION_KEY')
+    ]
     
 
 ];

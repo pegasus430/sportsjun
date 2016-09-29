@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Events\UserRegistered;
+use App\Http\Services\MSG91;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -87,4 +88,57 @@ class AuthApiController extends Controller
         
         JWTAuth::invalidate($request->input('token'));
     }
+
+    public function generateOTP(Request $request){
+
+        $mobileNumber = $request->mobileNumber;
+        $user_id = \Auth::user()->id;
+        $token = $request->timeToken;
+        $result = MSG91::generateOTP($mobileNumber,$user_id,$token);
+
+        $resp = [];
+
+        if(!$resp || $resp['success'] == false){
+            $resp['error'] = 'Error';
+            $resp['message'] =  array_get($result,'code');
+            return response()->json($resp, 500);
+        } else {
+            $resp['message'] = "OTP SENT SUCCESSFULLY";
+            return response()->json($resp);
+        }
+    }
+
+    public function verifyOTP(Request $request){
+        $user_id = \Auth::user()->id;
+        $token = $request->timeToken;
+        $otp = $request->otp;
+        $mobileNumber =  preg_replace('/\D/', '', $request->mobileNumber);
+
+        $result = MSG91::verifyOTP($user_id,$otp,$mobileNumber,$token);
+
+        $resp = [];
+        if ($result){
+            $resp['message'] = "NUMBER VERIFIED SUCCESSFULLY";
+            return response()->json($resp);
+        }else{
+            $resp['message'] =  "OTP INVALID";
+            return response()->json($resp,500);
+        }
+    }
+
+    //check is OTP sent to mobileNumber
+    public function isOtpSent(Request $request)
+    {
+        $mobileNumber =  preg_replace('/\D/', '', $request->mobileNumber);
+        $token = $request->timeToken;
+        if (MSG91::isOtpSent($mobileNumber,$token)){
+            return response()->json(['status'=>'success']);
+        }
+            return response()->json(['status'=>'false'],500);
+    }
+
+
+
+
+
 }
