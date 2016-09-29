@@ -154,7 +154,9 @@ class Tournaments extends Model
     function getGroupPoints($tournament_id,$organization_group_id){
             $points=OrganizationGroupTeamPoint::whereTournamentId($tournament_id)->whereOrganizationGroupId($organization_group_id)->first();
             if(empty($points)){
-                $team_id = DB::table('organization_group_teams')->where('organization_group_id',$organization_group_id)->pluck('team_id');
+                $team_id = DB::table('organization_group_teams')
+                            ->where('organization_group_id',$organization_group_id)
+                            ->lists('team_id');
                 $teams = null;
                 if ($team_id) {
                     $teams = TournamentGroupTeams::whereTournamentId($tournament_id);
