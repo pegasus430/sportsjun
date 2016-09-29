@@ -44,14 +44,14 @@ class Helper {
         // Resize the files
         // Upload to specified folder (File storage or CDN)
         $photos = array_filter(explode(',', $photoList));
-        $oldFilePath = 'uploads/temp/';
-        $newFilePath = 'uploads/'.$photoType.'/';
+        $oldFilePath = public_path('uploads/temp/');
+        $newFilePath = public_path('uploads/'.$photoType.'/');
         if($action!='' && $action_id!='')//changed for gallery page
         {
-            $newFilePath = public_path().'/uploads/'.$photoType.'/'.$image_type.'/'.$action_id.'/';
-            if (!file_exists($newFilePath)) {
-                File::makeDirectory($newFilePath, $mode = 0777, true, true);
-            }
+            $newFilePath = $newFilePath.'/'.$image_type.'/'.$action_id.'/';
+        }
+        if (!file_exists($newFilePath)) {
+            File::makeDirectory($newFilePath, $mode = 0777, true, true);
         }
         $insertedphotoids=array();
         // echo"<pre>";print_r($photos);
@@ -1150,7 +1150,8 @@ class Helper {
     }
 
     public static function ImageCheck($path){
-        return File::exists(public_path($path)) ? $path : 'images/default-profile-pic.jpg';
+
+        return (File::exists(public_path($path)) && File::isFile(public_path($path))) ? $path : 'images/default-profile-pic.jpg';
     }
 
     //getting the current route

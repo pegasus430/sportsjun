@@ -131,6 +131,12 @@ $css_version    = config('constants.CSS_VERSION');
                         <div class="container">
                                 <div class="row">
                                         <div class="col-md-6 kode_bg_white">
+                                            <ul class="kode-left-top-menu">
+                                                <li>
+                                                    <button type="button" class="btn btn-left-top-menu" data-toggle="modal" data-target="#pricing_modal">
+                                                            <i class="fa fa-credit-card" aria-hidden="true"></i> Pricing
+                                                    </button>
+                                            </ul>
                                                 <!--<ul class="top_slider_bxslider">
                                                         <li><span class="kode-barinfo"><strong>Latest News : </strong> Lorem ipsum dolor sit amet, cons ecte tuer adipiscing elit,</span></li>
                                                         <li><span class="kode-barinfo"><strong>Latest News : </strong> Lorem ipsum dolor sit amet, cons ecte tuer adipiscing elit,</span></li>
@@ -426,6 +432,25 @@ $css_version    = config('constants.CSS_VERSION');
                         </div>
                 </div>
         </div>
+</div>
+<!-- Modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="pricing_modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header thbg-color">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Contact Us</h4>
+            </div>
+            <div class="modal-body">
+                <p><strong>All sports event organizers (School's, Colleges, corporate's, Organizations, Individual Organizers)</strong></p>
+                <p>Contact us now for pricing your sports events (tournaments/leagues)</p>
+                <p><span class="contact-email"><a href="mailto:contact@sportsjun.com"><strong>contact@sportsjun.com</strong></a></span></p>
+            </div>
+        </div>
+    </div>
 </div>
 <!-- Modal -->
 

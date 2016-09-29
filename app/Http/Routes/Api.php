@@ -7,7 +7,7 @@ Route::group(['prefix'=>'/api/v1','middleware' => 'cors'], function($router){
     	});
 
     	Route::post('login', 'Api\AuthApiController@login');
-
+        Route::post('register', 'Api\AuthApiController@register');
 //'jwt.refresh'
     	Route::group(['middleware' => ['jwt.auth']], function($router) {	
 		    	$router->resource('/users',                 'Api\UserApiController');

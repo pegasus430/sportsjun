@@ -80,20 +80,21 @@
                                 @if(count($group->group_teams))
                                     @foreach($group->group_teams->sortByDesc('points') as $team)
 										<?php
-											if ($team && isset($team['won'])){
-												$matches_count = $team['won'] + $team['lost']+$team['tie'];
-                                                }
-                                            else
-											    $matches_count = 0;
+											$won = array_get($team,'won',0);
+											$lost = array_get($team,'lost',0);
+											$tie = array_get($team,'tie',0);
+
+											$matches_count = $won+$lost+$tie;
+
 
 										?>
                                     <tr id="row_{{$team['id']}}" class="group_row_{{$group->id}}">
                                     <td><b>{{ $team['name'] }}</b></td>
                                     <td> {{$matches_count}}
 										{{-- !empty($match_count[$group->id][$team['team_id']])?$match_count[$group->id][$team['team_id']]:0 --}}</td>
-                                    <td>{{ !empty($team['won'])?$team['won']:0 }}</td>
-                                    <td>{{ !empty($team['lost'])?$team['lost']:0 }}</td>
-									<td>{{ !empty($team['tie'])?$team['tie']:0 }}</td>
+                                    <td>{{ $won }}</td>
+                                    <td>{{ $lost }}</td>
+									<td>{{ $tie }}</td>
 									<td>{{ !empty($team['points'])?$team['points']:0 }}</td>
 
                                     @endforeach

@@ -18,12 +18,12 @@
                        </div></div>
                     </div>
 
-                    @foreach($parent_tournament->tournaments as $lis)   
-            
+                    @foreach($parent_tournament->tournaments as $lis)
+
                     <div class="search_thumbnail right-caption">
 
                         <div class="col-md-2 col-sm-3 col-xs-12 text-center">
-                            {!! Helper::Images( $lis->logo ,'tournaments',array('height'=>90,'width'=>90,'class'=>'img-circle img-border img-scale-down img-responsive') )!!}
+                            {!! Helper::Images( $lis->logo ? $lis->logo : $parent_tournament->logo ,'tournaments',array('height'=>90,'width'=>90,'class'=>'img-circle img-border img-scale-down img-responsive') )!!}
                         </div>
                         <div class="col-md-10 col-sm-9 col-xs-12">
                             <div class="t_tltle">

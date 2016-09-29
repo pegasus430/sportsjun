@@ -547,6 +547,7 @@ class TournamentsController extends Controller
     {
 		if(!empty($request['isParent']) && $request['isParent']=='yes')
 		{
+
 			return $this->updateParentTournament($request,$id);
 		}
 		$manager_id = Tournaments::where('id', $id)->pluck('manager_id');
@@ -632,7 +633,7 @@ class TournamentsController extends Controller
 		$tournamentParent->update(($request->except(['_method','_token','files','filelist_photos','isParent','manager_name','managerId','filelist_gallery','jfiler-items-exclude-files-0', 'organization_group_id'])));
 
 		if($request->input('organization_group_id')!='')
-        $tournamentParent->orgGroups()->sync([$request->input('organization_group_id')]);
+             $tournamentParent->orgGroups()->sync($request->input('organization_group_id'));
 
 		if (!empty($request['filelist_photos'])) {
 			Photo::where(['imageable_id'=>$id, 'imageable_type' => config('constants.PHOTO.TOURNAMENT_LOGO')])->update(['is_album_cover' => 0]);
