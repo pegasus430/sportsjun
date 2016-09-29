@@ -4504,5 +4504,11 @@ if(!isset($match_details['penalties']['team_b']['players_ids']))$match_details['
 		return $active_rubber;
 	}
 
+	public function updatehalftime($match_id, $half_time){
+		$match_model = MatchSchedule::find($match_id);
+		$match_model->selected_half_or_quarter = explode('_', $half_time)[1];
+		$match_model->save();		
+	}
+
 }
 ?>

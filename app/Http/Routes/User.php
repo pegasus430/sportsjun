@@ -694,6 +694,7 @@ Route::resource('team', 'User\TeamController');
 
 
 Route::get('/reloadgroupteampoints', 'User\OrganizationController@testTournaments');
+Route::get('/updatehalftime/{match_id?}/{half_time}', 'User\ScoreCardController@updatehalftime');
 
 
 
