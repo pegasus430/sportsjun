@@ -6,15 +6,15 @@
 			<div class="col-sm-6">
 				<div class="section">
 				<label class="form_label">
-					{{trans('message.sports_settings.number_of_sets')}}
+					Divide Match's into?
 				</label>
 
 				<label class="field select">
 					<select name='number_of_sets' class='gui-input' value="{{$settings->number_of_sets}}">
-							<option value='1'  {{$settings->number_of_sets==1?'selected':''}}>  1 </option>
-							<option value='3'  {{$settings->number_of_sets==3?'selected':''}} >  3 </option>
-							<option value='5'  {{$settings->number_of_sets==5?'selected':''}}>  5 </option> 
-							<option value='7'  {{$settings->number_of_sets==7?'selected':''}}>  7 </option> 
+							<option value='2'  {{$settings->number_of_sets==1?'selected':''}}>  2 </option>
+							<option value='4'  {{$settings->number_of_sets==3?'selected':''}} >  4 </option>
+							<option value='6'  {{$settings->number_of_sets==5?'selected':''}}>  6 </option> 
+							<option value='8'  {{$settings->number_of_sets==7?'selected':''}}>  8 </option> 
 					</select>
 					<i class="arrow double"></i>
 				</label>
@@ -23,17 +23,18 @@
 				</div>
 			</div>
 
-
-			<div class="col-sm-6">
 				<div class="section">
+				<div class="col-sm-6">
 				<label class="form_label">
-					{{trans('message.sports_settings.score_to_win')}}
+					{{trans('message.sports_settings.max_substitutes')}}
 				</label>
+
 				<label class="field">
-					<input type='text' name='maximum_points' value="{{$settings->maximum_points}}" class="gui-input">
+						<input type='text' name='maximum_substitutes' value="{{$settings->maximum_substitutes}}" placeholder="e.g 6" class='gui-input'>
 				</label>
 			</div>
 			</div>
+
 		</div>
 
 		<div class='row'>
@@ -62,17 +63,7 @@
 			</div>
 			</div>
 
-			<div class="section">
-				<div class="col-sm-6">
-				<label class="form_label">
-					{{trans('message.sports_settings.max_substitutes')}}
-				</label>
-
-				<label class="field">
-						<input type='text' name='maximum_substitutes' value="{{$settings->maximum_substitutes}}" placeholder="e.g 6" class='gui-input'>
-				</label>
-			</div>
-			</div>
+		
 		</div>
 
 		@include('tournaments.settings.points')

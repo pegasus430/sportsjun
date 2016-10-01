@@ -144,6 +144,13 @@ Route::group(['prefix'=>'match'], function(){
     Route::post('saveMatchRecordtableTennis', ['as'=>'match/saveMatchRecordtableTennis', 'uses'=>'User\ScoreCard\TabletennisScoreCardController@tableTennisStoreRecord']);
 
     Route::post('updatePreferencestableTennis', ['as'=>'match/updatePreferencestableTennis', 'uses'=>'User\ScoreCard\TabletennisScoreCardController@updatePreferences']);
+
+
+
+//Match Helpers
+    Route::get('set_active_rubber/{rubber_id?}', 'User\ScoreCardController@setActiveRubber');
+    Route::get('end_match_completely/{match_id?}', 'User\ScoreCardController@endMatchCompletely');
 });
 
 //End Matches
+

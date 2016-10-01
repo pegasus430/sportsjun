@@ -1,6 +1,12 @@
 @extends(Auth::user() ? 'layouts.app' : 'home.layout')
 @section('content')
 @include ('tournaments._leftmenu')
+
+<style type="text/css">
+    a{
+        color: inherit;
+    }
+</style>
 <div id="content-team" class="col-sm-10 group_stage">
 
 

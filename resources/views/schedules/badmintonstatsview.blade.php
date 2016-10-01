@@ -75,7 +75,7 @@
             </tr>
             </thead>
         <tbody>
-            @if(count($statsArray['singlesStatsArray'])) 
+            @if(count($rubberStats['singlesStatsArray'])) 
             <tr>
             <td>{{ config('constants.ENUM.SCHEDULE.MATCH_TYPE.TABLE TENNIS.singles') }}</td>
             <td>{{ $rubberStats['singlesStatsArray']['totalMatches'] }}</td>
@@ -85,7 +85,7 @@
             <td>{{ $rubberStats['singlesStatsArray']['wonPercentage'] }}</td>
             </tr>
             @endif
-            @if(count($statsArray['doublesStatsArray'])) 
+            @if(count($rubberStats['doublesStatsArray'])) 
             <tr>
             <td>{{ config('constants.ENUM.SCHEDULE.MATCH_TYPE.TABLE TENNIS.doubles') }}</td>
             <td>{{ $rubberStats['doublesStatsArray']['totalMatches'] }}</td>
@@ -95,7 +95,7 @@
             <td>{{ $rubberStats['doublesStatsArray']['wonPercentage'] }}</td>
             </tr>
             @endif
-            @if(count($statsArray['mixedStatsArray'])) 
+            @if(count($rubberStats['mixedStatsArray'])) 
             <tr>
             <td> MIXED </td>
             <td>{{ $rubberStats['mixedStatsArray']['totalMatches'] }}</td>
