@@ -203,9 +203,12 @@
     <div class="form-inline">
     @if($match_data[0]['hasSetupSquad'] && $match_data[0]['match_status']!='completed' )
           <br>
-          <div id='end_match_button'>
-          <button class="btn btn-danger soccer_buttons_disabled" onclick="return SJ.SCORECARD.soccerSetTimes(this)">End {{$match_data[0]['game_type']=='normal'?'Match':'Rubber'}}</button>
-          </div>
+       <div id='end_match_button'>
+        @if($match_data[0]['game_type']=='rubber' && !$active_rubber)
+           <button type="button" class="btn btn-danger" onclick="endMatchCompletely({{$match_data[0]['id']}})"> End Match</button>
+        @else
+          <button class="btn btn-danger soccer_buttons_disabled" onclick="return SJ.SCORECARD.soccerSetTimes(this)">End {{$match_data[0]['game_type']=='normal'?'Match':'Rubber'}}</button>  @endif
+        </div>
     @endif
  @if($isValidUser && $isForApprovalExist && ($match_data[0]['winner_id']>0 || $match_data[0]['is_tied']>0 || $match_data[0]['has_result'] == 0))    
       <button style="text-align:center;" type="button" onclick="forApproval();" class=" btn btn-primary">Send Score for Approval</button>
