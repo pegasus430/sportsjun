@@ -204,7 +204,7 @@
     @if($match_data[0]['hasSetupSquad'] && $match_data[0]['match_status']!='completed' )
           <br>
           <div id='end_match_button'>
-          <button class="btn btn-danger soccer_buttons_disabled" onclick="return SJ.SCORECARD.soccerSetTimes(this)">End Match</button>
+          <button class="btn btn-danger soccer_buttons_disabled" onclick="return SJ.SCORECARD.soccerSetTimes(this)">End {{$match_data[0]['game_type']=='normal'?'Match':'Rubber'}}</button>
           </div>
     @endif
  @if($isValidUser && $isForApprovalExist && ($match_data[0]['winner_id']>0 || $match_data[0]['is_tied']>0 || $match_data[0]['has_result'] == 0))    
@@ -1333,7 +1333,7 @@ function showHiddenRubber(){
 //complete match for rubber type, end match even if all rubbers are not played
 function endMatchCompletely(match_id){  
      $.ajax({
-        url:'/match/end_match_completely/'+match_id,       
+        url:'/match/end_match_completely_badminton/'+match_id,       
         success:function(){
            window.location = window.location;
         }

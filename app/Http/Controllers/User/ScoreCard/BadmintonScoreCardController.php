@@ -1144,6 +1144,41 @@ class BadmintonScoreCardController extends parentScoreCardController
             }
     }
 
+    //end match for rubber type, even if all rubbers is not played
+    public function endMatchCompletely($match_id){
+            $loginUserId = Auth::user()->id;
+            $match_model = MatchSchedule::find($match_id);
+            $tournamentDetails = Tournaments::find($match_model->tournament_id);
+            $winners_from_rubber = ScoreCard::getWinnerInRubber($match_id,$match_model->sports_id); 
+
+        $scorecardDetails = MatchSchedule::where('id',$match_id)->pluck('score_added_by');
+        $decode_scorecard_data = json_decode($scorecardDetails,true);
+        $modified_users = !empty($decode_scorecard_data['modified_users'])?$decode_scorecard_data['modified_users']:'';
+        $modified_users = $modified_users.','.$loginUserId;//scorecard changed users
+        $added_by = !empty($decode_scorecard_data['added_by'])?$decode_scorecard_data['added_by']:$loginUserId;
+        //score card approval process
+        $score_status = array('added_by'=>$added_by,'active_user'=>$loginUserId,'modified_users'=>$modified_users,'rejected_note'=>'');
+
+        $json_score_status = json_encode($score_status);            
+                    $winner_team_id = $winners_from_rubber['winner'];
+                    $looser_team_id = $winners_from_rubber['looser'];
+
+                                    MatchSchedule::where('id',$match_id)->update([
+                                    'match_status'=>'completed',
+                                    'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
+                                     'has_result'     => 1,
+                                     'match_result'   => 'win',
+                                    'score_added_by'=>$json_score_status]);
+
+                    if(!empty($match_model->tournament_round_number)) {
+                        $this->updateBracketDetails($match_model,$tournamentDetails,$winner_team_id);
+                    }
+                     
+                        $sportName = Sport::where('id',$match_model->sports_id)->pluck('sports_name');
+                        $this->insertPlayerStatistics($sportName,$match_id);
+                        $this->updateStatitics($match_id, $winner_team_id, $looser_team_id); 
+    }
+
 
 
 }

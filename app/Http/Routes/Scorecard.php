@@ -149,7 +149,8 @@ Route::group(['prefix'=>'match'], function(){
 
 //Match Helpers
     Route::get('set_active_rubber/{rubber_id?}', 'User\ScoreCardController@setActiveRubber');
-    Route::get('end_match_completely/{match_id?}', 'User\ScoreCardController@endMatchCompletely');
+    Route::get('end_match_completely_badminton/{match_id?}', 'User\ScoreCard\BadmintonScoreCardController@endMatchCompletely');
+    Route::get('end_match_completely_tableTennis/{match_id?}', 'User\ScoreCard\TabletennisScoreCardController@endMatchCompletely');
 });
 
 //End Matches
