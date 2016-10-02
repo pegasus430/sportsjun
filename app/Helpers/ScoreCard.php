@@ -13,6 +13,7 @@ use App\Model\TeamPlayers;
 use App\Model\volleyballScore;
 use App\Model\VolleyballPlayerMatchwiseStats;
 use App\Model\BasketballPlayerMatchwiseStats;
+use App\Model\UltimateFrisbeePlayerMatchwiseStats;
 use App\Model\TournamentMatchPreference;
 use App\Helpers\AllRequests;
 use App\User;
@@ -155,9 +156,13 @@ class ScoreCard {
 	public static function getTotalPoints($match_id, $sports_id, $type, $team_id){
 
 	$total_points= 0 ;
+	//$model = [];
 			switch ($sports_id) {
 				case '6':
-	$model = BasketballPlayerMatchwiseStats::where(['match_id'=>$match_id, 'team_id'=>$team_id])->get();
+	$model =BasketballPlayerMatchwiseStats::where(['match_id'=>$match_id, 'team_id'=>$team_id])->get();
+					break;
+				case '15':
+	$model =UltimateFrisbeePlayerMatchwiseStats::where(['match_id'=>$match_id, 'team_id'=>$team_id])->get();
 					break;
 				
 				default:

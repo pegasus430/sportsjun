@@ -91,6 +91,10 @@ input:read-only {
 
         }
 
+          td a{
+            color: #455469;          
+        }
+
 
 
 
@@ -459,7 +463,8 @@ input:read-only {
 										<tr id="team_a_row_{{$player['id']}}"  class="team_a_goal_row player_select {{$class_ps}} " player_id="{{$player['id']}} " player_name="{{$player['player_name']}}" team_id="{{$team_a_id}}" team_type='team_a' user_id="{{$player['user_id']}}" {!!$attr!!}>
 
 												<td>
-														{{$player['player_name']}}								
+									  <a href="/editsportsprofile/{{$player['user_id']}}" class="primary">                  {{$player['player_name']}} 
+                                      </a> 							
                                                 </td>
                                                 <td> 
       <input type='text' class="tennis_input_new gui-input  points_1_player_{{$player['user_id']}}" readonly="" name="points_1_{{$player['id']}}" value="{{$player['points_1']}}" >
@@ -489,7 +494,7 @@ input:read-only {
 											@endforeach
 										</tbody>
 
-										<thead class="thead active ">
+										<thead class="substitutes_head ">
 											<tr>
 												<th >Substitutes</th>
 												<th> 1 Pts </th>
@@ -518,7 +523,8 @@ input:read-only {
 										<tr id="team_a_row_{{$player['id']}}"  class="team_a_goal_row player_select {{$class_ps}} " player_id="{{$player['id']}} " player_name="{{$player['player_name']}}" team_id="{{$team_a_id}}" team_type='team_a' user_id="{{$player['user_id']}}" {!!$attr!!}>
 
 												<td>
-														{{$player['player_name']}}								
+							 <a href="/editsportsprofile/{{$player['user_id']}}" class="primary">                  {{$player['player_name']}} 
+                                      </a> 
                                                 </td>
                                                 <td> 
       <input type='text' class="tennis_input_new gui-input  points_1_player_{{$player['user_id']}}" readonly="" name="points_1_{{$player['id']}}" value="{{$player['points_1']}}" >
@@ -590,7 +596,8 @@ input:read-only {
 
 												
 												<td>
-														{{$player['player_name']}}								
+			 <a href="/editsportsprofile/{{$player['user_id']}}" class="primary">                  {{$player['player_name']}} 
+                                      </a> 	
                                                 </td>
                                                 <td> 
       <input type='text' class="tennis_input_new gui-input  points_1_player_{{$player['user_id']}}" readonly="" name="points_1_{{$player['id']}}" value="{{$player['points_1']}}" >
@@ -618,7 +625,7 @@ input:read-only {
 											@endforeach
 
 
-										<thead class="thead ">
+										<thead class="substitutes_head">
 											<tr>
 												<th >Substitutes</th>
 												<th> 1 Pts </th>
