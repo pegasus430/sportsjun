@@ -789,7 +789,7 @@ class BadmintonScoreCardController extends parentScoreCardController
             $active_rubber = $this->getActiveRubber($match_id);
             $rubber_number= $active_rubber->rubber_number;
 
-            if($number_of_rubber==$rubber_number) $rubber_completed=9;
+            if($number_of_rubber==$rubber_number) $rubber_completed=0;
             else $rubber_completed=0;
             $rubber_id=$active_rubber->id;
             $this->destroyRubberFromSession();

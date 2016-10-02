@@ -475,6 +475,8 @@
 @else 
   <!-- Start of Rubber -->
 <?php $match_has_winner = ScoreCard::getWinnerInRubber($match_data[0]['id'], $match_data[0]['sports_id'], true);?>
+
+  @if($active_rubber)
    <div class="row" > 
         <div class="col-sm-12">     
         <center>
@@ -504,6 +506,7 @@
 
         </div>
     </div> 
+  @endif
 
      <div class="row">
        <p><br></p>
