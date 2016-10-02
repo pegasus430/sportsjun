@@ -1799,6 +1799,11 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
         $(document).on('ifChecked', '.checkbox_half_time', function(){
             return SJ.SCORECARD.soccerChooseTime(this);
         });
+
+         $(window).load(function(){
+        	var quarter_time = {{$match_data[0]['selected_half_or_quarter']}}
+        	$('#quarter_'+quarter_time+'_id').iCheck('check');        	
+        })
 	</script>
 
 @endsection

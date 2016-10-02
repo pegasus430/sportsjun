@@ -14,6 +14,7 @@ use App\Model\volleyballScore;
 use App\Model\VolleyballPlayerMatchwiseStats;
 use App\Model\BasketballPlayerMatchwiseStats;
 use App\Model\UltimateFrisbeePlayerMatchwiseStats;
+use App\Model\WaterpoloPlayerMatchwiseStats;
 use App\Model\TournamentMatchPreference;
 use App\Helpers\AllRequests;
 use App\User;
@@ -164,6 +165,10 @@ class ScoreCard {
 				case '15':
 	$model =UltimateFrisbeePlayerMatchwiseStats::where(['match_id'=>$match_id, 'team_id'=>$team_id])->get();
 					break;
+				case '16':
+	$model =WaterpoloPlayerMatchwiseStats::where(['match_id'=>$match_id, 'team_id'=>$team_id])->get();
+					break;
+				
 				
 				default:
 					# code...

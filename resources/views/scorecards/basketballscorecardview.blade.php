@@ -421,7 +421,7 @@
                             <div class='col-sm-12'>
                                 <h3 id='team_a' class="team_fall team_title_head">{{$team_b_name}}</h3>
                                 <div class="table-responsive">
-                                    <table class="table table-striped"> 
+                                    <table class="table table-striped table-bordered"> 
                                         <thead class="thead ">
                                            <tr>
                                                 <th >Player</th>

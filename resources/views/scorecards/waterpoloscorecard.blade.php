@@ -232,7 +232,7 @@ input:read-only {
 
 			<div class="row">
 				<div class="col-md-12">
-					<h5 class="scoreboard_title">waterpolo Scorecard
+					<h5 class="scoreboard_title">Waterpolo Scorecard
 					@if(!empty($match_data[0]['match_category']))
                              <span class='match_type_text'>
                              ({{ucfirst($match_data[0]['match_category']) }})
@@ -1770,6 +1770,11 @@ var manual=false;
         $(document).on('ifChecked', '.checkbox_half_time', function(){
             return SJ.SCORECARD.soccerChooseTime(this);
         });
+
+         $(window).load(function(){
+        	var quarter_time = {{$match_data[0]['selected_half_or_quarter']}}
+        	$('#quarter_'+quarter_time+'_id').iCheck('check');        	
+        })
 	</script>
 
 @endsection

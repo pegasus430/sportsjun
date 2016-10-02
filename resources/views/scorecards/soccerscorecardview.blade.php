@@ -210,6 +210,7 @@
 
                                 <div class="form-group">
                                     <label>Winner is Not Updated</label>
+                                     HALF {{$match_data[0]['selected_half_or_quarter']}}
 
                                 </div>
                             @endif
