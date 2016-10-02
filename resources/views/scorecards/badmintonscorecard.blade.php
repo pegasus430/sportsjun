@@ -562,7 +562,7 @@
 
 <!-- If normal Match -->
  
- @if( isset($score_a_array['team_name']))
+ @if( isset($score_a_array['team_name'])  && $match_data[0]['game_type']=='normal')
 @if($match_data[0]['match_type']!='singles' )
   
 

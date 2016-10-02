@@ -291,7 +291,7 @@
 
                                                
                                                 <td class="">
-                                      <a href="/editsportsprofile/{{$player['user_id']}}" class="primary">                  {{$player['player_name']}} 
+                                      <a href="/editsportprofile/{{$player['user_id']}}" class="primary">                  {{$player['player_name']}} 
                                       </a>                         
                                                 </td>
                                                 <td class=""> 
@@ -342,7 +342,7 @@
 
                                                
                                                 <td class="">
-                                       <a href="/editsportsprofile/{{$player['user_id']}}" class="primary">                  {{$player['player_name']}} 
+                                       <a href="/editsportprofile/{{$player['user_id']}}" class="primary">                  {{$player['player_name']}} 
                                       </a>                              
                                                 </td>
                                                 <td class=""> 
@@ -427,7 +427,7 @@
                                         <tr>
                                                 
                                                 <td class="">
-                                     <a href="/editsportsprofile/{{$player['user_id']}}" class="primary">                  {{$player['player_name']}} 
+                                     <a href="/editsportprofile/{{$player['user_id']}}" class="primary">                  {{$player['player_name']}} 
                                       </a>      
                                                 </td>
                                                 <td class=""> 
@@ -473,7 +473,7 @@
                                         <tr>
                                                 
                                                 <td class="">
-                                  <a href="/editsportsprofile/{{$player['user_id']}}" class="primary">                  {{$player['player_name']}} 
+                                  <a href="/editsportprofile/{{$player['user_id']}}" class="primary">                  {{$player['player_name']}} 
                                  </a>                             
                                                 </td>
                                                 <td class=""> 
