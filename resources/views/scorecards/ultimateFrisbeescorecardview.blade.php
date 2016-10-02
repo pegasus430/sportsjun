@@ -27,6 +27,11 @@
         $b_fouls=$match_details->{$team_b_id}->fouls;       
     }
 
+      else {
+        $number_of_quarters = 4; 
+        $quarter_time = 20;
+    }
+
 
 
     function getClass($number){
