@@ -92,6 +92,10 @@
         .btn-penalty-chosen{
             opacity: 1;
         }
+       td a{
+            color: #455469;
+          
+        }
 
 
 
@@ -287,8 +291,9 @@
                                         <tr id="team_a_row_{{$player['id']}}">
 
                                                
-                                                <td class="{{getPlayerClass($player['playing_status'])}}">
-                                                        {{$player['player_name']}}                              
+                                                <td class="">
+                                      <a href="/editsportsprofile/{{$player['user_id']}}" class="primary">                  {{$player['player_name']}} 
+                                      </a>                         
                                                 </td>
                                                 <td class=""> 
     {{getClass($player['points_1'])}}
@@ -322,7 +327,7 @@
                                         </tbody>
 
 
-                                            <thead class="thead ">
+                                            <thead class="substitutes_head ">
                                           <tr>
                                                 <th >Substitutes</th>
                                                 <th> 1 Pts </th>
@@ -346,8 +351,9 @@
                                         <tr id="team_a_row_{{$player['id']}}">
 
                                                
-                                                <td class="{{getPlayerClass($player['playing_status'])}}">
-                                                        {{$player['player_name']}}                              
+                                                <td class="">
+                                       <a href="/editsportsprofile/{{$player['user_id']}}" class="primary">                  {{$player['player_name']}} 
+                                      </a>                              
                                                 </td>
                                                 <td class=""> 
     {{getClass($player['points_1'])}}
@@ -375,10 +381,37 @@
     {{getClass($player['total_points'])}}
                                                 </td>
                                          </tr>
-                                         </tr>
+                                        
                                      @endif
                                             @endforeach
                                         </tbody>
+
+                                        <thead class="total_head">
+                                            <tr>
+                                                <td>Total </td>
+                                                <td>
+    {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'points_1', $match_data[0]['a_id']))}}
+                                                </td>
+                                                 <td>
+    {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'points_2', $match_data[0]['a_id']))}}
+                                                </td>
+                                                 <td>
+    {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'points_3', $match_data[0]['a_id']))}}
+                                                </td>
+                                                 <td>
+    {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'fouls', $match_data[0]['a_id']))}}
+                                                </td>
+                                                 @for($index=1; $index<=$number_of_quarters; $index++)
+                                            <td class="">
+    {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'quarter_'.$index, $match_data[0]['a_id']))}}
+      
+                                            </td>
+                                              @endfor
+                                                <td>
+    {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'total_points', $match_data[0]['a_id']))}}
+                                                </td>
+                                            </tr>
+                                        </thead>
                                     </table>
 
                                 </div>
@@ -412,8 +445,9 @@
                                      @if($player['playing_status']=='P')
                                         <tr>
                                                 
-                                                <td class="{{getPlayerClass($player['playing_status'])}}">
-                                                        {{$player['player_name']}}                              
+                                                <td class="">
+                                     <a href="/editsportsprofile/{{$player['user_id']}}" class="primary">                  {{$player['player_name']}} 
+                                      </a>      
                                                 </td>
                                                 <td class=""> 
      {{getClass($player['points_1'])}}
@@ -445,7 +479,7 @@
                                             @endforeach
                                         </tbody>
 
-                                           <thead class="thead ">
+                                           <thead class="substitutes_head">
                                            <tr>
                                                 <th >Substitutes</th>
                                                 <th> 1 Pts </th>
@@ -468,8 +502,9 @@
                                      @if($player['playing_status']=='S')
                                         <tr>
                                                 
-                                                <td class="{{getPlayerClass($player['playing_status'])}}">
-                                                        {{$player['player_name']}}                              
+                                                <td class="">
+                                  <a href="/editsportsprofile/{{$player['user_id']}}" class="primary">                  {{$player['player_name']}} 
+                                 </a>                             
                                                 </td>
                                                 <td class=""> 
      {{getClass($player['points_1'])}}
@@ -495,11 +530,38 @@
     {{getClass($player['total_points'])}}
                                                 </td>
                                          </tr>
-                                         </tr>
+                                         
                                     
                                         @endif
                                             @endforeach
                                         </tbody>
+
+                                         <thead class="total_head">
+                                            <tr>
+                                                <td>Total </td>
+                                                <td>
+    {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'points_1', $match_data[0]['b_id']))}}
+                                                </td>
+                                                 <td>
+    {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'points_2', $match_data[0]['b_id']))}}
+                                                </td>
+                                                 <td>
+    {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'points_3', $match_data[0]['b_id']))}}
+                                                </td>
+                                                 <td>
+    {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'fouls', $match_data[0]['b_id']))}}
+                                                </td>
+                                                 @for($index=1; $index<=$number_of_quarters; $index++)
+                                            <td class="">
+    {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'quarter_'.$index, $match_data[0]['b_id']))}}
+      
+                                            </td>
+                                              @endfor
+                                                <td>
+    {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'total_points', $match_data[0]['b_id']))}}
+                                                </td>
+                                            </tr>
+                                        </thead>
                                     </table>
 
                                 </div>

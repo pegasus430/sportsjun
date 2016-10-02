@@ -489,7 +489,7 @@ input:read-only {
 											@endforeach
 										</tbody>
 
-										<thead class="thead ">
+										<thead class="thead active ">
 											<tr>
 												<th >Substitutes</th>
 												<th> 1 Pts </th>

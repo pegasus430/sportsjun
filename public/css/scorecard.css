@@ -1217,3 +1217,23 @@ div#playerOfTheMatchNote {
 .winner_set td{
 	background-color: #d4f5af;
 }
+
+
+
+
+
+.total_head{
+	
+    border-bottom: 1px solid #1B926C;
+    background: #266393;
+    color: yellow;
+}
+.players_head{
+	
+}
+
+.substitutes_head{
+	border-bottom: 1px solid #1B926C;
+    background: #1B926C;
+    color: #fff;
+}

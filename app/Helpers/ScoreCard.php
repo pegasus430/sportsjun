@@ -12,6 +12,7 @@ use App\Model\Tournaments;
 use App\Model\TeamPlayers;
 use App\Model\volleyballScore;
 use App\Model\VolleyballPlayerMatchwiseStats;
+use App\Model\BasketballPlayerMatchwiseStats;
 use App\Model\TournamentMatchPreference;
 use App\Helpers\AllRequests;
 use App\User;
@@ -149,6 +150,26 @@ class ScoreCard {
 		if($score_a>$score_b) return ['winner'=>$a_id, 'looser'=> $b_id];
 		else return ['winner'=>$b_id, 'looser'=> $a_id];
 
+	}
+
+	public static function getTotalPoints($match_id, $sports_id, $type, $team_id){
+
+	$total_points= 0 ;
+			switch ($sports_id) {
+				case '6':
+	$model = BasketballPlayerMatchwiseStats::where(['match_id'=>$match_id, 'team_id'=>$team_id])->get();
+					break;
+				
+				default:
+					# code...
+					break;
+			}
+
+		foreach ($model as $key => $value) {
+				$total_points += $value->{$type};
+		}
+
+		return $total_points;
 	}
 
 
