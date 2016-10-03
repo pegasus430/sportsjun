@@ -60,6 +60,7 @@ Route::group(['prefix' => 'organization/{id}'], function () {
         'uses' => 'User\OrganizationSchedulesController@index',
     ]);
 
+
 });
 
 Route::get('getteamdetails', [
@@ -128,6 +129,12 @@ Route::get('team/deleteteam/{team_id}/{flag}', [
 Route::post('team/update/{team_id}', [
     'as'   => 'team/update',
     'uses' => 'User\TeamController@updateteam',
+]);
+
+
+Route::post('team/change_ownership', [
+    'as'   => 'team.change_ownership',
+    'uses' => 'User\TeamController@changeOwnership',
 ]);
 
 //to update player/team details

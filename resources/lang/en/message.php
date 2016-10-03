@@ -363,7 +363,12 @@ return [
 		],
          'scores' => 'Scores' ,
 		'new_owner_notification'=>'Admin has added you as the Team Owner',	
-		'old_owner_notification'=>'Admin has removed you as the Team Owner',	
+		'old_owner_notification'=>'Admin has removed you as the Team Owner',
+        'ownership_change_modal'=>[
+                'title'=>'Change ownership',
+                'field_name'=> 'Name',
+                'field_email'=> 'Email'
+        ]
 	],
 	'album' => [
 	'albumcreate' => 'Album Created Successfully.',
