@@ -463,7 +463,7 @@ input:read-only {
 										<tr id="team_a_row_{{$player['id']}}"  class="team_a_goal_row player_select {{$class_ps}} " player_id="{{$player['id']}} " player_name="{{$player['player_name']}}" team_id="{{$team_a_id}}" team_type='team_a' user_id="{{$player['user_id']}}" {!!$attr!!}>
 
 												<td>
-									  <a href="/editsportsprofile/{{$player['user_id']}}" class="primary">                  {{$player['player_name']}} 
+									  <a href="/editsportprofile/{{$player['user_id']}}" class="primary">                  {{$player['player_name']}} 
                                       </a> 							
                                                 </td>
                                                 <td> 
@@ -523,7 +523,7 @@ input:read-only {
 										<tr id="team_a_row_{{$player['id']}}"  class="team_a_goal_row player_select {{$class_ps}} " player_id="{{$player['id']}} " player_name="{{$player['player_name']}}" team_id="{{$team_a_id}}" team_type='team_a' user_id="{{$player['user_id']}}" {!!$attr!!}>
 
 												<td>
-							 <a href="/editsportsprofile/{{$player['user_id']}}" class="primary">                  {{$player['player_name']}} 
+							 <a href="/editsportprofile/{{$player['user_id']}}" class="primary">                  {{$player['player_name']}} 
                                       </a> 
                                                 </td>
                                                 <td> 
@@ -596,7 +596,7 @@ input:read-only {
 
 												
 												<td>
-			 <a href="/editsportsprofile/{{$player['user_id']}}" class="primary">                  {{$player['player_name']}} 
+			 <a href="/editsportprofile/{{$player['user_id']}}" class="primary">                  {{$player['player_name']}} 
                                       </a> 	
                                                 </td>
                                                 <td> 

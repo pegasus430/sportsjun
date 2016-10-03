@@ -11,10 +11,9 @@
 
 				<label class="field select">
 					<select name='number_of_sets' class='gui-input' value="{{$settings->number_of_sets}}">
-							<option value='2'  {{$settings->number_of_sets==1?'selected':''}}>  2 </option>
-							<option value='4'  {{$settings->number_of_sets==3?'selected':''}} >  4 </option>
-							<option value='6'  {{$settings->number_of_sets==5?'selected':''}}>  6 </option> 
-							<option value='8'  {{$settings->number_of_sets==7?'selected':''}}>  8 </option> 
+							<option value='2'  {{$settings->number_of_sets==2?'selected':''}}>  Halves </option>
+							<option value='4'  {{$settings->number_of_sets==4?'selected':''}} > Quarters </option>
+							 
 					</select>
 					<i class="arrow double"></i>
 				</label>
