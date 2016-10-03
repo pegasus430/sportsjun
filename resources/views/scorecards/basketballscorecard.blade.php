@@ -1100,7 +1100,7 @@ input:read-only {
 											Number of Quarters
 										</div>
 										<div class="col-sm-5">
-											<input type='text' required="" placeholder="eg. 2" name='number_of_quarters' id='number_of_quarters'>
+											<input type='text' required="" placeholder="eg. 2" name='number_of_quarters' id='number_of_quarters' value='4' readonly="">
 										</div>
 									</div>
 									<br>
