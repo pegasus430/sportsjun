@@ -71,6 +71,13 @@
                 Media Gallery
             </a>
         </li>
+        <li>
+            <a class = "sidemenu_3"
+               href="{{ route('organization.members.list',$id) }}">
+                <span class = "ico ico-members"></span>
+                Players
+            </a>
+        </li>
 
 	</ul>
     </div>

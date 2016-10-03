@@ -49,6 +49,11 @@ Route::group(['prefix' => 'organization/{id}'], function () {
         'as'   => 'organization.groups.update',
         'uses' => 'User\OrganizationGroupsController@edit',
     ]);
+
+    Route::get('players', [
+        'as'   => 'organization.members.list',
+        'uses' => 'User\OrganizationMembersController@index',
+    ]);
 });
 
 Route::get('getteamdetails', [
