@@ -188,7 +188,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
                        </center>
                     </div>
                 </div>
-            @endi
+            @endif
 				<div class="row">
 					<div class="col-xs-12">
 						<div class="match_loc">
@@ -683,13 +683,12 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 								</div>
 							</div>
 						</div>
-					</div>
-				</div>
+					
 
 
 
 				<!-- Team B Goals Start-->
-				<div class='row' id='match_details'>
+				<div class='' id='match_details'>
 				<div class="col-sm-10 col-sm-offset-1 col-xs-12">
 					<h3 id='team_b' class="team_bowl table_head">MATCH DETAILS</h3>
 					<div class="table-responsive">

@@ -152,7 +152,7 @@
                        </center>
                     </div>
                 </div>
-            @endi
+            @endif
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="match_loc">
