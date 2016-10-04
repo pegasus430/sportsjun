@@ -2038,7 +2038,7 @@ class Helper {
         return $match_model;
     }
 
-    public static function updateOrganizationTeamsPoints($organization_id=null){
+    public static function updateOrganizationTeamsPoints($tournament_id=null){
             $tournaments_teams=DB::table('tournament_group_teams')
                       ->join('tournaments', 'tournaments.id', '=', 'tournament_group_teams.tournament_id')
                       ->join('organization_group_teams', 'organization_group_teams.team_id', '=','tournament_group_teams.team_id')
@@ -2046,19 +2046,17 @@ class Helper {
                       ->select('tournament_group_teams.*','organization_groups.*', 'tournaments.*', 'organization_group_teams.*', DB::RAW('sum(tournament_group_teams.points) as organization_group_points'))  
                       ->groupBy('organization_group_teams.organization_group_id') ;
 
-            if(!empty($organization_id)){
-              $tournaments_teams= $tournaments_teams->where('organization_groups.organization_id','=', $organization_id);
+            if(!empty($tournament_id)){
+              $tournaments_teams= $tournaments_teams->where('tournaments.id','=', $tournament_id);
             }                  
               $tournaments_teams=$tournaments_teams->get();
-
-
 
                 foreach($tournaments_teams as $organization_group_team){
                     $tournament_id=$organization_group_team->tournament_id;
                     $organization_id=$organization_group_team->organization_id;
                     $organization_group_id=$organization_group_team->organization_group_id;
                     $sports_id=$organization_group_team->sports_id;
-                    $organization_group_points=$organization_group_team->organization_group_points;
+                    $organization_group_points=Helper::getGroupPoints($tournament_id, $organization_group_id);
 
                     $check=OrganizationGroupTeamPoint::whereTournamentId($tournament_id)->whereOrganizationGroupId($organization_group_id)->first();
 
@@ -2078,16 +2076,41 @@ class Helper {
                         $new_ogtp->sports_id                =$sports_id;
                         $new_ogtp->points                   =$organization_group_points;
                         $new_ogtp->organization_group_id    =$organization_group_id;
-                        $new_ogtp->tournament_parent_id     =$organization_group_team->tournament_parent_id;
+                        $new_ogtp->tournament_parent_id    =$organization_group_team->tournament_parent_id;
 
-                          $new_ogtp->save();
+                        $new_ogtp->save();
                         
                     }
-                }
-
+                }                
 
 
             return $tournaments_teams;
+    }
+
+    public static function getGroupPoints($tournament_id,$organization_group_id){           
+                $team_id = DB::table('organization_group_teams')
+                            ->where('organization_group_id',$organization_group_id)
+                            ->lists('team_id');
+                $teams = null;
+                if ($team_id) {
+                    $teams = TournamentGroupTeams::whereTournamentId($tournament_id);
+                    if (is_array($team_id)) {
+                        $teams->whereIn('team_id', $team_id);
+                    }
+                    else {
+                        $teams->where('team_id', $team_id);
+                    }
+                    $teams = $teams->get();
+                }
+                if (!$teams) {
+                    return 0;
+                }
+
+                $final_points = $teams->sum('final_points');
+                $points = $final_points ? $final_points : $teams->sum('points');
+                return $points;
+                   
+           
     }
 
     public function getOrganizationTeamPoints($tournament_id=''){

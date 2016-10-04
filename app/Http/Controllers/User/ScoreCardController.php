@@ -4066,15 +4066,10 @@ class ScoreCardController extends Controller {
 
 
 			//update organization points;
-
-		$organization=Organization::join('tournament_parent', 'organization.id', '=', 'tournament_parent.organization_id')
-								->join('tournaments', 'tournaments.tournament_parent_id', '=', 'tournament_parent.id')
-								->where('tournaments.id', '=', $match_data[0]['tournament_id'])
-								->first();
-
-		if(!is_null($organization)){
-				Helper::updateOrganizationTeamsPoints($organization->id);
-		}
+	
+		if(!is_null($match_data[0]['tournament_id'])){
+				Helper::updateOrganizationTeamsPoints($match_data[0]['tournament_id']);
+		} 
 
 		}
 
