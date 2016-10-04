@@ -185,10 +185,15 @@ class Helper {
     }
     public static function getTeamCity($team_id)
     {
-        $getTeamAddress = Team::where('id', $team_id)->get(array('city','state','country'));
-        $address = Helper::addressInfo($getTeamAddress[0]['city'],$getTeamAddress[0]['state'],$getTeamAddress[0]['country']);
-        return $address;
+        if ($team_id) {
+            $getTeamAddress = Team::where('id', $team_id)->get(array('city', 'state', 'country'));
+            $address = Helper::addressInfo($getTeamAddress[0]['city'], $getTeamAddress[0]['state'],
+                $getTeamAddress[0]['country']);
+            return $address;
+        }
+        return '';
     }
+
     public static function getUserCity($user_id)
     {
         $getTeamAddress = User::where('id', $user_id)->get(array('city','state','country','dob'));
@@ -1150,7 +1155,6 @@ class Helper {
     }
 
     public static function ImageCheck($path){
-
         return (File::exists(public_path($path)) && File::isFile(public_path($path))) ? $path : 'images/default-profile-pic.jpg';
     }
 
