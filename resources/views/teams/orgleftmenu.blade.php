@@ -47,6 +47,14 @@
             </a>
         </li>
 
+        <li>
+            <a class = "sidemenu_3"
+               href="{{ route('organization.members.list',$id) }}">
+                <span class = "ico ico-members"></span>
+                Players
+            </a>
+        </li>
+
         <!--<li><a class="sidemenu_2" href="{{ url('/team/matches') }}">Matches</a></li>-->
         <!--<li>
             <a class = "sidemenu_2"
@@ -66,25 +74,21 @@
 
         <li>
             <a class = "sidemenu_3"
-               href = "{{ url('user/album/show').'/organization'.'/0'.'/'.$id }}">
-                <span class = "ico ico-media-gallery"></span>
-                Media Gallery
-            </a>
-        </li>
-        <li>
-            <a class = "sidemenu_3"
-               href="{{ route('organization.members.list',$id) }}">
-                <span class = "ico ico-members"></span>
-                Players
-            </a>
-        </li>
-        <li>
-            <a class = "sidemenu_3"
                href= "{{ route('organization.schedules.list',$id) }}">
                 <span class="ico ico-final-stage"></span>
                 Schedule
             </a>
         </li>
+
+
+        <li>
+            <a class = "sidemenu_3"
+               href = "{{ url('user/album/show').'/organization'.'/0'.'/'.$id }}">
+                <span class = "ico ico-media-gallery"></span>
+                Media Gallery
+            </a>
+        </li>
+
 
 	</ul>
     </div>
