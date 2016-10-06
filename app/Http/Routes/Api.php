@@ -14,7 +14,7 @@ Route::group(['prefix' => '/api/v1', 'middleware' => 'cors'], function ($router)
     Route::post('/otp/issent', ['uses' => 'Api\AuthApiController@isOtpSent']);
 
 //'jwt.refresh'
-    Route::group(['middleware' => ['jwt.auth']], function ($router) {
+    Route::group(['middleware' => ['jwt.api.auth']], function ($router) {
         $router->resource('/users', 'Api\UserApiController');
 
         //handle teams
