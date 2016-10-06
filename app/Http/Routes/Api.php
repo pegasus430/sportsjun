@@ -9,12 +9,12 @@ Route::group(['prefix' => '/api/v1', 'middleware' => 'cors'], function ($router)
     Route::post('login', 'Api\AuthApiController@login');
     Route::post('register', 'Api\AuthApiController@register');
 
-    Route::post('/otp/generate', ['uses' => 'Api\AuthApiController@generateOTP']);
-    Route::post('/otp/verify', ['uses' => 'Api\AuthApiController@verifyOTP']);
-    Route::post('/otp/issent', ['uses' => 'Api\AuthApiController@isOtpSent']);
-
 //'jwt.refresh'
     Route::group(['middleware' => ['jwt.api.auth']], function ($router) {
+        Route::post('/otp/generate', ['uses' => 'Api\AuthApiController@generateOTP']);
+        Route::post('/otp/verify', ['uses' => 'Api\AuthApiController@verifyOTP']);
+        Route::post('/otp/issent', ['uses' => 'Api\AuthApiController@isOtpSent']);
+
         $router->resource('/users', 'Api\UserApiController');
 
         //handle teams
