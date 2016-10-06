@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Services;
+namespace App\Services;
 
 
 use App\Model\Otp;
@@ -54,6 +54,7 @@ class MSG91
             [
                 'user_id' => $user_id,
                 'token' => $token,
+                'contact_number'=>$mobileNumber,
                 'otp' => array_get($response, "response.oneTimePassword")
             ]);
         return ['response'=>$response["response"],'success'=>true];
@@ -69,9 +70,10 @@ class MSG91
                 'otp' => $otp,
                 'token' => $token,
                 'contact_number' => $mobileNumber,
-                'is_verified',
-                0
+                'is_verified'=> 0
             ]);
+
+
         $query->orderBy('id', 'desc')->limit(1);
         $results = $query->get();
 
