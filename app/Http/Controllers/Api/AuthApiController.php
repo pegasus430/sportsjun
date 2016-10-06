@@ -44,6 +44,7 @@ class AuthApiController extends BaseApiController
             'name' => 'required|max:255',
             'firstname' => 'required|max:255',
             'lastname' => 'required|max:255',
+            'mobile'=> 'max:20',
             'email' => 'required|unique:users,email|email|max:255',
             'password' => 'required|min:6',
         ]);
@@ -54,6 +55,7 @@ class AuthApiController extends BaseApiController
                 'lastname' => $data['lastname'],
                 'name' => $data['firstname'] . ' ' . $data['lastname'],
                 'email' => $data['email'],
+                'contact_number'=> array_get($data,'mobile'),
                 'password' => bcrypt($data['password']),
                 'newsletter' => !empty($data['newsletter']) ? 1 : 0,
                 'verification_key' => md5($data['email']) //TODO:: these thing should be changed across all site
