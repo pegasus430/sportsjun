@@ -4,14 +4,14 @@
     position: absolute;
 }
 #container_my_team,#container_opp_team {
-    display: block; 
+    display: block;
     position:relative
-} 
+}
 /*.alert{display: none;}*/
-</style> 
+</style>
 <script src="http://malsup.github.com/jquery.form.js"></script>
 <!-- Modal -->
-{!! Form::open(['route' => 'addschedule','class'=>'form-horizontal','method' => 'POST','id' => 'frm_add_schedule']) !!} 
+{!! Form::open(['route' => 'addschedule','class'=>'form-horizontal','method' => 'POST','id' => 'frm_add_schedule']) !!}
 <div class="modal fade"  id="myModal" role="dialog">
 	<div class="modal-dialog sj_modal">
 	  <!-- Modal content-->
@@ -41,15 +41,15 @@
                                         {!! Form::hidden('tournament_match_number', null , array('id' => 'tournament_match_number')) !!}
                                         {!! Form::hidden('scheduletype', $schedule_type , array('id' => 'scheduletype')) !!}
                                         {!! Form::hidden('is_tournament', 1 , array('id' => 'is_tournament')) !!}
-					
+
                     <div class="row">
                     	<div class="col-sm-6">
                                         <div class="section" id="byeDiv" style="display:none;">
-                           
+
 						<label class="field select">
 							{!! Form::select('bye', $byeArray,null,['class'=>'gui-input','placeholder'=>trans('message.schedule.fields.match'),'id'=>'bye']
-							) !!}					
-							<i class="arrow double"></i> 
+							) !!}
+							<i class="arrow double"></i>
 						</label>
 					</div>
                     	</div>
@@ -62,13 +62,12 @@
 						</div>
                    	</div>
 					<div class="row">
-                    	<div class="col-sm-6">                
+                    	<div class="col-sm-6">
                         	<div class="section">
-                             <label class="form_label">{{   trans('message.schedule.fields.myteam') }} <span  class='required'>*</span> </label>    
+                             <label class="form_label">{{   trans('message.schedule.fields.myteam') }} <span  class='required'>*</span> </label>
 						<label for="myteam" class="field prepend-icon">
-							{!! Form::text('myteam',(isset($team_name)?$team_name:''), array('required','class'=>'gui-input','placeholder'=>trans('message.schedule.fields.selectteam'),'id'=>'myteam','autocomplete'=>'off')) !!}
+							{!! Form::select('my_team_id',$final_stage_teams,null,['class'=>'gui-input','id'=>'my_team_id']) !!}
 							<div id="container_my_team"></div>
-							{!! Form::hidden('my_team_id', (!empty($teamId)?$teamId:''), array('id' => 'my_team_id')) !!}
 							{!! Form::hidden('sports_id', (!empty($sports_id)?$sports_id:'') , array('id' => 'sports_id')) !!}
 							@if ($errors->has('myteam')) <p class="help-block">{{ $errors->first('myteam') }}</p> @endif
 							<label for="myteam" class="field-icon"><i class="fa fa-user"></i></label>
@@ -77,11 +76,9 @@
                     	</div>
                         <div class="col-sm-6">
                         	<div class="section" id="oppTeamDiv">
-                             <label class="form_label">{{   trans('message.schedule.fields.opponentteam') }} <span  class='required'>*</span> </label>    
+                             <label class="form_label">{{   trans('message.schedule.fields.opponentteam') }} <span  class='required'>*</span> </label>
 						<label for="oppteam" class="field prepend-icon">
-							{!! Form::text('oppteam',null, array('required','class'=>'gui-input','placeholder'=>trans('message.schedule.fields.selectteam'),'id'=>'oppteam','autocomplete'=>'off')) !!}
-							<div id="container_opp_team"></div>
-							{!! Form::hidden('opp_team_id', '', array('id' => 'opp_team_id')) !!}
+							{!! Form::select('opp_team_id',$final_stage_teams,null,['class'=>'gui-input','id' => 'opp_team_id']) !!}
 							@if ($errors->has('oppteam')) <p class="help-block">{{ $errors->first('oppteam') }}</p> @endif
 							<label for="oppteam" class="field-icon"><i class="fa fa-user"></i></label>
 						</label>
@@ -91,7 +88,7 @@
                     <div class="row">
                     	<div class="col-sm-6">
                         	<div class="section" id="matchStartDatediv">
-                                              <label class="form_label">{{   trans('message.schedule.fields.start_date') }}<span  class='required'>*</span> </label>              
+                                              <label class="form_label">{{   trans('message.schedule.fields.start_date') }}<span  class='required'>*</span> </label>
 						<label for="match_start_date" class="field prepend-icon">
 							<div class='input-group date' id='matchStartDate'>
 								{!! Form::text('match_start_date',null, array('required','class'=>'gui-input','placeholder'=>trans('message.schedule.fields.start_date'),'id'=>'match_start_date')) !!}
@@ -105,7 +102,7 @@
                     	</div>
                         <div class="col-sm-6">
                     		<div class="section" id="matchStartTimeDiv">
-                                                                          <label class="form_label">{{   trans('message.schedule.fields.start_time') }}</label>              
+                                                                          <label class="form_label">{{   trans('message.schedule.fields.start_time') }}</label>
 
 						<label for="match_start_time" class="field prepend-icon">
 							<div class='input-group date' id='matchStartTime'>
@@ -119,19 +116,19 @@
 					</div>
                     	</div>
                     </div>
-                                        
+
 					<!-- <div class="section">
 						<label for="end_time" class="field prepend-icon">
 							<div class='input-group date' id='match_end_time'>
                                                             {{--
 								{!! Form::text('end_time',null, array('required','class'=>'gui-input','placeholder'=>trans('message.schedule.fields.end_time'),'id'=>'end_time')) !!}
-                                                            --}}    
+                                                            --}}
 								<span class="input-group-addon">
 									<span class="glyphicon glyphicon-calendar"></span>
 								</span>
                                                             {{--
 								@if ($errors->has('end_time')) <p class="help-block">{{ $errors->first('end_time') }}</p> @endif
-                                                            --}}     
+                                                            --}}
 							</div>
 						</label>
 					</div>-->
@@ -139,32 +136,32 @@
 					<div class="row" >
                     	<div class="col-sm-6">
                         	<div class="section">
-                                              <label class="form_label">{{   trans('message.schedule.fields.playertype') }} </label>                
+                                              <label class="form_label">{{   trans('message.schedule.fields.playertype') }} </label>
                             <label class="field select">
                                 {!! Form::select('player_type', $player_types,null,['class'=>'gui-input','placeholder'=>trans('message.schedule.fields.playertype'),'id'=>'player_type']
-                                ) !!}					
+                                ) !!}
                                 @if ($errors->has('player_type')) <p class="help-block">{{ $errors->first('player_type') }}</p> @endif
-                                <i class="arrow double"></i> 
+                                <i class="arrow double"></i>
                             </label>
                         </div>
                     	</div>
                         <div class="col-sm-6">
                         	<div class="section">
-                                              <label class="form_label">{{   trans('message.schedule.fields.matchtype') }}</label>                
+                                              <label class="form_label">{{   trans('message.schedule.fields.matchtype') }}</label>
 
 						<label class="field select">
 							{!! Form::select('match_type',$match_types,null,['class'=>'gui-input','placeholder'=>trans('message.schedule.fields.matchtype'),'id'=>'match_type']
 							) !!}
 							@if ($errors->has('match_type')) <p class="help-block">{{ $errors->first('match_type') }}</p> @endif
-							<i class="arrow double"></i> 
+							<i class="arrow double"></i>
 						</label>
 					</div>
                     	</div>
-                    </div>            
+                    </div>
 
-                                                            
+
 					<div class="section">
-                                  <label class="form_label">{{   trans('message.schedule.fields.venue') }}<span  class='required'>*</span> </label>               
+                                  <label class="form_label">{{   trans('message.schedule.fields.venue') }}<span  class='required'>*</span> </label>
 						<label for="venue" class="field prepend-icon">
 							{!! Form::text('venue',null, array('required','class'=>'gui-input','placeholder'=>trans('message.schedule.fields.venue'),'id'=>'venue')) !!}
 							{!! Form::hidden('facility_id', '', array('id' => 'facility_id')) !!}
@@ -177,7 +174,7 @@
 
 			{!! Form::hidden('game_type',$tournamentDetails[0]['game_type'],['id'=>'game_type'] ) !!}
 			{!! Form::hidden('number_of_rubber',$tournamentDetails[0]['number_of_rubber'],['id'=>'number_games'] ) !!}
-                    
+
 				</div>
 	        </div>
         </div>
@@ -186,7 +183,7 @@
 			<button type="button" class="button btn-secondary" data-dismiss="modal">Close</button>
 		</div>
 	  </div>
-	
+
 
 	</div>
 </div>
@@ -203,7 +200,7 @@
         });
         $("#match_end_time").on("dp.change", function (e) {
             $('#match_start_time').data("DateTimePicker").maxDate(e.date);
-        });*/ 
+        });*/
 		//on page load
 		$("#schedule_match_btn").click(
 			function()
@@ -240,7 +237,7 @@
 				}
 			}
 		);
-		
+
 		//on radio button change
 		$('input[name=scheduletype]').change(
 			function()
@@ -259,26 +256,48 @@
 				{
 					$("#my_team").html('My Player');
 					$("#opp_team").html('Opponent Player');
-					$("#oppteam").val('');				
+					$("#oppteam").val('');
 					$("#opp_team_id").val('');
 					$("#myteam").val('');
 					$("#my_team_id").val('');
-				}			
+				}
 			}
 		);
-		
-		//for autocomplete my team or player		
+
+
+		$("#my_team_id").select2(
+
+		).change(function(e){
+			var selected = this.value;
+			$("#opp_team_id option").prop('disabled',false)
+			if (selected)
+				$("#opp_team_id option[value="+selected+"]").prop('disabled',true);
+			$("#opp_team_id").select2();
+		}).addClass('gui-input');
+		$("#opp_team_id").select2(
+
+        ).change(function(e){
+			var selected = this.value;
+			$("#my_team_id option").prop('disabled',false)
+			if (selected)
+				$("#my_team_id option[value="+selected+"]").prop('disabled',true);
+			$("#my_team_id").select2();
+		}).addClass('gui-input');;
+
+
+		/*
+		//for autocomplete my team or player
 		$("#myteam").autocomplete({
 			source: function(request, response) {
 				$.getJSON(base_url+"/getteamdetails", {team_id : $('#opp_team_id').val(), tournament_id : '{{ $tournament_id }}', tournament_group_id : $('#tournament_group_id').val() , scheduletype : $('#scheduletype').val(), search_team_ids : $('#search_team_ids').val(),tournament_round_number : $('#tournament_round_number').val(), term: request.term} , response);
 			},
-			minLength: 3,
-			change: function(event,ui) { 
-				if (ui.item==null || ui.item==undefined) 
-				{ 
+			minLength: 0,
+			change: function(event,ui) {
+				if (ui.item==null || ui.item==undefined)
+				{
 					$("#myteam").val('');
-					$("#myteam").focus(); 
-				} 
+					$("#myteam").focus();
+				}
 			},
 			select: function(event, ui) {
 				$('#my_team_id').val(ui.item.id);
@@ -295,29 +314,29 @@
 			appendTo: "#container_my_team"
 		});
 
-		//for autocomplete opponent team or player		
+		//for autocomplete opponent team or player
 		$("#oppteam").autocomplete({
 			source: function(request, response) {
 				$.getJSON(base_url+"/getteamdetails", {team_id : $('#my_team_id').val(), tournament_id : '{{ $tournament_id }}', tournament_group_id : $('#tournament_group_id').val() , scheduletype : $('#scheduletype').val(), search_team_ids : $('#search_team_ids').val(), tournament_round_number : $('#tournament_round_number').val(), term: request.term} , response);
-			},			
-			minLength: 3,
-			change: function(event,ui) { 
-				if (ui.item==null || ui.item==undefined) 
-				{ 
+			},
+			minLength: 0,
+			change: function(event,ui) {
+				if (ui.item==null || ui.item==undefined)
+				{
 					$("#oppteam").val('');
-					$("#oppteam").focus(); 
-				} 
-			},			
+					$("#oppteam").focus();
+				}
+			},
 			select: function(event, ui) {
 				$('#opp_team_id').val(ui.item.id);
 			},
 			appendTo: "#container_opp_team"
-		});	
-		
+		});
+		*/
 		//for autocomplete facilities
 		/*$("#venue").autocomplete({
 			source: base_url+"/facilities",
-			minLength: 3,		
+			minLength: 3,
 			select: function(event, ui) {
 				$('#facility_id').val(ui.item.id);
 			}
@@ -343,9 +362,9 @@
                         $("#oppteam").val('');
                         $("#match_start_date").val(date);
                 });
-                
+
     });
-	
+
  	//save match schedule
 	$("#save_schedule").click(function(){
 		if($('#frm_add_schedule').valid()) //if form is valid
@@ -354,7 +373,7 @@
                         $("#loader").html("<img src="+base_url+"/images/loaderwhite_21X21.gif>");
                         $("#save_schedule").hide();
 			$("#frm_add_schedule").ajaxSubmit({
-				url: base_url + '/addschedule', 
+				url: base_url + '/addschedule',
 				type: 'get',
 				dataType:'json',
 				success:function(data){
@@ -386,23 +405,23 @@
 					$.each(parsed_data, function(key, value) {
 						if(key ===	'start_time')//if error thrown is for date picker
 						{
-							$("#"+key).parent().parent().parent().addClass('has-error');	
+							$("#"+key).parent().parent().parent().addClass('has-error');
 							$("#"+key).parent().parent().append(getErrorHtml(value, key, '_'+key));
 						}
 						else //if other errors
 						{
-							$("#"+key).parent().parent().addClass('has-error');	
+							$("#"+key).parent().parent().addClass('has-error');
 							$("#"+key).parent().append(getErrorHtml(value, key, '_'+key));
 						}
-						
+
 					});
 				}
-			}); 
+			});
 		}else{
 			return true;
 		}
 	});
-	
+
 	//function to build span on error
 	function getErrorHtml(formErrors , id, flag )
 	{
@@ -411,7 +430,7 @@
 		o += '</span>';
 		return o;
 	}
-        
+
     function editschedulegroupmatches(schedule_id,is_owner,disableflag)
     {
         $.get(base_url+'/editteamschedule',{'scheduleId':schedule_id,'isOwner':is_owner},function(response,status,xhr){
@@ -430,7 +449,7 @@
                 });
                 $(".modal-body #city_id").html(options);
                 $(".modal-body #state_id").html(states);
-                
+
                 $(".modal-body #schedule_id").val(parsed_data.scheduleData.id);
                 $(".modal-body #myteam").val(parsed_data.team_a_name);
                 $(".modal-body #my_team_id").val(parsed_data.scheduleData.a_id);
@@ -447,15 +466,15 @@
                  $(".modal-body #country_id").val(parsed_data.scheduleData.country_id);
                 $(".modal-body #state_id").val(parsed_data.scheduleData.state_id);
                 $(".modal-body #city_id").val(parsed_data.scheduleData.city_id);
-                $(".modal-body #zip").val(parsed_data.scheduleData.zip); 
+                $(".modal-body #zip").val(parsed_data.scheduleData.zip);
                 $(".modal-body #is_edit").val(1);
                 $(".modal-body #tournament_id").val(parsed_data.scheduleData.tournament_id);
                 $(".modal-body #tournament_group_id").val(parsed_data.scheduleData.tournament_group_id);
                 $(".modal-body #tournament_round_number").val(parsed_data.scheduleData.tournament_round_number);
                 $(".modal-body #tournament_match_number").val(parsed_data.scheduleData.tournament_match_number);
-                
+
             }
-        });    	
+        });
     }
 
 
@@ -466,11 +485,11 @@
     if(game_type==='rubber') {
     		$('#hideNumberOfGames').show();
     		$('.alert-success').show();
-    		}    
-    else 
+    		}
+    else
     		$('#hideNumberOfGames').hide();
 
 
-    
+
 </script>
 

@@ -28,6 +28,7 @@ use App\Model\TournamentMatchPreference as Settings;
 use App\User;
 use Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use PDO;
 use Request;
@@ -1406,9 +1407,18 @@ class TournamentsController extends Controller
 
 		}
 
-		
+        $final_stage_teams = [];
+        if (is_array($selectetdFinalStageTeams)) {
+            if (is_array($tournamentTeams)) {
+                $final_stage_teams = array_only($tournamentTeams, $selectetdFinalStageTeams);
+            } else {
+                if (is_a($tournamentTeams, Collection::class)) {
+                    $final_stage_teams = $tournamentTeams->only($selectetdFinalStageTeams);
+                }
+            }
+        }
 
-	
+
 
 //            dd($tournament_id);
 		return view('tournaments.groups', array(
@@ -1426,6 +1436,7 @@ class TournamentsController extends Controller
 			'schedule_type'            => $schedule_type,
 			'tournament_type'          => $tournament_type,
 			'tournamentDetails'        => $tournaments->toArray(),
+            'final_stage_teams'        => $final_stage_teams,
 			'team_name'                => '',
 			'tournamentTeams'          => !empty($tournamentTeams) ? $tournamentTeams : [],
 			'sports_id'                => $sport_id,
