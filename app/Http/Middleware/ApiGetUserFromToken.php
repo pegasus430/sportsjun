@@ -65,6 +65,10 @@ class ApiGetUserFromToken
      */
     public function handle($request, \Closure $next)
     {
+        $token = $request->get('token');
+        if ($token){
+            $this->auth->setRequest($request)->setToken($token);
+        }
         if (! $token = $this->auth->setRequest($request)->getToken()) {
             return $this->respond('tymon.jwt.absent', 'token_not_provided', 400);
         }
