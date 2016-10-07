@@ -18,13 +18,12 @@ class OrganizationMembersController extends Controller
 
         $teamIds = $allTeams->lists('id');
 
-        $teamPlayers = TeamPlayers::whereIn('team_players.team_id',$teamIds)->get();
+        #$teamPlayers = TeamPlayers::whereIn('team_players.team_id',$teamIds)->get();
 
-        $member_ids = $teamPlayers->lists('user_id');
-        $members = User::whereIn('id',$member_ids)->get();
+        $members = User::whereHas('userdetails',function($query) use ($teamIds) {
+                $query->whereIn('team_players.team_id',$teamIds);
+            })->with('userdetails.team')->get();
 
-       #  dd($members->lists('id'));
-       # $members =
 
         return view('organization.members.list',
             compact('id','organization','staffList','members')

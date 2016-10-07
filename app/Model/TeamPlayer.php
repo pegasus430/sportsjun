@@ -13,5 +13,14 @@ class TeamPlayer extends Model
      */
     protected $table = 'team_players';
     protected $dates = ['deleted_at'];
+
+    public function team()
+    {
+        return $this->belongsTo(\App\Model\Team::class,'team_id','id');
+    }
+
+    public function user(){
+        return $this->belongsTo(\App\User::class,'user_id','id');
+    }
    
 }
