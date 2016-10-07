@@ -888,7 +888,7 @@ class TournamentsController extends Controller
 			{
 				$group_id    = $groups->id;
 				$teamDetails = TournamentGroupTeams::select()->where('tournament_group_id', $group_id)->orderBy('points', 'desc')->get();
-
+                
 				if (count((array) $teamDetails) > 0)
 					$team_details[$group_id] = $teamDetails->toArray(); //get tournament group teams
 
@@ -1368,6 +1368,17 @@ class TournamentsController extends Controller
 
 		$follow_unfollow = Helper::checkFollowUnfollow(isset(Auth::user()->id)?Auth::user()->id:0, 'TOURNAMENT', $tournament_id);
 
+        $final_stage_teams = [];
+        if (isset($selectetdFinalStageTeams) && is_array($selectetdFinalStageTeams) && isset($tournamentTeams)) {
+            if (is_array($tournamentTeams)) {
+                $final_stage_teams = array_only($tournamentTeams, $selectetdFinalStageTeams);
+            } else {
+                if (is_a($tournamentTeams, Collection::class)) {
+                    $final_stage_teams = $tournamentTeams->only($selectetdFinalStageTeams);
+                }
+            }
+        }
+
 		if($from_api){
 
 			return Response::json([
@@ -1407,16 +1418,6 @@ class TournamentsController extends Controller
 
 		}
 
-        $final_stage_teams = [];
-        if (is_array($selectetdFinalStageTeams)) {
-            if (is_array($tournamentTeams)) {
-                $final_stage_teams = array_only($tournamentTeams, $selectetdFinalStageTeams);
-            } else {
-                if (is_a($tournamentTeams, Collection::class)) {
-                    $final_stage_teams = $tournamentTeams->only($selectetdFinalStageTeams);
-                }
-            }
-        }
 
 
 
