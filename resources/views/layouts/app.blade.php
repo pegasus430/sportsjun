@@ -68,7 +68,7 @@
     <script type="text/javascript" src="{{ asset('/js/jquery-form.js')}}?v=<?php echo $js_version;?>"></script>
     <script src="{{ asset('/js/sinister.js') }}?v=<?php echo $js_version;?>" type="text/javascript"></script>
     <script src="{{ asset('/js/sidebar-menu.js') }}?v=<?php echo $js_version;?>"></script>
-    <script src="{{ asset('/js/select2/select2.min.js') }}?v=<?php echo $js_version;?>"></script>
+    <script src="{{ asset('/js/select2/select2.full.min.js') }}?v=<?php echo $js_version;?>"></script>
     <script type="text/javascript" src="/js/jspdf.js">  </script>
     
 
