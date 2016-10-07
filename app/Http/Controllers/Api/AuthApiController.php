@@ -65,10 +65,10 @@ class AuthApiController extends BaseApiController
                 $token = JWTAuth::fromUser($user);
                 return $this->ApiResponse(compact('token'));
             } else {
-                $error = ['message' => 'Failed to create user'];
+                $error = 'Failed to create user';
             }
         } else {
-            $error = $validator->errors();
+            $error = $validator->errors()->first();
         }
 
         return $this->ApiResponse(['error' => $error], 500);
@@ -92,7 +92,7 @@ class AuthApiController extends BaseApiController
             JWTAuth::invalidate($request->input('token'));
             return $this->ApiResponse(['message' => 'Logout'], 200);
         } else {
-            return $this->ApiResponse(['error' => $validator->errors()], 500);
+            return $this->ApiResponse(['error' => $validator->errors()->first()], 500);
         }
     }
 
@@ -108,15 +108,14 @@ class AuthApiController extends BaseApiController
             $result = MSG91::generateOTP($data['mobileNumber'], $user_id, $data['timeToken']);
             $resp = [];
             if (!$result || $result['success'] == false) {
-                $resp['error'] = 'Error';
-                $resp['message'] = array_get($result, 'response.code');
+                $resp['error'] = array_get($result, 'response.code');
                 return $this->ApiResponse($resp, 500);
             } else {
                 $resp['message'] = "OTP SENT SUCCESSFULLY";
                 return $this->ApiResponse($resp);
             }
         } else {
-            return $this->ApiResponse(['error' => $validator->errors()], 500);
+            return $this->ApiResponse(['error' => $validator->errors()->first()], 500);
         }
 
 
@@ -144,7 +143,7 @@ class AuthApiController extends BaseApiController
                 return $this->ApiResponse($resp, 500);
             }
         } else {
-            return $this->ApiResponse(['error' => $validator->errors()], 500);
+            return $this->ApiResponse(['error' => $validator->errors()->first()], 500);
         }
     }
 
@@ -163,7 +162,7 @@ class AuthApiController extends BaseApiController
             }
             return $this->ApiResponse(['message' => 'OTP is not sent'], 500);
         } else {
-            return $this->ApiResponse(['error' => $validator->errors()], 500);
+            return $this->ApiResponse(['error' => $validator->errors()->first()], 500);
         }
     }
 
