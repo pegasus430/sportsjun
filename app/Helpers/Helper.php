@@ -2039,8 +2039,9 @@ class Helper {
                       ->join('tournaments', 'tournaments.id', '=', 'tournament_group_teams.tournament_id')
                       ->join('organization_group_teams', 'organization_group_teams.team_id', '=','tournament_group_teams.team_id')
                       ->join('organization_groups', 'organization_groups.id', '=', 'organization_group_teams.organization_group_id')                      
-                      ->select('tournament_group_teams.*','organization_groups.*', 'tournaments.*', 'organization_group_teams.*', DB::RAW('sum(tournament_group_teams.points) as organization_group_points'))  
-                      ->groupBy('organization_group_teams.organization_group_id') ;
+                      ->select('tournament_group_teams.*','organization_groups.*', 'tournaments.*', 'organization_group_teams.*');
+                      // ->groupBy('tournaments.id')
+                      // ->groupBy('organization_group_teams.organization_group_id') ;
 
             if(!empty($tournament_id)){
               $tournaments_teams= $tournaments_teams->where('tournaments.id','=', $tournament_id);
