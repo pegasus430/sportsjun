@@ -20,9 +20,11 @@ class OrganizationMembersController extends Controller
 
         #$teamPlayers = TeamPlayers::whereIn('team_players.team_id',$teamIds)->get();
 
-        $members = User::whereHas('userdetails',function($query) use ($teamIds) {
-                $query->whereIn('team_players.team_id',$teamIds);
-            })->with('userdetails.team')->get();
+        $members = User::whereHas('userdetails',function($query) use ($teamIds,$id) {
+                $query->whereIn('team_players.team_id',$teamIds)->whereNotIn('team_players.role',['owner','manager'])
+                    ->join('teams','teams.id','=','team_players.team_id')
+                    ->where('teams.organization_id',$id);
+            })->with('userdetails.team.sports')->get();
 
 
         return view('organization.members.list',
