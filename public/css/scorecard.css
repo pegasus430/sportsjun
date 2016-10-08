@@ -1226,14 +1226,23 @@ div#playerOfTheMatchNote {
 	
     border-bottom: 1px solid #1B926C;
     background: #266393;
-    color: yellow;
+    color: white;
+    font-weight: bold;
 }
 .players_head{
-	
+	border-bottom: 1px solid #1B926C;
+    background: #1B926C;
+    color: #fff;
 }
 
 .substitutes_head{
 	border-bottom: 1px solid #1B926C;
-    background: #1B926C;
+    background: #5B926C;
     color: #fff;
+}
+
+.team_fall, .team_bat, .team_bowl{
+	text-align: center;
+	text-transform: uppercase;
+	font-weight: bold;
 }

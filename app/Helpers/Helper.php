@@ -2073,10 +2073,9 @@ class Helper {
                         $new_ogtp->sports_id                =$sports_id;
                         $new_ogtp->points                   =$organization_group_points;
                         $new_ogtp->organization_group_id    =$organization_group_id;
-                        $new_ogtp->tournament_parent_id    =$organization_group_team->tournament_parent_id;
+                        $new_ogtp->tournament_parent_id     =$organization_group_team->tournament_parent_id;
 
-                        $new_ogtp->save();
-                        
+                        $new_ogtp->save();                        
                     }
                 }                
 
