@@ -242,7 +242,7 @@ if($match_data[0]['game_type']=='rubber'){
 
  @foreach($rubbers as $rubber)
     <?php
-         $rubber_players = ScoreCard::getRubberPlayers($rubber->id, 3);
+         $rubber_players = ScoreCard::getRubberPlayers($rubber->id, $rubber->sports_id);
          $rubber_a_array = $rubber_players['a'];
          $rubber_b_array = $rubber_players['b'];
     ?>

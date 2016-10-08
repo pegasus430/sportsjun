@@ -3878,8 +3878,9 @@ class ScoreCardController extends Controller {
 					{
 						$is_win = 'yes';
 					}
-					if($sport_name=='Tennis')
-						$this->tennisStatistics($players,$match_type,$is_win);
+					if($sport_name=='Tennis'){
+						//$this->tennisStatistics($players,$match_type,$is_win);
+					}
 					else if($sport_name=='Table Tennis'){
 						//$this->tableTennisStatistics($players,$match_type,$is_win);
 					}

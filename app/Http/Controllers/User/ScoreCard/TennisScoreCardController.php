@@ -655,7 +655,7 @@ class TennisScoreCardController extends parentScoreCardController
 
     }
 
-   public function tennisStatistics($player_ids_array,$match_type,$is_win='',$schedule_type)
+   public function tennisStatistics($player_ids_array,$match_type,$is_win='',$schedule_type='normal')
     {
         //$player_ids_array = explode(',',$player_ids);
         foreach($player_ids_array as $user_id)
