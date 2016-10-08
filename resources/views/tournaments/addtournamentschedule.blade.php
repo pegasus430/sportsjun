@@ -277,6 +277,9 @@
         );
 
 
+        //$.getJSON(base_url+"/getteamdetails", {team_id : $('#my_team_id').val(), tournament_id : '{{ $tournament_id }}', tournament_group_id : $('#tournament_group_id').val() , scheduletype : $('#scheduletype').val(), search_team_ids : $('#search_team_ids').val(), tournament_round_number : $('#tournament_round_number').val(), term: request.term} , response);
+
+
         $("#my_team_id").select2(
                 {width: "100%"}
         ).change(function (e) {
@@ -295,6 +298,31 @@
                 $("#my_team_id option[value=" + selected + "]").prop('disabled', true);
             $("#my_team_id").select2({width: "100%"});
         });
+
+        $("#myModal").on('shown.bs.modal', function () {
+            $.getJSON(base_url + "/getteamdetails", {
+                team_id: 0,
+                tournament_id: '{{ $tournament_id }}',
+                tournament_group_id: $('#tournament_group_id').val(),
+                scheduletype: $('#scheduletype').val(),
+                search_team_ids: $('#search_team_ids').val(),
+                tournament_round_number: $('#tournament_round_number').val()
+            }, function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    data[i].text = data[i].value;
+                }
+                $("#opp_team_id").select2({
+                    width: "100%",
+                    data: data
+                }).val('').trigger('change');
+                $("#my_team_id").select2({
+                    width: "100%",
+                    data: data
+                }).val('').trigger('change');
+
+            });
+        });
+
 
         /*
          //for autocomplete my team or player

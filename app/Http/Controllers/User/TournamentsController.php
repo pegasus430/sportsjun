@@ -2000,14 +2000,14 @@ class TournamentsController extends Controller
 		$teams = TournamentGroupTeams::where('tournament_group_id',$tournament_group_id )->get(['team_id']);
 
 //           dd($teams);
-		$teamIds = '';
+		$teamIDs = '';
 		if(count($teams)) {
 			foreach($teams as $team) {
-				$teamIds.= $team->team_id.',';
+                $teamIDs.= $team->team_id.',';
 			}
 		}
 		if(!empty($teamIds)) {
-			$teamIDs = trim($teamIds,',');
+			$teamIDs = trim($teamIDs,',');
 		}
 		return $teamIDs;
 	}
