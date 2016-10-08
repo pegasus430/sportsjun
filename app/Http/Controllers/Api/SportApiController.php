@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Model\Sport;
 use Response;
 
-class SportApiController extends Controller
+class SportApiController extends BaseApiController
 {
     /**
      * Display a listing of the resource.
@@ -21,11 +21,7 @@ class SportApiController extends Controller
     {
         //
         $sports=Sport::all();
-        return Response::json([
-             'status'=>200,
-             'data'=>$sports,
-             'error'=>false
-            ]);
+        return $this->ApiResponse(['data'=>$sports]);
     }
 
     /**
@@ -94,3 +90,4 @@ class SportApiController extends Controller
         //
     }
 }
+

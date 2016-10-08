@@ -185,10 +185,15 @@ class Helper {
     }
     public static function getTeamCity($team_id)
     {
-        $getTeamAddress = Team::where('id', $team_id)->get(array('city','state','country'));
-        $address = Helper::addressInfo($getTeamAddress[0]['city'],$getTeamAddress[0]['state'],$getTeamAddress[0]['country']);
-        return $address;
+        if ($team_id) {
+            $getTeamAddress = Team::where('id', $team_id)->get(array('city', 'state', 'country'));
+            $address = Helper::addressInfo($getTeamAddress[0]['city'], $getTeamAddress[0]['state'],
+                $getTeamAddress[0]['country']);
+            return $address;
+        }
+        return '';
     }
+
     public static function getUserCity($user_id)
     {
         $getTeamAddress = User::where('id', $user_id)->get(array('city','state','country','dob'));
@@ -1150,7 +1155,6 @@ class Helper {
     }
 
     public static function ImageCheck($path){
-
         return (File::exists(public_path($path)) && File::isFile(public_path($path))) ? $path : 'images/default-profile-pic.jpg';
     }
 
@@ -2038,7 +2042,8 @@ class Helper {
             $tournaments_teams=DB::table('tournament_group_teams')
                       ->join('tournaments', 'tournaments.id', '=', 'tournament_group_teams.tournament_id')
                       ->join('organization_group_teams', 'organization_group_teams.team_id', '=','tournament_group_teams.team_id')
-                      ->join('organization_groups', 'organization_groups.id', '=', 'organization_group_teams.organization_group_id')                      
+                      ->join('organization_groups', 'organization_groups.id', '=', 'organization_group_teams.organization_group_id')                  
+                                            
                       ->select('tournament_group_teams.*','organization_groups.*', 'tournaments.*', 'organization_group_teams.*');
                       // ->groupBy('tournaments.id')
                       // ->groupBy('organization_group_teams.organization_group_id') ;
@@ -2073,9 +2078,10 @@ class Helper {
                         $new_ogtp->sports_id                =$sports_id;
                         $new_ogtp->points                   =$organization_group_points;
                         $new_ogtp->organization_group_id    =$organization_group_id;
-                        $new_ogtp->tournament_parent_id     =$organization_group_team->tournament_parent_id;
+                        $new_ogtp->tournament_parent_id    =$organization_group_team->tournament_parent_id;
 
-                        $new_ogtp->save();                        
+                        $new_ogtp->save();
+                        
                     }
                 }                
 
@@ -2471,3 +2477,4 @@ class Helper {
    
 
 }
+

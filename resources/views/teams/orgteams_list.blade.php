@@ -25,11 +25,19 @@
                                     {!! empty($t->isactive)?"<i class='fa fa-check'></i>":"<i class='fa fa-ban'></i>" !!}</a>
                             </div>
                         @endif
+                        <div class="col-xs-4">
+                            <p>Owner's name: </p>
+                            <p>Manager name: </p>
+                            <p>Coach: </p>
+                        </div>
                     </div>
 
                     <div class="clearfix"></div>
                     <p class="lt-grey">{{ !empty($t->description)?$t->description:'' }}</p>
                     <br>
+                    <div class="pull-right">
+                        <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#transfer-owner-modal" data-team-id="{{$t->id}}"><i class="fa fa-exchange"></i> Transfer ownership</button>
+                    </div>
                     <p>Sport : <span class='blue match_type_text'>{{Helper::getSportName($t->sports_id)}}</span> &nbsp;
                         &nbsp; Players : <span
                                 class='blue match_type_text'> {{Helper::getTeamDetails($t->id)->teamplayers->count()}}  </span>&nbsp;
@@ -39,9 +47,12 @@
                                 {{$og->name}},
                             @endforeach
                     </span>
+
                 </div>
 
             </div>
         </div>
     </div>
+    @include('teams.modal.change_ownership')
 @endforeach
+
