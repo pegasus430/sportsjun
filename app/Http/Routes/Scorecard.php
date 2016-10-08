@@ -19,7 +19,7 @@ Route::group(['prefix'=>'match'], function(){
     Route::get('/getHockeyDetails', 'User\ScoreCard\HockeyScorecardController@getHockeyDetails');
 
 
-      //routes for waterpolo
+      //routes for Ultimate Frisbee
     Route::post('confirmSquadultimateFrisbee',         ['as'=>'match/confirmSquadUltimateFrisbee', 'uses'=>'User\ScoreCard\UltimateFrisbeeScorecardController@confirmSquad']);
     Route::post('ultimateFrisbeeSwapPlayers',    ['as'=>'match/hockeySwapPlayersUltimateFrisbee', 'uses'=>'User\ScoreCard\UltimateFrisbeeScorecardController@UltimateFrisbeeSwapPlayers']);
     Route::post('/endMatchRecordultimateFrisbee', 'User\ScoreCard\UltimateFrisbeeScorecardController@UltimateFrisbeeStoreRecord');
@@ -141,19 +141,29 @@ Route::group(['prefix'=>'match'], function(){
     //routes for table tennis
 
     Route::post('savetableTennisPreferences', ['as'=>'match/savetableTennisnPreferences', 'uses'=>'User\ScoreCard\TabletennisScoreCardController@savePreferences']);
-
         //automatic scoring for badminton
     Route::post('tableTennisAddScore', ['as'=>'match/tableTennisAddScore', 'uses'=>'User\ScoreCard\TabletennisScoreCardController@addScore']);
     Route::post('tableTennisRemoveScore', ['as'=>'match/tableTennisRemoveScore', 'uses'=>'User\ScoreCard\TabletennisScoreCardController@removeScore']);
-
         //manual scoring for badminton
     Route::post('manualScoringtableTennis', ['as'=>'match/manualScoringtableTennis', 'uses'=>'User\ScoreCard\TabletennisScoreCardController@manualScoring']);
-
         //save final match record. after clicking on end match
     Route::post('saveMatchRecordtableTennis', ['as'=>'match/saveMatchRecordtableTennis', 'uses'=>'User\ScoreCard\TabletennisScoreCardController@tableTennisStoreRecord']);
 
     Route::post('updatePreferencestableTennis', ['as'=>'match/updatePreferencestableTennis', 'uses'=>'User\ScoreCard\TabletennisScoreCardController@updatePreferences']);
 
+
+    //routes for  tennis
+
+     Route::post('savetennisPreferences', ['as'=>'match/savetennisnPreferences', 'uses'=>'User\ScoreCard\TennisScoreCardController@savePreferences']);
+        //automatic scoring for badminton
+    Route::post('tennisAddScore', ['as'=>'match/tennisAddScore', 'uses'=>'User\ScoreCard\TennisScoreCardController@addScore']);
+    Route::post('tennisRemoveScore', ['as'=>'match/tennisRemoveScore', 'uses'=>'User\ScoreCard\TennisScoreCardController@removeScore']);
+        //manual scoring for badminton
+    Route::post('manualScoringtennis', ['as'=>'match/manualScoringtennis', 'uses'=>'User\ScoreCard\TennisScoreCardController@manualScoring']);
+        //save final match record. after clicking on end match
+    Route::post('saveMatchRecordtennis', ['as'=>'match/saveMatchRecordtennis', 'uses'=>'User\ScoreCard\TennisScoreCardController@tennisStoreRecord']);
+
+    Route::post('updatePreferencestennis', ['as'=>'match/updatePreferencestennis', 'uses'=>'User\ScoreCard\TennisScoreCardController@updatePreferences']);
 
 
 //Match Helpers

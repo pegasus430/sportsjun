@@ -16,10 +16,10 @@ use App\Model\City;
 use App\Model\Team;
 use App\Model\TeamPlayers;
 use App\Model\Sport;
-use App\Model\TabletennisPlayerMatchwiseStats;
-use App\Model\TtPlayerMatchScore as tabletennisPlayerMatchScore;
-use App\Model\TtPlayerRubberScore as tabletennisPlayerRubberScore;
-use App\Model\TtStatistic as tabletennisStatistic;
+use App\Model\tennisPlayerMatchwiseStats;
+use App\Model\TennisPlayerMatchScore;
+use App\Model\TennisPlayerRubberScore;
+use App\Model\TennisStatistic;
 use App\Model\MatchScheduleRubber;
 use App\Model\Photo;
 use App\User;
@@ -34,11 +34,11 @@ use App\Helpers\AllRequests;
 use Session;
 use Request;
 
-class TabletennisScoreCardController extends parentScoreCardController
+class TennisScoreCardController extends parentScoreCardController
 {
  
 
-  public function tabletennisScoreCard($match_data,$match,$sportsDetails=[],$tournamentDetails=[],$is_from_view=0)
+  public function tennisScoreCard($match_data,$match,$sportsDetails=[],$tournamentDetails=[],$is_from_view=0)
     { 
 
         $game_type=$match_data[0]['game_type'];
@@ -143,12 +143,12 @@ class TabletennisScoreCardController extends parentScoreCardController
             $is_singles = 'yes';
                     
     if($game_type=='normal'){
-        $scores_a = tabletennisPlayerMatchScore::select()->where('match_id',$match_data[0]['id'])->first();
-        $scores_b = tabletennisPlayerMatchScore::select()->where('match_id',$match_data[0]['id'])->skip(1)->first();
+        $scores_a = tennisPlayerMatchScore::select()->where('match_id',$match_data[0]['id'])->first();
+        $scores_b = tennisPlayerMatchScore::select()->where('match_id',$match_data[0]['id'])->skip(1)->first();
     }
     else{
-       // $scores_a = tabletennisPlayerRubberScore::select()->where('match_id',$match_data[0]['id'])->first();
-       // $scores_b = tabletennisPlayerRubberScore::select()->where('match_id',$match_data[0]['id'])->skip(1)->first();
+       // $scores_a = tennisPlayerRubberScore::select()->where('match_id',$match_data[0]['id'])->first();
+       // $scores_b = tennisPlayerRubberScore::select()->where('match_id',$match_data[0]['id'])->skip(1)->first();
     }
 
        
@@ -172,12 +172,12 @@ class TabletennisScoreCardController extends parentScoreCardController
             $is_singles = 'no';            
 
     if($game_type=='normal'){
-        $scores_a = tabletennisPlayerMatchScore::select()->where('match_id',$match_data[0]['id'])->first();
-        $scores_b = tabletennisPlayerMatchScore::select()->where('match_id',$match_data[0]['id'])->skip(1)->first();
+        $scores_a = tennisPlayerMatchScore::select()->where('match_id',$match_data[0]['id'])->first();
+        $scores_b = tennisPlayerMatchScore::select()->where('match_id',$match_data[0]['id'])->skip(1)->first();
     }
     else{
-         $scores_a = tabletennisPlayerRubberScore::select()->where('match_id',$match_data[0]['id'])->first();
-        $scores_b = tabletennisPlayerRubberScore::select()->where('match_id',$match_data[0]['id'])->skip(1)->first();
+         $scores_a = tennisPlayerRubberScore::select()->where('match_id',$match_data[0]['id'])->first();
+        $scores_b = tennisPlayerRubberScore::select()->where('match_id',$match_data[0]['id'])->skip(1)->first();
     }
             
             if(count($scores_a)>0)
@@ -193,7 +193,7 @@ class TabletennisScoreCardController extends parentScoreCardController
         //bye match
         if($match_data[0]['b_id']=='' && $match_data[0]['match_status']=='completed')
         {
-            $sport_class = 'tabletennis_scorcard';
+            $sport_class = 'tennis_scorcard';
             return view('scorecards.byematchview',array('team_a_name'=>$user_a_name,'team_a_logo'=>$user_a_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'sport_class'=>$sport_class));
         }
 
@@ -233,17 +233,17 @@ class TabletennisScoreCardController extends parentScoreCardController
         if($is_from_view==1 || (!empty($score_status_array['added_by']) && $score_status_array['added_by']!=$loginUserId && $match_data[0]['scoring_status']!='rejected') || $match_data[0]['match_status']=='completed' || $match_data[0]['scoring_status']=='approval_pending' || $match_data[0]['scoring_status']=='approved' || !$isValidUser)
         {
             
-                return view('scorecards.tabletennis.tabletennisscorecardview',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'user_a_name'=>$user_a_name,'user_b_name'=>$user_b_name,'user_a_logo'=>$user_a_logo,'user_b_logo'=>$user_b_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'is_singles'=>$is_singles,'score_a_array'=>$score_a_array,'score_b_array'=>$score_b_array,'b_players'=>$b_players,'a_players'=>$a_players,'team_a_player_images'=>$team_a_player_images,'team_b_player_images'=>$team_b_player_images,'decoded_match_details'=>$decoded_match_details,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,
+                return view('scorecards.tennis.tennisscorecardview',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'user_a_name'=>$user_a_name,'user_b_name'=>$user_b_name,'user_a_logo'=>$user_a_logo,'user_b_logo'=>$user_b_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'is_singles'=>$is_singles,'score_a_array'=>$score_a_array,'score_b_array'=>$score_b_array,'b_players'=>$b_players,'a_players'=>$a_players,'team_a_player_images'=>$team_a_player_images,'team_b_player_images'=>$team_b_player_images,'decoded_match_details'=>$decoded_match_details,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,
                     'rubbers'=>$rubbers,'active_rubber'=>$active_rubber, 'rubber_details'=>$rubber_details));
             
 
         }
-        else //to view and edit tabletennis/table tabletennis score card
+        else //to view and edit tennis/table tennis score card
         {
           
                 //for form submit pass id from controller
-                $form_id = 'tabletennis';
-                return view('scorecards.tabletennis.tabletennisscorecard',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'user_a_name'=>$user_a_name,'user_b_name'=>$user_b_name,'user_a_logo'=>$user_a_logo,'user_b_logo'=>$user_b_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'is_singles'=>$is_singles,'score_a_array'=>$score_a_array,'score_b_array'=>$score_b_array,'b_players'=>$b_players,'a_players'=>$a_players,'team_a_player_images'=>$team_a_player_images,'team_b_player_images'=>$team_b_player_images,'decoded_match_details'=>$decoded_match_details,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'form_id'=>$form_id,
+                $form_id = 'tennis';
+                return view('scorecards.tennis.tennisscorecard',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'user_a_name'=>$user_a_name,'user_b_name'=>$user_b_name,'user_a_logo'=>$user_a_logo,'user_b_logo'=>$user_b_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'is_singles'=>$is_singles,'score_a_array'=>$score_a_array,'score_b_array'=>$score_b_array,'b_players'=>$b_players,'a_players'=>$a_players,'team_a_player_images'=>$team_a_player_images,'team_b_player_images'=>$team_b_player_images,'decoded_match_details'=>$decoded_match_details,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'form_id'=>$form_id,
                     'rubbers'=>$rubbers,'active_rubber'=>$active_rubber, 'rubber_details'=>$rubber_details));
            
         }
@@ -366,7 +366,35 @@ class TabletennisScoreCardController extends parentScoreCardController
                         "set5"=>[
                                  "{$left_team_id_pre}_score"=>0,
                                 "{$right_team_id_pre}_score"=>0
-                            ]                     
+                            ], 
+                        "set1_tie_breaker"=>[
+                                "{$left_team_id_pre}_score"=>0,
+                                "{$right_team_id_pre}_score"=>0
+                            ],
+                        "set2_tie_breaker"=>[
+                                 "{$left_team_id_pre}_score"=>0,
+                                "{$right_team_id_pre}_score"=>0
+                            ],
+                        "set3_tie_breaker"=>[
+                                "{$left_team_id_pre}_score"=>0,
+                                "{$right_team_id_pre}_score"=>0
+                            ],
+                        "set4_tie_breaker"=>[
+                                  "{$left_team_id_pre}_score"=>0,
+                                "{$right_team_id_pre}_score"=>0
+                            ],
+                        "set5_tie_breaker"=>[
+                                 "{$left_team_id_pre}_score"=>0,
+                                "{$right_team_id_pre}_score"=>0
+                            ], 
+                        "aces"=>[
+                                 "{$left_team_id_pre}_score"=>0,
+                                "{$right_team_id_pre}_score"=>0
+                        ],
+                        "double_faults"=>[
+                                 "{$left_team_id_pre}_score"=>0,
+                                "{$right_team_id_pre}_score"=>0
+                        ],                    
 
                     ],
                     "match_type"=>$match_model->match_type,
@@ -397,9 +425,9 @@ class TabletennisScoreCardController extends parentScoreCardController
         $match_details=json_encode($match_details);
 
         //enter choosen players in the database
-        $this->inserttabletennisPlayer($left_player_1, $left_player_2, $tournament_id, $left_team_id, $left_team_name, $match_id, $left_player_1_name, $left_player_2_name, $game_type, $rubber_number,$rubber_id);
+        $this->inserttennisPlayer($left_player_1, $left_player_2, $tournament_id, $left_team_id, $left_team_name, $match_id, $left_player_1_name, $left_player_2_name, $game_type, $rubber_number,$rubber_id);
 
-        $this->inserttabletennisPlayer($right_player_1, $right_player_2, $tournament_id, $right_team_id,$right_team_name, $match_id, $right_player_1_name, $right_player_2_name, $game_type, $rubber_number,$rubber_id);
+        $this->inserttennisPlayer($right_player_1, $right_player_2, $tournament_id, $right_team_id,$right_team_name, $match_id, $right_player_1_name, $right_player_2_name, $game_type, $rubber_number,$rubber_id);
 
         $match_model->hasSetupSquad=1;
         $match_model->match_details=$match_details;
@@ -411,11 +439,11 @@ class TabletennisScoreCardController extends parentScoreCardController
     }
 
         //insert selected players in the database
-    public function inserttabletennisPlayer($player_1_id, $player_2_id, $tournament_id, $team_id, $team_name, $match_id, $player_1_name, $player_2_name, $game_type='normal', $rubber_number, $rubber_id){
+    public function inserttennisPlayer($player_1_id, $player_2_id, $tournament_id, $team_id, $team_name, $match_id, $player_1_name, $player_2_name, $game_type='normal', $rubber_number, $rubber_id){
 
 
-        if($game_type!='rubber')   $match_score_model=new tabletennisPlayerMatchScore; 
-        else    $match_score_model=new tabletennisPlayerRubberScore; 
+        if($game_type!='rubber')   $match_score_model=new tennisPlayerMatchScore; 
+        else    $match_score_model=new tennisPlayerRubberScore; 
 
 
             $match_score_model->user_id_a       =$player_1_id;
@@ -462,8 +490,8 @@ class TabletennisScoreCardController extends parentScoreCardController
 
         if($game_type=='normal'){
             $match_model=MatchSchedule::find($match_id);
-     $left_player_model=tabletennisPlayerMatchScore::find($table_score_id);
-     $right_player_model=tabletennisPlayerMatchScore::where('match_id', $match_id)->where('id', '!=', $table_score_id)->first();
+     $left_player_model=tennisPlayerMatchScore::find($table_score_id);
+     $right_player_model=tennisPlayerMatchScore::where('match_id', $match_id)->where('id', '!=', $table_score_id)->first();
           }
         else {
 
@@ -475,8 +503,8 @@ class TabletennisScoreCardController extends parentScoreCardController
             $match_model=MatchScheduleRubber::find($match_id);
             $match_details=json_decode($match_model->match_details);
             $match_model=MatchScheduleRubber::find($match_id);
-            $left_player_model=tabletennisPlayerRubberScore::find($table_score_id);
-            $right_player_model=tabletennisPlayerRubberScore::where('rubber_id', $match_id)->where('id', '!=', $table_score_id)->first();
+            $left_player_model=tennisPlayerRubberScore::find($table_score_id);
+            $right_player_model=tennisPlayerRubberScore::where('rubber_id', $match_id)->where('id', '!=', $table_score_id)->first();
         } 
 
 
@@ -586,7 +614,7 @@ class TabletennisScoreCardController extends parentScoreCardController
        if($match_model->match_type!='singles')$player_ids=[$match_score_model->user_id_a, $match_score_model->user_id_b];
        else $player_ids=[$match_score_model->user_id_a];
 
-    $this->tabletennisStatistics($player_ids,$match_model->match_type, '', $match_model->schedule_type);
+    $this->tennisStatistics($player_ids,$match_model->match_type, '', $match_model->schedule_type);
 
         return $match_details;
   }
@@ -627,7 +655,7 @@ class TabletennisScoreCardController extends parentScoreCardController
 
     }
 
-   public function tabletennisStatistics($player_ids_array,$match_type,$is_win='',$schedule_type)
+   public function tennisStatistics($player_ids_array,$match_type,$is_win='',$schedule_type)
     {
         //$player_ids_array = explode(',',$player_ids);
         foreach($player_ids_array as $user_id)
@@ -635,14 +663,14 @@ class TabletennisScoreCardController extends parentScoreCardController
             if(!empty($user_id)){
             $double_faults_count = '';
 
-            $player_match_details = tabletennisPlayerMatchScore::where('user_id_a',$user_id)->orWhere('user_id_b', $user_id)->get();           
+            $player_match_details = tennisPlayerMatchScore::where('user_id_a',$user_id)->orWhere('user_id_b', $user_id)->get();           
 
             //check already user id exists or not
-            $tabletennis_statistics= tabletennisStatistic::whereUserId($user_id)->whereMatchType($match_type)->first();
+            $tennis_statistics= tennisStatistic::whereUserId($user_id)->whereMatchType($match_type)->first();
 
-            if(!is_null($tabletennis_statistics)){  //if user exist update statistics
-                $won=$tabletennis_statistics->won;
-                $lost=$tabletennis_statistics->lost;
+            if(!is_null($tennis_statistics)){  //if user exist update statistics
+                $won=$tennis_statistics->won;
+                $lost=$tennis_statistics->lost;
   
                     if($is_win=='yes'){
                          $won++;                        
@@ -655,11 +683,11 @@ class TabletennisScoreCardController extends parentScoreCardController
                 $matches=count($player_match_details);
                 $won_percentage = number_format((($won+1)/($matches+1))*100,2);
 
-                $tabletennis_statistics->matches=$matches;
-                $tabletennis_statistics->won=$won;
-                $tabletennis_statistics->lost=$lost;
-                $tabletennis_statistics->won_percentage=$won_percentage;
-                $tabletennis_statistics->save();
+                $tennis_statistics->matches=$matches;
+                $tennis_statistics->won=$won;
+                $tennis_statistics->lost=$lost;
+                $tennis_statistics->won_percentage=$won_percentage;
+                $tennis_statistics->save();
             }
            
             else
@@ -675,15 +703,15 @@ class TabletennisScoreCardController extends parentScoreCardController
                 {
                     $lost=1;
                 }
-                $tabletennisStatisticsModel = new tabletennisStatistic();
-                $tabletennisStatisticsModel->user_id = $user_id;
-                $tabletennisStatisticsModel->match_type = $match_type;
-                $tabletennisStatisticsModel->matches = 1;
-                $tabletennisStatisticsModel->won_percentage = $won_percentage;
-                $tabletennisStatisticsModel->won = $won;
-                $tabletennisStatisticsModel->lost = $lost;
+                $tennisStatisticsModel = new tennisStatistic();
+                $tennisStatisticsModel->user_id = $user_id;
+                $tennisStatisticsModel->match_type = $match_type;
+                $tennisStatisticsModel->matches = 1;
+                $tennisStatisticsModel->won_percentage = $won_percentage;
+                $tennisStatisticsModel->won = $won;
+                $tennisStatisticsModel->lost = $lost;
         
-                $tabletennisStatisticsModel->save();
+                $tennisStatisticsModel->save();
             }
         }
 
@@ -703,15 +731,15 @@ class TabletennisScoreCardController extends parentScoreCardController
 
                               
             if($game_type=='rubber'){
-                $score_a_model=tabletennisPlayerRubberScore::find($score_a_id);
-                $score_b_model=tabletennisPlayerRubberScore::find($score_b_id); 
+                $score_a_model=tennisPlayerRubberScore::find($score_a_id);
+                $score_b_model=tennisPlayerRubberScore::find($score_b_id); 
                 $match_id=$score_a_model->rubber_id;   
                 $match_model=MatchScheduleRubber::find($match_id);   
                 
             }
             else{
-                $score_a_model=tabletennisPlayerMatchScore::find($score_a_id);
-                $score_b_model=tabletennisPlayerMatchScore::find($score_b_id); 
+                $score_a_model=tennisPlayerMatchScore::find($score_a_id);
+                $score_b_model=tennisPlayerMatchScore::find($score_b_id); 
                 $match_id=$score_a_model->match_id;    
                 $match_model=Matchschedule::find($match_id);
             }       
@@ -735,6 +763,22 @@ class TabletennisScoreCardController extends parentScoreCardController
                     $match_details_data->{"set".$i}->{$right_team_id."_score"}=(int)$request->{"b_set".$i}>$end_point?$end_point:(int)$request->{"b_set".$i};
                }
 
+            //store aces
+
+            $score_a_model->aces=$request->a_aces;
+            $score_b_model->aces=$request->b_aces;
+
+            $match_details_data->aces->{$left_team_id."_score"}=(int)$request->a_aces;
+            $match_details_data->aces->{$right_team_id."_score"}=(int)$request->b_aces;
+
+            //store double faults
+            $score_a_model->double_faults=$request->a_double_faults;
+            $score_b_model->double_faults=$request->b_double_faults;
+
+            $match_details_data->double_faults->{$left_team_id."_score"}=$request->a_double_faults;
+            $match_details_data->double_faults->{$right_team_id."_score"}=$request->b_double_faults;
+
+
             $score_a_model->save();
             $score_b_model->save();
 
@@ -752,7 +796,7 @@ class TabletennisScoreCardController extends parentScoreCardController
 
 
 //get json details;
-    public function gettabletennisDetails(ObjectRequest $request){
+    public function gettennisDetails(ObjectRequest $request){
         $match_id=$request->match_id;
         $match_model=matchschedule::find($match_id);
         return $match_model->match_details;
@@ -760,7 +804,7 @@ class TabletennisScoreCardController extends parentScoreCardController
 
 //store final record. When clicked on end match button //sets the winner and loser
 
-    public function tabletennisStoreRecord(ObjectRequest $Objrequest){
+    public function tennisStoreRecord(ObjectRequest $Objrequest){
 
         $loginUserId = Auth::user()->id;
         $request = Request::all();
@@ -999,7 +1043,7 @@ class TabletennisScoreCardController extends parentScoreCardController
         }
         else $is_win='';
 
-    $this->tabletennisStatistics($player_ids,$match_model->match_type, $is_win, $match_model->schedule_type);
+    $this->tennisStatistics($player_ids,$match_model->match_type, $is_win, $match_model->schedule_type);
 
         $match_model=MatchSchedule::find($match_id);
         $player_ids=explode(',', $match_model->player_b_ids);
@@ -1011,7 +1055,7 @@ class TabletennisScoreCardController extends parentScoreCardController
             $is_win='no';
         }
         else $is_win='';
-    $this->tabletennisStatistics($player_ids,$match_model->match_type, $is_win, $match_model->schedule_type);
+    $this->tennisStatistics($player_ids,$match_model->match_type, $is_win, $match_model->schedule_type);
 
     }
 
@@ -1046,13 +1090,13 @@ class TabletennisScoreCardController extends parentScoreCardController
 
         if($game_type=='normal'){
             $match_model=MatchSchedule::find($match_id);
-            $left_player_model=tabletennisPlayerMatchScore::where('match_id',$match_id)->first();
-            $right_player_model=tabletennisPlayerMatchScore::where('match_id',$match_id)->skip(1)->first();
+            $left_player_model=tennisPlayerMatchScore::where('match_id',$match_id)->first();
+            $right_player_model=tennisPlayerMatchScore::where('match_id',$match_id)->skip(1)->first();
           }
         else {
             $match_model=MatchScheduleRubber::find($match_id);
-            $left_player_model=tabletennisPlayerRubberScore::where('rubber_id',$match_id)->first();
-            $right_player_model=tabletennisPlayerRubberScore::where('rubber_id',$match_id)->skip(1)->first();
+            $left_player_model=tennisPlayerRubberScore::where('rubber_id',$match_id)->first();
+            $right_player_model=tennisPlayerRubberScore::where('rubber_id',$match_id)->skip(1)->first();
         }  
 
             $left_player_score=0;
@@ -1089,13 +1133,13 @@ class TabletennisScoreCardController extends parentScoreCardController
 
         if($game_type=='normal'){
             $match_model=MatchSchedule::find($match_id);
-            $left_player_model=tabletennisPlayerMatchScore::where('match_id',$match_id)->first();
-            $right_player_model=tabletennisPlayerMatchScore::where('match_id',$match_id)->skip(1)->first();
+            $left_player_model=tennisPlayerMatchScore::where('match_id',$match_id)->first();
+            $right_player_model=tennisPlayerMatchScore::where('match_id',$match_id)->skip(1)->first();
           }
         else {
             $match_model=MatchScheduleRubber::find($match_id);
-            $left_player_model=tabletennisPlayerRubberScore::where('rubber_id',$match_id)->first();
-            $right_player_model=tabletennisPlayerRubberScore::where('rubber_id',$match_id)->skip(1)->first();
+            $left_player_model=tennisPlayerRubberScore::where('rubber_id',$match_id)->first();
+            $right_player_model=tennisPlayerRubberScore::where('rubber_id',$match_id)->skip(1)->first();
         } 
 
     $match_score_model=$left_player_model;

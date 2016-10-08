@@ -188,7 +188,7 @@
                     </div>
                 </div>
             </div>
-			<h5 class="scoreboard_title">Table Tennis Scorecard @if($match_data[0]['match_type']!='other')
+			<h5 class="scoreboard_title">Tennis Scorecard @if($match_data[0]['match_type']!='other')
 											<span class='match_type_text'>({{ $match_data[0]['match_type']=='odi'?strtoupper($match_data[0]['match_type']):ucfirst($match_data[0]['match_type'])}} , {{ucfirst($match_data[0]['match_category'] )}})</span>
 									@endif</h5>
         </div>
@@ -404,7 +404,7 @@
     </div>
   </div>
 
-  {!! Form::open(array('url' => '', 'method' => 'POST','id'=>'tableTennis', 'onsubmit'=>'return manualScoring(this)')) !!}
+  {!! Form::open(array('url' => '', 'method' => 'POST','id'=>'tennis', 'onsubmit'=>'return manualScoring(this)')) !!}
 
 
 <!-- Start of normal match -->
@@ -518,7 +518,7 @@
 
  @foreach($rubbers as $rubber)
     <?php
-         $rubber_players = ScoreCard::getRubberPlayers($rubber->id, 3);
+         $rubber_players = ScoreCard::getRubberPlayers($rubber->id, $rubber->sports_id);
          $rubber_a_array = $rubber_players['a'];
          $rubber_b_array = $rubber_players['b'];
     ?>
@@ -542,12 +542,12 @@
 
         <div id='hide_next_rubber_if_match_has_winner' style="{{$match_has_winner['has_winner']?'display:none':''}} ">
 
-            @include('scorecards.tabletennis.tabletennisscorecardrubber')
+            @include('scorecards.tennis.tennisscorecardrubber')
 
          </div>
      
       @else
-         @include('scorecards.tabletennis.tabletennisscorecardrubberview')
+         @include('scorecards.tennis.tennisscorecardrubberview')
       @endif
     
  @endforeach
@@ -731,7 +731,7 @@
 	
 
 	<!-- end -->
-		<input type="hidden" id="tableTennis_form_data" value="">
+		<input type="hidden" id="tennis_form_data" value="">
     	{!! Form::hidden('user_id_a',$match_data[0]['a_id'],array('class'=>'gui-input ')) !!}
     	{!! Form::hidden('user_id_b',$match_data[0]['b_id'],array('class'=>'gui-input ')) !!}
     	{!! Form::hidden('player_ids_a',$match_data[0]['player_a_ids'],array('class'=>'gui-input ')) !!}
@@ -864,7 +864,7 @@ function checkPlayers()
 	var match_type = "{{$match_data[0]['match_type']}}";
 	if(type=='player' || match_type=='singles')
 	{
-		$('#tableTennis').submit();
+		$('#tennis').submit();
 	}else
 	{
 		var a_checkboxes = $(".team_a_checkbox:checkbox");
@@ -874,7 +874,7 @@ function checkPlayers()
 		var b_checked_count = b_checkboxes.filter(":checked").length;
 		if(a_checked_count==2 && b_checked_count==2)
 		{
-			$('#tableTennis').submit();
+			$('#tennis').submit();
 		}
 		else
 		{
@@ -997,7 +997,7 @@ function savePreferences(that){
         content:"Do you want to save the preferences?",
         confirm:function(){
                         $.ajax({
-                        url:base_url+"/match/savetableTennisPreferences",
+                        url:base_url+"/match/savetennisPreferences",
                         data:data,
                         type:'post',
                         success : function(){                         
@@ -1155,7 +1155,7 @@ function getTeamPlayers(that){
               }
 
                     $.ajax({
-                        url:'/match/tableTennisAddScore',
+                        url:'/match/tennisAddScore',
                         data:data,
                         method:'post',
                         dataType:'json',
@@ -1194,7 +1194,7 @@ function getTeamPlayers(that){
               }
 
                     $.ajax({
-                        url:'/match/tableTennisAddScore',
+                        url:'/match/tennisAddScore',
                         data:data,
                         method:'post',
                         dataType:'json',
@@ -1236,7 +1236,7 @@ function getTeamPlayers(that){
             content: "Update Preferences",
             confirm: function(){
                                   $.ajax({
-                                  url:base_url+"/match/updatePreferencestableTennis",
+                                  url:base_url+"/match/updatePreferencestennis",
                                   type:'post', 
                                   data:data,
                                   success:function(){
@@ -1251,10 +1251,10 @@ function getTeamPlayers(that){
      }
 
      function manualScoring(that){
-        var data=$('#tableTennis').serialize();
+        var data=$('#tennis').serialize();
 
         $.ajax({
-            url:base_url+"/match/manualScoringtableTennis",
+            url:base_url+"/match/manualScoringtennis",
             type:'post',
             data:data,
             success:function(response){
@@ -1270,7 +1270,7 @@ function getTeamPlayers(that){
         var data=$('#endMatchForm').serialize();
 
         $.ajax({
-            url:base_url+"/match/saveMatchRecordtableTennis",
+            url:base_url+"/match/saveMatchRecordtennis",
             type:'post', 
             data:data,
             success:function(response){
@@ -1339,7 +1339,7 @@ function showHiddenRubber(){
 //complete match for rubber type, end match even if all rubbers are not played
 function endMatchCompletely(match_id){  
      $.ajax({
-        url:'/match/end_match_completely_tableTennis/'+match_id,       
+        url:'/match/end_match_completely_tennis/'+match_id,       
         success:function(){
            window.location = window.location;
         }
