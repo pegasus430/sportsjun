@@ -246,7 +246,7 @@ if($match_data[0]['game_type']=='rubber'){
          $rubber_a_array = $rubber_players['a'];
          $rubber_b_array = $rubber_players['b'];
     ?>
-         @include('scorecards.tabletennisscorecardrubberview')
+         @include('scorecards.tabletennis.tabletennisscorecardrubberview')
  @endforeach
  
  @endif

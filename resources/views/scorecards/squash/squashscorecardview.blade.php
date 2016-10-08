@@ -142,7 +142,7 @@ if($match_data[0]['game_type']=='rubber'){
                     </div>
                 </div>
             </div>
-			<h5 class="scoreboard_title">Badminton Scorecard @if($match_data[0]['match_type']!='other')
+			<h5 class="scoreboard_title">Squash Scorecard @if($match_data[0]['match_type']!='other')
 											<span class='match_type_text'>({{ $match_data[0]['match_type']=='odi'?strtoupper($match_data[0]['match_type']):ucfirst($match_data[0]['match_type'])}}, {{ucfirst($match_data[0]['match_category']) }})</span>
 									@endif</h5>
         </div>
@@ -244,11 +244,11 @@ if($match_data[0]['game_type']=='rubber'){
 
  @foreach($rubbers as $rubber)
     <?php
-         $rubber_players = ScoreCard::getRubberPlayers($rubber->id);
+         $rubber_players = ScoreCard::getRubberPlayers($rubber->id, $rubber->sports_id);
          $rubber_a_array = $rubber_players['a'];
          $rubber_b_array = $rubber_players['b'];
     ?>
-         @include('scorecards.badmintonrubberview')
+         @include('scorecards.squash.squashrubberview')
  @endforeach
  
  @endif
@@ -345,7 +345,7 @@ function scoreCardStatus(status)
 		$.ajax({
             url: base_url+'/match/scoreCardStatus',
             type: "post",
-            data: {'scorecard_status': status,'match_id':match_id,'rej_note':rej_note,'sport_name':'Badminton'},
+            data: {'scorecard_status': status,'match_id':match_id,'rej_note':rej_note,'sport_name':'squash'},
             success: function(data) {
                 if(data.status == 'success') {
 					window.location.href = base_url+'/match/scorecard/edit/'+match_id;
@@ -368,7 +368,7 @@ function getMatchDetails(){
 
   var base_url=base_url || secure_url;
         $.ajax({
-            url:  base_url+'/viewpublic/match/getBadmintonDetails', 
+            url:  base_url+'/viewpublic/match/getsquashDetails', 
             type:'get', 
             dataType:'json',
             data:data,

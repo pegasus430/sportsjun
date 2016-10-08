@@ -268,10 +268,10 @@
 
                         <div class='row'>
                             <div class='col-sm-12'>
-                                <h3 id='team_a' class="team_bat team_title_head">{{$team_a_name}}</h3>
+                                <h3 id='team_a' class="team_fall team_title_head">{{$team_a_name}}</h3>
                                 <div class="table-responsive">
                                     <table class="table table-striped table-bordered">
-                                        <thead class="thead ">
+                                        <thead class="players_head ">
                                           <tr>
                                         
                                                 <th >Player</th>
@@ -404,8 +404,8 @@
                             <div class='col-sm-12'>
                                 <h3 id='team_a' class="team_fall team_title_head">{{$team_b_name}}</h3>
                                 <div class="table-responsive">
-                                    <table class="table table-striped,table-bordered"> 
-                                        <thead class="thead ">
+                                    <table class="table table-striped table-bordered"> 
+                                        <thead class="players_head ">
                                            <tr>
                                                 <th >Player</th>
                                                 <th> Goals </th>

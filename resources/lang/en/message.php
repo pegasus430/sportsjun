@@ -541,4 +541,5 @@ return [
     		'substitutes'			=> 'Substitute Players',
     		'max_substitutes' 	=> 'Maximum Substitute per Player'
     ]
+
 ];

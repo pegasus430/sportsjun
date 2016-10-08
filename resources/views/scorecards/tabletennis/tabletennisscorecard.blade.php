@@ -542,12 +542,12 @@
 
         <div id='hide_next_rubber_if_match_has_winner' style="{{$match_has_winner['has_winner']?'display:none':''}} ">
 
-            @include('scorecards.tabletennisscorecardrubber')
+            @include('scorecards.tabletennis.tabletennisscorecardrubber')
 
          </div>
      
       @else
-         @include('scorecards.tabletennisscorecardrubberview')
+         @include('scorecards.tabletennis.tabletennisscorecardrubberview')
       @endif
     
  @endforeach

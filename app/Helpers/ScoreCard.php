@@ -14,6 +14,7 @@ use App\Model\volleyballScore;
 use App\Model\VolleyballPlayerMatchwiseStats;
 use App\Model\BasketballPlayerMatchwiseStats;
 use App\Model\UltimateFrisbeePlayerMatchwiseStats;
+use App\Model\SquashPlayerRubberScore;
 use App\Model\WaterpoloPlayerMatchwiseStats;
 use App\Model\TournamentMatchPreference;
 use App\Helpers\AllRequests;
@@ -75,6 +76,12 @@ class ScoreCard {
 
  			break;
 
+ 			case 13:
+ 				$scores_a = SquashPlayerRubberScore::select()->where('rubber_id',$rubber_id)->first();
+				$scores_b = SquashPlayerRubberScore::select()->where('rubber_id',$rubber_id)->skip(1)->first();
+
+ 			break;
+
 
         default:
  				# code...
@@ -106,7 +113,7 @@ class ScoreCard {
 			$score_b=0;
 
 			switch ($sports_id) {
-				case in_array($sports_id, [5,2,3]):
+				case in_array($sports_id, [5,2,3,13]):
 			$score_a=MatchScheduleRubber::where('winner_id', $a_id)->whereMatchId($match_id)->get()->count();
 			$score_b=MatchScheduleRubber::where('winner_id', $b_id)->whereMatchId($match_id)->get()->count();
 					break;

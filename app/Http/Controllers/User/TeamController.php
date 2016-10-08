@@ -1399,3 +1399,4 @@ class TeamController extends Controller
         $team_details->organizationGroups()->attach($groupId);
     }
 }
+

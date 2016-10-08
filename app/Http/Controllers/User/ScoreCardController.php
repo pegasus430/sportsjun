@@ -169,7 +169,9 @@ class ScoreCardController extends Controller {
 				$sport_name = $sportsDetails[0]['sports_name'];
 				if(strtolower($sport_name)==strtolower('Tennis'))//if match is related to tennis
 				{
-					return  $this->tennisOrTableTennisScoreCard($match_data,$match='Tennis',$sportsDetails,$tournamentDetails);
+					//return  $this->tennisOrTableTennisScoreCard($match_data,$match='Tennis',$sportsDetails,$tournamentDetails);
+					$tt= new ScoreCard\TennisScoreCardController;
+					return $tt->tennisScoreCard($match_data,$match='Tennis',$sportsDetails,$tournamentDetails);
 				}else if(strtolower($sport_name)==strtolower('Table Tennis'))//if match is related to table tennis
 				{
 					//return $this->tennisOrTableTennisScoreCard($match_data,$match='Table Tennis',$sportsDetails,$tournamentDetails);
@@ -891,7 +893,7 @@ class ScoreCardController extends Controller {
 
 	}
 	//function to insert tennis statitistics
-	public function tennisStatistics($player_ids_a_array,$match_type,$is_win='')
+	public function tennisStatisticsOld($player_ids_a_array,$match_type,$is_win='', $schedule_type='normal')
 	{
 		//$player_ids_a_array = explode(',',$player_ids);
 		foreach($player_ids_a_array as $user_id)
@@ -3522,7 +3524,9 @@ class ScoreCardController extends Controller {
 				$sport_name = $sportsDetails[0]['sports_name'];
 				if(strtolower($sport_name)==strtolower('Tennis'))//if match is related to tennis
 				{
-					return  $this->tennisOrTableTennisScoreCard($match_data,$match='Tennis',$sportsDetails,$tournamentDetails,$is_from_view=1);
+					$tt = new ScoreCard\TennisScoreCardController;
+					return $tt->tennisScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
+					//return  $this->tennisOrTableTennisScoreCard($match_data,$match='Tennis',$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}else if(strtolower($sport_name)==strtolower('Table Tennis'))//if match is related to table tennis
 				{
 					//return $this->tennisOrTableTennisScoreCard($match_data,$match='Table Tennis',$sportsDetails,$tournamentDetails,$is_from_view=1);
@@ -3611,7 +3615,9 @@ class ScoreCardController extends Controller {
 				$sport_name = $sportsDetails[0]['sports_name'];
 				if(strtolower($sport_name)==strtolower('Tennis'))//if match is related to tennis
 				{
-					return  $this->tennisOrTableTennisScoreCard($match_data,$match='Tennis',$sportsDetails,$tournamentDetails,$is_from_view=1);
+					//return  $this->tennisOrTableTennisScoreCard($match_data,$match='Tennis',$sportsDetails,$tournamentDetails,$is_from_view=1);
+					$tt = new ScoreCard\TabletennisScoreCardController;
+					return $tt->tennisScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}else if(strtolower($sport_name)==strtolower('Table Tennis'))//if match is related to table tennis
 				{
 					//return $this->tennisOrTableTennisScoreCard($match_data,$match='Table Tennis',$sportsDetails,$tournamentDetails,$is_from_view=1);
@@ -3872,8 +3878,9 @@ class ScoreCardController extends Controller {
 					{
 						$is_win = 'yes';
 					}
-					if($sport_name=='Tennis')
-						$this->tennisStatistics($players,$match_type,$is_win);
+					if($sport_name=='Tennis'){
+						//$this->tennisStatistics($players,$match_type,$is_win);
+					}
 					else if($sport_name=='Table Tennis'){
 						//$this->tableTennisStatistics($players,$match_type,$is_win);
 					}

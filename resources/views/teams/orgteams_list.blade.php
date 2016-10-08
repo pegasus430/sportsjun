@@ -55,3 +55,4 @@
     </div>
     @include('teams.modal.change_ownership')
 @endforeach
+
