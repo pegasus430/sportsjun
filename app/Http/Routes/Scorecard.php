@@ -117,19 +117,28 @@ Route::group(['prefix'=>'match'], function(){
         //get match details for badminton
     Route::get('/getBadmintonDetails', 'User\ScoreCard\BadmintonScoreCardController@getBadmintonDetails');
 
-        //routes for squash
-     Route::post('saveSquashPreferences', ['as'=>'match/saveSquashPreferences', 'uses'=>'User\ScoreCard\SquashScoreCardController@savePreferences']);
+       
+  
+    //routes for squash
+    Route::post('savesquashPreferences', ['as'=>'match/savesquashPreferences', 'uses'=>'User\ScoreCard\SquashScoreCardController@savePreferences']);
+        //automatic scoring for squash
     Route::post('squashAddScore', ['as'=>'match/squashAddScore', 'uses'=>'User\ScoreCard\SquashScoreCardController@addScore']);
-    Route::post('manualScoringSquash', ['as'=>'match/manualScoringSquash', 'uses'=>'User\ScoreCard\SquashScoreCardController@manualScoring']);
-    Route::post('saveMatchRecordSquash', ['as'=>'match/saveMatchRecordSquash', 'uses'=>'User\ScoreCard\SquashScoreCardController@squashStoreRecord']);
+    Route::post('squashRemoveScore', ['as'=>'match/squashRemoveScore', 'uses'=>'User\ScoreCard\SquashScoreCardController@removeScore']);
 
-    Route::post('updatePreferencesSquash', ['as'=>'match/updatePreferencesSquash', 'uses'=>'User\ScoreCard\SquashScoreCardController@updatePreferences']);
+        //manual scoring for squash
+    Route::post('manualScoringsquash', ['as'=>'match/manualScoringsquash', 'uses'=>'User\ScoreCard\SquashScoreCardController@manualScoring']);
 
-    Route::get('/getSquashDetails', 'User\ScoreCard\SquashScoreCardController@getSquashDetails');
+        //save final match record. after clicking on end match
+    Route::post('saveMatchRecordsquash', ['as'=>'match/saveMatchRecordsquash', 'uses'=>'User\ScoreCard\SquashScoreCardController@squashStoreRecord']);
+
+    Route::post('updatePreferencessquash', ['as'=>'match/updatePreferencesSquash', 'uses'=>'User\ScoreCard\SquashScoreCardController@updatePreferences']);
+
+        //get match details for squash
+    Route::get('/getsquashDetails', 'User\ScoreCard\SquashScoreCardController@getsquashDetails');
 
 
 
-    //routes for badminton
+    //routes for table tennis
 
     Route::post('savetableTennisPreferences', ['as'=>'match/savetableTennisnPreferences', 'uses'=>'User\ScoreCard\TabletennisScoreCardController@savePreferences']);
 
@@ -151,6 +160,7 @@ Route::group(['prefix'=>'match'], function(){
     Route::get('set_active_rubber/{rubber_id?}', 'User\ScoreCardController@setActiveRubber');
     Route::get('end_match_completely_badminton/{match_id?}', 'User\ScoreCard\BadmintonScoreCardController@endMatchCompletely');
     Route::get('end_match_completely_tableTennis/{match_id?}', 'User\ScoreCard\TabletennisScoreCardController@endMatchCompletely');
+     Route::get('end_match_completely_squash/{match_id?}', 'User\ScoreCard\TabletennisScoreCardController@endMatchCompletely');
 });
 
 //End Matches

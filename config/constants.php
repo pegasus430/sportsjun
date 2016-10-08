@@ -306,6 +306,15 @@ return [
                     'active_players' => 6,
                     'substitute'     => 6,
 
+                ],
+                13 => [
+                    'number_of_sets'=>3,
+                    'score_to_win'  =>21,
+                    'end_point'     =>29,
+                    'enable_two_points'     => 'on',
+                    'active_players' => 6,
+                    'substitute'     => 6,
+
                 ], 
                 3 => [
                     'number_of_sets'=>5,
