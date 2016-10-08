@@ -1374,7 +1374,7 @@ class TournamentsController extends Controller
                 $final_stage_teams = array_only($tournamentTeams, $selectetdFinalStageTeams);
             } else {
                 if (is_a($tournamentTeams, Collection::class)) {
-                    $final_stage_teams = $tournamentTeams->only($selectetdFinalStageTeams);
+                    $final_stage_teams = array_only($tournamentTeams->lists('name','id')->toArray(),$selectetdFinalStageTeams);
                 }
             }
         }

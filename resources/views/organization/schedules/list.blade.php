@@ -15,7 +15,7 @@
                     </div>
                 @endif
 
-                @if($schedules))
+                @if($schedules)
                     <div id="my_schedule_container">
                         @include('organization.schedules.partials.schedule_list')
                     </div> {{-- /#my_groups_container --}}

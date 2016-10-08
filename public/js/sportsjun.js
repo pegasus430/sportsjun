@@ -769,10 +769,10 @@ function editMatchSchedule(a, b, c, modal_id) {
                 $(".modal-body #schedule_id").val(e.scheduleData.id);
                 $(".modal-body #scheduletype").val(e.scheduleData.schedule_type);
                 $(".modal-body #myteam").val(e.team_a_name);
-                $(".modal-body #my_team_id").val(e.scheduleData.a_id);
+                $(".modal-body #my_team_id").val(e.scheduleData.a_id).select2({width:"100%"}).trigger('change');;
                 $(".modal-body #sports_id").val(e.scheduleData.sports_id);
                 $(".modal-body #oppteam").val(e.team_b_name);
-                $(".modal-body #opp_team_id").val(e.scheduleData.b_id);
+                $(".modal-body #opp_team_id").val(e.scheduleData.b_id).select2({width:"100%"}).trigger('change');;
                 $(".modal-body #match_start_date").val(e.scheduleData.match_start_date);
                 if(e.scheduleData.match_start_time!='' && e.scheduleData.match_start_time!='00:00:00') {
                     $(".modal-body #match_start_time").val(e.scheduleData.match_start_time);
