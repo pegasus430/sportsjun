@@ -91,6 +91,10 @@ input:read-only {
 
         }
 
+          td a{
+            color: #455469;          
+        }
+
 
 
 
@@ -114,6 +118,8 @@ input:read-only {
 	$b_points=0;
 	$a_fouls=0;
 	$b_fouls=0;
+	$attr="";
+	$class_ps='';
 	$number_of_quarters=0;
 
 
@@ -204,15 +210,15 @@ input:read-only {
 					</div>
 				</div>
 
-				 @if(!is_null($match_data[0]['tournament_id']))
+			   @if(!is_null($match_data[0]['tournament_id']))
                 <div class='row'>
                     <div class='col-xs-12'>
-                        <div class='match_loc'>
-				                 <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
-				                 	<h4>	{{$tournamentDetails['name']}} Tournament </h4>
-				                  </a>
+                        <center>
+                          <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
+                                    <h4>    {{$tournamentDetails['name']}} Tournament </h4>
+                                  </a>
                                 
-                        </div>
+                       </center>
                     </div>
                 </div>
             @endif
@@ -435,7 +441,62 @@ input:read-only {
 									<table class="table table-striped table-bordered">
 										<thead class="thead ">
 											<tr>
-												<th >Player</th>
+												<th >Players</th>
+												<th> 1 Pts </th>
+												<th> 2 Pts </th>
+												<th> 3 Pts </th>												
+												<th >Fouls</th>
+												
+										@for($index=1; $index<=$number_of_quarters; $index++)
+												<th>Qtr {{$index}}</th>
+										@endfor
+
+												<th> Total </th>
+												
+
+											</tr>
+										</thead>
+										<tbody id="team_tr_a" >
+											@foreach($team_a_basketball_scores_array as $player)
+									@if($player['playing_status']=='P')									
+
+										<tr id="team_a_row_{{$player['id']}}"  class="team_a_goal_row player_select {{$class_ps}} " player_id="{{$player['id']}} " player_name="{{$player['player_name']}}" team_id="{{$team_a_id}}" team_type='team_a' user_id="{{$player['user_id']}}" {!!$attr!!}>
+
+												<td>
+									  <a href="/editsportprofile/{{$player['user_id']}}" class="primary">                  {{$player['player_name']}} 
+                                      </a> 							
+                                                </td>
+                                                <td> 
+      <input type='text' class="tennis_input_new gui-input  points_1_player_{{$player['user_id']}}" readonly="" name="points_1_{{$player['id']}}" value="{{$player['points_1']}}" >
+                                                </td>
+                                                <td>
+      <input type='text' class="tennis_input_new gui-input  points_2_player_{{$player['user_id']}}" readonly="" name="points_2_{{$player['id']}}" value="{{$player['points_2']}}" >
+
+                                                </td>
+                                                <td>
+      <input type='text' class="tennis_input_new gui-input  points_3_player_{{$player['user_id']}}" readonly="" name="points_3_{{$player['id']}}" value="{{$player['points_3']}}" >
+                                                </td>                                             
+                                              
+                                                <td class="{{$player['id']}}_fouls">
+                                               			 <input type='text' class="tennis_input_new gui-input validation allownumericwithdecimal fouls_player_{{$player['user_id']}}" readonly="" name="fouls_{{$player['id']}}" value="{{$player['fouls']}}">
+                                                </td>
+      											
+
+                                              @for($index=1; $index<=$number_of_quarters; $index++)
+                                                <td><input type='text' class="tennis_input_new gui-input validation allownumericwithdecimal quarters_{{$index}}_player_{{$player['user_id']}}" readonly="" name="quarters_{{$index}}_player_{{$player['id']}}" value="{{$player['quarter_'.$index]}}"></td>
+                                              @endfor
+
+                                              <td>
+      <input type='text' class="tennis_input_new gui-input  total_points_player_{{$player['user_id']}}" readonly="" name="total_points_{{$player['id']}}" value="{{$player['total_points']}}" >
+      											</td>
+                                         </tr>
+                                      @endif
+											@endforeach
+										</tbody>
+
+										<thead class="substitutes_head ">
+											<tr>
+												<th >Substitutes</th>
 												<th> 1 Pts </th>
 												<th> 2 Pts </th>
 												<th> 3 Pts </th>												
@@ -453,18 +514,143 @@ input:read-only {
 										<tbody id="team_tr_a" >
 											@foreach($team_a_basketball_scores_array as $player)
 
-										<?php
-											if($player['playing_status']=='S'){
+									@if($player['playing_status']!='P')
+										<?php											
 												$attr="playing_status='S'";
-												$class_ps='not_playing';
-											}
-											else{
-												$attr="";
-												$class_ps='';
-											}
-
+												$class_ps='not_playing';										
 										?>
+										
+										<tr id="team_a_row_{{$player['id']}}"  class="team_a_goal_row player_select {{$class_ps}} " player_id="{{$player['id']}} " player_name="{{$player['player_name']}}" team_id="{{$team_a_id}}" team_type='team_a' user_id="{{$player['user_id']}}" {!!$attr!!}>
 
+												<td>
+							 <a href="/editsportprofile/{{$player['user_id']}}" class="primary">                  {{$player['player_name']}} 
+                                      </a> 
+                                                </td>
+                                                <td> 
+      <input type='text' class="tennis_input_new gui-input  points_1_player_{{$player['user_id']}}" readonly="" name="points_1_{{$player['id']}}" value="{{$player['points_1']}}" >
+                                                </td>
+                                                <td>
+      <input type='text' class="tennis_input_new gui-input  points_2_player_{{$player['user_id']}}" readonly="" name="points_2_{{$player['id']}}" value="{{$player['points_2']}}" >
+
+                                                </td>
+                                                <td>
+      <input type='text' class="tennis_input_new gui-input  points_3_player_{{$player['user_id']}}" readonly="" name="points_3_{{$player['id']}}" value="{{$player['points_3']}}" >
+                                                </td>                                             
+                                              
+                                                <td class="{{$player['id']}}_fouls">
+                                               			 <input type='text' class="tennis_input_new gui-input validation allownumericwithdecimal fouls_player_{{$player['user_id']}}" readonly="" name="fouls_{{$player['id']}}" value="{{$player['fouls']}}">
+                                                </td>
+      											
+
+                                              @for($index=1; $index<=$number_of_quarters; $index++)
+                                                <td><input type='text' class="tennis_input_new gui-input validation allownumericwithdecimal quarters_{{$index}}_player_{{$player['user_id']}}" readonly="" name="quarters_{{$index}}_player_{{$player['id']}}" value="{{$player['quarter_'.$index]}}"></td>
+                                              @endfor
+
+                                              <td>
+      <input type='text' class="tennis_input_new gui-input  total_points_player_{{$player['user_id']}}" readonly="" name="total_points_{{$player['id']}}" value="{{$player['total_points']}}" >
+      											</td>
+                                         </tr>
+                                        @endif
+											@endforeach
+										</tbody>
+									</table>
+
+								</div>
+							</div>
+							<!-- End LineUp Team A -->
+							<!-- Start LineUp Team B -->
+							<div class='col-sm-12'>
+								<h3 id='team_a' class="team_fall team_title_head">{{$team_b_name}}</h3>
+								<div class="table-responsive">
+									<table class="table table-striped table-bordered">	
+										<thead class="thead ">
+											<tr>
+												<th >Players</th>
+												<th> 1 Pts </th>
+												<th> 2 Pts </th>
+												<th> 3 Pts </th>	
+												<th >Fouls</th>											
+												
+										@for($index=1; $index<=$number_of_quarters; $index++)
+												<th>Qtr {{$index}}</th>
+										@endfor
+												<th>Total</th>
+
+
+											</tr>
+										</thead>									
+										<tbody id="team_tr_b" >
+									
+											@foreach($team_b_basketball_scores_array as $player)
+
+										@if($player['playing_status']=='P')
+											<?php										
+												
+													$attr="";
+													$class_ps='';
+												
+											?>
+
+
+										<tr id="team_a_row_{{$player['id']}}"  class="team_a_goal_row player_select {{$class_ps}}" player_id="{{$player['id']}} " player_name="{{$player['player_name']}}" team_id="{{$team_b_id}}" team_type='team_a' user_id="{{$player['user_id']}}" {!!$attr!!}>
+
+												
+												<td>
+			 <a href="/editsportprofile/{{$player['user_id']}}" class="primary">                  {{$player['player_name']}} 
+                                      </a> 	
+                                                </td>
+                                                <td> 
+      <input type='text' class="tennis_input_new gui-input  points_1_player_{{$player['user_id']}}" readonly="" name="points_1_{{$player['id']}}" value="{{$player['points_1']}}" >
+                                                </td>
+                                                <td>
+      <input type='text' class="tennis_input_new gui-input  points_2_player_{{$player['user_id']}}" readonly="" name="points_2_{{$player['id']}}" value="{{$player['points_2']}}" >
+
+                                                </td>
+                                                <td>
+      <input type='text' class="tennis_input_new gui-input  points_3_player_{{$player['user_id']}}" readonly="" name="points_3_{{$player['id']}}" value="{{$player['points_3']}}" >
+                                                </td>                                             
+                                              
+                                                <td class="{{$player['id']}}_fouls">
+                                               			 <input type='text' class="tennis_input_new gui-input validation allownumericwithdecimal fouls_player_{{$player['user_id']}}" readonly="" name="fouls_{{$player['id']}}" value="{{$player['fouls']}}">
+                                                </td>      											
+
+                                              @for($index=1; $index<=$number_of_quarters; $index++)
+                                                <td><input type='text' class="tennis_input_new gui-input validation allownumericwithdecimal quarters_{{$index}}_player_{{$player['user_id']}}" readonly="" name="quarters_{{$index}}_player_{{$player['id']}}" value="{{$player['quarter_'.$index]}}"></td>
+                                              @endfor
+   											    <td>
+      <input type='text' class="tennis_input_new gui-input  total_points_player_{{$player['user_id']}}" readonly="" name="total_points_{{$player['id']}}" value="{{$player['total_points']}}" >
+      											</td>
+                                         </tr>
+									@endif
+											@endforeach
+
+
+										<thead class="substitutes_head">
+											<tr>
+												<th >Substitutes</th>
+												<th> 1 Pts </th>
+												<th> 2 Pts </th>
+												<th> 3 Pts </th>												
+												<th >Fouls</th>
+												
+										@for($index=1; $index<=$number_of_quarters; $index++)
+												<th>Qtr {{$index}}</th>
+										@endfor
+
+												<th> Total </th>
+												
+
+											</tr>
+										</thead>
+										<tbody id="team_tr_a" >
+								@foreach($team_b_basketball_scores_array as $player)
+
+									@if($player['playing_status']!='P')
+										<?php											
+												$attr="playing_status='S'";
+												$class_ps='not_playing';										
+										?>
+										
 										<tr id="team_a_row_{{$player['id']}}"  class="team_a_goal_row player_select {{$class_ps}} " player_id="{{$player['id']}} " player_name="{{$player['player_name']}}" team_id="{{$team_a_id}}" team_type='team_a' user_id="{{$player['user_id']}}" {!!$attr!!}>
 
 												<td>
@@ -494,81 +680,9 @@ input:read-only {
       <input type='text' class="tennis_input_new gui-input  total_points_player_{{$player['user_id']}}" readonly="" name="total_points_{{$player['id']}}" value="{{$player['total_points']}}" >
       											</td>
                                          </tr>
+                                        @endif
 											@endforeach
 										</tbody>
-									</table>
-
-								</div>
-							</div>
-							<!-- End LineUp Team A -->
-							<!-- Start LineUp Team B -->
-							<div class='col-sm-12'>
-								<h3 id='team_a' class="team_fall team_title_head">{{$team_b_name}}</h3>
-								<div class="table-responsive">
-									<table class="table table-striped">	
-										<thead class="thead ">
-											<tr>
-												<th >Player</th>
-												<th> 1 Pts </th>
-												<th> 2 Pts </th>
-												<th> 3 Pts </th>	
-												<th >Fouls</th>											
-												
-										@for($index=1; $index<=$number_of_quarters; $index++)
-												<th>Qtr {{$index}}</th>
-										@endfor
-												<th>Total</th>
-
-
-											</tr>
-										</thead>									
-										<tbody id="team_tr_b" >
-									
-											@foreach($team_b_basketball_scores_array as $player)
-
-											<?php
-											if($player['playing_status']=='S'){
-												$attr="playing_status='S'";
-												$class_ps='not_playing';
-											}
-											else{
-												$attr="";
-												$class_ps='';
-											}
-										?>
-
-
-										<tr id="team_a_row_{{$player['id']}}"  class="team_a_goal_row player_select {{$class_ps}}" player_id="{{$player['id']}} " player_name="{{$player['player_name']}}" team_id="{{$team_b_id}}" team_type='team_a' user_id="{{$player['user_id']}}" {!!$attr!!}>
-
-												
-												<td>
-														{{$player['player_name']}}								
-                                                </td>
-                                                <td> 
-      <input type='text' class="tennis_input_new gui-input  points_1_player_{{$player['user_id']}}" readonly="" name="points_1_{{$player['id']}}" value="{{$player['points_1']}}" >
-                                                </td>
-                                                <td>
-      <input type='text' class="tennis_input_new gui-input  points_2_player_{{$player['user_id']}}" readonly="" name="points_2_{{$player['id']}}" value="{{$player['points_2']}}" >
-
-                                                </td>
-                                                <td>
-      <input type='text' class="tennis_input_new gui-input  points_3_player_{{$player['user_id']}}" readonly="" name="points_3_{{$player['id']}}" value="{{$player['points_3']}}" >
-                                                </td>                                             
-                                              
-                                                <td class="{{$player['id']}}_fouls">
-                                               			 <input type='text' class="tennis_input_new gui-input validation allownumericwithdecimal fouls_player_{{$player['user_id']}}" readonly="" name="fouls_{{$player['id']}}" value="{{$player['fouls']}}">
-                                                </td>      											
-
-                                              @for($index=1; $index<=$number_of_quarters; $index++)
-                                                <td><input type='text' class="tennis_input_new gui-input validation allownumericwithdecimal quarters_{{$index}}_player_{{$player['user_id']}}" readonly="" name="quarters_{{$index}}_player_{{$player['id']}}" value="{{$player['quarter_'.$index]}}"></td>
-                                              @endfor
-   											    <td>
-      <input type='text' class="tennis_input_new gui-input  total_points_player_{{$player['user_id']}}" readonly="" name="total_points_{{$player['id']}}" value="{{$player['total_points']}}" >
-      											</td>
-                                         </tr>
-									
-
-											@endforeach
 										</tbody>
 									</table>
 
@@ -674,7 +788,7 @@ input:read-only {
 												
 												<option value="walkover" {$match_data[0]['match_result']=='walkover'?'selected':''}} >Walkover</option>
 												
-												<option {{$match_data[0]['match_result']=='win'?'selected':''}}  value="win">win</option>
+												<option {{$match_data[0]['match_result']=='win'?'selected':''}}  value="win">Win</option>
 												
 												<option value="washout" {{$match_data[0]['match_result']=='washout'?'selected':''}}>No Result</option>
 											</select>
@@ -966,7 +1080,6 @@ input:read-only {
 	</div>
 
 
-	
 
 
 	<div id="basketballPreferences" class="modal fade">
@@ -987,7 +1100,7 @@ input:read-only {
 											Number of Quarters
 										</div>
 										<div class="col-sm-5">
-											<input type='text' required="" placeholder="eg. 2" name='number_of_quarters' id='number_of_quarters'>
+											<input type='text' required="" placeholder="eg. 2" name='number_of_quarters' id='number_of_quarters' value='4' readonly="">
 										</div>
 									</div>
 									<br>
@@ -1844,6 +1957,11 @@ function send(){
         $(document).on('ifChecked', '.checkbox_half_time', function(){
             return SJ.SCORECARD.soccerChooseTime(this);
         });
+
+        $(window).load(function(){
+        	var quarter_time = {{$match_data[0]['selected_half_or_quarter']}}
+        	$('#quarter_'+quarter_time+'_id').iCheck('check');        	
+        })
 	</script>
 
 @endsection

@@ -6,7 +6,7 @@
 			<div class="col-sm-6">
 				<div class="section">
 				<label class="form_label">
-					{{trans('message.sports_settings.number_of_sets')}}
+					{{trans('message.sports_settings.number_of_sets')}}  <span  class='required'>*</span>
 				</label>
 
 				<label class="field select">
@@ -27,7 +27,7 @@
 			<div class="col-sm-6">
 				<div class="section">
 				<label class="form_label">
-					{{trans('message.sports_settings.score_to_win')}}
+					{{trans('message.sports_settings.score_to_win')}}  <span  class='required'>*</span>
 				</label>
 				<label class="field">
 					<input type='text' name='score_to_win' value="{{$settings->score_to_win}}">
@@ -40,7 +40,7 @@
 			<div class="col-sm-6">
 				<div class="section">
 				<label class="form_label">
-					{{trans('message.sports_settings.end_point')}}
+					{{trans('message.sports_settings.end_point')}} 	 <span  class='required'>*</span>
 				</label>
 
 				<label class="field">

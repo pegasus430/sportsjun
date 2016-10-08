@@ -239,6 +239,11 @@ if (typeof SJ.SCORECARD === 'undefined')
                         },
                         soccerChooseTime:function(that){
                                 $('#half_time').val($(that).val());
+                                var half_time = $(that).val();
+                                var match_id  = $('#match_id').val();
+                                $.ajax({
+                                    url:'/updatehalftime/'+match_id+'/'+half_time                                    
+                                })
                         },
 
                         getSelectedPlayerId:function(){

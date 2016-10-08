@@ -1,9 +1,26 @@
  <ul class="nav nav-tabs nav-justified">
-  <li class="{{$rubber->rubber_number==$active_rubber?'active':$rubber->match_status}}">
+
+ <?php
+    if($rubber->match_status=='completed'){
+      $r_class='completed';
+      $r_status= 'Completed';
+    }
+    else {
+        if($match_data[0]['match_status']=='completed'){
+            $r_class=$rubber->match_status;
+            $r_status = $rubber->match_details==''?'Not played':'';
+        }
+        else{
+            $r_class=$rubber->match_details!=''?'active':'scheduled';
+            $r_status=$rubber->match_details!=''?'PLAYING':'Scheduled';
+        }
+    }
+  ?>
+  <li class="{{$r_class}}">
       <a>
      <span class="pull-left hidden-xs">{{date('jS F , Y',strtotime($rubber['match_start_date'])).' - '.date("g:i a", strtotime($rubber['match_start_time']))}}</span>
         RUBBER {{$rubber->rubber_number}}   &nbsp; &nbsp; <span style='color:white'> [ {{$rubber->match_category}} , {{$rubber->match_type}} ]</span>
-        <span class='pull-right'>{{strtoupper($rubber->rubber_number==$active_rubber?'PLAYING':$rubber->match_status)}}
+        <span class='pull-right'> {{strtoupper($r_status)}}
         </span>
         </a>
 </ul>

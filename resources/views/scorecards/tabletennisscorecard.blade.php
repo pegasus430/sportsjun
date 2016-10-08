@@ -168,18 +168,18 @@
                 </div>
             </div>
 
-              @if(!is_null($match_data[0]['tournament_id']))
+                @if(!is_null($match_data[0]['tournament_id']))
                 <div class='row'>
                     <div class='col-xs-12'>
-                        <div class='match_loc'>
-                           <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
-                            {{$tournamentDetails['name']}} Tournament
-                          </a>
+                        <center>
+                          <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
+                                    <h4>    {{$tournamentDetails['name']}} Tournament </h4>
+                                  </a>
                                 
-                        </div>
+                       </center>
                     </div>
                 </div>
-                @endif
+            @endif
 
             <div class="row">
               <div class="col-xs-12">
@@ -188,7 +188,7 @@
                     </div>
                 </div>
             </div>
-			<h5 class="scoreboard_title">tableTennis Scorecard @if($match_data[0]['match_type']!='other')
+			<h5 class="scoreboard_title">Table Tennis Scorecard @if($match_data[0]['match_type']!='other')
 											<span class='match_type_text'>({{ $match_data[0]['match_type']=='odi'?strtoupper($match_data[0]['match_type']):ucfirst($match_data[0]['match_type'])}} , {{ucfirst($match_data[0]['match_category'] )}})</span>
 									@endif</h5>
         </div>
@@ -204,8 +204,11 @@
     @if($match_data[0]['hasSetupSquad'] && $match_data[0]['match_status']!='completed' )
           <br>
           <div id='end_match_button'>
-          <button class="btn btn-danger soccer_buttons_disabled" onclick="return SJ.SCORECARD.soccerSetTimes(this)">End Match</button>
-          </div>
+        @if($match_data[0]['game_type']=='rubber' && !$active_rubber)
+           <button type="button" class="btn btn-danger" onclick="endMatchCompletely({{$match_data[0]['id']}})"> End Match</button>
+        @else
+          <button class="btn btn-danger soccer_buttons_disabled" onclick="return SJ.SCORECARD.soccerSetTimes(this)">End {{$match_data[0]['game_type']=='normal'?'Match':'Rubber'}}</button>  @endif
+         </div>
     @endif
  @if($isValidUser && $isForApprovalExist && ($match_data[0]['winner_id']>0 || $match_data[0]['is_tied']>0 || $match_data[0]['has_result'] == 0))    
       <button style="text-align:center;" type="button" onclick="forApproval();" class=" btn btn-primary">Send Score for Approval</button>
@@ -229,6 +232,7 @@
 
     <!--<a onclick="createnewset({{ $i=1 }});" style="float:right;">(Add More Sets)</a>-->
  
+@if($match_data[0]['game_type']!='rubber' )
 <!-- Set Preferences -->
   @if(!$match_data[0]['hasSetupSquad'] )
     <div class='row'>
@@ -386,12 +390,8 @@
   @else
 
  
-   <!-- show alert for no results -->
+   <!-- show alert for no results -->  
 
-
-  
-
-@if($match_data[0]['game_type']!='rubber' )
 
 <div class="row">
     <div class='col-sm-12'>
@@ -472,8 +472,49 @@
 </form>
 <!-- End of normal match -->
 
+@endif
+
 @else 
   <!-- Start of Rubber -->
+
+  <?php $match_has_winner = ScoreCard::getWinnerInRubber($match_data[0]['id'], $match_data[0]['sports_id'], true);?>
+  @if($active_rubber)
+   <div class="row" > 
+        <div class="col-sm-12">     
+        <center>
+          <div class="col-md-3"> 
+            <label>
+                Select Rubber Scoresheet
+            </label>
+          </div>
+          <div class="col-md-7">
+            <select class="form-control select" id='select_rubber'>
+                @foreach($rubbers as $rubber)
+                  <option value="{{$rubber->id}}" {{$rubber->rubber_number==$active_rubber?'selected':''}} {{$rubber->match_status=='completed'?'disabled':''}} > 
+                  {{date('jS F , Y',strtotime($rubber['match_start_date'])).' - '.date("g:i a", strtotime($rubber['match_start_time']))}}
+        RUBBER {{$rubber->rubber_number}}   &nbsp; &nbsp;  [ {{$rubber->match_category}} , {{$rubber->match_type}} ]
+        
+                  </option>
+                @endforeach
+            </select>
+          </div>
+          <div class="col-md-2">
+
+            <button class="btn btn-primary" onclick="setActiveRubber(this)">Change Rubber</button>
+          </div>
+           
+            </center>
+
+
+        </div>
+    </div> 
+
+    @endif
+
+     <div class="row">
+       <p><br></p>
+     </div>
+     <div class="clearfix">
 
  @foreach($rubbers as $rubber)
     <?php
@@ -489,16 +530,30 @@
       }
   ?>
 
-      @if($rubber->rubber_number==$active_rubber)
-         @include('scorecards.tabletennisscorecardrubber')
+        @if($rubber->rubber_number==$active_rubber)
+
+        @if($match_has_winner['has_winner'])
+
+      <div >
+          {!! $match_has_winner['message']!!} &nbsp; &nbsp; <button class="btn btn-primary" type="button" onclick='showHiddenRubber()'>Continue </button> &nbsp; &nbsp; <button type="button" class="btn btn-danger" onclick="endMatchCompletely({{$match_data[0]['id']}})"> End Match</button>
+      </div>
+
+        @endif
+
+        <div id='hide_next_rubber_if_match_has_winner' style="{{$match_has_winner['has_winner']?'display:none':''}} ">
+
+            @include('scorecards.tabletennisscorecardrubber')
+
+         </div>
+     
       @else
          @include('scorecards.tabletennisscorecardrubberview')
       @endif
     
  @endforeach
  
- @endif
 
+@endif
  <!-- End of Rubber -->
 
 
@@ -508,7 +563,7 @@
 
 <!-- If normal Match -->
  
- @if( isset($score_a_array['team_name']))
+ @if( isset($score_a_array['team_name']) && $match_data[0]['game_type']=='normal' )
 @if($match_data[0]['match_type']!='singles' )
   
 
@@ -712,8 +767,7 @@
   </div>
 </div>
 
-
-      
+ @if($match_data[0]['hasSetupSquad'] ) 
   <div id="updatePreferencesModal" class="modal fade">
             <div class="modal-dialog sj_modal sportsjun-forms">
               <div class="modal-content">
@@ -1265,6 +1319,33 @@ function addButtonSet(set_index){
 
 addButtonSet({{$current_set}});
 
+
+function setActiveRubber(that){
+    var rubber_id =$('#select_rubber').val();
+      $.ajax({
+        url:'/match/set_active_rubber/'+rubber_id,       
+        success:function(){
+           window.location = window.location;
+        }
+
+      })
+}
+
+function showHiddenRubber(){
+    $('#hide_next_rubber_if_match_has_winner').show();
+}
+
+
+//complete match for rubber type, end match even if all rubbers are not played
+function endMatchCompletely(match_id){  
+     $.ajax({
+        url:'/match/end_match_completely_tableTennis/'+match_id,       
+        success:function(){
+           window.location = window.location;
+        }
+
+      })
+}
 </script>
 
 

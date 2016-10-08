@@ -4066,15 +4066,10 @@ class ScoreCardController extends Controller {
 
 
 			//update organization points;
-
-		$organization=Organization::join('tournament_parent', 'organization.id', '=', 'tournament_parent.organization_id')
-								->join('tournaments', 'tournaments.tournament_parent_id', '=', 'tournament_parent.id')
-								->where('tournaments.id', '=', $match_data[0]['tournament_id'])
-								->first();
-
-		if(!is_null($organization)){
-				Helper::updateOrganizationTeamsPoints($organization->id);
-		}
+	
+		if(!is_null($match_data[0]['tournament_id'])){
+				Helper::updateOrganizationTeamsPoints($match_data[0]['tournament_id']);
+		} 
 
 		}
 
@@ -4497,12 +4492,33 @@ if(!isset($match_details['penalties']['team_b']['players_ids']))$match_details['
 //get the active rubber
 	public function getActiveRubber($match_id){
 	$match_model=MatchSchedule::find($match_id);
+
+		if(Session::has('rubberInfo')){
+			return Session::get('rubberInfo');
+		}
 			
 	$active_rubber=MatchScheduleRubber::whereMatchId($match_id)->orderBy('id', 'asc')->where('match_status', '=', 'scheduled')->first();
-
-
 		return $active_rubber;
 	}
+
+//set active rubber
+	public function setActiveRubber($rubber_id){
+		$active_rubber=MatchScheduleRubber::find($rubber_id);		
+		Session(['rubberInfo'=>$active_rubber]);
+	}
+
+//deselect rubber
+	public function destroyRubberFromSession(){
+		Session::remove('rubberInfo');
+	}
+
+	public function updatehalftime($match_id, $half_time){
+		$match_model = MatchSchedule::find($match_id);
+		$match_model->selected_half_or_quarter = explode('_', $half_time)[1];
+		$match_model->save();		
+	}
+
+
 
 }
 ?>

@@ -206,15 +206,15 @@ input:read-only {
 					</div>
 				</div>
 
-				 @if(!is_null($match_data[0]['tournament_id']))
+			   @if(!is_null($match_data[0]['tournament_id']))
                 <div class='row'>
                     <div class='col-xs-12'>
-                        <div class='match_loc'>
-				                 <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
-				                 		<h4 > {{$tournamentDetails['name']}} Tournament </h4>
-				                  </a>
+                        <center>
+                          <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
+                                    <h4>    {{$tournamentDetails['name']}} Tournament </h4>
+                                  </a>
                                 
-                        </div>
+                       </center>
                     </div>
                 </div>
             @endif
@@ -1778,6 +1778,11 @@ var manual=false;
         $(document).on('ifChecked', '.checkbox_half_time', function(){
             return SJ.SCORECARD.soccerChooseTime(this);
         });
+
+         $(window).load(function(){
+        	var quarter_time = {{$match_data[0]['selected_half_or_quarter']}}
+        	$('#quarter_'+quarter_time+'_id').iCheck('check');        	
+        })
 	</script>
 
 @endsection
