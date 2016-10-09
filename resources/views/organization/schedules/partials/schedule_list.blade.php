@@ -12,7 +12,7 @@
                     <div class="pull-right">
                         <a href="/download/schedules_all?tournament_id={{ $tournament['id'] }}" class="btn-danger btn"
                            name="match_schedule_tournament_{{ $tournament['id'] }}"
-                            onclick="return false;"
+                           onclick="return false;"
                         ><i class="fa fa-download"></i>
                             Download Schedule </a>
                     </div>
@@ -38,20 +38,29 @@
                     @foreach ($tournament->matches as $match)
                         <div class="row sportsjun-datatable-item">
                             <div class="col-md-2">
-                                    <span class="match-detail-score">{!!  Helper::displayDateFormat($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""), 'jS F, Y <\b\\r>g:i A' )  !!}</span>
+                                <span class="match-detail-score">{!!  Helper::displayDateFormat($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""), 'jS F, Y <\b\\r>g:i A' )  !!}</span>
                             </div>
                             <div class="col-md-1 text-capitalize">
-                                    <span class="hidden-md hidden-lg"><b>Sport Name:</b></span>
-                                    {{$match->sport->sports_name}}
+                                <span class="hidden-md hidden-lg"><b>Sport Name:</b></span>
+                                {{$match->sport->sports_name}}
                             </div>
                             <div class="col-md-3">
-                                    <b>{{$tournament->name}}</b>
+                                <b>{{$tournament->name}}</b>
                             </div>
                             <div class="col-md-4">
+                                <div class="schedule-datatable-img">
+                                    <div class="team_player_sj_img">
+                                        {!! Helper::makeImageHtml($match->sideALogo,['class'=>'img-circle img-border ','height'=>52,'width'=>52]) !!}
+                                    </div>
+                                    VS
+                                    <div class="team_player_sj_img">
+                                        {!! Helper::makeImageHtml($match->sideBLogo,['class'=>'img-circle img-border ','height'=>52,'width'=>52]) !!}
+                                    </div>
+                                </div>
+
                                 @if ($match->a_id != null)
-                                    <?php $sideA = $match->schedule_type == 'team' ? array_get($teamNames,
-                                            $match->a_id) : array_get($userNames, $match->a_id); ?>
-                                    <span class="schedule-team-name">{{  $sideA }}</span>
+                                    <span class="schedule-team-name">{{  $match->schedule_type == 'team' ? array_get($teamNames,
+                                        $match->a_id) : array_get($userNames, $match->a_id) }}</span>
                                 @endif
                                 @if ($match->a_id !=null && $match->b_id != null)
                                     <b>vs</b>
@@ -93,11 +102,6 @@
                                 @else
                                 @endif
 
-                                @if($match['game_type']=='rubber')
-                                    <span class="pull-right">
-                 			            <a href="#" class="show_sub_field show_sub_tournament " parent_field_id="{{$match['id']}}">View Rubber</a>
-                 			  	    </span>
-                                @endif
 
                             </div>
                         </div>
