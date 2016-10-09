@@ -685,6 +685,31 @@ function viewMore(a, b) {
     });
 }
 
+function DataTableLoadMore(el){
+    var load_more_div = $(el).closest($(el).data('replace'));
+    var url = $(el).data('url');
+    if (url)
+        $.ajax({
+            url: url,
+            data: {},
+            dataType : 'text',
+            type : 'GET',
+            beforeSend: function() {
+                $.blockUI({
+                    width: "50px",
+                    message: $("#spinner").html()
+                });
+            },
+            complete:function(xhr,status){
+                $.unblockUI();
+            },
+            success: function(result) {
+                $(load_more_div).replaceWith(result);
+            }
+        });
+    return false;
+}
+
 function editMatchSchedule(a, b, c, modal_id) {
      $(".modal-body #schedule_id").val(a);
      $(".modal-body #main_schedule_id").val(a);

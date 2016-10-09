@@ -8,3 +8,10 @@
     padding-left:10px;
     display:inline-block;
 }
+
+.member-user-info-name{
+    color: #67a1ea;
+}
+.member-user-info-name:hover{
+    color: #67a1ea;
+}

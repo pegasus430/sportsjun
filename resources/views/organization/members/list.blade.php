@@ -14,10 +14,33 @@
                         {{ session('status') }}
                     </div>
                 @endif
-
                 @if($members->count())
+                    <div class="sportsjun-datafilter">
+                        <form method="GET">
+                            <div class="form-group">
+                                <label>Find people in your club</label>
+                                <div class="input-group">
+                                    <input class="form-control" name="filter-team" value="{{ $filter_team }}"/>
+                                    <span class="input-group-btn"><button class="btn btn-tiny btn-primary "
+                                                                          type="button">Find</button></span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                     <div id="my_players_container">
-                        @include('organization.members.partials.member_list')
+                        <table class="table sportsjun-datatable">
+                            <thead class="sportsjun-datatable-head">
+                            <tr>
+                                <th style="width:30%">Name</th>
+                                <th>Teams</th>
+                                <th>Sports</th>
+                                <th>Stats/Notes</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                @include('organization.members.partials.member_list')
+                            </tbody>
+                        </table>
                     </div> {{-- /#my_groups_container --}}
                 @else
                     <div id="players_empty text-left">

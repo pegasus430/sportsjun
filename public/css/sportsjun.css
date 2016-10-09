@@ -2992,3 +2992,17 @@ div#tournament_details_cover img {
 .bluewish{
   color:#123456;
 }
+
+.sportsjun-datatable{
+
+}
+
+.sportsjun-datatable-head{
+    background-color: #333;
+    color:#EEE;
+    border:0;
+}
+
+.table > .sportsjun-datatable-head>tr>th{
+    font-weight:bold;
+}
