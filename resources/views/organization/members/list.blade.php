@@ -14,19 +14,19 @@
                         {{ session('status') }}
                     </div>
                 @endif
-                @if($members->count())
-                    <div class="sportsjun-datafilter">
-                        <form method="GET">
-                            <div class="form-group">
-                                <label>Find people in your club</label>
-                                <div class="input-group">
-                                    <input class="form-control" name="filter-team" value="{{ $filter_team }}"/>
-                                    <span class="input-group-btn"><button class="btn btn-tiny btn-primary "
-                                                                          type="button">Find</button></span>
-                                </div>
+                <div class="sportsjun-datafilter">
+                    <form method="GET">
+                        <div class="form-group">
+                            <label>Find people in your club</label>
+                            <div class="input-group">
+                                <input class="form-control" name="filter-team" value="{{ $filter_team }}"/>
+                                <span class="input-group-btn"><button class="btn btn-tiny btn-primary "
+                                                                      type="button">Find</button></span>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
+                </div>
+                @if($members->count())
                     <div id="my_players_container">
                         <table class="table sportsjun-datatable">
                             <thead class="sportsjun-datatable-head">
@@ -44,7 +44,7 @@
                     </div> {{-- /#my_groups_container --}}
                 @else
                     <div id="players_empty text-left">
-
+                        <p>No Records</p>
                     </div>
                 @endif
 
