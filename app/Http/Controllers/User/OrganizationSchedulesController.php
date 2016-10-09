@@ -13,6 +13,20 @@ use App\User;
 
 class OrganizationSchedulesController extends Controller
 {
+    public function tournamentList($id){
+        $term = \Request::has('term') ? filter_var(\Request::get('term'), FILTER_SANITIZE_STRING) : false;
+
+        $tournamentsQuery = Tournaments::whereHas('tournamentParent', function ($query) use ($id) {
+            $query->where('organization_id', $id);
+        });
+
+        if ($term){
+            $tournamentsQuery->where('name','LIKE','%'.$term.'%');
+        }
+        return $tournamentsQuery->orderBy('name','ASC')->get()->unique('name')->lists('name','id');
+    }
+
+
     public function index($id)
     {
         $organization = Organization::with('staff')->findOrFail($id);
