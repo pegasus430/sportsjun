@@ -20,9 +20,12 @@
     <div class="pull-left half-width col-xs-12 col-sm-6"> <input class='full-width form-control dark-border' placeholder="filter match e.g team name, date" onkeyup="filterDiv(this)"></div>
 
         @foreach($roundArray as $round)
+          <?php $bracket_name = Helper::getRoundStage($tournament_id, $round);
+                $round_name = $bracket_name=='WINNER'?'THIRD POSITION' : $bracket_name; 
+          ?>
                   <div class="col-sm-12">
                         <div class="round-{{Helper::convert_number_to_words($round)}}">
-                            <div class="round"><p>    {{Helper::getRoundStage($tournament_id, $round)}} </p></div>
+                            <div class="round"><p>    {{$round_name}} </p></div>
                                   @if($round==1)             
                                          @include('tournaments.sub_match_schedules')               
                                  @else 

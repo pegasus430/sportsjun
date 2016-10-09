@@ -44,3 +44,4 @@ class Kernel extends HttpKernel
         'jwt.api.auth' => \App\Http\Middleware\ApiGetUserFromToken::class,
     ];
 }
+

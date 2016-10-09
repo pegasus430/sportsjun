@@ -169,7 +169,9 @@ class ScoreCardController extends Controller {
 				$sport_name = $sportsDetails[0]['sports_name'];
 				if(strtolower($sport_name)==strtolower('Tennis'))//if match is related to tennis
 				{
-					return  $this->tennisOrTableTennisScoreCard($match_data,$match='Tennis',$sportsDetails,$tournamentDetails);
+					//return  $this->tennisOrTableTennisScoreCard($match_data,$match='Tennis',$sportsDetails,$tournamentDetails);
+					$tt= new ScoreCard\TennisScoreCardController;
+					return $tt->tennisScoreCard($match_data,$match='Tennis',$sportsDetails,$tournamentDetails);
 				}else if(strtolower($sport_name)==strtolower('Table Tennis'))//if match is related to table tennis
 				{
 					//return $this->tennisOrTableTennisScoreCard($match_data,$match='Table Tennis',$sportsDetails,$tournamentDetails);
@@ -891,7 +893,7 @@ class ScoreCardController extends Controller {
 
 	}
 	//function to insert tennis statitistics
-	public function tennisStatistics($player_ids_a_array,$match_type,$is_win='')
+	public function tennisStatisticsOld($player_ids_a_array,$match_type,$is_win='', $schedule_type='normal')
 	{
 		//$player_ids_a_array = explode(',',$player_ids);
 		foreach($player_ids_a_array as $user_id)
@@ -3522,7 +3524,9 @@ class ScoreCardController extends Controller {
 				$sport_name = $sportsDetails[0]['sports_name'];
 				if(strtolower($sport_name)==strtolower('Tennis'))//if match is related to tennis
 				{
-					return  $this->tennisOrTableTennisScoreCard($match_data,$match='Tennis',$sportsDetails,$tournamentDetails,$is_from_view=1);
+					$tt = new ScoreCard\TennisScoreCardController;
+					return $tt->tennisScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
+					//return  $this->tennisOrTableTennisScoreCard($match_data,$match='Tennis',$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}else if(strtolower($sport_name)==strtolower('Table Tennis'))//if match is related to table tennis
 				{
 					//return $this->tennisOrTableTennisScoreCard($match_data,$match='Table Tennis',$sportsDetails,$tournamentDetails,$is_from_view=1);
@@ -3611,7 +3615,9 @@ class ScoreCardController extends Controller {
 				$sport_name = $sportsDetails[0]['sports_name'];
 				if(strtolower($sport_name)==strtolower('Tennis'))//if match is related to tennis
 				{
-					return  $this->tennisOrTableTennisScoreCard($match_data,$match='Tennis',$sportsDetails,$tournamentDetails,$is_from_view=1);
+					//return  $this->tennisOrTableTennisScoreCard($match_data,$match='Tennis',$sportsDetails,$tournamentDetails,$is_from_view=1);
+					$tt = new ScoreCard\TabletennisScoreCardController;
+					return $tt->tennisScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}else if(strtolower($sport_name)==strtolower('Table Tennis'))//if match is related to table tennis
 				{
 					//return $this->tennisOrTableTennisScoreCard($match_data,$match='Table Tennis',$sportsDetails,$tournamentDetails,$is_from_view=1);
@@ -3872,8 +3878,9 @@ class ScoreCardController extends Controller {
 					{
 						$is_win = 'yes';
 					}
-					if($sport_name=='Tennis')
-						$this->tennisStatistics($players,$match_type,$is_win);
+					if($sport_name=='Tennis'){
+						//$this->tennisStatistics($players,$match_type,$is_win);
+					}
 					else if($sport_name=='Table Tennis'){
 						//$this->tableTennisStatistics($players,$match_type,$is_win);
 					}
@@ -4066,15 +4073,10 @@ class ScoreCardController extends Controller {
 
 
 			//update organization points;
-
-		$organization=Organization::join('tournament_parent', 'organization.id', '=', 'tournament_parent.organization_id')
-								->join('tournaments', 'tournaments.tournament_parent_id', '=', 'tournament_parent.id')
-								->where('tournaments.id', '=', $match_data[0]['tournament_id'])
-								->first();
-
-		if(!is_null($organization)){
-				Helper::updateOrganizationTeamsPoints($organization->id);
-		}
+	
+		if(!is_null($match_data[0]['tournament_id'])){
+				Helper::updateOrganizationTeamsPoints($match_data[0]['tournament_id']);
+		} 
 
 		}
 
@@ -4497,12 +4499,33 @@ if(!isset($match_details['penalties']['team_b']['players_ids']))$match_details['
 //get the active rubber
 	public function getActiveRubber($match_id){
 	$match_model=MatchSchedule::find($match_id);
+
+		if(Session::has('rubberInfo')){
+			return Session::get('rubberInfo');
+		}
 			
 	$active_rubber=MatchScheduleRubber::whereMatchId($match_id)->orderBy('id', 'asc')->where('match_status', '=', 'scheduled')->first();
-
-
 		return $active_rubber;
 	}
+
+//set active rubber
+	public function setActiveRubber($rubber_id){
+		$active_rubber=MatchScheduleRubber::find($rubber_id);		
+		Session(['rubberInfo'=>$active_rubber]);
+	}
+
+//deselect rubber
+	public function destroyRubberFromSession(){
+		Session::remove('rubberInfo');
+	}
+
+	public function updatehalftime($match_id, $half_time){
+		$match_model = MatchSchedule::find($match_id);
+		$match_model->selected_half_or_quarter = explode('_', $half_time)[1];
+		$match_model->save();		
+	}
+
+
 
 }
 ?>

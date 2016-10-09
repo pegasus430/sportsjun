@@ -91,4 +91,5 @@ class MSG91
             1)->count();
         return $isOtpSent > 0;
     }
+
 }

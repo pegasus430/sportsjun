@@ -204,15 +204,15 @@ input:read-only {
 					</div>
 				</div>
 
-				 @if(!is_null($match_data[0]['tournament_id']))
+			@if(!is_null($match_data[0]['tournament_id']))
                 <div class='row'>
                     <div class='col-xs-12'>
-                        <div class='match_loc'>
-				                 <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
-				                 		{{$tournamentDetails['name']}} Tournament
-				                  </a>
+                        <center>
+                          <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
+                                    <h4>    {{$tournamentDetails['name']}} Tournament </h4>
+                                  </a>
                                 
-                        </div>
+                       </center>
                     </div>
                 </div>
             @endif
@@ -232,7 +232,7 @@ input:read-only {
 
 			<div class="row">
 				<div class="col-md-12">
-					<h5 class="scoreboard_title">waterpolo Scorecard
+					<h5 class="scoreboard_title">Waterpolo Scorecard
 					@if(!empty($match_data[0]['match_category']))
                              <span class='match_type_text'>
                              ({{ucfirst($match_data[0]['match_category']) }})
@@ -433,7 +433,7 @@ input:read-only {
 								<h3 id='team_a' class="team_bat team_title_head">{{$team_a_name}}</h3>
 								<div class="table-responsive">
 									<table class="table table-striped table-bordered">
-										<thead class="thead ">
+										<thead class="players_head ">
 											<tr>
 												<th >Player</th>
 												<th> Goals </th>
@@ -498,7 +498,7 @@ input:read-only {
 								<h3 id='team_a' class="team_fall team_title_head">{{$team_b_name}}</h3>
 								<div class="table-responsive">
 									<table class="table table-striped">	
-										<thead class="thead ">
+										<thead class="players_head ">
 											<tr>
 												<th >Player</th>
 												<th> Goals </th>
@@ -1770,6 +1770,11 @@ var manual=false;
         $(document).on('ifChecked', '.checkbox_half_time', function(){
             return SJ.SCORECARD.soccerChooseTime(this);
         });
+
+         $(window).load(function(){
+        	var quarter_time = {{$match_data[0]['selected_half_or_quarter']}}
+        	$('#quarter_'+quarter_time+'_id').iCheck('check');        	
+        })
 	</script>
 
 @endsection

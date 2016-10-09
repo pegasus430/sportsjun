@@ -177,14 +177,15 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 				</div>
 
 			<!-- If match is from tournament, displays tournament details -->
-			@if(!is_null($match_data[0]['tournament_id']))
+			   @if(!is_null($match_data[0]['tournament_id']))
                 <div class='row'>
                     <div class='col-xs-12'>
-                        <div class='match_loc'>
-                           <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
-				                 		{{$tournamentDetails['name']}} Tournament
-				           </a>
-                        </div>
+                        <center>
+                          <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
+                                    <h4>    {{$tournamentDetails['name']}} Tournament </h4>
+                                  </a>
+                                
+                       </center>
                     </div>
                 </div>
             @endif
@@ -682,13 +683,12 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 								</div>
 							</div>
 						</div>
-					</div>
-				</div>
+					
 
 
 
 				<!-- Team B Goals Start-->
-				<div class='row' id='match_details'>
+				<div class='' id='match_details'>
 				<div class="col-sm-10 col-sm-offset-1 col-xs-12">
 					<h3 id='team_b' class="team_bowl table_head">MATCH DETAILS</h3>
 					<div class="table-responsive">
@@ -1798,6 +1798,11 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
         $(document).on('ifChecked', '.checkbox_half_time', function(){
             return SJ.SCORECARD.soccerChooseTime(this);
         });
+
+         $(window).load(function(){
+        	var quarter_time = {{$match_data[0]['selected_half_or_quarter']}}
+        	$('#quarter_'+quarter_time+'_id').iCheck('check');        	
+        })
 	</script>
 
 @endsection

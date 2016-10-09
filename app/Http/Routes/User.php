@@ -49,6 +49,30 @@ Route::group(['prefix' => 'organization/{id}'], function () {
         'as'   => 'organization.groups.update',
         'uses' => 'User\OrganizationGroupsController@edit',
     ]);
+
+    Route::get('players', [
+        'as'   => 'organization.members.list',
+        'uses' => 'User\OrganizationMembersController@index',
+    ]);
+
+    Route::get('teamlist', [
+        'as'   => 'organization.members.teamlist',
+        'uses' => 'User\OrganizationMembersController@teamList',
+    ]);
+
+
+
+    Route::get('schedules', [
+        'as'   => 'organization.schedules.list',
+        'uses' => 'User\OrganizationSchedulesController@index',
+    ]);
+
+    Route::get('tournamentlist', [
+        'as'   => 'organization.schedules.tournamentlist',
+        'uses' => 'User\OrganizationSchedulesController@tournamentList',
+    ]);
+
+
 });
 
 Route::get('getteamdetails', [
@@ -117,6 +141,12 @@ Route::get('team/deleteteam/{team_id}/{flag}', [
 Route::post('team/update/{team_id}', [
     'as'   => 'team/update',
     'uses' => 'User\TeamController@updateteam',
+]);
+
+
+Route::post('team/change_ownership', [
+    'as'   => 'team.change_ownership',
+    'uses' => 'User\TeamController@changeOwnership',
 ]);
 
 //to update player/team details
@@ -694,6 +724,7 @@ Route::resource('team', 'User\TeamController');
 
 
 Route::get('/reloadgroupteampoints', 'User\OrganizationController@testTournaments');
+Route::get('/updatehalftime/{match_id?}/{half_time}', 'User\ScoreCardController@updatehalftime');
 
 
 

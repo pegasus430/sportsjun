@@ -120,15 +120,15 @@ if($match_data[0]['game_type']=='rubber'){
                 </div>
             </div>
 
-            @if(!is_null($match_data[0]['tournament_id']))
+              @if(!is_null($match_data[0]['tournament_id']))
                 <div class='row'>
                     <div class='col-xs-12'>
-                        <div class='match_loc'>
+                        <center>
                           <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
-                            {{$tournamentDetails['name']}} Tournament
-                          </a>
+                                    <h4>    {{$tournamentDetails['name']}} Tournament </h4>
+                                  </a>
                                 
-                        </div>
+                       </center>
                     </div>
                 </div>
             @endif
@@ -246,7 +246,7 @@ if($match_data[0]['game_type']=='rubber'){
          $rubber_a_array = $rubber_players['a'];
          $rubber_b_array = $rubber_players['b'];
     ?>
-         @include('scorecards.tabletennisscorecardrubberview')
+         @include('scorecards.tabletennis.tabletennisscorecardrubberview')
  @endforeach
  
  @endif

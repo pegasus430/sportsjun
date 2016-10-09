@@ -29,8 +29,8 @@ class AddSchedulesRequest extends Request {
         $tournamentid = Request::get('tournament_id');
         $validationArray = [
       'scheduletype' => 'required',
-      'myteam' => 'required',
-      'oppteam' => 'required',
+      'my_team_id' => 'required',
+      'opp_team_id' => 'required',
       'match_start_date' => 'required|date_format:'.config('constants.DATE_FORMAT.VALIDATION_DATE_FORMAT'),
       'match_start_time' => 'date_format:'.config('constants.DATE_FORMAT.VALIDATION_TIME_FORMAT'),
       // 'start_time' => 'required|',
@@ -57,9 +57,9 @@ class AddSchedulesRequest extends Request {
     public function messages() {
         return [
           'scheduletype.required' => trans('validation.required'),
-          'myteam.required' => trans('validation.required'),
+          'my_team_id.required' => trans('validation.required'),
           // 'myteam.max' => trans('validation.required'),
-          'oppteam.required' => trans('validation.required'),
+          'opp_team_id.required' => trans('validation.required'),
           // 'oppteam.max' => trans('validation.required'),
           'start_time.required' => trans('validation.required'),
           'start_time.date' => trans('validation.date'),

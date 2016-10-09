@@ -28,6 +28,7 @@ use App\Model\TournamentMatchPreference as Settings;
 use App\User;
 use Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use PDO;
 use Request;
@@ -887,7 +888,7 @@ class TournamentsController extends Controller
 			{
 				$group_id    = $groups->id;
 				$teamDetails = TournamentGroupTeams::select()->where('tournament_group_id', $group_id)->orderBy('points', 'desc')->get();
-
+                
 				if (count((array) $teamDetails) > 0)
 					$team_details[$group_id] = $teamDetails->toArray(); //get tournament group teams
 
@@ -1367,6 +1368,17 @@ class TournamentsController extends Controller
 
 		$follow_unfollow = Helper::checkFollowUnfollow(isset(Auth::user()->id)?Auth::user()->id:0, 'TOURNAMENT', $tournament_id);
 
+        $final_stage_teams = [];
+        if (isset($selectetdFinalStageTeams) && is_array($selectetdFinalStageTeams) && isset($tournamentTeams)) {
+            if (is_array($tournamentTeams)) {
+                $final_stage_teams = array_only($tournamentTeams, $selectetdFinalStageTeams);
+            } else {
+                if (is_a($tournamentTeams, Collection::class)) {
+                    $final_stage_teams = array_only($tournamentTeams->lists('name','id')->toArray(),$selectetdFinalStageTeams);
+                }
+            }
+        }
+
 		if($from_api){
 
 			return Response::json([
@@ -1406,9 +1418,8 @@ class TournamentsController extends Controller
 
 		}
 
-		
 
-	
+
 
 //            dd($tournament_id);
 		return view('tournaments.groups', array(
@@ -1426,6 +1437,7 @@ class TournamentsController extends Controller
 			'schedule_type'            => $schedule_type,
 			'tournament_type'          => $tournament_type,
 			'tournamentDetails'        => $tournaments->toArray(),
+            'final_stage_teams'        => $final_stage_teams,
 			'team_name'                => '',
 			'tournamentTeams'          => !empty($tournamentTeams) ? $tournamentTeams : [],
 			'sports_id'                => $sport_id,
@@ -1988,14 +2000,14 @@ class TournamentsController extends Controller
 		$teams = TournamentGroupTeams::where('tournament_group_id',$tournament_group_id )->get(['team_id']);
 
 //           dd($teams);
-		$teamIds = '';
+		$teamIDs = '';
 		if(count($teams)) {
 			foreach($teams as $team) {
-				$teamIds.= $team->team_id.',';
+                $teamIDs.= $team->team_id.',';
 			}
 		}
 		if(!empty($teamIds)) {
-			$teamIDs = trim($teamIds,',');
+			$teamIDs = trim($teamIDs,',');
 		}
 		return $teamIDs;
 	}

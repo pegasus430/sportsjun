@@ -1,4 +1,6 @@
 @extends(Auth::user() ? 'layouts.app' : 'home.layout')
+
+
 @section('content')
 
 <?php 
@@ -120,15 +122,15 @@ if($match_data[0]['game_type']=='rubber'){
                 </div>
             </div>
 
-            @if(!is_null($match_data[0]['tournament_id']))
+             @if(!is_null($match_data[0]['tournament_id']))
                 <div class='row'>
                     <div class='col-xs-12'>
-                        <div class='match_loc'>
+                        <center>
                           <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
-                            {{$tournamentDetails['name']}} Tournament
-                          </a>
+                                    <h4>    {{$tournamentDetails['name']}} Tournament </h4>
+                                  </a>
                                 
-                        </div>
+                       </center>
                     </div>
                 </div>
             @endif
@@ -140,7 +142,7 @@ if($match_data[0]['game_type']=='rubber'){
                     </div>
                 </div>
             </div>
-			<h5 class="scoreboard_title">Badminton Scorecard @if($match_data[0]['match_type']!='other')
+			<h5 class="scoreboard_title">Squash Scorecard @if($match_data[0]['match_type']!='other')
 											<span class='match_type_text'>({{ $match_data[0]['match_type']=='odi'?strtoupper($match_data[0]['match_type']):ucfirst($match_data[0]['match_type'])}}, {{ucfirst($match_data[0]['match_category']) }})</span>
 									@endif</h5>
         </div>
@@ -242,18 +244,18 @@ if($match_data[0]['game_type']=='rubber'){
 
  @foreach($rubbers as $rubber)
     <?php
-         $rubber_players = ScoreCard::getRubberPlayers($rubber->id);
+         $rubber_players = ScoreCard::getRubberPlayers($rubber->id, $rubber->sports_id);
          $rubber_a_array = $rubber_players['a'];
          $rubber_b_array = $rubber_players['b'];
     ?>
-         @include('scorecards.badmintonrubberview')
+         @include('scorecards.squash.squashrubberview')
  @endforeach
  
  @endif
 
  <!-- End of Rubber -->
 
-    @if($match_data[0]['match_status']=='completed' && isset($display_users))
+@if($match_data[0]['match_status']=='completed' && isset($display_users))
 
 
 @if($match_data[0]['match_type']!='singles' )
@@ -343,7 +345,7 @@ function scoreCardStatus(status)
 		$.ajax({
             url: base_url+'/match/scoreCardStatus',
             type: "post",
-            data: {'scorecard_status': status,'match_id':match_id,'rej_note':rej_note,'sport_name':'Badminton'},
+            data: {'scorecard_status': status,'match_id':match_id,'rej_note':rej_note,'sport_name':'squash'},
             success: function(data) {
                 if(data.status == 'success') {
 					window.location.href = base_url+'/match/scorecard/edit/'+match_id;
@@ -366,7 +368,7 @@ function getMatchDetails(){
 
   var base_url=base_url || secure_url;
         $.ajax({
-            url:  base_url+'/viewpublic/match/getBadmintonDetails', 
+            url:  base_url+'/viewpublic/match/getsquashDetails', 
             type:'get', 
             dataType:'json',
             data:data,
@@ -387,6 +389,7 @@ function getMatchDetails(){
 @endif
 
 </script>
+
 
 
 <!-- Put plus and minus buttons on left and rights of sets -->

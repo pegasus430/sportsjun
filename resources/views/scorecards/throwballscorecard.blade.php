@@ -217,14 +217,15 @@ input:read-only {
 					</div>
 				</div>
 
-				 @if(!is_null($match_data[0]['tournament_id']))
+		  @if(!is_null($match_data[0]['tournament_id']))
                 <div class='row'>
                     <div class='col-xs-12'>
-                        <div class='match_loc'>
-                    <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
-                            {{$tournamentDetails['name']}} Tournament
-                   </a>   
-                        </div>
+                        <center>
+                          <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
+                                    <h4>    {{$tournamentDetails['name']}} Tournament </h4>
+                                  </a>
+                                
+                       </center>
                     </div>
                 </div>
             @endif

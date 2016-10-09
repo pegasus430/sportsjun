@@ -27,6 +27,11 @@
         $b_fouls=$match_details->{$team_b_id}->fouls;       
     }
 
+    else {
+        $number_of_quarters = 4; 
+        $quarter_time = 20;
+    }
+
 
 
     function getClass($number){
@@ -91,6 +96,10 @@
         }
         .btn-penalty-chosen{
             opacity: 1;
+        }
+       td a{
+            color: #455469;
+          
         }
 
 
@@ -169,15 +178,15 @@
                     </div>
                 </div>
 
-                 @if(!is_null($match_data[0]['tournament_id']))
+            @if(!is_null($match_data[0]['tournament_id']))
                 <div class='row'>
                     <div class='col-xs-12'>
-                        <div class='match_loc'>
+                        <center>
                           <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
                                     <h4>    {{$tournamentDetails['name']}} Tournament </h4>
                                   </a>
                                 
-                        </div>
+                       </center>
                     </div>
                 </div>
             @endif
@@ -241,6 +250,8 @@
                                 <div class="form-group">
                                     <label>Winner is Not Updated</label>
 
+                                    QUARTER {{$match_data[0]['selected_half_or_quarter']}}
+
                                 </div>
                             @endif
                         @endif
@@ -258,12 +269,12 @@
 
                         <div class='row'>
                             <div class='col-sm-12'>
-                                <h3 id='team_a' class="team_bat team_title_head">{{$team_a_name}}</h3>
+                                <h3 id='team_a' class="team_fall team_title_head">{{$team_a_name}}</h3>
                                 <div class="table-responsive">
                                     <table class="table table-striped table-bordered">
-                                        <thead class="thead ">
+                                        <thead class="players_head ">
                                           <tr>
-                                                <th >Player</th>
+                                                <th >Player<s/th>
                                                 <th> 1 Pts </th>
                                                 <th> 2 Pts </th>
                                                 <th> 3 Pts </th>                                                
@@ -281,11 +292,13 @@
                                         <tbody id="team_tr_a" >
                                             @foreach($team_a_basketball_scores_array as $player)
 
+                                    @if($player['playing_status']=='P')
                                         <tr id="team_a_row_{{$player['id']}}">
 
                                                
-                                                <td class="{{getPlayerClass($player['playing_status'])}}">
-                                                        {{$player['player_name']}}                              
+                                                <td class="">
+                                      <a href="/editsportprofile/{{$player['user_id']}}" class="primary">                  {{$player['player_name']}} 
+                                      </a>                         
                                                 </td>
                                                 <td class=""> 
     {{getClass($player['points_1'])}}
@@ -314,8 +327,96 @@
                                                 </td>
                                          </tr>
                                          </tr>
+                                     @endif
                                             @endforeach
                                         </tbody>
+
+
+                                            <thead class="substitutes_head ">
+                                          <tr>
+                                                <th >Substitutes</th>
+                                                <th> 1 Pts </th>
+                                                <th> 2 Pts </th>
+                                                <th> 3 Pts </th>                                                
+                                                <th >Fouls</th>
+                                                
+                                        @for($index=1; $index<=$number_of_quarters; $index++)
+                                                <th>Qtr {{$index}}</th>
+                                        @endfor
+
+                                                <th> Total </th>
+                                                
+
+                                            </tr>
+                                        </thead>
+                                        <tbody id="team_tr_a" >
+                                            @foreach($team_a_basketball_scores_array as $player)
+
+                                    @if($player['playing_status']=='S')
+                                        <tr id="team_a_row_{{$player['id']}}">
+
+                                               
+                                                <td class="">
+                                       <a href="/editsportprofile/{{$player['user_id']}}" class="primary">                  {{$player['player_name']}} 
+                                      </a>                              
+                                                </td>
+                                                <td class=""> 
+    {{getClass($player['points_1'])}}
+                                                </td>
+                                                <td class="">
+    {{getClass($player['points_2'])}}
+
+                                                </td>
+                                                <td class="">
+    {{getClass($player['points_3'])}}
+                                                </td>                                             
+                                              
+                                                <td class="">
+                                                       {{getClass($player['fouls'])}}
+                                                </td>
+                                                
+
+                                              @for($index=1; $index<=$number_of_quarters; $index++)
+                                            <td class="">
+    {{getClass($player['quarter_'.$index])}}
+                                            </td>
+                                              @endfor
+
+                                              <td class="">
+    {{getClass($player['total_points'])}}
+                                                </td>
+                                         </tr>
+                                        
+                                     @endif
+                                            @endforeach
+                                        </tbody>
+
+                                        <thead class="total_head">
+                                            <tr>
+                                                <td>Total </td>
+                                                <td>
+    {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'points_1', $match_data[0]['a_id']))}}
+                                                </td>
+                                                 <td>
+    {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'points_2', $match_data[0]['a_id']))}}
+                                                </td>
+                                                 <td>
+    {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'points_3', $match_data[0]['a_id']))}}
+                                                </td>
+                                                 <td>
+    {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'fouls', $match_data[0]['a_id']))}}
+                                                </td>
+                                                 @for($index=1; $index<=$number_of_quarters; $index++)
+                                            <td class="">
+    {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'quarter_'.$index, $match_data[0]['a_id']))}}
+      
+                                            </td>
+                                              @endfor
+                                                <td>
+    {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'total_points', $match_data[0]['a_id']))}}
+                                                </td>
+                                            </tr>
+                                        </thead>
                                     </table>
 
                                 </div>
@@ -325,8 +426,8 @@
                             <div class='col-sm-12'>
                                 <h3 id='team_a' class="team_fall team_title_head">{{$team_b_name}}</h3>
                                 <div class="table-responsive">
-                                    <table class="table table-striped"> 
-                                        <thead class="thead ">
+                                    <table class="table table-striped table-bordered"> 
+                                        <thead class="players_head ">
                                            <tr>
                                                 <th >Player</th>
                                                 <th> 1 Pts </th>
@@ -346,12 +447,12 @@
                                         <tbody id="team_tr_b" >
                                     
                                             @foreach($team_b_basketball_scores_array as $player)
-
+                                     @if($player['playing_status']=='P')
                                         <tr>
-
                                                 
-                                                <td class="{{getPlayerClass($player['playing_status'])}}">
-                                                        {{$player['player_name']}}                              
+                                                <td class="">
+                                     <a href="/editsportprofile/{{$player['user_id']}}" class="primary">                  {{$player['player_name']}} 
+                                      </a>      
                                                 </td>
                                                 <td class=""> 
      {{getClass($player['points_1'])}}
@@ -379,9 +480,93 @@
                                          </tr>
                                          </tr>
                                     
-
+                                        @endif
                                             @endforeach
                                         </tbody>
+
+                                           <thead class="substitutes_head">
+                                           <tr>
+                                                <th >Substitutes</th>
+                                                <th> 1 Pts </th>
+                                                <th> 2 Pts </th>
+                                                <th> 3 Pts </th>                                                
+                                                <th >Fouls</th>
+                                                
+                                        @for($index=1; $index<=$number_of_quarters; $index++)
+                                                <th>Qtr {{$index}}</th>
+                                        @endfor
+
+                                                <th> Total </th>
+                                                
+
+                                            </tr>
+                                        </thead>                                    
+                                        <tbody id="team_tr_b" >
+                                    
+                                            @foreach($team_b_basketball_scores_array as $player)
+                                     @if($player['playing_status']=='S')
+                                        <tr>
+                                                
+                                                <td class="">
+                                  <a href="/editsportprofile/{{$player['user_id']}}" class="primary">                  {{$player['player_name']}} 
+                                 </a>                             
+                                                </td>
+                                                <td class=""> 
+     {{getClass($player['points_1'])}}
+                                                </td>
+                                                <td  class="">
+     {{getClass($player['points_2'])}}
+
+                                                </td>
+                                                <td class="">
+     {{getClass($player['points_3'])}}
+                                                </td>                                             
+                                              
+                                                <td class="{{$player['id']}}_fouls ">
+    {{getClass($player['fouls'])}}
+                                                </td>
+                                                
+
+                                              @for($index=1; $index<=$number_of_quarters; $index++)
+                                                <td class="">{{getClass($player['quarter_'.$index])}}</td>
+                                              @endfor
+
+                                              <td class="">
+    {{getClass($player['total_points'])}}
+                                                </td>
+                                         </tr>
+                                         
+                                    
+                                        @endif
+                                            @endforeach
+                                        </tbody>
+
+                                         <thead class="total_head">
+                                            <tr>
+                                                <td>Total </td>
+                                                <td>
+    {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'points_1', $match_data[0]['b_id']))}}
+                                                </td>
+                                                 <td>
+    {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'points_2', $match_data[0]['b_id']))}}
+                                                </td>
+                                                 <td>
+    {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'points_3', $match_data[0]['b_id']))}}
+                                                </td>
+                                                 <td>
+    {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'fouls', $match_data[0]['b_id']))}}
+                                                </td>
+                                                 @for($index=1; $index<=$number_of_quarters; $index++)
+                                            <td class="">
+    {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'quarter_'.$index, $match_data[0]['b_id']))}}
+      
+                                            </td>
+                                              @endfor
+                                                <td>
+    {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'total_points', $match_data[0]['b_id']))}}
+                                                </td>
+                                            </tr>
+                                        </thead>
                                     </table>
 
                                 </div>
