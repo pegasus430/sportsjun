@@ -5,7 +5,7 @@
         <div class="col-md-12">
             <div class="panel">
                 <div class="panel-top-container clearfix">
-                    <div class="pull-left"><h4 class="panel-heading">Players</h4></div>
+                    <div class="pull-left"><h4 class="panel-heading">Players in your organization</h4></div>
                     <div class="pull-right panel-right-btn">
                     </div> {{-- /.panel-right-btn--}}
                 </div> {{-- /.panel-top-container --}}
@@ -17,9 +17,9 @@
                 <div class="sportsjun-datafilter">
                     <form method="GET">
                         <div class="form-group">
-                            <label>Find people in your club</label>
+                            <label>Find players in your organization</label>
                             <div class="input-group">
-                                <input id="filter_team" class="form-control" name="filter-team" value="{{ $filter_team }}"/>
+                                <input id="filter_team" class="form-control" name="filter-team" value="{{ $filter_team }}" placeholder="TEAM"/>
                                 <span class="input-group-btn"><button class="btn btn-tiny btn-primary "
                                                                       type="submit">Find</button></span>
                             </div>

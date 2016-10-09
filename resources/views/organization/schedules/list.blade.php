@@ -16,7 +16,7 @@
             <div class="sportsjun-datafilter">
                 <form method="GET">
                     <div class="form-group">
-                        <label>Find events in your club</label>
+                        <label>Find events in your organization</label>
                         <div class="input-group">
                             <input id="filter_event" class="form-control" name="filter-event"
                                    value="{{ $filter_event }}"/>
