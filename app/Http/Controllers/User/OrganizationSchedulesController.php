@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Model\MatchSchedule;
 use App\Model\Organization;
+use App\Model\Team;
 use App\Model\TeamPlayers;
 use App\Model\TournamentParent;
 use App\Model\Tournaments;
@@ -46,9 +47,11 @@ class OrganizationSchedulesController extends Controller
                 'matches' => function ($query) {
                     $query->orderBy('match_start_date', 'match_start_time');
                 },
-                'matches.scheduleA',
-                'matches.scheduleB'
+                'matches.sport'
             ]);
+
+        $teamNames = Team::lists('name','id');
+        $userNames = User::lists('name','id');
 
         if($filter_event){
             $tournamentsQuery->where('name','LIKE','%'.$filter_event.'%');
@@ -66,18 +69,20 @@ class OrganizationSchedulesController extends Controller
         */
 
 
+
+
         if (\Request::ajax()) {
             if (\Request::wantsJson()) {
                 return ['error' => 'Json response is not set'];
             } else {
                 return view('organization.schedules.partials.schedule_list',
-                    compact('id', 'organization', 'staffList', 'tournaments', 'filter_event'));
+                    compact('id', 'organization', 'staffList', 'tournaments', 'filter_event','teamNames','userNames'));
             }
         }
 
 
         return view('organization.schedules.list',
-            compact('id', 'organization', 'staffList', 'tournaments', 'filter_event')
+            compact('id', 'organization', 'staffList', 'tournaments', 'filter_event','teamNames','userNames')
         );
     }
 
