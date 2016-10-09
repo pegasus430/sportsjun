@@ -7,7 +7,14 @@
             <div class="col-md-10 col-sm-9 col-xs-12">
                 <div class="t_tltle clearfix schedule-tournament-info">
                     <div class="pull-left">
-                        {{ $tournament['name'] }}
+                        <b>{{ $tournament['name'] }}</b>
+                    </div>
+                    <div class="pull-right">
+                        <a href="/download/schedules_all?tournament_id={{ $tournament['id'] }}" class="btn-danger btn"
+                           name="match_schedule_tournament_{{ $tournament['id'] }}"
+                            onclick="return false;"
+                        ><i class="fa fa-download"></i>
+                            Download Schedule </a>
                     </div>
                 </div>
 
@@ -19,36 +26,84 @@
             </div>
         </div>
         <div id="matches_{{$tournament->id}}" class="collapse schedulle-matches-info">
-            <table class="table sportsjun-datatable">
-                <thead class="sportsjun-datatable-head">
-                <tr>
-                    <th>Date</th>
-                    <th>Type</th>
-                    <th>Event</th>
-                    <th>Location</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach ($tournament->matches as $item)
-                    <tr>
-                        <td>
-                            <span>{{$item->match_start_date}}</span><br/>
-                            <span class="schedule-time">{{$item->match_start_time}}</span>
-                        </td>
-                        <td class="text-capitalize">{{$item->match_type}}</td>
-                        <td><p>{{$tournament->name}}<br/>
-                            <span class="schedule-team-name">{{$item->scheduleA ? $item->scheduleA->name : '' }}</span> <b>vs</b> <span class="schedule-team-name">{{ $item->scheduleB ? $item->scheduleB->name : '' }}</span></p>
-                        </td>
-                        <td>
-                            @if ($item->address)
-                                {{$item->address}}<br/>
-                            @endif
-                           <span class="schedule-address-global-info">{{$item->country ? $item->country.',': ''}} {{$item->city ? $item->city.',': ''}} {{$item->state}}</span>
-                        </td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
+            <div class="sportsjun-datatable">
+                <div class="row sportsjun-datatable-head hidden-sm hidden-xs">
+                    <div class="col-md-2">Date</div>
+                    <div class="col-md-1 ">Sport Name</div>
+                    <div class="col-md-3">Event</div>
+                    <div class="col-md-4">Match Details</div>
+                    <div class="col-md-2">Status/Score</div>
+                </div>
+                <div class="sportsjun-datatable-body">
+                    @foreach ($tournament->matches as $match)
+                        <div class="row sportsjun-datatable-item">
+                            <div class="col-md-2">
+                                    <span class="match-detail-score">{!!  Helper::displayDateFormat($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""), 'jS F, Y <\b\\r>g:i A' )  !!}</span>
+                            </div>
+                            <div class="col-md-1 text-capitalize">
+                                    <span class="hidden-md hidden-lg"><b>Sport Name:</b></span>
+                                    {{$match->sport->sports_name}}
+                            </div>
+                            <div class="col-md-3">
+                                    <b>{{$tournament->name}}</b>
+                            </div>
+                            <div class="col-md-4">
+                                @if ($match->a_id != null)
+                                    <?php $sideA = $match->schedule_type == 'team' ? array_get($teamNames,
+                                            $match->a_id) : array_get($userNames, $match->a_id); ?>
+                                    <span class="schedule-team-name">{{  $sideA }}</span>
+                                @endif
+                                @if ($match->a_id !=null && $match->b_id != null)
+                                    <b>vs</b>
+                                @endif
+                                @if ($match->b_id != null)
+                                    <span class="schedule-team-name">
+                                        {{ $match->schedule_type =='team' ? array_get($teamNames,$match->b_id) : array_get($userNames,$match->b_id) }}</span>
+                                @endif
+                                <br/>
+                                @if ($match->address)
+                                    {{$match->address}}<br/>
+                                @endif
+                                <span class="schedule-address-global-info">{{$match->country ? $match->country.',': ''}} {{$match->city ? $match->city.',': ''}} {{$match->state}}</span><br/>
+
+                            </div>
+                            <div class="col-md-2">
+                                Status: <span class='event_date sports_text'>{{ucfirst($match['match_status'])}}</span>
+                                <br>
+
+                                <span class="match-detail-score">Scores: <span
+                                            class='blue'>{{ $match->scores }} </span></span><br>
+                                @if(!is_null($match['winner_id']))
+                                    <span class="match-detail-winner red">Winner: {{ $match->winner }} </span>
+                                @endif
+                                <br>
+                                @if($match->scoreMore)
+                                    @if($match->scoreMore==trans('message.schedule.viewscore'))
+                                        <span class="tournament_score pull-left"><a
+                                                    href="{{ url('match/scorecard/view/'.$match['id']) }}"
+                                                    class="btn-primary "
+                                                    style="padding: .3em 1em;">{{$match->scoreMore}}</a></span>
+                                    @else
+                                        <span class="tournament_score pull-left"><a
+                                                    href="{{ url('match/scorecard/edit/'.$match['id']) }}"
+                                                    class="btn-primary "
+                                                    style="padding: .3em 1em;">{{$match->scoreMore}}</a></span>
+                                    @endif
+
+                                @else
+                                @endif
+
+                                @if($match['game_type']=='rubber')
+                                    <span class="pull-right">
+                 			            <a href="#" class="show_sub_field show_sub_tournament " parent_field_id="{{$match['id']}}">View Rubber</a>
+                 			  	    </span>
+                                @endif
+
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
         </div>
     </div>
 @endforeach

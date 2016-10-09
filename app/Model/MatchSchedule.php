@@ -2,6 +2,9 @@
 
 namespace App\Model;
 
+use App\Helpers\Helper;
+use App\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -33,21 +36,6 @@ class MatchSchedule extends Model {
         return $this->belongsTo('App\User', 'b_id');
     }
 
-    public function scheduleA(){
-        if ($this->schedule_type== 'team')
-            return $this->belongsTo('App\Model\Team', 'a_id');
-        else
-            return $this->belongsTo('App\User', 'a_id');
-    }
-
-    public function scheduleB(){
-        if ($this->schedule_type== 'team')
-            return $this->belongsTo('App\Model\Team', 'b_id');
-        else
-            return $this->belongsTo('App\User', 'b_id');
-    }
-
-
     public function sport() {
         return $this->belongsTo('App\Model\Sport', 'sports_id');
     }
@@ -59,4 +47,53 @@ class MatchSchedule extends Model {
     public function tournament(){
         return $this->belongsTo('App\Model\Tournaments', 'tournament_id');
     }
+
+    /**
+     * Attributes
+     */
+
+    public function getScoresAttribute(){
+        if($this->game_type!='normal'){
+            return $this->a_score. ' - '. $this->b_score;
+        }
+        if($this->match_details!=null){
+            $match_details=json_decode($this->match_details);
+            $a_id=$this->a_id;
+            $b_id=$this->b_id;
+            return Helper::getScoresFromMatchDetails($match_details,$this->sports_id,$a_id,$b_id);
+        }
+        return ' - ';
+    }
+
+    public function getWinnerAttribute(){
+        if(!empty($this->winner_id)){
+            if($this->schedule_type=='player'){
+                return User::find($this->winner_id)->name;
+            }
+            else{
+                return Team::find($this->winner_id)->name;
+            }
+        }
+    }
+
+    public function getScoreMoreAttribute(){
+        if ($this->match_status == 'completed')
+        {
+            return trans('message.schedule.viewscore');
+        }
+        else if ( $this->match_start_date && Carbon::now()->gte(Carbon::createFromFormat('Y-m-d', $this->match_start_date)))
+        {
+            $scoreOwner           = Helper::isValidUserForScoreEnter($this->toArray());
+            if ($scoreOwner)
+            {
+                return Helper::getCurrentScoringStatus($this);
+            }
+            else
+            {
+                return trans('message.schedule.viewscore');
+            }
+        }
+    }
+
+
 }
