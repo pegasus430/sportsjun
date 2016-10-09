@@ -20,7 +20,8 @@
                             {!! Form::text('name', null, [
                                    'class' => 'form-control',
                                    'placeholder' => 'Name',
-                                   'id' => 'name'
+                                   'id' => 'name',
+                                   'required'=>''
                                ]) !!}
                         </div>
 
@@ -31,7 +32,8 @@
                                 {!! Form::text('email', null, [
                                     'class' => 'form-control',
                                     'placeholder' => 'Email',
-                                    'id' => 'email'
+                                    'id' => 'email',
+                                    'required'=>''
                                 ]) !!}
                             </div>
                         </div>
