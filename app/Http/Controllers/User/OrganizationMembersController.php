@@ -10,6 +10,16 @@ use App\User;
 
 class OrganizationMembersController extends Controller
 {
+    public function teamList($id){
+        $term = \Request::has('term') ? filter_var(\Request::get('term'), FILTER_SANITIZE_STRING) : false;
+        $organization = Organization::with('staff')->findOrFail($id);
+        $allTeams = $organization->teamplayers();
+        if ($term){
+            $allTeams->where('name','LIKE','%'.$term.'%');
+        }
+        return $allTeams->orderBy('name','ASC')->get()->unique('name')->lists('name','id');
+    }
+
     public function index($id)
     {
         $organization = Organization::with('staff')->findOrFail($id);
@@ -39,7 +49,6 @@ class OrganizationMembersController extends Controller
         return view('organization.members.list',
             compact('id', 'organization', 'staffList', 'members','filter_team')
         );
-
     }
 
 }

@@ -19,9 +19,9 @@
                         <div class="form-group">
                             <label>Find people in your club</label>
                             <div class="input-group">
-                                <input class="form-control" name="filter-team" value="{{ $filter_team }}"/>
+                                <input id="filter_team" class="form-control" name="filter-team" value="{{ $filter_team }}"/>
                                 <span class="input-group-btn"><button class="btn btn-tiny btn-primary "
-                                                                      type="button">Find</button></span>
+                                                                      type="submit">Find</button></span>
                             </div>
                         </div>
                     </form>
@@ -52,4 +52,30 @@
         </div> {{-- /.col-md-12 --}}
     </div> {{-- /.col-lg-10 --}}
     @include('organization.groups.partials.create_group_modal')
+    <script>
+        $(document).ready(function(){
+           $('#filter_team').autocomplete({
+                        minLength:0,
+                       source: function( request, response ) {
+                           $.getJSON( "{{route('organization.members.teamlist',['id'=>$id])}}", request, function( data, status, xhr ) {
+                               var items = [];
+                               for (var key in data){
+                                  items.push(
+                                          {
+                                              label:data[key],
+                                              value:data[key]
+                                          }
+                                  )
+                               };
+                               response( data );
+                           });
+                       }
+                   }
+            );
+            $('#filter_team').on('focus', function() {
+                $(this).autocomplete( "search");
+            });
+
+        });
+    </script>
 @endsection
