@@ -32,7 +32,22 @@ class MatchSchedule extends Model {
     public function scheduleusertwo() {
         return $this->belongsTo('App\User', 'b_id');
     }
-    
+
+    public function scheduleA(){
+        if ($this->schedule_type== 'team')
+            return $this->belongsTo('App\Model\Team', 'a_id');
+        else
+            return $this->belongsTo('App\User', 'a_id');
+    }
+
+    public function scheduleB(){
+        if ($this->schedule_type== 'team')
+            return $this->belongsTo('App\Model\Team', 'b_id');
+        else
+            return $this->belongsTo('App\User', 'b_id');
+    }
+
+
     public function sport() {
         return $this->belongsTo('App\Model\Sport', 'sports_id');
     }

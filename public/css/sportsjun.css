@@ -3006,3 +3006,19 @@ div#tournament_details_cover img {
 .table > .sportsjun-datatable-head>tr>th{
     font-weight:bold;
 }
+
+.schedule-tournament-info{
+    min-height:60px;
+}
+
+.schedulle-matches-info{
+    border-bottom:3px solid #666;
+}
+
+.schedule-team-name{
+    color: #67a1ea;
+}
+
+.schedule-address-global-info{
+    color:#666;
+}

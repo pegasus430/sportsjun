@@ -14,14 +14,26 @@
                         {{ session('status') }}
                     </div>
                 @endif
+                <div class="sportsjun-datafilter">
+                    <form method="GET">
+                        <div class="form-group">
+                            <label>Find events in your club</label>
+                            <div class="input-group">
+                                <input class="form-control" name="filter-event" value="{{ $filter_event }}"/>
+                                <span class="input-group-btn"><button class="btn btn-tiny btn-primary "
+                                                                      type="button">Find</button></span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                @if($tournaments->count())
 
-                @if($schedules)
-                    <div id="my_schedule_container">
+                    <div>
                         @include('organization.schedules.partials.schedule_list')
-                    </div> {{-- /#my_groups_container --}}
+                    </div>
                 @else
                     <div id="schedule_empty text-left">
-
+                        <p>No Records</p>
                     </div>
                 @endif
 
