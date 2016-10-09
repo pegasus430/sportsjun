@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\Helpers\Helper;
 use Auth;
 use DB;
 use Illuminate\Database\Eloquent\Model;
@@ -171,4 +172,26 @@ class Team extends Model
     {
         return $this->hasMany('App\Model\RequestsModel', 'to_id', 'id');
     }
+
+    /**
+     * Attributes
+     */
+
+    public static function logoImage($id){
+        $logo = Photo::where('imageable_id', $id)
+            ->where('imageable_type', config('constants.PHOTO.TEAM_PHOTO'))
+            ->orderBy('id', 'desc')
+            ->first();
+        if ($logo && $logo->url) {
+            return Helper::getImagePath($logo->url,'teams');
+        }
+    }
+
+    public function getLogoImageAttribute()
+    {
+        return self::logoImage($this->id);
+    }
+
+
+
 }

@@ -2,8 +2,10 @@
 
 namespace App;
 
+use App\Helpers\Helper;
 use App\Model\Organization;
 use App\Model\OrganizationRole;
+use App\Model\Photo;
 use Auth;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -277,5 +279,15 @@ class User extends Model implements AuthenticatableContract,
 			return false;
 		}
 	}
+
+    public static function logoImage($id){
+        $logo = Photo::where('imageable_id', $id)
+            ->where('imageable_type', config('constants.PHOTO.USER_PHOTO'))
+            ->orderBy('id', 'desc')
+            ->first();
+        if ($logo && $logo->url) {
+            return Helper::getImagePath($logo->url,'teams');
+        }
+    }
 
 }
