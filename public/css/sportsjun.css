@@ -3031,3 +3031,6 @@ div#tournament_details_cover img {
     color:#666;
 }
 
+.schedule-datatable-img .team_player_sj_img{
+    display:inline-block;
+}
