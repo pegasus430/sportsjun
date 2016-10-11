@@ -2846,3 +2846,20 @@
 .match-detail-score {
 font-weight:bold;
 }
+
+.sportsjun-datafilter{
+    background-color: #333;
+    color:#EEE;
+    padding:10px 20px;
+    margin-bottom:10px;
+    font-size:1.5em;
+}
+
+.sportsjun-datafilter input{
+    color:black;
+}
+
+.datafilter-search{
+    position:absolute;
+    right:0;
+}

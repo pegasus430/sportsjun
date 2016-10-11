@@ -55,9 +55,21 @@ Route::group(['prefix' => 'organization/{id}'], function () {
         'uses' => 'User\OrganizationMembersController@index',
     ]);
 
+    Route::get('teamlist', [
+        'as'   => 'organization.members.teamlist',
+        'uses' => 'User\OrganizationMembersController@teamList',
+    ]);
+
+
+
     Route::get('schedules', [
         'as'   => 'organization.schedules.list',
         'uses' => 'User\OrganizationSchedulesController@index',
+    ]);
+
+    Route::get('tournamentlist', [
+        'as'   => 'organization.schedules.tournamentlist',
+        'uses' => 'User\OrganizationSchedulesController@tournamentList',
     ]);
 
 

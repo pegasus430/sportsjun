@@ -1,3 +1,18 @@
+@if (session('data-message'))
+    <?php      $data_message = session('data-message');    ?>
+    <div
+            @if (isset($data_message['error']))
+                class="alert alert-warning" id="warning-alert"
+            @else
+                class="alert alert-success" id="success-alert"
+            @endif
+    >
+        <button type="button" class="close" data-dismiss="alert">x</button>
+       {{ array_get($data_message,'message') }}
+    </div>
+@endif
+
+
 @foreach($teams as $t)
     <div class="t_details" style="min-height: inherit;">
         <div class="row main_tour">

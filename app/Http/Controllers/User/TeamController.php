@@ -19,6 +19,7 @@ use App\Model\Requestsmodel;
 use App\Model\Sport;
 use App\Model\State;
 use App\Model\Team;
+use App\Model\TeamPlayer;
 use App\Model\TeamPlayers;
 use App\Model\UserStatistic;
 use App\User;
@@ -1196,8 +1197,10 @@ class TeamController extends Controller
         if (!$validator->fails()) {
             $user = User::where('email', $data['email'])->first();
             $team = Team::where('id', $data['teamId'])->first();
-            //TODO: check rights to change owner
-            if ($team && true) {
+
+            $organization = Organization::whereId($team->organization_id)->first();
+
+            if ($team && $organization && $organization->user->id == \Auth::user()->id) {
                 if (!$user) {
                     $user = User::create([
                         'name' => $data['name'],
@@ -1206,23 +1209,41 @@ class TeamController extends Controller
                     \Event::fire(new UserRegistered($user));
                 }
                 if ($user) {
-                    $team->owner_id = $user->id;
+                    TeamPlayer::where('team_id',$team->id)->where('role','owner')->where('user_id','!=',$user->id)->update(['role'=>'player']);
+                    $teamplayer = TeamPlayer::where('team_id',$team->id)->where('user_id',$user->id)->first();
+                    if ($teamplayer) {
+                        $teamplayer->role = 'owner';
+                        $teamplayer->save();
+                    } else {
+                        $teamplayer= new TeamPlayer();
+                        $teamplayer->user_id = $user->id;
+                        $teamplayer->team_id = $team->id;
+                        $teamplayer->role = 'owner';
+                        $teamplayer->status = 'accepted';
+                        $teamplayer->save();
+                    }
+
+
+                    $team->team_owner_id = $user->id;
+                    $team->save();
                     $result['message']= 'Ownership changed to '.$user->name;
                 } else {
-                    $result['errors'] = 'Failed to create user';
+                    $result['error']=true;
+                    $result['message'] = 'Failed to create user';
                 }
             } else {
-                $result['errors'] = 'Permission denied';
+                $result['error']=true;
+                $result['message'] = 'Permission denied';
             }
         } else {
-            $result['errors'] = $validator->errors();
+            $result['error']=true;
+            $result['message'] = $validator->errors()->first();
         }
 
         if (\Request::isJson()) {
             return $result;
         } else {
-            #return $result;
-            \Session::flash('errors', array_get($result, 'errors'));
+            \Session::flash('data-message', $result);
             return redirect()->back();
         }
 

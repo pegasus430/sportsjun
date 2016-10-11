@@ -1,32 +1,40 @@
-<table class="table table-bordered">
-    <thead>
+@foreach($members as $member)
     <tr>
-        <th style="width:30%">Name</th>
-        <th>Teams</th>
-        <th>Stats/Notes</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach($members as $member)
-        <tr>
-            <td>
-                <a href="{{route('showsportprofile',['id'=>$member['id']])}}" class="member-image">
-                    {!! Helper::Images( (count($member['user']['photos'])?$member['user']['photos'][0]['url']:''),'user_profile',array('height'=>60 ) ) !!}
-                </a>
-                <span class="member-user-info">
-                        <a href="{{route('showsportprofile',['id'=>$member['id']])}}">{{ $member->name }}</a>
+        <td>
+            <a href="{{route('showsportprofile',['id'=>$member['id']])}}" class="member-image">
+                {!! Helper::Images( (count($member['user']['photos'])?$member['user']['photos'][0]['url']:''),'user_profile',array('height'=>60,'width'=>60,'class'=>'img-circle img-border ') ) !!}
+            </a>
+            <span class="member-user-info">
+                        <a href="{{route('showsportprofile',['id'=>$member['id']])}}" class="member-user-info-name">{{ $member->name }}</a>
                 </span>
 
-            </td>
-            <td>
-                @foreach ($member->userdetails as $teamPlayer)
-                    <a href="{{route('team/members',['team_id'=>object_get($teamPlayer,'team.id')])}}">{{object_get($teamPlayer,'team.name')}}</a>
-                @endforeach
-
-            </td>
-
-            <td></td>
-        </tr>
-    @endforeach
-    </tbody>
-</table>
+        </td>
+        <td>
+            @foreach ($member->userdetails as $teamPlayer)
+                {{object_get($teamPlayer,'team.name')}}@if ($teamPlayer != $member->userdetails->last()), @endif
+            @endforeach
+        </td>
+        <td>
+            @foreach ($member->userdetails as $teamPlayer)
+                {{object_get($teamPlayer,'team.sports.sports_name')}}@if ($teamPlayer != $member->userdetails->last())
+                    , @endif
+            @endforeach
+        </td>
+        <td></td>
+    </tr>
+@endforeach
+<tr>
+    <td colspan="5">
+        @if ($members->hasMorePages())
+            <div id="viewmorediv">
+                <a id="viewmorebutton" class="view_tageline_mkt" data-replace="tr"
+                   data-url="{{route('organization.members.list',['id'=>$id,'page'=>$members->currentPage()+1,'filter-team'=>$filter_team])}}"
+                   onclick="return DataTableLoadMore(this);"
+                >
+                    <span class="market_place"><i
+                                class="fa fa-arrow-down"></i> <label>{{ trans('message.view_more') }}</label></span>
+                </a>
+            </div>
+        @endif
+    </td>
+</tr>

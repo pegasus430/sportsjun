@@ -839,322 +839,90 @@ class Helper {
     public static function getSportName($sports_id)
     {
         $sportName = null;
-        if(is_numeric($sports_id))
-        {
-            $sportName = Sport::where('id',$sports_id)->pluck('sports_name');
+        if (is_numeric($sports_id)) {
+            $sportName = Sport::where('id', $sports_id)->pluck('sports_name');
         }
         return $sportName;
     }
-    public static function Images($imgsrc,$imgtype,$details='', $from_local=false)
+
+    public static function getImagePath($imgsrc, $imgtype, $details ='')
     {
-
-    
-
-        $img='';
-        $id='';
-        $uploads='uploads';
-    if($from_local) $globalurl = public_path().'/';
-    else $globalurl = url();
-        
-        //$globalurl = 'http://localhost/sportsjun/public/';
-        if(isset($details['width']))
-        {
-            $width=$details['width'];
+        if (!$imgsrc || $imgsrc == '' ) {
+            return '/images/default-profile-pic.jpg';
         }
-        else
-        {
-            $width='';
-        }
-        if(isset($details['height']))
-        {
-            $height=$details['height'];
-        }
-        else{
-            $height='';
-        }
-        if(isset($details['class']))
-        {
-            $class=$details['class'];
-        }
-        else{
-            $class='';
-        }
-        if(isset($details['title']))
-        {
-            $title=$details['title'];
-        }
-        else{
-            $title='';
-        }
-
-
-
+        $uploads = 'uploads';
         switch ($imgtype) {
             case 'tournaments':
-
-                if($imgsrc=='')
-                {
-                    $url=$globalurl.'/images/default-profile-pic.jpg';
-                }
-                else
-                {
-                    $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$imgsrc;
-                    //onerror=this.onerror=null;this.src='$globalurl/images/default-profile-pic.jpg'
-                }
-
-                break;
-
             case 'teams':
-
-
-                if($imgsrc=='')
-                {
-                    $url=$globalurl.'/images/default-profile-pic.jpg';
-                }
-                else
-                {
-                    $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$imgsrc;
-                }
-
-                break;
-
-            case  'organization':
-
-                if($imgsrc=='')
-                {
-                    $url=$globalurl.'/images/default-profile-pic.jpg';
-                }
-                else
-                {
-                    $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$imgsrc;
-                }
-
-                break;
-
+            case 'organization':
             case 'facility':
-
-                if($imgsrc=='')
-                {
-                    $url=$globalurl.'/images/default-profile-pic.jpg';
-                }
-                else
-                {
-                    $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$imgsrc;
-                }
-
-                break;
-
-            case  'marketplace':
-
-                if($imgsrc=='')
-                {
-                    $url=$globalurl.'/images/default-profile-pic.jpg';
-
-                }
-                else
-                {
-                    $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$imgsrc;
-                }
-
-                break;
-
-            case  'form_gallery_tournaments':
-
-                if($imgsrc=='')
-                {
-                    $url=$globalurl.'/images/default-profile-pic.jpg';
-
-                }
-                else
-                {
-                    $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$imgsrc;
-                }
-
-                break;
-
+            case 'marketplace':
+            case 'form_gallery_tournaments':
             case 'form_gallery_facility':
-
-                if($imgsrc=='')
-                {
-                    $url=$globalurl.'/images/default-profile-pic.jpg';
-
-                }
-                else
-                {
-                    $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$imgsrc;
-                }
-
-
-                break;
-            case  'form_gallery_organization':
-
-                if($imgsrc=='')
-                {
-                    $url=$globalurl.'/images/default-profile-pic.jpg';
-                }
-                else{
-                    $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$imgsrc;
-                }
-
-
-                break;
-
-
-            case 'user_profile':
-
-
-                if($imgsrc=='')
-                {
-                    $url=$globalurl.'/images/default-profile-pic.jpg';
-                }
-                else{
-                    $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$imgsrc;
-                }
-
-                break;
-
+            case 'form_gallery_organization':
+            case 'images':
+                return '/' . $uploads . '/' . $imgtype . '/' . $imgsrc;
             case 'gallery/gallery_user':
-
-                if(isset($details['id']))
-                {
-                    $id=$details['id'];
-                }
-                if($imgsrc=='')
-                {
-                    $url=$globalurl.'/images/default-profile-pic.jpg';
-
-                }
-                else
-                {
-                    $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$id.'/'.$imgsrc;
-                }
-
-                break;
-
-
-            case  'gallery/gallery_team':
-
-                if(isset($details['id']))
-                {
-                    $id=$details['id'];
-                }
-                if($imgsrc=='')
-                {
-                    $url=$globalurl.'/images/default-profile-pic.jpg';
-
-                }
-                else
-                {
-                    $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$id.'/'.$imgsrc;}
-
-                break;
-
-
-            case  'gallery/gallery_tournaments':
-
-                if(isset($details['id']))
-                {
-                    $id=$details['id'];
-                }
-                if($imgsrc=='')
-                {
-                    $url=$globalurl.'/images/default-profile-pic.jpg';
-
-                }
-                else
-                {
-                    $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$id.'/'.$imgsrc;}
-
-                break;
-
+            case 'gallery/gallery_team':
+            case 'gallery/gallery_tournaments':
             case 'gallery/gallery_facility':
-
-                if(isset($details['id']))
-                {
-                    $id=$details['id'];
+            case 'gallery/gallery_organization':
+            case 'gallery/gallery_match':
+            case 'user_profile':
+                $id ='';
+                if (isset($details['id'])) {
+                    $id = $details['id'];
                 }
-                if($imgsrc=='')
-                {
-                    $url=$globalurl.'/images/default-profile-pic.jpg';
-
-                }
-                else
-                {
-                    $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$id.'/'.$imgsrc;
-                }
-
-                break;
-
-            case  'gallery/gallery_organization':
-
-                if(isset($details['id']))
-                {
-                    $id=$details['id'];
-                }
-                if($imgsrc=='')
-                {
-                    $url=$globalurl.'/images/default-profile-pic.jpg';
-                }
-                else
-                {
-                    $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$id.'/'.$imgsrc;
-                }
-
-                break;
-            case  'gallery/gallery_match':
-
-                if(isset($details['id']))
-                {
-                    $id=$details['id'];
-                }
-                if($imgsrc=='')
-                {
-                    $url=$globalurl.'/images/default-profile-pic.jpg';
-                }
-                else
-                {
-                    $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$id.'/'.$imgsrc;
-                }
-
-                break;
-
-            case  'user_profile':
-
-                if(isset($details['id']))
-                {
-                    $id=$details['id'];
-                }
-                if($imgsrc=='')
-                {
-                    $url=$globalurl.'/images/default-profile-pic.jpg';
-                }
-                else
-                {
-                    $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$id.'/'.$imgsrc;
-                }
-
-                break;
-
-            case  'images':
-
-                $url=$globalurl.'/'.$imgtype.'/'.$imgsrc;
-
-                break;
-
+                return '/' . $uploads . '/' . $imgtype . '/' . $id . '/' . $imgsrc;
             default:
-                $url=$globalurl.'/'.$uploads.'/'.$imgtype.'/'.$imgsrc;
-                break;
+                return '/' . $uploads . '/' . $imgtype . '/' . $imgsrc;
         }
+    }
 
-
-        $img ="<img data-original='$url' src='$url' title='$title' onerror=this.onerror=null;this.src=\"$globalurl/images/default-profile-pic.jpg\" height=$height  width=$width   class='$class lazy' >";
-
-
-        return  $img ;
+    public static function Images($imgsrc, $imgtype, $details = '', $from_local = false)
+    {
+        $path = self::getImagePath($imgsrc, $imgtype,$details);
+        return self::makeImageHtml($path,$details,$from_local);
 
     }
 
-    public static function ImageCheck($path){
+    public static function makeImageHtml($path, $details = '', $from_local = false){
+        if ($from_local) {
+            $globalurl = public_path() . '/';
+        } else {
+            $globalurl = url();
+        }
+
+        //$globalurl = 'http://localhost/sportsjun/public/';
+        if (isset($details['width'])) {
+            $width = $details['width'];
+        } else {
+            $width = '';
+        }
+        if (isset($details['height'])) {
+            $height = $details['height'];
+        } else {
+            $height = '';
+        }
+        if (isset($details['class'])) {
+            $class = $details['class'];
+        } else {
+            $class = '';
+        }
+        if (isset($details['title'])) {
+            $title = $details['title'];
+        } else {
+            $title = '';
+        }
+        $url = $globalurl.$path;
+        $img = "<img data-original='$url' src='$url' title='$title' onerror=this.onerror=null;this.src=\"$globalurl/images/default-profile-pic.jpg\" height=$height  width=$width   class='$class lazy' >";
+        return $img;
+    }
+
+
+
+    public static function ImageCheck($path)
+    {
         return (File::exists(public_path($path)) && File::isFile(public_path($path))) ? $path : 'images/default-profile-pic.jpg';
     }
 
@@ -1508,16 +1276,19 @@ class Helper {
 
     public static function isValidUserForScoreEnter($matchData)
     {
+        //compatabitle layer for old code
+        $matchData = isset($matchData[0]) ? $matchData[0] :$matchData;
+        
         $loginUserId = isset(Auth::user()->id)?Auth::user()->id:0;
         $loginUserRole = Auth::check()?Auth::user()->role:null;
-        $team_a_id = $matchData[0]['a_id'];
-        $team_b_id = $matchData[0]['b_id'];
+        $team_a_id = $matchData['a_id'];
+        $team_b_id = $matchData['b_id'];
         if($loginUserRole=='admin')// if admin login
         {
             return true;
-        }else if(!empty($matchData[0]['tournament_id']))// if match has tournament
+        }else if(!empty($matchData['tournament_id']))// if match has tournament
         {
-            $tournamentDetails = Tournaments::where('id', '=', $matchData[0]['tournament_id'])->first();
+            $tournamentDetails = Tournaments::where('id', '=', $matchData['tournament_id'])->first();
             $tournamentManagerId = $tournamentDetails['manager_id'];
             $tournamentOwner = TournamentParent::where('id',$tournamentDetails['tournament_parent_id'])->first(['owner_id','name','manager_id']);
             if($loginUserId==$tournamentManagerId || $loginUserId==$tournamentOwner->owner_id || $loginUserId==$tournamentOwner->manager_id) {
@@ -1528,7 +1299,7 @@ class Helper {
         {
 
             //if schedule type is player
-            $schedule_type = $matchData[0]['schedule_type']; // if schedule type is player
+            $schedule_type = $matchData['schedule_type']; // if schedule type is player
             if($schedule_type=='player')
             {
                 if($team_a_id==$loginUserId || $team_b_id==$loginUserId)
@@ -1755,6 +1526,10 @@ class Helper {
         return date($format, strtotime($date));
     }
 
+    public static function displayDateFormat($date, $format = 'd-m-Y H:i:s' ){
+        return date($format, strtotime($date));
+    }
+
     public static function storeDate($date,$flag='')
     {
         $date = str_replace('/', '-', $date);
@@ -1959,7 +1734,38 @@ class Helper {
                     }
                 }
 
-    }   
+    }
+
+    public static function getScoresFromMatchDetails($match_details, $sports_id, $a_id, $b_id)
+    {
+        switch ($sports_id) {
+            case '5':           //badminton
+                $scores = $match_details->scores;
+                return $scores->{$a_id . '_score'} . ' sets - ' . $scores->{$b_id . '_score'} . ' sets';
+                break;
+            case in_array($sports_id, ['13', '14', '17', '7']):           //squash
+                $scores = $match_details->scores;
+                return $scores->{$a_id . '_score'} . ' sets - ' . $scores->{$b_id . '_score'} . ' sets';
+                break;
+            case '4':           //soccer
+                return $match_details->{$a_id}->goals . ' - ' . $match_details->{$b_id}->goals;
+                break;
+            case '11':           //hockey
+                return $match_details->{$a_id}->goals . ' - ' . $match_details->{$b_id}->goals;
+                break;
+            case in_array($sports_id, [6, 15, 16]):           //basketball
+                return $match_details->{$a_id}->total_points . ' - ' . $match_details->{$b_id}->total_points;
+                break;
+            case '1':           //cricket
+                return Team::find($a_id)->name . " (" . $match_details->{$a_id}->fst_ing_score . "/" . $match_details->{$a_id}->fst_ing_wkt . (!empty($match_details->{$a_id}->scnd_ing_overs) ? ", " . $match_details->{$a_id}->scnd_ing_score . "/" . $match_details->{$a_id}->scnd_ing_wkt : "") . ") &nbsp;" .
+                    Team::find($b_id)->name . " (" . $match_details->{$b_id}->fst_ing_score . "/" . $match_details->{$b_id}->fst_ing_wkt . (!empty($match_details->{$b_id}->scnd_ing_overs) ? ", " . $match_details->{$b_id}->scnd_ing_score . "/" . $match_details->{$b_id}->scnd_ing_wkt : "") . ")";
+                break;
+            default:
+                return '';
+                break;
+        }
+    }
+
 
     public static function getMatchDetails($match_id, $game_type='normal'){
 
@@ -1980,53 +1786,10 @@ class Helper {
             }
 
         if($match_model->match_details!=null){
-
             $match_details=json_decode($match_model->match_details);
             $a_id=$match_model->a_id;
             $b_id=$match_model->b_id;
-
-
-            switch ($match_model->sports_id) {
-                case '5':           //badminton
-                    $scores=$match_details->scores;
-            $match_model->scores=$scores->{$a_id.'_score'}.' sets - '. $scores->{$b_id.'_score'}.' sets';
-
-                break;
-
-                 case in_array($match_model->sports_id, ['13', '14', '17','7']):           //squash
-                    $scores=$match_details->scores;
-            $match_model->scores=$scores->{$a_id.'_score'}.' sets - '. $scores->{$b_id.'_score'}.' sets';
-
-                break;
-
-                 case '4':           //soccer
-                   
-            $match_model->scores=$match_details->{$a_id}->goals.' - '. $match_details->{$b_id}->goals;
-
-                break;
-
-                 case '11':           //hockey
-                   
-            $match_model->scores=$match_details->{$a_id}->goals.' - '. $match_details->{$b_id}->goals;
-
-                break;
-
-                case in_array($match_model->sports_id, [6,15,16]):           //basketball
-                   
-            $match_model->scores=$match_details->{$a_id}->total_points.' - '. $match_details->{$b_id}->total_points;
-
-                break;
-                
-                case '1':           //cricket                   
-            $match_model->scores =  Team::find($a_id)->name . " (" . $match_details->{$a_id}->fst_ing_score . "/" . $match_details->{$a_id}->fst_ing_wkt . (!empty($match_details->{$a_id}->scnd_ing_overs) ? ", " . $match_details->{$a_id}->scnd_ing_score . "/" . $match_details->{$a_id}->scnd_ing_wkt : "") . ") &nbsp;" . 
-                                    Team::find($b_id)->name . " (" . $match_details->{$b_id}->fst_ing_score . "/" . $match_details->{$b_id}->fst_ing_wkt . (!empty($match_details->{$b_id}->scnd_ing_overs) ? ", " . $match_details->{$b_id}->scnd_ing_score . "/" . $match_details->{$b_id}->scnd_ing_wkt : "") . ")";
-                break;
-                
-
-                default:
-                    $match_model->scores='';
-                    break;
-            }
+            $match_model->scores = self::getScoresFromMatchDetails($match_details,$match_model->sports_id,$a_id,$b_id);
         }
         else{
                 $match_model->scores=' - ';
