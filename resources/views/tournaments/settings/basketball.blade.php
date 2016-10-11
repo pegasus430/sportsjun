@@ -21,9 +21,9 @@
 				
 				</div>
 			</div>
-
-				<div class="section">
 				<div class="col-sm-6">
+				<div class="section">
+				
 				<label class="form_label">
 					{{trans('message.sports_settings.max_substitutes')}}
 				</label>
