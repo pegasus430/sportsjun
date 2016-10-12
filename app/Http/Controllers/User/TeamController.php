@@ -536,8 +536,9 @@ class TeamController extends Controller
 
         $user_id = (isset(Auth::user()->id) ? Auth::user()->id : 0);
 
-        $teamsQuery = DB::table('teams')
-            ->join('users', 'users.id', '=', 'teams.team_owner_id');
+        $teamsQuery = Team::
+                join('users', 'users.id', '=', 'teams.team_owner_id')
+                ->with('teamplayers.user')        ;
         if ($group_id) {
             $teamsQuery->join('organization_group_teams', 'organization_group_teams.team_id', '=', 'teams.id')
                 ->where('organization_group_teams.organization_group_id', '=', $group_id);
