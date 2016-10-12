@@ -1743,7 +1743,7 @@ class Helper {
                 $scores = $match_details->scores;
                 return $scores->{$a_id . '_score'} . ' sets - ' . $scores->{$b_id . '_score'} . ' sets';
                 break;
-            case in_array($sports_id, ['13', '14', '17', '7']):           //squash
+            case in_array($sports_id, ['13', '17', '7']):           //squash
                 $scores = $match_details->scores;
                 return $scores->{$a_id . '_score'} . ' sets - ' . $scores->{$b_id . '_score'} . ' sets';
                 break;
@@ -1753,7 +1753,7 @@ class Helper {
             case '11':           //hockey
                 return $match_details->{$a_id}->goals . ' - ' . $match_details->{$b_id}->goals;
                 break;
-            case in_array($sports_id, [6, 15, 16]):           //basketball
+            case in_array($sports_id, [6, 14, 15, 16]):           //basketball
                 return $match_details->{$a_id}->total_points . ' - ' . $match_details->{$b_id}->total_points;
                 break;
             case '1':           //cricket
