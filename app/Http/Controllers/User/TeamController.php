@@ -655,29 +655,39 @@ class TeamController extends Controller
         }
     }
 
+    //function to make team makeasteamcoach
+    public function makeasteamcoach($team_id, $user_id)
+    {
+        if (is_numeric($team_id) && is_numeric($user_id)) {
+            if (TeamPlayers::setUserRole($team_id,$user_id,TeamPlayers::$ROLE_COACH)){
+                return redirect()->back()->with('status', trans('message.team.teamcoach'));
+            } else {
+                return redirect()->back()->with('error_msg', trans('message.team.validation'));
+            }
+        } else {
+            return redirect()->back()->with('error_msg', trans('message.team.validation'));
+        }
+    }
+
+    //function to make team makeasteamcoach
+    public function makeasteamphysio($team_id, $user_id)
+    {
+        if (is_numeric($team_id) && is_numeric($user_id)) {
+            if (TeamPlayers::setUserRole($team_id,$user_id,TeamPlayers::$ROLE_PHYSIO)){
+                return redirect()->back()->with('status', trans('message.team.teamphysio'));
+            } else {
+                return redirect()->back()->with('error_msg', trans('message.team.validation'));
+            }
+        } else {
+            return redirect()->back()->with('error_msg', trans('message.team.validation'));
+        }
+    }
+
     //function to make team makeasteamvicecaptain
     public function makeasteamvicecaptain($team_id, $user_id)
     {
         if (is_numeric($team_id) && is_numeric($user_id)) {
-            //check if there is any captain existing with that team
-            $existing_captain_ids = TeamPlayers::where('team_id', $team_id)->where('role',
-                'vice-captain')->get(array('id'));
-            //if managers exist update their roles as players
-            if (!empty($existing_captain_ids)) {
-                //foreach manager id update as player
-                foreach ($existing_captain_ids as $existing_captain_id) {
-                    $existing_captain_id->role = 'player';
-                    $existing_captain_id->save();
-                }
-            }
-            //update given user id to manager
-            $captain_ids = TeamPlayers::where('user_id', $user_id)->where('team_id', $team_id)->get(array('id'));
-            if (!empty($captain_ids)) {
-                //foreach manager id update as player
-                foreach ($captain_ids as $captain_id) {
-                    $captain_id->role = 'vice-captain';
-                    $captain_id->save();
-                }
+            if (TeamPlayers::setUserRole($team_id,$user_id,TeamPlayers::$ROLE_VICE_CAPTAIN)){
                 return redirect()->back()->with('status', trans('message.team.teamvicecaptain'));
             } else {
                 return redirect()->back()->with('error_msg', trans('message.team.validation'));
@@ -686,6 +696,7 @@ class TeamController extends Controller
             return redirect()->back()->with('error_msg', trans('message.team.validation'));
         }
     }
+
 
     //function to reamove teammanager
     public function removeasteammanager($team_id, $user_id)
