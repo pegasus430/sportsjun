@@ -28,6 +28,9 @@ Route::group(['prefix'=>'viewpublic'], function(){
 	Route::get('/match/getBadmintonDetails', 'User\ScoreCard\BadmintonScoreCardController@getBadmintonDetails');
 	Route::get('/match/getSoccerDetails', 'User\ScoreCardController@getSoccerDetails');
 
+    //Route::get('organization/{slug}','User\TeamController@getorgDetails');
+    Route::get('organization/{id}','User\TeamController@getorgDetails');
+
 
 });
 
