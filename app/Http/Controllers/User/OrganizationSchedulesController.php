@@ -80,9 +80,11 @@ class OrganizationSchedulesController extends Controller
             }
         }
 
+        $orgInfo= [$organization->toArray()];
+
 
         return view('organization.schedules.list',
-            compact('id', 'organization', 'staffList', 'tournaments', 'filter_event','teamNames','userNames')
+            compact('id', 'organization', 'staffList', 'tournaments', 'filter_event','teamNames','userNames','orgInfo')
         );
     }
 

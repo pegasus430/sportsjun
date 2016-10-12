@@ -41,6 +41,8 @@
 												<li><a href="{{  URL::to('/team/removefromteam/'.(!empty($own['team_id'])?$own['team_id']:0).'/'.(!empty($own['user_id'])?$own['user_id']:0)) }}">Remove From Team</a></li>
 												<li><a href="{{  URL::to('/team/maketeamcaptain/'.(!empty($own['team_id'])?$own['team_id']:0).'/'.(!empty($own['user_id'])?$own['user_id']:0)) }}">Make Team Captain</a></li>
 												<li><a href="{{  URL::to('/team/maketeamvicecaptain/'.(!empty($own['team_id'])?$own['team_id']:0).'/'.(!empty($own['user_id'])?$own['user_id']:0)) }}">Make Team Vice-Captain</a></li>
+												<li><a href="{{  URL::to('/team/maketeamcoach/'.(!empty($own['team_id'])?$own['team_id']:0).'/'.(!empty($own['user_id'])?$own['user_id']:0)) }}">Make Coach</a></li>
+												<li><a href="{{  URL::to('/team/maketeamphysio/'.(!empty($own['team_id'])?$own['team_id']:0).'/'.(!empty($own['user_id'])?$own['user_id']:0)) }}">Make Physio</a></li>
 											</ul>
 										</div>
 									</div>
@@ -92,6 +94,8 @@
 													@endif
 													<li><a href="{{  URL::to('/team/maketeamcaptain/'.(!empty($player['team_id'])?$player['team_id']:0).'/'.(!empty($player['user_id'])?$player['user_id']:0)) }}">Make Team Captain</a></li>
 													<li><a href="{{  URL::to('/team/maketeamvicecaptain/'.(!empty($player['team_id'])?$player['team_id']:0).'/'.(!empty($player['user_id'])?$player['user_id']:0)) }}">Make Team Vice-Captain</a></li>
+													<li><a href="{{  URL::to('/team/maketeamcoach/'.(!empty($own['team_id'])?$own['team_id']:0).'/'.(!empty($own['user_id'])?$own['user_id']:0)) }}">Make Coach</a></li>
+													<li><a href="{{  URL::to('/team/maketeamphysio/'.(!empty($player['team_id'])?$player['team_id']:0).'/'.(!empty($player['user_id'])?$player['user_id']:0)) }}">Make Physio</a></li>
 												</ul>
 											</div>
 										</div>

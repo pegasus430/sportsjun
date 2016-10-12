@@ -323,6 +323,8 @@ return [
 	'userremovefail' => 'Failed to Delete User.',
 	'teamcaptain' => 'Team Captain Updated Successfully.',
 	'teamvicecaptain' => 'Team Vice-Captain Updated Successfully.',
+    'teamcoach' =>        'Team Coach Updated Successfully.',
+    'teamphysio' =>        'Team Physio Updated Successfully.',
 	'managerremove' => 'Manager Deleted Succesfully.',
 	'managervalidation' => 'No Managers Found',
 	'Invitation' => 'Invitation Sent Successfully.',

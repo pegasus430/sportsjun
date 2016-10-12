@@ -23,8 +23,10 @@ class OrganizationMembersController extends Controller
     public function index($id)
     {
         $organization = Organization::with('staff')->findOrFail($id);
+
         $staffList = $organization->staff->pluck('name', 'id');
         $allTeams = $organization->teamplayers()->get();
+
         $teamIds = $allTeams->lists('id');
         #$teamPlayers = TeamPlayers::whereIn('team_players.team_id',$teamIds)->get();
 
@@ -46,8 +48,11 @@ class OrganizationMembersController extends Controller
                 return view('organization.members.partials.member_list', compact('id','members','filter_team'));
             }
         }
+
+        $orgInfo= [$organization->toArray()];
+
         return view('organization.members.list',
-            compact('id', 'organization', 'staffList', 'members','filter_team')
+            compact('id', 'organization', 'staffList', 'members','filter_team','orgInfo')
         );
     }
 

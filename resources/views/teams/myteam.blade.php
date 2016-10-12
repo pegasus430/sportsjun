@@ -44,6 +44,7 @@
 							</div>
 						</div>
                         <div class="clearfix"></div>
+
 						@if(!empty($team_owners_managers))
 						@foreach($team_owners_managers as $own)
 						<div class="col-xs-6">
@@ -63,8 +64,8 @@
 												<li><a href="{{  URL::to('/team/removefromteam/'.(!empty($own['team_id'])?$own['team_id']:0).'/'.(!empty($own['user_id'])?$own['user_id']:0)) }}">Remove From Team</a></li>
 												<li><a href="{{  URL::to('/team/maketeamcaptain/'.(!empty($own['team_id'])?$own['team_id']:0).'/'.(!empty($own['user_id'])?$own['user_id']:0)) }}">Make Team Captain</a></li>
 												<li><a href="{{  URL::to('/team/maketeamvicecaptain/'.(!empty($own['team_id'])?$own['team_id']:0).'/'.(!empty($own['user_id'])?$own['user_id']:0)) }}">Make Team Vice-Captain</a></li>
-												<li><a href="#{{  URL::to('/team/coach/'.(!empty($own['team_id'])?$own['team_id']:0).'/'.(!empty($own['user_id'])?$own['user_id']:0)) }}">Coach</a></li>
-												<li><a href="#{{  URL::to('/team/physio/'.(!empty($own['team_id'])?$own['team_id']:0).'/'.(!empty($own['user_id'])?$own['user_id']:0)) }}">Physio</a></li>
+												<li><a href="{{  URL::to('/team/maketeamcoach/'.(!empty($own['team_id'])?$own['team_id']:0).'/'.(!empty($own['user_id'])?$own['user_id']:0)) }}">Make Coach</a></li>
+												<li><a href="{{  URL::to('/team/maketeamphysio/'.(!empty($own['team_id'])?$own['team_id']:0).'/'.(!empty($own['user_id'])?$own['user_id']:0)) }}">Make Physio</a></li>
 											</ul>
 										</div>
 									</div>
@@ -76,6 +77,12 @@
 						</div>
 						@endforeach
 						@endif
+						<div class="col-xs-12">
+							<div class="pull-right">
+								<button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#transfer-owner-modal" data-team-id="{{$team_id}}"><i class="fa fa-exchange"></i> Transfer ownership</button>
+							</div>
+						</div>
+
 
 					</div>
 				</div>
@@ -120,6 +127,8 @@
 													@endif
 													<li><a href="{{  URL::to('/team/maketeamcaptain/'.(!empty($player['team_id'])?$player['team_id']:0).'/'.(!empty($player['user_id'])?$player['user_id']:0)) }}">Make Team Captain</a></li>
 													<li><a href="{{  URL::to('/team/maketeamvicecaptain/'.(!empty($player['team_id'])?$player['team_id']:0).'/'.(!empty($player['user_id'])?$player['user_id']:0)) }}">Make Team Vice-Captain</a></li>
+													<li><a href="{{  URL::to('/team/maketeamcoach/'.(!empty($player['team_id'])?$player['team_id']:0).'/'.(!empty($player['user_id'])?$player['user_id']:0)) }}">Make Coach</a></li>
+													<li><a href="{{  URL::to('/team/maketeamphysio/'.(!empty($player['team_id'])?$player['team_id']:0).'/'.(!empty($player['user_id'])?$player['user_id']:0)) }}">Make Physio</a></li>
 												</ul>
 											</div>
 										</div>
@@ -188,6 +197,7 @@
 	<?php } ?>
 	</div>
 </div>
+@include('teams.modal.change_ownership')
 @include ('widgets.teamspopup')
 <script type="text/javascript">
 	$(window).ready(function(){
