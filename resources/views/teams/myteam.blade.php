@@ -44,6 +44,7 @@
 							</div>
 						</div>
                         <div class="clearfix"></div>
+
 						@if(!empty($team_owners_managers))
 						@foreach($team_owners_managers as $own)
 						<div class="col-xs-6">
@@ -76,6 +77,12 @@
 						</div>
 						@endforeach
 						@endif
+						<div class="col-xs-12">
+							<div class="pull-right">
+								<button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#transfer-owner-modal" data-team-id="{{$team_id}}"><i class="fa fa-exchange"></i> Transfer ownership</button>
+							</div>
+						</div>
+
 
 					</div>
 				</div>
@@ -188,6 +195,7 @@
 	<?php } ?>
 	</div>
 </div>
+@include('teams.modal.change_ownership')
 @include ('widgets.teamspopup')
 <script type="text/javascript">
 	$(window).ready(function(){
