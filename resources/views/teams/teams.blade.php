@@ -7,15 +7,11 @@
     @endif
 
     <div id="content" class="col-sm-10 tournament_profile">
-            @if (!Auth::user())
-                <div class="col-md-12">
-                <div class="team_view">
-                    {!! Helper::Images(!empty($orgInfo[0]['logo'])?$orgInfo[0]['logo']:'','organization',array('height'=>100,'width'=>100) )!!}
-                    <h1>{{ $orgInfo[0]['name'] or "" }}</h1>
-                </div>
-            @else
-                        <div class="col-md-6">
-            @endif
+        <div class="col-md-8 col-md-offset-2 col-xs-12">
+            <div class="team_view">
+                {!! Helper::Images(!empty($orgInfo[0]['logo'])?$orgInfo[0]['logo']:'','organization',array('height'=>100,'width'=>'100%') )!!}
+                <h1>{{ $orgInfo[0]['name'] or "" }}</h1>
+            </div>
             <div class="group_no clearfix">
                 <h4 class="stage_head">{{ trans('message.organization.fields.orgdetails') }}</h4>
             </div>
