@@ -10,9 +10,9 @@
                         <b>{{ $tournament['name'] }}</b>
                     </div>
                     <div class="pull-right">
-                        <a href="/download/schedules_all?tournament_id={{ $tournament['id'] }}" class="btn-danger btn"
+                        <a href="/download/schedules?tournament_id={{ $tournament['id'] }}" class="btn-danger btn"
                            name="match_schedule_tournament_{{ $tournament['id'] }}"
-                           onclick="return false;"
+
                         ><i class="fa fa-download"></i>
                             Download Schedule </a>
                     </div>
