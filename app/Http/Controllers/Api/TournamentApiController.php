@@ -12,7 +12,7 @@ use App\Http\Controllers\Controller;
 use App\Model\Tournaments;
 use Response;
 
-class TournamentApiController extends Controller
+class TournamentApiController extends BaseApiController
 {
     /**
      * Display a listing of the resource.
@@ -59,7 +59,7 @@ class TournamentApiController extends Controller
             ->paginate(20);
 
 
-        return Response::json($tournaments);
+        return $this->ApiResponse($tournaments->toArray());
     }
 
     /**
