@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use DB;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Api\FunctionsApiController as functionsApi;
@@ -19,17 +20,46 @@ class TournamentApiController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function __construct() {
-      $this->functionsApi = new functionsApi;
-      $this->tournamentsApi = new tournamentsApi;
-    }    
-    
-    
+    public function __construct()
+    {
+        $this->functionsApi = new functionsApi;
+        $this->tournamentsApi = new tournamentsApi;
+    }
+
+
     public function index()
     {
-        //
-        $tournaments=Tournaments::paginate(20);
-        return Response::json(  $tournaments );
+        $tournaments = Tournaments::
+        join('tournament_parent', function ($join) {
+            $join->on('tournaments.tournament_parent_id', '=', 'tournament_parent.id');
+        })
+            ->select([
+                'tournaments.name',
+                'tournaments.description',
+                'tournaments.tournament_parent_name',
+                'tournaments.address',
+                'tournaments.contact_number',
+                'tournaments.contact_name',
+                'tournaments.location',
+                'tournaments.zip',
+                'tournaments.city',
+                'tournaments.country',
+                'tournaments.type',
+                'tournaments.match_type',
+                'tournaments.player_type',
+                'tournaments.schedule_type',
+                'tournaments.game_type',
+                'tournaments.start_date',
+                'tournaments.end_date',
+                'tournaments.status',
+
+                DB::raw('COALESCE(tournaments.logo,tournament_parent.logo) as logo'),
+                'tournament_parent.logo as tournament_parent_logo'
+            ])
+            ->paginate(20);
+
+
+        return Response::json($tournaments);
     }
 
     /**
@@ -45,7 +75,7 @@ class TournamentApiController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -56,44 +86,49 @@ class TournamentApiController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
         //
-        $tournament=Tournaments::find($id);
+        $tournament = Tournaments::find($id);
         $tournament->photos;
         $tournament->user;
         return Response::json([
-            'status'=>200,
-            'data'=>$tournament,
-            'error'=>false]);
+            'status' => 200,
+            'data' => $tournament,
+            'error' => false
+        ]);
 
     }
 
-    public function parent($id){
-        $tournament=Tournaments::find($id);
-        $parent_tournament=$tournament->tournamentParent;
+    public function parent($id)
+    {
+        $tournament = Tournaments::find($id);
+        $parent_tournament = $tournament->tournamentParent;
 
         return Response::json([
-            'status'=>200,
-            'data'=>$parent_tournament,
-            'error'=>false]);
+            'status' => 200,
+            'data' => $parent_tournament,
+            'error' => false
+        ]);
     }
 
-    public function follow_tournament($id){
-      return  $this->functionsApi->follow_unfollow('tournaments', $id, 1);
+    public function follow_tournament($id)
+    {
+        return $this->functionsApi->follow_unfollow('tournaments', $id, 1);
     }
 
-    public function unfollow_tournament($id){
-      return  $this->functionsApi->follow_unfollow('tournaments', $id, 0);
+    public function unfollow_tournament($id)
+    {
+        return $this->functionsApi->follow_unfollow('tournaments', $id, 0);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -104,8 +139,8 @@ class TournamentApiController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -116,7 +151,7 @@ class TournamentApiController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -124,19 +159,23 @@ class TournamentApiController extends Controller
         //
     }
 
-    public function search(Request $request){
+    public function search(Request $request)
+    {
 
     }
 
-    public function group_stage($id){
+    public function group_stage($id)
+    {
         return $this->tournamentsApi->groups($id, 'group', true);
     }
 
-    public function final_stage($id){
+    public function final_stage($id)
+    {
         return $this->tournamentsApi->groups($id, 'final', true);
     }
 
-    public function player_standing($id){
+    public function player_standing($id)
+    {
         return $this->tournamentsApi->playerStanding($id, true);
     }
 }
