@@ -71,6 +71,8 @@ class UserApiController extends BaseApiController
      */
     public function update(Request $request, $id = 0)
     {
+        $user = \Auth::user();
+        $id = $user->id;
         $data = $request->all();
         $validator = \Validator::make($data, [
             'firstname' => 'max:255',
@@ -99,9 +101,9 @@ class UserApiController extends BaseApiController
             'about' => 'about',
         ];
 
-        $user = \Auth::user();
+
         if (!$validator->fails()) {
-            if (!$id === 0) {
+            if (!($id === $user->id)) {
                 $error = 'Can update only self';
             } else {
                 foreach ($map as $key => $value){
