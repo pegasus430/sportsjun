@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class UserApiController extends Controller
+class UserApiController extends BaseApiController
 {
     /**
      * Display a listing of the resource.
@@ -32,7 +32,7 @@ class UserApiController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -43,7 +43,7 @@ class UserApiController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -54,30 +54,76 @@ class UserApiController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
         //
     }
- 
+
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id = 0)
     {
-        //
+        $data = $request->all();
+        $validator = \Validator::make($data, [
+            'firstname' => 'max:255',
+            'lastname' => 'max:255',
+            'mobile' => 'max:20',
+            'email' => 'unique:users,email,' . $id . '|email|max:255',
+            'gender' => 'in:male,female,other',
+            'address' => 'max:100',
+            'city' => 'max:100',
+            'country' => 'max:100',
+            'state' => 'max:100',
+            'zipcode' => 'max:16',
+            'about' => '',
+        ]);
+        $map = [
+            'firstname' => 'firstname',
+            'lastname' => 'lastname',
+            'mobile' => 'contact_number',
+            'email' => 'email',
+            'gender' => 'gender',
+            'address' => 'address',
+            'city' => 'city',//?update city_id
+            'country' => 'country', //?update country_id
+            'state' => 'state', // ?update state_id
+            'zipcode' => 'zip',
+            'about' => 'about',
+        ];
+
+        $user = \Auth::user();
+        if (!$validator->fails()) {
+            if (!$id === 0) {
+                $error = 'Can update only self';
+            } else {
+                foreach ($map as $key => $value){
+                    if(!is_array($value)){
+                        if (isset($data[$key])) {
+                            $user->$value = $data[$key];
+                         }
+                    }
+                }
+                $user->save();
+                return $this->ApiResponse(['message' => 'User updated Successfully'], 200);
+            }
+        } else {
+            $error = $validator->errors()->first();
+        }
+        return $this->ApiResponse(['error' => $error], 500);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

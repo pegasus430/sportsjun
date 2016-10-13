@@ -15,7 +15,8 @@ Route::group(['prefix' => '/api/v1', 'middleware' => 'cors'], function ($router)
         Route::post('/otp/verify', ['uses' => 'Api\AuthApiController@verifyOTP']);
         Route::post('/otp/issent', ['uses' => 'Api\AuthApiController@isOtpSent']);
 
-        $router->resource('/users', 'Api\UserApiController');
+        #$router->resource('/users', 'Api\UserApiController');
+        $router->post('users/{id?}','Api\UserApiController@update');
 
         //handle teams
         $router->resource('/teams', 'Api\TeamApiController');
