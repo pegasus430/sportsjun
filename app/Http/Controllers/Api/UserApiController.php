@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\Helper;
+use App\Model\Photo;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -86,6 +88,7 @@ class UserApiController extends BaseApiController
             'state' => 'max:100',
             'zipcode' => 'max:16',
             'about' => '',
+            'image' => 'mimes:png,gif,jpeg,jpg',
         ]);
         $map = [
             'firstname' => 'firstname',
@@ -101,7 +104,6 @@ class UserApiController extends BaseApiController
             'about' => 'about',
         ];
 
-
         if (!$validator->fails()) {
             if (!($id === $user->id)) {
                 $error = 'Can update only self';
@@ -113,6 +115,25 @@ class UserApiController extends BaseApiController
                          }
                     }
                 }
+
+                $logo = $request->file('image');
+                if($logo) {
+                    $albumID = 1;
+                    $coverPic = 1;
+                    $image_id = Helper::uploadPhotos($logo, config('constants.PHOTO_PATH.USERS_PROFILE'), $id,
+                        $albumID, $coverPic, config('constants.PHOTO.USER_PHOTO'), $user_id = $id);
+
+                    $logo=Photo::select('url')->where('imageable_type',config('constants.PHOTO.USER_PHOTO'))
+                                                ->where('imageable_id',  $id )
+                                                ->where('user_id', $id)
+                                                ->where('is_album_cover',1)
+                                                ->where('id',$image_id)
+                                                ->first();
+                    if ($logo){
+                            $user->logo = $logo->url;
+                    }
+                }
+
                 $user->save();
                 return $this->ApiResponse(['message' => 'User updated Successfully'], 200);
             }
