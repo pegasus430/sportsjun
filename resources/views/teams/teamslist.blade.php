@@ -23,90 +23,11 @@
             <div class="panel-body">
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs nav-justified" id="team_ul">
-                  <li class="" id="org_tab"><a href="#organization" data-toggle="tab" aria-expanded="true">{{ trans('message.users.fields.managedorganizations') }}<span class="t_badge">{{ count($managedOrgArray) }}</span></a>                    </li>
                     <li class="" id="mgt_tab"><a href="#managedteams" data-toggle="tab" aria-expanded="true">{{ trans('message.users.fields.managedteams') }}<span class="t_badge">{{ count($manageTeamArray) }}</span></a>                    </li>
                     <li class="active" id="jnd_tab"><a href="#joinedteams" data-toggle="tab" aria-expanded="false">{{ trans('message.users.fields.joinedteams') }}<span class="t_badge">{{ count($joinTeamArray) }}</span></a>                    </li>
                     <li class="" id="foll_tab"><a href="#followingteam" data-toggle="tab" aria-expanded="false">{{ trans('message.users.fields.followingteam') }}<span class="t_badge">{{ count($followingTeamArray) }}</span></a>                    </li>
                 </ul>
                 <div class="tab-content">
-
-				       <div class="tab-pane fade"  id="organization" >
-                                        <table class="table">
-                                            <tbody>
-
-                                                <tr>
-                                                    <td>
-                                                        @if(count($managedOrgArray))
-                                                        @foreach($managedOrgArray as $managedOrg)
-
-                                                    	<div class="t_details">
-                                                        <div class="row main_tour">
-                                                          <div class="col-md-2 col-sm-3 col-xs-12 text-center">
-														  	<?php //echo "<pre>";print_r($managedOrg) ;exit;?>
-                                                                @if(count($managedOrg['photos']))
-                                                                @foreach($managedOrg['photos'] as $p)
-                                                                 <!--  <img class="img-circle img-border" src="{{ asset('/uploads/'.config('constants.PHOTO_PATH.TEAMS_FOLDER_PATH').'/'.(!empty($p['url'])?$p['url']:'')) }}" onerror="this.onerror=null;this.src='{{ asset('/images/default-profile-pic.jpg') }}';" style="width: 90%;height:90%;">-->
-
-
-                													  {!! Helper::Images((!empty($p['url'])?$p['url']:''),'organization',array('class'=>'img-circle img-border img-scale-down','height'=>90,'width'=>90) )!!}
-
-                                                                @endforeach
-                                                                @else
-                                                                    <!--<img class="img-circle img-border" src="{{ asset('/images/default-profile-pic.jpg') }}" onerror="this.onerror=null;this.src='{{ asset('/images/default-profile-pic.jpg') }}';" style="width: 90%;height:90%;">-->
-                												  {!! Helper::Images('default-profile-pic.jpg','images',array('class'=>'img-circle img-border  img-scale-down','height'=>90,'width'=>90) )!!}
-
-                                                                @endif
-
-                                                            </div>
-
-														 <div class="col-md-10 col-sm-9 col-xs-12">
-                                                              <div class="sm-center">
-                                                                   <div class="t_tltle">
-
-                                                                    <div class="pull-left">
-                                                                           <a href="{{ url('getorgteamdetails/'.$managedOrg['id']) }}">{{ !empty($managedOrg['name'])?$managedOrg['name']:'' }}</a>
-                                                                            <p class="t_by">By <a target="_blank" href="{{ url('/editsportprofile/'.(!empty($id)?$id:0))}}">{{ !empty($managedOrg['user']['name'])?$managedOrg['user']['name']:'' }}</a></p>
-                                                                     </div>
-                                                                    @if(isset($userId) && ($userId == Auth::user()->id))
-                                                                    <div class="pull-right ed-btn">
-                                                                            <a href="{{ url('/organization/'.(!empty($managedOrg['id'])?$managedOrg['id']:0).'/edit') }}"  class="edit" title="Edit" data-toggle="tooltip" data-placement="top"><i class="fa fa-pencil"></i></a>
-                                                                            <a href="{{ url('/organization/delete/'.(!empty($managedOrg['id'])?$managedOrg['id']:0)).'/'.(empty($managedOrg['isactive'])?'a':'d')}}" class="delete" title="Deactivate" data-toggle="tooltip" data-placement="top">
-                                                                                {!! empty($managedOrg['isactive'])?"<i class='fa fa-check'></i>":"<i class='fa fa-ban'></i>" !!}
-                                                                            </a>
-                                                                        </div>
-																	@endif
-                                                                    </div>
-                                                                    <ul class="t_tags">
-																		  <li>Teams: <span class="green">{{ !empty($managedOrg['teamplayers'])?count($managedOrg['teamplayers']):0 }}</span>
-                                                                        </li>
-
-                                                                    </ul>
-                                                                    <p class="lt-grey">{{ !empty($managedOrg['about'])?$managedOrg['about']:'' }}</p>
-                                                             	</div>
-                                                            </div>
-													 </div>
-                                                     </div>
-
-                                                        @endforeach
-                                                        @else
-                                                        <div class="message_new_for_team">Manage all your teams easily by grouping them under an Organization.</div>
-                                                        <div class="intro_list_container">
-                                                                <ul class="intro_list_on_empty_pages">
-                                                                        <span class="steps_to_follow">Steps to follow:</span>
-                                                                        <li>Click on the <span class="bold">Create New +</span> button on the top left side, select <span class="bold">Organization</span></li>
-                                                                        <li>Fill all the details and select <span class="bold">teams</span> from drop-down (if needed) and <span class="bold">Create</span></li>
-                                                                        <li>Manage all your Teams under one Organization umbrella.</li>
-                                                                </ul>
-                                                        </div>
-                                                        @endif
-
-
-                                                    </td>
-                                                </tr>
-
-                                            </tbody>
-                                        </table>
-                            </div>
                             <div class="tab-pane fade" id="managedteams">
                                 <table class="table">
                                     <tbody>

@@ -409,9 +409,9 @@ class TeamController extends Controller
         $joinTeamArray = array();
         $followingTeamArray = array();
         $manageTeamArray = array();
-        $managedOrgArray = array();
-        $managedOrgArray1 = array();
-        $managedOrgArray = Organization::select('name', 'id', 'isactive')->where('user_id', $user_id)->get()->toArray();
+     #   $managedOrgArray = array();
+     #   $managedOrgArray1 = array();
+     #   $managedOrgArray = Organization::select('name', 'id', 'isactive')->where('user_id', $user_id)->get()->toArray();
 
         //get the details from user statistics based on user id
         //$follow_teamDetails = UserStatistic::where('user_id', $user_id)->first();
@@ -445,18 +445,19 @@ class TeamController extends Controller
         if (count($following_team_array)) {
             $followingTeamArray = $this->getteamdetails($following_team_array);
         }
+        /*
         if (count($managedOrgArray)) {
             foreach ($managedOrgArray as $man) {
                 $id[] = $man['id'];
             }
             $managedOrgArray1 = $this->getorgdeatils($id);
-        }
+        }*/
 
         return view('teams.teamslist', [
             'joinTeamArray' => $joinTeamArray,
             'followingTeamArray' => $followingTeamArray,
             'manageTeamArray' => $manageTeamArray,
-            'managedOrgArray' => $managedOrgArray1,
+          //  'managedOrgArray' => $managedOrgArray1,
             'id' => (isset(Auth::user()->id) ? Auth::user()->id : 0),
             'userId' => $user_id,
         ]);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\User;
 use Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -24,14 +25,16 @@ use Illuminate\Http\Request as ObjRequest;
 
 //use Helper;
 
-class OrganizationController extends Controller {
+class OrganizationController extends Controller
+{
 
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         //
     }
 
@@ -40,54 +43,73 @@ class OrganizationController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
-        $type = config('constants.ENUM.ORGANIZATION.ORGANIZATION_TYPE');  
+    public function create()
+    {
+        $type = config('constants.ENUM.ORGANIZATION.ORGANIZATION_TYPE');
         $countries = Country::orderBy('country_name')->lists('country_name', 'id')->all();
         $teams = Team::where('team_owner_id', Auth::user()->id)->orderBy('name')->lists('name', 'id')->all();
         $states = [];
-		$cities=[];
-        return view('organization.create', array('countries' =>  [''=>'Select Country']+$countries, 'states' => ['' => 'Select State'] + $states, 'cities' => ['' => 'Select City'] + $cities, 'type' => ['' => 'Select Organization Type'] +$type, 'id' => '', 'roletype' => 'user', 'teams' =>['' => 'Select Team'] + $teams, 'selectedTeams' => ''));
+        $cities = [];
+        return view('organization.create', array(
+            'countries' => ['' => 'Select Country'] + $countries,
+            'states' => ['' => 'Select State'] + $states,
+            'cities' => ['' => 'Select City'] + $cities,
+            'type' => ['' => 'Select Organization Type'] + $type,
+            'id' => '',
+            'roletype' => 'user',
+            'teams' => ['' => 'Select Team'] + $teams,
+            'selectedTeams' => ''
+        ));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Requests\CreateOrganizatonRequest $request) {
-		 	
+    public function store(Requests\CreateOrganizatonRequest $request)
+    {
+
         $request['user_id'] = Auth::user()->id;
-        $request['country'] = !empty($request['country_id']) ? Country::where('id', $request['country_id'])->first()->country_name : 'null';
-        $request['state'] = !empty($request['state_id']) ? State::where('id', $request['state_id'])->first()->state_name : 'null';
-        $request['city'] = !empty($request['city_id']) ? City::where('id', $request['city_id'])->first()->city_name : 'null';
-		$location=Helper::address($request['address'],$request['city'],$request['state'],$request['country']);
-	    $request['location']=trim($location,",");
+        $request['country'] = !empty($request['country_id']) ? Country::where('id',
+            $request['country_id'])->first()->country_name : 'null';
+        $request['state'] = !empty($request['state_id']) ? State::where('id',
+            $request['state_id'])->first()->state_name : 'null';
+        $request['city'] = !empty($request['city_id']) ? City::where('id',
+            $request['city_id'])->first()->city_name : 'null';
+        $location = Helper::address($request['address'], $request['city'], $request['state'], $request['country']);
+        $request['location'] = trim($location, ",");
         $organization = Organization::create($request->all());
         if (count($request->team)) {
-            Team::where('team_owner_id', Auth::user()->id)->whereIn('id', $request->team)->update(['organization_id' => $organization->id]);
+            Team::where('team_owner_id', Auth::user()->id)->whereIn('id',
+                $request->team)->update(['organization_id' => $organization->id]);
         }
         $id = $organization->id; //Inserted record ID
         $user_id = Auth::user()->id;
         //Upload Photos
         $albumID = 1; //Default album if no album is not selected.
         $coverPic = 1;
-        if (isset($input['album_id']) && $input['album_id'])
+        if (isset($input['album_id']) && $input['album_id']) {
             $albumID = $input['album_id'];
-        if (isset($input['cover_pic']) && $input['cover_pic'])
+        }
+        if (isset($input['cover_pic']) && $input['cover_pic']) {
             $coverPic = $input['cover_pic'];
-        Helper::uploadPhotos($request['filelist_photos'], config('constants.PHOTO_PATH.ORGANIZATION'), $id, $albumID, $coverPic, config('constants.PHOTO.ORGANIZATION_LOGO'), $user_id);
-	    Helper::uploadPhotos($request['filelist_gallery'], config('constants.PHOTO_PATH.ORGANIZATION_PROFILE'), $id, $albumID, $coverPic, config('constants.PHOTO.ORGANIZATION_PROFILE'), $user_id);
-		$logo=Photo::select('url')->where('imageable_type',config('constants.PHOTO.ORGANIZATION_LOGO'))->where('imageable_id',  $id )->where('user_id', Auth::user()->id)->where('is_album_cover',1)->get()->toArray();
-		if(!empty($logo))
-		{
-			foreach($logo as $l)
-			{
-				  Organization::where('id', $id)->update(['logo' => $l['url']]);
-				//echo $l['url'];exit;
-			}
-			
-		}
+        }
+        Helper::uploadPhotos($request['filelist_photos'], config('constants.PHOTO_PATH.ORGANIZATION'), $id, $albumID,
+            $coverPic, config('constants.PHOTO.ORGANIZATION_LOGO'), $user_id);
+        Helper::uploadPhotos($request['filelist_gallery'], config('constants.PHOTO_PATH.ORGANIZATION_PROFILE'), $id,
+            $albumID, $coverPic, config('constants.PHOTO.ORGANIZATION_PROFILE'), $user_id);
+        $logo = Photo::select('url')->where('imageable_type',
+            config('constants.PHOTO.ORGANIZATION_LOGO'))->where('imageable_id', $id)->where('user_id',
+            Auth::user()->id)->where('is_album_cover', 1)->get()->toArray();
+        if (!empty($logo)) {
+            foreach ($logo as $l) {
+                Organization::where('id', $id)->update(['logo' => $l['url']]);
+                //echo $l['url'];exit;
+            }
+
+        }
         //End Upload Photos        
         // redirect('/');
         return redirect()->back()->with('status', trans('message.organization.create'));
@@ -96,157 +118,185 @@ class OrganizationController extends Controller {
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id) {
+    public function show($id)
+    {
         //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id) {
+    public function edit($id)
+    {
         $request['user_id'] = Auth::user()->id;
         $organization = Organization::findOrFail($id);
-        $type = config('constants.ENUM.ORGANIZATION.ORGANIZATION_TYPE');  
+        $type = config('constants.ENUM.ORGANIZATION.ORGANIZATION_TYPE');
         $countries = Country::orderBy('country_name')->lists('country_name', 'id')->all();
-        $states = State::where('country_id', $organization->country_id)->orderBy('state_name')->lists('state_name', 'id')->all();
-        $cities = City::where('state_id', $organization->state_id)->orderBy('city_name')->lists('city_name', 'id')->all();
+        $states = State::where('country_id', $organization->country_id)->orderBy('state_name')->lists('state_name',
+            'id')->all();
+        $cities = City::where('state_id', $organization->state_id)->orderBy('city_name')->lists('city_name',
+            'id')->all();
         $teams = Team::where('team_owner_id', Auth::user()->id)->orderBy('name')->lists('name', 'id')->all();
         $selectedTeams = Team::where('team_owner_id', Auth::user()->id)->where('organization_id', $id)->get(['id']);
         $selectedTeamsIds = '';
         if (count($selectedTeams)) {
             $selectedTeamsIds = array_divide(array_flatten($selectedTeams->toArray()));
         }
-		if(  $selectedTeamsIds=='')
-		{
-			$selectedTeams = '';
-		}
-		else
-		{
-			$selectedTeams = $selectedTeamsIds[1];
-		}
+        if ($selectedTeamsIds == '') {
+            $selectedTeams = '';
+        } else {
+            $selectedTeams = $selectedTeamsIds[1];
+        }
 
-        return view('organization.edit', compact('organization'))->with(array('id' => $id,'countries' => ['' => 'Select Country'] + $countries,'states' => ['' => 'Select State'] + $states, 'cities' => ['' => 'Select City'] + $cities, 'type' => ['' => 'Select Organization Type'] + $type, 'roletype' => 'user', 'organization' => $organization, 'teams' =>['' => 'Select Teams'] + $teams, 'selectedTeams' =>  $selectedTeams));
+        return view('organization.edit', compact('organization'))->with(array(
+            'id' => $id,
+            'countries' => ['' => 'Select Country'] + $countries,
+            'states' => ['' => 'Select State'] + $states,
+            'cities' => ['' => 'Select City'] + $cities,
+            'type' => ['' => 'Select Organization Type'] + $type,
+            'roletype' => 'user',
+            'organization' => $organization,
+            'teams' => ['' => 'Select Teams'] + $teams,
+            'selectedTeams' => $selectedTeams
+        ));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Requests\CreateOrganizatonRequest $request, $id) {
-        $request['city'] = !empty($request['city_id']) ? City::where('id', $request['city_id'])->first()->city_name : 'null';
-        $request['state'] = !empty($request['state_id']) ? State::where('id', $request['state_id'])->first()->state_name : 'null';
-        $request['country'] = !empty($request['country_id']) ? Country::where('id', $request['country_id'])->first()->country_name : 'null';
-        $location=Helper::address($request['address'],$request['city'],$request['state'],$request['country']);
-	    $request['location']=trim($location,",");
-        Organization::whereId($id)->update($request->except(['_method', '_token', 'files', 'filelist_photos', 'team','filelist_gallery','jfiler-items-exclude-files-0']));
+    public function update(Requests\CreateOrganizatonRequest $request, $id)
+    {
+        $request['city'] = !empty($request['city_id']) ? City::where('id',
+            $request['city_id'])->first()->city_name : 'null';
+        $request['state'] = !empty($request['state_id']) ? State::where('id',
+            $request['state_id'])->first()->state_name : 'null';
+        $request['country'] = !empty($request['country_id']) ? Country::where('id',
+            $request['country_id'])->first()->country_name : 'null';
+        $location = Helper::address($request['address'], $request['city'], $request['state'], $request['country']);
+        $request['location'] = trim($location, ",");
+        Organization::whereId($id)->update($request->except([
+            '_method',
+            '_token',
+            'files',
+            'filelist_photos',
+            'team',
+            'filelist_gallery',
+            'jfiler-items-exclude-files-0'
+        ]));
         if (count($request->team)) {
-            Team::where('team_owner_id', Auth::user()->id)->where('organization_id', $id)->update(['organization_id' => NULL]);
-            Team::where('team_owner_id', Auth::user()->id)->whereIn('id', $request->team)->update(['organization_id' => $id]);
+            Team::where('team_owner_id', Auth::user()->id)->where('organization_id',
+                $id)->update(['organization_id' => null]);
+            Team::where('team_owner_id', Auth::user()->id)->whereIn('id',
+                $request->team)->update(['organization_id' => $id]);
         }
         if (!empty($request['filelist_photos'])) {
-            Photo::where(['imageable_id'=>$id, 'imageable_type' => config('constants.PHOTO.ORGANIZATION_LOGO')])->update(['is_album_cover' => 0]);
+            Photo::where([
+                'imageable_id' => $id,
+                'imageable_type' => config('constants.PHOTO.ORGANIZATION_LOGO')
+            ])->update(['is_album_cover' => 0]);
             //Upload Photos
             $albumID = 1; //Default album if no album is not selected.
             $coverPic = 1;
             $user_id = Auth::user()->id;
-            if (isset($input['album_id']) && $input['album_id'])
+            if (isset($input['album_id']) && $input['album_id']) {
                 $albumID = $input['album_id'];
-            if (isset($input['cover_pic']) && $input['cover_pic'])
+            }
+            if (isset($input['cover_pic']) && $input['cover_pic']) {
                 $coverPic = $input['cover_pic'];
-            Helper::uploadPhotos($request['filelist_photos'], config('constants.PHOTO_PATH.ORGANIZATION'), $id, $albumID, $coverPic, config('constants.PHOTO.ORGANIZATION_LOGO'), $user_id);
-			
+            }
+            Helper::uploadPhotos($request['filelist_photos'], config('constants.PHOTO_PATH.ORGANIZATION'), $id,
+                $albumID, $coverPic, config('constants.PHOTO.ORGANIZATION_LOGO'), $user_id);
+
             //End Upload Photos
         }
-		 if (!empty($request['filelist_gallery'])) {
-        //  Photo::where(['user_id' => Auth::user()->id, 'imageable_type' => config('constants.PHOTO.ORGANIZATION_PROFILE')])->update(['is_album_cover' => 0]);
+        if (!empty($request['filelist_gallery'])) {
+            //  Photo::where(['user_id' => Auth::user()->id, 'imageable_type' => config('constants.PHOTO.ORGANIZATION_PROFILE')])->update(['is_album_cover' => 0]);
             //Upload Photos
             $albumID = 1; //Default album if no album is not selected.
             $coverPic = 1;
             $user_id = Auth::user()->id;
-            if (isset($input['album_id']) && $input['album_id'])
+            if (isset($input['album_id']) && $input['album_id']) {
                 $albumID = $input['album_id'];
-            if (isset($input['cover_pic']) && $input['cover_pic'])
+            }
+            if (isset($input['cover_pic']) && $input['cover_pic']) {
                 $coverPic = $input['cover_pic'];
-			 Helper::uploadPhotos($request['filelist_gallery'], config('constants.PHOTO_PATH.ORGANIZATION_PROFILE'), $id, $albumID, $coverPic, config('constants.PHOTO.ORGANIZATION_PROFILE'), $user_id);
+            }
+            Helper::uploadPhotos($request['filelist_gallery'], config('constants.PHOTO_PATH.ORGANIZATION_PROFILE'), $id,
+                $albumID, $coverPic, config('constants.PHOTO.ORGANIZATION_PROFILE'), $user_id);
             //End Upload Photos
         }
-		$logo=Photo::select('url')->where('is_album_cover',1)->where('imageable_type',config('constants.PHOTO.ORGANIZATION_LOGO'))->where('imageable_id',  $id )->where('user_id', Auth::user()->id)->get()->toArray();
-		if(!empty($logo))
-		{
-			foreach($logo as $l)
-			{
-				  Organization::where('id', $id)->update(['logo' => $l['url']]);
-			}
-			
-		}
-        return redirect()->back()->with('status', trans('message.organization.update'))->with('div_sel_org','active');
+        $logo = Photo::select('url')->where('is_album_cover', 1)->where('imageable_type',
+            config('constants.PHOTO.ORGANIZATION_LOGO'))->where('imageable_id', $id)->where('user_id',
+            Auth::user()->id)->get()->toArray();
+        if (!empty($logo)) {
+            foreach ($logo as $l) {
+                Organization::where('id', $id)->update(['logo' => $l['url']]);
+            }
+
+        }
+        return redirect()->back()->with('status', trans('message.organization.update'))->with('div_sel_org', 'active');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         //
     }
-		public function deleteorganization($org_id,$flag)
-	 {
-		$request = Request::all();
-		$delete_id =$org_id;
-		if(is_numeric($delete_id) && $delete_id > 0)
-		{
-			if($flag == 'd')
-			{
-				if(Organization::where('id',$delete_id)->update(['isactive'=>0]))
-				{
-					return redirect()->back()->with('status',  trans('message.organization.delete'))->with('div_sel_org','active');
-				}
-				else
-				{
-					return redirect()->back()->with('error_msg', trans('message.organization.deletefail'))->with('div_sel_org','active');
-				}
-			}
-			elseif($flag == 'a')
-			{
-				if(Organization::where('id',$delete_id)->update(['isactive'=>1]))
-				{
-					return redirect()->back()->with('status',  trans('message.organization.activate'))->with('div_sel_org','active');
-				}
-				else
-				{
-					return redirect()->back()->with('error_msg', trans('message.organization.activatefail'))->with('div_sel_org','active');
-				}
-			}
-			else
-			{
-				return redirect()->back()->with('error_msg', trans('message.organization.updatefail'))->with('div_sel_org','active');
-			}
-		}
-		else
-		{
-			return redirect()->back()->with('error_msg', trans('message.organization.updatefail'))->with('div_sel_org','active');
-		}
-	}
-    
+
+    public function deleteorganization($org_id, $flag)
+    {
+        $request = Request::all();
+        $delete_id = $org_id;
+        if (is_numeric($delete_id) && $delete_id > 0) {
+            if ($flag == 'd') {
+                if (Organization::where('id', $delete_id)->update(['isactive' => 0])) {
+                    return redirect()->back()->with('status', trans('message.organization.delete'))->with('div_sel_org',
+                        'active');
+                } else {
+                    return redirect()->back()->with('error_msg',
+                        trans('message.organization.deletefail'))->with('div_sel_org', 'active');
+                }
+            } elseif ($flag == 'a') {
+                if (Organization::where('id', $delete_id)->update(['isactive' => 1])) {
+                    return redirect()->back()->with('status',
+                        trans('message.organization.activate'))->with('div_sel_org', 'active');
+                } else {
+                    return redirect()->back()->with('error_msg',
+                        trans('message.organization.activatefail'))->with('div_sel_org', 'active');
+                }
+            } else {
+                return redirect()->back()->with('error_msg',
+                    trans('message.organization.updatefail'))->with('div_sel_org', 'active');
+            }
+        } else {
+            return redirect()->back()->with('error_msg', trans('message.organization.updatefail'))->with('div_sel_org',
+                'active');
+        }
+    }
+
     public function organizationTournaments($id)
     {
-        $offset         = !empty(Request::get('offset')) ? Request::get('offset') : 0;
-        $limit          = !empty(Request::get('limit')) ? Request::get('limit') : config('constants.LIMIT');
-        $sports_array   = $exist_array = $follow_array = [];
-        
-        $user_id    = Auth::user()->id;
-        $query      = DB::table('tournament_parent')
+        $offset = !empty(Request::get('offset')) ? Request::get('offset') : 0;
+        $limit = !empty(Request::get('limit')) ? Request::get('limit') : config('constants.LIMIT');
+        $sports_array = $exist_array = $follow_array = [];
+
+        $user_id = Auth::user()->id;
+        $query = DB::table('tournament_parent')
             ->join('tournaments', 'tournaments.tournament_parent_id', '=', 'tournament_parent.id')
             ->select('tournament_parent.logo',
                 'tournaments.id',
@@ -265,104 +315,139 @@ class OrganizationController extends Controller {
             ->where('tournaments.isactive', 1)
             ->whereNull('tournaments.deleted_at')
             ->where('tournament_parent.organization_id', $id);
-        
-        $totalresult = $query->get();
-        $total       = count($totalresult);
-        $tournaments = $query->limit($limit)->offset($offset)->orderBy('tournaments.updated_at', 'desc')->get();
-        $orgInfo     = Organization::select()->where('id', $id)->get()->toArray();
-        $orgInfoObj   = Organization::find($id);
 
-        $parent_tournaments=TournamentParent::whereOrganizationId($id)->get();
-        
-        if (!empty($parent_tournaments))
-        {
-            foreach($parent_tournaments as $parent_tournament){
-                    foreach ($parent_tournament->tournaments as $teamdet)
-                    {
-                        $currentTimestamp   = time();
-                        $startDateTimestamp = strtotime($teamdet->start_date);
-                        $endDateTimestamp   = strtotime($teamdet->end_date);
-                        if ($endDateTimestamp <= $currentTimestamp)
-                        {
-                            $teamdet->status = "Completed";
-                            $teamdet->statusColor = "black";
-                            $tournament_winner_details = SearchController::getTournamentWinner($teamdet, ["name"]);
-                            if (!empty($tournament_winner_details))
-                            {
-                                $teamdet->winnerName = $tournament_winner_details["name"];
-                            }
+        $totalresult = $query->get();
+        $total = count($totalresult);
+        $tournaments = $query->limit($limit)->offset($offset)->orderBy('tournaments.updated_at', 'desc')->get();
+        $orgInfo = Organization::select()->where('id', $id)->get()->toArray();
+        $orgInfoObj = Organization::find($id);
+
+        $parent_tournaments = TournamentParent::whereOrganizationId($id)->get();
+
+        if (!empty($parent_tournaments)) {
+            foreach ($parent_tournaments as $parent_tournament) {
+                foreach ($parent_tournament->tournaments as $teamdet) {
+                    $currentTimestamp = time();
+                    $startDateTimestamp = strtotime($teamdet->start_date);
+                    $endDateTimestamp = strtotime($teamdet->end_date);
+                    if ($endDateTimestamp <= $currentTimestamp) {
+                        $teamdet->status = "Completed";
+                        $teamdet->statusColor = "black";
+                        $tournament_winner_details = SearchController::getTournamentWinner($teamdet, ["name"]);
+                        if (!empty($tournament_winner_details)) {
+                            $teamdet->winnerName = $tournament_winner_details["name"];
                         }
-                        else if ($startDateTimestamp > $currentTimestamp){
+                    } else {
+                        if ($startDateTimestamp > $currentTimestamp) {
                             $teamdet->status = "Not started";
                             $teamdet->statusColor = "green";
-                        }
-                        else if ($currentTimestamp >= $startDateTimestamp)
-                        {
-                            $teamdet->status = "In progress";
-                            $teamdet->statusColor = "black";
+                        } else {
+                            if ($currentTimestamp >= $startDateTimestamp) {
+                                $teamdet->status = "In progress";
+                                $teamdet->statusColor = "black";
+                            }
                         }
                     }
-                    
-                    $sports       = Sport::get();
-                    foreach ($sports as $sport)
-                    {
-                        $sports_array[$sport->id] = $sport->sports_name;
-                    }
+                }
+
+                $sports = Sport::get();
+                foreach ($sports as $sport) {
+                    $sports_array[$sport->id] = $sport->sports_name;
+                }
+            }
         }
-    }
-        
+
         return view('organization.tournaments')->with([
-                'tournaments'      => $tournaments,
-                'id'               => $id,
-                'orgInfo'          => $orgInfo,
-                'userId'           => $user_id,
-                'totalTournaments' => $total,
-                'sports_array'     => $sports_array,
-                'exist_array'      => $exist_array,
-                'follow_array'     => $follow_array,
-                'parent_tournaments' => $parent_tournaments,
-                'orgInfoObj'       => $orgInfoObj
+            'tournaments' => $tournaments,
+            'id' => $id,
+            'orgInfo' => $orgInfo,
+            'userId' => $user_id,
+            'totalTournaments' => $total,
+            'sports_array' => $sports_array,
+            'exist_array' => $exist_array,
+            'follow_array' => $follow_array,
+            'parent_tournaments' => $parent_tournaments,
+            'orgInfoObj' => $orgInfoObj
         ]);
     }
 
-    public function testTournaments(){
-            return Helper::updateOrganizationTeamsPoints();
+    public function testTournaments()
+    {
+        return Helper::updateOrganizationTeamsPoints();
     }
 
-    public function addGroupSportPoints($tournament_parent_id, ObjRequest $request){
-            $sports_id=$request->sport_id;
-            $max_index=$request->max_index;
+    public function addGroupSportPoints($tournament_parent_id, ObjRequest $request)
+    {
+        $sports_id = $request->sport_id;
+        $max_index = $request->max_index;
 
-            $parent_tournament=TournamentParent::find($tournament_parent_id);
-             $orgInfoObj   = Organization::find($parent_tournament->organization_id);
+        $parent_tournament = TournamentParent::find($tournament_parent_id);
+        $orgInfoObj = Organization::find($parent_tournament->organization_id);
 
-             $organization_id=$orgInfoObj->id;
+        $organization_id = $orgInfoObj->id;
 
 
-             $check=OrganizationGroupTeamPoint::whereTournamentParentId($tournament_parent_id)->whereSportsId($sports_id)->whereOrganizationId($organization_id)->first();
+        $check = OrganizationGroupTeamPoint::whereTournamentParentId($tournament_parent_id)->whereSportsId($sports_id)->whereOrganizationId($organization_id)->first();
 
-             if(!is_null($check)){
-                   
-                      return 'Sorry, this sports already exists';
-             }
+        if (!is_null($check)) {
 
-             else{
+            return 'Sorry, this sports already exists';
+        } else {
 
-                for($i=0; $i<=$max_index; $i++){
-                    $group_id=$request->{'group_'.$i};
-                    $points=$request->{'input_'.$i};
+            for ($i = 0; $i <= $max_index; $i++) {
+                $group_id = $request->{'group_' . $i};
+                $points = $request->{'input_' . $i};
 
-                    $model=new OrganizationGroupTeamPoint;
-                    $model->points=$points;
-                    $model->organization_group_id=$group_id;
-                    $model->tournament_parent_id=$tournament_parent_id;
-                    $model->organization_id=$organization_id;
-                    $model->sports_id=$sports_id;
-                    $model->save();
-                }
-             }
+                $model = new OrganizationGroupTeamPoint;
+                $model->points = $points;
+                $model->organization_group_id = $group_id;
+                $model->tournament_parent_id = $tournament_parent_id;
+                $model->organization_id = $organization_id;
+                $model->sports_id = $sports_id;
+                $model->save();
+            }
+        }
 
-        return view('organization.standing.overall_standing_display_sports', compact('orgInfo', 'orgInfoObj','parent_tournament'));
+        return view('organization.standing.overall_standing_display_sports',
+            compact('orgInfo', 'orgInfoObj', 'parent_tournament'));
+    }
+
+    public function organizationList($user_id = null)
+    {
+
+        $user = $user_id ? User::whereId($user_id)->first() : null;
+        if (!$user) {
+            $user = \Auth::user();
+        }
+
+        $managedOrgs = Organization::with(['teamplayers', 'photos', 'user'])
+            ->where('user_id', $user_id)
+            ->orderBy('isactive', 'desc')
+            ->get();
+
+        $followingIds = $user ? $user->folowers()->organizations()->lists('type_id') : [];
+        $followingOrgs = Organization::with(['teamplayers', 'photos', 'user'])->whereIn('id', $followingIds)
+            ->orderBy('isactive', 'desc')
+            ->get();
+
+        $joinedOrgs = Organization::with([
+            'teamplayers',
+            'photos',
+            'user',
+            'staff' => function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            }
+        ])
+            ->orderBy('isactive', 'desc')
+            ->get();
+
+        return view('organization.organizationList', [
+            'managedOrgs' => $managedOrgs,
+            'followingOrgs' => $followingOrgs,
+            'joinedOrgs' => $joinedOrgs,
+            'user' => $user
+
+        ]);
     }
 
 }
