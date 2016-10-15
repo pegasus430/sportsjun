@@ -635,6 +635,13 @@ class Helper {
         $tTwentyWinPercentage = 0;
         $testWinPercentage = 0;
 
+        for($i=5; $i<=45; $i=$i+5){
+            ${'winCount'.$i} = 0;
+            ${'looseCount'.$i} = 0;
+            ${'isTied'.$i} = 0;
+            ${$i.'WinPercentage'} = 0;
+        }
+
         if (count($teamStats)) {
             foreach ($teamStats as $stats) {
                 if($stats['match_type']=='odi') {
@@ -663,6 +670,21 @@ class Helper {
                         $isTiedTest = $isTiedTest + 1;
                     }
                 }
+
+                for($i=5; $i<=45; $i=$i+5){
+
+                 if($stats['match_type']==$i) {
+                    if ($stats['winner_id'] == $teamId) {
+                         ${'winCount'.$i} =  ${'winCount'.$i} + 1;
+                    } else if ($stats['looser_id'] == $teamId) {
+                         ${'looseCount'.$i} =  ${'looseCount'.$i} + 1;
+                    } else if ($stats['is_tied']) {
+                       ${'isTied'.$i} = ${'isTied'.$i} + 1;
+                    }
+                }
+                        
+                }
+
             }
         }
         $odiTotalMatches = $winCountOdi + $looseCountOdi + $isTiedOdi;
@@ -683,7 +705,21 @@ class Helper {
         }
         $testStatsArray = ['totalMatches' => $testTotalMatches, 'winCount' => $winCountTest, 'looseCount' => $looseCountTest, 'isTied' => $isTiedTest, 'wonPercentage' => $testWinPercentage];
 
-        $finalArray = ['odiStatsArray'=>$odiStatsArray, 'tTwentyStatsArray'=>$tTwentyStatsArray, 'testStatsArray'=>$testStatsArray];
+           for($i=5; $i<=45; $i=$i+5){
+
+        ${$i.'TotalMatches'} = ${'winCount'.$i} + ${'looseCount'.$i}+ ${'isTied'.$i};
+        if(${$i.'TotalMatches'}) {
+            ${$i.'WinPercentage'}  = number_format((${'winCount'.$i}/ (${$i.'TotalMatches'})) * 100, 2);
+        }
+        ${$i.'StatsArray'} = ['totalMatches' => ${$i.'TotalMatches'}, 'winCount' => ${'winCount'.$i} , 'looseCount' => ${'looseCount'.$i}, 'isTied' => $isTiedTtewnty, 'wonPercentage' =>  ${$i.'WinPercentage'} ];
+                        
+                }
+
+        $finalArray = ['odiStatsArray'=>$odiStatsArray, 'tTwentyStatsArray'=>$tTwentyStatsArray, 'testStatsArray'=>$testStatsArray ];
+
+          for($i=5; $i<=45; $i=$i+5){
+                $finalArray[$i.'StatsArray']=${$i.'StatsArray'};
+          }
 
         return $finalArray;
     }
