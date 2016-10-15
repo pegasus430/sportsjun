@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\Helper;
+use App\Model\Followers;
 use DB;
 use Illuminate\Http\Request;
 
@@ -27,39 +29,34 @@ class TournamentApiController extends BaseApiController
     }
 
 
-    public function index()
+    public function index($filter = false)
     {
-        $tournaments = Tournaments::
-        join('tournament_parent', function ($join) {
-            $join->on('tournaments.tournament_parent_id', '=', 'tournament_parent.id');
-        })
-            ->select([
-                'tournaments.name',
-                'tournaments.description',
-                'tournaments.tournament_parent_name',
-                'tournaments.address',
-                'tournaments.contact_number',
-                'tournaments.contact_name',
-                'tournaments.location',
-                'tournaments.zip',
-                'tournaments.city',
-                'tournaments.country',
-                'tournaments.type',
-                'tournaments.match_type',
-                'tournaments.player_type',
-                'tournaments.schedule_type',
-                'tournaments.game_type',
-                'tournaments.start_date',
-                'tournaments.end_date',
-                'tournaments.status',
-
-                DB::raw('COALESCE(tournaments.logo,tournament_parent.logo) as logo'),
-                'tournament_parent.logo as tournament_parent_logo'
-            ])
-            ->paginate(20);
-
-
-        return $this->ApiResponse($tournaments->toArray());
+        $tournaments = Tournaments::joinParent();
+        $user = \Auth::user();
+        if ($filter) {
+            if ($user) {
+                switch ($filter) {
+                    case 'managed':
+                        $tournament_ids = $user->getManagedTournamentsIds();
+                        $tournaments = $tournaments->whereIn('tournaments.id',$tournament_ids);
+                        break;
+                    case 'joined':
+                        $tournament_ids = $user->getJoinedTournamentsIds();
+                        $tournaments = $tournaments->whereIn('tournaments.id',$tournament_ids);
+                        break;
+                    case 'following':
+                        $tournament_ids =  $user->folowers()->tournaments()->lists('type_id');
+                        $tournaments = $tournaments->whereIn('tournaments.id',$tournament_ids);
+                        break;
+                default:
+                    $tournaments->where(DB::raw('false'));
+                    break;
+                }
+            }   else {
+                $tournaments->where(DB::raw('false'));
+            }
+        }
+        return $this->ApiResponse($tournaments->paginate(20)->toArray());
     }
 
     /**

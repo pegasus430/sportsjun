@@ -18,7 +18,9 @@ class Followers extends Model {
 	protected $morphClass = 'followers';	
 	protected $fillable = array('user_id','type','type_id');
 	protected $dates = ['deleted_at'];
-	
+
+    static $TYPE_TOURNAMENTS = 'tournament';
+
 	//Get Managing and joined teams
 	public function getFollowingList($user_id,$type)
 	{		
@@ -30,4 +32,9 @@ class Followers extends Model {
 		return $team_array;
 	}
 	//End
+
+    public function scopeTournaments($query){
+        return $query->where('type',self::$TYPE_TOURNAMENTS);
+    }
+
 }
