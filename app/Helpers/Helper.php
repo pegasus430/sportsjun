@@ -77,7 +77,50 @@ class Helper {
                 $insertedphotoids[]=$photo->id;
             }
         }
-        return 	$insertedphotoids;
+        return $insertedphotoids;
+    }
+
+    public static function uploadImage(
+        UploadedFile $image,
+        $photoType,
+        $id,
+        $albumID = '',
+        $coverPic = '',
+        $imageableType,
+        $user_id = '',
+        $action = '',
+        $action_id = '',
+        $image_type = ''
+    ) {
+        $newFilePath = public_path('uploads/' . $photoType . '/');
+        if ($action != '' && $action_id != '')//changed for gallery page
+        {
+            $newFilePath = $newFilePath . '/' . $image_type . '/' . $action_id . '/';
+        }
+        if (!file_exists($newFilePath)) {
+            File::makeDirectory($newFilePath, $mode = 0777, true, true);
+        }
+
+        $newFileName = str_random(20).'.'.$image->getClientOriginalExtension();
+        try {
+            $image->move($newFilePath, $newFileName);
+            $photosArray = array(
+                'user_id' => $user_id,
+                'album_id' => $albumID,
+                'title' => $image->getClientOriginalName(),
+                'url' => $newFileName,
+                'is_album_cover' => $coverPic,
+                'imageable_id' => $id,
+                'imageable_type' => $imageableType
+            );
+
+            $photo = Photo::create($photosArray);
+            return $photo->id;
+        } catch(FileException $ex){
+            Log::error($ex->getMessage());
+        }
+        return false;
+
     }
 
     public static function printQueries(){
