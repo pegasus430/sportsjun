@@ -101,6 +101,7 @@ Route::get('team/removeteammanager/{team_id}/{user_id}', [
     'uses' => 'User\TeamController@removeasteammanager',
 ]);
 
+//TODO: maketeam* methods should be POST instead GET
 //to make as captain
 Route::get('team/maketeamcaptain/{team_id}/{user_id}', [
     'as'   => 'team/maketeamcaptain',
@@ -112,6 +113,19 @@ Route::get('team/maketeamvicecaptain/{team_id}/{user_id}', [
     'as'   => 'team/maketeamvicecaptain',
     'uses' => 'User\TeamController@makeasteamvicecaptain',
 ]);
+
+//to make as coach
+Route::get('team/maketeamcoach/{team_id}/{user_id}', [
+    'as'   => 'team/maketeamcoach',
+    'uses' => 'User\TeamController@makeasteamcoach',
+]);
+
+//to make as coach
+Route::get('team/maketeamphysio/{team_id}/{user_id}', [
+    'as'   => 'team/maketeamphysio',
+    'uses' => 'User\TeamController@makeasteamphysio',
+]);
+
 
 //to send invite reminder
 Route::get('team/sendinvitereminder/{team_id}/{user_id}', [

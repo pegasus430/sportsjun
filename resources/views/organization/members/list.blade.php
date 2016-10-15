@@ -17,7 +17,7 @@
                 <div class="sportsjun-datafilter">
                     <form method="GET">
                         <div class="form-group">
-                            <label>Find players in your organization</label>
+                            <label>Filter by teams in your organization</label>
                             <div class="input-group">
                                 <input id="filter_team" class="form-control" name="filter-team" value="{{ $filter_team }}" placeholder="TEAM"/>
                                 <span class="input-group-btn"><button class="btn btn-tiny btn-primary "

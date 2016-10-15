@@ -40,13 +40,12 @@
                                     {!! empty($t->isactive)?"<i class='fa fa-check'></i>":"<i class='fa fa-ban'></i>" !!}</a>
                             </div>
                         @endif
-                        <div class="col-xs-4">
-                            <p>Owner's name: </p>
-                            <p>Manager name: </p>
-                            <p>Coach: </p>
+                        <div class="col-xs-4 teams-teamplayers">
+                            <p><b>Owner's name:</b> {{ $t->ownersName }} </p>
+                            <p><b>Manager name:</b> {{ $t->managersName }} </p>
+                            <p><b>Coach:</b> {{ $t->coachsName }} </p>
                         </div>
                     </div>
-
                     <div class="clearfix"></div>
                     <p class="lt-grey">{{ !empty($t->description)?$t->description:'' }}</p>
                     <br>

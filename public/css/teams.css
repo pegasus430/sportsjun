@@ -217,3 +217,7 @@
 	.sm-center .pull-left,
 	.sm-center .pull-right {width: 100%;}
 }
+
+.teams-teamplayers{
+	font-weight:normal;
+}

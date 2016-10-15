@@ -10,14 +10,19 @@
 
         </td>
         <td>
-            @foreach ($member->userdetails as $teamPlayer)
-                {{object_get($teamPlayer,'team.name')}}@if ($teamPlayer != $member->userdetails->last()), @endif
+            <?php
+                $teamNames = array_unique($member->userdetails->lists('team.name')->toArray());
+            ?>
+            @foreach ($teamNames as $teamName)
+                {{$teamName}}@if ($teamName != last($teamNames)), @endif
             @endforeach
         </td>
         <td>
-            @foreach ($member->userdetails as $teamPlayer)
-                {{object_get($teamPlayer,'team.sports.sports_name')}}@if ($teamPlayer != $member->userdetails->last())
-                    , @endif
+            <?php
+                $sports = array_unique($member->userdetails->lists('team.sports.sports_name')->toArray());
+            ?>
+            @foreach ($sports as $sport)
+                {{$sport }}@if ($sport != last($sports)), @endif
             @endforeach
         </td>
         <td></td>

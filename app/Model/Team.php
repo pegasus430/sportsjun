@@ -192,6 +192,19 @@ class Team extends Model
         return self::logoImage($this->id);
     }
 
+    public function getOwnersNameAttribute(){
+        if( $this->teamplayers)
+            return $this->teamplayers->where('role','owner')->implode('user.name',',');
+    }
 
+    public function getManagersNameAttribute(){
+        if( $this->teamplayers)
+            return $this->teamplayers->where('role','manager')->implode('user.name',',');
+    }
+
+    public function getCoachsNameAttribute(){
+        if( $this->teamplayers)
+            return $this->teamplayers->where('role','coach')->implode('user.name',',');
+    }
 
 }
