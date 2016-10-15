@@ -120,8 +120,8 @@ class UserApiController extends BaseApiController
                 if($logo) {
                     $albumID = 1;
                     $coverPic = 1;
-                    $image_id = Helper::uploadPhotos($logo, config('constants.PHOTO_PATH.USERS_PROFILE'), $id,
-                        $albumID, $coverPic, config('constants.PHOTO.USER_PHOTO'), $user_id = $id);
+                    $image_id = Helper::uploadImage($logo, config('constants.PHOTO_PATH.USERS_PROFILE'), $id,
+                        $albumID, $coverPic, config('constants.PHOTO.USER_PHOTO'), $id);
 
                     $logo=Photo::select('url')->where('imageable_type',config('constants.PHOTO.USER_PHOTO'))
                                                 ->where('imageable_id',  $id )
