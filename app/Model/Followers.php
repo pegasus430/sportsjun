@@ -21,6 +21,9 @@ class Followers extends Model {
 
     static $TYPE_TOURNAMENTS = 'tournament';
 
+    static $TYPE_ORGANIZATIONS = 'organization';
+
+
 	//Get Managing and joined teams
 	public function getFollowingList($user_id,$type)
 	{		
@@ -35,6 +38,10 @@ class Followers extends Model {
 
     public function scopeTournaments($query){
         return $query->where('type',self::$TYPE_TOURNAMENTS);
+    }
+
+    public function scopeOrganizations($query){
+        return $query->where('type',self::$TYPE_ORGANIZATIONS);
     }
 
 }

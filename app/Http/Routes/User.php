@@ -25,6 +25,12 @@ Route::get('organizationTeamlist/{id}/{group_id?}', [
     'uses' => 'User\TeamController@organizationTeamlist',
 ]);
 
+Route::get('ogranization/organizations/{user_id?}', [
+    'as'   => 'ogranizations',
+    'uses' => 'User\OrganizationController@organizationList',
+]);
+
+
 Route::group(['prefix' => 'organization/{id}'], function () {
     Route::get('staff', [
         'as'   => 'organization.staff',

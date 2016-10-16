@@ -118,7 +118,9 @@ class Helper
             File::makeDirectory($newFilePath, $mode = 0777, true, true);
         }
 
-        $newFileName = str_random(20).'.'.$image->getClientOriginalExtension();
+
+        $newFileName = str_random(20) . '.' . $image->getClientOriginalExtension();
+
         try {
             $image->move($newFilePath, $newFileName);
             $photosArray = array(
@@ -133,7 +135,9 @@ class Helper
 
             $photo = Photo::create($photosArray);
             return $photo->id;
-        } catch(FileException $ex){
+
+        } catch (FileException $ex) {
+
             Log::error($ex->getMessage());
         }
         return false;
@@ -691,11 +695,11 @@ class Helper
         $tTwentyWinPercentage = 0;
         $testWinPercentage = 0;
 
-        for($i=5; $i<=45; $i=$i+5){
-            ${'winCount'.$i} = 0;
-            ${'looseCount'.$i} = 0;
-            ${'isTied'.$i} = 0;
-            ${$i.'WinPercentage'} = 0;
+        for ($i = 5; $i <= 45; $i = $i + 5) {
+            ${'winCount' . $i} = 0;
+            ${'looseCount' . $i} = 0;
+            ${'isTied' . $i} = 0;
+            ${$i . 'WinPercentage'} = 0;
         }
 
         if (count($teamStats)) {
@@ -742,18 +746,22 @@ class Helper
                     }
                 }
 
-                for($i=5; $i<=45; $i=$i+5){
+                for ($i = 5; $i <= 45; $i = $i + 5) {
 
-                 if($stats['match_type']==$i) {
-                    if ($stats['winner_id'] == $teamId) {
-                         ${'winCount'.$i} =  ${'winCount'.$i} + 1;
-                    } else if ($stats['looser_id'] == $teamId) {
-                         ${'looseCount'.$i} =  ${'looseCount'.$i} + 1;
-                    } else if ($stats['is_tied']) {
-                       ${'isTied'.$i} = ${'isTied'.$i} + 1;
+                    if ($stats['match_type'] == $i) {
+                        if ($stats['winner_id'] == $teamId) {
+                            ${'winCount' . $i} = ${'winCount' . $i} + 1;
+                        } else {
+                            if ($stats['looser_id'] == $teamId) {
+                                ${'looseCount' . $i} = ${'looseCount' . $i} + 1;
+                            } else {
+                                if ($stats['is_tied']) {
+                                    ${'isTied' . $i} = ${'isTied' . $i} + 1;
+                                }
+                            }
+                        }
                     }
-                }
-                        
+
                 }
 
             }
@@ -795,21 +803,32 @@ class Helper
         ];
 
 
-           for($i=5; $i<=45; $i=$i+5){
+        for ($i = 5; $i <= 45; $i = $i + 5) {
+            ${$i . 'TotalMatches'} = ${'winCount' . $i} + ${'looseCount' . $i} + ${'isTied' . $i};
+            if (${$i . 'TotalMatches'}) {
+                ${$i . 'WinPercentage'} = number_format((${'winCount' . $i} / (${$i . 'TotalMatches'})) * 100, 2);
+            }
+            ${$i . 'StatsArray'} = [
+                'totalMatches' => ${$i . 'TotalMatches'},
+                'winCount' => ${'winCount' . $i},
+                'looseCount' => ${'looseCount' . $i},
+                'isTied' => $isTiedTtewnty,
+                'wonPercentage' => ${$i . 'WinPercentage'}
+            ];
 
-        ${$i.'TotalMatches'} = ${'winCount'.$i} + ${'looseCount'.$i}+ ${'isTied'.$i};
-        if(${$i.'TotalMatches'}) {
-            ${$i.'WinPercentage'}  = number_format((${'winCount'.$i}/ (${$i.'TotalMatches'})) * 100, 2);
+
         }
-        ${$i.'StatsArray'} = ['totalMatches' => ${$i.'TotalMatches'}, 'winCount' => ${'winCount'.$i} , 'looseCount' => ${'looseCount'.$i}, 'isTied' => $isTiedTtewnty, 'wonPercentage' =>  ${$i.'WinPercentage'} ];
-                        
-                }
 
-        $finalArray = ['odiStatsArray'=>$odiStatsArray, 'tTwentyStatsArray'=>$tTwentyStatsArray, 'testStatsArray'=>$testStatsArray ];
+        $finalArray = [
+            'odiStatsArray' => $odiStatsArray,
+            'tTwentyStatsArray' => $tTwentyStatsArray,
+            'testStatsArray' => $testStatsArray
+        ];
 
-          for($i=5; $i<=45; $i=$i+5){
-                $finalArray[$i.'StatsArray']=${$i.'StatsArray'};
-          }
+        for ($i = 5; $i <= 45; $i = $i + 5) {
+            $finalArray[$i . 'StatsArray'] = ${$i . 'StatsArray'};
+        }
+
 
         return $finalArray;
     }
@@ -1038,9 +1057,9 @@ class Helper
         return $sportName;
     }
 
-    public static function getImagePath($imgsrc, $imgtype, $details ='')
+    public static function getImagePath($imgsrc, $imgtype, $details = '')
     {
-        if (!$imgsrc || $imgsrc == '' ) {
+        if (!$imgsrc || $imgsrc == '') {
             return '/images/default-profile-pic.jpg';
         }
         $uploads = 'uploads';
@@ -1062,7 +1081,7 @@ class Helper
             case 'gallery/gallery_organization':
             case 'gallery/gallery_match':
             case 'user_profile':
-                $id ='';
+                $id = '';
                 if (isset($details['id'])) {
                     $id = $details['id'];
                 }
@@ -1074,12 +1093,13 @@ class Helper
 
     public static function Images($imgsrc, $imgtype, $details = '', $from_local = false)
     {
-        $path = self::getImagePath($imgsrc, $imgtype,$details);
-        return self::makeImageHtml($path,$details,$from_local);
+        $path = self::getImagePath($imgsrc, $imgtype, $details);
+        return self::makeImageHtml($path, $details, $from_local);
 
     }
 
-    public static function makeImageHtml($path, $details = '', $from_local = false){
+    public static function makeImageHtml($path, $details = '', $from_local = false)
+    {
         if ($from_local) {
             $globalurl = public_path() . '/';
         } else {
@@ -1107,11 +1127,10 @@ class Helper
         } else {
             $title = '';
         }
-        $url = $globalurl.$path;
+        $url = $globalurl . $path;
         $img = "<img data-original='$url' src='$url' title='$title' onerror=this.onerror=null;this.src=\"$globalurl/images/default-profile-pic.jpg\" height=$height  width=$width   class='$class lazy' >";
         return $img;
     }
-
 
 
     public static function ImageCheck($path)
@@ -1520,6 +1539,7 @@ class Helper
                 return false;
             } else {
 
+
                 //if schedule type is player
                 $schedule_type = $matchData['schedule_type']; // if schedule type is player
                 if ($schedule_type == 'player') {
@@ -1895,6 +1915,7 @@ class Helper
         return $model;
     }
 
+
     public static function  sendEmailPlayers($match_details=[], $match_type=''){ 
 
                     $team_a_id=explode(',', $match_details['player_a_ids']);
@@ -2239,7 +2260,7 @@ class Helper
 
                 break;
 
-            case in_array($sports_id, [3, 5, 13, 17, 14, 7]):
+            case in_array($sports_id, [3, 5, 13, 17, 7]):
                 //die(json_encode($team_id));
                 foreach ($match_models as $key => $match) {
 
@@ -2273,6 +2294,7 @@ class Helper
             case in_array($sports_id, [6,14,15,16]):
             foreach ($match_models as $key => $match) {
                   if ($match->a_id == $team_id) {         //sets the home and againts team
+
                         $gf_team = $match->a_id;
                         $ga_team = $match->b_id;
                     } elseif ($match->b_id == $team_id) {
@@ -2295,6 +2317,7 @@ class Helper
 
         return $details;
     }
+
 
 
     public static function displayEmptyDash($number){
