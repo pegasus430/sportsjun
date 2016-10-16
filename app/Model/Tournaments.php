@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\Helpers\Helper;
 use DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -70,6 +71,18 @@ class Tournaments extends Model
         'number_of_rubber'
     ];
 
+    protected $appends = ['logoImage'];
+
+    public function scopeJoinParent($query)
+    {
+        return $query->join('tournament_parent', function ($join) {
+                $join->on('tournaments.tournament_parent_id', '=', 'tournament_parent.id');
+            })
+            ->select([
+                'tournaments.*',
+                'tournament_parent.logo as tournament_parent_logo'
+            ]);
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -87,19 +100,22 @@ class Tournaments extends Model
 
     public function logo()
     {
-        return $this->hasOne('App\Model\Photo', 'imageable_id', 'tournament_parent_id')->where('imageable_type', 'tournaments')->where('is_album_cover', 1)->select('imageable_id','url');
+        return $this->hasOne('App\Model\Photo', 'imageable_id', 'tournament_parent_id')->where('imageable_type',
+            'tournaments')->where('is_album_cover', 1)->select('imageable_id', 'url');
     }
 
     public function photos()
     {
         $this->morphClass = 'tournaments';
-        return $this->morphMany('App\Model\Photo', 'imageable')->where('imageable_type', 'tournaments')->where('is_album_cover', 1);
+        return $this->morphMany('App\Model\Photo', 'imageable')->where('imageable_type',
+            'tournaments')->where('is_album_cover', 1);
     }
 
     public function photo()
     {
         $this->morphClass = 'form_gallery_tournaments';
-        return $this->morphMany('App\Model\Photo', 'imageable')->where('imageable_type', 'form_gallery_tournaments')->where('is_album_cover', 1);
+        return $this->morphMany('App\Model\Photo', 'imageable')->where('imageable_type',
+            'form_gallery_tournaments')->where('is_album_cover', 1);
     }
 
     public function groups()
@@ -120,21 +136,18 @@ class Tournaments extends Model
     public function searchResults($req_params)
     {
         $offset = !empty($req_params['offset']) ? $req_params['offset'] : 0;
-        $limit  = !empty($req_params['limit']) ? $req_params['limit'] : config('constants.LIMIT');
-        $query  = $this->with('logo')->search($req_params['search_by']);
-        if (trim($req_params['sport']) != '')
-        {
+        $limit = !empty($req_params['limit']) ? $req_params['limit'] : config('constants.LIMIT');
+        $query = $this->with('logo')->search($req_params['search_by']);
+        if (trim($req_params['sport']) != '') {
             $query = $this->with('logo')
                 ->search($req_params['search_by'])
                 ->whereIn('sports_id', explode(",", $req_params['sport']));
         }
-        if ($req_params['amount'] != '')
-        {
+        if ($req_params['amount'] != '') {
             $amount = explode("-", $req_params['amount']);
-            $query  = $query->whereBetween('enrollment_fee', $amount);
+            $query = $query->whereBetween('enrollment_fee', $amount);
         }
-        if (trim($req_params['search_city_id']) != '')
-        {
+        if (trim($req_params['search_city_id']) != '') {
             $query = $query->where('city_id', trim($req_params['search_city_id']));
         }
 
@@ -143,63 +156,70 @@ class Tournaments extends Model
         //echo $query;exit;	
 
         $totalresult = $query->get();
-        $total       = count($totalresult);
-        $result      = $query->limit($limit)->offset($offset)->orderBy('updated_at', 'desc')->get();
-        $response    = array(
+        $total = count($totalresult);
+        $result = $query->limit($limit)->offset($offset)->orderBy('updated_at', 'desc')->get();
+        $response = array(
             'result' => $result,
-            'total' => $total);
+            'total' => $total
+        );
         return $response;
     }
 
-    function getGroupPoints($tournament_id,$organization_group_id){
-            $points=OrganizationGroupTeamPoint::whereTournamentId($tournament_id)->whereOrganizationGroupId($organization_group_id)->first();
-            if(empty($points)){
-                $team_id = DB::table('organization_group_teams')
-                            ->where('organization_group_id',$organization_group_id)
-                            ->lists('team_id');
-                $teams = null;
-                if ($team_id) {
-                    $teams = TournamentGroupTeams::whereTournamentId($tournament_id);
-                    if (is_array($team_id)) {
-                        $teams->whereIn('team_id', $team_id);
-                    }
-                    else {
-                        $teams->where('team_id', $team_id);
-                    }
-                    $teams = $teams->get();
+    function getGroupPoints($tournament_id, $organization_group_id)
+    {
+        $points = OrganizationGroupTeamPoint::whereTournamentId($tournament_id)->whereOrganizationGroupId($organization_group_id)->first();
+        if (empty($points)) {
+            $team_id = DB::table('organization_group_teams')
+                ->where('organization_group_id', $organization_group_id)
+                ->lists('team_id');
+            $teams = null;
+            if ($team_id) {
+                $teams = TournamentGroupTeams::whereTournamentId($tournament_id);
+                if (is_array($team_id)) {
+                    $teams->whereIn('team_id', $team_id);
+                } else {
+                    $teams->where('team_id', $team_id);
                 }
-                if (!$teams) {
-                    return 0;
-                }
+                $teams = $teams->get();
+            }
+            if (!$teams) {
+                return 0;
+            }
 
-                $final_points = $teams->sum('final_points');
-                $points = $final_points ? $final_points : $teams->sum('points');
-                return $points;
-            }
-            else{
-                $points=$points->points;
-            }
+            $final_points = $teams->sum('final_points');
+            $points = $final_points ? $final_points : $teams->sum('points');
             return $points;
+        } else {
+            $points = $points->points;
+        }
+        return $points;
 
     }
 
-    function finalMatches(){
-            return $this->hasMany('App\Model\MatchSchedule')->where('tournament_round_number','!=', null);
+    function finalMatches()
+    {
+        return $this->hasMany('App\Model\MatchSchedule')->where('tournament_round_number', '!=', null);
     }
 
-    function settings(){
-            return $this->hasOne('App\Model\TournamentMatchPreference','tournament_id');
+    function settings()
+    {
+        return $this->hasOne('App\Model\TournamentMatchPreference', 'tournament_id');
     }
 
-    function matches(){
-            return $this->hasMany('App\Model\MatchSchedule' , 'tournament_id');
+    function matches()
+    {
+        return $this->hasMany('App\Model\MatchSchedule', 'tournament_id');
     }
 
     function followers(){
             return $this->hasMany('App\Model\Followers','type_id')->whereType('tournament');
     }
 
-
-
+    public function getLogoImageAttribute()
+    {
+        $logo = $this->logo ? $this->logo :
+            ($this->tournament_parent_logo ?  $this->tournament_parent_logo : object_get($this->tournamentParent,'logo')) ;
+        return Helper::getImagePath($logo, 'teams');
+    }
 
 }

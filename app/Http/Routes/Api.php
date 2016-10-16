@@ -22,8 +22,8 @@ Route::group(['prefix' => '/api/v1', 'middleware' => 'cors'], function ($router)
         $router->resource('/teams', 'Api\TeamApiController');
 
         //handle tournaments
-        $router->get('/tournaments', 'Api\TournamentApiController@index');
-        $router->get('/tournaments/{id}', 'Api\TournamentApiController@show');
+        $router->get('/tournaments/{filter?}', 'Api\TournamentApiController@index')->where('filter', '[a-zA-Z]+');;
+        $router->get('/tournaments/{id}', 'Api\TournamentApiController@show')->where('id', '[0-9]+');;
         $router->get('/tournaments/{id}/parent', 'Api\TournamentApiController@parent');
         $router->get('/tournaments/{id}/follow', 'Api\TournamentApiController@follow_tournament');
         $router->get('/tournaments/{id}/un_follow', 'Api\TournamentApiController@unfollow_tournament');
