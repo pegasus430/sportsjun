@@ -12,6 +12,20 @@
             </tr>
             </thead>
         <tbody>
+
+     
+        @for($i=5; $i<=45; $i=$i+5)
+            @if(count($statsArray[$i.'StatsArray'])) 
+            <tr>
+            <td>{{$i}}</td>
+            <td>{{ $statsArray[$i.'StatsArray']['totalMatches'] }}</td>
+            <td>{{ $statsArray[$i.'StatsArray']['winCount'] }}</td>
+            <td>{{ $statsArray[$i.'StatsArray']['looseCount'] }}</td>
+            <td>{{ $statsArray[$i.'StatsArray']['isTied'] }}</td>
+            <td>{{ $statsArray[$i.'StatsArray']['wonPercentage'] }}</td>
+            </tr>
+            @endif
+        @endfor
             @if(count($statsArray['odiStatsArray'])) 
             <tr>
             <td>{{ config('constants.ENUM.SCHEDULE.MATCH_TYPE.CRICKET.odi') }}</td>

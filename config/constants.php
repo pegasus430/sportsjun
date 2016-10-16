@@ -64,7 +64,11 @@ return [
                 [
                         'MATCH_TYPE'  => [
                                 'CRICKET'      => ['odi' => 'ODI', 't20' => 'T20',
-                                        'test' => 'TEST'],
+                                        'test' => 'TEST',
+                                        '5'=>'5',
+                                        '10'=>'10',
+                                        '15'=>'15','25'=>'25',
+                                        '30'=>'30','35'=>'35','45'=>'45'],
                                 'TENNIS'       => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES'],
                                 'TABLE TENNIS' => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES'],
                                 'FOOTBALL'     => ['other' => 'OTHERS'],
@@ -78,7 +82,11 @@ return [
                 [
                         'MATCH_TYPE'  => [
                                 'CRICKET'      => ['odi' => 'ODI', 't20' => 'T20',
-                                        'test' => 'TEST', 'any'=>'ANY'],
+                                        'test' => 'TEST', 
+                                        '5'=>'5',
+                                        '10'=>'10',
+                                        '15'=>'15','25'=>'25',
+                                        '30'=>'30','35'=>'35','45'=>'45','any'=>'ANY'],
                                 'TENNIS'       => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES',
                                          'any'=>'ANY'],
 

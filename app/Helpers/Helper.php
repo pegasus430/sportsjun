@@ -118,7 +118,7 @@ class Helper
             File::makeDirectory($newFilePath, $mode = 0777, true, true);
         }
 
-        $newFileName = str_random(20).'.'.$image->getClientOriginalExtension();
+        $newFileName = str_random(20) . '.' . $image->getClientOriginalExtension();
         try {
             $image->move($newFilePath, $newFileName);
             $photosArray = array(
@@ -133,7 +133,7 @@ class Helper
 
             $photo = Photo::create($photosArray);
             return $photo->id;
-        } catch(FileException $ex){
+        } catch (FileException $ex) {
             Log::error($ex->getMessage());
         }
         return false;
@@ -691,6 +691,13 @@ class Helper
         $tTwentyWinPercentage = 0;
         $testWinPercentage = 0;
 
+        for ($i = 5; $i <= 45; $i = $i + 5) {
+            ${'winCount' . $i} = 0;
+            ${'looseCount' . $i} = 0;
+            ${'isTied' . $i} = 0;
+            ${$i . 'WinPercentage'} = 0;
+        }
+
         if (count($teamStats)) {
             foreach ($teamStats as $stats) {
                 if ($stats['match_type'] == 'odi') {
@@ -734,6 +741,25 @@ class Helper
                         }
                     }
                 }
+
+                for ($i = 5; $i <= 45; $i = $i + 5) {
+
+                    if ($stats['match_type'] == $i) {
+                        if ($stats['winner_id'] == $teamId) {
+                            ${'winCount' . $i} = ${'winCount' . $i} + 1;
+                        } else {
+                            if ($stats['looser_id'] == $teamId) {
+                                ${'looseCount' . $i} = ${'looseCount' . $i} + 1;
+                            } else {
+                                if ($stats['is_tied']) {
+                                    ${'isTied' . $i} = ${'isTied' . $i} + 1;
+                                }
+                            }
+                        }
+                    }
+
+                }
+
             }
         }
         $odiTotalMatches = $winCountOdi + $looseCountOdi + $isTiedOdi;
@@ -772,11 +798,31 @@ class Helper
             'wonPercentage' => $testWinPercentage
         ];
 
+        for ($i = 5; $i <= 45; $i = $i + 5) {
+            ${$i . 'TotalMatches'} = ${'winCount' . $i} + ${'looseCount' . $i} + ${'isTied' . $i};
+            if (${$i . 'TotalMatches'}) {
+                ${$i . 'WinPercentage'} = number_format((${'winCount' . $i} / (${$i . 'TotalMatches'})) * 100, 2);
+            }
+            ${$i . 'StatsArray'} = [
+                'totalMatches' => ${$i . 'TotalMatches'},
+                'winCount' => ${'winCount' . $i},
+                'looseCount' => ${'looseCount' . $i},
+                'isTied' => $isTiedTtewnty,
+                'wonPercentage' => ${$i . 'WinPercentage'}
+            ];
+
+        }
+
         $finalArray = [
             'odiStatsArray' => $odiStatsArray,
             'tTwentyStatsArray' => $tTwentyStatsArray,
             'testStatsArray' => $testStatsArray
         ];
+
+        for ($i = 5; $i <= 45; $i = $i + 5) {
+            $finalArray[$i . 'StatsArray'] = ${$i . 'StatsArray'};
+        }
+
 
         return $finalArray;
     }
@@ -1005,9 +1051,9 @@ class Helper
         return $sportName;
     }
 
-    public static function getImagePath($imgsrc, $imgtype, $details ='')
+    public static function getImagePath($imgsrc, $imgtype, $details = '')
     {
-        if (!$imgsrc || $imgsrc == '' ) {
+        if (!$imgsrc || $imgsrc == '') {
             return '/images/default-profile-pic.jpg';
         }
         $uploads = 'uploads';
@@ -1029,7 +1075,7 @@ class Helper
             case 'gallery/gallery_organization':
             case 'gallery/gallery_match':
             case 'user_profile':
-                $id ='';
+                $id = '';
                 if (isset($details['id'])) {
                     $id = $details['id'];
                 }
@@ -1041,12 +1087,13 @@ class Helper
 
     public static function Images($imgsrc, $imgtype, $details = '', $from_local = false)
     {
-        $path = self::getImagePath($imgsrc, $imgtype,$details);
-        return self::makeImageHtml($path,$details,$from_local);
+        $path = self::getImagePath($imgsrc, $imgtype, $details);
+        return self::makeImageHtml($path, $details, $from_local);
 
     }
 
-    public static function makeImageHtml($path, $details = '', $from_local = false){
+    public static function makeImageHtml($path, $details = '', $from_local = false)
+    {
         if ($from_local) {
             $globalurl = public_path() . '/';
         } else {
@@ -1074,11 +1121,10 @@ class Helper
         } else {
             $title = '';
         }
-        $url = $globalurl.$path;
+        $url = $globalurl . $path;
         $img = "<img data-original='$url' src='$url' title='$title' onerror=this.onerror=null;this.src=\"$globalurl/images/default-profile-pic.jpg\" height=$height  width=$width   class='$class lazy' >";
         return $img;
     }
-
 
 
     public static function ImageCheck($path)
@@ -1944,7 +1990,7 @@ class Helper
                 $scores = $match_details->scores;
                 return $scores->{$a_id . '_score'} . ' sets - ' . $scores->{$b_id . '_score'} . ' sets';
                 break;
-            case in_array($sports_id, ['13', '14', '17', '7']):           //squash
+            case in_array($sports_id, ['13', '17', '7']):           //squash
                 $scores = $match_details->scores;
                 return $scores->{$a_id . '_score'} . ' sets - ' . $scores->{$b_id . '_score'} . ' sets';
                 break;
@@ -1954,7 +2000,7 @@ class Helper
             case '11':           //hockey
                 return $match_details->{$a_id}->goals . ' - ' . $match_details->{$b_id}->goals;
                 break;
-            case in_array($sports_id, [6, 15, 16]):           //basketball
+            case in_array($sports_id, [6, 14, 15, 16]):           //basketball
                 return $match_details->{$a_id}->total_points . ' - ' . $match_details->{$b_id}->total_points;
                 break;
             case '1':           //cricket
