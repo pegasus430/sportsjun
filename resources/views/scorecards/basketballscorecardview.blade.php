@@ -15,6 +15,12 @@
     $a_fouls=0;
     $b_fouls=0;
 
+     $match_settings=Helper::getMatchSettings($match_data[0]['tournament_id'],$match_data[0]['sports_id']);
+    $number_of_quarters=$match_settings->number_of_sets;
+
+    $type_name = 'Quarter';
+    $short_type_name='Qtr';
+
     if(isset($preferences->number_of_quarters)){
         $number_of_quarters=$preferences->number_of_quarters;
         $quarter_time=$preferences->quarter_time;
@@ -27,10 +33,15 @@
         $b_fouls=$match_details->{$team_b_id}->fouls;       
     }
 
-    else {
-        $number_of_quarters = 4; 
+    else {       
         $quarter_time = 20;
     }
+
+    if($number_of_quarters==2){
+        $type_name='Half';
+        $short_type_name='Half';
+    }
+    
 
 
 
@@ -250,7 +261,7 @@
                                 <div class="form-group">
                                     <label>Winner is Not Updated</label>
 
-                                    QUARTER {{$match_data[0]['selected_half_or_quarter']}}
+                                    {{$type_name}} {{$match_data[0]['selected_half_or_quarter']}}
 
                                 </div>
                             @endif
@@ -281,7 +292,7 @@
                                                 <th >Fouls</th>
                                                 
                                         @for($index=1; $index<=$number_of_quarters; $index++)
-                                                <th>Qtr {{$index}}</th>
+                                                <th>{{$short_type_name}} {{$index}}</th>
                                         @endfor
 
                                                 <th> Total </th>
@@ -341,7 +352,7 @@
                                                 <th >Fouls</th>
                                                 
                                         @for($index=1; $index<=$number_of_quarters; $index++)
-                                                <th>Qtr {{$index}}</th>
+                                                <th>{{$short_type_name}} {{$index}}</th>
                                         @endfor
 
                                                 <th> Total </th>
@@ -436,7 +447,7 @@
                                                 <th >Fouls</th>
                                                 
                                         @for($index=1; $index<=$number_of_quarters; $index++)
-                                                <th>Qtr {{$index}}</th>
+                                                <th>{{$short_type_name}} {{$index}}</th>
                                         @endfor
 
                                                 <th> Total </th>
@@ -493,7 +504,7 @@
                                                 <th >Fouls</th>
                                                 
                                         @for($index=1; $index<=$number_of_quarters; $index++)
-                                                <th>Qtr {{$index}}</th>
+                                                <th>{{$short_type_name}} {{$index}}</th>
                                         @endfor
 
                                                 <th> Total </th>
