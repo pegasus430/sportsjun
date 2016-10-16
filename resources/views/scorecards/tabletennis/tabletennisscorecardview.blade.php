@@ -189,7 +189,7 @@ if($match_data[0]['game_type']=='rubber'){
       <table class='table table-striped table-bordered'>
         <thead>
           <tr class='team_fall team_title_head'>
-           @if(!is_null($score_a_array['team_id']))  <th><b>TEAMS</b></th> @endif
+       
              <th>PLAYERS</th>
 
              @for($set_index=1; $set_index<=$set; $set_index++)
@@ -199,13 +199,13 @@ if($match_data[0]['game_type']=='rubber'){
           </tr>
         </thead>
         <tbody>
-             <tr>
-             <!-- Show teams if schedule type is team -->
-            @if(!is_null($score_a_array['team_id']))<td><b>{{$score_a_array['team_name']}}</b></td>@endif
+                           <!-- Show teams if schedule type is team -->
+           <tr @if(!empty($score_a_array['team_id']) && ($score_a_array['team_id']==$match_data[0]['winner_id'])) class='winner_set' @endif>
+           
 
-            <td><b>{{$score_a_array['player_name_a']}} / {{$score_a_array['player_name_b']}}</b></td>
-
-          @for($set_index=1; $set_index<=$set; $set_index++)
+            <td>  
+             @if(!is_null($score_a_array['team_id']))<b>{{$score_a_array['team_name']}}</b><br>@endif {{$score_a_array['player_name_a']}} / {{$score_a_array['player_name_b']}}</td>
+  @for($set_index=1; $set_index<=$set; $set_index++)
                  
                <td class='a_set{{$set_index}} ' >
                   <span class='remove_button_left button_set_{{$set_index}}'></span>
@@ -217,11 +217,12 @@ if($match_data[0]['game_type']=='rubber'){
           </tr>
 
           <tr>
-          <!-- Show teams if schedule type is team -->
-          @if(!is_null($score_b_array['team_id']))<td><b>{{$score_b_array['team_name']}}</b></td>@endif
+                  <!-- Show teams if schedule type is team -->
+            <tr @if(!empty($score_b_array['team_id']) && ($score_b_array['team_id']==$match_data[0]['winner_id'])) class='winner_set' @endif>          
 
-            <td><b>{{$score_b_array['player_name_a']}} / {{$score_b_array['player_name_b']}}</b></td>
-            @for($set_index=1; $set_index<=$set; $set_index++)
+            <td>  
+             @if(!is_null($score_b_array['team_id']))<b>{{$score_b_array['team_name']}}</b><br>@endif {{$score_b_array['player_name_a']}} / {{$score_b_array['player_name_b']}}</td>
+ @for($set_index=1; $set_index<=$set; $set_index++)
                   
                <td class='b_set{{$set_index}}  '>
                    <span class='remove_button_right button_set_{{$set_index}}'></span>

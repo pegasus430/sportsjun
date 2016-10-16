@@ -200,7 +200,7 @@ if($match_data[0]['game_type']=='rubber'){
         <thead>
           <tr class='team_fall team_title_head'>
 
-             <th>PLAYERS</th>
+             <th>PLAYERS</th> 
 
              @for($set_index=1; $set_index<=$set; $set_index++)
               <th>SET {{$set_index}}</th>
@@ -209,8 +209,7 @@ if($match_data[0]['game_type']=='rubber'){
           </tr>
         </thead>
         <tbody>
-             <tr>
-             <!-- Show teams if schedule type is team -->
+                         <!-- Show teams if schedule type is team -->
            <tr @if(!empty($score_a_array['team_id']) && ($score_a_array['team_id']==$match_data[0]['winner_id'])) class='winner_set' @endif>
            
 

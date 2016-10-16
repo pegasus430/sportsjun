@@ -11,7 +11,7 @@
     $team_a_name = $user_a_name;
 		$team_b_name = $user_b_name;
 
-    $match_data[0]['tournament_id']!=null?$disabled='readonly':'';
+    $match_data[0]['tournament_id']!=null?$disabled='readonly':$disabled='';
     $match_settings   =   Helper::getMatchSettings($match_data[0]['tournament_id'],$match_data[0]['sports_id']);
 
     $team_a_id=$match_data[0]['a_id'];
@@ -32,10 +32,10 @@
 
     isset($match_details->preferences)?$preferences=$match_details->preferences:[];
     
-    // if(isset($preferences->number_of_sets))$set=$preferences->number_of_sets ;
-    // else $set=$match_settings->number_of_sets;
+    if(isset($preferences->number_of_sets))$set=$preferences->number_of_sets ;
+    else $set=$match_settings->number_of_sets;
 
-    $set=$match_settings->number_of_sets;
+   // $set=$match_settings->number_of_sets;
 
     ${'team_'.$match_data[0]['a_id'].'_score'}='0 sets';
     ${'team_'.$match_data[0]['b_id'].'_score'}='0 sets'; 
@@ -423,7 +423,8 @@
         <tbody>
           <tr>
 
-            <td>{{$score_a_array['player_name_a']}} / {{$score_a_array['player_name_b']}}</td>
+                 <td>  
+             @if(!is_null($score_a_array['team_id']))<b>{{$score_a_array['team_name']}}</b><br>@endif {{$score_a_array['player_name_a']}} / {{$score_a_array['player_name_b']}}</td>
             
           @for($set_index=1; $set_index<=$set; $set_index++)
             <td>
@@ -435,7 +436,8 @@
         </tr>
 
           <tr>
-            <td>{{$score_b_array['player_name_a']}} / {{$score_b_array['player_name_b']}}</td>
+          <td>  
+             @if(!is_null($score_b_array['team_id']))<b>{{$score_b_array['team_name']}}</b><br>@endif {{$score_b_array['player_name_a']}} / {{$score_b_array['player_name_b']}}</td>
 
             @for($set_index=1; $set_index<=$set; $set_index++)
               <td>

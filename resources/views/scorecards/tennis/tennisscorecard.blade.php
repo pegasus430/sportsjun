@@ -433,7 +433,8 @@
         <tbody>
           <tr>
 
-            <td>{{$score_a_array['player_name_a']}} / {{$score_a_array['player_name_b']}}</td>
+                   <td>  
+             @if(!is_null($score_a_array['team_id']))<b>{{$score_a_array['team_name']}}</b><br>@endif {{$score_a_array['player_name_a']}} / {{$score_a_array['player_name_b']}}</td>
             
           @for($set_index=1; $set_index<=$set; $set_index++)
             <td>
@@ -449,7 +450,9 @@
         </tr>
 
           <tr>
-            <td>{{$score_b_array['player_name_a']}} / {{$score_b_array['player_name_b']}}</td>
+         
+            <td>  
+             @if(!is_null($score_b_array['team_id']))<b>{{$score_b_array['team_name']}}</b><br>@endif {{$score_b_array['player_name_a']}} / {{$score_b_array['player_name_b']}}</td>
 
             @for($set_index=1; $set_index<=$set; $set_index++)
               <td>
