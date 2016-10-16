@@ -195,6 +195,10 @@ class Tournaments extends Model
             return $this->hasMany('App\Model\MatchSchedule' , 'tournament_id');
     }
 
+    function followers(){
+            return $this->hasMany('App\Model\Followers','type_id')->whereType('tournament');
+    }
+
 
 
 

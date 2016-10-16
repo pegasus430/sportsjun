@@ -355,6 +355,7 @@ class WaterPoloScorecardController extends parentScoreCardController
 
         $match_model->match_details=json_encode($match_details);
         $match_model->save();
+        Helper::start_match_email($match_model);
     }
 
 

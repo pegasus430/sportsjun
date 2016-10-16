@@ -1,12 +1,13 @@
 
 {!! $view_data['header'] !!}
 Hi {{ $view_data['user_name'] or 'User' }} <br>
-Your {{$view_data['match_type']}} game played on {{date('jS F , Y',strtotime($view_data['match_date']))}} between <b>{{$view_data['team_a_name']}}</b> vs <b>{{$view_data['team_b_name']}}</b> score has been updated and is available to view<br>
+<br>
+The {{$view_data['sports_name']}} match played on {{date('jS F , Y',strtotime($view_data['match_date']))}} between <b>{{$view_data['team_a_name']}}</b> vs <b>{{$view_data['team_b_name']}}</b> score  will start soon!<br>
 
 <br>
 ScoreCard Link :  <a href="{!! url('/matchpublic/scorecard/view/'.$view_data['match_id']) !!}"> click here</a>
 <br><br>
-Personal Stats View : <a href="{!! url('showsportprofile/'.$view_data['user_id']) !!}">Personal stats</a>
+
 <br>
 
 <br>

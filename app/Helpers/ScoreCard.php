@@ -194,6 +194,11 @@ class ScoreCard {
 	}
 
 
+	public static function send_email_for_match(){
+
+	}
+
+
 
 }
 

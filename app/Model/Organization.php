@@ -110,4 +110,8 @@ class Organization extends Model
                 return $response;
         }
         //End
+
+         function followers(){
+            return $this->hasMany('App\Model\Followers','type_id')->whereType('organization');
+        }
 }

@@ -1698,10 +1698,9 @@ class Helper {
 
     public static function  sendEmailPlayers($match_details=[], $match_type=''){ 
 
-
-
                     $team_a_id=explode(',', $match_details['player_a_ids']);
                     $team_b_id=explode(',', $match_details['player_b_ids']); 
+                    $tournament_id = $match_details['tournament_id'];
 
                 if($match_details['schedule_type']=='player'){
                     $team_a_name   =  User::find($match_details['a_id'])->name;
@@ -1715,37 +1714,76 @@ class Helper {
 
                 //send email to  team_a players
                     foreach ($team_a_id as $key => $player_id) {
-
-                            if(!is_null($user=User::find($player_id))){  
-                            $user_name=$user->name;
-                            $data=[
-                                'match_type'    =>  $match_type, 
-                                'match_date'    =>  $match_details['match_start_date'],
-                                'team_a_name'   =>  $team_a_name,
-                                'team_b_name'   =>  $team_b_name,
-                                'user_name'     =>  $user_name,
-                                'match_id'      =>  $match_details['id'],
-                                'user_id'       =>  $player_id
-                                ];
-                            $mail_data=[
-                                    'view'      =>  'emails.endmatchnotification',
-                                    'subject'   =>  'Match : '. strtoupper($team_a_name) .' vs ' . strtoupper($team_b_name) . ' Scorecard (sportsJun)' ,
-                                    'to_user_id'=>  $player_id,
-                                    'to_email_id'=> $user->email,
-                                    'view_data' =>  $data, 
-                                    'flag'      =>  $match_type, 
-                                    'send_flag' =>  1,
-
-                            ];
-                        
-                            if(SendMail::sendmail($mail_data)){
-                                   // die('done');
-                            }
-                        }
+        $this->send_match_email_to_user($match_details, $player_id,$team_a_name, $team_b_name,'endmatchnotification_followers');
+             
                     }
                 //send email to team_b players
                     foreach ($team_b_id as $key => $player_id) {
-                            if(!is_null($user=User::find($player_id))){  
+        $this->send_match_email_to_user($match_details, $player_id,$team_a_name, $team_b_name,'endmatchnotification');
+                    }
+
+                //Send Email to followers (tournaments and organizations )
+
+                if(!is_null($tournament_id )){
+                    $tournament=Tournaments::find( $tournament_id );
+                    $followers = $tournament->followers;
+
+                    foreach ($followers as $key => $follower) {
+                        $player_id = $follower->user_id;
+        $this->send_match_email_to_user($match_details, $player_id,$team_a_name, $team_b_name,'endmatchnotification_followers');
+             
+                    }
+
+                    $organization = $tournament->tournamentParent->organization;
+                    $followers = $organization->followers;
+
+                    foreach ($followers as $key => $follower) {
+                        $player_id = $follower->user_id;
+        $this->send_match_email_to_user($match_details, $player_id,$team_a_name, $team_b_name,'endmatchnotification_followers');
+                        
+                    }
+
+                }
+    }
+
+    public static function start_match_email($match_details){
+
+           $tournament_id = $match_details['tournament_id'];
+
+                if($match_details['schedule_type']=='player'){
+                    $team_a_name   =  User::find($match_details['a_id'])->name;
+                    $team_b_name   =  User::find($match_details['b_id'])->name; 
+                }
+                else{
+                    $team_a_name   =  Team::find($match_details['a_id'])->name;
+                    $team_b_name   =  Team::find($match_details['b_id'])->name;
+                }
+
+            if(!is_null($tournament_id )){
+                    $tournament=Tournaments::find( $tournament_id );
+                    $followers = $tournament->followers;
+
+                    foreach ($followers as $key => $follower) {
+                        $player_id = $follower->user_id;
+        $this->send_match_email_to_user($match_details, $player_id,$team_a_name, $team_b_name,'startmatchnotification_followers');
+             
+                    }
+
+                    $organization = $tournament->tournamentParent->organization;
+                    $followers = $organization->followers;
+
+                    foreach ($followers as $key => $follower) {
+                        $player_id = $follower->user_id;
+        $this->send_match_email_to_user($match_details, $player_id,$team_a_name, $team_b_name,'startmatchnotification_followers');
+                        
+                    }
+
+                }
+    }
+
+    public static function send_match_email_to_user($match_details, $player_id,$team_a_name, $team_b_name,$view){
+
+         if(!is_null($user=User::find($player_id))){  
                             $user_name=$user->name;
                             $data=[
                                 'match_type'    =>  $match_type, 
@@ -1754,10 +1792,11 @@ class Helper {
                                 'team_b_name'   =>  $team_b_name,
                                 'user_name'     =>  $user_name,
                                 'match_id'      =>  $match_details['id'],
-                                'user_id'       =>  $player_id
+                                'user_id'       =>  $player_id,
+                                'sports_name'   =>  '',
                                 ];
                             $mail_data=[
-                                    'view'      =>  'emails.endmatchnotification',
+                                    'view'      =>  'emails.'.$view,
                                     'subject'   =>  'Match : '. strtoupper($team_a_name) .' vs ' . strtoupper($team_b_name) . ' Scorecard (sportsJun)' ,
                                     'to_user_id'=>  $player_id,
                                     'to_email_id'=> $user->email,
@@ -1767,8 +1806,7 @@ class Helper {
                             ];
 
                         SendMail::sendmail($mail_data);
-                    }
-                }
+        }
 
     }
 
