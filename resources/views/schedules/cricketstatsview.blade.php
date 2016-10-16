@@ -13,19 +13,25 @@
             </thead>
         <tbody>
 
+    <?php
+        $match_type = config('constants.ENUM.SCHEDULE.MATCH_TYPE.CRICKET');
+
+    ?>
      
-        @for($i=5; $i<=45; $i=$i+5)
-            @if(count($statsArray[$i.'StatsArray'])) 
+        @foreach($match_type as $mt=>$value)
+            @if(count($statsArray[$mt.'StatsArray'])) 
             <tr>
-            <td>{{$i}}</td>
-            <td>{{ Helper::displayEmptyDash($statsArray[$i.'StatsArray']['totalMatches']) }}</td>
-            <td>{{ Helper::displayEmptyDash($statsArray[$i.'StatsArray']['winCount']) }}</td>
-            <td>{{ Helper::displayEmptyDash($statsArray[$i.'StatsArray']['looseCount']) }}</td>
-            <td>{{ Helper::displayEmptyDash($statsArray[$i.'StatsArray']['isTied']) }}</td>
-            <td>{{ Helper::displayEmptyDash($statsArray[$i.'StatsArray']['wonPercentage']) }}</td>
+            <td>{{$value}}</td>
+            <td>{{ Helper::displayEmptyDash($statsArray[$mt.'StatsArray']['totalMatches']) }}</td>
+            <td>{{ Helper::displayEmptyDash($statsArray[$mt.'StatsArray']['winCount']) }}</td>
+            <td>{{ Helper::displayEmptyDash($statsArray[$mt.'StatsArray']['looseCount']) }}</td>
+            <td>{{ Helper::displayEmptyDash($statsArray[$mt.'StatsArray']['isTied']) }}</td>
+            <td>{{ Helper::displayEmptyDash($statsArray[$mt.'StatsArray']['wonPercentage']) }}</td>
             </tr>
             @endif
-        @endfor
+        @endforeach
+
+    {{--
             @if(count($statsArray['odiStatsArray'])) 
             <tr>
             <td>{{ config('constants.ENUM.SCHEDULE.MATCH_TYPE.CRICKET.odi') }}</td>
@@ -56,6 +62,7 @@
             <td>{{ Helper::displayEmptyDash($statsArray['testStatsArray']['wonPercentage']) }}</td>
             </tr>
             @endif
+    --}}
         </tbody>
         </table>
     </div>

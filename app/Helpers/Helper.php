@@ -695,7 +695,10 @@ class Helper
         $tTwentyWinPercentage = 0;
         $testWinPercentage = 0;
 
-        for ($i = 5; $i <= 45; $i = $i + 5) {
+        $match_type = config('constants.ENUM.SCHEDULE.MATCH_TYPE.CRICKET');
+            
+        
+        foreach($match_type as $i=>$value){
             ${'winCount' . $i} = 0;
             ${'looseCount' . $i} = 0;
             ${'isTied' . $i} = 0;
@@ -746,7 +749,7 @@ class Helper
                     }
                 }
 
-                for ($i = 5; $i <= 45; $i = $i + 5) {
+                 foreach($match_type as $i=>$value){
 
                     if ($stats['match_type'] == $i) {
                         if ($stats['winner_id'] == $teamId) {
@@ -803,7 +806,7 @@ class Helper
         ];
 
 
-        for ($i = 5; $i <= 45; $i = $i + 5) {
+         foreach($match_type as $i=>$value){
             ${$i . 'TotalMatches'} = ${'winCount' . $i} + ${'looseCount' . $i} + ${'isTied' . $i};
             if (${$i . 'TotalMatches'}) {
                 ${$i . 'WinPercentage'} = number_format((${'winCount' . $i} / (${$i . 'TotalMatches'})) * 100, 2);
@@ -812,20 +815,21 @@ class Helper
                 'totalMatches' => ${$i . 'TotalMatches'},
                 'winCount' => ${'winCount' . $i},
                 'looseCount' => ${'looseCount' . $i},
-                'isTied' => $isTiedTtewnty,
+                'isTied' => ${'isTied' . $i},
                 'wonPercentage' => ${$i . 'WinPercentage'}
             ];
 
 
         }
 
-        $finalArray = [
-            'odiStatsArray' => $odiStatsArray,
-            'tTwentyStatsArray' => $tTwentyStatsArray,
-            'testStatsArray' => $testStatsArray
-        ];
+        // $finalArray = [
+        //     'odiStatsArray' => $odiStatsArray,
+        //     'tTwentyStatsArray' => $tTwentyStatsArray,
+        //     'testStatsArray' => $testStatsArray
+        // ];
 
-        for ($i = 5; $i <= 45; $i = $i + 5) {
+        $finalArray=[];         
+        foreach($match_type as $i=>$value){
             $finalArray[$i . 'StatsArray'] = ${$i . 'StatsArray'};
         }
 
