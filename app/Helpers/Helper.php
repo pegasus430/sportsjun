@@ -1714,12 +1714,12 @@ class Helper {
 
                 //send email to  team_a players
                     foreach ($team_a_id as $key => $player_id) {
-        $this->send_match_email_to_user($match_details, $player_id,$team_a_name, $team_b_name,'endmatchnotification_followers');
+        Helper::send_match_email_to_user($match_details, $player_id,$team_a_name, $team_b_name,'endmatchnotification_followers');
              
                     }
                 //send email to team_b players
                     foreach ($team_b_id as $key => $player_id) {
-        $this->send_match_email_to_user($match_details, $player_id,$team_a_name, $team_b_name,'endmatchnotification');
+        Helper::send_match_email_to_user($match_details, $player_id,$team_a_name, $team_b_name,'endmatchnotification');
                     }
 
                 //Send Email to followers (tournaments and organizations )
@@ -1730,18 +1730,20 @@ class Helper {
 
                     foreach ($followers as $key => $follower) {
                         $player_id = $follower->user_id;
-        $this->send_match_email_to_user($match_details, $player_id,$team_a_name, $team_b_name,'endmatchnotification_followers');
+        Helper::send_match_email_to_user($match_details, $player_id,$team_a_name, $team_b_name,'endmatchnotification_followers');
              
                     }
 
                     $organization = $tournament->tournamentParent->organization;
+                if($organization){
                     $followers = $organization->followers;
 
                     foreach ($followers as $key => $follower) {
                         $player_id = $follower->user_id;
-        $this->send_match_email_to_user($match_details, $player_id,$team_a_name, $team_b_name,'endmatchnotification_followers');
+        Helper::send_match_email_to_user($match_details, $player_id,$team_a_name, $team_b_name,'endmatchnotification_followers');
                         
                     }
+                }
 
                 }
     }
@@ -1765,18 +1767,20 @@ class Helper {
 
                     foreach ($followers as $key => $follower) {
                         $player_id = $follower->user_id;
-        $this->send_match_email_to_user($match_details, $player_id,$team_a_name, $team_b_name,'startmatchnotification_followers');
+        Helper::send_match_email_to_user($match_details, $player_id,$team_a_name, $team_b_name,'startmatchnotification_followers');
              
                     }
 
                     $organization = $tournament->tournamentParent->organization;
+                if($organization){
                     $followers = $organization->followers;
 
                     foreach ($followers as $key => $follower) {
                         $player_id = $follower->user_id;
-        $this->send_match_email_to_user($match_details, $player_id,$team_a_name, $team_b_name,'startmatchnotification_followers');
+        Helper::send_match_email_to_user($match_details, $player_id,$team_a_name, $team_b_name,'startmatchnotification_followers');
                         
                     }
+                }
 
                 }
     }
@@ -1786,7 +1790,7 @@ class Helper {
          if(!is_null($user=User::find($player_id))){  
                             $user_name=$user->name;
                             $data=[
-                                'match_type'    =>  $match_type, 
+                                'match_type'    =>  $match_details['match_type'], 
                                 'match_date'    =>  $match_details['match_start_date'],
                                 'team_a_name'   =>  $team_a_name,
                                 'team_b_name'   =>  $team_b_name,
@@ -1794,6 +1798,7 @@ class Helper {
                                 'match_id'      =>  $match_details['id'],
                                 'user_id'       =>  $player_id,
                                 'sports_name'   =>  '',
+
                                 ];
                             $mail_data=[
                                     'view'      =>  'emails.'.$view,
@@ -1801,8 +1806,9 @@ class Helper {
                                     'to_user_id'=>  $player_id,
                                     'to_email_id'=> $user->email,
                                     'view_data' =>  $data,
-                                    'flag'      =>  $match_type,
+                                    'flag'      =>  $match_details['$match_type'],
                                     'send_flag' =>  1,
+                                     'type'          =>  $view
                             ];
 
                         SendMail::sendmail($mail_data);
