@@ -18,42 +18,42 @@
             @if(count($statsArray[$i.'StatsArray'])) 
             <tr>
             <td>{{$i}}</td>
-            <td>{{ $statsArray[$i.'StatsArray']['totalMatches'] }}</td>
-            <td>{{ $statsArray[$i.'StatsArray']['winCount'] }}</td>
-            <td>{{ $statsArray[$i.'StatsArray']['looseCount'] }}</td>
-            <td>{{ $statsArray[$i.'StatsArray']['isTied'] }}</td>
-            <td>{{ $statsArray[$i.'StatsArray']['wonPercentage'] }}</td>
+            <td>{{ Helper::displayEmptyDash($statsArray[$i.'StatsArray']['totalMatches']) }}</td>
+            <td>{{ Helper::displayEmptyDash($statsArray[$i.'StatsArray']['winCount']) }}</td>
+            <td>{{ Helper::displayEmptyDash($statsArray[$i.'StatsArray']['looseCount']) }}</td>
+            <td>{{ Helper::displayEmptyDash($statsArray[$i.'StatsArray']['isTied']) }}</td>
+            <td>{{ Helper::displayEmptyDash($statsArray[$i.'StatsArray']['wonPercentage']) }}</td>
             </tr>
             @endif
         @endfor
             @if(count($statsArray['odiStatsArray'])) 
             <tr>
             <td>{{ config('constants.ENUM.SCHEDULE.MATCH_TYPE.CRICKET.odi') }}</td>
-            <td>{{ $statsArray['odiStatsArray']['totalMatches'] }}</td>
-            <td>{{ $statsArray['odiStatsArray']['winCount'] }}</td>
-            <td>{{ $statsArray['odiStatsArray']['looseCount'] }}</td>
-            <td>{{ $statsArray['odiStatsArray']['isTied'] }}</td>
-            <td>{{ $statsArray['odiStatsArray']['wonPercentage'] }}</td>
+            <td>{{ Helper::displayEmptyDash($statsArray['odiStatsArray']['totalMatches']) }}</td>
+            <td>{{ Helper::displayEmptyDash($statsArray['odiStatsArray']['winCount']) }}</td>
+            <td>{{ Helper::displayEmptyDash($statsArray['odiStatsArray']['looseCount']) }}</td>
+            <td>{{ Helper::displayEmptyDash($statsArray['odiStatsArray']['isTied']) }}</td>
+            <td>{{ Helper::displayEmptyDash($statsArray['odiStatsArray']['wonPercentage']) }}</td>
             </tr>
             @endif
-            @if(count($statsArray['tTwentyStatsArray'])) 
+            @if(count($statsArray['tTwentyStatsArray']))
             <tr>
             <td>{{ config('constants.ENUM.SCHEDULE.MATCH_TYPE.CRICKET.t20') }}</td>
-            <td>{{ $statsArray['tTwentyStatsArray']['totalMatches'] }}</td>
-            <td>{{ $statsArray['tTwentyStatsArray']['winCount'] }}</td>
-            <td>{{ $statsArray['tTwentyStatsArray']['looseCount'] }}</td>
-            <td>{{ $statsArray['tTwentyStatsArray']['isTied'] }}</td>
-            <td>{{ $statsArray['tTwentyStatsArray']['wonPercentage'] }}</td>
+            <td>{{ Helper::displayEmptyDash($statsArray['tTwentyStatsArray']['totalMatches']) }}</td>
+            <td>{{ Helper::displayEmptyDash($statsArray['tTwentyStatsArray']['winCount']) }}</td>
+            <td>{{ Helper::displayEmptyDash($statsArray['tTwentyStatsArray']['looseCount']) }}</td>
+            <td>{{ Helper::displayEmptyDash($statsArray['tTwentyStatsArray']['isTied']) }}</td>
+            <td>{{ Helper::displayEmptyDash($statsArray['tTwentyStatsArray']['wonPercentage']) }}</td>
             </tr>
             @endif
-            @if(count($statsArray['testStatsArray'])) 
+            @if(count($statsArray['testStatsArray']))
             <tr>
             <td>{{ config('constants.ENUM.SCHEDULE.MATCH_TYPE.CRICKET.test') }}</td>
-            <td>{{ $statsArray['testStatsArray']['totalMatches'] }}</td>
-            <td>{{ $statsArray['testStatsArray']['winCount'] }}</td>
-            <td>{{ $statsArray['testStatsArray']['looseCount'] }}</td>
-            <td>{{ $statsArray['testStatsArray']['isTied'] }}</td>
-            <td>{{ $statsArray['testStatsArray']['wonPercentage'] }}</td>
+            <td>{{ Helper::displayEmptyDash($statsArray['testStatsArray']['totalMatches']) }}</td>
+            <td>{{ Helper::displayEmptyDash($statsArray['testStatsArray']['winCount']) }}</td>
+            <td>{{ Helper::displayEmptyDash($statsArray['testStatsArray']['looseCount']) }}</td>
+            <td>{{ Helper::displayEmptyDash($statsArray['testStatsArray']['isTied']) }}</td>
+            <td>{{ Helper::displayEmptyDash($statsArray['testStatsArray']['wonPercentage']) }}</td>
             </tr>
             @endif
         </tbody>

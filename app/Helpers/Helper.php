@@ -2049,7 +2049,7 @@ class Helper {
 
 
     public static function displayEmptyDash($number){
-            if($number>0){
+            if($number){
                 return $number;
             }
             else return '-';
