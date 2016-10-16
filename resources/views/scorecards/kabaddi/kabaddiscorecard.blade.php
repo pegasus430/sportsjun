@@ -163,7 +163,8 @@ input:read-only {
 								<div class="team_detail">
 									<div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['a_id'] }}">{{ $team_a_name }}</a></div>
 									<div class="team_city">{{ $team_a_city }}</div>
-									<div class="team_score team_a_score" id="team_a_score">{{$a_points}} <span id='team_a_fouls'  class='fouls team_a_fouls'>{{$a_fouls}}</span></div>
+									<div class="team_score team_a_score show_score" id="team_a_score">{{$a_points}} <span id='team_a_fouls'  class='fouls team_a_fouls'>{{$a_fouls}}</span></div>
+									<div class="team_score hidden_score" ><input type="text" value="{{$a_points}}" id="hidden_a_score" name='team_a_score'> </div>
 									
 								</div>
 							</div>
@@ -178,7 +179,9 @@ input:read-only {
 								<div class="team_detail">
 									<div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['b_id'] }}">{{ $team_b_name }}</a></div>
 									<div class="team_city">{{ $team_b_city }}</div>
-									<div class="team_score team_b_score" id="team_b_score">{{$b_points}} <span id='team_b_count' class='fouls team_b_fouls' >{{$b_fouls}}</span></div>
+									<div class="team_score team_b_score show_score" id="team_b_score">{{$b_points}} <span id='team_b_count' class='fouls team_b_fouls' >{{$b_fouls}}</span></div>
+									<div class="team_score hidden_score"><input type="text" value="{{$b_points}}" name='team_b_score' id="hidden_b_score"> </div>
+									
 									
 								</div>
 							</div>
@@ -203,7 +206,8 @@ input:read-only {
 								<div class="team_detail">
 									<div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['b_id'] }}">{{ $team_b_name }}</a></div>
 									<div class="team_city">{{ $team_b_city }}</div>
-									<div class="team_score team_b_score" id="team_b_score">{{$b_points}} <span id='team_b_count' class='fouls team_b_fouls' >{{$b_fouls}}</span></div>
+									<div class="team_score team_b_score show_score" id="team_b_score">{{$b_points}} <span id='team_b_count' class='fouls team_b_fouls' >{{$b_fouls}}</span></div>
+									<div class="team_score hidden_score"><input type="text" value="{{$b_points}}" name='team_b_score' id="hidden_b_score"> </div>
 								</div>
 							</div>
 						</div>
@@ -1164,6 +1168,7 @@ input:read-only {
 	<script>
 		$(document).ready(function(){
 			getTeam();
+			$('.hidden_score').hide();
 		});
 		function getTeam()
 		{
@@ -1593,6 +1598,10 @@ input:read-only {
 					$('.team_a_score').html(tem_a.total_points + " <span class='fouls'>"+tem_a.fouls+"</span>")
 					$('.team_b_score').html(tem_b.total_points + " <span class='fouls'>"+tem_b.fouls+"</span>")
 
+					$('#hidden_a_score').val(tem_a.total_points);
+					$('#hidden_b_score').val(tem_b.total_points);
+
+
 
 					$.each(tem_a.players, function(key, value){							
 							
@@ -1843,6 +1852,8 @@ var manual=false;
                 $('#real_time_scoring').hide();
                 $('#saveButton').show();
                  $('#end_match_btn').hide();
+                 $('.hidden_score').show();
+                 $('.show_score').hide();
                 manual=true;
             }, 
             cancel:function(){
@@ -1861,6 +1872,8 @@ var manual=false;
                  $('#real_time_scoring').show();
                  $('#saveButton').hide();
                   $('#end_match_btn').show();
+                 $('.hidden_score').hide();
+                 $('.show_score').show();
                  manual=false;
             }, 
             cancel:function(){
@@ -1874,6 +1887,11 @@ var manual=false;
 
      function manualScoring(that){
         var data=$('#kabaddi').serialize();
+        var team_a_score = $('#hidden_a_score').val();
+        var team_b_score = $('#hidden_b_score').val();
+
+         data = data + '&team_a_score='+  team_a_score + '&team_b_score='+	team_b_score;
+                
         var match_players=$('#match_players').val();
         var number_of_quarters={{$number_of_quarters}}
         var check_inputs=false;
@@ -1903,18 +1921,20 @@ var manual=false;
 
         		var total=Number($('.total_points_player_'+value).val());
 
-        		if(total_count!=quarter_count_total){			
-        				// if sum of points is not equal to the total input        		
-        			alert('please verify points or quarters ');
-        			$('.points_1_player_'+value).focus();
-        			$('.total_points_player_'+value).focus();
-        			check_inputs=false;
-        			return false;
-        		}
+        		// if(total_count!=quarter_count_total){			
+        		// 		// if sum of points is not equal to the total input        		
+        		// 	alert('please verify points or quarters ');
+        		// 	$('.points_1_player_'+value).focus();
+        		// 	$('.total_points_player_'+value).focus();
+        		// 	check_inputs=false;
+        		// 	return false;
+        		// }
         		
-        		else{
-        			check_inputs=true;
-        		}
+        		// else{
+        		// 	check_inputs=true;
+        		// }
+
+        		check_inputs=true;
 
         })
 

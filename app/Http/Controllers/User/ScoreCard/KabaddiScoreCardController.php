@@ -386,6 +386,9 @@ class KabaddiScoreCardController extends parentScoreCardController
 
 
     public function manualScoring(ObjectRequest $request){
+            $team_a_score = $request->team_a_score;
+            $team_b_score = $request->team_b_score;              
+
             $match_id=$request->match_id;
             $match_model=MatchSchedule::find($match_id);
             $match_details=json_decode($match_model->match_details);
@@ -459,8 +462,14 @@ class KabaddiScoreCardController extends parentScoreCardController
         $match_details->{$team_a_id}->fouls=${$team_a_id.'_fouls'};
         $match_details->{$team_b_id}->fouls=${$team_b_id.'_fouls'};
 
-        $match_details->{$team_a_id}->total_points=${$team_a_id.'_points'};
-        $match_details->{$team_b_id}->total_points=${$team_b_id.'_points'};
+        // $match_details->{$team_a_id}->total_points=${$team_a_id.'_points'};
+        // $match_details->{$team_b_id}->total_points=${$team_b_id.'_points'};
+
+
+        $match_details->{$team_a_id}->total_points=$team_a_score;
+        $match_details->{$team_b_id}->total_points=$team_b_score;
+
+
 
         $match_details=json_encode($match_details);
 
