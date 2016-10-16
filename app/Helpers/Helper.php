@@ -2064,7 +2064,7 @@ class Helper {
          break;
 
        
-            case ($sports_id==6||$sports_id==15 || $sports_id==16):
+            case in_array($sports_id, [6,14,15,16]):
             foreach ($match_models as $key => $match) {
                 if($match->a_id==$team_id){         //sets the home and againts team
                     $gf_team=$match->a_id; 

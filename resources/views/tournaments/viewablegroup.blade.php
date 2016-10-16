@@ -43,11 +43,11 @@
                                     <th class="text-center">GA</th>
                                 @endif
 
-                                 @if(in_array($sports_id, [6,15,16]))                               		
+                                 @if(in_array($sports_id, [6,14,15,16]))                               		
                                     <th class="text-center">PS</th>
                                     <th class="text-center">PA</th>
                                 @endif
-                                @if(in_array($sports_id, [3,5,13, 17, 14, 7]))                               		
+                                @if(in_array($sports_id, [3,5,13, 17, 7]))                               		
                                     <th class="text-center">SW</th>
                                     <th class="text-center"> SL</th>
                                 @endif
