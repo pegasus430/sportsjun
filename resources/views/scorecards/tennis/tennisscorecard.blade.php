@@ -97,7 +97,7 @@
 
 
 </style>
-<div class="col_standard table_tennis_scorcard">
+<div class="col_standard tennis_scorcard">
     <div id="team_vs" class="tt_bg">
       <div class="container">
           <div class="row">

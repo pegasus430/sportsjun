@@ -117,7 +117,7 @@
 
     </style>
     <div class="col_standard soccer_scorecard">
-        <div id="team_vs" class="ss_bg">
+        <div id="team_vs" class="ss_bg bk_bg">
             <div class="container">
                 <div class="row">
                     <div class="team team_one col-xs-5">

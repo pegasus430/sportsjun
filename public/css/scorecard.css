@@ -504,6 +504,32 @@
     margin: 0;
  }
 
+ .soccer_scorecard .bk_bg:before {
+	content: '';
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: #002542 url(/images/scorecard/basketball.jpg) top center no-repeat;
+	background-size: cover;
+	background-position: 0 -350px;
+	z-index: 0;
+}
+
+ .soccer_scorecard .sq_bg:before {
+	content: '';
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: #002542 url(/images/scorecard/squash.jpg) top center no-repeat;
+	background-size: cover;
+	background-position: 0 -350px;
+	z-index: 0;
+}
+
 
 /* Textbox Style  */
 #team_vs .group 			  {
