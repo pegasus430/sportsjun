@@ -25,8 +25,8 @@ Route::get('organizationTeamlist/{id}/{group_id?}', [
     'uses' => 'User\TeamController@organizationTeamlist',
 ]);
 
-Route::get('ogranization/organizations/{user_id?}', [
-    'as'   => 'ogranizations',
+Route::get('organization/organizations/{user_id?}', [
+    'as'   => 'organizations',
     'uses' => 'User\OrganizationController@organizationList',
 ]);
 
