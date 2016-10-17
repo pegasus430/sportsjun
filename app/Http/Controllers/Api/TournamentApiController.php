@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\Helper;
 use App\Model\Followers;
+use App\Model\TournamentGroups;
+use App\Model\TournamentGroupTeams;
 use DB;
 use Illuminate\Http\Request;
 
@@ -88,16 +90,11 @@ class TournamentApiController extends BaseApiController
      */
     public function show($id)
     {
-        //
-        $tournament = Tournaments::find($id);
-        $tournament->photos;
-        $tournament->user;
-        return Response::json([
-            'status' => 200,
-            'data' => $tournament,
-            'error' => false
-        ]);
+        $tournament = Tournaments
+            ::with(['tournamentParent'])
+            ->find($id);
 
+        return $this->ApiResponse($tournament);
     }
 
     public function parent($id)
@@ -105,11 +102,7 @@ class TournamentApiController extends BaseApiController
         $tournament = Tournaments::find($id);
         $parent_tournament = $tournament->tournamentParent;
 
-        return Response::json([
-            'status' => 200,
-            'data' => $parent_tournament,
-            'error' => false
-        ]);
+        return $this->ApiResponse($parent_tournament);
     }
 
     public function follow_tournament($id)
@@ -163,7 +156,27 @@ class TournamentApiController extends BaseApiController
 
     public function group_stage($id)
     {
-        return $this->tournamentsApi->groups($id, 'group', true);
+        $groups = TournamentGroups::
+        where('tournament_id', $id)
+            ->select(['id', 'name', 'isactive'])
+            ->with([
+                'group_teams' => function ($query) {
+                     $query->select(
+                         \DB::raw(' FORMAT(@rownum:=@rownum+1,0) `rank`'),
+                        'tournament_group_id',
+                        'tournament_id',
+                        'id',
+                        'team_id',
+                        'name',
+                        'won',
+                        'lost'
+                    )
+                        ->from(\DB::raw(  with(new TournamentGroupTeams())->getTable().',(SELECT @rownum:=0) r'))
+                        ->orderBy('points', 'desc');
+                }
+            ])
+            ->get();
+        return  $this->ApiResponse($groups);
     }
 
     public function final_stage($id)
