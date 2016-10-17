@@ -418,6 +418,7 @@ class OrganizationController extends Controller
         $user = $user_id ? User::whereId($user_id)->first() : null;
         if (!$user) {
             $user = \Auth::user();
+            $user_id = $user->id;
         }
 
         $managedOrgs = Organization::with(['teamplayers', 'photos', 'user'])
@@ -434,10 +435,11 @@ class OrganizationController extends Controller
             'teamplayers',
             'photos',
             'user',
-            'staff' => function ($query) use ($user) {
-                $query->where('user_id', $user->id);
-            }
+            'staff'
         ])
+            ->whereHas('staff',function ($query) use ($user_id) {
+                $query->where('user_id', $user_id);
+            })
             ->orderBy('isactive', 'desc')
             ->get();
 
@@ -445,7 +447,8 @@ class OrganizationController extends Controller
             'managedOrgs' => $managedOrgs,
             'followingOrgs' => $followingOrgs,
             'joinedOrgs' => $joinedOrgs,
-            'user' => $user
+            'user' => $user,
+            'user_id'=>$user_id
 
         ]);
     }
