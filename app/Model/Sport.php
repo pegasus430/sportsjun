@@ -9,6 +9,23 @@ class Sport extends Model {
 
     use SoftDeletes;
 
+    public static $CRICKET = 1;
+    public static $TENNIS = 2;
+    public static $TABLE_TENNIS = 3;
+    public static $SOCCER = 4;
+    public static $BADMINTON = 5;
+    public static $BASKETBALL = 6;
+    public static $VOLEYBALL = 7;
+    public static $SWIMMING = 8;
+    public static $RUNNING = 9;
+    public static $HOKKEY = 11;
+    public static $BASEBALL = 12;
+    public static $SQUASH = 13;
+    public static $KABADDI = 14;
+    public static $ULTIMATE_FRISBEE = 15;
+    public static $WATER_POLO = 16;
+    public static $THROW_BALL = 17;
+
     /**
      * The database table used by the model.
      *
