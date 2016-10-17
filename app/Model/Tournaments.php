@@ -214,7 +214,7 @@ class Tournaments extends Model
     public function getLogoImageAttribute()
     {
         $logo = $this->logo ? $this->logo :
-            ($this->tournament_parent_logo ?  $this->tournament_parent_logo : object_get($this->tournamentParent,'logo')) ;
+            (array_key_exists('tournament_parent_logo',$this->attributes) ?  $this->tournament_parent_logo : object_get($this->tournamentParent,'logo')) ;
         return Helper::getImagePath($logo, 'teams');
     }
 
