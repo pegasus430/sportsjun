@@ -37,7 +37,6 @@
 													<td class="text-center">{{$lis->getGroupPoints($lis->id,$og->id)}}</td>
 											@endforeach
 										</tr>
-
 								</tbody>
 							</table>
 						</div>
@@ -104,6 +103,11 @@
                                 @else
                                     <tr id="no_teams_{{$group->id}}"><td colspan="6">{{trans('message.tournament.empty_teams') }}</td></tr>
                                 @endif
+									<tr>
+										<td colspan="6" class="text-center-force">
+											<p class="points-footer">Powered by <img class="img-responsive pull-right" src="{{url('/images/SportsJun_Final_Transparent.png')}}" height="30px" width="180px"></p>
+										</td>
+									</tr>
                                 </tbody>
                                 </table>
 

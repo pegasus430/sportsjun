@@ -3040,3 +3040,17 @@ div#tournament_details_cover img {
 .schedule-datatable-img .team_player_sj_img{
     display:inline-block;
 }
+
+.text-center-force{
+    text-align:center !important;
+}
+
+.points-footer{
+    display: inline-block;
+    margin: auto;
+    vertical-align: middle;
+    line-height: 36px;
+    font-size: 24px;
+    padding: 0;
+    color: red;
+}

@@ -87,7 +87,11 @@
 
 						</tr>
 												
-
+						<tr>
+							<td colspan="{{$orgInfoObj->groups->count()+1}}" class="text-center">
+								<p class="points-footer">Powered by <img class="img-responsive pull-right" src="{{url('/images/SportsJun_Final_Transparent.png')}}" height="30px" width="180px"></p>
+							</td>
+						</tr>
 								</tbody>
 
 					@else
