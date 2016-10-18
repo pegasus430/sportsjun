@@ -349,7 +349,7 @@ class TeamController extends Controller
         //if team's details are not empty
         if (!empty($teams)) {
             //static array for owner,manager and coach
-            $owners_managers = array('owner', 'manager', 'coach');
+            $owners_managers = ['owner', 'manager', TeamPlayers::$ROLE_COACH, TeamPlayers::$ROLE_PHYSIO];
             foreach ($teams as $team) {
                 //if teamplayer's details are not empty
                 if (!empty($team['teamplayers'])) {
@@ -659,7 +659,7 @@ class TeamController extends Controller
     public function makeasteamcoach($team_id, $user_id)
     {
         if (is_numeric($team_id) && is_numeric($user_id)) {
-            if (TeamPlayers::setUserRole($team_id,$user_id,TeamPlayers::$ROLE_COACH)){
+            if (TeamPlayers::setUserRole($team_id,$user_id,TeamPlayers::$ROLE_COACH,false)){
                 return redirect()->back()->with('status', trans('message.team.teamcoach'));
             } else {
                 return redirect()->back()->with('error_msg', trans('message.team.validation'));
@@ -670,11 +670,40 @@ class TeamController extends Controller
     }
 
     //function to make team makeasteamcoach
+    public function removeasteamcoach($team_id, $user_id)
+    {
+        if (is_numeric($team_id) && is_numeric($user_id)) {
+            if (TeamPlayers::setUserRole($team_id,$user_id,TeamPlayers::$ROLE_PLAYER,false)){
+                return redirect()->back()->with('status', trans('message.team.coachremove'));
+            } else {
+                return redirect()->back()->with('error_msg', trans('message.team.validation'));
+            }
+        } else {
+            return redirect()->back()->with('error_msg', trans('message.team.validation'));
+        }
+    }
+
+
+    //function to make team makeasteamcoach
     public function makeasteamphysio($team_id, $user_id)
     {
         if (is_numeric($team_id) && is_numeric($user_id)) {
-            if (TeamPlayers::setUserRole($team_id,$user_id,TeamPlayers::$ROLE_PHYSIO)){
+            if (TeamPlayers::setUserRole($team_id,$user_id,TeamPlayers::$ROLE_PHYSIO,false)){
                 return redirect()->back()->with('status', trans('message.team.teamphysio'));
+            } else {
+                return redirect()->back()->with('error_msg', trans('message.team.validation'));
+            }
+        } else {
+            return redirect()->back()->with('error_msg', trans('message.team.validation'));
+        }
+    }
+
+    //function to make team makeasteamcoach
+    public function removeasteamphysio($team_id, $user_id)
+    {
+        if (is_numeric($team_id) && is_numeric($user_id)) {
+            if (TeamPlayers::setUserRole($team_id,$user_id,TeamPlayers::$ROLE_PLAYER,false)){
+                return redirect()->back()->with('status', trans('message.team.physioremove'));
             } else {
                 return redirect()->back()->with('error_msg', trans('message.team.validation'));
             }
@@ -1310,7 +1339,7 @@ class TeamController extends Controller
         //if team's details are not empty
         if (!empty($teams)) {
             //static array for owner,manager and coach
-            $owners_managers = array('owner', 'manager', 'coach');
+            $owners_managers = ['owner', 'manager', TeamPlayers::$ROLE_COACH ,TeamPlayers::$ROLE_PHYSIO];
             foreach ($teams as $team) {
                 //if teamplayer's details are not empty
                 if (!empty($team['teamplayers'])) {
