@@ -1214,7 +1214,11 @@ class TeamController extends Controller
 
             $organization = Organization::whereId($team->organization_id)->first();
 
-            if ($team && $organization && $organization->user->id == \Auth::user()->id) {
+            // TODO: ?use policies //if (Gate::check(''))
+
+            if ($team && $organization &&
+                ($organization->user_id == \Auth::user()->id || $team->team_owner_id == \Auth::user()->id )
+            ) {
                 if (!$user) {
                     $user = User::create([
                         'name' => $data['name'],
