@@ -19,7 +19,6 @@ use App\Model\Requestsmodel;
 use App\Model\Sport;
 use App\Model\State;
 use App\Model\Team;
-use App\Model\TeamPlayer;
 use App\Model\TeamPlayers;
 use App\Model\UserStatistic;
 use App\User;
@@ -1227,13 +1226,13 @@ class TeamController extends Controller
                     \Event::fire(new UserRegistered($user));
                 }
                 if ($user) {
-                    TeamPlayer::where('team_id',$team->id)->where('role','owner')->where('user_id','!=',$user->id)->update(['role'=>'player']);
-                    $teamplayer = TeamPlayer::where('team_id',$team->id)->where('user_id',$user->id)->first();
+                    TeamPlayers::where('team_id',$team->id)->where('role','owner')->where('user_id','!=',$user->id)->update(['role'=>'player']);
+                    $teamplayer = TeamPlayers::where('team_id',$team->id)->where('user_id',$user->id)->first();
                     if ($teamplayer) {
                         $teamplayer->role = 'owner';
                         $teamplayer->save();
                     } else {
-                        $teamplayer= new TeamPlayer();
+                        $teamplayer= new TeamPlayers();
                         $teamplayer->user_id = $user->id;
                         $teamplayer->team_id = $team->id;
                         $teamplayer->role = 'owner';

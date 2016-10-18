@@ -18,7 +18,7 @@ use App\Model\SportQuestionOption;
 Use App\Model\Photo;
 use App\Http\Requests;
 use Response;
-use App\Model\TeamPlayer;
+use App\Model\TeamPlayers;
 use App\Helpers\Helper;
 
 class SportsController extends Controller {
@@ -394,7 +394,7 @@ class SportsController extends Controller {
 			$team_id = Request::get('team_id');
 			$role = 'player';
 			$user_id = Request::get('response');
-			$TeamPlayer = new TeamPlayer();
+			$TeamPlayer = new TeamPlayers();
 			$TeamPlayer->team_id = $team_id;
 			$TeamPlayer->user_id = $user_id;
 			$TeamPlayer->role = $role;
