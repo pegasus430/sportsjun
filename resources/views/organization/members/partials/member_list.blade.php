@@ -1,4 +1,10 @@
 @foreach($members as $member)
+    <?php
+        $teams = $member->userdetails->reject(function ($name) {
+            return empty($name['team']);
+        })->lists('team')->unique('name');
+    ?>
+
     <tr>
         <td>
             <a href="{{route('showsportprofile',['id'=>$member['id']])}}" class="member-image">
@@ -10,16 +16,14 @@
 
         </td>
         <td>
-            <?php
-                $teamNames = array_unique($member->userdetails->lists('team.name')->toArray());
-            ?>
+            <?php $teamNames = $teams->lists('name'); ?>
             @foreach ($teamNames as $teamName)
-                {{$teamName}}@if ($teamName != last($teamNames)), @endif
+                {{$teamName}}@if ($teamName != $teamNames->last()), @endif
             @endforeach
         </td>
         <td>
             <?php
-                $sports = array_unique($member->userdetails->lists('team.sports.sports_name')->toArray());
+                $sports = array_unique($teams->lists('sports.sports_name')->toArray());
             ?>
             @foreach ($sports as $sport)
                 {{$sport }}@if ($sport != last($sports)), @endif
