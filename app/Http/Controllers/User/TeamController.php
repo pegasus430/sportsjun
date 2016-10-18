@@ -1206,7 +1206,8 @@ class TeamController extends Controller
             'email' => 'required|email|max:255',
         ]);
 
-        $result = [];
+        $status = false;
+        $error = false;
         if (!$validator->fails()) {
             $user = User::where('email', $data['email'])->first();
             $team = Team::where('id', $data['teamId'])->first();
@@ -1235,28 +1236,35 @@ class TeamController extends Controller
                         $teamplayer->status = 'accepted';
                         $teamplayer->save();
                     }
-
-
                     $team->team_owner_id = $user->id;
                     $team->save();
-                    $result['message']= 'Ownership changed to '.$user->name;
+                    $status = 'Ownership changed to '.$user->name;
                 } else {
-                    $result['error']=true;
-                    $result['message'] = 'Failed to create user';
+                    $error = 'Failed to create user';
                 }
             } else {
-                $result['error']=true;
-                $result['message'] = 'Permission denied';
+                $error = 'Permission denied';
             }
         } else {
-            $result['error']=true;
-            $result['message'] = $validator->errors()->first();
+            $error = $validator->errors()->first();
         }
 
         if (\Request::isJson()) {
+            $result =  [];
+            if ($status){
+                $result['status']=$status;
+            }
+            if ($error){
+                $result['error']=$error;
+            }
             return $result;
         } else {
-            \Session::flash('data-message', $result);
+            if ($status) {
+                \Session::flash('status', $status);
+            }
+            if ($error) {
+                \Session::flash('error', $error);
+            }
             return redirect()->back();
         }
 
