@@ -9,7 +9,7 @@
     <div id="content" class="col-sm-10 tournament_profile">
         <div class="col-md-8 col-md-offset-2 col-xs-12">
             <div class="team_view">
-                {!! Helper::Images(!empty($orgInfo[0]['logo'])?$orgInfo[0]['logo']:'','organization',array('height'=>100,'width'=>'100%') )!!}
+                {!! Helper::Images(!empty($orgInfo[0]['logo'])?$orgInfo[0]['logo']:'','organization',array('height'=>100,'width'=>'100%', 'class'=>'no-border-radius') )!!}
                 <h1>{{ $orgInfo[0]['name'] or "" }}</h1>
             </div>
             <div class="group_no clearfix">

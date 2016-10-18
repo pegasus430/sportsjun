@@ -16,6 +16,12 @@ html, body { height:100%;}
 
 }
 
+.no-border-radius {
+    -webkit-border-radius:0 !important;
+    -moz-border-radius:0 !important;
+    border-radius:0 !important;
+}
+
 .sportsjun_nav_new{ background:#65c178 !important; border:none;}
 .navbar-brand{ background:#84cd93; color:#fff !important; height: 65px; padding:5px 15px 5px 10px; width:250px;}
 .navbar-brand img{ margin:3px auto;}
