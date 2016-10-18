@@ -12,7 +12,10 @@
 						@if(count($orgInfoObj->groups))
 								<thead>
 									<tr>
-											<th></th>
+											<th>
+												<p><b><center>&nbsp;</center></b></p>
+												<br/>
+												{!! Helper::makeImageHtml($parent_tournament->logoImage,array('height'=>60,'width'=>60,'class'=>'img-responsive img-rounded center-block') )!!}</th>
 											@foreach($orgInfoObj->groups as $og)
 												<td><p><b><center>{{$og->name}}</center></b></p>
 													<br>

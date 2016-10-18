@@ -319,7 +319,7 @@ class OrganizationController extends Controller
         $totalresult = $query->get();
         $total = count($totalresult);
         $tournaments = $query->limit($limit)->offset($offset)->orderBy('tournaments.updated_at', 'desc')->get();
-        $orgInfo = Organization::select()->where('id', $id)->get()->toArray();
+
         $orgInfoObj = Organization::find($id);
 
         $parent_tournaments = TournamentParent::whereOrganizationId($id)->get();
@@ -360,7 +360,6 @@ class OrganizationController extends Controller
         return view('organization.tournaments')->with([
             'tournaments' => $tournaments,
             'id' => $id,
-            'orgInfo' => $orgInfo,
             'userId' => $user_id,
             'totalTournaments' => $total,
             'sports_array' => $sports_array,
@@ -449,7 +448,6 @@ class OrganizationController extends Controller
             'joinedOrgs' => $joinedOrgs,
             'user' => $user,
             'user_id'=>$user_id
-
         ]);
     }
 
