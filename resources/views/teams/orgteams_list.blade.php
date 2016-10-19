@@ -45,7 +45,10 @@
                     <div class="clearfix"></div>
                     <p class="lt-grey">{{ !empty($t->description)?$t->description:'' }}</p>
                     <br>
-                    @if(isset($userId) && ($userId == $t->team_owner_id || $organization->user_id = $userId ))
+                    <?php
+                        $manager_ids = $t->playersByRole(\App\Model\TeamPlayers::$ROLE_MANAGER)->lists('id')->all();
+                    ?>
+                    @if(isset($userId) && ($userId == $t->team_owner_id  || $organization->user_id = $userId  || in_array($userId,$manager_ids)))
                         <div class="pull-right">
                             <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#transfer-owner-modal" data-team-id="{{$t->id}}"><i class="fa fa-exchange"></i> Transfer ownership</button>
                         </div>
