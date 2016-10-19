@@ -9,8 +9,8 @@
     <div id="content" class="col-sm-10 tournament_profile">
         <div class="col-md-8 col-md-offset-2 col-xs-12">
             <div class="team_view">
-                {!! Helper::Images(!empty($orgInfo[0]['logo'])?$orgInfo[0]['logo']:'','organization',array('height'=>100,'width'=>'100%', 'class'=>'no-border-radius') )!!}
-                <h1>{{ $orgInfo[0]['name'] or "" }}</h1>
+                {!! Helper::makeImageHtml($orgInfoObj->logoImage,array('height'=>100,'width'=>'100%', 'class'=>'no-border-radius') )!!}
+                <h1>{{ $orgInfoObj->name }}</h1>
             </div>
             <div class="group_no clearfix">
                 <h4 class="stage_head">{{ trans('message.organization.fields.orgdetails') }}</h4>
@@ -19,71 +19,71 @@
                 <tbody>
                 <tr>
                     <th>{{   trans('message.organization.fields.name') }}</th>
-                    <td>{{ $orgInfo[0]['name']}}</td>
+                    <td>{{ $orgInfoObj->name }}</td>
                 </tr>
 
                 <tr>
                     <th>{{   trans('message.organization.fields.contactnumber') }}</th>
-                    <td>{{ $orgInfo[0]['contact_number']}}</td>
+                    <td>{{ $orgInfoObj->contact_number }}</td>
 
                 </tr>
-                @if ($orgInfo[0]['alternate_contact_number'] !== '')
+                @if ($orgInfoObj->alternate_contact_number)
                     <tr>
                         <th>{{   trans('message.organization.fields.altcontactnumber') }}</th>
-                        <td>{{ $orgInfo[0]['alternate_contact_number']}}</td>
+                        <td>{{ $orgInfoObj->alternate_contact_number }}</td>
                     </tr>
                 @endif
-                @if ( $orgInfo[0]['contact_name'])
+                @if ( $orgInfoObj->contact_name)
                     <tr>
                         <th>{{   trans('message.organization.fields.contactpersonname') }}</th>
-                        <td> {{ $orgInfo[0]['contact_name'] }}</td>
+                        <td> {{ $orgInfoObj->contact_name }}</td>
                     </tr>
                 @endif
                 <tr>
                     <th>{{   trans('message.organization.fields.email') }}</th>
-                    <td>{{ $orgInfo[0]['email']}}</td>
+                    <td>{{ $orgInfoObj->email }}</td>
                 </tr>
                 <tr>
                     <th>{{   trans('message.organization.fields.organizationtype') }}</th>
-                    <td>{{ $orgInfo[0]['organization_type']}}</td>
+                    <td>{{ $orgInfoObj->organization_type }}</td>
                 </tr>
-                @if ( $orgInfo[0]['social_facebook'])
+                @if ( $orgInfoObj->social_facebook)
                     <tr>
                         <th>{{   trans('message.organization.fields.facebook') }}</th>
-                        <td>{{ $orgInfo[0]['social_facebook']}}</td>
+                        <td><a href="{{ $orgInfoObj->social_facebook}}">{{ $orgInfoObj->social_facebook}}</a></td>
                     </tr>
                 @endif
-                @if ( $orgInfo[0]['social_twitter'])
+                @if ( $orgInfoObj->social_twitter)
                     <tr>
                         <th>{{   trans('message.organization.fields.twitter') }}</th>
-                        <td>{{ $orgInfo[0]['social_twitter']}}</td>
+                        <td><a href="{{ $orgInfoObj->social_twitter}}">{{ $orgInfoObj->social_twitter}}</a></td>
                     </tr>
                 @endif
-                @if ( $orgInfo[0]['social_linkedin'])
+                @if ( $orgInfoObj->social_linkedin)
                     <tr>
                         <th>{{   trans('message.organization.fields.linkedin') }}</th>
-                        <td>{{ $orgInfo[0]['social_linkedin']}}</td>
+                        <td><a href="{{ $orgInfoObj->social_linkedin}}">{{ $orgInfoObj->social_linkedin}}</a></td>
                     </tr>
                 @endif
-                @if ( $orgInfo[0]['social_googleplus'])
+                @if ( $orgInfoObj->social_googleplus)
                     <tr>
                         <th>{{   trans('message.organization.fields.googleplus') }}</th>
-                        <td>{{ $orgInfo[0]['social_googleplus']}}</td>
+                        <td><a href="{{ $orgInfoObj->social_googleplus}}">{{ $orgInfoObj->social_googleplus}}</a></td>
                     </tr>
                 @endif
-                @if ( $orgInfo[0]['website_url'])
+                @if ( $orgInfoObj->website_url)
                     <tr>
                         <th>{{   trans('message.organization.fields.websiteurl') }}</th>
-                        <td>{{ $orgInfo[0]['website_url']}}</td>
+                        <td> <a href="{{$orgInfoObj->website_url}}">{{$orgInfoObj->website_url}}</a></td>
                     </tr>
                 @endif
                 <tr>
                     <th>{{   trans('message.organization.fields.about') }}</th>
-                    <td>{{ $orgInfo[0]['about']}}</td>
+                    <td>{{ $orgInfoObj->about}}</td>
                 </tr>
                 <tr>
                     <th>{{   trans('message.organization.fields.location') }}</th>
-                    <td>{{ $orgInfo[0]['location']}}</td>
+                    <td>{{ $orgInfoObj->location}}</td>
 
                 </tr>
 

@@ -408,7 +408,7 @@ class OrganizationController extends Controller
         }
 
         return view('organization.standing.overall_standing_display_sports',
-            compact('orgInfo', 'orgInfoObj', 'parent_tournament'));
+            compact('orgInfoObj', 'parent_tournament'));
     }
 
     public function organizationList($user_id = null)
