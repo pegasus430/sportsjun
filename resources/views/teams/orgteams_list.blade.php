@@ -45,9 +45,11 @@
                     <div class="clearfix"></div>
                     <p class="lt-grey">{{ !empty($t->description)?$t->description:'' }}</p>
                     <br>
-                    <div class="pull-right">
-                        <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#transfer-owner-modal" data-team-id="{{$t->id}}"><i class="fa fa-exchange"></i> Transfer ownership</button>
-                    </div>
+                    @if(isset($userId) && ($userId == $t->team_owner_id || $organization->user_id = $userId ))
+                        <div class="pull-right">
+                            <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#transfer-owner-modal" data-team-id="{{$t->id}}"><i class="fa fa-exchange"></i> Transfer ownership</button>
+                        </div>
+                    @endif
                     <p>Sport : <span class='blue match_type_text'>{{Helper::getSportName($t->sports_id)}}</span> &nbsp;
                         &nbsp; Players : <span
                                 class='blue match_type_text'> {{Helper::getTeamDetails($t->id)->teamplayers->count()}}  </span>&nbsp;
