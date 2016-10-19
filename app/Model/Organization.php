@@ -115,13 +115,13 @@ class Organization extends Model
         }
         //End
 
-    public function getLogoImageAttribute()
-    {
-        return Helper::getImagePath($this->logo,'ogranization');
-    }
-
-         function followers(){
+        function followers(){
             return $this->hasMany('App\Model\Followers','type_id')->whereType('organization');
+        }
+
+        public function getLogoImageAttribute()
+        {
+            return Helper::getImagePath($this->logo,'ogranization');
         }
 
 }
