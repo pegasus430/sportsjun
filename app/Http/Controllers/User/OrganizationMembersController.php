@@ -30,16 +30,19 @@ class OrganizationMembersController extends Controller
         $teamIds = $allTeams->lists('id');
         #$teamPlayers = TeamPlayers::whereIn('team_players.team_id',$teamIds)->get();
 
-        $filter_team = \Request::has('filter-team') ? filter_var(\Request::get('filter-team'),FILTER_SANITIZE_STRING) : null;
+        $filter_team = \Request::has('filter-team') ? filter_var(\Request::get('filter-team'),
+            FILTER_SANITIZE_STRING) : null;
 
-        $members = User::whereHas('userdetails', function ($query) use ($teamIds, $id,$filter_team) {
-            $query->whereIn('team_players.team_id', $teamIds)->whereNotIn('team_players.role', ['owner', 'manager'])
-                ->join('teams', 'teams.id', '=', 'team_players.team_id')
-                ->where('teams.organization_id', $id);
-                if ($filter_team){
-                    $query->where('teams.name','LIKE','%'.$filter_team.'%');
-                }
-        })->with('userdetails.team.sports')->paginate(15);
+        $members = User::whereHas('userdetails', function ($query) use ($teamIds, $id, $filter_team) {
+            $query->whereIn('team_id', $teamIds)
+                  ->whereNotIn('role', ['owner', 'manager']);
+        })->with([
+            'userdetails.team' => function ($query) use ($id) {
+                $query->where('organization_id', $id);
+            },
+            'userdetails.team.sports'
+        ])
+            ->paginate(15);
 
         if (\Request::ajax()) {
             if (\Request::wantsJson()) {

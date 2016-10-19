@@ -1,18 +1,18 @@
 <div class="col-sm-2" id="sidebar-left">
 	<div class="row">
 			<div class="team_view">
-						{!! Helper::Images(!empty($orgInfo[0]['logo'])?$orgInfo[0]['logo']:'','organization',array('height'=>100,'width'=>100) )!!}
-						<h1>{{ $orgInfo[0]['name'] or "" }}</h1>
+						{!! Helper::makeImageHtml($orgInfoObj->logoImage,array('height'=>100,'width'=>100) )!!}
+						<h1>{{ $orgInfoObj->name }}</h1>
 
-                                        @if(isset($userId) && isset($orgInfo) && ($userId == $orgInfo[0]['user_id']))
+                                        @if(isset($userId) && isset($orgInfoObj) && ($userId == $orgInfoObj->user_id))
 					<a href="{{url('/organization/'.(!empty($id)?$id:0).'/edit')}}" class="tvp_edit">
 					  <span class="fa fa-pencil" title="Edit"></span>
 					</a>
                                         @endif
 		        <div class="locations">
-				  <i class="fa fa-map-marker"></i>&nbsp;<span style="word-wrap: break-word;">{{ $orgInfo[0]['location'] or "Location" }}</span>
+				  <i class="fa fa-map-marker"></i>&nbsp;<span style="word-wrap: break-word;">{{ $orgInfoObj->location or "Location" }}</span>
 				 </div>
-		            <div class="more desc">{{ $orgInfo[0]['about']  or 'Description' }}</div>
+		            <div class="more desc">{{ $orgInfoObj->about  or 'Description' }}</div>
 
                 @if(isset($follow_array))
 
