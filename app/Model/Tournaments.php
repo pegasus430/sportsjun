@@ -3,13 +3,16 @@
 namespace App\Model;
 
 use App\Helpers\Helper;
+use App\User;
 use DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
 use Sofa\Eloquence\Eloquence;
 
 class Tournaments extends Model
 {
+    protected $_finalStageTeams;
 
     use SoftDeletes,
         Eloquence;
@@ -218,8 +221,28 @@ class Tournaments extends Model
     public function getLogoImageAttribute()
     {
         $logo = $this->logo ? $this->logo :
-            ($this->tournament_parent_logo ?  $this->tournament_parent_logo : object_get($this->tournamentParent,'logo')) ;
+            (array_key_exists('tournament_parent_logo',$this->attributes) ?  $this->tournament_parent_logo : object_get($this->tournamentParent,'logo')) ;
         return Helper::getImagePath($logo, 'teams');
+    }
+
+    public function getFinalStageTeamsListAttribute(){
+        if (!$this->_finalStageTeams) {
+            $schedule_type = $this->schedule_type ? $this->schedule_type : 'team';
+            $teamIDs = explode(',', trim($this->final_stage_teams_ids, ','));
+            switch($schedule_type){
+                case 'team':
+                    $this->_finalStageTeams = Team::whereIn('id', $teamIDs)->orderBy('name')->select(['id','name','logo'])->get();
+                    break;
+                case 'individual':
+                    $this->_finalStageTeams = User::whereIn('id', $teamIDs)->orderBy('name')->select(['id','name','logo'])->get();
+                    break;
+                default:
+                    $this->_finalStageTeams = new Collection();
+                    break;
+            }
+        }
+
+        return $this->_finalStageTeams;
     }
 
 }

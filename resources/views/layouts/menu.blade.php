@@ -19,12 +19,12 @@
             <aside id="main" class="main_menu">
             <!--    <li><a href="{{ URL::to('/') }}"><span class="fa"><img src="{{ url('/images/dashboard.png') }}" height="18" width="18"/></span>Dashboard</a></li>
 -->    <li><a href="{{ url('/myschedule',[(isset(Auth::user()->id)?Auth::user()->id:0)]) }}"><span class="fa"><img src="{{ url('/images/Schedule.png') }}" height="18" width="22"/></span>My Schedule</a></li>
+                <li><a href="{{ route('organizations') }}"><span class="fa"><img src="{{ url('/images/Organization.png') }}" height="18" width="24"/></span>My Organizations</a></li>
                 <li><a href="{{ URL::to('/team/teams') }}"><span class="fa"><img src="{{ url('/images/my-team.png') }}" height="18" width="23"/></span>My Team</a></li>
                 <li><a href="{{ url('/user/album/show/user') }}"><span class="fa"><img src="{{ url('/images/gallery.png') }}" height="18" width="22"/></span>My Gallery</a></li>
                 <li><a href="{{ url('/tournaments') }}"><span class="fa"><img src="{{ url('/images/Tournaments.png') }}" height="18" width="19"/></span>My Tournaments</a></li>
             <!--<li><a href="{{ url('/facility') }}"><span class="fa"><img src="{{ url('/images/Facility.png') }}" height="18" width="26"/></span>Facility</a></li>-->
                 <li><a href="{{ url('/marketplace/myitems') }}" ><span class="fa"><img src="{{ url('/images/Market-Place.png') }}" height="18" width="24"/></span>My Store</a></li>
-                <li><a href="{{ route('ogranizations') }}"><span class="fa"><img src="{{ url('/images/Organizations.png') }}" height="18" width="24"/></span>My Organizations</a></li>
                 <li class="more hidden" data-width="80">
                     <a href="#"><span class="fa fa-ellipsis-h"></span>More</a>
                     <ul></ul>

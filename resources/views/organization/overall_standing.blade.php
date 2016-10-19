@@ -12,7 +12,10 @@
 						@if(count($orgInfoObj->groups))
 								<thead>
 									<tr>
-											<th></th>
+											<th>
+												<p><b><center>&nbsp;</center></b></p>
+												<br/>
+												{!! Helper::makeImageHtml($parent_tournament->logoImage,array('height'=>60,'width'=>60,'class'=>'img-responsive img-rounded center-block') )!!}</th>
 											@foreach($orgInfoObj->groups as $og)
 												<td><p><b><center>{{$og->name}}</center></b></p>
 													<br>
@@ -84,7 +87,11 @@
 
 						</tr>
 												
-
+						<tr>
+							<td colspan="{{$orgInfoObj->groups->count()+1}}" class="text-center">
+								<p class="points-footer">Powered by <img class="img-responsive pull-right" src="{{url('/images/SportsJun_Final_Transparent.png')}}" height="30px" width="180px"></p>
+							</td>
+						</tr>
 								</tbody>
 
 					@else

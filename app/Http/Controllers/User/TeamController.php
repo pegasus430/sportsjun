@@ -19,7 +19,6 @@ use App\Model\Requestsmodel;
 use App\Model\Sport;
 use App\Model\State;
 use App\Model\Team;
-use App\Model\TeamPlayer;
 use App\Model\TeamPlayers;
 use App\Model\UserStatistic;
 use App\User;
@@ -350,7 +349,7 @@ class TeamController extends Controller
         //if team's details are not empty
         if (!empty($teams)) {
             //static array for owner,manager and coach
-            $owners_managers = array('owner', 'manager', 'coach');
+            $owners_managers = ['owner', 'manager', TeamPlayers::$ROLE_COACH, TeamPlayers::$ROLE_PHYSIO];
             foreach ($teams as $team) {
                 //if teamplayer's details are not empty
                 if (!empty($team['teamplayers'])) {
@@ -518,12 +517,12 @@ class TeamController extends Controller
         $photo = Photo::select('url')->where('imageable_id', '=', $id)->where('imageable_type', '=',
             config('constants.PHOTO.TEAM_PHOTO'))->where('user_id',
             (isset(Auth::user()->id) ? Auth::user()->id : 0))->get()->toArray();
-        $orgInfo = Organization::select()->where('id', $id)->get()->toArray();
+        $orgInfoObj = Organization::find($id);
 
         return view('teams.teams')->with(array(
             'teams' => $teams,
             'photo' => $photo,
-            'orgInfo' => $orgInfo,
+            'orgInfoObj' => $orgInfoObj,
             'id' => $id,
             'userId' => $user_id
         ));
@@ -552,12 +551,12 @@ class TeamController extends Controller
             ->orderBy('isactive', 'desc')->get();
 
         // $photo= Photo::select('url')->where('imageable_id', '=', $id)->where('imageable_type', '=', config('constants.PHOTO.TEAM_PHOTO'))->where('user_id', (isset(Auth::user()->id)?Auth::user()->id:0))->get()->toArray();
-        $orgInfo = Organization::select()->where('id', $id)->get()->toArray();
+        $orgInfoObj = Organization::find($id);
 
         return view('teams.orgteams')->with(array(
             'teams' => $teams,
             'id' => $id,
-            'orgInfo' => $orgInfo,
+            'orgInfoObj' => $orgInfoObj,
             'userId' => $user_id
         ));
     }
@@ -660,7 +659,7 @@ class TeamController extends Controller
     public function makeasteamcoach($team_id, $user_id)
     {
         if (is_numeric($team_id) && is_numeric($user_id)) {
-            if (TeamPlayers::setUserRole($team_id,$user_id,TeamPlayers::$ROLE_COACH)){
+            if (TeamPlayers::setUserRole($team_id,$user_id,TeamPlayers::$ROLE_COACH,false)){
                 return redirect()->back()->with('status', trans('message.team.teamcoach'));
             } else {
                 return redirect()->back()->with('error_msg', trans('message.team.validation'));
@@ -671,11 +670,40 @@ class TeamController extends Controller
     }
 
     //function to make team makeasteamcoach
+    public function removeasteamcoach($team_id, $user_id)
+    {
+        if (is_numeric($team_id) && is_numeric($user_id)) {
+            if (TeamPlayers::setUserRole($team_id,$user_id,TeamPlayers::$ROLE_PLAYER,false)){
+                return redirect()->back()->with('status', trans('message.team.coachremove'));
+            } else {
+                return redirect()->back()->with('error_msg', trans('message.team.validation'));
+            }
+        } else {
+            return redirect()->back()->with('error_msg', trans('message.team.validation'));
+        }
+    }
+
+
+    //function to make team makeasteamcoach
     public function makeasteamphysio($team_id, $user_id)
     {
         if (is_numeric($team_id) && is_numeric($user_id)) {
-            if (TeamPlayers::setUserRole($team_id,$user_id,TeamPlayers::$ROLE_PHYSIO)){
+            if (TeamPlayers::setUserRole($team_id,$user_id,TeamPlayers::$ROLE_PHYSIO,false)){
                 return redirect()->back()->with('status', trans('message.team.teamphysio'));
+            } else {
+                return redirect()->back()->with('error_msg', trans('message.team.validation'));
+            }
+        } else {
+            return redirect()->back()->with('error_msg', trans('message.team.validation'));
+        }
+    }
+
+    //function to make team makeasteamcoach
+    public function removeasteamphysio($team_id, $user_id)
+    {
+        if (is_numeric($team_id) && is_numeric($user_id)) {
+            if (TeamPlayers::setUserRole($team_id,$user_id,TeamPlayers::$ROLE_PLAYER,false)){
+                return redirect()->back()->with('status', trans('message.team.physioremove'));
             } else {
                 return redirect()->back()->with('error_msg', trans('message.team.validation'));
             }
@@ -1206,14 +1234,19 @@ class TeamController extends Controller
             'email' => 'required|email|max:255',
         ]);
 
-        $result = [];
+        $status = false;
+        $error = false;
         if (!$validator->fails()) {
             $user = User::where('email', $data['email'])->first();
             $team = Team::where('id', $data['teamId'])->first();
 
             $organization = Organization::whereId($team->organization_id)->first();
 
-            if ($team && $organization && $organization->user->id == \Auth::user()->id) {
+            // TODO: ?use policies //if (Gate::check(''))
+
+            if ($team && $organization &&
+                ($organization->user_id == \Auth::user()->id || $team->team_owner_id == \Auth::user()->id )
+            ) {
                 if (!$user) {
                     $user = User::create([
                         'name' => $data['name'],
@@ -1222,41 +1255,48 @@ class TeamController extends Controller
                     \Event::fire(new UserRegistered($user));
                 }
                 if ($user) {
-                    TeamPlayer::where('team_id',$team->id)->where('role','owner')->where('user_id','!=',$user->id)->update(['role'=>'player']);
-                    $teamplayer = TeamPlayer::where('team_id',$team->id)->where('user_id',$user->id)->first();
+                    TeamPlayers::where('team_id',$team->id)->where('role','owner')->where('user_id','!=',$user->id)->update(['role'=>'player']);
+                    $teamplayer = TeamPlayers::where('team_id',$team->id)->where('user_id',$user->id)->first();
                     if ($teamplayer) {
                         $teamplayer->role = 'owner';
                         $teamplayer->save();
                     } else {
-                        $teamplayer= new TeamPlayer();
+                        $teamplayer= new TeamPlayers();
                         $teamplayer->user_id = $user->id;
                         $teamplayer->team_id = $team->id;
                         $teamplayer->role = 'owner';
                         $teamplayer->status = 'accepted';
                         $teamplayer->save();
                     }
-
-
                     $team->team_owner_id = $user->id;
                     $team->save();
-                    $result['message']= 'Ownership changed to '.$user->name;
+                    $status = 'Ownership changed to '.$user->name;
                 } else {
-                    $result['error']=true;
-                    $result['message'] = 'Failed to create user';
+                    $error = 'Failed to create user';
                 }
             } else {
-                $result['error']=true;
-                $result['message'] = 'Permission denied';
+                $error = 'Permission denied';
             }
         } else {
-            $result['error']=true;
-            $result['message'] = $validator->errors()->first();
+            $error = $validator->errors()->first();
         }
 
         if (\Request::isJson()) {
+            $result =  [];
+            if ($status){
+                $result['status']=$status;
+            }
+            if ($error){
+                $result['error']=$error;
+            }
             return $result;
         } else {
-            \Session::flash('data-message', $result);
+            if ($status) {
+                \Session::flash('status', $status);
+            }
+            if ($error) {
+                \Session::flash('error', $error);
+            }
             return redirect()->back();
         }
 
@@ -1299,7 +1339,7 @@ class TeamController extends Controller
         //if team's details are not empty
         if (!empty($teams)) {
             //static array for owner,manager and coach
-            $owners_managers = array('owner', 'manager', 'coach');
+            $owners_managers = ['owner', 'manager', TeamPlayers::$ROLE_COACH ,TeamPlayers::$ROLE_PHYSIO];
             foreach ($teams as $team) {
                 //if teamplayer's details are not empty
                 if (!empty($team['teamplayers'])) {

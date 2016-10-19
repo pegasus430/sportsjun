@@ -18,7 +18,7 @@
                                                                             !empty($organization['name'])?$organization['name']:''
                                                                             }}</a>
                         <p class="t_by">By <a target="_blank"
-                                              href="{{ url('/editsportprofile/'.(!empty($id)?$id:0))}}">{{
+                                              href="{{ url('/editsportprofile/'.(!empty($user_id)?$user_id:0))}}">{{
                                                                                 !empty($organization['user']['name'])?$organization['user']['name']:''
                                                                                 }}</a></p>
                     </div>

@@ -25,8 +25,8 @@ Route::get('organizationTeamlist/{id}/{group_id?}', [
     'uses' => 'User\TeamController@organizationTeamlist',
 ]);
 
-Route::get('ogranization/organizations/{user_id?}', [
-    'as'   => 'ogranizations',
+Route::get('organization/organizations/{user_id?}', [
+    'as'   => 'organizations',
     'uses' => 'User\OrganizationController@organizationList',
 ]);
 
@@ -126,10 +126,21 @@ Route::get('team/maketeamcoach/{team_id}/{user_id}', [
     'uses' => 'User\TeamController@makeasteamcoach',
 ]);
 
+Route::get('team/removeteamcoach/{team_id}/{user_id}', [
+    'as'   => 'team/removeteamcoach',
+    'uses' => 'User\TeamController@removeasteamcoach',
+]);
+
+
 //to make as coach
 Route::get('team/maketeamphysio/{team_id}/{user_id}', [
     'as'   => 'team/maketeamphysio',
     'uses' => 'User\TeamController@makeasteamphysio',
+]);
+
+Route::get('team/removeteamphysio/{team_id}/{user_id}', [
+    'as'   => 'team/removeteamphysio',
+    'uses' => 'User\TeamController@removeasteamphysio',
 ]);
 
 

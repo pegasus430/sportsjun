@@ -14,8 +14,8 @@
 
 				</div>
 				@endif
-				
-				<div class="row">
+
+					<div class="row">
 					<div class="team_managers_row clearfix">
 						<div class="col-md-12">
 
@@ -55,17 +55,29 @@
 							 </div>
 								<div class="player_info">
 									<div class="player_profile_title"><a href="{{ url('/editsportprofile').'/'.(!empty($own['user_id'])?$own['user_id']:0) }}">{{ !empty($own['user']['name'])?$own['user']['name']:'NA' }}</a></div>
-									@if(($logged_in_user_role == 'owner' || $logged_in_user_role == 'manager') && $own['role'] == 'manager'	)
+									@if(($logged_in_user_role == 'owner' || $logged_in_user_role == 'manager'))
 									<div>
 										<div class="dropdown">
 											<a href="#" data-toggle="dropdown" class="dropdown-toggle player_position">{{ !empty($own['role'])?$own['role']:'NA' }}&nbsp;<span class="glyphicon glyphicon-menu-down font-small"></span></a>
 											<ul class="dropdown-menu">
-												<li><a href="{{  URL::to('/team/removeteammanager/'.(!empty($own['team_id'])?$own['team_id']:0).'/'.(!empty($own['user_id'])?$own['user_id']:0)) }}">Remove Team Manager</a></li>
+												@if ($own['role'] == 'manager')
+													<li><a href="{{  URL::to('/team/removeteammanager/'.(!empty($own['team_id'])?$own['team_id']:0).'/'.(!empty($own['user_id'])?$own['user_id']:0)) }}">Remove Team Manager</a></li>
+												@else
+													<li><a href="{{  URL::to('/team/maketeammanager/'.(!empty($own['team_id'])?$own['team_id']:0).'/'.(!empty($own['user_id'])?$own['user_id']:0)) }}">Make Team Manager</a></li>
+												@endif
 												<li><a href="{{  URL::to('/team/removefromteam/'.(!empty($own['team_id'])?$own['team_id']:0).'/'.(!empty($own['user_id'])?$own['user_id']:0)) }}">Remove From Team</a></li>
 												<li><a href="{{  URL::to('/team/maketeamcaptain/'.(!empty($own['team_id'])?$own['team_id']:0).'/'.(!empty($own['user_id'])?$own['user_id']:0)) }}">Make Team Captain</a></li>
 												<li><a href="{{  URL::to('/team/maketeamvicecaptain/'.(!empty($own['team_id'])?$own['team_id']:0).'/'.(!empty($own['user_id'])?$own['user_id']:0)) }}">Make Team Vice-Captain</a></li>
-												<li><a href="{{  URL::to('/team/maketeamcoach/'.(!empty($own['team_id'])?$own['team_id']:0).'/'.(!empty($own['user_id'])?$own['user_id']:0)) }}">Make Coach</a></li>
-												<li><a href="{{  URL::to('/team/maketeamphysio/'.(!empty($own['team_id'])?$own['team_id']:0).'/'.(!empty($own['user_id'])?$own['user_id']:0)) }}">Make Physio</a></li>
+												@if ($own['role'] == 'coach')
+														<li><a href="{{  URL::to('/team/removeteamcoach/'.(!empty($own['team_id'])?$own['team_id']:0).'/'.(!empty($own['user_id'])?$own['user_id']:0)) }}">Remove Coach</a></li>
+												@else
+													<li><a href="{{  URL::to('/team/maketeamcoach/'.(!empty($own['team_id'])?$own['team_id']:0).'/'.(!empty($own['user_id'])?$own['user_id']:0)) }}">Make Coach</a></li>
+												@endif
+												@if ($own['role'] == 'physio')
+														<li><a href="{{  URL::to('/team/removeteamphysio/'.(!empty($own['team_id'])?$own['team_id']:0).'/'.(!empty($own['user_id'])?$own['user_id']:0)) }}">Remove Physio</a></li>
+												@else
+													<li><a href="{{  URL::to('/team/maketeamphysio/'.(!empty($own['team_id'])?$own['team_id']:0).'/'.(!empty($own['user_id'])?$own['user_id']:0)) }}">Make Physio</a></li>
+												@endif
 											</ul>
 										</div>
 									</div>

@@ -213,7 +213,7 @@ class AlbumController extends Controller {
 		$id="";
 		$loginUserId= "";
 		$orgalbumcreate="";
-		$orgInfo = [];
+		$orgInfoObj = null;
 		if($action=='team')
 		{
 
@@ -257,7 +257,7 @@ class AlbumController extends Controller {
 			$loginUserId= isset(Auth::user()->id)?Auth::user()->id:0;  //user or guest
 			//to create album permissions
 			$orgalbumcreate = DB::select("SELECT * FROM `organization` tp WHERE `user_id` = $loginUserId AND `id`=$action_id AND tp.deleted_at is NULL");
-			$orgInfo= Organization::select()->where('id',$action_id)->get()->toArray();
+			$orgInfoObj= Organization::find($action_id);
 			$album_array = Album::select('id','title','user_id')->where('imageable_type',$imageable_type_album)->where('imageable_id',$action_id)->get()->toArray();//albums related to users
 
 
@@ -433,7 +433,7 @@ class AlbumController extends Controller {
 			'loginUserId'                 => $loginUserId,
 			'orgalbumcreate'              => $orgalbumcreate,
 			'organization_profile_albums' => $organization_profile_albums,
-			'orgInfo'                     => $orgInfo
+			'orgInfoObj'                     => $orgInfoObj
 		));
 
 		// }

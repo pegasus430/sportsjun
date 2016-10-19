@@ -319,7 +319,7 @@ class OrganizationController extends Controller
         $totalresult = $query->get();
         $total = count($totalresult);
         $tournaments = $query->limit($limit)->offset($offset)->orderBy('tournaments.updated_at', 'desc')->get();
-        $orgInfo = Organization::select()->where('id', $id)->get()->toArray();
+
         $orgInfoObj = Organization::find($id);
 
         $parent_tournaments = TournamentParent::whereOrganizationId($id)->get();
@@ -360,7 +360,6 @@ class OrganizationController extends Controller
         return view('organization.tournaments')->with([
             'tournaments' => $tournaments,
             'id' => $id,
-            'orgInfo' => $orgInfo,
             'userId' => $user_id,
             'totalTournaments' => $total,
             'sports_array' => $sports_array,
@@ -409,7 +408,7 @@ class OrganizationController extends Controller
         }
 
         return view('organization.standing.overall_standing_display_sports',
-            compact('orgInfo', 'orgInfoObj', 'parent_tournament'));
+            compact('orgInfoObj', 'parent_tournament'));
     }
 
     public function organizationList($user_id = null)
@@ -418,6 +417,7 @@ class OrganizationController extends Controller
         $user = $user_id ? User::whereId($user_id)->first() : null;
         if (!$user) {
             $user = \Auth::user();
+            $user_id = $user->id;
         }
 
         $managedOrgs = Organization::with(['teamplayers', 'photos', 'user'])
@@ -434,10 +434,11 @@ class OrganizationController extends Controller
             'teamplayers',
             'photos',
             'user',
-            'staff' => function ($query) use ($user) {
-                $query->where('user_id', $user->id);
-            }
+            'staff'
         ])
+            ->whereHas('staff',function ($query) use ($user_id) {
+                $query->where('user_id', $user_id);
+            })
             ->orderBy('isactive', 'desc')
             ->get();
 
@@ -445,8 +446,8 @@ class OrganizationController extends Controller
             'managedOrgs' => $managedOrgs,
             'followingOrgs' => $followingOrgs,
             'joinedOrgs' => $joinedOrgs,
-            'user' => $user
-
+            'user' => $user,
+            'user_id'=>$user_id
         ]);
     }
 

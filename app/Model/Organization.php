@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\Helpers\Helper;
 use App\User;
 use Auth;
 use Illuminate\Database\Eloquent\Model;
@@ -24,6 +25,9 @@ class Organization extends Model
                 'latitude', 'address', 'city_id', 'city', 'state_id', 'state', 'country_id',
                 'country', 'zip', 'alternate_contact_number', 'contact_name', 'logo');
         protected $morphClass        = 'organization';
+
+
+    protected $appends = ['logoImage'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -111,7 +115,13 @@ class Organization extends Model
         }
         //End
 
-         function followers(){
+        function followers(){
             return $this->hasMany('App\Model\Followers','type_id')->whereType('organization');
         }
+
+        public function getLogoImageAttribute()
+        {
+            return Helper::getImagePath($this->logo,'organization');
+        }
+
 }

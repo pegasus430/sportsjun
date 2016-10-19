@@ -1,17 +1,13 @@
-@if (session('data-message'))
-    <?php      $data_message = session('data-message');    ?>
-    <div
-            @if (isset($data_message['error']))
-                class="alert alert-warning" id="warning-alert"
-            @else
-                class="alert alert-success" id="success-alert"
-            @endif
-    >
-        <button type="button" class="close" data-dismiss="alert">x</button>
-       {{ array_get($data_message,'message') }}
+@if (session('status'))
+    <div class="alert alert-success">
+        {{ session('status') }}
+    </div>
+@elseif (session('error_msg'))
+    <div class="alert alert-danger">
+        {{ session('error_msg')  }}
+
     </div>
 @endif
-
 
 @foreach($teams as $t)
     <div class="t_details" style="min-height: inherit;">
@@ -49,9 +45,11 @@
                     <div class="clearfix"></div>
                     <p class="lt-grey">{{ !empty($t->description)?$t->description:'' }}</p>
                     <br>
-                    <div class="pull-right">
-                        <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#transfer-owner-modal" data-team-id="{{$t->id}}"><i class="fa fa-exchange"></i> Transfer ownership</button>
-                    </div>
+                    @if(isset($userId) && ($userId == $t->team_owner_id || $organization->user_id = $userId ))
+                        <div class="pull-right">
+                            <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#transfer-owner-modal" data-team-id="{{$t->id}}"><i class="fa fa-exchange"></i> Transfer ownership</button>
+                        </div>
+                    @endif
                     <p>Sport : <span class='blue match_type_text'>{{Helper::getSportName($t->sports_id)}}</span> &nbsp;
                         &nbsp; Players : <span
                                 class='blue match_type_text'> {{Helper::getTeamDetails($t->id)->teamplayers->count()}}  </span>&nbsp;
