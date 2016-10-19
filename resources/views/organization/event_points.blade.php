@@ -15,7 +15,10 @@
 								  </thead>
 								<tbody>
 								   <tr>
-								   			<td>
+									   <td>
+										   <p><b><center>&nbsp;</center></b></p>
+										   <br/>
+										   {!! Helper::makeImageHtml($lis->logoImage,array('height'=>60,'width'=>60,'class'=>'img-responsive img-rounded center-block') )!!}</td>
 								   		@foreach($orgInfoObj->groups as $og)
 												<td>
 													<p><b><center>{{$og->name}}</center></b></p>
@@ -34,7 +37,6 @@
 													<td class="text-center">{{$lis->getGroupPoints($lis->id,$og->id)}}</td>
 											@endforeach
 										</tr>
-
 								</tbody>
 							</table>
 						</div>
@@ -101,6 +103,11 @@
                                 @else
                                     <tr id="no_teams_{{$group->id}}"><td colspan="6">{{trans('message.tournament.empty_teams') }}</td></tr>
                                 @endif
+									<tr>
+										<td colspan="6" class="text-center-force">
+											<p class="points-footer">Powered by <img class="img-responsive pull-right" src="{{url('/images/SportsJun_Final_Transparent.png')}}" height="30px" width="180px"></p>
+										</td>
+									</tr>
                                 </tbody>
                                 </table>
 

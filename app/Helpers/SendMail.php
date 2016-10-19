@@ -16,7 +16,7 @@ class SendMail {
 		$view_data = $data['view_data'];
 		$send_flag = !empty($data['send_flag'])?$data['send_flag']:0;
 		$to_user_id = $data['to_user_id'];
-		$type = !empty($type)?$type:NULL;
+		$type = !empty($data['type'])? $data['type']:NULL;
 		$cc_address = !empty($cc_address)?$cc_address:NULL;
 		$bcc_address = !empty($bcc_address)?$bcc_address:NULL;
 		$status = 0;

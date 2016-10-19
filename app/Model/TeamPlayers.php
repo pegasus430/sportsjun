@@ -12,8 +12,14 @@ class TeamPlayers extends Model
     protected $dates = ['deleted_at'];
     protected $fillable = array('team_id', 'user_id', 'role', 'created_at', 'updated_at', 'isactive', 'status');
 
+
+    static $ROLE_OWNER = 'owner';
+    static $ROLE_MANAGER = 'manager';
+    static $ROLE_KEEPER = 'keeper';
+    static $ROLE_PLAYER = 'player';
     static $ROLE_COACH = 'coach';
     static $ROLE_PHYSIO = 'physio';
+    static $ROLE_CAPTAIN = 'captain';
     static $ROLE_VICE_CAPTAIN ='vice-captain';
 
     //a player belongs to a team

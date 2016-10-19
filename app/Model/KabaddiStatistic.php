@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class KabaddiStatistic extends Model
 {
     //
-      protected $table = 'kabaddi_statistics';
+      protected $table = 'kabaddi_statistic';
 }

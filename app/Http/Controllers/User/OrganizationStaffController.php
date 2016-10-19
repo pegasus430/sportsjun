@@ -26,9 +26,9 @@ class OrganizationStaffController extends Controller
         $staffList = $organization->staff;
 
         $staffRoles = OrganizationRole::lists('name', 'id')->all();
-        $orgInfo= Organization::select()->where('id',$id)->get()->toArray();
+        $orgInfoObj= Organization::find($id);
         return view('organization.staff.list',
-            compact('id', 'staffList', 'staffRoles', 'orgInfo'));
+            compact('id', 'staffList', 'staffRoles', 'orgInfoObj'));
     }
 
     /**

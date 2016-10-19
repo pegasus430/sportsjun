@@ -406,6 +406,7 @@ class TabletennisScoreCardController extends parentScoreCardController
         $main_match_model->match_details=$match_details;
         $match_model->save();
         $main_match_model->save();
+        Helper::start_match_email($match_model);
 
         return $match_details;
     }

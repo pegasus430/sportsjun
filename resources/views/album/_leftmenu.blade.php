@@ -46,7 +46,7 @@
                 <li><a class="sidemenu_5" href="{{ url('sport/playerrequests').'/'.(isset(Auth::user()->id)?Auth::user()->id:0) }}"><span class="ico ico-request"></span> Requests</a></li>
             @endif
             <li><a class="sidemenu_6" href="{{ url('/myschedule',[$userId]) }}"><span class="ico ico-schedule"></span> {{($userId == (isset(Auth::user()->id)?Auth::user()->id:0))?'My Schedule':'Schedule'}}</a></li>
-            <li><a class="sidemenu_7" href="{{ url('/following',[$userId]) }}"><span class="ico ico-schedule"></span> Following</a></li>
+            <li><a class="sidemenu_7" href="{{ url('/following',[$userId]) }}"><span class="ico ico-followers"></span> Following</a></li>
         </ul>
     </div>
 </div>

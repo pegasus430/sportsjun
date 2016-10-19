@@ -171,7 +171,7 @@ class User extends Model implements AuthenticatableContract,
     //a user can be a multiple team player
     public function userdetails()
     {
-        return $this->hasMany('App\Model\TeamPlayer');
+        return $this->hasMany('App\Model\TeamPlayers');
     }
 
     public function photos()

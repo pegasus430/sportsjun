@@ -58,24 +58,13 @@ Route::group(['prefix'=>'match'], function(){
       Route::post('volleyballAddScore', ['as'=>'match/volleyballAddScore', 'uses'=>'User\ScoreCard\VolleyballScoreCardController@addScore']);
 
 
-        //routes for Kabaddi
-    Route::post('confirmSquadkabaddi',        
-         ['as'=>'match/confirmSquadkabaddi', 
-         'uses'=>'User\ScoreCard\KabaddiScoreCardController@confirmSquad']);
 
-    Route::post('submitServingPlayerskabaddi',         
-        ['as'=>'match/submitServingPlayerskabaddi', 
-        'uses'=>'User\ScoreCard\KabaddiScoreCardController@submitServingPlayers']);
-
-    Route::post('kabaddiSwapPlayers',    ['as'=>'match/kabaddiSwapPlayersKabaddi', 'uses'=>'User\ScoreCard\KabaddiScoreCardController@kabaddiSwapPlayers']);
-
+     //routes for basketball
+    Route::post('confirmSquadkabaddi',         ['as'=>'match/confirmSquadKabaddi', 'uses'=>'User\ScoreCard\KabaddiScoreCardController@confirmSquad']);
+    Route::post('kabaddiSwapPlayers',    ['as'=>'match/hockeySwapPlayersKabaddi', 'uses'=>'User\ScoreCard\KabaddiScoreCardController@kabaddilSwapPlayers']);
     Route::post('/endMatchRecordkabaddi', 'User\ScoreCard\KabaddiScoreCardController@kabaddiStoreRecord');
-
-    Route::post('/saveMatchRecordVolleyball', 'User\ScoreCard\KabaddiScoreCardController@kabaddiSaveRecord');
-
-    Route::post('manualScoringkabaddi', ['as'=>'match/manualScoringkabaddi', 'uses'=>'User\ScoreCard\KabaddiScoreCardController@manualScoring']);
-
-      Route::post('kabaddiAddScore', ['as'=>'match/volleyballAddScore', 'uses'=>'User\ScoreCard\KabaddiScoreCardController@addScore']);
+    Route::post('/saveMatchRecordkabaddi', 'User\ScoreCard\KabaddiScoreCardController@kabaddiSaveRecord');
+    Route::post('manualScoringkabaddi', ['as'=>'match/manualScoringKabaddi', 'uses'=>'User\ScoreCard\KabaddiScoreCardController@manualScoring']);
 
         //routes for Throwball
     Route::post('confirmSquadthrowball',        

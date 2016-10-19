@@ -10,7 +10,7 @@ Personal Stats View : <a href="{!! url('showsportprofile/'.$view_data['user_id']
 <br>
 
 <br>
-You can also view other team scores, team stats and personal stats of players by <a href="http://www.sportsjun.com">loggin to Sportsjun</a>
+You can also view other team scores, team stats and personal stats of players by <a href="http://www.sportsjun.com">login to Sportsjun</a>
 
 
 Regards!<br>

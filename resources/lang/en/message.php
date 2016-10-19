@@ -16,7 +16,7 @@ return [
         'availableforteam' => 'Interested to join teams?',
         'allowfollowerstofollow' => 'Interested to play matches?',
 		'availableforteam_view' => 'Interested to join teams',
-        'allowfollowerstofollow_view' => 'Interested to play matches',        
+        'allowfollowerstofollow_view' => 'Interested to play matches',
         'sportskill' => 'Sport Skill',
         'playersportstats' => 'Player Sport Stats',
         'nostats' => 'No Stats Found.',
@@ -105,7 +105,7 @@ return [
 				'venue' => 'Venue',
 				'playertype' => 'Player Type',
 				'matchtype' => 'Match Type',
-				'number_of_games' => 'Number of Games',			
+				'number_of_games' => 'Number of Games',
 				'match' => 'Match',
 				'selectteam' => 'Select A Team',
 				'selectpalyer' => 'Select A Player',
@@ -138,9 +138,11 @@ return [
 			'joinedteams' => 'Joined Teams',
 			'followingteam' => 'Following Teams',
 			'managedorganizations' => 'Managed Organizations',
+            'joinedorganizations' => 'Joined Organizations',
+            'followingorganizations' => 'Following Organizations',
 			'isavailable' => 'Is Available',
 			],
-		
+
 	],
 	'facility' => [
 	'facilitycreated' => 'Facility Created Successfully.',
@@ -325,7 +327,9 @@ return [
 	'teamvicecaptain' => 'Team Vice-Captain Updated Successfully.',
     'teamcoach' =>        'Team Coach Updated Successfully.',
     'teamphysio' =>        'Team Physio Updated Successfully.',
-	'managerremove' => 'Manager Deleted Succesfully.',
+	'managerremove' => 'Manager Deleted Successfully.',
+    'coachremove' => 'Coach Deleted Successfully',
+    'physioremove' => 'Physio Deleted Successfully',
 	'managervalidation' => 'No Managers Found',
 	'Invitation' => 'Invitation Sent Successfully.',
 	'Invitationfail' => 'Failed to Send the Invitation.',
@@ -364,7 +368,7 @@ return [
 		'washout' => 'WASHOUT'
 		],
          'scores' => 'Scores' ,
-		'new_owner_notification'=>'Admin has added you as the Team Owner',	
+		'new_owner_notification'=>'Admin has added you as the Team Owner',
 		'old_owner_notification'=>'Admin has removed you as the Team Owner',
         'ownership_change_modal'=>[
                 'title'=>'Change ownership',
@@ -375,7 +379,7 @@ return [
 	'album' => [
 	'albumcreate' => 'Album Created Successfully.',
 	'albumphotocreate' => 'Photos Added Successfully.',
-	
+
 	'fields' => [
 		'albumheading' => 'Create Album',
 		'albumname' => 'Album Name',
@@ -411,7 +415,7 @@ return [
 		'zip' =>'Zip code',
 		'image' => 'Images',
 		],
-		
+
 	],
 	'marketplace' => [
 		'fields' =>[
@@ -438,15 +442,15 @@ return [
 		'email' =>'Email',
 		'subject' =>'Subject',
 		'message' =>'Message',
-	
-		
+
+
 		],
 	],
 	'inviteplayer'=>[
-		
-		'subject' => 'SportsJun Player Invite.',		
-		'addusersubject' => 'Added as SportsJun User.',		
-		
+
+		'subject' => 'SportsJun Player Invite.',
+		'addusersubject' => 'Added as SportsJun User.',
+
 		],
 	'scorecard'=>[
 		'scorecardmsg' => 'Scorecard Created Successfully.',
@@ -532,7 +536,7 @@ return [
         'added_message' => 'Staff Invited Successfully!',
         'already_exists_message' => 'Staff Already exists!',
         'user_create_email_required' => 'User not exists in database. Please, provide email to register new'
-    ], 
+    ],
     'settings' 	=> 'Settings',
     'sports_settings'	=> [
     		'number_of_sets'	=> 'Number of Sets',

@@ -40,9 +40,11 @@
           @for($set_index=1; $set_index<=$set; $set_index++)
                  
                <td class='a_set{{$set_index}} ' >
-                  <span class='remove_button_left button_set_{{$set_index}}'></span>
+              
                       {{$rubber_a_array['set'.$set_index]}}
-                  <span class='add_button_left button_set_{{$set_index}}'></span>
+
+                      <span class="tie_breaker"> {{Helper::displayEmptyDash($rubber_a_array['set'.$set_index.'_tie_breaker'])}}</span>
+             
                </td>
           @endfor
               <td> {{$rubber_a_array['aces']}}</td>
@@ -58,9 +60,11 @@
             @for($set_index=1; $set_index<=$set; $set_index++)
                   
                <td class='b_set{{$set_index}}  '>
-                   <span class='remove_button_right button_set_{{$set_index}}'></span>
+              
                       {{$rubber_b_array['set'.$set_index]}}
-                   <span class='add_button_right button_set_{{$set_index}}'></span>
+
+                       <span class="tie_breaker"> {{Helper::displayEmptyDash($rubber_b_array['set'.$set_index.'_tie_breaker'])}}</span>
+                  
                 </td>
           @endfor
 

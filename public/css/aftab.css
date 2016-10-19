@@ -1937,6 +1937,11 @@ transition: all 300ms ease;opacity: 1;}
 	background: url(../images/schedule_reg_state.png) top center no-repeat;
 	background-size: contain;
 	}
+.leftmenu-icon .ico-followers {
+	background: url(../images/followers_reg_state.png) top center no-repeat;
+	background-size: contain;
+}
+
 .leftmenu-icon .ico-team {
 	background: url(../images/team_reg_state.png) top center no-repeat;
 	background-size: contain;
@@ -1947,7 +1952,6 @@ transition: all 300ms ease;opacity: 1;}
 	}
 .leftmenu-icon .ico-tournament {
 	background: url(../images/tournament_reg_state.png) top center no-repeat;
-
 	background-size: contain;
 	}
 
@@ -1984,6 +1988,10 @@ transition: all 300ms ease;opacity: 1;}
 	background: url(../images/info_reg_state.png) top center no-repeat;
 	background-size: contain;
 	}
+.leftmenu-icon .ico-settings {
+	background: url(../images/settings_reg_state.png) top center no-repeat;
+	background-size: contain;
+}
 	
 	
 	
@@ -2008,6 +2016,10 @@ transition: all 300ms ease;opacity: 1;}
 	background: url(../images/schedule_act_state.png) top center no-repeat;
 	background-size: contain;
 	}
+.leftmenu-icon .active .ico-followers {
+	background: url(../images/followers_act_state.png) top center no-repeat;
+	background-size: contain;
+}
 .leftmenu-icon .active .ico-communication {
 	background: url(../images/communication_act_state.png) top center no-repeat;
 	background-size: contain;
@@ -2038,7 +2050,11 @@ transition: all 300ms ease;opacity: 1;}
 	background: url(../images/stats_act_state.png) top center no-repeat;
 	background-size: contain;
 	}
-	
+
+.leftmenu-icon .active .ico-settings {
+	background: url(../images/settings_act_state.png) top center no-repeat;
+	background-size: contain;
+}
 
 /* Dropdown Alert */
 ul.dropdown-alerts .da-arrow {

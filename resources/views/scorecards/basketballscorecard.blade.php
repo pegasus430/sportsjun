@@ -109,6 +109,7 @@ input:read-only {
 	<?php $team_a_id = $match_data[0]['a_id']; $team_b_id= $match_data[0]['b_id'] ; 
 	$match_id=$match_data[0]['id'];
 	$tournament_id=$match_data[0]['tournament_id'];
+   
 
 	?>
 	<?php
@@ -120,8 +121,12 @@ input:read-only {
 	$b_fouls=0;
 	$attr="";
 	$class_ps='';
-	$number_of_quarters=0;
 
+	 $match_settings=Helper::getMatchSettings($match_data[0]['tournament_id'],$match_data[0]['sports_id']);
+	$number_of_quarters=$match_settings->number_of_sets;
+
+	$type_name = 'Quarter';
+	$short_type_name='Qtr';
 
 	if(isset($preferences->number_of_quarters)){
 		$number_of_quarters=$preferences->number_of_quarters;
@@ -134,11 +139,16 @@ input:read-only {
 		$a_fouls=$match_details->{$team_a_id}->fouls;
 		$b_fouls=$match_details->{$team_b_id}->fouls;		
 	}
+
+	if($number_of_quarters==2){
+		$type_name='Half';
+		$short_type_name='Half';
+	}
 	
 	?>
 
 	<div class="col_standard soccer_scorecard">
-		<div id="team_vs" class="ss_bg">
+		<div id="team_vs" class="ss_bg bk_bg">
 			<div class="container">
 				<div class="row">
 					<div class="team team_one col-xs-5">
@@ -448,7 +458,7 @@ input:read-only {
 												<th >Fouls</th>
 												
 										@for($index=1; $index<=$number_of_quarters; $index++)
-												<th>Qtr {{$index}}</th>
+												<th>{{$short_type_name}} {{$index}}</th>
 										@endfor
 
 												<th> Total </th>
@@ -503,7 +513,7 @@ input:read-only {
 												<th >Fouls</th>
 												
 										@for($index=1; $index<=$number_of_quarters; $index++)
-												<th>Qtr {{$index}}</th>
+												<th>{{$short_type_name}} {{$index}}</th>
 										@endfor
 
 												<th> Total </th>
@@ -572,7 +582,7 @@ input:read-only {
 												<th >Fouls</th>											
 												
 										@for($index=1; $index<=$number_of_quarters; $index++)
-												<th>Qtr {{$index}}</th>
+												<th>{{$short_type_name}} {{$index}}</th>
 										@endfor
 												<th>Total</th>
 
@@ -634,7 +644,7 @@ input:read-only {
 												<th >Fouls</th>
 												
 										@for($index=1; $index<=$number_of_quarters; $index++)
-												<th>Qtr {{$index}}</th>
+												<th>{{$short_type_name}}{{$index}}</th>
 										@endfor
 
 												<th> Total </th>
@@ -707,13 +717,13 @@ input:read-only {
 
 						<div class='col-xs-12 panel' style="padding-top : 20px; padding-bottom:20px; border:inset #ddd 1px; ">
 							<div class='hidden-xs col-sm-3'>
-								<label>Choose Quarter </label>
+								<label>Choose {{$type_name}} </label>
 							</div>
 
 							@for($i=1; $i<=$number_of_quarters; $i++)
 					
 							<div class='col-xs-6 col-sm-{{floor(12/($number_of_quarters + 1))}}'>
-								<label for='quarter_{{$i}}_id' class="label_half_time" > Quarter {{$i}} &nbsp;</label>
+								<label for='quarter_{{$i}}_id' class="label_half_time" > {{$type_name}} {{$i}} &nbsp;</label>
 							    <input type='radio' name='choose_half_time' value='quarter_{{$i}}' {{$i==1?'checked':''}}  id='quarter_{{$i}}_id' class='checkbox_half_time' > 
 							</div>
 							@endfor
@@ -726,7 +736,7 @@ input:read-only {
 							<label class="col-sm-3 col-xs-5">
 								<select name='select_half_time' class='form-control ' data-style="" onclick="return SJ.SCORECARD.soccerChooseTime(this)">
 								@for($i=1; $i<=$number_of_quarters; $i++)
-									<option value="quarter_{{$i}}">Quarter {{$i}}</option>
+									<option value="quarter_{{$i}}">{{$type_name}} {{$i}}</option>
 								@endfor
 								</select>
 							</label>
@@ -1097,16 +1107,20 @@ input:read-only {
 								<div class='col-sm-12'>								
 									<div class='row'>
 										<div class='col-sm-4'>
-											Number of Quarters
+											Match divided into
 										</div>
 										<div class="col-sm-5">
-											<input type='text' required="" placeholder="eg. 2" name='number_of_quarters' id='number_of_quarters' value='4' readonly="">
+											<select name="number_of_quarters" id='number_of_quarters' class="form-control">
+											<option value="2" {{$number_of_quarters==2?'selected':''}}>Halves</option>
+											<option value="4" {{$number_of_quarters==4?'selected':''}}>Quarters </option>
+												
+											</select>
 										</div>
 									</div>
 									<br>
 									<div class='row'>
 										<div class='col-sm-4'>
-											Each Quarter time
+											Each Quarter/Half Time
 										</div>
 										<div class="col-sm-5">
 											<input type='text' required="" placeholder="eg. 30" name='quarter_time' id='quarter_time'>

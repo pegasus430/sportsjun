@@ -64,7 +64,13 @@ return [
                 [
                         'MATCH_TYPE'  => [
                                 'CRICKET'      => ['odi' => 'ODI', 't20' => 'T20',
-                                        'test' => 'TEST'],
+                                        'test' => 'TEST',
+                                        'F5'=>'F5',
+                                        'T10'=>'T10',
+                                        'F15'=>'F15',
+                                        'T25'=>'T25',
+                                        'T30'=>'T30','T35'=>'T35',
+                                        'F40'=>'F40','F45'=>'F45'],
                                 'TENNIS'       => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES'],
                                 'TABLE TENNIS' => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES'],
                                 'FOOTBALL'     => ['other' => 'OTHERS'],
@@ -78,7 +84,12 @@ return [
                 [
                         'MATCH_TYPE'  => [
                                 'CRICKET'      => ['odi' => 'ODI', 't20' => 'T20',
-                                        'test' => 'TEST', 'any'=>'ANY'],
+                                        'test' => 'TEST', 
+                                        'F5'=>'F5',
+                                        'T10'=>'T10',
+                                        'T15'=>'T15','T25'=>'T25',
+                                        'T30'=>'T30','T35'=>'T35',
+                                        'F40'=>'F40','F45'=>'F45','any'=>'ANY'],
                                 'TENNIS'       => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES',
                                          'any'=>'ANY'],
 

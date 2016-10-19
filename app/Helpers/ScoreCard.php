@@ -13,6 +13,7 @@ use App\Model\TeamPlayers;
 use App\Model\volleyballScore;
 use App\Model\VolleyballPlayerMatchwiseStats;
 use App\Model\BasketballPlayerMatchwiseStats;
+use App\Model\KabaddiPlayerMatchwiseStats;
 use App\Model\UltimateFrisbeePlayerMatchwiseStats;
 use App\Model\SquashPlayerRubberScore;
 use App\Model\WaterpoloPlayerMatchwiseStats;
@@ -175,6 +176,9 @@ class ScoreCard {
 				case '16':
 	$model =WaterpoloPlayerMatchwiseStats::where(['match_id'=>$match_id, 'team_id'=>$team_id])->get();
 					break;
+				case '14':
+	$model =KabaddiPlayerMatchwiseStats::where(['match_id'=>$match_id, 'team_id'=>$team_id])->get();
+
 				
 				
 				default:
@@ -187,6 +191,11 @@ class ScoreCard {
 		}
 
 		return $total_points;
+	}
+
+
+	public static function send_email_for_match(){
+
 	}
 
 

@@ -118,7 +118,9 @@ class Helper
             File::makeDirectory($newFilePath, $mode = 0777, true, true);
         }
 
-        $newFileName = str_random(20).'.'.$image->getClientOriginalExtension();
+
+        $newFileName = str_random(20) . '.' . $image->getClientOriginalExtension();
+
         try {
             $image->move($newFilePath, $newFileName);
             $photosArray = array(
@@ -133,7 +135,9 @@ class Helper
 
             $photo = Photo::create($photosArray);
             return $photo->id;
-        } catch(FileException $ex){
+
+        } catch (FileException $ex) {
+
             Log::error($ex->getMessage());
         }
         return false;
@@ -691,6 +695,16 @@ class Helper
         $tTwentyWinPercentage = 0;
         $testWinPercentage = 0;
 
+        $match_type = config('constants.ENUM.SCHEDULE.MATCH_TYPE.CRICKET');
+            
+        
+        foreach($match_type as $i=>$value){
+            ${'winCount' . $i} = 0;
+            ${'looseCount' . $i} = 0;
+            ${'isTied' . $i} = 0;
+            ${$i . 'WinPercentage'} = 0;
+        }
+
         if (count($teamStats)) {
             foreach ($teamStats as $stats) {
                 if ($stats['match_type'] == 'odi') {
@@ -734,6 +748,25 @@ class Helper
                         }
                     }
                 }
+
+                 foreach($match_type as $i=>$value){
+
+                    if ($stats['match_type'] == $i) {
+                        if ($stats['winner_id'] == $teamId) {
+                            ${'winCount' . $i} = ${'winCount' . $i} + 1;
+                        } else {
+                            if ($stats['looser_id'] == $teamId) {
+                                ${'looseCount' . $i} = ${'looseCount' . $i} + 1;
+                            } else {
+                                if ($stats['is_tied']) {
+                                    ${'isTied' . $i} = ${'isTied' . $i} + 1;
+                                }
+                            }
+                        }
+                    }
+
+                }
+
             }
         }
         $odiTotalMatches = $winCountOdi + $looseCountOdi + $isTiedOdi;
@@ -772,11 +805,34 @@ class Helper
             'wonPercentage' => $testWinPercentage
         ];
 
-        $finalArray = [
-            'odiStatsArray' => $odiStatsArray,
-            'tTwentyStatsArray' => $tTwentyStatsArray,
-            'testStatsArray' => $testStatsArray
-        ];
+
+         foreach($match_type as $i=>$value){
+            ${$i . 'TotalMatches'} = ${'winCount' . $i} + ${'looseCount' . $i} + ${'isTied' . $i};
+            if (${$i . 'TotalMatches'}) {
+                ${$i . 'WinPercentage'} = number_format((${'winCount' . $i} / (${$i . 'TotalMatches'})) * 100, 2);
+            }
+            ${$i . 'StatsArray'} = [
+                'totalMatches' => ${$i . 'TotalMatches'},
+                'winCount' => ${'winCount' . $i},
+                'looseCount' => ${'looseCount' . $i},
+                'isTied' => ${'isTied' . $i},
+                'wonPercentage' => ${$i . 'WinPercentage'}
+            ];
+
+
+        }
+
+        // $finalArray = [
+        //     'odiStatsArray' => $odiStatsArray,
+        //     'tTwentyStatsArray' => $tTwentyStatsArray,
+        //     'testStatsArray' => $testStatsArray
+        // ];
+
+        $finalArray=[];         
+        foreach($match_type as $i=>$value){
+            $finalArray[$i . 'StatsArray'] = ${$i . 'StatsArray'};
+        }
+
 
         return $finalArray;
     }
@@ -1005,9 +1061,9 @@ class Helper
         return $sportName;
     }
 
-    public static function getImagePath($imgsrc, $imgtype, $details ='')
+    public static function getImagePath($imgsrc, $imgtype, $details = '')
     {
-        if (!$imgsrc || $imgsrc == '' ) {
+        if (!$imgsrc || $imgsrc == '') {
             return '/images/default-profile-pic.jpg';
         }
         $uploads = 'uploads';
@@ -1029,7 +1085,7 @@ class Helper
             case 'gallery/gallery_organization':
             case 'gallery/gallery_match':
             case 'user_profile':
-                $id ='';
+                $id = '';
                 if (isset($details['id'])) {
                     $id = $details['id'];
                 }
@@ -1041,12 +1097,13 @@ class Helper
 
     public static function Images($imgsrc, $imgtype, $details = '', $from_local = false)
     {
-        $path = self::getImagePath($imgsrc, $imgtype,$details);
-        return self::makeImageHtml($path,$details,$from_local);
+        $path = self::getImagePath($imgsrc, $imgtype, $details);
+        return self::makeImageHtml($path, $details, $from_local);
 
     }
 
-    public static function makeImageHtml($path, $details = '', $from_local = false){
+    public static function makeImageHtml($path, $details = '', $from_local = false)
+    {
         if ($from_local) {
             $globalurl = public_path() . '/';
         } else {
@@ -1074,11 +1131,10 @@ class Helper
         } else {
             $title = '';
         }
-        $url = $globalurl.$path;
+        $url = $globalurl . $path;
         $img = "<img data-original='$url' src='$url' title='$title' onerror=this.onerror=null;this.src=\"$globalurl/images/default-profile-pic.jpg\" height=$height  width=$width   class='$class lazy' >";
         return $img;
     }
-
 
 
     public static function ImageCheck($path)
@@ -1487,6 +1543,7 @@ class Helper
                 return false;
             } else {
 
+
                 //if schedule type is player
                 $schedule_type = $matchData['schedule_type']; // if schedule type is player
                 if ($schedule_type == 'player') {
@@ -1862,77 +1919,123 @@ class Helper
         return $model;
     }
 
-    public static function sendEmailPlayers($match_details = [], $match_type = '')
-    {
 
+    public static function  sendEmailPlayers($match_details=[], $match_type=''){ 
 
-        $team_a_id = explode(',', $match_details['player_a_ids']);
-        $team_b_id = explode(',', $match_details['player_b_ids']);
+                    $team_a_id=explode(',', $match_details['player_a_ids']);
+                    $team_b_id=explode(',', $match_details['player_b_ids']); 
+                    $tournament_id = $match_details['tournament_id'];
 
-        if ($match_details['schedule_type'] == 'player') {
-            $team_a_name = User::find($match_details['a_id'])->name;
-            $team_b_name = User::find($match_details['b_id'])->name;
-        } else {
-            $team_a_name = Team::find($match_details['a_id'])->name;
-            $team_b_name = Team::find($match_details['b_id'])->name;
-        }
-
-
-        //send email to  team_a players
-        foreach ($team_a_id as $key => $player_id) {
-
-            if (!is_null($user = User::find($player_id))) {
-                $user_name = $user->name;
-                $data = [
-                    'match_type' => $match_type,
-                    'match_date' => $match_details['match_start_date'],
-                    'team_a_name' => $team_a_name,
-                    'team_b_name' => $team_b_name,
-                    'user_name' => $user_name,
-                    'match_id' => $match_details['id'],
-                    'user_id' => $player_id
-                ];
-                $mail_data = [
-                    'view' => 'emails.endmatchnotification',
-                    'subject' => 'Match : ' . strtoupper($team_a_name) . ' vs ' . strtoupper($team_b_name) . ' Scorecard (sportsJun)',
-                    'to_user_id' => $player_id,
-                    'to_email_id' => $user->email,
-                    'view_data' => $data,
-                    'flag' => $match_type,
-                    'send_flag' => 1,
-
-                ];
-
-                if (SendMail::sendmail($mail_data)) {
-                    // die('done');
+                if($match_details['schedule_type']=='player'){
+                    $team_a_name   =  User::find($match_details['a_id'])->name;
+                    $team_b_name   =  User::find($match_details['b_id'])->name; 
                 }
-            }
-        }
-        //send email to team_b players
-        foreach ($team_b_id as $key => $player_id) {
-            if (!is_null($user = User::find($player_id))) {
-                $user_name = $user->name;
-                $data = [
-                    'match_type' => $match_type,
-                    'match_date' => $match_details['match_start_date'],
-                    'team_a_name' => $team_a_name,
-                    'team_b_name' => $team_b_name,
-                    'user_name' => $user_name,
-                    'match_id' => $match_details['id'],
-                    'user_id' => $player_id
-                ];
-                $mail_data = [
-                    'view' => 'emails.endmatchnotification',
-                    'subject' => 'Match : ' . strtoupper($team_a_name) . ' vs ' . strtoupper($team_b_name) . ' Scorecard (sportsJun)',
-                    'to_user_id' => $player_id,
-                    'to_email_id' => $user->email,
-                    'view_data' => $data,
-                    'flag' => $match_type,
-                    'send_flag' => 1,
-                ];
+                else{
+                    $team_a_name   =  Team::find($match_details['a_id'])->name;
+                    $team_b_name   =  Team::find($match_details['b_id'])->name;
+                }
+       
 
-                SendMail::sendmail($mail_data);
-            }
+                //send email to  team_a players
+                    foreach ($team_a_id as $key => $player_id) {
+        Helper::send_match_email_to_user($match_details, $player_id,$team_a_name, $team_b_name,'endmatchnotification_followers');
+             
+                    }
+                //send email to team_b players
+                    foreach ($team_b_id as $key => $player_id) {
+        Helper::send_match_email_to_user($match_details, $player_id,$team_a_name, $team_b_name,'endmatchnotification');
+                    }
+
+                //Send Email to followers (tournaments and organizations )
+
+                if(!is_null($tournament_id )){
+                    $tournament=Tournaments::find( $tournament_id );
+                    $followers = $tournament->followers;
+
+                    foreach ($followers as $key => $follower) {
+                        $player_id = $follower->user_id;
+        Helper::send_match_email_to_user($match_details, $player_id,$team_a_name, $team_b_name,'endmatchnotification_followers');
+             
+                    }
+
+                    $organization = $tournament->tournamentParent->organization;
+                if($organization){
+                    $followers = $organization->followers;
+
+                    foreach ($followers as $key => $follower) {
+                        $player_id = $follower->user_id;
+        Helper::send_match_email_to_user($match_details, $player_id,$team_a_name, $team_b_name,'endmatchnotification_followers');
+                        
+                    }
+                }
+
+                }
+    }
+
+    public static function start_match_email($match_details){
+
+           $tournament_id = $match_details['tournament_id'];
+
+                if($match_details['schedule_type']=='player'){
+                    $team_a_name   =  User::find($match_details['a_id'])->name;
+                    $team_b_name   =  User::find($match_details['b_id'])->name; 
+                }
+                else{
+                    $team_a_name   =  Team::find($match_details['a_id'])->name;
+                    $team_b_name   =  Team::find($match_details['b_id'])->name;
+                }
+
+            if(!is_null($tournament_id )){
+                    $tournament=Tournaments::find( $tournament_id );
+                    $followers = $tournament->followers;
+
+                    foreach ($followers as $key => $follower) {
+                        $player_id = $follower->user_id;
+        Helper::send_match_email_to_user($match_details, $player_id,$team_a_name, $team_b_name,'startmatchnotification_followers');
+             
+                    }
+
+                    $organization = $tournament->tournamentParent->organization;
+                if($organization){
+                    $followers = $organization->followers;
+
+                    foreach ($followers as $key => $follower) {
+                        $player_id = $follower->user_id;
+        Helper::send_match_email_to_user($match_details, $player_id,$team_a_name, $team_b_name,'startmatchnotification_followers');
+                        
+                    }
+                }
+
+                }
+    }
+
+    public static function send_match_email_to_user($match_details, $player_id,$team_a_name, $team_b_name,$view){
+
+         if(!is_null($user=User::find($player_id))){  
+                            $user_name=$user->name;
+                            $data=[
+                                'match_type'    =>  $match_details['match_type'], 
+                                'match_date'    =>  $match_details['match_start_date'],
+                                'team_a_name'   =>  $team_a_name,
+                                'team_b_name'   =>  $team_b_name,
+                                'user_name'     =>  $user_name,
+                                'match_id'      =>  $match_details['id'],
+                                'user_id'       =>  $player_id,
+                                'sports_name'   =>  '',
+
+                                ];
+                            $mail_data=[
+                                    'view'      =>  'emails.'.$view,
+                                    'subject'   =>  'Match : '. strtoupper($team_a_name) .' vs ' . strtoupper($team_b_name) . ' Scorecard (sportsJun)' ,
+                                    'to_user_id'=>  $player_id,
+                                    'to_email_id'=> $user->email,
+                                    'view_data' =>  $data,
+                                    'flag'      =>  $match_details['$match_type'],
+                                    'send_flag' =>  1,
+                                     'type'          =>  $view
+                            ];
+
+                        SendMail::sendmail($mail_data);
         }
 
     }
@@ -1944,7 +2047,7 @@ class Helper
                 $scores = $match_details->scores;
                 return $scores->{$a_id . '_score'} . ' sets - ' . $scores->{$b_id . '_score'} . ' sets';
                 break;
-            case in_array($sports_id, ['13', '14', '17', '7']):           //squash
+            case in_array($sports_id, ['13', '17', '7']):           //squash
                 $scores = $match_details->scores;
                 return $scores->{$a_id . '_score'} . ' sets - ' . $scores->{$b_id . '_score'} . ' sets';
                 break;
@@ -1954,7 +2057,7 @@ class Helper
             case '11':           //hockey
                 return $match_details->{$a_id}->goals . ' - ' . $match_details->{$b_id}->goals;
                 break;
-            case in_array($sports_id, [6, 15, 16]):           //basketball
+            case in_array($sports_id, [6, 14, 15, 16]):           //basketball
                 return $match_details->{$a_id}->total_points . ' - ' . $match_details->{$b_id}->total_points;
                 break;
             case '1':           //cricket
@@ -2161,7 +2264,7 @@ class Helper
 
                 break;
 
-            case in_array($sports_id, [3, 5, 13, 17, 14, 7]):
+            case in_array($sports_id, [3, 5, 13, 17, 7]):
                 //die(json_encode($team_id));
                 foreach ($match_models as $key => $match) {
 
@@ -2191,11 +2294,11 @@ class Helper
                 }
 
                 break;
+       
+            case in_array($sports_id, [6,14,15,16]):
+            foreach ($match_models as $key => $match) {
+                  if ($match->a_id == $team_id) {         //sets the home and againts team
 
-
-            case ($sports_id == 6 || $sports_id == 15 || $sports_id == 16):
-                foreach ($match_models as $key => $match) {
-                    if ($match->a_id == $team_id) {         //sets the home and againts team
                         $gf_team = $match->a_id;
                         $ga_team = $match->b_id;
                     } elseif ($match->b_id == $team_id) {
@@ -2220,13 +2323,13 @@ class Helper
     }
 
 
-    public static function displayEmptyDash($number)
-    {
-        if ($number > 0) {
-            return $number;
-        } else {
-            return '-';
-        }
+
+    public static function displayEmptyDash($number){
+            if($number){
+                return $number;
+            }
+            else return '-';
+
     }
 
     public static function getVolleyballServer($match_id, $sports_name = 'volleyball')

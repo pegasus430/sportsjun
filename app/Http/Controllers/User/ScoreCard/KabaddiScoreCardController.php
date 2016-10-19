@@ -15,11 +15,8 @@ use App\Model\Team;
 use App\Model\TeamPlayers;
 use App\Model\Sport;
 use App\Model\KabaddiPlayerMatchwiseStats;
-use App\Model\kabaddiScore;
+use App\Model\KabaddiPlayerMatchScore;
 use App\Model\KabaddiStatistic;
-use App\Model\KabaddiSetDetails;
-use App\Model\SubstituteRecord;
-
 use App\Model\Photo;
 use App\User;
 use DB;
@@ -32,7 +29,7 @@ use App\Helpers\AllRequests;
 use Session;
 use Request;
 
-class KabaddiscoreCardController extends parentScoreCardController
+class KabaddiScoreCardController extends parentScoreCardController
 {
  
  public function kabaddiScoreCard($match_data,$sportsDetails=[],$tournamentDetails=[],$is_from_view=0)
@@ -48,13 +45,16 @@ class KabaddiscoreCardController extends parentScoreCardController
 
         $team_a_players = array();
         $team_b_players = array();
+       
         $team_a_id = $match_data[0]['a_id'];
         $team_b_id = $match_data[0]['b_id'];
         $team_a_playerids = explode(',',$match_data[0]['player_a_ids']);
         $team_b_playerids = explode(',',$match_data[0]['player_b_ids']);
 
+       
         //get match id
         $match_id=$match_data[0]['id'];
+        $match_players = kabaddiPlayerMatchwiseStats::whereMatchId($match_id)->get(['user_id'])->toArray();
 
         //get kabaddi scores for team a
         $team_a_kabaddi_scores = kabaddiPlayerMatchwiseStats::select()->where('match_id',$match_data[0]['id'])->where('team_id',$team_a_id)->get();
@@ -80,10 +80,6 @@ class KabaddiscoreCardController extends parentScoreCardController
         //get players statistics
         $team_a_players_stat=kabaddiPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_a_id)->get();
         $team_b_players_stat=kabaddiPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_b_id)->get();
-
-
-        $active_players_a=kabaddiPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_a_id)->wherePlayingStatus('P')->lists('player_name', 'user_id')->toArray();
-        $active_players_b=kabaddiPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_b_id)->wherePlayingStatus('P')->lists('player_name', 'user_id')->toArray();
 
         //get team names
         $team_a_name = Team::where('id',$team_a_id)->pluck('name');
@@ -137,11 +133,45 @@ class KabaddiscoreCardController extends parentScoreCardController
                 $team_wise_score_details[$key] = $array;
             }
         }
-      
+        $team_a_goals=0;
+        $team_b_goals=0;
 
-        //get kabaddi team scoring;
-    $kabaddi_a_score=kabaddiScore::whereMatchId($match_data[0]['id'])->whereTeamId($match_data[0]['a_id'])->first();
-    $kabaddi_b_score=kabaddiScore::whereMatchId($match_data[0]['id'])->whereTeamId($match_data[0]['b_id'])->first();
+        $team_a_red_count = 0;
+        $team_b_red_count = 0;
+        $team_a_yellow_count = 0;
+        $team_b_yellow_count = 0;
+        //team a goals
+        if(!empty($team_wise_score_details[$match_data[0]['a_id']]['goals']) && $team_wise_score_details[$match_data[0]['a_id']]['goals']!=null)
+        {
+            $team_a_goals = $team_wise_score_details[$match_data[0]['a_id']]['goals'];
+
+        }
+        if(!empty($team_wise_score_details[$match_data[0]['a_id']]['red_card_count']) && $team_wise_score_details[$match_data[0]['a_id']]['red_card_count']!=null)
+        {
+            $team_a_red_count = $team_wise_score_details[$match_data[0]['a_id']]['red_card_count'];
+
+        }
+        if(!empty($team_wise_score_details[$match_data[0]['a_id']]['yellow_card_count']) && $team_wise_score_details[$match_data[0]['a_id']]['yellow_card_count']!=null)
+        {
+            $team_a_yellow_count = $team_wise_score_details[$match_data[0]['a_id']]['yellow_card_count'];
+
+        }
+
+
+        //team b goals
+        if(!empty($team_wise_score_details[$match_data[0]['b_id']]['goals']) && $team_wise_score_details[$match_data[0]['b_id']]['goals']!=null)
+        {
+            $team_b_goals = $team_wise_score_details[$match_data[0]['b_id']]['goals'];
+        }
+        if(!empty($team_wise_score_details[$match_data[0]['b_id']]['red_card_count']) && $team_wise_score_details[$match_data[0]['b_id']]['red_card_count']!=null)
+        {
+            $team_b_red_count = $team_wise_score_details[$match_data[0]['b_id']]['red_card_count'];
+        }
+        if(!empty($team_wise_score_details[$match_data[0]['b_id']]['yellow_card_count']) && $team_wise_score_details[$match_data[0]['b_id']]['yellow_card_count']!=null)
+        {
+            $team_b_yellow_count = $team_wise_score_details[$match_data[0]['b_id']]['yellow_card_count'];
+        }
+
 
 
         //score status
@@ -183,18 +213,10 @@ class KabaddiscoreCardController extends parentScoreCardController
             $player_of_the_match=$match_data[0]['player_of_the_match'];
             if($player_of_the_match_model=User::find($player_of_the_match))$player_of_the_match=$player_of_the_match_model;
             else $player_of_the_match=NULL;
-            return view('scorecards.kabaddiscorecardview',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'team_a'=>[''=>'Select Player']+$team_a,'team_b'=>[''=>'Select Player']+$team_b,'match_data'=>$match_data,'team_a_name'=>$team_a_name,'team_b_name'=>$team_b_name,'team_a_kabaddi_scores_array'=>$team_a_kabaddi_scores_array,'team_b_kabaddi_scores_array'=>$team_b_kabaddi_scores_array,'team_a_count'=>$team_a_count,'team_b_count'=>$team_b_count,'team_a_logo'=>$team_a_logo,'team_b_logo'=>$team_b_logo,'player_name_array'=> $player_name_array,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'form_id'=>$form_id,'team_a_players'=>$team_a_players, 'team_b_players'=>$team_b_players, 'player_of_the_match'=>$player_of_the_match,
-                'kabaddi_a_score'=>$kabaddi_a_score,
-                'kabaddi_b_score'=>$kabaddi_b_score));
+            return view('scorecards.kabaddi.kabaddiscorecardview',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'team_a'=>[''=>'Select Player']+$team_a,'team_b'=>[''=>'Select Player']+$team_b,'match_data'=>$match_data,'team_a_name'=>$team_a_name,'team_b_name'=>$team_b_name,'team_a_kabaddi_scores_array'=>$team_a_kabaddi_scores_array,'team_b_kabaddi_scores_array'=>$team_b_kabaddi_scores_array,'team_a_count'=>$team_a_count,'team_b_count'=>$team_b_count,'team_a_logo'=>$team_a_logo,'team_b_logo'=>$team_b_logo,'team_a_goals'=>$team_a_goals,'team_b_goals'=>$team_b_goals,'player_name_array'=> $player_name_array,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'team_a_red_count'=>$team_a_red_count,'team_a_yellow_count'=>$team_a_yellow_count,'team_b_red_count'=>$team_b_red_count,'team_b_yellow_count'=>$team_b_yellow_count,'form_id'=>$form_id,'team_a_players'=>$team_a_players, 'team_b_players'=>$team_b_players, 'player_of_the_match'=>$player_of_the_match, 'match_players'=>$match_players));
         }else //kabaddi score view and edit
         {
-            return view('scorecards.kabaddiscorecard',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'team_a'=>[''=>'Select Player']+$team_a,'team_b'=>[''=>'Select Player']+$team_b,'match_data'=>$match_data,'team_a_name'=>$team_a_name,'team_b_name'=>$team_b_name,'team_a_kabaddi_scores_array'=>$team_a_kabaddi_scores_array,'team_b_kabaddi_scores_array'=>$team_b_kabaddi_scores_array,'team_a_count'=>$team_a_count,'team_b_count'=>$team_b_count,'team_a_logo'=>$team_a_logo,'team_b_logo'=>$team_b_logo,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'form_id'=>$form_id, 
-                'team_a_players'=>$team_a_players, 
-                'team_b_players'=>$team_b_players, 
-                'kabaddi_a_score'=>$kabaddi_a_score,
-                'kabaddi_b_score'=>$kabaddi_b_score,
-                'active_players_a'=>$active_players_a,
-                'active_players_b'=>$active_players_b));
+            return view('scorecards.kabaddi.kabaddiscorecard',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'team_a'=>[''=>'Select Player']+$team_a,'team_b'=>[''=>'Select Player']+$team_b,'match_data'=>$match_data,'team_a_name'=>$team_a_name,'team_b_name'=>$team_b_name,'team_a_kabaddi_scores_array'=>$team_a_kabaddi_scores_array,'team_b_kabaddi_scores_array'=>$team_b_kabaddi_scores_array,'team_a_count'=>$team_a_count,'team_b_count'=>$team_b_count,'team_a_logo'=>$team_a_logo,'team_b_logo'=>$team_b_logo,'team_a_goals'=>$team_a_goals,'team_b_goals'=>$team_b_goals,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'team_a_red_count'=>$team_a_red_count,'team_a_yellow_count'=>$team_a_yellow_count,'team_b_red_count'=>$team_b_red_count,'team_b_yellow_count'=>$team_b_yellow_count,'form_id'=>$form_id, 'team_a_players'=>$team_a_players, 'team_b_players'=>$team_b_players, 'match_players'=>$match_players));
         }
 
     }
@@ -224,37 +246,89 @@ class KabaddiscoreCardController extends parentScoreCardController
         $team_a_substitute_players=isset($request['team_a']['substitute'])?$request['team_a']['substitute']:[];
         $team_b_substitute_players=isset($request['team_b']['substitute'])?$request['team_b']['substitute']:[];
 
-        
+        $players_a_details=[];
+        $players_b_details=[];
+
+        $default_player_details=[           //default player info
+            "points_1"=>0,
+            "points_2"=>0,
+            "points_3"=>0,
+            "fouls"=>0,
+            "total_points"=>0,
+            "playing_status"=>0,
+            "dismissed"=>0, 
+            "quarters_played"=>'',
+            "quarter_1"=>[
+                    "points_1"=>0,
+                    "points_2"=>0,
+                    "points_3"=>0,
+                    "fouls"=>0,
+                    "total_points"=>0,
+            ],
+            "quarter_2"=>[
+                    "points_1"=>0,
+                    "points_2"=>0,
+                    "points_3"=>0,
+                    "fouls"=>0,
+                    "total_points"=>0,
+            ],
+            "quarter_3"=>[
+                    "points_1"=>0,
+                    "points_2"=>0,
+                    "points_3"=>0,
+                    "fouls"=>0,
+                    "total_points"=>0
+            ],
+            "quarter_4"=>[
+                    "points_1"=>0,
+                    "points_2"=>0,
+                    "points_3"=>0,
+                    "fouls"=>0,
+                    "total_points"=>0,
+                ],
+            "quarter_5"=>(object)[
+                    "points_1"=>0,
+                    "points_2"=>0,
+                    "points_3"=>0,
+                    "fouls"=>0,
+                    "total_points"=>0,
+                ],
+            "quarter_6"=>(object)[
+                    "points_1"=>0,
+                    "points_2"=>0,
+                    "points_3"=>0,
+                    "fouls"=>0,
+                    "total_points"=>0,
+                ]
+        ];
 
         foreach($team_a_playing_players as $p){
 
-            $player_name=User::find($p)->name;            
-            $this->insertkabaddiscore($p, $tournament_id, $match_id, $team_a_id,$player_name, $team_a_name,'P');        }
-        foreach($team_a_substitute_players as $p){
-
             $player_name=User::find($p)->name;
-            $this->insertkabaddiscore($p, $tournament_id, $match_id, $team_a_id,$player_name, $team_a_name,'S');
-            
+            $default_player_details['playing_status']=1;
+            $this->insertkabaddiScore($p, $tournament_id, $match_id, $team_a_id,$player_name, $team_a_name,'P');
+            $players_a_details['player_'.$p]=$default_player_details;
+        }
+        foreach($team_a_substitute_players as $p){
+            $player_name=User::find($p)->name;
+            $this->insertkabaddiScore($p, $tournament_id, $match_id, $team_a_id,$player_name, $team_a_name,'S');
+            $players_a_details['player_'.$p]=$default_player_details; 
         }
         foreach($team_b_playing_players as $p){
 
             $player_name=User::find($p)->name;
-           
-            $this->insertkabaddiscore($p, $tournament_id, $match_id, $team_b_id,$player_name, $team_b_name,'P');
-          
+             $default_player_details['playing_status']=1;
+            $this->insertkabaddiScore($p, $tournament_id, $match_id, $team_b_id,$player_name, $team_b_name,'P');
+            $players_b_details['player_'.$p]=$default_player_details;
         }
         foreach($team_b_substitute_players as $p){          
             $player_name=User::find($p)->name;
-            $this->insertkabaddiscore($p, $tournament_id, $match_id, $team_b_id,$player_name, $team_b_name,'S');
-              
+            $this->insertkabaddiScore($p, $tournament_id, $match_id, $team_b_id,$player_name, $team_b_name,'S');
+            $players_b_details['player_'.$p]=$default_player_details;     
         }
         
         //insert the default match_details for the match
         $match_model=MatchSchedule::find($match_id);
-    $match_settings   =   Helper::getMatchSettings($match_model['tournament_id'],$match_model['sports_id']);
-
-    $set=$match_settings->number_of_sets;
-    $maximum_points = $match_settings->maximum_points;
         $match_details=[
             "team_a"=>[
                 "id"=>$team_a_id,
@@ -263,51 +337,41 @@ class KabaddiscoreCardController extends parentScoreCardController
             "team_b"=>[
                 "id"=>$team_b_id,
                 "name"=>$team_b_name
-                    ],                   
-             "preferences"=>[
-                        "left_team_id"=>$team_a_id,
-                        "right_team_id"=>$team_b_id,                        
-                        "number_of_sets"=>$set,                        
-                        "end_point"=>$maximum_points,                       
                     ],
-            "match_details"=>[
-                "set1"=>[
-                        "{$team_a_id}_score"=>0,
-                        "{$team_b_id}_score"=>0
-                    ],
-                "set2"=>[
-                         "{$team_a_id}_score"=>0,
-                        "{$team_b_id}_score"=>0
-                    ],
-                "set3"=>[
-                        "{$team_a_id}_score"=>0,
-                        "{$team_b_id}_score"=>0
-                    ],
-                "set4"=>[
-                          "{$team_a_id}_score"=>0,
-                        "{$team_b_id}_score"=>0
-                    ],
-                "set5"=>[
-                         "{$team_a_id}_score"=>0,
-                        "{$team_b_id}_score"=>0
-                        ]
-                ],                   
-                "match_type"=>$match_model->match_type,
-                "schedule_type"=>$match_model->schedule_type, 
-                "current_set"=>1, 
-                "scores"=>[
-                    "{$team_a_id}_score"=>0,
-                    "{$team_b_id}_score"=>0
-                ]           
+            "{$team_a_id}"  =>  [
+                "id"=>$team_a_id,
+                "total_points"=>0,
+                "fouls"=>0,
+                "players"=>$players_a_details,
+                ],
+            "{$team_b_id}"=>[
+                "id"=>$team_b_id,
+                "total_points"=>0,
+                "fouls"=>0,
+                "players"=>$players_b_details
+                ] ,           
+            "first_half"=>[
+
+            ],
+            "second_half"=>[
+               
+            ],          
+            "preferences"=>[
+                    'number_of_quarters'=>$number_of_quarters,
+                    'quarter_time'=>$quarter_time,
+                    'max_fouls'=>$max_fouls
+                 ],
+            
             
         ];
 
         $match_model->match_details=json_encode($match_details);
         $match_model->save();
+        Helper::start_match_email($match_model);
     }
 
 
-      public function insertkabaddiscore($user_id,$tournament_id,$match_id,$team_id,$player_name,$team_name,$playing_status='S')
+      public function insertkabaddiScore($user_id,$tournament_id,$match_id,$team_id,$player_name,$team_name,$playing_status='S')
     {
         $kabaddi_model = new kabaddiPlayerMatchwiseStats();
         $kabaddi_model->user_id          = $user_id;
@@ -321,56 +385,99 @@ class KabaddiscoreCardController extends parentScoreCardController
     }
 
 
-  
     public function manualScoring(ObjectRequest $request){
+            $team_a_score = $request->team_a_score;
+            $team_b_score = $request->team_b_score;              
+
             $match_id=$request->match_id;
-
-           
-
-            $match_model=Matchschedule::find($match_id);
+            $match_model=MatchSchedule::find($match_id);
             $match_details=json_decode($match_model->match_details);
+            $team_a_id=$match_model->a_id;
+            $team_b_id=$match_model->b_id;
 
-            $team_a=$match_model->a_id;
-            $team_b=$match_model->b_id;
+            ${$team_a_id.'_fouls'}=0;
+            ${$team_b_id.'_fouls'}=0;
+
+            ${$team_a_id.'_points'}=0;
+            ${$team_b_id.'_points'}=0;
+
+            $preferences=$match_details->preferences;
+            $number_of_quarters=$preferences->number_of_quarters;
+            $max_fouls=$preferences->max_fouls;
+
+            $players_stats=kabaddiPlayerMatchwiseStats::whereMatchId($match_id)->get();
+
+            foreach ($players_stats as $key => $player) {
+                //stores quarters played
+                        //$player->quarters_played=$request->{'quarters_'.$player->id};
+                        //$match_details->{$player->team_id}->players->{'player_'.$player->user_id}->quarters_played=$request->{'quarters_'.$player->id};
+
+                //number of points type
+                    $player->points_1=$request->{'points_1_'.$player->id};
+                    $player->points_2=$request->{'points_2_'.$player->id};
+                    $player->points_3=$request->{'points_3_'.$player->id};
+
+                $match_details->{$player->team_id}->players->{'player_'.$player->user_id}->points_1=$player->points_1;
+                $match_details->{$player->team_id}->players->{'player_'.$player->user_id}->points_2=$player->points_2;
+                $match_details->{$player->team_id}->players->{'player_'.$player->user_id}->points_3=$player->points_3;
+                
+
+                                //if player fouls is greater than max, return max to the player.
+                        if($request->{'fouls_'.$player->id}>$max_fouls) $request->{'fouls_'.$player->id}=$max_fouls;
+
+                                    //stores fouls per player
+                        $player->fouls=$request->{'fouls_'.$player->id};
+
+                        $match_details->{$player->team_id}->players->{'player_'.$player->user_id}->fouls=$request->{'fouls_'.$player->id};
+
+                 if($player->fouls>=$max_fouls){
+                     $match_details->{$player->team_id}->players->{'player_'.$player->user_id}->dismissed=1;
+                           $player->playing_status = 'S';
+                   };
+
+                            
+                                    //stores points per player
+                        $total_points_per_player=0;
+                                for($i=1; $i<=$number_of_quarters; $i++){
+
+                            $total_points_per_player+=$request->{'quarters_'.$i.'_player_'.$player->id};
+                            $match_details->{$player->team_id}->players->{'player_'.$player->user_id}->{'quarter_'.$i}->total_points=$request->{'quarters_'.$i.'_player_'.$player->id};
+
+                            $player['quarter_'.$i]=$request->{'quarters_'.$i.'_player_'.$player->id};
+                        
+
+                                }
+
+                        //stores players total points
+                            $player->total_points=$total_points_per_player;
+                            $player->save();
+
+                        //store points to team
+                        ${$player->team_id.'_points'}+=$player->total_points;
+                                //stores fouls to teams
+                        ${$player->team_id.'_fouls'}+=$player->fouls;
+
+            }
+
+        $match_details->{$team_a_id}->fouls=${$team_a_id.'_fouls'};
+        $match_details->{$team_b_id}->fouls=${$team_b_id.'_fouls'};
+
+        // $match_details->{$team_a_id}->total_points=${$team_a_id.'_points'};
+        // $match_details->{$team_b_id}->total_points=${$team_b_id.'_points'};
 
 
-            $end_point=$match_details->preferences->end_point;
-            $number_of_sets=$match_details->preferences->number_of_sets;
+        $match_details->{$team_a_id}->total_points=$team_a_score;
+        $match_details->{$team_b_id}->total_points=$team_b_score;
 
 
-            $score_a_model=kabaddiScore::whereMatchId($match_id)->whereTeamId($team_a)->first();
-            $score_b_model=kabaddiScore::whereMatchId($match_id)->whereTeamId($team_b)->first();
 
-                    
-            $match_details_data=$match_details->match_details;
-           
+        $match_details=json_encode($match_details);
 
+        $match_model->match_details=$match_details;
+        $match_model->save();
 
-            //start scoring
-
-            for($i=1; $i<=$number_of_sets; $i++){
-
-                if($i==5) $end_point=15; 
-                    $score_a_model->{"set".$i}=$request->{"a_set".$i}>$end_point?$end_point:(int)$request->{"a_set".$i};
-                    $score_b_model->{"set".$i}=$request->{"b_set".$i}>$end_point?$end_point:(int)$request->{"b_set".$i};
-
-                    $match_details_data->{"set".$i}->{$team_a."_score"}=(int)$request->{"a_set".$i}>$end_point?$end_point:(int)$request->{"a_set".$i};
-                    $match_details_data->{"set".$i}->{$team_b."_score"}=(int)$request->{"b_set".$i}>$end_point?$end_point:(int)$request->{"b_set".$i};
-               }
-
-            $score_a_model->save();
-            $score_b_model->save();
-
-            $match_details->match_details=$match_details_data;
-            $match_details->scores=$this->getScoreSet($match_id);
-            $match_details->current_set=$this->getCurrentSet($match_id);     //get current active set
-
-            $match_model->match_details=json_encode($match_details);
-            $match_model->save();
-
-            
-
-        return 'match saved';
+        return $match_details;
+    
     }
 
      public function kabaddiStoreRecord(ObjectRequest $Objrequest){
@@ -388,7 +495,7 @@ class KabaddiscoreCardController extends parentScoreCardController
         $kabaddi_player=kabaddiPlayerMatchwiseStats::whereMatchId($match_id)->first();
         $delted_ids=$request['delted_ids'];
         $match_result=$request['match_result'];
-        $match_report=$request['match_report'];
+        $match_report= $request['match_report'];
         $winner_team_id = !empty(Request::get('winner_team_id'))?Request::get('winner_team_id'):NULL;//winner_id
         $player_of_the_match=isset($request['player_of_the_match'])?$request['player_of_the_match']:NULL;
 
@@ -458,9 +565,9 @@ class KabaddiscoreCardController extends parentScoreCardController
                         'winner_id'=>$winner_team_id ,
                         'looser_id'=>$looser_team_id,
                         'has_result'     => $has_result,
-                        'match_report'=>$match_report,
                         'match_result'   => $match_result,
-                        'is_tied'=>$is_tie, 'match_report'=>$match_report,
+                        'match_report'   => $match_report,
+                        'is_tied'=>$is_tie,
                         'score_added_by'=>$json_score_status]);
 //                                Helper::printQueries();
 
@@ -490,9 +597,9 @@ class KabaddiscoreCardController extends parentScoreCardController
                     'winner_id'      => $winner_team_id,
                      'looser_id'      => $looser_team_id,
                     'is_tied'        => $is_tie,
-                    'match_report'=>$match_report,
                      'has_result'     => $has_result,
                      'match_result'   => $match_result,
+                     'match_report'   => $match_report,
                      'score_added_by' => $json_score_status,'scoring_status'=>$approved]);
 
                 if($match_status=='completed')
@@ -511,9 +618,10 @@ class KabaddiscoreCardController extends parentScoreCardController
         else
             {
                 MatchSchedule::where('id',$match_id)->update(['winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
-                    'is_tied'=>$is_tie, 'match_report'=>$match_report,
+                    'is_tied'=>$is_tie,
                     'has_result'     => $has_result,
                      'match_result'   => $match_result,
+                     'match_report'   => $match_report,
                      'score_added_by'=>$json_score_status]);
             }
         }
@@ -526,8 +634,15 @@ class KabaddiscoreCardController extends parentScoreCardController
         //check already player has record or not
         $user_kabaddi_details = kabaddiStatistic::select()->where('user_id',$user_id)->get();
 
-        $kabaddi_details = kabaddiPlayerMatchwiseStats::join('match_schedules', 'match_schedules.id', '=', 'kabaddi_player_matchwise_stats.match_id')->selectRaw('count(match_id) as match_count')->selectRaw(' as points_1')->selectRaw('sum(points_2) as points_2')->selectRaw('sum(points_3) as points_3')->selectRaw('sum(total_points) as total_points')->selectRaw('sum(fouls) as fouls')->where('user_id',$user_id)->groupBy('user_id')->get();
+        $kabaddi_details = kabaddiPlayerMatchwiseStats::selectRaw('count(match_id) as match_count')->selectRaw('sum(points_1) as points_1')->selectRaw('sum(points_2) as points_2')->selectRaw('sum(points_3) as points_3')->selectRaw('sum(total_points) as total_points')->selectRaw('sum(fouls) as fouls')->where('user_id',$user_id)->groupBy('user_id')->get();
 
+
+
+        $points_1 = (!empty($kabaddi_details[0]['points_1']))?$kabaddi_details[0]['points_1']:0;
+        $points_2 = (!empty($kabaddi_details[0]['points_2']))?$kabaddi_details[0]['points_2']:0;
+        $points_3 = (!empty($kabaddi_details[0]['points_3']))?$kabaddi_details[0]['points_3']:0;
+        $fouls = (!empty($kabaddi_details[0]['fouls']))?$kabaddi_details[0]['fouls']:0;
+        $total_points = (!empty($kabaddi_details[0]['total_points']))?$kabaddi_details[0]['total_points']:0;
 
         if(count($user_kabaddi_details)>0)
         {
@@ -535,19 +650,22 @@ class KabaddiscoreCardController extends parentScoreCardController
 
             kabaddiStatistic::where('user_id',$user_id)
                 ->update([  'matches'=>$match_count,
-                            'won'=>$won,
-                            'lost'=>$lost,
-                            'tie'=>$tie,                            
-                            'won_percentage'=>$won_percentage
+                            'points_1'=>$points_1,
+                            'points_2'=>$points_2,
+                            'points_3'=>$points_3,
+                            'fouls'=>$fouls,
+                            'total_points'=>$total_points
                          ]);
         }else
         {
             $kabaddi_statistic = new kabaddiStatistic();
             $kabaddi_statistic->user_id = $user_id;
             $kabaddi_statistic->matches = 1;
-            $kabaddi_statistic->won = 0;
-            $kabaddi_statistic->lost = 0;
-            $kabaddi_statistic->tie = 0;     
+            $kabaddi_statistic->{'points_1'} = $points_1;
+            $kabaddi_statistic->{'points_2'} = $points_2;
+            $kabaddi_statistic->{'points_3'} = $points_3;
+            $kabaddi_statistic->fouls = $fouls;
+            $kabaddi_statistic->total_points = $total_points;
             $kabaddi_statistic->save();
         }
     }
@@ -557,413 +675,156 @@ class KabaddiscoreCardController extends parentScoreCardController
         $match_id=$request['match_id'];
         $team_id=$request['team_id'];
         $time_substituted=$request['time_substituted'];
-        $match_model=MatchSchedule::find($match_id);
         $kabaddi_model=kabaddiPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_id)->get();
-
-        $playing=[];
-        $subst=[];
-
-        //get match settings
-        $match_settings = Helper::getMatchSettings($match_model['tournament_id'],$match_model['sports_id']);
-        $maximum_substitutes = $match_settings->maximum_substitutes;
 
         foreach ($kabaddi_model as $sm ){
             $sm_id=$sm->id;
             $sm_status=$sm->playing_status;
 
-$check_maximum_substitute=SubstituteRecord::whereMatchId($match_id)->whereUserId($sm->user_id)->get()->count();
-
-            if($check_maximum_substitute<=$maximum_substitutes){
-
             if(isset($request["substitute_a_".$sm_id]) && ($request["substitute_a_".$sm_id]=='on')){
                 if($sm_status=='P'){
-                array_push($playing, ['user_id'=>$sm->user_id, 'id'=>$sm->id, 'serving_order'=>$sm->serving_order]);
                     $sm->playing_status='S';
                 }
-                else {
-                array_push($subst, ['user_id'=>$sm->user_id, 'id'=>$sm->id]);
-                    $sm->playing_status='P'; 
-                    }             
-               
+                else $sm->playing_status='P';
+
+                $sm->has_substituted=1;
+                $sm->time_substituted=$time_substituted;
                 $sm->save();
-
-                }
             }
+
         }
-
-         for($j=0; $j<count($playing); $j++){
-
-                 $substitute_record=new SubstituteRecord;
-                 $substitute_record->user_id=$playing[$j]['user_id'];
-                 $substitute_record->substituted_by=$subst[$j]['user_id'];
-                 $substitute_record->team_id=$sm->team_id;
-                 $substitute_record->match_id=$match_id;
-                 $substitute_record->sports_id=$match_model->sports_id;
-                 $substitute_record->tournament_id=$match_model->tournament_id;                
-                  $substitute_record->substituted_at=$time_substituted;
-                  $substitute_record->save();
-
-  kabaddiPlayerMatchwiseStats::find($playing[$j]['id'])->update(['serving_order'=>null]);
-  kabaddiPlayerMatchwiseStats::find($subst[$j]['id'])->update(['serving_order'=>$playing[$j]['serving_order']]);
-
-            }     
-
         return $kabaddi_model;
 
     }
 
-    
-  
+     public function kabaddiSaveRecord(){
+            $request=Request::all();
+            $match_id=$request['match_id'];
+        
+     
+        $team_a_id=$request['team_a_id'];
+        $team_b_id=$request['team_b_id'];
+        $i=$request['index'];
+        $match_data=matchSchedule::find($match_id);
+        $match_details=json_decode($match_data['match_details']);
+        $max_fouls=$match_details->preferences->max_fouls;
+        $kabaddi_players=kabaddiPlayerMatchwiseStats::whereMatchId($match_id)->first();
+
+
+                $quarter=$request['quarter_'.$i];
+                $team_id=$request['team_'.$i];
+                $player_stat_id=$request['player_'.$i];
+                $user_id=$request['user_'.$i];
+                $record_type=$request['record_type_'.$i];
+               // $time=$request['time_'.$i];
+                $player_name=$request['player_name_'.$i];
+                $team_type=$request['team_type_'.$i];
+
+       $kabaddi_model= kabaddiPlayerMatchwiseStats::find($player_stat_id);
+       $team_id=$kabaddi_model->team_id;
 
-
-    public function submitServingPlayers(ObjectRequest $request){
-         $match_model=MatchSchedule::find($request->match_id);
-         $team_a=$match_model->a_id;
-         $team_b=$match_model->b_id;
-
-         $team_a_score_model=kabaddiScore::whereMatchId($request->match_id)->whereTeamId($team_a)->first();
-
-         if(!$team_a_score_model){
-
-            //insert team scoring data. 
-              $team_a_score_model=new kabaddiScore;
-              $team_a_score_model->match_id=$match_model->id;
-              $team_a_score_model->tournament_id    = $match_model->tournament_id;
-              $team_a_score_model->team_id          = $match_model->a_id;
-              $team_a_score_model->team_name        = Team::find($team_a)->name;
-
-              if($request->team==$team_a){
-                    $team_a_score_model->won_toss=1;
-                    $team_a_score_model->elected=$request->elected;
-              } 
-              else {$team_a_score_model->won_toss=0;
-                    $request->elected=='serve'?$team_a_score_model->elected='receive':$team_a_score_model->elected='serve';
-              }
-
-             
-              $team_a_score_model->save();
-
-
-            //insert team scoring data. 
-              $team_b_score_model=new kabaddiScore;
-              $team_b_score_model->match_id=$match_model->id;
-              $team_b_score_model->tournament_id    = $match_model->tournament_id;
-              $team_b_score_model->team_id          = $team_b;
-              $team_b_score_model->team_name        = Team::find($team_b)->name;
-
-            if($request->team==$team_b){
-                    $team_b_score_model->won_toss=1;
-                    $team_b_score_model->elected=$request->elected;
-              } 
-              else {$team_b_score_model->won_toss=0;
-                    $request->elected=='serve'?$team_b_score_model->elected='receive':$team_b_score_model->elected='serve';
-            }
-
-              $team_b_score_model->save();
-
-         }
-
-
-         for($i=1; $i<=6; $i++){
-                $player_model=kabaddiPlayerMatchwiseStats::whereUserId($request->{'serving_a_'.$i})->whereTeamId($team_a)->whereMatchId($request->match_id)->first()->update(['serving_order'=>$i]);               
-
-                $player_model=kabaddiPlayerMatchwiseStats::whereUserId($request->{'serving_b_'.$i})->whereTeamId($team_b)->whereMatchId($request->match_id)->first()->update(['serving_order'=>$i]);
-         }
-
-         return 'success';
-    }
-
-
-      public function getScoreSet($match_id){
-            $match_model=MatchSchedule::find($match_id);
-            $team_a=$match_model->a_id;
-            $team_b=$match_model->b_id;
-
-            $left_player_model=kabaddiScore::whereMatchId($match_id)->whereTeamId($team_a)->first();
-            $right_player_model=kabaddiScore::whereMatchId($match_id)->whereTeamId($team_b)->first();
-
-            $left_player_score=0;
-            $right_player_score=0;
-
-            for($i=1; $i<=5; $i++){
-                if($left_player_model->{'set'.$i}==$right_player_model->{'set'.$i}){
-                    //nothing to do
-                }
-                elseif($left_player_model->{'set'.$i}>$right_player_model->{'set'.$i}){
-                    $left_player_score++;
-                }
-                elseif($left_player_model->{'set'.$i}<$right_player_model->{'set'.$i}){
-                   $right_player_score++;
-                }
-            }
-
-        return [
-            "{$team_a}_score"=>$left_player_score,
-            "{$team_b}_score"=>$right_player_score
-        ];
-    }
-
-
-    public function getCurrentSet($match_id){
-            $match_model=MatchSchedule::find($match_id);
-            $team_a=$match_model->a_id;
-            $team_b=$match_model->b_id;
-
-
-            $preferences=json_decode($match_model->match_details)->preferences;
-
-            //first and second player(team) or left and right player(team)
-    $match_score_model=kabaddiScore::whereMatchId($match_id)->whereTeamId($team_a)->first();
-    $match_score_model_other=kabaddiScore::whereMatchId($match_id)->whereTeamId($team_b)->first();
-
-
-            if($this->checkSet('set1', $match_score_model, $match_score_model_other, $preferences)){
-                    return 1;                   
-            }
-            else{           //set1 is complete
-
-                if($this->checkSet('set2', $match_score_model, $match_score_model_other, $preferences)){
-                    return 2;  
-                }
-
-                else{       //set2 is complete
-                        if($this->checkSet('set3', $match_score_model, $match_score_model_other, $preferences)){
-                            return 3;  
-                            }
-                        else{
-                      
-                                if($this->checkSet('set4', $match_score_model, $match_score_model_other, $preferences)){
-                                        return 4;
-                                            
-                                    }
-                                    else{
-                                        if($this->checkSet('set5', $match_score_model, $match_score_model_other, $preferences, 15)){
-                                              return 5; 
-                                         }
-                                         else return 0;
-                                }
-                            
-                            }
-                        }
-                }
-    }
-
-
-    public function checkSet($set, $match_score_model, $match_score_model_other, $preferences , $stw=0){
-            $end_point = 1000;
-            $score_to_win = 25;
-            $number_of_sets = 5;            
-            $enable_two_points = 'on';
-
-            if($stw!=0) $score_to_win =15; 
-
-
-            $set1_score=$match_score_model->{$set};
-            $set1_opponent_score=$match_score_model_other->{$set};
-
-            if($set1_score<$score_to_win && $set1_opponent_score<$score_to_win){
-                return true;                 
-                //if user one and two scores are less than the score to win, active set
-            }
-
-            else if($set1_score==$end_point || $set1_opponent_score==$end_point){
-                return false;  
-                //if a user score = end_point score, skip set. or complete set. 
-            }
-
-            else if($set1_score>=$score_to_win || $set1_opponent_score>=$score_to_win){
-                if($enable_two_points=='on'){
-                    if(($set1_score-$set1_opponent_score)>=2) return false;
-                    elseif(($set1_opponent_score-$set1_score)>=2) return false;
-                    else return true;
-                }
-                else{
-                    return false;
-                }
-            }
-            
-
-    }
-
-        public function addScore(ObjectRequest $request){
-
-
-            $match_id=$request->match_id;           
-            $team_id=(int)$request->team_id;
-            $original_team_id=$team_id;
-            $player_id=(int)$request->player_id;
-            $action=$request->action;    //add or remove; 
-            $val   =$request->val;           
-
-
-            
-
-            $match_model=MatchSchedule::find($match_id);            //match_schedule data
-            $match_details=json_decode($match_model->match_details);
-            $preferences=$match_details->preferences;
-                            //opponent team data
-
-            $end_point = 1000;
-            $score_to_win = 25;
-            $number_of_sets = 5;          
-            $enable_two_points = 'on';
-
-            $team_a=$match_model->a_id;
-            $team_b=$match_model->b_id;
-            $set_number=0;
-
-
-           
-                if($val=='won'){
-                        
-                }
-                else{
-                    if($team_id==$team_a){
-                        $team_id=$team_b;
-                    } 
-                    else{
-                        $team_id=$team_a;
-                    } 
-
-            //Exchange player positions
-        DB::statement("UPDATE kabaddi_player_matchwise_stats SET serving_order = (serving_order %6) +1 WHERE match_id=$match_id AND playing_status='P'");
-
-                }
-           
-            //get current active set;
-               
-            
-            // Check if set1 is complete
-
-                //first and second player(team) or left and right player(team)
-    $match_score_model=kabaddiScore::whereMatchId($match_id)->whereTeamId($team_id)->first();
-    $match_score_model_other=kabaddiScore::whereMatchId($match_id)->where('team_id','!=',$team_id)->first();
-
-    $match_score_model->elected='serve';
-    $match_score_model_other->elected='receive';
-
-    $match_score_model->save();
-    $match_score_model_other->save();
-
-    $left_player_model=$match_score_model;
-    $right_player_model=$match_score_model_other;
-
-            if($this->checkSet('set1', $left_player_model, $right_player_model, $preferences)){
-
-                    if($action=='remove' && $match_score_model->set1>0 ){   //remove point if set_score>0
-                                $match_score_model->set1--;
-                                $match_score_model->save();
-
-                                $match_details->match_details->set1->{$team_id."_score"}=$match_score_model->set1;
-
-                               
-                    }
-                    elseif($action=='add') {
-
-                                $match_score_model->set1++;
-                                $match_score_model->save(); 
-
-                                $match_details->match_details->set1->{$team_id."_score"}=$match_score_model->set1;   $set_number=1;                            
-                    }  
-            }
-            else{           //set1 is complete
-
-                if($this->checkSet('set2',$left_player_model, $right_player_model, $preferences)){
-                        if($action=='remove' && $match_score_model->set2>0 ){
-                            $match_score_model->set2--;
-                            $match_score_model->save(); 
-            $match_details->match_details->set2->{$team_id."_score"} =$match_score_model->set2;                         
-                        }
-                        elseif($action=='add') {
-                                    $match_score_model->set2++;
-                                    $match_score_model->save();
-            $match_details->match_details->set2->{$team_id."_score"} =$match_score_model->set2;
-                                     $set_number=2;
-                        }  
-                }
-
-                else{       //set2 is complete
-                        if($this->checkSet('set3', $match_score_model, $match_score_model_other, $preferences)){
-                                if($action=='remove' && $match_score_model->set3>0 ){
-                                    $match_score_model->set3--;
-                                    $match_score_model->save();
-            $match_details->match_details->set3->{$team_id."_score"} =$match_score_model->set3;
-                                    
-                                }
-                                elseif($action=='add') {
-                                    $match_score_model->set3++;
-                                    $match_score_model->save();
-            $match_details->match_details->set3->{$team_id."_score"} =$match_score_model->set3;
-                                         $set_number=3;
-                                }    
-                            }
-                        else{
-
-                            if($number_of_sets>3){
-
-                                    if($this->checkSet('set4', $match_score_model, $match_score_model_other, $preferences)){
-                                            if($action=='remove' && $match_score_model->set4>0 ){
-
-                                                $match_score_model->set4--;
-                                                $match_score_model->save();
-
-            $match_details->match_details->set4->{$team_id."_score"} =$match_score_model->set4;                                                
-                                            }
-                                            elseif($action=='add') {
-                                                $match_score_model->set4++;
-                                                $match_score_model->save();
-            $match_details->match_details->set4->{$team_id."_score"} =$match_score_model->set4;
-                                                 $set_number=4;
-                                         } 
-                                    }
-                                    else{
-                                        if($this->checkSet('set5', $match_score_model, $match_score_model_other, $preferences, 15)){
-                                               if($action=='remove' && $match_score_model->set5>0 ){
-
-                                                    $match_score_model->set5--;
-                                                    $match_score_model->save();
-            $match_details->match_details->set5->{$team_id."_score"} =$match_score_model->set5;
-                                                 
-                                                }
-                                                elseif($action=='add') {
-                                                    $match_score_model->set5++;
-                                                    $match_score_model->save();
-            $match_details->match_details->set5->{$team_id."_score"} =$match_score_model->set5;
-                                                     $set_number=5;
-                                              }  
-                                         }
-                                }
-                            
-                            }
-                        }
-                }
-            }
-
-        $match_details->current_set=$this->getCurrentSet($match_id);
-        $match_details->scores=$this->getScoreSet($match_id);
-
-        $match_details=json_encode($match_details);
-        $match_model->match_details=$match_details;
-        $match_model->save();
-        $match_score_model->total_points=$match_score_model->set1 + $match_score_model->set2 + $match_score_model->set3 + $match_score_model->set4 + $match_score_model->set5;      
-        $match_score_model->save();
-
-        //insert record;
-
-        $setDetails=kabaddiSetDetails::whereMatchId($match_id)->whereTeamId($original_team_id)->whereSetNumber($set_number)->whereServerId($player_id);
-
-        if($val=='won'){                        
                 
-        }
-        else {
 
-        }
+                switch ($record_type) {
+                    case 'points_1':
+
+          $kabaddi_model->points_1++;
+          $kabaddi_model->{$quarter}++;
+          
+          $match_details->{$team_id}->players->{'player_'.$kabaddi_model->user_id}->points_1++;
+          $match_details->{$team_id}->players->{'player_'.$kabaddi_model->user_id}->{$quarter}->points_1++;
+          $match_details->{$team_id}->players->{'player_'.$kabaddi_model->user_id}->{$quarter}->total_points=$kabaddi_model->{$quarter};
+          
+          $kabaddi_model->total_points=$this->getTotal($kabaddi_model);
+
+      $match_details->{$team_id}->total_points++;
+      $match_details->{$team_id}->players->{'player_'.$kabaddi_model->user_id}->total_points=$kabaddi_model->total_points;
+
+                        break;
+
+                    case 'points_2':
+           $kabaddi_model->points_2++;
+           $kabaddi_model->{$quarter}+=2;
+
+    
+       $match_details->{$team_id}->players->{'player_'.$kabaddi_model->user_id}->points_2++;
+       $match_details->{$team_id}->players->{'player_'.$kabaddi_model->user_id}->{$quarter}->points_2++;
+       $match_details->{$team_id}->players->{'player_'.$kabaddi_model->user_id}->{$quarter}->total_points=$kabaddi_model->{$quarter};
+
+          $match_details->{$team_id}->total_points+=2;
+          $kabaddi_model->total_points=$this->getTotal($kabaddi_model);
+      $match_details->{$team_id}->players->{'player_'.$kabaddi_model->user_id}->total_points=$kabaddi_model->total_points;
 
 
-       $match_details=json_decode($match_details);
-       $match_details->server=Helper::getVolleyballServer($match_id, 'kabaddi');
+                    break;
 
-        return json_encode($match_details);
+                    case 'points_3':
+           $kabaddi_model->points_3++;
+           $kabaddi_model->{$quarter}+=3;
+          $match_details->{$team_id}->players->{'player_'.$kabaddi_model->user_id}->total_points+=3;
+            $match_details->{$team_id}->players->{'player_'.$kabaddi_model->user_id}->points_3++;;
+          $match_details->{$team_id}->players->{'player_'.$kabaddi_model->user_id}->{$quarter}->points=$kabaddi_model->points_3;
+
+               $match_details->{$team_id}->players->{'player_'.$kabaddi_model->user_id}->{$quarter}->total_points=$kabaddi_model->{$quarter};
+               
+          $match_details->{$team_id}->total_points+=3;
+          $kabaddi_model->total_points=$this->getTotal($kabaddi_model);
+
+      $match_details->{$team_id}->players->{'player_'.$kabaddi_model->user_id}->total_points=$kabaddi_model->total_points;
+
+                    break;
+
+                    case 'fouls':
+               if($kabaddi_model->fouls>=$max_fouls){
+                   $match_details->{$team_id}->players->{'player_'.$user_id}->dismissed=1;
+                   $kabaddi_model->playing_status='S';
+               }
+
+          $kabaddi_model->fouls++;
+          $match_details->{$team_id}->players->{'player_'.$user_id}->fouls ++; 
+          $match_details->{$team_id}->players->{'player_'.$user_id}->{$quarter}->fouls++;
+          $match_details->{$team_id}->fouls++;
+        
+                    break;
+                    
+                    default:
+                        # code...
+                        break;
+                }
+
+              $kabaddi_model->save();
+
+        //$this->updatekabaddiScore($user_id,$match_id,$team_id,$player_name,$points_1, $points_2, $points_3, $total_points, $fouls);
+        $this->kabaddiStatistics($user_id);          
+
+
+        $match_data->match_details=json_encode($match_details);
+        $match_data->save();
+            return $match_data->match_details;
+
     }
+
+    public function updatekabaddiScore($user_id,$match_id,$team_id,$player_name,$points_1,$points_2,$points_3, $total_points, $fouls)
+    {
+        $player_stat=kabaddiPlayerMatchwiseStats::where('user_id',$user_id)->where('match_id',$match_id)->where('team_id',$team_id)->update(['user_id'=>$user_id,
+            'points_1'=>$points_1,
+            'points_2'=>$points_2,
+            'points_3'=>$points_3,
+            'total_points'=>$total_points,
+            'fouls'=>$fouls
+            ]);
+        //kabaddiStatistic::where('user_id',$user_id)->update(['yellow_cards'=>$yellow_card_count,'red_cards'=>$red_card_count,'goals_scored'=>$goal_count]);
+    }
+    //
+
+    public function getTotal($player_model){
+        $total=0; 
+        for($i=1; $i<=6; $i++){
+                $total+=$player_model->{'quarter_'.$i};
+        }
+        return $total;
+    }
+
+
 
  }

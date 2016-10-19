@@ -434,6 +434,7 @@ class TennisScoreCardController extends parentScoreCardController
         $main_match_model->match_details=$match_details;
         $match_model->save();
         $main_match_model->save();
+        Helper::start_match_email($match_model);
 
         return $match_details;
     }
@@ -758,6 +759,12 @@ class TennisScoreCardController extends parentScoreCardController
             for($i=1; $i<=$number_of_sets; $i++){
                     $score_a_model->{"set".$i}=$request->{"a_set".$i}>$end_point?$end_point:(int)$request->{"a_set".$i};
                     $score_b_model->{"set".$i}=$request->{"b_set".$i}>$end_point?$end_point:(int)$request->{"b_set".$i};
+
+                    //Tie breaker
+
+                     $score_a_model->{"set".$i."_tie_breaker"}=$request->{"a_set_tie".$i};
+                    $score_b_model->{"set".$i."_tie_breaker"}=$request->{"b_set_tie".$i};
+
 
                     $match_details_data->{"set".$i}->{$left_team_id."_score"}=(int)$request->{"a_set".$i}>$end_point?$end_point:(int)$request->{"a_set".$i};
                     $match_details_data->{"set".$i}->{$right_team_id."_score"}=(int)$request->{"b_set".$i}>$end_point?$end_point:(int)$request->{"b_set".$i};
