@@ -756,6 +756,18 @@
 	background-position: 0 -465px;
 	z-index: 0;
 }
+.table_tennis_scorcard .tn_bg:before {
+	content: '';
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: #002542 url(/images/scorecard/tennis.jpg) top center no-repeat;
+	background-size: cover;
+	background-position: 0 -465px;
+	z-index: 0;
+}
 .tennis_scorcard .tn_bg:after {
 	content: '';
 	position: absolute;
