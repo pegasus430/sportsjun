@@ -115,8 +115,7 @@ class Organization extends Model
         }
         //End
 
-
-         function followers(){
+        function followers(){
             return $this->hasMany('App\Model\Followers','type_id')->whereType('organization');
         }
 
@@ -124,6 +123,5 @@ class Organization extends Model
         {
             return Helper::getImagePath($this->logo,'ogranization');
         }
-
 
 }
