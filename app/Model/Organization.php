@@ -121,7 +121,7 @@ class Organization extends Model
 
         public function getLogoImageAttribute()
         {
-            return Helper::getImagePath($this->logo,'ogranization');
+            return Helper::getImagePath($this->logo,'organization');
         }
 
 }
