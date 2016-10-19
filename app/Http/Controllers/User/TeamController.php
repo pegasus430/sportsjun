@@ -551,7 +551,7 @@ class TeamController extends Controller
             ->orderBy('isactive', 'desc')->get();
 
         // $photo= Photo::select('url')->where('imageable_id', '=', $id)->where('imageable_type', '=', config('constants.PHOTO.TEAM_PHOTO'))->where('user_id', (isset(Auth::user()->id)?Auth::user()->id:0))->get()->toArray();
-        $orgInfoObj = Organization::find('id', $id);
+        $orgInfoObj = Organization::find($id);
 
         return view('teams.orgteams')->with(array(
             'teams' => $teams,
