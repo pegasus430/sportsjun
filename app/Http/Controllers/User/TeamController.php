@@ -517,12 +517,12 @@ class TeamController extends Controller
         $photo = Photo::select('url')->where('imageable_id', '=', $id)->where('imageable_type', '=',
             config('constants.PHOTO.TEAM_PHOTO'))->where('user_id',
             (isset(Auth::user()->id) ? Auth::user()->id : 0))->get()->toArray();
-        $orgInfo = Organization::select()->where('id', $id)->get()->toArray();
+        $orgInfoObj = Organization::find($id);
 
         return view('teams.teams')->with(array(
             'teams' => $teams,
             'photo' => $photo,
-            'orgInfo' => $orgInfo,
+            'orgInfoObj' => $orgInfoObj,
             'id' => $id,
             'userId' => $user_id
         ));
@@ -551,12 +551,12 @@ class TeamController extends Controller
             ->orderBy('isactive', 'desc')->get();
 
         // $photo= Photo::select('url')->where('imageable_id', '=', $id)->where('imageable_type', '=', config('constants.PHOTO.TEAM_PHOTO'))->where('user_id', (isset(Auth::user()->id)?Auth::user()->id:0))->get()->toArray();
-        $orgInfo = Organization::select()->where('id', $id)->get()->toArray();
+        $orgInfoObj = Organization::find('id', $id);
 
         return view('teams.orgteams')->with(array(
             'teams' => $teams,
             'id' => $id,
-            'orgInfo' => $orgInfo,
+            'orgInfoObj' => $orgInfoObj,
             'userId' => $user_id
         ));
     }

@@ -33,7 +33,7 @@ class OrganizationGroupsController extends Controller
         $groups = $organization->groups;
 
         $groups->load('manager', 'teams');
-        $orgInfo = Organization::select()->where('id', $id)->get()->toArray();
+        $orgInfoObj = Organization::find($id);
 
         $user_id = (isset(Auth::user()->id)?Auth::user()->id:0);
         $teams = Team::whereDoesntHave('organizationGroups')
@@ -43,7 +43,7 @@ class OrganizationGroupsController extends Controller
                     ->orderBy('isactive','desc')->get();
 
         return view('organization.groups.list',
-            compact('id', 'staffList', 'groups', 'organization', 'orgInfo','teams'),['userId'=>$user_id]);
+            compact('id', 'staffList', 'groups', 'organization', 'orgInfoObj','teams'),['userId'=>$user_id]);
 
     }
 

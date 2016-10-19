@@ -52,10 +52,10 @@ class OrganizationMembersController extends Controller
             }
         }
 
-        $orgInfo= [$organization->toArray()];
 
         return view('organization.members.list',
-            compact('id', 'organization', 'staffList', 'members','filter_team','orgInfo')
+            compact('id', 'organization', 'staffList', 'members', 'filter_team'),
+            ['orgInfoObj'=>$organization]
         );
     }
 
