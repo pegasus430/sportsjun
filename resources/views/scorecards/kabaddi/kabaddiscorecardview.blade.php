@@ -15,7 +15,7 @@
     $a_fouls=0;
     $b_fouls=0;
 
-     $match_settings=Helper::getMatchSettings($match_data[0]['tournament_id'],$match_data[0]['sports_id']);
+         $match_settings=Helper::getMatchSettings($match_data[0]['tournament_id'],$match_data[0]['sports_id']);
     $number_of_quarters=$match_settings->number_of_sets;
 
     $type_name = 'Quarter';
@@ -33,7 +33,7 @@
         $b_fouls=$match_details->{$team_b_id}->fouls;       
     }
 
-    else {       
+   else {       
         $quarter_time = 20;
     }
 
@@ -117,7 +117,7 @@
 
     </style>
     <div class="col_standard soccer_scorecard">
-        <div id="team_vs" class="ss_bg bk_bg">
+        <div id="team_vs" class="ss_bg sq_bg">
             <div class="container">
                 <div class="row">
                     <div class="team team_one col-xs-5">
@@ -217,7 +217,7 @@
 
             <div class="panel panel-default">
                 <div class="col-md-12">
-                    <h5 class="scoreboard_title">Basketball Scorecard
+                    <h5 class="scoreboard_title">Kabaddi Scorecard
                             @if(!empty($match_data[0]['match_category']))
                              <span class='match_type_text'>
                              ({{ucfirst($match_data[0]['match_category']) }})
@@ -261,7 +261,7 @@
                                 <div class="form-group">
                                     <label>Winner is Not Updated</label>
 
-                                    {{$type_name}} {{$match_data[0]['selected_half_or_quarter']}}
+                                    {{$type_name}}  {{$match_data[0]['selected_half_or_quarter']}}
 
                                 </div>
                             @endif
@@ -286,9 +286,9 @@
                                         <thead class="players_head ">
                                           <tr>
                                                 <th >Player<s/th>
-                                                <th> 1 Pts </th>
-                                                <th> 2 Pts </th>
-                                                <th> 3 Pts </th>                                                
+                                                <th> Goal</th>
+                               <!--                  <th> 2 Pts </th>
+                                                <th> 3 Pts </th>  -->                                               
                                                 <th >Fouls</th>
                                                 
                                         @for($index=1; $index<=$number_of_quarters; $index++)
@@ -301,7 +301,7 @@
                                             </tr>
                                         </thead>
                                         <tbody id="team_tr_a" >
-                                            @foreach($team_a_basketball_scores_array as $player)
+                                            @foreach($team_a_kabaddi_scores_array as $player)
 
                                     @if($player['playing_status']=='P')
                                         <tr id="team_a_row_{{$player['id']}}">
@@ -311,16 +311,18 @@
                                       <a href="/editsportprofile/{{$player['user_id']}}" class="primary">                  {{$player['player_name']}} 
                                       </a>                         
                                                 </td>
-                                                <td class=""> 
+                                               <td class=""> 
     {{getClass($player['points_1'])}}
                                                 </td>
+    {{--
                                                 <td class="">
     {{getClass($player['points_2'])}}
 
                                                 </td>
                                                 <td class="">
     {{getClass($player['points_3'])}}
-                                                </td>                                             
+                                                </td>   
+    --}}                                          
                                               
                                                 <td class="">
                                                        {{getClass($player['fouls'])}}
@@ -346,9 +348,9 @@
                                             <thead class="substitutes_head ">
                                           <tr>
                                                 <th >Substitutes</th>
-                                                <th> 1 Pts </th>
-                                                <th> 2 Pts </th>
-                                                <th> 3 Pts </th>                                                
+                                                <th> Goals</th>
+                                             <!--    <th> 2 Pts </th>
+                                                <th> 3 Pts </th>  -->                                               
                                                 <th >Fouls</th>
                                                 
                                         @for($index=1; $index<=$number_of_quarters; $index++)
@@ -361,7 +363,7 @@
                                             </tr>
                                         </thead>
                                         <tbody id="team_tr_a" >
-                                            @foreach($team_a_basketball_scores_array as $player)
+                                            @foreach($team_a_kabaddi_scores_array as $player)
 
                                     @if($player['playing_status']=='S')
                                         <tr id="team_a_row_{{$player['id']}}">
@@ -374,13 +376,15 @@
                                                 <td class=""> 
     {{getClass($player['points_1'])}}
                                                 </td>
+    {{--
                                                 <td class="">
     {{getClass($player['points_2'])}}
 
                                                 </td>
                                                 <td class="">
     {{getClass($player['points_3'])}}
-                                                </td>                                             
+                                                </td>   
+    --}}                                          
                                               
                                                 <td class="">
                                                        {{getClass($player['fouls'])}}
@@ -408,12 +412,14 @@
                                                 <td>
     {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'points_1', $match_data[0]['a_id']))}}
                                                 </td>
+    {{--
                                                  <td>
     {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'points_2', $match_data[0]['a_id']))}}
                                                 </td>
                                                  <td>
     {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'points_3', $match_data[0]['a_id']))}}
                                                 </td>
+    --}}
                                                  <td>
     {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'fouls', $match_data[0]['a_id']))}}
                                                 </td>
@@ -441,9 +447,9 @@
                                         <thead class="players_head ">
                                            <tr>
                                                 <th >Player</th>
-                                                <th> 1 Pts </th>
-                                                <th> 2 Pts </th>
-                                                <th> 3 Pts </th>                                                
+                                                <th> Goal </th>
+                                               <!--  <th> 2 Pts </th>
+                                                <th> 3 Pts </th>  -->                                               
                                                 <th >Fouls</th>
                                                 
                                         @for($index=1; $index<=$number_of_quarters; $index++)
@@ -457,7 +463,7 @@
                                         </thead>                                    
                                         <tbody id="team_tr_b" >
                                     
-                                            @foreach($team_b_basketball_scores_array as $player)
+                                            @foreach($team_b_kabaddi_scores_array as $player)
                                      @if($player['playing_status']=='P')
                                         <tr>
                                                 
@@ -468,13 +474,14 @@
                                                 <td class=""> 
      {{getClass($player['points_1'])}}
                                                 </td>
-                                                <td  class="">
+        {{--                                        <td  class="">
      {{getClass($player['points_2'])}}
 
                                                 </td>
                                                 <td class="">
      {{getClass($player['points_3'])}}
-                                                </td>                                             
+                                                </td>  
+        --}}                                           
                                               
                                                 <td class="{{$player['id']}}_fouls ">
     {{getClass($player['fouls'])}}
@@ -498,9 +505,11 @@
                                            <thead class="substitutes_head">
                                            <tr>
                                                 <th >Substitutes</th>
-                                                <th> 1 Pts </th>
+                                                <th> Goal </th>
+        {{--
                                                 <th> 2 Pts </th>
-                                                <th> 3 Pts </th>                                                
+                                                <th> 3 Pts </th>  
+        --}}                                              
                                                 <th >Fouls</th>
                                                 
                                         @for($index=1; $index<=$number_of_quarters; $index++)
@@ -514,7 +523,7 @@
                                         </thead>                                    
                                         <tbody id="team_tr_b" >
                                     
-                                            @foreach($team_b_basketball_scores_array as $player)
+                                            @foreach($team_b_kabaddi_scores_array as $player)
                                      @if($player['playing_status']=='S')
                                         <tr>
                                                 
@@ -525,13 +534,14 @@
                                                 <td class=""> 
      {{getClass($player['points_1'])}}
                                                 </td>
-                                                <td  class="">
+       {{--                                         <td  class="">
      {{getClass($player['points_2'])}}
 
                                                 </td>
                                                 <td class="">
      {{getClass($player['points_3'])}}
-                                                </td>                                             
+                                              </td>  
+        --}}                                           
                                               
                                                 <td class="{{$player['id']}}_fouls ">
     {{getClass($player['fouls'])}}
@@ -558,12 +568,13 @@
                                                 <td>
     {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'points_1', $match_data[0]['b_id']))}}
                                                 </td>
-                                                 <td>
+       {{--                                          <td>
     {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'points_2', $match_data[0]['b_id']))}}
                                                 </td>
                                                  <td>
     {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'points_3', $match_data[0]['b_id']))}}
                                                 </td>
+        --}}
                                                  <td>
     {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'fouls', $match_data[0]['b_id']))}}
                                                 </td>

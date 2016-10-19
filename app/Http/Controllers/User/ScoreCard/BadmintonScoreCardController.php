@@ -408,6 +408,8 @@ class BadmintonScoreCardController extends parentScoreCardController
         $match_model->save();
         $main_match_model->save();
 
+        Helper::start_match_email($match_model);
+
         return $match_details;
     }
 

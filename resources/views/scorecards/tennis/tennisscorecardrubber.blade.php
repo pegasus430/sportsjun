@@ -192,6 +192,7 @@
              
             @for($set_index=1; $set_index<=$set; $set_index++)
               <th>SET {{$set_index}}</th>
+              <th>TB {{$set_index}}</th>
             @endfor
               <th>ACES </th>
               <th>D FAULTS </th>
@@ -210,6 +211,10 @@
                  <input  readonly class="gui-input validation allownumericwithdecimal runs_new a_set{{$set_index}}" value="{{$rubber_a_array['set'.$set_index]}}" name='a_set{{$set_index}}'>
                 <span class='hidden-xs pull-right add_button_left left_button_add_set_{{$set_index}}'></span>
             </td>
+               <td>
+
+                 <input  readonly class="gui-input validation allownumericwithdecimal runs_new " value="{{$rubber_a_array['set'.$set_index.'_tie_breaker']}}" name='a_set_tie{{$set_index}}'>
+            </td>
           @endfor
             <td><input class="gui-input validation allownumericwithdecimal runs_new a_aces" type="" name="a_aces" value="{{$rubber_a_array['aces']}}" readonly=""> </td>
             <td><input class="gui-input validation allownumericwithdecimal runs_new a_double_faults" type="" name="a_double_faults" value="{{$rubber_a_array['double_faults']}}" readonly="">  </td>
@@ -227,6 +232,10 @@
                   <input  readonly class="gui-input validation allownumericwithdecimal runs_new b_set{{$set_index}}" value="{{$rubber_b_array['set'.$set_index]}}" name='b_set{{$set_index}}'>
                 <span class='hidden-xs pull-right add_button_right right_button_add_set_{{$set_index}}'></span>
               </td>
+                 <td>
+
+                 <input  readonly class="gui-input validation allownumericwithdecimal runs_new " value="{{$rubber_b_array['set'.$set_index.'_tie_breaker']}}" name='b_set_tie{{$set_index}}'>
+            </td>
             @endfor
              <td><input type="" class="gui-input validation allownumericwithdecimal runs_new b_aces" name="b_aces" value="{{$rubber_b_array['aces']}}" readonly=""> </td>
             <td><input class="gui-input validation allownumericwithdecimal runs_new b_double_faults" type="" name="b_double_faults" value="{{$rubber_b_array['double_faults']}}" readonly="">  </td>

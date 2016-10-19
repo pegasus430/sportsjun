@@ -109,7 +109,6 @@ input:read-only {
 	<?php $team_a_id = $match_data[0]['a_id']; $team_b_id= $match_data[0]['b_id'] ; 
 	$match_id=$match_data[0]['id'];
 	$tournament_id=$match_data[0]['tournament_id'];
-   
 
 	?>
 	<?php
@@ -121,12 +120,14 @@ input:read-only {
 	$b_fouls=0;
 	$attr="";
 	$class_ps='';
+	$number_of_quarters=0;
 
 	 $match_settings=Helper::getMatchSettings($match_data[0]['tournament_id'],$match_data[0]['sports_id']);
 	$number_of_quarters=$match_settings->number_of_sets;
 
 	$type_name = 'Quarter';
 	$short_type_name='Qtr';
+
 
 	if(isset($preferences->number_of_quarters)){
 		$number_of_quarters=$preferences->number_of_quarters;
@@ -148,7 +149,7 @@ input:read-only {
 	?>
 
 	<div class="col_standard soccer_scorecard">
-		<div id="team_vs" class="ss_bg bk_bg">
+		<div id="team_vs" class="ss_bg sq_bg">
 			<div class="container">
 				<div class="row">
 					<div class="team team_one col-xs-5">
@@ -173,7 +174,8 @@ input:read-only {
 								<div class="team_detail">
 									<div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['a_id'] }}">{{ $team_a_name }}</a></div>
 									<div class="team_city">{{ $team_a_city }}</div>
-									<div class="team_score team_a_score" id="team_a_score">{{$a_points}} <span id='team_a_fouls'  class='fouls team_a_fouls'>{{$a_fouls}}</span></div>
+									<div class="team_score team_a_score show_score" id="team_a_score">{{$a_points}} <span id='team_a_fouls'  class='fouls team_a_fouls'>{{$a_fouls}}</span></div>
+									<div class="team_score hidden_score" ><input type="text" value="{{$a_points}}" id="hidden_a_score" name='team_a_score'> </div>
 									
 								</div>
 							</div>
@@ -188,7 +190,9 @@ input:read-only {
 								<div class="team_detail">
 									<div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['b_id'] }}">{{ $team_b_name }}</a></div>
 									<div class="team_city">{{ $team_b_city }}</div>
-									<div class="team_score team_b_score" id="team_b_score">{{$b_points}} <span id='team_b_count' class='fouls team_b_fouls' >{{$b_fouls}}</span></div>
+									<div class="team_score team_b_score show_score" id="team_b_score">{{$b_points}} <span id='team_b_count' class='fouls team_b_fouls' >{{$b_fouls}}</span></div>
+									<div class="team_score hidden_score"><input type="text" value="{{$b_points}}" name='team_b_score' id="hidden_b_score"> </div>
+									
 									
 								</div>
 							</div>
@@ -213,7 +217,8 @@ input:read-only {
 								<div class="team_detail">
 									<div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['b_id'] }}">{{ $team_b_name }}</a></div>
 									<div class="team_city">{{ $team_b_city }}</div>
-									<div class="team_score team_b_score" id="team_b_score">{{$b_points}} <span id='team_b_count' class='fouls team_b_fouls' >{{$b_fouls}}</span></div>
+									<div class="team_score team_b_score show_score" id="team_b_score">{{$b_points}} <span id='team_b_count' class='fouls team_b_fouls' >{{$b_fouls}}</span></div>
+									<div class="team_score hidden_score"><input type="text" value="{{$b_points}}" name='team_b_score' id="hidden_b_score"> </div>
 								</div>
 							</div>
 						</div>
@@ -248,7 +253,7 @@ input:read-only {
 
 			<div class="row">
 				<div class="col-md-12">
-					<h5 class="scoreboard_title">Basketball Scorecard
+					<h5 class="scoreboard_title">Kabaddi Scorecard
 					@if(!empty($match_data[0]['match_category']))
                              <span class='match_type_text'>
                              ({{ucfirst($match_data[0]['match_category']) }})
@@ -425,7 +430,7 @@ input:read-only {
 				<div class="row">
 					<!-- Team A Goals Start-->
 					<div class="col-sm-12 col-lg-12">
-   <form id='basketball' onsubmit='return manualScoring(this)'>
+   <form id='kabaddi' onsubmit='return manualScoring(this)'>
    				{!!csrf_field()!!}
    					 <div class="row">
 					    <div class='col-sm-12'>
@@ -452,9 +457,9 @@ input:read-only {
 										<thead class="players_head ">
 											<tr>
 												<th >Players</th>
-												<th> 1 Pts </th>
-												<th> 2 Pts </th>
-												<th> 3 Pts </th>												
+												<th> Goals </th>
+												<!-- <th> 2 Pts </th>
+												<th> 3 Pts </th> -->												
 												<th >Fouls</th>
 												
 										@for($index=1; $index<=$number_of_quarters; $index++)
@@ -467,7 +472,7 @@ input:read-only {
 											</tr>
 										</thead>
 										<tbody id="team_tr_a" >
-											@foreach($team_a_basketball_scores_array as $player)
+											@foreach($team_a_kabaddi_scores_array as $player)
 									@if($player['playing_status']=='P')									
 
 										<tr id="team_a_row_{{$player['id']}}"  class="team_a_goal_row player_select {{$class_ps}} " player_id="{{$player['id']}} " player_name="{{$player['player_name']}}" team_id="{{$team_a_id}}" team_type='team_a' user_id="{{$player['user_id']}}" {!!$attr!!}>
@@ -479,13 +484,15 @@ input:read-only {
                                                 <td> 
       <input type='text' class="tennis_input_new gui-input  points_1_player_{{$player['user_id']}}" readonly="" name="points_1_{{$player['id']}}" value="{{$player['points_1']}}" >
                                                 </td>
+               {{--
                                                 <td>
       <input type='text' class="tennis_input_new gui-input  points_2_player_{{$player['user_id']}}" readonly="" name="points_2_{{$player['id']}}" value="{{$player['points_2']}}" >
 
                                                 </td>
                                                 <td>
       <input type='text' class="tennis_input_new gui-input  points_3_player_{{$player['user_id']}}" readonly="" name="points_3_{{$player['id']}}" value="{{$player['points_3']}}" >
-                                                </td>                                             
+                                                </td>                  
+                  --}}  
                                               
                                                 <td class="{{$player['id']}}_fouls">
                                                			 <input type='text' class="tennis_input_new gui-input validation allownumericwithdecimal fouls_player_{{$player['user_id']}}" readonly="" name="fouls_{{$player['id']}}" value="{{$player['fouls']}}">
@@ -507,9 +514,9 @@ input:read-only {
 										<thead class="substitutes_head ">
 											<tr>
 												<th >Substitutes</th>
-												<th> 1 Pts </th>
-												<th> 2 Pts </th>
-												<th> 3 Pts </th>												
+												<th> Goals </th>
+											<!-- 	<th> 2 Pts </th>
+												<th> 3 Pts </th> -->												
 												<th >Fouls</th>
 												
 										@for($index=1; $index<=$number_of_quarters; $index++)
@@ -522,7 +529,7 @@ input:read-only {
 											</tr>
 										</thead>
 										<tbody id="team_tr_a" >
-											@foreach($team_a_basketball_scores_array as $player)
+											@foreach($team_a_kabaddi_scores_array as $player)
 
 									@if($player['playing_status']!='P')
 										<?php											
@@ -539,13 +546,15 @@ input:read-only {
                                                 <td> 
       <input type='text' class="tennis_input_new gui-input  points_1_player_{{$player['user_id']}}" readonly="" name="points_1_{{$player['id']}}" value="{{$player['points_1']}}" >
                                                 </td>
+        {{--
                                                 <td>
       <input type='text' class="tennis_input_new gui-input  points_2_player_{{$player['user_id']}}" readonly="" name="points_2_{{$player['id']}}" value="{{$player['points_2']}}" >
 
                                                 </td>
                                                 <td>
       <input type='text' class="tennis_input_new gui-input  points_3_player_{{$player['user_id']}}" readonly="" name="points_3_{{$player['id']}}" value="{{$player['points_3']}}" >
-                                                </td>                                             
+                                                </td>      
+         --}}                                       
                                               
                                                 <td class="{{$player['id']}}_fouls">
                                                			 <input type='text' class="tennis_input_new gui-input validation allownumericwithdecimal fouls_player_{{$player['user_id']}}" readonly="" name="fouls_{{$player['id']}}" value="{{$player['fouls']}}">
@@ -576,9 +585,9 @@ input:read-only {
 										<thead class="players_head ">
 											<tr>
 												<th >Players</th>
-												<th> 1 Pts </th>
-												<th> 2 Pts </th>
-												<th> 3 Pts </th>	
+												<th> Goals </th>
+											<!-- 	<th> 2 Pts </th>
+												<th> 3 Pts </th>	 -->
 												<th >Fouls</th>											
 												
 										@for($index=1; $index<=$number_of_quarters; $index++)
@@ -591,7 +600,7 @@ input:read-only {
 										</thead>									
 										<tbody id="team_tr_b" >
 									
-											@foreach($team_b_basketball_scores_array as $player)
+											@foreach($team_b_kabaddi_scores_array as $player)
 
 										@if($player['playing_status']=='P')
 											<?php										
@@ -612,13 +621,15 @@ input:read-only {
                                                 <td> 
       <input type='text' class="tennis_input_new gui-input  points_1_player_{{$player['user_id']}}" readonly="" name="points_1_{{$player['id']}}" value="{{$player['points_1']}}" >
                                                 </td>
+       {{--
                                                 <td>
       <input type='text' class="tennis_input_new gui-input  points_2_player_{{$player['user_id']}}" readonly="" name="points_2_{{$player['id']}}" value="{{$player['points_2']}}" >
 
                                                 </td>
                                                 <td>
       <input type='text' class="tennis_input_new gui-input  points_3_player_{{$player['user_id']}}" readonly="" name="points_3_{{$player['id']}}" value="{{$player['points_3']}}" >
-                                                </td>                                             
+                                                </td>        
+        --}}          
                                               
                                                 <td class="{{$player['id']}}_fouls">
                                                			 <input type='text' class="tennis_input_new gui-input validation allownumericwithdecimal fouls_player_{{$player['user_id']}}" readonly="" name="fouls_{{$player['id']}}" value="{{$player['fouls']}}">
@@ -638,13 +649,13 @@ input:read-only {
 										<thead class="substitutes_head">
 											<tr>
 												<th >Substitutes</th>
-												<th> 1 Pts </th>
-												<th> 2 Pts </th>
-												<th> 3 Pts </th>												
+												<th> Goals </th>
+												<!-- <th> 2 Pts </th>
+												<th> 3 Pts </th>	 -->											
 												<th >Fouls</th>
 												
 										@for($index=1; $index<=$number_of_quarters; $index++)
-												<th>{{$short_type_name}}{{$index}}</th>
+												<th>{{$short_type_name}} {{$index}}</th>
 										@endfor
 
 												<th> Total </th>
@@ -653,7 +664,7 @@ input:read-only {
 											</tr>
 										</thead>
 										<tbody id="team_tr_a" >
-								@foreach($team_b_basketball_scores_array as $player)
+								@foreach($team_b_kabaddi_scores_array as $player)
 
 									@if($player['playing_status']!='P')
 										<?php											
@@ -669,13 +680,15 @@ input:read-only {
                                                 <td> 
       <input type='text' class="tennis_input_new gui-input  points_1_player_{{$player['user_id']}}" readonly="" name="points_1_{{$player['id']}}" value="{{$player['points_1']}}" >
                                                 </td>
+       {{--
                                                 <td>
       <input type='text' class="tennis_input_new gui-input  points_2_player_{{$player['user_id']}}" readonly="" name="points_2_{{$player['id']}}" value="{{$player['points_2']}}" >
 
                                                 </td>
                                                 <td>
       <input type='text' class="tennis_input_new gui-input  points_3_player_{{$player['user_id']}}" readonly="" name="points_3_{{$player['id']}}" value="{{$player['points_3']}}" >
-                                                </td>                                             
+                                                </td>    
+        --}}                                         
                                               
                                                 <td class="{{$player['id']}}_fouls">
                                                			 <input type='text' class="tennis_input_new gui-input validation allownumericwithdecimal fouls_player_{{$player['user_id']}}" readonly="" name="fouls_{{$player['id']}}" value="{{$player['fouls']}}">
@@ -723,7 +736,7 @@ input:read-only {
 							@for($i=1; $i<=$number_of_quarters; $i++)
 					
 							<div class='col-xs-6 col-sm-{{floor(12/($number_of_quarters + 1))}}'>
-								<label for='quarter_{{$i}}_id' class="label_half_time" > {{$type_name}} {{$i}} &nbsp;</label>
+								<label for='quarter_{{$i}}_id' class="label_half_time" > {{$type_name}}  {{$i}} &nbsp;</label>
 							    <input type='radio' name='choose_half_time' value='quarter_{{$i}}' {{$i==1?'checked':''}}  id='quarter_{{$i}}_id' class='checkbox_half_time' > 
 							</div>
 							@endfor
@@ -731,28 +744,28 @@ input:read-only {
 						</div>
 
 						<center class=" sportsjun-forms "  >
-							<button href="javascript:void(0);" data-toggle="modal" data-target="#basketballSubstituteModalA" class='btn-link btn-other btn-secondary-link  request pull-left' onclick="return false">Substitute A</button>
+							<button href="javascript:void(0);" data-toggle="modal" data-target="#kabaddiSubstituteModalA" class='btn-link btn-other btn-secondary-link  request pull-left' onclick="return false">Substitute A</button>
 						{{--
 							<label class="col-sm-3 col-xs-5">
 								<select name='select_half_time' class='form-control ' data-style="" onclick="return SJ.SCORECARD.soccerChooseTime(this)">
 								@for($i=1; $i<=$number_of_quarters; $i++)
-									<option value="quarter_{{$i}}">{{$type_name}} {{$i}}</option>
+									<option value="quarter_{{$i}}">Quarter {{$i}}</option>
 								@endfor
 								</select>
 							</label>
 						--}}
 
 
-							<button class="btn-link  btn-goal-card-select  "  onclick="return SJ.SCORECARD.basketballAddPoint(this)" value='1' type='points_1' type="button">1 Ptr</button>
+							<button class="btn-link  btn-goal-card-select  "  onclick="return SJ.SCORECARD.basketballAddPoint(this)" value='1' type='points_1' type="button">Goal</button>
 
-							<button class="btn-link btn-goal-card-select "   onclick="return SJ.SCORECARD.basketballAddPoint(this)" type='points_2' value='2' type="button">2 Ptr</button>
+							<!-- <button class="btn-link btn-goal-card-select "   onclick="return SJ.SCORECARD.basketballAddPoint(this)" type='points_2' value='2' type="button">2 Ptr</button>
 
-							<button  class="btn-link request btn-goal-card-select  "   onclick="return SJ.SCORECARD.basketballAddPoint(this)" type='points_3' value='3' type="button">3 Ptr</button>
+							<button  class="btn-link request btn-goal-card-select  "   onclick="return SJ.SCORECARD.basketballAddPoint(this)" type='points_3' value='3' type="button">3 Ptr</button> -->
 
 							<button  class="btn-link request btn-red-card-select  "   onclick="return SJ.SCORECARD.basketballAddPoint(this)" type='fouls' value='3' type="button">Fouls</button>
 
 							
-							<button data-toggle="modal" data-target="#basketballSubstituteModalB" class='btn-link btn-secondary-link  request pull-right' onclick="return false">Substitute  B</button>
+							<button data-toggle="modal" data-target="#kabaddiSubstituteModalB" class='btn-link btn-secondary-link  request pull-right' onclick="return false">Substitute  B</button>
 						</center>
 						<div class='row'>
 							<p><br>
@@ -826,11 +839,11 @@ input:read-only {
 											<label class="">Select Player of Match:</label>
 											<select name="player_of_the_match" id="player_of_the_match" class=" form-control " onchange="">
 												<option value="0" disabled="">Team A</option>
-												@foreach($team_a_basketball_scores_array as $tm_player)
+												@foreach($team_a_kabaddi_scores_array as $tm_player)
 													<option value="{{$tm_player['user_id']}}" @if($match_data[0]['player_of_the_match']==$tm_player['user_id'])?'selected':'' @endif >{{$tm_player['player_name']}}</option>
 												@endforeach
 												<option value="0" disabled="">Team B</option>
-												@foreach($team_b_basketball_scores_array as $tm_player)
+												@foreach($team_b_kabaddi_scores_array as $tm_player)
 													<option value="{{$tm_player['user_id']}}" @if($match_data[0]['player_of_the_match']==$tm_player['user_id'])?'selected':'' @endif >{{$tm_player['player_name']}}</option>
 												@endforeach
 											</select>
@@ -863,9 +876,9 @@ input:read-only {
 
 	<input type='hidden' id='total_players_a' value="{{count($team_a_players)}}">
 	<input type='hidden' id='total_players_b' value="{{count($team_b_players)}}">
-	<input type="hidden" id="basketball_form_data" value="">
-	<input type="hidden" name="team_a_count" value="{{ (count($team_a_basketball_scores_array)>0)?count($team_a_basketball_scores_array):1 }}" id="team_a_count">
-	<input type="hidden" name="team_b_count" value="{{ (count($team_b_basketball_scores_array)>0)?count($team_b_basketball_scores_array):1 }}" id="team_b_count">
+	<input type="hidden" id="kabaddi_form_data" value="">
+	<input type="hidden" name="team_a_count" value="{{ (count($team_a_kabaddi_scores_array)>0)?count($team_a_kabaddi_scores_array):1 }}" id="team_a_count">
+	<input type="hidden" name="team_b_count" value="{{ (count($team_b_kabaddi_scores_array)>0)?count($team_b_kabaddi_scores_array):1 }}" id="team_b_count">
 	<input type="hidden" name="tournament_id" value="{{ $match_data[0]['tournament_id'] }}">
 	<input type="hidden" name="team_a_id" value="{{ $match_data[0]['a_id'] }}" id="team_a_id">
 	<input type="hidden" name="team_b_id" value="{{ $match_data[0]['b_id'] }}" id="team_b_id">
@@ -904,7 +917,7 @@ input:read-only {
 					<li>
 
 						@if(!$match_data[0]['hasSetupSquad'])
-							<button type='button' class='btn-danger btn .' onclick="$('#basketballPreferences').modal('show')" ><i class="fa fa-floppy-o"></i> Confirm Squad</button>
+							<button type='button' class='btn-danger btn .' onclick="$('#kabaddiPreferences').modal('show')" ><i class="fa fa-floppy-o"></i> Confirm Squad</button>
 						@else
 
 
@@ -921,13 +934,13 @@ input:read-only {
 
 	<!-- Start Modals -->
 
-	<div id="basketballSubstituteModalA" class="modal fade">
+	<div id="kabaddiSubstituteModalA" class="modal fade">
 		<div class="modal-dialog sj_modal sportsjun-forms">
 			<div class="modal-content">
 				<div class="alert alert-danger" id="div_failure1"></div>
 				<div class="alert alert-success" id="div_success1" style="display:none;"></div>
 				<div class="modal-body">
-					<form  onsubmit="return basketballSwapPlayers('form_substitute_a')" id='form_substitute_a'>
+					<form  onsubmit="return kabaddiSwapPlayers('form_substitute_a')" id='form_substitute_a'>
 						{!!csrf_field()!!}
 						<input type='hidden' name='match_id' value="{{$match_id}}">
 						<input type='hidden' name='team_id' value="{{$team_a_id}}">
@@ -942,14 +955,14 @@ input:read-only {
 											<th colspan="4">Playing Squad</th>
 										</tr>
 										<tbody id="">
-										@foreach($team_a_basketball_scores_array as $key=>$team_a_basketball)
-											@if($team_a_basketball['playing_status']=="P" )
-												<tr class="player_details_{{$team_a_basketball['id']}}">
-													<td colspan="3" class='select_left' class="team_a_goal_row player_select " player_id="{{$team_a_basketball['id']}} "  player_name="{{$team_a_basketball['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_basketball['player_name']}}
-														{!! $team_a_basketball['has_substituted']==1?"<i class='fa fa-share'></i>":''!!}
+										@foreach($team_a_kabaddi_scores_array as $key=>$team_a_kabaddi)
+											@if($team_a_kabaddi['playing_status']=="P" )
+												<tr class="player_details_{{$team_a_kabaddi['id']}}">
+													<td colspan="3" class='select_left' class="team_a_goal_row player_select " player_id="{{$team_a_kabaddi['id']}} "  player_name="{{$team_a_kabaddi['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_kabaddi['player_name']}}
+														{!! $team_a_kabaddi['has_substituted']==1?"<i class='fa fa-share'></i>":''!!}
 													</td>
 													<td colspan="1" >
-														<input type='checkbox' name="substitute_a_{{$team_a_basketball['id']}}"  >
+														<input type='checkbox' name="substitute_a_{{$team_a_kabaddi['id']}}"  >
 													</td>
 												</tr>
 											@endif
@@ -967,17 +980,17 @@ input:read-only {
 											<th colspan="4">Substitute Squad</th>
 										</tr>
 										<tbody id="">
-										@foreach($team_a_basketball_scores_array as $key=>$team_a_basketball)
-											@if($team_a_basketball['playing_status']=="S" )
+										@foreach($team_a_kabaddi_scores_array as $key=>$team_a_kabaddi)
+											@if($team_a_kabaddi['playing_status']=="S" )
 
-												<tr class="player_details_{{$team_a_basketball['id']}}">
-													<td colspan="3" class='select_left' class="team_a_goal_row player_select" player_id="{{$team_a_basketball['id']}} "  player_name="{{$team_a_basketball['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_basketball['player_name']}}
-														{!!$team_a_basketball['has_substituted']==1?"<i class='fa fa-reply'></i> {$team_a_basketball['time_substituted']} \"":'' !!}
+												<tr class="player_details_{{$team_a_kabaddi['id']}}">
+													<td colspan="3" class='select_left' class="team_a_goal_row player_select" player_id="{{$team_a_kabaddi['id']}} "  player_name="{{$team_a_kabaddi['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_kabaddi['player_name']}}
+														{!!$team_a_kabaddi['has_substituted']==1?"<i class='fa fa-reply'></i> {$team_a_kabaddi['time_substituted']} \"":'' !!}
 
 
 													</td>
 													<td colspan="1" >
-														<input type='checkbox' name="substitute_a_{{$team_a_basketball['id']}}" >
+														<input type='checkbox' name="substitute_a_{{$team_a_kabaddi['id']}}" >
 													</td>
 												</tr>
 											@endif
@@ -1007,14 +1020,14 @@ input:read-only {
 	</div>
 
 
-	<div id="basketballSubstituteModalB" class="modal fade">
+	<div id="kabaddiSubstituteModalB" class="modal fade">
 		<div class="modal-dialog sj_modal sportsjun-forms">
 			<div class="modal-content">
 				<div class="alert alert-danger" id="div_failure1"></div>
 				<div class="alert alert-success" id="div_success1" style="display:none;"></div>
 				<div class="modal-body">
 					<div class='row'>
-						<form  onsubmit="return basketballSwapPlayers('form_substitute_b')" id='form_substitute_b'>
+						<form  onsubmit="return kabaddiSwapPlayers('form_substitute_b')" id='form_substitute_b'>
 							{!!csrf_field()!!}
 							<div class="table-responsive">
 								<center class='table_head'> {{$team_b_name}} Substitute</center>
@@ -1029,14 +1042,14 @@ input:read-only {
 											<th colspan="4">Playing Squad</th>
 										</tr>
 										<tbody id="">
-										@foreach($team_b_basketball_scores_array as $team_a_basketball)
-											@if($team_a_basketball['playing_status']=="P" )
-												<tr class="player_details_{{$team_a_basketball['id']}}">
-													<td colspan="3" class='select_left' class="team_a_goal_row player_select" player_id="{{$team_a_basketball['id']}} "  player_name="{{$team_a_basketball['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_basketball['player_name']}}
-														{!! $team_a_basketball['has_substituted']==1?"<i class='fa fa-share'></i> {$team_a_basketball['time_substituted']}\"":'' !!}
+										@foreach($team_b_kabaddi_scores_array as $team_a_kabaddi)
+											@if($team_a_kabaddi['playing_status']=="P" )
+												<tr class="player_details_{{$team_a_kabaddi['id']}}">
+													<td colspan="3" class='select_left' class="team_a_goal_row player_select" player_id="{{$team_a_kabaddi['id']}} "  player_name="{{$team_a_kabaddi['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_kabaddi['player_name']}}
+														{!! $team_a_kabaddi['has_substituted']==1?"<i class='fa fa-share'></i> {$team_a_kabaddi['time_substituted']}\"":'' !!}
 													</td>
 													<td colspan="1" >
-														<input type='checkbox' name="substitute_a_{{$team_a_basketball['id']}}" >
+														<input type='checkbox' name="substitute_a_{{$team_a_kabaddi['id']}}" >
 													</td>
 												</tr>
 											@endif
@@ -1054,14 +1067,14 @@ input:read-only {
 											<th colspan="4">Substitute Squad</th>
 										</tr>
 										<tbody id="">
-										@foreach($team_b_basketball_scores_array as $team_a_basketball)
-											@if($team_a_basketball['playing_status']=="S" )
-												<tr class="player_details_{{$team_a_basketball['id']}}">
-													<td colspan="3" class='select_left' class="team_a_goal_row player_select" player_id="{{$team_a_basketball['id']}} "  player_name="{{$team_a_basketball['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_basketball['player_name']}}
-														{!! $team_a_basketball['has_substituted']==1?"<i class='fa fa-reply'></i>":'' !!}
+										@foreach($team_b_kabaddi_scores_array as $team_a_kabaddi)
+											@if($team_a_kabaddi['playing_status']=="S" )
+												<tr class="player_details_{{$team_a_kabaddi['id']}}">
+													<td colspan="3" class='select_left' class="team_a_goal_row player_select" player_id="{{$team_a_kabaddi['id']}} "  player_name="{{$team_a_kabaddi['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_kabaddi['player_name']}}
+														{!! $team_a_kabaddi['has_substituted']==1?"<i class='fa fa-reply'></i>":'' !!}
 													</td>
 													<td colspan="1" >
-														<input type='checkbox' name="substitute_a_{{$team_a_basketball['id']}}" >
+														<input type='checkbox' name="substitute_a_{{$team_a_kabaddi['id']}}" >
 													</td>
 												</tr>
 											@endif
@@ -1092,7 +1105,7 @@ input:read-only {
 
 
 
-	<div id="basketballPreferences" class="modal fade">
+	<div id="kabaddiPreferences" class="modal fade">
 		<div class="modal-dialog sj_modal sportsjun-forms">
 			<div class="modal-content">
 				<div class="alert alert-danger" id="div_failure1"></div>
@@ -1126,6 +1139,7 @@ input:read-only {
 											<input type='text' required="" placeholder="eg. 30" name='quarter_time' id='quarter_time'>
 										</div>
 									</div>
+
 
 									<br>
 									<div class='row'>
@@ -1170,6 +1184,7 @@ input:read-only {
 	<script>
 		$(document).ready(function(){
 			getTeam();
+			$('.hidden_score').hide();
 		});
 		function getTeam()
 		{
@@ -1191,8 +1206,8 @@ input:read-only {
 			$('#winner_team_id').val($('#winner_id').val());
 		
 		}
-		var team_a_count='{{ (count($team_a_basketball_scores_array)>0)?count($team_a_basketball_scores_array):1 }}';
-		var team_b_count='{{ (count($team_b_basketball_scores_array)>0)?count($team_b_basketball_scores_array):1 }}';
+		var team_a_count='{{ (count($team_a_kabaddi_scores_array)>0)?count($team_a_kabaddi_scores_array):1 }}';
+		var team_b_count='{{ (count($team_b_kabaddi_scores_array)>0)?count($team_b_kabaddi_scores_array):1 }}';
 		allownumericwithdecimal();
 		checkDuplicatePlayers('select_player_a');
 		checkDuplicatePlayers('select_player_b');
@@ -1538,7 +1553,7 @@ input:read-only {
 				confirm:function(){
 					$(this).attr('disabled', true);
 					$.ajax({
-						url:base_url+'/match/confirmSquadbasketball',
+						url:base_url+'/match/confirmSquadkabaddi',
 						data:tempSquadData,
 						type:'post',
 						success:function(response){
@@ -1560,9 +1575,9 @@ input:read-only {
 		}
 
 		function saveMatchDetails(){
-			var data=$('#basketball').serialize();
+			var data=$('#kabaddi').serialize();
 			$.ajax({
-				url:base_url+'/match/insertAndUpdatebasketballCard',
+				url:base_url+'/match/insertAndUpdatekabaddiCard',
 				data:data,
 				method:'post',
 				success:function(response){
@@ -1584,12 +1599,12 @@ input:read-only {
 			var team_b_id={{$team_b_id}}
 
 			$.ajax({
-				url:base_url+'/match/saveMatchRecordBasketball',
+				url:base_url+'/match/saveMatchRecordkabaddi',
 				data:data,
 				method:'post',
 				dataType:'json',
 				success:function(response){
-					//setTimeout(getbasketballDetails,2000);
+					//setTimeout(getkabaddiDetails,2000);
 					var tem_a=response[team_a_id];
 					var tem_b=response[team_b_id];
 					var number_of_quarters=response.preferences.number_of_quarters;
@@ -1598,6 +1613,10 @@ input:read-only {
 
 					$('.team_a_score').html(tem_a.total_points + " <span class='fouls'>"+tem_a.fouls+"</span>")
 					$('.team_b_score').html(tem_b.total_points + " <span class='fouls'>"+tem_b.fouls+"</span>")
+
+					$('#hidden_a_score').val(tem_a.total_points);
+					$('#hidden_b_score').val(tem_b.total_points);
+
 
 
 					$.each(tem_a.players, function(key, value){							
@@ -1669,7 +1688,7 @@ input:read-only {
 			return false;
 		}
 
-		function getbasketballDetails(){
+		function getkabaddiDetails(){
 			//load details
 				var data={
 					match_id:$('#match_id').val(),
@@ -1678,7 +1697,7 @@ input:read-only {
 				}
 
 					$.ajax({
-						url:base_url+'/match/getbasketballDetails',
+						url:base_url+'/match/getkabaddiDetails',
 						method:'get',
 						data:data,
 						success:function(response){
@@ -1688,10 +1707,10 @@ input:read-only {
 		}
 
 		
-		function basketballSwapPlayers(ser_id){
+		function kabaddiSwapPlayers(ser_id){
 			var data=$('#'+ser_id).serialize();
 			$.ajax({
-				url:base_url+'/match/basketballSwapPlayers',
+				url:base_url+'/match/kabaddiSwapPlayers',
 				data:data,
 				method:'post',
 				success:function(response){
@@ -1750,11 +1769,11 @@ input:read-only {
 
 
 		//Choose players for penalty
-		function basketballChoosePenaltiesPlayers(form_id){
+		function kabaddiChoosePenaltiesPlayers(form_id){
 			$('#display_penalty_players').show();
 			var data=$('#'+form_id).serialize();
 			$.ajax({
-				url:base_url+'/match/choosePenaltyPlayersbasketball',
+				url:base_url+'/match/choosePenaltyPlayerskabaddi',
 				data:data,
 				method:'post',
 				dataType:'json',
@@ -1764,7 +1783,7 @@ input:read-only {
 					var response_b=response.response_b;
 					$('#penalty_players_a').append(response_a);
 					$('#penalty_players_b').append(response_b);
-					$('#basketballPenaltiesModal').modal('hide');
+					$('#kabaddiPenaltiesModal').modal('hide');
 
 				},
 				error:function(x,y,z){
@@ -1795,7 +1814,7 @@ input:read-only {
 			$('.btn_'+team_type+'_'+index).removeClass('btn-penalty-chosen');
 
 			$.ajax({
-				url:base_url+'/match/scorePenaltybasketball',
+				url:base_url+'/match/scorePenaltykabaddi',
 				type:'post',
 				data:data,
 				dataType:'json',
@@ -1849,6 +1868,8 @@ var manual=false;
                 $('#real_time_scoring').hide();
                 $('#saveButton').show();
                  $('#end_match_btn').hide();
+                 $('.hidden_score').show();
+                 $('.show_score').hide();
                 manual=true;
             }, 
             cancel:function(){
@@ -1867,6 +1888,8 @@ var manual=false;
                  $('#real_time_scoring').show();
                  $('#saveButton').hide();
                   $('#end_match_btn').show();
+                 $('.hidden_score').hide();
+                 $('.show_score').show();
                  manual=false;
             }, 
             cancel:function(){
@@ -1879,7 +1902,12 @@ var manual=false;
     }
 
      function manualScoring(that){
-        var data=$('#basketball').serialize();
+        var data=$('#kabaddi').serialize();
+        var team_a_score = $('#hidden_a_score').val();
+        var team_b_score = $('#hidden_b_score').val();
+
+         data = data + '&team_a_score='+  team_a_score + '&team_b_score='+	team_b_score;
+                
         var match_players=$('#match_players').val();
         var number_of_quarters={{$number_of_quarters}}
         var check_inputs=false;
@@ -1909,18 +1937,20 @@ var manual=false;
 
         		var total=Number($('.total_points_player_'+value).val());
 
-        		if(total_count!=quarter_count_total){			
-        				// if sum of points is not equal to the total input        		
-        			alert('please verify points or quarters ');
-        			$('.points_1_player_'+value).focus();
-        			$('.total_points_player_'+value).focus();
-        			check_inputs=false;
-        			return false;
-        		}
+        		// if(total_count!=quarter_count_total){			
+        		// 		// if sum of points is not equal to the total input        		
+        		// 	alert('please verify points or quarters ');
+        		// 	$('.points_1_player_'+value).focus();
+        		// 	$('.total_points_player_'+value).focus();
+        		// 	check_inputs=false;
+        		// 	return false;
+        		// }
         		
-        		else{
-        			check_inputs=true;
-        		}
+        		// else{
+        		// 	check_inputs=true;
+        		// }
+
+        		check_inputs=true;
 
         })
 
@@ -1935,7 +1965,7 @@ var manual=false;
 
 function send(){
         $.ajax({
-            url:base_url+"/match/manualScoringBasketball",
+            url:base_url+"/match/manualScoringkabaddi",
             type:'post',
             data:data,
             success:function(response){
@@ -1952,7 +1982,7 @@ function send(){
         var data=$('#endMatchForm').serialize();
 
         $.ajax({
-            url:base_url+"/match/endMatchRecordBasketball",
+            url:base_url+"/match/endMatchRecordkabaddi",
             type:'post', 
             data:data,
             success:function(response){

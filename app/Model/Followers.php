@@ -20,7 +20,9 @@ class Followers extends Model {
 	protected $dates = ['deleted_at'];
 
     static $TYPE_TOURNAMENTS = 'tournament';
+
     static $TYPE_ORGANIZATIONS = 'organization';
+
 
 	//Get Managing and joined teams
 	public function getFollowingList($user_id,$type)

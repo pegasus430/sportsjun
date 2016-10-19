@@ -120,11 +120,11 @@
                                     <th>GA</th>
                                 @endif
 
-                                @if(in_array($sports_id, [6,15,16]))                               		
+                                @if(in_array($sports_id, [6,15,16,14]))                               		
                                     <th>PS</th>
                                     <th>PA</th>
                                 @endif
-                                 @if(in_array($sports_id, [3,5,13, 17, 14, 7]))                               		
+                                 @if(in_array($sports_id, [3,5,13, 17, 7]))                               		
                                     <th>SW</th>
                                     <th>SL</th>
                                 @endif
