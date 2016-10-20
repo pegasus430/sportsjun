@@ -181,7 +181,13 @@
 														</a>
 														</h4>
 														<br>
-														<span class="match-detail-score">{{ Helper::displayDateTime($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""), 1) }}</span>
+														<span class="match-detail-score">
+															@if ($match['match_start_date'])
+																{{ Helper::displayDateTime($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""), 1) }}
+															@else
+																TBD
+															@endif
+														</span>
 														<span class='sports_text'>{{ isset($sport_name)?$sport_name:'' }}</span>														
 														@if($match['match_type']!='other')
 															<span class='match_type_text'>({{ $match['match_type']=='odi'?strtoupper($match['match_type']):ucfirst($match['match_type']) }}, {{ucfirst($match['match_category'])}})</span>
@@ -297,7 +303,14 @@
 														</a>
 														</h4>
 
-														<span class="event-date">{{ Helper::displayDateTime($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""), 1) }}</span>
+														<span class="event-date">
+															@if ($match['match_start_date'])
+																{{ Helper::displayDateTime($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""), 1) }}
+															@else
+																TBD
+															@endif
+
+														</span>
 														<span class='sports_text'>{{ isset($sport_name)?$sport_name:'' }}</span>
 														@if($match['match_type']!='other')
 															<span class='match_type_text'>({{ $match['match_type']=='odi'?strtoupper($match['match_type']):ucfirst($match['match_type']) }})</span>

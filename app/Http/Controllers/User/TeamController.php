@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Events\TeamOwnershipChanged;
 use App\Events\UserRegistered;
 use App\Helpers\AllRequests;
 use App\Helpers\Helper;
@@ -1270,6 +1271,8 @@ class TeamController extends Controller
                     }
                     $team->team_owner_id = $user->id;
                     $team->save();
+                    \Event::fire(new TeamOwnershipChanged($user,$team));
+
                     $status = 'Ownership changed to '.$user->name;
                 } else {
                     $error = 'Failed to create user';

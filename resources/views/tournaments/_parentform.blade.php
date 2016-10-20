@@ -31,8 +31,21 @@
 
 {!!Form::hidden('tournament_id', null) !!}
 {!!Form::hidden('organization_group_id', null) !!}
-  
-<div class="row">	
+
+
+<div class="row">
+    <div class = "col-sm-12">
+        <div class = "section">
+            <label class = "form_label">{{   trans('message.team.fields.organization') }} </label>
+            <label class = "field select">
+                {!! Form::select('organization_id',$organization,null, array('class'=>'gui-input','id'=>'organization_id','placeholder'=>'Select Organization', 'onchange' => 'displayOrgGroups(this.value)')) !!}
+                @if ($errors->has('organization_id'))
+                    <p class = "help-block">{{ $errors->first('organization_id') }}</p>
+                @endif
+                <i class = "arrow double"></i>
+            </label>
+        </div>
+    </div>
 <div class="col-sm-6">		 
     <div class="section">
         <label class="form_label">{{  trans('message.tournament.fields.contactnumber') }}  <span  class='required'>*</span></label>		
@@ -91,18 +104,7 @@
 
 </div>
  <div class="row">
-    <div class = "col-sm-12">
-        <div class = "section">
-            <label class = "form_label">{{   trans('message.team.fields.organization') }} </label>
-            <label class = "field select">
-                {!! Form::select('organization_id',$organization,null, array('class'=>'gui-input','id'=>'organization_id','placeholder'=>'Select Organization', 'onchange' => 'displayOrgGroups(this.value)')) !!}
-                @if ($errors->has('organization_id'))
-                    <p class = "help-block">{{ $errors->first('organization_id') }}</p>
-                @endif
-                <i class = "arrow double"></i>
-            </label>
-        </div>
-    </div>
+
 
     <div class = "col-sm-12">
         <div class = "section" id="organization-groups" @if(!isset($groupsList)) style="display: none" @endif>
@@ -135,8 +137,12 @@
 	
     $(function () {
 		   $("#manager_name").autocomplete({			 
-                source: "{{ url('tournaments/getUsers') }}",
-                minLength: 3,
+                search:function(event,ui){
+                    var newUrl="{{ url('tournaments/getUsers') }}?organization_id="+$("#organization_id").val();
+                    $(this).autocomplete("option","source",newUrl)
+                },
+                source:[],
+                minLength: 2,
 				response: function(event, ui) {
 					if (!ui.content.length) {
 						var noResult = { value:"",label:"No results found" };
