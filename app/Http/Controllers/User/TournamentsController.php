@@ -509,19 +509,23 @@ class TournamentsController extends Controller
 	}
 	public function getUsers()
 	{
-		$results=array();
-		$user_name = Request::get('term');
-		// $users = User::where('name','LIKE','%'.$user_name.'%')->where('isactive',1)->get(['id','name']);
-		DB::setFetchMode(PDO::FETCH_ASSOC);
-		$users = DB::select("SELECT * FROM `users`  WHERE `name` LIKE '%$user_name%' and `isactive`=1") ;
-		DB::setFetchMode(PDO::FETCH_CLASS);
-		if(count($users)>0)
-		{
-			foreach ($users as $query)
-			{
-				$results[] = ['id' => $query['id'], 'value' => $query['name']];
-			}
-		}
+	    $organization_id = \Request::get('organization_id',false);
+        $user_name = Request::get('term');
+        $users = User::where('users.name','LIKE','%'.$user_name.'%')->select(['users.id','users.name'])->limit(50);
+        if ($organization_id){
+            $users->join('organization','organization.user_id','=','users.id');
+            $users->where('organization.id',$organization_id);
+
+            $users->join('organization_staffs',function($join){
+                $join->on('organization_staffs.user_id','=','users.id');
+            });
+            $users->where('organization_staffs.organization_id',$organization_id);
+        }
+
+        $users = $users ->get();
+        $results = $users->map(function($user){
+            return ['id'=>$user->id,'value'=>$user->name];
+        });
 		return Response::json($results);
 	}
 

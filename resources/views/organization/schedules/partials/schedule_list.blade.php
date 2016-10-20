@@ -38,7 +38,12 @@
                     @foreach ($tournament->matches as $match)
                         <div class="row sportsjun-datatable-item">
                             <div class="col-md-2">
-                                <span class="match-detail-score">{!!  Helper::displayDateFormat($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""), 'jS F, Y <\b\\r>g:i A' )  !!}</span>
+                                <span class="match-detail-score">
+                                    @if ($match['match_start_date'])
+                                        {!!  Helper::displayDateFormat($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""), 'jS F, Y <\b\\r>g:i A' )  !!}</span>
+                                    @else
+                                        TBD
+                                    @endif
                             </div>
                             <div class="col-md-1 text-capitalize">
                                 <span class="hidden-md hidden-lg"><b>Sport Name:</b></span>

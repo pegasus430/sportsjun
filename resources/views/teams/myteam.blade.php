@@ -89,11 +89,13 @@
 						</div>
 						@endforeach
 						@endif
-						<div class="col-xs-12">
-							<div class="pull-right">
-								<button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#transfer-owner-modal" data-team-id="{{$team_id}}"><i class="fa fa-exchange"></i> Transfer ownership</button>
+						@if($logged_in_user_role == 'owner' || $logged_in_user_role == 'manager')
+							<div class="col-xs-12">
+								<div class="pull-right">
+									<button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#transfer-owner-modal" data-team-id="{{$team_id}}"><i class="fa fa-exchange"></i> Transfer ownership</button>
+								</div>
 							</div>
-						</div>
+						@endif
 
 
 					</div>
