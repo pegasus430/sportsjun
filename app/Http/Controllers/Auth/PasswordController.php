@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Contracts\Auth\PasswordBroker;
+
 
 class PasswordController extends Controller {
     /*
@@ -25,10 +25,8 @@ use ResetsPasswords;
      *
      * @return void
      */
-    public function __construct(Guard $auth, PasswordBroker $passwords) {
+    public function __construct(Guard $auth) {
         $this->auth = $auth;
-        $this->passwords = $passwords;
-
         $this->middleware('guest');
     }
 
