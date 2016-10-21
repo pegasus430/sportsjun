@@ -1,3 +1,8 @@
+<?php
+  $orgFollowed = isset($userId) ? $orgInfoObj->followers()->where('user_id',$userId)->count() > 0 : false;
+?>
+
+
 <div class="col-sm-2" id="sidebar-left">
 	<div class="row">
 			<div class="team_view">
@@ -14,14 +19,13 @@
 				 </div>
 		            <div class="more desc">{{ $orgInfoObj->about  or 'Description' }}</div>
 
-                @if(isset($follow_array))
 
-                <?php
+                <div class="follow_unfollow_organization" id="follow_unfollow_organization_{{$id}}" uid="{{$id}}" val="ORGANIZATION" flag="{{ $orgFollowed ?0:1 }}">
+                    <a href="#" id="follow_unfollow_organization_a_{{$id}}" class="{{ $orgFollowed? 'sj_unfollow':'sj_follow' }}">
+                        <span id="follow_unfollow_organization_span_{{$id}}">
+                            <i class="{{ $orgFollowed ?'fa fa-remove':'fa fa-check' }}"></i>
+                            {{ $orgFollowed ?'Unfollow':'Follow' }}</span></a></div>
 
-                ?>
-                      <div class="follow_unfollow_organization" id="follow_unfollow_organization_{{$id}}" uid="{{$id}}" val="ORGANIZATION" flag="{{ in_array($id,$follow_array)?0:1 }}"><a href="#" id="follow_unfollow_organization_a_{{$id}}" class="{{ in_array($id,$follow_array)?'sj_unfollow':'sj_follow' }}"><span id="follow_unfollow_organization_span_{{$id}}"><i class="{{ in_array($id,$follow_array)?'fa fa-remove':'fa fa-check' }}"></i>{{ in_array($id,$follow_array)?'Unfollow':'Follow' }}</span></a></div> 
-                
-              @endif
 
 	          </div>
 	<ul class="nav sidemenu_nav leftmenu-icon" id="side-menu">

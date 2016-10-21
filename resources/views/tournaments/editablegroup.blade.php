@@ -277,7 +277,13 @@
 										</a>
                                     </h4>
                                     <br>									
-									<span class="match-detail-score">{{ Helper::displayDateTime($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""), 1) }}</span>
+									<span class="match-detail-score">
+										@if ($match['match_start_date'])
+											{{ Helper::displayDateTime($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""), 1) }}
+										@else
+											TBD
+										@endif
+									</span>
 									
 									<span class='sports_text'>{{ isset($sport_name)?$sport_name:'' }}</span>
 									
@@ -399,7 +405,13 @@
                                     </h4>
                                     <br>
 									
-									<span class="match-detail-score">{{ Helper::displayDateTime($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""), 1) }}</span>
+									<span class="match-detail-score">
+										@if ($match['match_start_date'])
+											{{ Helper::displayDateTime($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""), 1) }}
+										@else
+											TBD
+										@endif
+									</span>
 									<span class='sports_text'>{{ isset($sport_name)?$sport_name:'' }}</span>
 
 

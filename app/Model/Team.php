@@ -173,6 +173,13 @@ class Team extends Model
         return $this->hasMany('App\Model\RequestsModel', 'to_id', 'id');
     }
 
+    public function playersByRole($role){
+        if ($this->teamplayers)
+           return $this->teamplayers->where('role',$role);
+        else
+            return $this->teamplayers()->where('role',$role)->get();
+    }
+
     /**
      * Attributes
      */

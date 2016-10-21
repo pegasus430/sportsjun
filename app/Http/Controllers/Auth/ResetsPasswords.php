@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\PasswordBroker;
+use Illuminate\Support\Facades\Password;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use DB;
 use App\User;
@@ -19,12 +20,6 @@ trait ResetsPasswords
          */
         protected $auth;
 
-        /**
-         * The password broker implementation.
-         *
-         * @var PasswordBroker
-         */
-        protected $passwords;
 
         /**
          * Display the form to request a password reset link.
@@ -78,7 +73,7 @@ trait ResetsPasswords
                         }
                 }
 
-                $response = $this->passwords->sendResetLink($request->only('email'), function($m) {
+                $response = Password::sendResetLink($request->only('email'), function($m) {
                         $m->subject($this->getEmailSubject());
                 });
 
@@ -163,7 +158,7 @@ trait ResetsPasswords
                         'email', 'password', 'password_confirmation', 'token'
                 );
 
-                $response = $this->passwords->reset($credentials, function($user, $password) {
+                $response = Password::reset($credentials, function($user, $password) {
                         $user->password = bcrypt($password);
 
                         $user->save();

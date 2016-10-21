@@ -63,10 +63,16 @@
                         <td>{{ is_string($groups) ? $groups: 'KNOCK OUT' }}</td>
                     @endif
                     <td>
-                        {{ Helper::displayDate($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""), 1) }}
+                        @if ($match['match_start_date'])
+                            {{ Helper::displayDate($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""), 1) }}
+                        @else
+                            TBD
+                        @endif
                     </td>
                     <td>
-                        {{ date('h:i A', strtotime($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""))) }}
+                        @if ($match['match_start_date'])
+                            {{ date('h:i A', strtotime($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""))) }}
+                        @endif
                     </td>
                     <td>
                         @if($match['schedule_type']=='team' )
