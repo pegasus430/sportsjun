@@ -980,9 +980,8 @@ class TeamController extends Controller
         $limit = config('constants.LIMIT',20);
         $type_ids = [
                     config('constants.REQUEST_TYPE.PLAYER_TO_TEAM'),
-                    config('constants.REQUEST_TYPE.TEAM_TO_PLAYER'),
-                    config('constants.REQUEST_TYPE.TEAM_TO_TOURNAMENT'),
-                    config('constants.REQUEST_TYPE.TEAM_TO_TEAM')];
+                    config('constants.REQUEST_TYPE.TEAM_TO_TEAM')
+        ];
 
         $type = \Request::get('type');
         $received = false;
@@ -993,6 +992,12 @@ class TeamController extends Controller
                 ->appends('type','received');
         }
         $sent = false;
+        $type_ids = [
+            config('constants.REQUEST_TYPE.TEAM_TO_PLAYER'),
+            config('constants.REQUEST_TYPE.TEAM_TO_TOURNAMENT'),
+            config('constants.REQUEST_TYPE.TEAM_TO_TEAM')
+        ];
+
         if ($type == null || $type === 'sent') {
             $sent = Requestsmodel::requestQuery($type_ids)
                 ->where('request.from_id', $id)
@@ -1001,10 +1006,11 @@ class TeamController extends Controller
         }
 
         if ($type){
-            if ($received)
-                return view('common.requestsLists',['items'=>$received,'flag'=>'in','team'=>true]);
+            if ($received) {
+                return view('common.requestsList', ['items' => $received, 'flag' => 'in', 'team' => true]);
+            }
             if ($sent)
-                return view('common.requestsLists',['items'=>$sent,'team'=>true]);
+                return view('common.requestsList',['items'=>$sent,'team'=>true]);
             return \App::abort(404);
         };
 

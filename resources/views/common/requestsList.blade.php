@@ -32,10 +32,10 @@
         </div>
     </div>
 @endforeach
-@if($sent->hasMorePages())
+@if($items->hasMorePages())
     <div id="viewmorediv">
         <a id="viewmorebutton" class="btn btn-view" data-replace="#viewmorediv"
-           data-url="{{$sent->nextPageUrl()}}"
+           data-url="{{$items->nextPageUrl()}}"
            onclick="return DataTableLoadMore(this);">
             {{ trans('message.view_more') }}
         </a>

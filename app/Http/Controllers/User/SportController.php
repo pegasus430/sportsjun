@@ -450,8 +450,6 @@ class SportController extends Controller {
         $limit = config('constants.LIMIT',20);
         $type_ids = [
                         config('constants.REQUEST_TYPE.TEAM_TO_PLAYER'),
-                        config('constants.REQUEST_TYPE.PLAYER_TO_TEAM'),
-                        config('constants.REQUEST_TYPE.PLAYER_TO_TOURNAMENT'),
                         config('constants.REQUEST_TYPE.PLAYER_TO_PLAYER')
         ];
 
@@ -464,18 +462,22 @@ class SportController extends Controller {
                 ->appends('type','received');
         }
         $sent = false;
+        $type_ids = [
+            config('constants.REQUEST_TYPE.PLAYER_TO_TEAM'),
+            config('constants.REQUEST_TYPE.PLAYER_TO_TOURNAMENT'),
+            config('constants.REQUEST_TYPE.PLAYER_TO_PLAYER')
+        ];
         if ($type == null || $type === 'sent') {
             $sent = Requestsmodel::requestQuery($type_ids)
                 ->where('request.from_id', $id)
                 ->paginate($limit)
                 ->appends('type','sent');
         }
-
         if ($type){
             if ($received)
-                return view('common.requestsLists',['items'=>$received,'flag'=>'in']);
+                return view('common.requestsList',['items'=>$received,'flag'=>'in']);
             if ($sent)
-                return view('common.requestsLists',['items'=>$sent]);
+                return view('common.requestsList',['items'=>$sent]);
             return \App::abort(404);
         };
 
