@@ -4,7 +4,11 @@
         <button type="button" class="close request" data-dismiss="alert" flag='d'reqid='{{ !empty($res->id)?$res->id:0 }}' title="Close">×</button>
         <div class="search_thumbnail right-caption">
             <div class="search_image">
-                {!! Helper::Images( $res->logo ,config('constants.PHOTO_PATH.'.$res->logo_type),array('height'=>90,'width'=>90,'class'=>'img-circle') )!!}
+                @if ((isset($flag) && $flag == 'in' && isset($team))|| (!isset($team) && (!isset($flag))))
+                    {!! Helper::Images( $res->logoTo ,config('constants.PHOTO_PATH.'.$res->logoToType),array('height'=>90,'width'=>90,'class'=>'img-circle') )!!}
+                @else
+                    {!! Helper::Images( $res->logoFrom ,config('constants.PHOTO_PATH.'.$res->logoFromType),array('height'=>90,'width'=>90,'class'=>'img-circle') )!!}
+                @endif
             </div>
             <div class="search_caption">
                 <h3>{{ !empty($from_to_names->from_name)?$from_to_names->from_name:'' }}</h3>

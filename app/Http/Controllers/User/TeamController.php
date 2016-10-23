@@ -1002,13 +1002,13 @@ class TeamController extends Controller
 
         if ($type){
             if ($received)
-                return view('common.requestsLists',['items'=>$received,'flag'=>'in']);
+                return view('common.requestsLists',['items'=>$received,'flag'=>'in','team'=>true]);
             if ($sent)
-                return view('common.requestsLists',['items'=>$sent]);
+                return view('common.requestsLists',['items'=>$sent,'team'=>true]);
             return \App::abort(404);
         };
 
-        return view('teams.teamrequests', compact('received','sent'));
+        return view('teams.teamrequests', compact('received','sent'),['team'=>true]);
     }
 
        //fucntion to accept/reject request
