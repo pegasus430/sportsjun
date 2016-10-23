@@ -22,7 +22,9 @@
                 <td>{{$statistic->won}}</td>
                 <td>{{$statistic->lost}}</td>
                 <!--<td>{{$statistic->tied}}</td>-->
+                @if($statistic->matches!=0)
                 <td>{{number_format(($statistic->won/$statistic->matches)*100,2)}}</td>
+                @endif
              
                 <!--<td>{{$statistic->points}}</td>-->
             </tr>

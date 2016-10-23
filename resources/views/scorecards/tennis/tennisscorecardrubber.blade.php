@@ -1,4 +1,4 @@
- <div class="row">
+   <div class="row">
     <div class='col-sm-12'>
      <span class='pull-right'>   
         <a href='javascript:void(0)' onclick="enableManualEditing(this)" style="color:#123456;">edit <i class='fa fa-pencil'></i></a> 
@@ -192,7 +192,7 @@
              
             @for($set_index=1; $set_index<=$set; $set_index++)
               <th>SET {{$set_index}}</th>
-              <th>TB {{$set_index}}</th>
+              <th class="tb-hide tb tb-{{$set_index}}">TB {{$set_index}}</th>
             @endfor
               <th>ACES </th>
               <th>D FAULTS </th>
@@ -211,9 +211,11 @@
                  <input  readonly class="gui-input validation allownumericwithdecimal runs_new a_set{{$set_index}}" value="{{$rubber_a_array['set'.$set_index]}}" name='a_set{{$set_index}}'>
                 <span class='hidden-xs pull-right add_button_left left_button_add_set_{{$set_index}}'></span>
             </td>
-               <td>
+               <td class="tb-hide tb tb-{{$set_index}}">
+                   <span class='hidden-xs pull-left remove_button_left left_button_remove_set_tb_{{$set_index}}'></span>
+                 <input  readonly class="tgui-input validation allownumericwithdecimal runs_new " value="{{$rubber_a_array['set'.$set_index.'_tie_breaker']}}" name='a_set_tie{{$set_index}}'>
+                  <span class='hidden-xs pull-right add_button_left left_button_add_set_tb_{{$set_index}}'></span>
 
-                 <input  readonly class="gui-input validation allownumericwithdecimal runs_new " value="{{$rubber_a_array['set'.$set_index.'_tie_breaker']}}" name='a_set_tie{{$set_index}}'>
             </td>
           @endfor
             <td><input class="gui-input validation allownumericwithdecimal runs_new a_aces" type="" name="a_aces" value="{{$rubber_a_array['aces']}}" readonly=""> </td>
@@ -232,9 +234,9 @@
                   <input  readonly class="gui-input validation allownumericwithdecimal runs_new b_set{{$set_index}}" value="{{$rubber_b_array['set'.$set_index]}}" name='b_set{{$set_index}}'>
                 <span class='hidden-xs pull-right add_button_right right_button_add_set_{{$set_index}}'></span>
               </td>
-                 <td>
+                 <td class="tb-hide tb tb-{{$set_index}}">
 
-                 <input  readonly class="gui-input validation allownumericwithdecimal runs_new " value="{{$rubber_b_array['set'.$set_index.'_tie_breaker']}}" name='b_set_tie{{$set_index}}'>
+                 <input  readonly class="  gui-input validation allownumericwithdecimal runs_new " value="{{$rubber_b_array['set'.$set_index.'_tie_breaker']}}" name='b_set_tie{{$set_index}}'>
             </td>
             @endfor
              <td><input type="" class="gui-input validation allownumericwithdecimal runs_new b_aces" name="b_aces" value="{{$rubber_b_array['aces']}}" readonly=""> </td>
@@ -248,6 +250,8 @@
       </table>
     </div>
   </div>
+
+    <CENTER> <button type="button" class="btn btn-event" id='tie_breaker'>Tie Breaker</button></CENTER>
 </div>
 
 

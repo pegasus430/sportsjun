@@ -844,6 +844,10 @@
           </div>
 
 @endif
+
+
+
+
 <script>
 $(window).load(function(){
 var limit=2;
@@ -1331,6 +1335,8 @@ function addButtonSet(set_index){
     $('.arm_b').attr('table_score_id', $('.arm_b_val').val());
     $('.arm_a').attr('table_score_id', $('.arm_a_val').val());
 
+    console.log(set_index);
+
 
 
 
@@ -1367,9 +1373,45 @@ function endMatchCompletely(match_id){
 }
 </script>
 
-
+<!-- Tie Breaking -->
 <script type="text/javascript">
+    $('.tb-hide').hide();
+    var tie_breaker=false;
+    var tb_set = 1; 
 
+
+    $('#tie_breaker').click(function(){
+
+        if(!tie_breaker){
+          $.confirm({
+              title:"Tie Breaking Alert",
+              content:"<div id='tie_breaker_text' class='tb-hide'><div class='col-md-8'><center>Choose Set</center>   </div>      <div class='col-md-4'>          <select id='tie_breaker_set' class='form-control'>                @for($set_index=1; $set_index<=$set; $set_index++)                  <option value='{{$set_index}}'>{{$set_index}}</option>  @endfor </select></div></div>",
+              confirm:function(){
+                 tie_breaker=true;
+                 tb_set = $('#tie_breaker_set').val();
+                 $('.tb-'+tb_set).show();               
+                 addButtonSet('tb_'+tb_set);
+
+              }
+          })
+
+           
+        }
+        else{
+           $.confirm({
+              title:"Tie Breaking Alert",
+              content:'this is me',
+              confirm:function(){
+                  tie_breaker=false;
+                  $('.tb-'+tb_set).hide(); 
+                  tb_set = tb_set +1; 
+                  addButtonSet(tb_set);
+              }
+          })
+
+           
+        }
+    })
 </script>
 @endsection
 

@@ -9,7 +9,10 @@
                 <th>TEAM </th>
                 <th>MAT</th>
                              
-                <th>Goals</th>
+                <th>Points</th>
+                <th>R CARD </th>
+                <th>Y CARD </th>
+
                 <th>{{ config('constants.BASKETBALL_STATS.FOULS')}}</th>
 <!--                <th>{{ config('constants.BASKETBALL_STATS.GOALS_SAVED')}}</th>
                 <th>{{ config('constants.BASKETBALL_STATS.GOALS_ASSIST')}}</th>
@@ -25,13 +28,15 @@
                          
  {!! Helper::Images($statistic->logo,'user_profile',array('class'=>'img-circle img-border ','height'=>52,'width'=>52) )!!}
                              
-                                
+                    
                              
                 </span>
                     {{$statistic->player_name}}</a></td>                
                 <td><a href='/team/members/{{$statistic->team_id}}' class="text-primary">{{$statistic->team_name}}</a></td>
                 <td>{{$statistic->matches}}</td>     
-                <td>{{Helper::displayEmptyDash($statistic->total_points)}}</td>
+                <td>{{Helper::displayEmptyDash($statistic->total_points)}}</td>  
+                <td>{{Helper::displayEmptyDash($statistic->red_card)}}</td>
+                <td>{{Helper::displayEmptyDash($statistic->yellow_card)}}</td>
                 <td {{$statistic->fouls>0?"class=red":''}}>{{Helper::displayEmptyDash($statistic->fouls)}}</td>
 <!--                <td>{{$statistic->goals_saved}}</td>
                 <td>{{$statistic->goal_assist}}</td>

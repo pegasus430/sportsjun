@@ -664,7 +664,9 @@ class TennisScoreCardController extends parentScoreCardController
             if(!empty($user_id)){
             $double_faults_count = '';
 
-            $player_match_details = tennisPlayerMatchScore::where('user_id_a',$user_id)->orWhere('user_id_b', $user_id)->get();           
+            $player_match_details = tennisPlayerMatchScore::where('user_id_a',$user_id)->orWhere('user_id_b', $user_id)->get();   
+
+             $player_rubber_details = tennisPlayerRubberScore::where('user_id_a',$user_id)->orWhere('user_id_b', $user_id)->get();          
 
             //check already user id exists or not
             $tennis_statistics= tennisStatistic::whereUserId($user_id)->whereMatchType($match_type)->first();
@@ -681,7 +683,7 @@ class TennisScoreCardController extends parentScoreCardController
                     }                    
                 
 
-                $matches=count($player_match_details);
+               $matches=count($player_match_details) + count($player_rubber_details);
                 $won_percentage = number_format((($won+1)/($matches+1))*100,2);
 
                 $tennis_statistics->matches=$matches;

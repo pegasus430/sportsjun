@@ -59,9 +59,9 @@ Route::group(['prefix'=>'match'], function(){
 
 
 
-     //routes for basketball
+     //routes for kabaddi
     Route::post('confirmSquadkabaddi',         ['as'=>'match/confirmSquadKabaddi', 'uses'=>'User\ScoreCard\KabaddiScoreCardController@confirmSquad']);
-    Route::post('kabaddiSwapPlayers',    ['as'=>'match/hockeySwapPlayersKabaddi', 'uses'=>'User\ScoreCard\KabaddiScoreCardController@kabaddilSwapPlayers']);
+    Route::post('kabaddiSwapPlayers',    ['as'=>'match/hockeySwapPlayersKabaddi', 'uses'=>'User\ScoreCard\KabaddiScoreCardController@kabaddiSwapPlayers']);
     Route::post('/endMatchRecordkabaddi', 'User\ScoreCard\KabaddiScoreCardController@kabaddiStoreRecord');
     Route::post('/saveMatchRecordkabaddi', 'User\ScoreCard\KabaddiScoreCardController@kabaddiSaveRecord');
     Route::post('manualScoringkabaddi', ['as'=>'match/manualScoringKabaddi', 'uses'=>'User\ScoreCard\KabaddiScoreCardController@manualScoring']);

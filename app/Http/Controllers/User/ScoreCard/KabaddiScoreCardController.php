@@ -251,8 +251,8 @@ class KabaddiScoreCardController extends parentScoreCardController
 
         $default_player_details=[           //default player info
             "points_1"=>0,
-            "points_2"=>0,
-            "points_3"=>0,
+            "red_card"=>0,
+            "yellow_card"=>0,
             "fouls"=>0,
             "total_points"=>0,
             "playing_status"=>0,
@@ -260,43 +260,43 @@ class KabaddiScoreCardController extends parentScoreCardController
             "quarters_played"=>'',
             "quarter_1"=>[
                     "points_1"=>0,
-                    "points_2"=>0,
-                    "points_3"=>0,
+                    "red_card"=>0,
+                    "yellow_card"=>0,
                     "fouls"=>0,
                     "total_points"=>0,
             ],
             "quarter_2"=>[
                     "points_1"=>0,
-                    "points_2"=>0,
-                    "points_3"=>0,
+                    "red_card"=>0,
+                    "yellow_card"=>0,
                     "fouls"=>0,
                     "total_points"=>0,
             ],
             "quarter_3"=>[
                     "points_1"=>0,
-                    "points_2"=>0,
-                    "points_3"=>0,
+                    "red_card"=>0,
+                    "yellow_card"=>0,
                     "fouls"=>0,
                     "total_points"=>0
             ],
             "quarter_4"=>[
                     "points_1"=>0,
-                    "points_2"=>0,
-                    "points_3"=>0,
+                    "red_card"=>0,
+                    "yellow_card"=>0,
                     "fouls"=>0,
                     "total_points"=>0,
                 ],
             "quarter_5"=>(object)[
                     "points_1"=>0,
-                    "points_2"=>0,
-                    "points_3"=>0,
+                    "red_card"=>0,
+                    "yellow_card"=>0,
                     "fouls"=>0,
                     "total_points"=>0,
                 ],
             "quarter_6"=>(object)[
                     "points_1"=>0,
-                    "points_2"=>0,
-                    "points_3"=>0,
+                    "red_card"=>0,
+                    "yellow_card"=>0,
                     "fouls"=>0,
                     "total_points"=>0,
                 ]
@@ -414,12 +414,12 @@ class KabaddiScoreCardController extends parentScoreCardController
 
                 //number of points type
                     $player->points_1=$request->{'points_1_'.$player->id};
-                    $player->points_2=$request->{'points_2_'.$player->id};
-                    $player->points_3=$request->{'points_3_'.$player->id};
+                    $player->red_card=$request->{'red_card_'.$player->id};
+                    $player->yellow_card=$request->{'yellow_card_'.$player->id};
 
                 $match_details->{$player->team_id}->players->{'player_'.$player->user_id}->points_1=$player->points_1;
-                $match_details->{$player->team_id}->players->{'player_'.$player->user_id}->points_2=$player->points_2;
-                $match_details->{$player->team_id}->players->{'player_'.$player->user_id}->points_3=$player->points_3;
+                $match_details->{$player->team_id}->players->{'player_'.$player->user_id}->red_card=$player->red_card;
+                $match_details->{$player->team_id}->players->{'player_'.$player->user_id}->yellow_card=$player->yellow_card;
                 
 
                                 //if player fouls is greater than max, return max to the player.
@@ -634,13 +634,13 @@ class KabaddiScoreCardController extends parentScoreCardController
         //check already player has record or not
         $user_kabaddi_details = kabaddiStatistic::select()->where('user_id',$user_id)->get();
 
-        $kabaddi_details = kabaddiPlayerMatchwiseStats::selectRaw('count(match_id) as match_count')->selectRaw('sum(points_1) as points_1')->selectRaw('sum(points_2) as points_2')->selectRaw('sum(points_3) as points_3')->selectRaw('sum(total_points) as total_points')->selectRaw('sum(fouls) as fouls')->where('user_id',$user_id)->groupBy('user_id')->get();
+        $kabaddi_details = kabaddiPlayerMatchwiseStats::selectRaw('count(match_id) as match_count')->selectRaw('sum(points_1) as points_1')->selectRaw('sum(red_card) as red_card')->selectRaw('sum(yellow_card) as yellow_card')->selectRaw('sum(total_points) as total_points')->selectRaw('sum(fouls) as fouls')->where('user_id',$user_id)->groupBy('user_id')->get();
 
 
 
         $points_1 = (!empty($kabaddi_details[0]['points_1']))?$kabaddi_details[0]['points_1']:0;
-        $points_2 = (!empty($kabaddi_details[0]['points_2']))?$kabaddi_details[0]['points_2']:0;
-        $points_3 = (!empty($kabaddi_details[0]['points_3']))?$kabaddi_details[0]['points_3']:0;
+        $red_card = (!empty($kabaddi_details[0]['red_card']))?$kabaddi_details[0]['red_card']:0;
+        $yellow_card = (!empty($kabaddi_details[0]['yellow_card']))?$kabaddi_details[0]['yellow_card']:0;
         $fouls = (!empty($kabaddi_details[0]['fouls']))?$kabaddi_details[0]['fouls']:0;
         $total_points = (!empty($kabaddi_details[0]['total_points']))?$kabaddi_details[0]['total_points']:0;
 
@@ -651,8 +651,8 @@ class KabaddiScoreCardController extends parentScoreCardController
             kabaddiStatistic::where('user_id',$user_id)
                 ->update([  'matches'=>$match_count,
                             'points_1'=>$points_1,
-                            'points_2'=>$points_2,
-                            'points_3'=>$points_3,
+                            'red_card'=>$red_card,
+                            'yellow_card'=>$yellow_card,
                             'fouls'=>$fouls,
                             'total_points'=>$total_points
                          ]);
@@ -662,8 +662,8 @@ class KabaddiScoreCardController extends parentScoreCardController
             $kabaddi_statistic->user_id = $user_id;
             $kabaddi_statistic->matches = 1;
             $kabaddi_statistic->{'points_1'} = $points_1;
-            $kabaddi_statistic->{'points_2'} = $points_2;
-            $kabaddi_statistic->{'points_3'} = $points_3;
+            $kabaddi_statistic->{'red_card'} = $red_card;
+            $kabaddi_statistic->{'yellow_card'} = $yellow_card;
             $kabaddi_statistic->fouls = $fouls;
             $kabaddi_statistic->total_points = $total_points;
             $kabaddi_statistic->save();
@@ -742,39 +742,7 @@ class KabaddiScoreCardController extends parentScoreCardController
 
                         break;
 
-                    case 'points_2':
-           $kabaddi_model->points_2++;
-           $kabaddi_model->{$quarter}+=2;
-
-    
-       $match_details->{$team_id}->players->{'player_'.$kabaddi_model->user_id}->points_2++;
-       $match_details->{$team_id}->players->{'player_'.$kabaddi_model->user_id}->{$quarter}->points_2++;
-       $match_details->{$team_id}->players->{'player_'.$kabaddi_model->user_id}->{$quarter}->total_points=$kabaddi_model->{$quarter};
-
-          $match_details->{$team_id}->total_points+=2;
-          $kabaddi_model->total_points=$this->getTotal($kabaddi_model);
-      $match_details->{$team_id}->players->{'player_'.$kabaddi_model->user_id}->total_points=$kabaddi_model->total_points;
-
-
-                    break;
-
-                    case 'points_3':
-           $kabaddi_model->points_3++;
-           $kabaddi_model->{$quarter}+=3;
-          $match_details->{$team_id}->players->{'player_'.$kabaddi_model->user_id}->total_points+=3;
-            $match_details->{$team_id}->players->{'player_'.$kabaddi_model->user_id}->points_3++;;
-          $match_details->{$team_id}->players->{'player_'.$kabaddi_model->user_id}->{$quarter}->points=$kabaddi_model->points_3;
-
-               $match_details->{$team_id}->players->{'player_'.$kabaddi_model->user_id}->{$quarter}->total_points=$kabaddi_model->{$quarter};
-               
-          $match_details->{$team_id}->total_points+=3;
-          $kabaddi_model->total_points=$this->getTotal($kabaddi_model);
-
-      $match_details->{$team_id}->players->{'player_'.$kabaddi_model->user_id}->total_points=$kabaddi_model->total_points;
-
-                    break;
-
-                    case 'fouls':
+                        case 'fouls':
                if($kabaddi_model->fouls>=$max_fouls){
                    $match_details->{$team_id}->players->{'player_'.$user_id}->dismissed=1;
                    $kabaddi_model->playing_status='S';
@@ -794,7 +762,7 @@ class KabaddiScoreCardController extends parentScoreCardController
 
               $kabaddi_model->save();
 
-        //$this->updatekabaddiScore($user_id,$match_id,$team_id,$player_name,$points_1, $points_2, $points_3, $total_points, $fouls);
+        //$this->updatekabaddiScore($user_id,$match_id,$team_id,$player_name,$points_1, $red_card, $yellow_card, $total_points, $fouls);
         $this->kabaddiStatistics($user_id);          
 
 
@@ -804,12 +772,12 @@ class KabaddiScoreCardController extends parentScoreCardController
 
     }
 
-    public function updatekabaddiScore($user_id,$match_id,$team_id,$player_name,$points_1,$points_2,$points_3, $total_points, $fouls)
+    public function updatekabaddiScore($user_id,$match_id,$team_id,$player_name,$points_1,$red_card,$yellow_card, $total_points, $fouls)
     {
         $player_stat=kabaddiPlayerMatchwiseStats::where('user_id',$user_id)->where('match_id',$match_id)->where('team_id',$team_id)->update(['user_id'=>$user_id,
             'points_1'=>$points_1,
-            'points_2'=>$points_2,
-            'points_3'=>$points_3,
+            'red_card'=>$red_card,
+            'yellow_card'=>$yellow_card,
             'total_points'=>$total_points,
             'fouls'=>$fouls
             ]);
