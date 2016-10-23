@@ -717,6 +717,7 @@ Route::post('getplayers', [
     'uses' => 'User\InvitePlayerController@invitePlayers',
 ]);
 Route::post('/addemailtoplayer', 'User\InvitePlayerController@addEmailToPlayers');
+Route::post('user/set-sports', ['as'=>'select-sports','uses'=>'User\UserController@setSports']);
 
 Route::get('user/info/{id?}', 'User\UserController@info');
 Route::get('user/team/{id?}', 'User\UserController@team');

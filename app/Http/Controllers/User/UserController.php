@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Model\City;
 use App\Model\Country;
 use App\Model\Photo;
+use App\Model\Sport;
 use App\Model\State;
 use App\Model\Team;
 use App\Model\UserProvider;
@@ -426,4 +427,33 @@ class UserController extends Controller {
                 ->with('limit',$limit)
                 ->with('offset',$limit+$offset);
     }    
+    public function setSports()
+    {
+        if (!\Auth::user()) {
+            return redirect()->back();
+        }
+        $data = \Request::all();
+        $validator = \Validator::make($data, [
+            // 'sports.*' => 'required|exists:sports,id',  // Array validation introduced in laravel 5.2
+            'sports' => 'required'
+        ]);
+        if (!$validator->fails()) {
+            $sportsIds = $data['sports'];
+            $sports = Sport::whereIn('id',$sportsIds)->select('id')->get(); // Validate sports exists
+            if ($sports->count()) {
+                $userId = \Auth::user()->id;
+                $userStatistic = UserStatistic::where('user_id', $userId)->first();
+                if (!$userStatistic){
+                    UserStatistic::create(['user_id' => $userId, 'following_sports' => ',' . $sports->implode('id',',') . ',']);
+                    return redirect('/');
+                }
+            } else {
+                Session::flash('error', trans('message.sports.sports_not_exists'));
+                return redirect()->back();
+            }
+        } else {
+            Session::flash('error', trans('message.sports.sports_not_exists'));
+            return redirect()->back();
+        }
+    }
 }
