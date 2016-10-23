@@ -38,6 +38,20 @@ Route::group(['prefix' => '/api/v1', 'middleware' => 'cors'], function ($router)
         //get sports
         $router->get('/sports', ['as' => 'get.sports', 'uses' => 'Api\SportApiController@index']);
 
+        $router->get('/match-schedules',['uses'=>'Api\MatchSchedulesApiController@getList']);
+
+        $router->group(['prefix'=>'sports',],function($router){
+            $router->group(['prefix'=>'cricket'],function($router){
+                $router->get('/statistics', ['uses' => 'Api\SportCricketApiController@cricketStatistics']);
+                $router->get('/player-match-score', ['uses' => 'Api\SportCricketApiController@cricketPlayerMatchScore']);
+                $router->get('/overwise-score', ['uses' => 'Api\SportCricketApiController@cricketOverwiseScore']);
+
+                $router->post('/overwise-score/{id?}', ['uses' => 'Api\SportCricketApiController@setCricketOverwiseScore']);
+
+            });
+        });
+
+
 
         //user interaction
         $router->get('/send_feedback', 'Api\FunctionsApiController@sendFeedback');
