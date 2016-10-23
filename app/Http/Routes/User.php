@@ -678,11 +678,7 @@ Route::get('sport/playerrequests/{id}', [
     'uses' => 'User\SportController@getplayerrequests',
 ]);
 
-//function to get requests for a player
-Route::get('sport/getviewmoreplayerrequests', [
-    'as'   => 'sport/getviewmoreplayerrequests',
-    'uses' => 'User\SportController@getviewmoreplayerrequests',
-]);
+
 
 Route::get('getquestions', [
     'as'   => 'getquestions',
@@ -726,6 +722,8 @@ Route::get('user/viewmorenotifications',
     'User\UserController@getViewMoreNotifications');
 Route::resource('user/inviteplayer', 'User\InvitePlayerController');
 Route::resource('user', 'User\UserController');
+
+
 //End Users
 
 
@@ -749,6 +747,8 @@ Route::get('get_org_groups_list', [
     'as'   => 'organization.groups.get_list',
     'uses' => 'User\SearchOrgGroupsController@getGroupsList',
 ]);
+
+
 
 
 Route::resource('sport', 'User\SportController');
