@@ -2,12 +2,20 @@
 
 Route::group(['prefix' => '/api/v1', 'middleware' => 'cors'], function ($router) {
 
-    $router->get('/', function () {
-        //return response()->json({'me'});
-    });
-
-    Route::post('login', 'Api\AuthApiController@login');
     Route::post('register', 'Api\AuthApiController@register');
+    Route::post('login', 'Api\AuthApiController@login');
+
+    Route::group(['middleware'=> ['jwt.api.auth'] , 'namespace'=>'Api','alias'=>'api'],function ($router){
+        $router->get('/users','UserApiController@index');
+        $router->get('/users/{id}','UserApiController@show');
+        $router->post('/users/{id?}','UserApiController@update');
+
+        $router->get('/cities','DataApiController@cities');
+        $router->get('/countries','DataApiController@countries');
+        $router->get('/states','DataApiController@states');
+
+
+    });
 
 //'jwt.refresh'
     Route::group(['middleware' => ['jwt.api.auth']], function ($router) {
@@ -15,8 +23,12 @@ Route::group(['prefix' => '/api/v1', 'middleware' => 'cors'], function ($router)
         Route::post('/otp/verify', ['uses' => 'Api\AuthApiController@verifyOTP']);
         Route::post('/otp/issent', ['uses' => 'Api\AuthApiController@isOtpSent']);
 
-        #$router->resource('/users', 'Api\UserApiController');
-        $router->post('users/{id?}','Api\UserApiController@update');
+
+
+
+
+
+
 
         $router->get('/organizations','Api\OrganizationApiController@getList');
         $router->get('/organizations/{id}','Api\OrganizationApiController@getOrganization');
