@@ -36,6 +36,8 @@ class TournamentParent extends Model
         'organization_id',
     ];
 
+    protected $appends = ['logoImage'];
+
     public function photos()
     {
         $this->morphClass = 'tournaments';

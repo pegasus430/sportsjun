@@ -91,7 +91,7 @@ class TournamentApiController extends BaseApiController
     public function show($id)
     {
         $tournament = Tournaments
-            ::with(['tournamentParent'])
+            ::with(['tournamentParent','sports'])
             ->find($id);
 
         return $this->ApiResponse($tournament);
