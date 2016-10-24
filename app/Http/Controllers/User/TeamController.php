@@ -977,49 +977,47 @@ class TeamController extends Controller
     public function getteamrequests($id)
     {
         Helper::leftMenuVariables($id);
-        $limit = config('constants.LIMIT');
-        $offset = 0;
-        $type_ids = config('constants.REQUEST_TYPE.PLAYER_TO_TEAM') . ',' . config('constants.REQUEST_TYPE.TEAM_TO_PLAYER') . ',' . config('constants.REQUEST_TYPE.TEAM_TO_TOURNAMENT') . ',' . config('constants.REQUEST_TYPE.TEAM_TO_TEAM');
-        //pass type flag to get the request
-        $result = AllRequests::getrequests($id, $type_ids, $limit, $offset);
-        $result_count = AllRequests::getrequestscount($id, $type_ids);
-        //get sent request
-        $sent = AllRequests::getsentrequests($id, $type_ids, $limit, $offset);
-        $sent_count = AllRequests::getsentrequestscount($id, $type_ids);
-        return view('teams.teamrequests', [
-            'result' => $result,
-            'sent' => $sent,
-            'received_count' => $result_count,
-            'sent_count' => $sent_count,
-            'limit' => $limit,
-            'offset1' => $limit + $offset,
-            'offset2' => $limit + $offset
-        ]);
-    }
+        $limit = config('constants.LIMIT',20);
+        $type_ids = [
+                    config('constants.REQUEST_TYPE.PLAYER_TO_TEAM'),
+                    config('constants.REQUEST_TYPE.TEAM_TO_TEAM')
+        ];
 
-    //function to show the requests
-    public function getviewmoreteamrequests()
-    {
-        $id = !empty(Request::get('id')) ? Request::get('id') : 0;
-        $flag = !empty(Request::get('flag')) ? Request::get('flag') : '';
-        $limit = !empty(Request::get('limit')) ? Request::get('limit') : 0;
-        $offset1 = !empty(Request::get('offset1')) ? Request::get('offset1') : 0;
-        $offset2 = !empty(Request::get('offset2')) ? Request::get('offset2') : 0;
-        $type_ids = config('constants.REQUEST_TYPE.TEAM_TO_PLAYER') . ',' . config('constants.REQUEST_TYPE.TEAM_TO_TOURNAMENT') . ',' . config('constants.REQUEST_TYPE.TEAM_TO_TEAM');
-        //pass type flag to get the request
-        if ($flag == 'Received') {
-            $result = AllRequests::getrequests($id, $type_ids, $limit, $offset1);
-            $offset1 = $offset1 + $limit;
-        } else {
-            //get sent request
-            $result = AllRequests::getsentrequests($id, $type_ids, $limit, $offset2);
-            $offset2 = $offset2 + $limit;
+        $type = \Request::get('type');
+        $received = false;
+        if ($type == null || $type === 'received') {
+            $received = Requestsmodel::requestQuery($type_ids)
+                ->where('request.to_id', $id)
+                ->paginate($limit)
+                ->appends('type','received');
         }
-        return view('common.viewmorerequests',
-            ['sent' => $result, 'limit' => $limit, 'offset1' => $offset1, 'offset2' => $offset2, 'flag' => $flag]);
+        $sent = false;
+        $type_ids = [
+            config('constants.REQUEST_TYPE.TEAM_TO_PLAYER'),
+            config('constants.REQUEST_TYPE.TEAM_TO_TOURNAMENT'),
+            config('constants.REQUEST_TYPE.TEAM_TO_TEAM')
+        ];
+
+        if ($type == null || $type === 'sent') {
+            $sent = Requestsmodel::requestQuery($type_ids)
+                ->where('request.from_id', $id)
+                ->paginate($limit)
+                ->appends('type','sent');
+        }
+
+        if ($type){
+            if ($received) {
+                return view('common.requestsList', ['items' => $received, 'flag' => 'in', 'team' => true]);
+            }
+            if ($sent)
+                return view('common.requestsList',['items'=>$sent,'team'=>true]);
+            return \App::abort(404);
+        };
+
+        return view('teams.teamrequests', compact('received','sent'),['team'=>true]);
     }
 
-    //fucntion to accept/reject request
+       //fucntion to accept/reject request
     public function acceptrejectrequest()
     {
         $request = Request::all();

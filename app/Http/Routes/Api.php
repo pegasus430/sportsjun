@@ -18,6 +18,9 @@ Route::group(['prefix' => '/api/v1', 'middleware' => 'cors'], function ($router)
         #$router->resource('/users', 'Api\UserApiController');
         $router->post('users/{id?}','Api\UserApiController@update');
 
+        $router->get('/organizations','Api\OrganizationApiController@getList');
+        $router->get('/organizations/{id}','Api\OrganizationApiController@getOrganization');
+
         //handle teams
         $router->resource('/teams', 'Api\TeamApiController');
 
@@ -45,9 +48,7 @@ Route::group(['prefix' => '/api/v1', 'middleware' => 'cors'], function ($router)
                 $router->get('/statistics', ['uses' => 'Api\SportCricketApiController@cricketStatistics']);
                 $router->get('/player-match-score', ['uses' => 'Api\SportCricketApiController@cricketPlayerMatchScore']);
                 $router->get('/overwise-score', ['uses' => 'Api\SportCricketApiController@cricketOverwiseScore']);
-
                 $router->post('/overwise-score/{id?}', ['uses' => 'Api\SportCricketApiController@setCricketOverwiseScore']);
-
             });
         });
 
