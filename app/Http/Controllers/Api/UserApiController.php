@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\Helper;
 use App\Model\Photo;
+use App\User;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -11,66 +12,22 @@ use App\Http\Controllers\Controller;
 
 class UserApiController extends BaseApiController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
+    public function index(){
+        $users = User::select(['id','name'])->paginate(20);
+        return $this->ApiResponse($users);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function show($id){
+        $user = \Auth::user();
+        if ($id == $user->id) {
+            $user = array_only($user->toArray(),['id','name','firstname','lastname','email','dob','gender','location','address','city_id','city','state_id','state',
+                'country_id','country','zip','contact_number','about','newsletter','logoImage']);
+        } else
+            $user = User::where('id', $id)->select(['id', 'name', 'firstname', 'lastname'])->first();
+        return $this->ApiResponse($user);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id = 0)
     {
         $user = \Auth::user();
@@ -79,7 +36,7 @@ class UserApiController extends BaseApiController
         $validator = \Validator::make($data, [
             'firstname' => 'max:255',
             'lastname' => 'max:255',
-            'mobile' => 'max:20',
+            'mobile' => 'max:20|numeric',
             'email' => 'unique:users,email,' . $id . '|email|max:255',
             'gender' => 'in:male,female,other',
             'address' => 'max:100',
@@ -143,14 +100,5 @@ class UserApiController extends BaseApiController
         return $this->ApiResponse(['error' => $error], 500);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+
 }

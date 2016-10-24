@@ -11,7 +11,7 @@ class BaseApiController extends Controller
     function applyFilter($query,$fields =[]){
         $data = \Request::all();
         foreach ($fields as $field){
-            if (in_array($field,$data)){
+            if (isset($data[$field])){
                 $query->where($field,$data[$field]);
             }
         }
@@ -20,6 +20,11 @@ class BaseApiController extends Controller
 
 
     function ApiResponse($response,$code = 200){
+        if (!$response) {
+            $code = 404;
+            $response = 'Not found';
+        }
+
         if ($code>=200 && $code<400)
             $status = 'Success';
         else
