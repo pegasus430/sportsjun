@@ -638,7 +638,9 @@ class SquashScoreCardController extends parentScoreCardController
             if(!empty($user_id)){
             $double_faults_count = '';
 
-            $player_match_details = squashPlayerMatchScore::where('user_id_a',$user_id)->orWhere('user_id_b', $user_id)->get();           
+            $player_match_details = squashPlayerMatchScore::where('user_id_a',$user_id)->orWhere('user_id_b', $user_id)->get();   
+            $player_rubber_details = squashPlayerRubberScore::where('user_id_a',$user_id)->orWhere('user_id_b', $user_id)->get();   
+
 
             //check already user id exists or not
             $squash_statistics= squashStatistic::whereUserId($user_id)->whereMatchType($match_type)->first();
@@ -655,7 +657,7 @@ class SquashScoreCardController extends parentScoreCardController
                     }                    
                 
 
-                $matches=count($player_match_details);
+            $matches=count($player_match_details) + count($player_rubber_details);
                 $won_percentage = number_format((($won+1)/($matches+1))*100,2);
 
                 $squash_statistics->matches=$matches;

@@ -37,7 +37,7 @@
                             {{ trans('message.sports.addsportsprofile') }}
                         </div>
                         <div class="cardheader">
-                            {{ trans('message.sports.fields.sportsprofile') }}
+                            {!! nl2br(e(trans('message.sports.fields.sportsrequired')))  !!}
                         </div>
                         <div class="avatar">
                             @if(Session::has('socialuser'))
@@ -71,17 +71,22 @@
 
                                 @if (count($sports))
                                     <input type="hidden" id="user_question" value="1">
-                                    <ul class="list-inline">
-                                        @foreach($sports as $sport)
-                                            <li>
-                                                @if($userId==isset(Auth::user()->id)?Auth::user()->id:0)
-                                                    <a id="sport_name_{{$sport->id}}" class="btn btn-primary" href="javascript:void(0)" onclick="displaySportQuestions('follow',{{$sport->id}},{{$userId}},'{{$sport->sports_name}}');">{{$sport->sports_name}}</a>
-                                                @else
-                                                    <a id="sport_name_{{$sport->id}}" class="btn btn-primary" href="javascript:void(0)" onclick="displaySportQuestions('unfollow',{{$sport->id}},{{$userId}},'{{$sport->sports_name}}');">{{$sport->sports_name}}</a>
-                                                @endif
-                                            </li>
-                                        @endforeach
-                                    </ul>
+                                    <form method="POST" action="{{ route('select-sports') }}">
+                                        {{ csrf_field() }}
+                                        <ul class="list-inline">
+                                            @foreach($sports as $sport)
+                                                <li>
+                                                    <input id="sports_{{$sport->id}}" type="checkbox" class="hidden switch-class sports-checkbox"  name="sports[]" value="{{$sport->id}}" />
+                                                    <a id="sport_name_{{$sport->id}}" class="btn btn-primary" data-id="{{$sport->id}}"
+                                                       href="javascript:void(0)"
+                                                       onclick="return selectSport(this);">{{$sport->sports_name}}</a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                        <div class="row">
+                                            <button id="select_sports" type="submit" class="btn pull-right disabled" disabled>Select Sports </button>
+                                        </div>
+                                    </form>
                                 @else
                                     <div>{{trans('message.sports.nosports')}}</div>
                                 @endif
@@ -96,6 +101,7 @@
                                         {!! Form::close() !!}
                                     </div>
                                 @endif
+
 
                             @else
                                 <div class="sj-alert sj-alert-info">
@@ -113,8 +119,10 @@
         $(function () {
             @if(isset($userId))
           @if($userId==(isset(Auth::user()->id)?Auth::user()->id:0))
-              $('a:not("#logout"),.btn').click(function(e){e.preventDefault();});
-            $('#main_match_schedule').each(function(){
+              $('a:not("#logout"),.btn:not("#select_sports")').click(function (e) {
+                e.preventDefault();
+            });
+            $('#main_match_schedule').each(function () {
                 $(this).removeAttr('data-target');
                 $(this).removeAttr('data-toggle');
             });

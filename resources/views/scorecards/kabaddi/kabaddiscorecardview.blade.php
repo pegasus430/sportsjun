@@ -286,7 +286,9 @@
                                         <thead class="players_head ">
                                           <tr>
                                                 <th >Player<s/th>
-                                                <th> Goal</th>
+                                                <th> Points</th>
+                                                <th> R Card</th>
+                                                <th> Y Card</th>
                                <!--                  <th> 2 Pts </th>
                                                 <th> 3 Pts </th>  -->                                               
                                                 <th >Fouls</th>
@@ -314,15 +316,15 @@
                                                <td class=""> 
     {{getClass($player['points_1'])}}
                                                 </td>
-    {{--
+
                                                 <td class="">
-    {{getClass($player['points_2'])}}
+    {{getClass($player['red_card'])}}
 
                                                 </td>
                                                 <td class="">
-    {{getClass($player['points_3'])}}
+    {{getClass($player['yellow_card'])}}
                                                 </td>   
-    --}}                                          
+                                     
                                               
                                                 <td class="">
                                                        {{getClass($player['fouls'])}}
@@ -348,7 +350,9 @@
                                             <thead class="substitutes_head ">
                                           <tr>
                                                 <th >Substitutes</th>
-                                                <th> Goals</th>
+                                                <th> Points</th>
+                                                <th> R Card</th>
+                                                <th> Y Card</th>
                                              <!--    <th> 2 Pts </th>
                                                 <th> 3 Pts </th>  -->                                               
                                                 <th >Fouls</th>
@@ -376,15 +380,15 @@
                                                 <td class=""> 
     {{getClass($player['points_1'])}}
                                                 </td>
-    {{--
+ 
                                                 <td class="">
-    {{getClass($player['points_2'])}}
+    {{getClass($player['red_card'])}}
 
                                                 </td>
                                                 <td class="">
-    {{getClass($player['points_3'])}}
+    {{getClass($player['yellow_card'])}}
                                                 </td>   
-    --}}                                          
+                                       
                                               
                                                 <td class="">
                                                        {{getClass($player['fouls'])}}
@@ -412,14 +416,14 @@
                                                 <td>
     {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'points_1', $match_data[0]['a_id']))}}
                                                 </td>
-    {{--
+  
                                                  <td>
-    {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'points_2', $match_data[0]['a_id']))}}
+    {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'red_card', $match_data[0]['a_id']))}}
                                                 </td>
                                                  <td>
-    {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'points_3', $match_data[0]['a_id']))}}
+    {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'yellow_card', $match_data[0]['a_id']))}}
                                                 </td>
-    --}}
+
                                                  <td>
     {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'fouls', $match_data[0]['a_id']))}}
                                                 </td>
@@ -447,7 +451,10 @@
                                         <thead class="players_head ">
                                            <tr>
                                                 <th >Player</th>
-                                                <th> Goal </th>
+                                               
+                                                  <th> Points</th>
+                                                <th> R Card</th>
+                                                <th> Y Card</th>
                                                <!--  <th> 2 Pts </th>
                                                 <th> 3 Pts </th>  -->                                               
                                                 <th >Fouls</th>
@@ -474,14 +481,14 @@
                                                 <td class=""> 
      {{getClass($player['points_1'])}}
                                                 </td>
-        {{--                                        <td  class="">
-     {{getClass($player['points_2'])}}
+                                            <td  class="">
+     {{getClass($player['red_card'])}}
 
                                                 </td>
                                                 <td class="">
-     {{getClass($player['points_3'])}}
+     {{getClass($player['yellow_card'])}}
                                                 </td>  
-        --}}                                           
+                                          
                                               
                                                 <td class="{{$player['id']}}_fouls ">
     {{getClass($player['fouls'])}}
@@ -505,11 +512,10 @@
                                            <thead class="substitutes_head">
                                            <tr>
                                                 <th >Substitutes</th>
-                                                <th> Goal </th>
-        {{--
-                                                <th> 2 Pts </th>
-                                                <th> 3 Pts </th>  
-        --}}                                              
+                                                
+                                                <th> Points</th>
+                                                <th> R Card</th>
+                                                <th> Y Card</th>                                             
                                                 <th >Fouls</th>
                                                 
                                         @for($index=1; $index<=$number_of_quarters; $index++)
@@ -534,14 +540,14 @@
                                                 <td class=""> 
      {{getClass($player['points_1'])}}
                                                 </td>
-       {{--                                         <td  class="">
-     {{getClass($player['points_2'])}}
+                                      <td  class="">
+     {{getClass($player['red_card'])}}
 
                                                 </td>
                                                 <td class="">
-     {{getClass($player['points_3'])}}
+     {{getClass($player['yellow_card'])}}
                                               </td>  
-        --}}                                           
+                                        
                                               
                                                 <td class="{{$player['id']}}_fouls ">
     {{getClass($player['fouls'])}}
@@ -568,13 +574,13 @@
                                                 <td>
     {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'points_1', $match_data[0]['b_id']))}}
                                                 </td>
-       {{--                                          <td>
-    {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'points_2', $match_data[0]['b_id']))}}
+                                           <td>
+    {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'red_card', $match_data[0]['b_id']))}}
                                                 </td>
                                                  <td>
-    {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'points_3', $match_data[0]['b_id']))}}
+    {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'yellow_card', $match_data[0]['b_id']))}}
                                                 </td>
-        --}}
+  
                                                  <td>
     {{getClass(ScoreCard::getTotalPoints($match_data[0]['id'], $match_data[0]['sports_id'], 'fouls', $match_data[0]['b_id']))}}
                                                 </td>

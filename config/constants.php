@@ -309,10 +309,10 @@ return [
         'SPORTS_PREFERENCES'      => [
                 1 => [],
                 2 => [
-                    'number_of_sets'=>5,
-                    'score_to_win'  =>21,
-                    'end_point'     =>29,
-                    'enable_two_points'     => 'on',
+                    'number_of_sets'=>3,
+                    'score_to_win'  =>6,
+                    'end_point'     =>6,
+                    'enable_two_points'     => 'off',
                     'active_players' => 6,
                     'substitute'     => 6,
 

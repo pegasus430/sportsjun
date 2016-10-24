@@ -62,7 +62,7 @@ class Authenticate
 
                         $allowedRoutesBeforeSportsProfileUpdate = ['showsportprofile/{userId}',
                                 'editsportprofile/{userId}',
-                                'schedule/getstates', 'sport/getsports', 'getquestions',
+                                'schedule/getstates', 'sport/getsports', 'getquestions', 'user/set-sports',
                                 'sport/{sport}',
                                 'sport/updateUserStats'];
 

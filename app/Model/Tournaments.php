@@ -222,7 +222,7 @@ class Tournaments extends Model
     {
         $logo = $this->logo ? $this->logo :
             (array_key_exists('tournament_parent_logo',$this->attributes) ?  $this->tournament_parent_logo : object_get($this->tournamentParent,'logo')) ;
-        return Helper::getImagePath($logo, 'teams');
+        return Helper::getImagePath($logo, 'tournaments');
     }
 
     public function getFinalStageTeamsListAttribute(){

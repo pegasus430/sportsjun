@@ -638,6 +638,7 @@ class TabletennisScoreCardController extends parentScoreCardController
 
             $player_match_details = tabletennisPlayerMatchScore::where('user_id_a',$user_id)->orWhere('user_id_b', $user_id)->get();           
 
+            $player_rubber_details = tabletennisPlayerRubberScore::where('user_id_a',$user_id)->orWhere('user_id_b', $user_id)->get();  
             //check already user id exists or not
             $tabletennis_statistics= tabletennisStatistic::whereUserId($user_id)->whereMatchType($match_type)->first();
 
@@ -653,7 +654,7 @@ class TabletennisScoreCardController extends parentScoreCardController
                     }                    
                 
 
-                $matches=count($player_match_details);
+                $matches=count($player_match_details) + count($player_rubber_details);
                 $won_percentage = number_format((($won+1)/($matches+1))*100,2);
 
                 $tabletennis_statistics->matches=$matches;

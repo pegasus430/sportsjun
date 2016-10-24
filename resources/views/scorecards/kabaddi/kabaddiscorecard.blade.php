@@ -457,9 +457,9 @@ input:read-only {
 										<thead class="players_head ">
 											<tr>
 												<th >Players</th>
-												<th> Goals </th>
-												<!-- <th> 2 Pts </th>
-												<th> 3 Pts </th> -->												
+												 <th> Points</th>
+                                                <th> R Card</th>
+                                                <th> Y Card</th>											
 												<th >Fouls</th>
 												
 										@for($index=1; $index<=$number_of_quarters; $index++)
@@ -484,15 +484,15 @@ input:read-only {
                                                 <td> 
       <input type='text' class="tennis_input_new gui-input  points_1_player_{{$player['user_id']}}" readonly="" name="points_1_{{$player['id']}}" value="{{$player['points_1']}}" >
                                                 </td>
-               {{--
+          
                                                 <td>
-      <input type='text' class="tennis_input_new gui-input  points_2_player_{{$player['user_id']}}" readonly="" name="points_2_{{$player['id']}}" value="{{$player['points_2']}}" >
+      <input type='text' class="tennis_input_new gui-input  red_card_player_{{$player['user_id']}}" readonly="" name="red_card_{{$player['id']}}" value="{{$player['red_card']}}" >
 
                                                 </td>
                                                 <td>
-      <input type='text' class="tennis_input_new gui-input  points_3_player_{{$player['user_id']}}" readonly="" name="points_3_{{$player['id']}}" value="{{$player['points_3']}}" >
+      <input type='text' class="tennis_input_new gui-input  yellow_card_player_{{$player['user_id']}}" readonly="" name="yellow_card_{{$player['id']}}" value="{{$player['yellow_card']}}" >
                                                 </td>                  
-                  --}}  
+               
                                               
                                                 <td class="{{$player['id']}}_fouls">
                                                			 <input type='text' class="tennis_input_new gui-input validation allownumericwithdecimal fouls_player_{{$player['user_id']}}" readonly="" name="fouls_{{$player['id']}}" value="{{$player['fouls']}}">
@@ -514,9 +514,9 @@ input:read-only {
 										<thead class="substitutes_head ">
 											<tr>
 												<th >Substitutes</th>
-												<th> Goals </th>
-											<!-- 	<th> 2 Pts </th>
-												<th> 3 Pts </th> -->												
+												 <th> Points</th>
+                                                <th> R Card</th>
+                                                <th> Y Card</th>												
 												<th >Fouls</th>
 												
 										@for($index=1; $index<=$number_of_quarters; $index++)
@@ -546,15 +546,15 @@ input:read-only {
                                                 <td> 
       <input type='text' class="tennis_input_new gui-input  points_1_player_{{$player['user_id']}}" readonly="" name="points_1_{{$player['id']}}" value="{{$player['points_1']}}" >
                                                 </td>
-        {{--
+    
                                                 <td>
-      <input type='text' class="tennis_input_new gui-input  points_2_player_{{$player['user_id']}}" readonly="" name="points_2_{{$player['id']}}" value="{{$player['points_2']}}" >
+      <input type='text' class="tennis_input_new gui-input  red_card_player_{{$player['user_id']}}" readonly="" name="red_card_{{$player['id']}}" value="{{$player['red_card']}}" >
 
                                                 </td>
                                                 <td>
-      <input type='text' class="tennis_input_new gui-input  points_3_player_{{$player['user_id']}}" readonly="" name="points_3_{{$player['id']}}" value="{{$player['points_3']}}" >
+      <input type='text' class="tennis_input_new gui-input  yellow_card_player_{{$player['user_id']}}" readonly="" name="yellow_card_{{$player['id']}}" value="{{$player['yellow_card']}}" >
                                                 </td>      
-         --}}                                       
+                                         
                                               
                                                 <td class="{{$player['id']}}_fouls">
                                                			 <input type='text' class="tennis_input_new gui-input validation allownumericwithdecimal fouls_player_{{$player['user_id']}}" readonly="" name="fouls_{{$player['id']}}" value="{{$player['fouls']}}">
@@ -585,9 +585,10 @@ input:read-only {
 										<thead class="players_head ">
 											<tr>
 												<th >Players</th>
-												<th> Goals </th>
-											<!-- 	<th> 2 Pts </th>
-												<th> 3 Pts </th>	 -->
+											
+										 <th> Points</th>
+                                                <th> R Card</th>
+                                                <th> Y Card</th>
 												<th >Fouls</th>											
 												
 										@for($index=1; $index<=$number_of_quarters; $index++)
@@ -621,15 +622,15 @@ input:read-only {
                                                 <td> 
       <input type='text' class="tennis_input_new gui-input  points_1_player_{{$player['user_id']}}" readonly="" name="points_1_{{$player['id']}}" value="{{$player['points_1']}}" >
                                                 </td>
-       {{--
+      
                                                 <td>
-      <input type='text' class="tennis_input_new gui-input  points_2_player_{{$player['user_id']}}" readonly="" name="points_2_{{$player['id']}}" value="{{$player['points_2']}}" >
+      <input type='text' class="tennis_input_new gui-input  red_card_player_{{$player['user_id']}}" readonly="" name="red_card_{{$player['id']}}" value="{{$player['red_card']}}" >
 
                                                 </td>
                                                 <td>
-      <input type='text' class="tennis_input_new gui-input  points_3_player_{{$player['user_id']}}" readonly="" name="points_3_{{$player['id']}}" value="{{$player['points_3']}}" >
+      <input type='text' class="tennis_input_new gui-input  yellow_card_player_{{$player['user_id']}}" readonly="" name="yellow_card_{{$player['id']}}" value="{{$player['yellow_card']}}" >
                                                 </td>        
-        --}}          
+            
                                               
                                                 <td class="{{$player['id']}}_fouls">
                                                			 <input type='text' class="tennis_input_new gui-input validation allownumericwithdecimal fouls_player_{{$player['user_id']}}" readonly="" name="fouls_{{$player['id']}}" value="{{$player['fouls']}}">
@@ -649,9 +650,9 @@ input:read-only {
 										<thead class="substitutes_head">
 											<tr>
 												<th >Substitutes</th>
-												<th> Goals </th>
-												<!-- <th> 2 Pts </th>
-												<th> 3 Pts </th>	 -->											
+												 <th> Points</th>
+                                                <th> R Card</th>
+                                                <th> Y Card</th>		
 												<th >Fouls</th>
 												
 										@for($index=1; $index<=$number_of_quarters; $index++)
@@ -680,15 +681,15 @@ input:read-only {
                                                 <td> 
       <input type='text' class="tennis_input_new gui-input  points_1_player_{{$player['user_id']}}" readonly="" name="points_1_{{$player['id']}}" value="{{$player['points_1']}}" >
                                                 </td>
-       {{--
+       
                                                 <td>
-      <input type='text' class="tennis_input_new gui-input  points_2_player_{{$player['user_id']}}" readonly="" name="points_2_{{$player['id']}}" value="{{$player['points_2']}}" >
+      <input type='text' class="tennis_input_new gui-input  red_card_player_{{$player['user_id']}}" readonly="" name="red_card_{{$player['id']}}" value="{{$player['red_card']}}" >
 
                                                 </td>
                                                 <td>
-      <input type='text' class="tennis_input_new gui-input  points_3_player_{{$player['user_id']}}" readonly="" name="points_3_{{$player['id']}}" value="{{$player['points_3']}}" >
+      <input type='text' class="tennis_input_new gui-input  yellow_card_player_{{$player['user_id']}}" readonly="" name="yellow_card_{{$player['id']}}" value="{{$player['yellow_card']}}" >
                                                 </td>    
-        --}}                                         
+                                            
                                               
                                                 <td class="{{$player['id']}}_fouls">
                                                			 <input type='text' class="tennis_input_new gui-input validation allownumericwithdecimal fouls_player_{{$player['user_id']}}" readonly="" name="fouls_{{$player['id']}}" value="{{$player['fouls']}}">
@@ -756,11 +757,11 @@ input:read-only {
 						--}}
 
 
-							<button class="btn-link  btn-goal-card-select  "  onclick="return SJ.SCORECARD.basketballAddPoint(this)" value='1' type='points_1' type="button">Goal</button>
+							<button class="btn-link  btn-goal-card-select  "  onclick="return SJ.SCORECARD.basketballAddPoint(this)" value='1' type='points_1' type="button">Point</button>
 
-							<!-- <button class="btn-link btn-goal-card-select "   onclick="return SJ.SCORECARD.basketballAddPoint(this)" type='points_2' value='2' type="button">2 Ptr</button>
+							<button class="btn-link btn-red-card-select "   onclick="return SJ.SCORECARD.basketballAddPoint(this)" type='red_card' value='2' type="button">Red Card</button>
 
-							<button  class="btn-link request btn-goal-card-select  "   onclick="return SJ.SCORECARD.basketballAddPoint(this)" type='points_3' value='3' type="button">3 Ptr</button> -->
+							<button  class="btn-link request btn-yellow-card-select  "   onclick="return SJ.SCORECARD.basketballAddPoint(this)" type='yellow_card' value='3' type="button">Yellow Card</button>
 
 							<button  class="btn-link request btn-red-card-select  "   onclick="return SJ.SCORECARD.basketballAddPoint(this)" type='fouls' value='3' type="button">Fouls</button>
 
@@ -1623,14 +1624,14 @@ input:read-only {
 							
 							var fouls=value.fouls;
 							var points_1=value.points_1;
-							var points_2=value.points_2;
-							var points_3=value.points_3;
+							var red_card=value.red_card;
+							var yellow_card=value.yellow_card;
 							var total_points=value.total_points;
 
 							$('.fouls_'+key).val(fouls);
 							$('.points_1_'+key).val(points_1);
-							$('.points_2_'+key).val(points_2);
-							$('.points_3_'+key).val(points_3);
+							$('.red_card_'+key).val(red_card);
+							$('.yellow_card_'+key).val(yellow_card);
 							$('.total_points_'+key).val(total_points)
 
 
@@ -1644,14 +1645,14 @@ input:read-only {
 
 							var fouls=value.fouls;
 							var points_1=value.points_1;
-							var points_2=value.points_2;
-							var points_3=value.points_3;
+							var red_card=value.red_card;
+							var yellow_card=value.yellow_card;
 							var total_points=value.total_points;
 
 							$('.fouls_'+key).val(fouls);
 							$('.points_1_'+key).val(points_1);
-							$('.points_2_'+key).val(points_2);
-							$('.points_3_'+key).val(points_3);
+							$('.red_card_'+key).val(red_card);
+							$('.yellow_card_'+key).val(yellow_card);
 							$('.total_points_'+key).val(total_points)
 
 
@@ -1922,8 +1923,8 @@ var manual=false;
         		var value=value.user_id;       		
         	       		
         		var pt_1_count=Number($('.points_1_player_'+value).val());
-        		var pt_2_count=Number($('.points_2_player_'+value).val());
-        		var pt_3_count=Number($('.points_3_player_'+value).val());
+        		var pt_2_count=Number($('.red_card_player_'+value).val());
+        		var pt_3_count=Number($('.yellow_card_player_'+value).val());
 
         	var quarter_count_total=0;
         		for(j=1; j<=number_of_quarters; j++){
