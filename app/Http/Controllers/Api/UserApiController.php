@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\Helper;
 use App\Model\Photo;
+use App\Model\Sport;
+use App\Model\UserStatistic;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -100,5 +102,74 @@ class UserApiController extends BaseApiController
         return $this->ApiResponse(['error' => $error], 500);
     }
 
+    public function sports($id = 'self'){
+        if ($id == 'self')
+            $id = \Auth::user()->id;
+
+        $statistics = UserStatistic::find($id);
+        $sports = Sport::
+                select(
+                    [
+                        'id',
+                        'sports_name',
+                        'is_schedule_available',
+                        'is_scorecard_available',
+                        'isactive',
+                        \DB::raw('0 as following'),
+                        \DB::raw('0 as allowed')
+                    ]
+                )
+                ->where('isactive',1)
+                ->get();
+
+        if ($statistics){
+            $following_sports = explode(',',trim($statistics->following_sports,','));
+            $allowed_sports = explode(',',trim($statistics->allowed_sports,','));
+            foreach ($sports as $sport){
+                if (in_array($sport->id,$following_sports)){
+                    $sport->following = 1;
+                }
+                if (in_array($sport->id,$allowed_sports)){
+                    $sport->allowed = 1;
+                }
+            }
+        }
+        return $this->ApiResponse($sports);
+    }
+
+    public function updateSports($id = 'self'){
+        if ($id == 'self')
+            $id = \Auth::user()->id;
+
+        $userStatistic = UserStatistic::find($id);
+
+        $following_sports = \Request::get('following_sports', false);
+        if ($following_sports)
+            $following_sports = Sport::whereIn('id',$following_sports)->select('id')->get()->implode('id',',');
+        else
+            $following_sports = object_get($userStatistic,'following_sports');
+
+        $allowed_sports = \Request::get('allowed_sports', false);
+        if ($allowed_sports)
+            $allowed_sports = Sport::whereIn('id',$allowed_sports)->select('id')->get()->implode('id',',');
+        else
+            $allowed_sports = object_get($userStatistic,'allowed_sports');
+
+        if (!$userStatistic) {
+            $userStatistic = UserStatistic::create(
+                [
+                    'user_id' => $id,
+                    'following_sports' => ',' . $following_sports . ',',
+                    'allowed_sports' => ',' . $allowed_sports . ',',
+                    'isactive' => 1
+                ]);
+        } else {
+            $userStatistic->following_sports = ',' . $following_sports . ',';
+            $userStatistic->allowed_sports =',' . $allowed_sports . ',';
+            $userStatistic->save();
+        }
+
+        return $this->ApiResponse('fail',404);
+    }
 
 }

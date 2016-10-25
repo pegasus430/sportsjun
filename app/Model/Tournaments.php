@@ -201,7 +201,8 @@ class Tournaments extends Model
 
     function finalMatches()
     {
-        return $this->hasMany('App\Model\MatchSchedule')->where('tournament_round_number', '!=', null);
+        return $this->hasMany(MatchSchedule::class,'tournament_id')
+                        ->where('match_schedules.tournament_round_number','is not', null);
     }
 
     function settings()

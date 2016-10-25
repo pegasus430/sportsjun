@@ -2,86 +2,65 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Model\Team;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class TeamApiController extends Controller
+class TeamApiController extends BaseApiController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $teams = Team::select([
+            'id',
+            'team_owner_id',
+            'sports_id',
+            'organization_id',
+            'team_level',
+            'gender',
+            'location',
+            'address',
+            'city_id',
+            'city',
+            'state_id',
+            'state',
+            'country_id',
+            'country',
+            'zip',
+            'logo',
+            'description',
+            'team_available',
+            'player_available'
+        ])->paginate(50);
+        return $this->ApiResponse($teams);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        //
+        $team = Team::where('id', $id)
+            ->select([
+                'id',
+                'team_owner_id',
+                'sports_id',
+                'organization_id',
+                'team_level',
+                'gender',
+                'location',
+                'address',
+                'city_id',
+                'city',
+                'state_id',
+                'state',
+                'country_id',
+                'country',
+                'zip',
+                'logo',
+                'description',
+                'team_available',
+                'player_available'
+            ])->first();
+        return $this->ApiResponse($team);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

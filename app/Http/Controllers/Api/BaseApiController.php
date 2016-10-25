@@ -20,7 +20,7 @@ class BaseApiController extends Controller
 
 
     function ApiResponse($response,$code = 200){
-        if (!$response) {
+        if (!$response && !is_array($response)) {
             $code = 404;
             $response = 'Not found';
         }
