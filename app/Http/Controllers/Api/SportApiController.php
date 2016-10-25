@@ -19,8 +19,9 @@ class SportApiController extends BaseApiController
      */
     public function index()
     {
-        //
-        $sports=Sport::all();
+        $sports=Sport::select(
+            ['id','created_by','sports_name','sports_type','is_schedule_available','is_scorecard_available','isactive']
+        )->get();
         return $this->ApiResponse(['data'=>$sports]);
     }
 

@@ -6,7 +6,7 @@ use App\Model\Organization;
 
 class OrganizationApiController extends BaseApiController
 {
-    public function getList(){
+    public function index(){
         $organizations = Organization::
                     select([
                         'id',
@@ -19,7 +19,7 @@ class OrganizationApiController extends BaseApiController
         return $this->ApiResponse($organizations);
     }
 
-    public function getOrganization($id){
+    public function show($id){
         $organization = Organization::
             select([
                 'id',
