@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 
 class BaseApiController extends Controller
@@ -39,7 +39,26 @@ class BaseApiController extends Controller
             'code'=>$code,
             'response'=>$response,
         ];
-
     }
+
+    function PaginatedMapResponse(LengthAwarePaginator $paginator,$map){
+        $data = [];
+        foreach ($paginator as $item) {
+            $item_data =[];
+            foreach ($map as $key => $mapped){
+                if (!is_integer($key))
+                    $item_data[$key]= object_get($item,$mapped);
+                else
+                    $item_data[$mapped] = object_get($item,$mapped);
+            }
+            $data[]=$item_data;
+        }
+
+        $result = new LengthAwarePaginator($data, $paginator->total(), $paginator->perPage(),
+            $paginator->currentPage(), ['path' => \Request::url(), 'query' => \Request::query()]);
+
+        return $this->ApiResponse($result);
+    }
+
 
 }

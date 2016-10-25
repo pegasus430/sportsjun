@@ -98,7 +98,7 @@ class Tournaments extends Model
 
     public function sports()
     {
-        return $this->hasMany('App\Model\Sport', 'id', 'sports_id');
+        return $this->hasOne(Sport::class, 'id', 'sports_id');
     }
 
     public function logo()
@@ -244,6 +244,12 @@ class Tournaments extends Model
         }
 
         return $this->_finalStageTeams;
+    }
+
+
+
+    public function getDateStringAttribute(){
+        return Helper::displayDate($this->start_date).' to '.Helper::displayDate($this->end_date);
     }
 
 }
