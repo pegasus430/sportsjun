@@ -62,9 +62,18 @@ class TournamentApiController extends BaseApiController
             }
         }
 
-        $result = $tournaments->paginate(20);
+        $tournaments =  $tournaments->paginate(20);
 
-        return $this->ApiResponse($result);
+        return $this->PaginatedMapResponse($tournaments,[
+            'id',
+            'image'=>'logoImage',
+            'name',
+            'address'=>'location',
+            'date'=>'dateString',
+            'status',
+            'sports_id',
+            'sport'=>'sports.sports_name'
+        ]);
     }
 
     /**
