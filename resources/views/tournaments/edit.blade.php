@@ -34,7 +34,8 @@
       	<div class="sportsjun-forms">
 				 
 			  <div class="form-body">
-                       @include ('tournaments._form', ['submitButtonText' => 'Update'])
+                       @include ('tournaments._form', ['submitButtonText' => 'Update','formType'=>'edit'])
+                       @include ('tournaments._enrolform', ['submitButtonText' => 'Update','formType'=>'edit'])
 			    </div>	
 				
                 
@@ -43,8 +44,9 @@
 </div>       
       </div>
       <div class="modal-footer">
-	  <button type="submit" onclick="update();" class="button btn-primary">Update</button>
-        <button type="button" class="button btn-secondary" data-dismiss="modal">Close</button>
+	  	<button style="display: none;" type="submit" onclick="update();" class="button btn-primary btn-createedit">Update</button>
+	  	<a class="button btn-primary btn-tournamentedit">Next</a>
+        <button type="button" class="button btn-secondary btn-close-m" data-dismiss="modal">Close</button>
       </div>
 	  {!! Form::close() !!}
 					{!! JsValidator::formRequest('App\Http\Requests\CreateTournamentRequest', '#edit-tournaments'); !!}
@@ -96,6 +98,56 @@
 								
 							});
                     </script>
-
-
-
+<script type="text/javascript">
+    $(function () {
+    	var enroltype = $('#enrollment_type').val();
+    	//alert(enroltype);
+    	if(enroltype != 'online'){
+    		$('.btn-tournamentedit').hide();
+        	$('.btn-createedit').show();
+    	}
+        $('.payment_detailsedit').hide();
+        $('.form_enroledit').hide();
+        $("#reg_opening_date").datepicker();
+        $("#reg_closing_date").datepicker();
+        $('.payment_formedit').hide();
+        $("body").on('click','.btn-tournamentedit', function(){
+        	if($("#sub-tournaments").valid()){
+        		//alert($('.form_enroledit').css('display'));
+        		if($('.form_enroledit').css('display') == 'block'){
+	        		$('.form_enroledit').hide();
+	        		$('.payment_detailsedit').show();
+	        		$('.btn-tournamentedit').hide();
+	        		$('.btn-createedit').show();
+	        	} else {
+	        		$('.form_enroledit').show();
+	        	}
+	            
+	            $('.main_tour_formedit').hide();
+        	}
+        	// $("#sub-tournaments").valid();
+        	
+        })
+        $("body").on('click','.add_account_divedit', function(){
+        	$('.payment_formedit').show();
+        })
+        $('body').on('click','.btn-close-m',function(){
+        	// alert('ads');
+        	// window.location.reload();
+        })
+        $('#enrollment_type').on('change', function (e) {
+        	//alert('asdasd');
+            var enroltype = $('#enrollment_type').val();
+            if(enroltype != 'online'){
+            	$('.btn-tournamentedit').hide();
+        		$('.btn-createedit').show();
+            } else {
+            	$('.btn-tournamentedit').show();
+        		$('.btn-createedit').hide();
+            }
+        })
+    });
+    $('#editsubtournament').on('hidden.bs.modal', function () {
+	    window.location.reload();
+	})
+</script>
