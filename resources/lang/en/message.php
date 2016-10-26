@@ -242,7 +242,7 @@ return [
 	'select_team' => 'Select Team.',
 	'team_count_exceeded' => 'Team Count Limit Exceeded.',
 	'failed_to_add_team' => 'Failed To Add Team.',
-		'fields' => [
+	'fields' => [
 		'name' => 'Tournament Name',
 		'parenttournamentname' => 'Parent Tournament Name',
 		'type' => 'Tournament Type',
@@ -277,8 +277,31 @@ return [
 		'player_type' =>'Player Type',
 		'match_type' =>'Match Type',
 		'game_type' =>'Game Type',
-		'rubber_number'		=> 'How many rubbers in a Match?'
-		],
+		'Enrollmenttype' => 'Enrollment Type',
+		'rubber_number'		=> 'How many rubbers in a Match?',
+		'enrolment_form_name' => 'Enrolment Setup',
+		'enrolment_form_subname' => 'Enrolment Details',
+		'reg_reg_heading' => 'Registration',
+		
+		'reg_opening_date' => 'Open Date',
+		'reg_opening_time' => 'Open Time',
+		'reg_closing_date' => 'Close Date',
+		'reg_closing_time' => 'Close Time',
+		'total_enrollment' => 'Total no of enrolments',
+		'min_enrollment' => 'Min enrolments per user',
+		'max_enrollment' => 'Max enrolments per user',
+		'terms_conditions' => 'Terms & conditions',
+		'is_sold_out' => 'Please stop enrolments/sold out',
+		'price_per_enrolment' => 'Price per enrolment',
+
+		'account_holder_name' => 'Account holder name',
+		'account_number' => 'Account number',
+		'bank_name' => 'Bank name',
+		'branch' => 'Branch',
+		'ifsc' => 'IFSC',
+		'file_upload' => 'Upload',
+	],
+	'bank_form_warning' => 'Note:Please upload account holder pan card',
 			'rubber'=>[
 		'edit_schedule' 	=> 'Update Schedule'
 			],

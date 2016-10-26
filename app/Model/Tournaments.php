@@ -71,6 +71,7 @@ class Tournaments extends Model
         'match_type',
         'player_type',
         'game_type',
+        'enrollment_type',
         'number_of_rubber'
     ];
 
