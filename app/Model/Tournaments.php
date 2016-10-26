@@ -98,7 +98,7 @@ class Tournaments extends Model
 
     public function sports()
     {
-        return $this->hasMany('App\Model\Sport', 'id', 'sports_id');
+        return $this->hasOne(Sport::class, 'id', 'sports_id');
     }
 
     public function logo()
@@ -201,7 +201,8 @@ class Tournaments extends Model
 
     function finalMatches()
     {
-        return $this->hasMany('App\Model\MatchSchedule')->where('tournament_round_number', '!=', null);
+        return $this->hasMany(MatchSchedule::class,'tournament_id')
+                        ->where('match_schedules.tournament_round_number','is not', null);
     }
 
     function settings()
@@ -243,6 +244,12 @@ class Tournaments extends Model
         }
 
         return $this->_finalStageTeams;
+    }
+
+
+
+    public function getDateStringAttribute(){
+        return Helper::displayDate($this->start_date).' to '.Helper::displayDate($this->end_date);
     }
 
 }

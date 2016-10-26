@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\Helper;
 use App\Model\Photo;
+use App\Model\Sport;
+use App\Model\UserStatistic;
+use App\User;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -11,66 +14,22 @@ use App\Http\Controllers\Controller;
 
 class UserApiController extends BaseApiController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
+    public function index(){
+        $users = User::select(['id','name'])->paginate(20);
+        return $this->ApiResponse($users);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function show($id){
+        $user = \Auth::user();
+        if ($id == $user->id) {
+            $user = array_only($user->toArray(),['id','name','firstname','lastname','email','dob','gender','location','address','city_id','city','state_id','state',
+                'country_id','country','zip','contact_number','about','newsletter','logoImage']);
+        } else
+            $user = User::where('id', $id)->select(['id', 'name', 'firstname', 'lastname'])->first();
+        return $this->ApiResponse($user);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id = 0)
     {
         $user = \Auth::user();
@@ -79,7 +38,7 @@ class UserApiController extends BaseApiController
         $validator = \Validator::make($data, [
             'firstname' => 'max:255',
             'lastname' => 'max:255',
-            'mobile' => 'max:20',
+            'mobile' => 'max:20|numeric',
             'email' => 'unique:users,email,' . $id . '|email|max:255',
             'gender' => 'in:male,female,other',
             'address' => 'max:100',
@@ -143,14 +102,74 @@ class UserApiController extends BaseApiController
         return $this->ApiResponse(['error' => $error], 500);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+    public function sports($id = 'self'){
+        if ($id == 'self')
+            $id = \Auth::user()->id;
+
+        $statistics = UserStatistic::find($id);
+        $sports = Sport::
+                select(
+                    [
+                        'id',
+                        'sports_name',
+                        'is_schedule_available',
+                        'is_scorecard_available',
+                        'isactive',
+                        \DB::raw('0 as following'),
+                        \DB::raw('0 as allowed')
+                    ]
+                )
+                ->where('isactive',1)
+                ->get();
+
+        if ($statistics){
+            $following_sports = explode(',',trim($statistics->following_sports,','));
+            $allowed_sports = explode(',',trim($statistics->allowed_sports,','));
+            foreach ($sports as $sport){
+                if (in_array($sport->id,$following_sports)){
+                    $sport->following = 1;
+                }
+                if (in_array($sport->id,$allowed_sports)){
+                    $sport->allowed = 1;
+                }
+            }
+        }
+        return $this->ApiResponse($sports);
     }
+
+    public function updateSports($id = 'self'){
+        if ($id == 'self')
+            $id = \Auth::user()->id;
+
+        $userStatistic = UserStatistic::find($id);
+
+        $following_sports = \Request::get('following_sports', false);
+        if ($following_sports)
+            $following_sports = Sport::whereIn('id',$following_sports)->select('id')->get()->implode('id',',');
+        else
+            $following_sports = object_get($userStatistic,'following_sports');
+
+        $allowed_sports = \Request::get('allowed_sports', false);
+        if ($allowed_sports)
+            $allowed_sports = Sport::whereIn('id',$allowed_sports)->select('id')->get()->implode('id',',');
+        else
+            $allowed_sports = object_get($userStatistic,'allowed_sports');
+
+        if (!$userStatistic) {
+            $userStatistic = UserStatistic::create(
+                [
+                    'user_id' => $id,
+                    'following_sports' => ',' . $following_sports . ',',
+                    'allowed_sports' => ',' . $allowed_sports . ',',
+                    'isactive' => 1
+                ]);
+        } else {
+            $userStatistic->following_sports = ',' . $following_sports . ',';
+            $userStatistic->allowed_sports =',' . $allowed_sports . ',';
+            $userStatistic->save();
+        }
+
+        return $this->ApiResponse('fail',404);
+    }
+
 }

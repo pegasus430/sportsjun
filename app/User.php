@@ -87,6 +87,7 @@ class User extends Model implements AuthenticatableContract,
 
     protected $dates = ['deleted_at'];
 
+    protected $appends = ['logoImage'];
     /** Extra */
     /**
      * @param $orgId
@@ -293,8 +294,12 @@ class User extends Model implements AuthenticatableContract,
             ->orderBy('id', 'desc')
             ->first();
         if ($logo && $logo->url) {
-            return Helper::getImagePath($logo->url, 'teams');
+            return Helper::getImagePath($logo->url, 'user_profile');
         }
+    }
+
+    public function getLogoImageAttribute(){
+        return self::logoImage($this->id);
     }
 
     public function getJoinedTournamentsIds()
