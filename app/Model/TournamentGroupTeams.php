@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class TournamentGroupTeams extends Model
 {
     protected $_matchSchedules;
+    protected $_teamStats;
 
     use SoftDeletes;
     protected $table = 'tournament_group_teams';
@@ -153,6 +154,60 @@ class TournamentGroupTeams extends Model
         }
         return $details;
     }
+
+
+    public function getTeamStatsAttribute(){
+        if (!$this->_teamStats) {
+            foreach ($this->matchSchedules as $schedule) {
+                switch ($schedule->match_type) {
+                    case 't20':
+                        $maxOverCount = 20;
+                        break;
+                    case 'odi':
+                        $maxOverCount = 50;
+                        break;
+                    case 'test':
+                        $maxOverCount = 90;
+                        break;
+                    default:
+                        $maxOverCount = 0;
+                }
+                $match_stats =  $schedule->matchDetailsA;
+
+                if ($match_stats) {
+                    $team_ids = array_keys($match_stats);
+                    foreach ($match_stats as $team_id => $team_stat) {
+                        if (empty($team_stats[$team_id])) {
+                            $team_stats[$team_id] = [];
+                            $team_stats[$team_id]['total_runs_scored'] = $team_stats[$team_id]['total_runs_conceded'] = 0;
+                            $team_stats[$team_id]['total_overs_faced'] = $team_stats[$team_id]['total_overs_bowled'] = 0;
+                        }
+                        $team_stats[$team_id]['total_runs_scored'] += (int)$team_stat['fst_ing_score'] + (int)$team_stat['scnd_ing_score'];
+                        $team_stats[$team_id]['total_overs_faced'] += (((int)$team_stat['fst_ing_wkt'] == 10) ? (float)$maxOverCount : (float)$team_stat['fst_ing_overs']) + (((int)$team_stat['scnd_ing_wkt'] == 10) ? (float)$maxOverCount : (float)$team_stat['scnd_ing_overs']);
+                        $other_team_id = ($team_ids[0] == $team_id) ? $team_ids[1] : $team_ids[0];
+                        $team_stats[$team_id]['total_runs_conceded'] += (int)$match_stats[$other_team_id]['fst_ing_score'] + (int)$match_stats[$other_team_id]['scnd_ing_score'];
+                        $team_stats[$team_id]['total_overs_bowled'] += (((int)$match_stats[$other_team_id]['fst_ing_wkt'] == 10) ? (float)$maxOverCount : (float)$match_stats[$other_team_id]['fst_ing_overs']) + (((int)$match_stats[$other_team_id]['scnd_ing_wkt'] == 10) ? (float)$maxOverCount : (float)$match_stats[$other_team_id]['scnd_ing_overs']);
+                    }
+                }
+            }
+            $this->_teamStats = $team_stats;
+        }
+        return $this->_teamStats;
+    }
+
+    public function getNrrAttribute(){
+        $team_stats = $this->teamStats;
+        $nrr = '';
+        if ($team_stats[$this->team_id]['total_overs_faced'] > 0
+            && $team_stats[$this->team_id]['total_overs_bowled'] > 0)
+        {
+            $nrr = ($team_stats[$this->team_id]['total_runs_scored'] / $team_stats[$this->team_id]['total_overs_faced']);
+            $nrr -= ($team_stats[$this->team_id]['total_runs_conceded'] / $team_stats[$this->team_id]['total_overs_bowled']);
+            $nrr = round($nrr, 3);
+        }
+        return $nrr;
+    }
+
 
 }
 

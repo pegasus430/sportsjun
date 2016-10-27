@@ -10,6 +10,8 @@ use Illuminate\Support\Collection;
 
 class BaseApiController extends Controller
 {
+    static $COUNTER_KEY = 999;
+
     function applyFilter($query, $fields = [])
     {
         $data = \Request::all();
@@ -68,16 +70,77 @@ class BaseApiController extends Controller
         return $this->ApiResponse($result);
     }
 
-    function CollectionMapResponse(Collection $collection,$map){
+    function mappedExtract($mapped,$item,$base){
+        $source = array_get ($mapped,'source');
+        $type = array_get($mapped,'type');
+
+        $data = object_get($item,$source);
+        if ($data){
+            switch($type) {
+                case 'list':
+                    $fields = $mapped['fields'];
+                    if (is_callable($fields))
+                        $fields = $fields($item);
+                    $result = [];
+                    $counter=1;
+                    foreach ($data as $sub){
+                        $item_data =[];
+                        foreach ($fields as $key => $mapped) {
+                            if (is_string($mapped)) {
+                                if (!is_integer($key)) {
+                                    $item_data[$key] = object_get($sub, $mapped);
+                                } else {
+                                    $item_data[$mapped] = object_get($sub, $mapped);
+                                }
+                            } else {
+                                if ($mapped === self::$COUNTER_KEY) {
+                                    $item_data[$key] = $counter;
+                                    continue;
+                                }
+                                if (is_array($mapped)){
+                                    $item_data[$key] = $this->mappedExtract($mapped,$sub,$base);
+                                }
+                            }
+                        }
+                        $result[]= $item_data;
+                        $counter++;
+                    }
+                    return $result;
+                    break;
+                case 'value':
+                    $value = $mapped['value'];
+                    if (is_callable($value)){
+                        $value= $value($item,$base);
+                    }
+                    return $value;
+                default:
+                    return [];
+            }
+        } else {
+            return [];
+        }
+
+    }
+
+
+    function CollectionMapResponse(Collection $collection, $map)
+    {
         $data = [];
         foreach ($collection as $item) {
             $item_data = [];
             foreach ($map as $key => $mapped) {
-                if (!is_integer($key)) {
-                    $item_data[$key] = object_get($item, $mapped);
+                if (is_string($mapped)) {
+                    if (!is_integer($key)) {
+                        $item_data[$key] = object_get($item, $mapped);
+                    } else {
+                        $item_data[$mapped] = object_get($item, $mapped);
+                    }
                 } else {
-                    $item_data[$mapped] = object_get($item, $mapped);
+                    if (is_array($mapped)){
+                        $item_data[$key] = $this->mappedExtract($mapped,$item,$item);
+                    }
                 }
+
             }
             $data[] = $item_data;
         }
