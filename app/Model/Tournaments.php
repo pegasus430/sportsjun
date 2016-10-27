@@ -245,5 +245,6 @@ class Tournaments extends Model
 
         return $this->_finalStageTeams;
     }
+    // 
 
 }

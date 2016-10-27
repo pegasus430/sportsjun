@@ -58,7 +58,8 @@ return [
                                 'multistage' => 'Groups + Knock-Out'],
                         'SCHEDULE_TYPE' => ['team' => 'TEAM', 'individual' => 'INDIVIDUAL'],
                         'GAME_TYPE'     => ['normal'    =>'NORMAL - ONE GAME',     'rubber'   =>   'RUBBER - MULTIPLE GAMES'],
-                        'ENROLLMENT_TYPE'     => ['online'    =>'ONLINE PAYMENT',     'offline'   =>   'OFFLINE PAYMENT','onlylisting'   =>   'JUST LISTING']
+                        'ENROLLMENT_TYPE'     => ['online'    =>'ONLINE PAYMENT',     'offline'   =>   'OFFLINE PAYMENT','onlylisting'   =>   'JUST LISTING'],
+                        'STATUS'     => ['notstarted'    =>'NOT STARTED',     'running'   =>   'IN PROGRESS','completed'   =>   'COMPLETED']
                 ]
                 ,
                 'SCHEDULE'     => 
