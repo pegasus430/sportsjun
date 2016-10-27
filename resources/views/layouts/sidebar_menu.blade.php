@@ -56,6 +56,7 @@
     <ul class="nav sidebar-nav">
     <!--<li><a href="{{ URL::to('/') }}"><i class="fa"><img src="{{ url('/images/dashboard.png') }}" height="18" width="18"/></i>Dashboard</a></li>-->
         <li><a href="{{ url('/myschedule',[isset(Auth::user()->id)?Auth::user()->id:0]) }}"><i class="fa"><img src="{{ url('/images/Schedule.png') }}" height="18" width="22"/></i>My Schedule</a></li>
+        <li><a href="{{ route('organizations') }}"><i class="fa"><img src="{{ url('/images/Organization.png') }}" height="18" width="24"/></i>My Organizations</a></li>
         <li><a href="{{ URL::to('/team/teams') }}"><i class="fa"><img src="{{ url('/images/my-team.png') }}" height="18" width="23"/></i>My Team</a></li>
         <li><a href="{{ url('/user/album/show/user') }}"><i class="fa"><img src="{{ url('/images/gallery.png') }}" height="18" width="22"/></i>My Gallery</a></li>
         <li><a href="{{ url('/tournaments') }}"><i class="fa"><img src="{{ url('/images/Tournaments.png') }}" height="18" width="19"/></i>My Tournaments</a></li>
