@@ -103,6 +103,9 @@ class MatchSchedule extends Model
     public function getMatchDetailsPAttribute(){
         return json_decode($this->match_details);
     }
+    public function getMatchDetailsAAttribute(){
+        return json_decode($this->match_details,true);
+    }
 
     public function getSideAAttribute(){
         if ($this->schedule_type == 'team') {
