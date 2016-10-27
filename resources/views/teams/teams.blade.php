@@ -1,9 +1,7 @@
-@extends(Auth::user() ? 'layouts.app' : 'home.layout')
+@extends(Auth::user() || (isset($is_widget) && $is_widget) ? 'layouts.app' : 'home.layout')
 @section('content')
-    @if (Auth::user())
-        @include ('teams.orgleftmenu')
-    @else
-
+    @if (Auth::user() || (isset($is_widget) && $is_widget))
+            @include ('teams.orgleftmenu')
     @endif
 
     <div id="content" class="col-sm-10 tournament_profile">

@@ -117,7 +117,9 @@
             </svg>
         </div>
     </div>
-    @include('layouts.menu')
+    @if (!(isset($is_widget) && $is_widget))
+        @include('layouts.menu')
+    @endif
     <div class="sports_wrapper">
         <div class="row">
             @yield('content')

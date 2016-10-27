@@ -14,10 +14,12 @@
                                     data-target="#create_group">Create New Team Group
                             </button>
                         @endcan
+                        @if (!(isset($is_widget) && $is_widget))
                         <a href="{{route('organizationTeamlist',['id'=>$id])}}"
                                 class="btn btn-primary"
                             >List All Teams
                         </a>
+                        @endif
                     </div> {{-- /.panel-right-btn--}}
                 </div> {{-- /.panel-top-container --}}
                 @if (session('status'))

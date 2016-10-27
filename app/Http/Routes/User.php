@@ -61,10 +61,6 @@ Route::group(['prefix' => 'organization/{id}'], function () {
         'uses' => 'User\OrganizationMembersController@index',
     ]);
 
-    Route::get('teamlist', [
-        'as'   => 'organization.members.teamlist',
-        'uses' => 'User\OrganizationMembersController@teamList',
-    ]);
 
 
 
@@ -73,9 +69,11 @@ Route::group(['prefix' => 'organization/{id}'], function () {
         'uses' => 'User\OrganizationSchedulesController@index',
     ]);
 
-    Route::get('tournamentlist', [
-        'as'   => 'organization.schedules.tournamentlist',
-        'uses' => 'User\OrganizationSchedulesController@tournamentList',
+
+
+    Route::get('widget',[
+        'as' =>'organization.widget.code',
+        'uses' => 'User\OrganizationController@widgetCode'
     ]);
 
 
@@ -261,7 +259,10 @@ Route::get('formgallery/{id?}/{action?}', [
     'uses' => 'User\AlbumController@Formgallery',
 ]);
 Route::get('user/album/show/{test?}/{id?}/{team_id?}/{page?}',
-    'User\AlbumController@show');
+    [
+        'as'=>'user.album.show',
+        'uses'=>'User\AlbumController@show'
+    ]);
 Route::get('albumajax/{test?}/{id?}/{team_id?}/{page?}/{lastinsertedid?}',
     'User\AlbumController@albumajax');
 Route::get('galleryajax/{album_id}/{user_id}/{is_user?}/{action?}/{team_id?}/{page?}',

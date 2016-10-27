@@ -9,7 +9,11 @@
                          style="height: 150px"/>
                     <div class="single_group_info">
                         <div class="single_group_name">
-                            <a href="{{route('organizationTeamlist',['id'=>$id, 'group'=>$group->id])}}">{{ $group->name }}</a>
+                            @if (!(isset($is_widget) && $is_widget))
+                                <a href="{{route('organizationTeamlist',['id'=>$id, 'group'=>$group->id])}}">{{ $group->name }}</a>
+                            @else
+                                <a href="#">{{ $group->name }}</a>
+                            @endif
 
                             @can('createGroup', $organization)
                                 <span class='pull-right '><a href='javascript:void(0)' class="red"
