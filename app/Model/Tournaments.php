@@ -72,7 +72,19 @@ class Tournaments extends Model
         'player_type',
         'game_type',
         'enrollment_type',
-        'number_of_rubber'
+        'number_of_rubber',
+        'enrollment_type',
+        'is_sold_out',
+        'price_per_enrolment',
+        'reg_opening_date',
+        'reg_opening_time',
+        'reg_closing_date',
+        'reg_closing_time',
+        'total_enrollment',
+        'min_enrollment',
+        'max_enrollment',
+        'terms_conditions',
+        'vendor_bank_account_id',
     ];
 
     protected $appends = ['logoImage'];

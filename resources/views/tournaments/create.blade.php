@@ -13,7 +13,8 @@
          @if( $roletype=='admin')
                     {!! Form::open(['route' => 'admin.tournaments.store','class'=>'form-horizontal','method' => 'POST','id' => 'sub-tournaments']) !!}   
 				<div class="form-body">
-                         @include ('tournaments._form', ['submitButtonText' => 'Create'])
+                         @include ('tournaments._form', ['submitButtonText' => 'Create','formType'=>''])
+				 		@include ('tournaments._enrolform', ['submitButtonText' => 'Create','formType'=>''])
 						 <input type="hidden" name="isParent" id="isParent" value="no">
 						 <input type="hidden" name="tournament_parent_id" id="tournament_parent_id" value="{{$parent_id}}">
 						 <input type="hidden" name="tournament_parent_name" id="tournament_parent_name" value="{{!empty($tournament_name)?$tournament_name:''}}">
@@ -104,6 +105,8 @@ $(function() {
         $('.form_enrol').hide();
         $("#reg_opening_date").datepicker();
         $("#reg_closing_date").datepicker();
+        $('#reg_opening_time').datetimepicker({ format: 'h:mm A' });
+        $('#reg_closing_time').datetimepicker({ format: 'h:mm A' });
         $('.payment_form').hide();
         $("body").on('click','.btn-tournament', function(){
         	if($("#sub-tournaments").valid()){
@@ -130,9 +133,11 @@ $(function() {
             if(enroltype != 'online'){
             	$('.btn-tournament').hide();
         		$('.btn-create').show();
+        		$('.enroltype').show();
             } else {
             	$('.btn-tournament').show();
         		$('.btn-create').hide();
+        		$('.enroltype').hide();
             }
         })
     });
