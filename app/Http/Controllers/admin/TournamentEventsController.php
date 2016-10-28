@@ -74,6 +74,7 @@ class TournamentEventsController extends Controller
 		$grid = \DataGrid::source($filter);
 		$grid->attributes(array("class"=>"table table-striped"));
 
+		$grid->add('id','ID');
 		$grid->add('tournament_parent_name','Tournament Name');
 		$grid->add('name','Tournament Event');
 	    $grid->add('start_date','Start Date');		
@@ -84,12 +85,12 @@ class TournamentEventsController extends Controller
 	    $grid->add('enrollment_type','Registration Type')->cell( function( $value, $row) {
 	        return config('constants.ENUM.TOURNAMENTS.ENROLLMENT_TYPE')[$value];
 	   	});
-	    $grid->add('status','Status')->cell( function( $value, $row) {
-	        return config('constants.ENUM.TOURNAMENTS.STATUS')[$value];
-	   	});
-	    $grid->add('id','Registration count');
+	    // $grid->add('status','Status')->cell( function( $value, $row) {
+	    //     return config('constants.ENUM.TOURNAMENTS.STATUS')[$value];
+	   	// });
+	    //$grid->add('id','Registration count');
 
-        // $grid->edit('editTournament', 'Operation','modify|delete');
+        $grid->edit('edittournamentevent', 'Operation','modify|delete');
         $grid->orderBy('id','desc');		
         // $grid->link('admin/tournaments/create',"New Tournament", "TR");
 		$grid->paginate(

@@ -264,31 +264,6 @@ if(!empty($matchScheduleCount) && $matchScheduleCount>0)
     	@if ($errors->has('facility_id')) <p class="help-block">{{ $errors->first('facility_id') }}</p> @endif
     	</label>
     </div>-->
-    <div class="row">	
-    <div class="col-sm-6">
-        <div class="section">
-            <label class="form_label">{{  trans('message.tournament.fields.pricemoney') }} </label>	
-            <label class="field prepend-icon">
-             {!! Form::text('prize_money', null, array('class'=>'gui-input','placeholder'=>trans('message.tournament.fields.pricemoney'))) !!}
-                @if ($errors->has('prize_money')) <p class="help-block">{{ $errors->first('prize_money') }}</p> @endif
-                <label for="pricemoney" class="field-icon"><i class="fa fa-inr"></i></label>
-            </label>
-        </div>
-    </div>
-
-
-    <div class="col-sm-6">		
-    <div class="section">
-        <label class="form_label">{{  trans('message.tournament.fields.enrollmentfee') }} </label>	
-    	<label class="field prepend-icon">
-    	 {!! Form::text('enrollment_fee', null, array('class'=>'gui-input','placeholder'=>trans('message.tournament.fields.enrollmentfee'))) !!}
-    		@if ($errors->has('enrollment_fee')) <p class="help-block">{{ $errors->first('enrollment_fee') }}</p> @endif
-                        <label for="enrollmentfee" class="field-icon"><i class="fa fa-inr"></i></label>
-
-    	  </label>
-    </div>
-    </div>
-    </div>
     <div class="row">
     <div class="col-sm-4">					
         <div class="section">
@@ -320,19 +295,42 @@ if(!empty($matchScheduleCount) && $matchScheduleCount>0)
         </label>
     </div>
     </div>
-
-    <div class="col-sm-4">
-    <div class="section">
-        <label class="form_label">{{  trans('message.tournament.fields.Enrollmenttype') }} </label> 
-        <label class="field prepend-icon">
-        {!! Form::select('enrollment_type', $enrollment_type, null,array('id'=>'enrollment_type','class'=>'form-control')) !!}
-        @if ($errors->has('enrollment_type')) <p class="help-block">{{ $errors->first('enrollment_type') }}</p> @endif
-        <label for="Pointstolosingteam" class="field-icon"><i class="fa fa-thumbs-down"></i></label>
-        </label>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="section">
+            <label class="form_label">{{  trans('message.tournament.fields.pricemoney') }} </label> 
+            <label class="field prepend-icon">
+             {!! Form::text('prize_money', null, array('class'=>'gui-input','placeholder'=>trans('message.tournament.fields.pricemoney'))) !!}
+                @if ($errors->has('prize_money')) <p class="help-block">{{ $errors->first('prize_money') }}</p> @endif
+                <label for="pricemoney" class="field-icon"><i class="fa fa-inr"></i></label>
+            </label>
+        </div>
     </div>
+    <div class="col-sm-6">
+        <div class="section">
+            <label class="form_label">{{  trans('message.tournament.fields.Enrollmenttype') }} </label> 
+            <label class="field prepend-icon">
+            {!! Form::select('enrollment_type', $enrollment_type, null,array('id'=>'enrollment_type','class'=>'form-control')) !!}
+            @if ($errors->has('enrollment_type')) <p class="help-block">{{ $errors->first('enrollment_type') }}</p> @endif
+            <label for="Pointstolosingteam" class="field-icon"><i class="fa fa-thumbs-down"></i></label>
+            </label>
+        </div>
     </div>
+</div>	
+<div class="row enroltype{{$formType}}">   
+    <div class="col-sm-6">      
+        <div class="section">
+            <label class="form_label">{{  trans('message.tournament.fields.enrollmentfee') }} </label>  
+            <label class="field prepend-icon">
+             {!! Form::text('enrollment_fee', null, array('class'=>'gui-input','placeholder'=>trans('message.tournament.fields.enrollmentfee'))) !!}
+                @if ($errors->has('enrollment_fee')) <p class="help-block">{{ $errors->first('enrollment_fee') }}</p> @endif
+                            <label for="enrollmentfee" class="field-icon"><i class="fa fa-inr"></i></label>
 
-    	</div>		
+              </label>
+        </div>
+    </div>
+</div>
     <!--<div class="section col-sm-6">
         <label class="form_label">{{  trans('message.tournament.fields.status') }} <span  class='required'>*</span> </label>	
     	<label class="field prepend-icon">

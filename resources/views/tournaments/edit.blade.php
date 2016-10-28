@@ -16,7 +16,8 @@
 			         <div class="modal-body">
       	<div class="sportsjun-forms">                 
 			     <div class="form-body">
-                        @include ('tournaments._form', ['submitButtonText' => 'Update'])
+                        @include ('tournaments._form', ['submitButtonText' => 'Update','formType'=>'edit'])
+                       @include ('tournaments._enrolform', ['submitButtonText' => 'Update','formType'=>'edit'])
 						</div>	
 				 <div class="form-footer">
                   <button type="submit" class="button btn-primary">Update</button>
@@ -100,19 +101,25 @@
                     </script>
 <script type="text/javascript">
     $(function () {
+    	$('.enroltypeedit').hide();
+    	$('.sold_check').show();
     	var enroltype = $('#enrollment_type').val();
     	//alert(enroltype);
     	if(enroltype != 'online'){
     		$('.btn-tournamentedit').hide();
         	$('.btn-createedit').show();
+        	$('.enroltypeedit').show();
     	}
         $('.payment_detailsedit').hide();
         $('.form_enroledit').hide();
         $("#reg_opening_date").datepicker();
         $("#reg_closing_date").datepicker();
+        $('#reg_opening_time').datetimepicker({ format: 'h:mm A' });
+        $('#reg_closing_time').datetimepicker({ format: 'h:mm A' });
+
         $('.payment_formedit').hide();
         $("body").on('click','.btn-tournamentedit', function(){
-        	if($("#sub-tournaments").valid()){
+        	if($("#edit-tournaments").valid()){
         		//alert($('.form_enroledit').css('display'));
         		if($('.form_enroledit').css('display') == 'block'){
 	        		$('.form_enroledit').hide();
@@ -141,9 +148,11 @@
             if(enroltype != 'online'){
             	$('.btn-tournamentedit').hide();
         		$('.btn-createedit').show();
+        		$('.enroltypeedit').show();
             } else {
             	$('.btn-tournamentedit').show();
         		$('.btn-createedit').hide();
+        		$('.enroltypeedit').hide();
             }
         })
     });

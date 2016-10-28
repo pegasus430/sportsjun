@@ -167,6 +167,6 @@ Route::group(array('middleware' => 'role'), function() {
     Route::resource('admin/marketplace', 'admin\MarketplaceController');
     Route::resource('admin/team', 'admin\TeamController');
     Route::resource('admin/tournamentevents', 'admin\TournamentEventsController');
-    Route::resource('admin/bankaccounts', 'admin\BankAccountsController');
+    Route::controller('admin/bankaccounts', 'admin\BankAccountsController');
     Route::resource('admin', 'admin\UserController');
 });

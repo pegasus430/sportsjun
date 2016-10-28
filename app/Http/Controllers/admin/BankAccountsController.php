@@ -31,7 +31,7 @@ class BankAccountsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function getIndex()
     {
 
 		$globalurl=url(); 
@@ -50,8 +50,9 @@ class BankAccountsController extends Controller
 		$grid->attributes(array("class"=>"table table-striped"));
 
 		$grid->add('user.name','Name');
-		$grid->add('account_holder_name','Account Holder Name');
-	    $grid->add('user.email','User Email');
+        $grid->add('<a href="bankaccounts/details/{{ $id }}">{{ $account_holder_name }}</a>','Account Holder Name');
+        $grid->add('bank_name','Bank Name');
+        $grid->add('<a href="bankaccounts/details/{{ $id }}">{{ $user->email }}</a>','User Email');
 	    $grid->add('varified','Status')->cell( function( $value, $row) {
 	        return ['0'=>'Pending','1'=>'Approved'][$value];
 	   	});
@@ -63,5 +64,11 @@ class BankAccountsController extends Controller
         );
 		//Helper::printQueries();
         return  view('admin.bankaccounts.index', compact('filter', 'grid'));
+    }
+    public function getDetails($id){
+        $bankDetails = VendorBankAccounts::with('user')->where('id',$id)->first();
+        if($bankDetails){
+            return  view('admin.bankaccounts.details', compact('bankDetails'));
+        }
     }
 }

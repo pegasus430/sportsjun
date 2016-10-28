@@ -24,7 +24,7 @@
             <div class="section">
                 <label class="form_label">{{  trans('message.tournament.fields.reg_opening_time') }}</label>         
                 <label class='field' >
-                    <div class="input-group time" id="reg_opening_time">
+                    <div class="input-group date" id="reg_opening_time">
                         {!! Form::text('reg_opening_time', null, array('class'=>'gui-input','placeholder'=>trans('message.tournament.fields.reg_opening_time'))) !!}
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-time"></span>
@@ -54,7 +54,7 @@
             <div class="section">
                 <label class="form_label">{{  trans('message.tournament.fields.reg_closing_time') }}</label>         
                 <label class='field' >
-                    <div class="input-group" id='reg_closing_time'>
+                    <div class="input-group date" id='reg_closing_time'>
                         {!! Form::text('reg_closing_time', null, array('class'=>'gui-input','placeholder'=>trans('message.tournament.fields.reg_closing_time'))) !!}
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-time"></span>
@@ -113,7 +113,7 @@
                 </label>
             </div>
         </div>
-        <div class="col-sm-6">                       
+        <div class="col-sm-6 sold_check" style="display: none;">                       
             <div class="section">
                 <label class="form_label"><br/></label> 
                 <label class = "option block">

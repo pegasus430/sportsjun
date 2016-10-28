@@ -438,7 +438,9 @@ class TournamentsController extends Controller
 		$request['reg_opening_time'] = !empty($request['reg_opening_time'])?$request['reg_opening_time']:'00:00:00';
 		$request['reg_closing_time'] = !empty($request['reg_closing_time'])?$request['reg_closing_time']:'00:00:00';
 		/** @var Tournaments $Tournaments */
-
+		if( $request['enrollment_type'] == 'online' ){
+			$request['enrollment_fee'] = $request['price_per_enrolment'];
+		}
 		$Tournaments = Tournaments::create($request->all());
 		$last_inserted_sport_id = 0;
 		$id= $Tournaments->id ;
@@ -637,7 +639,10 @@ class TournamentsController extends Controller
 		$request['reg_closing_date']=Helper::storeDate($request['reg_closing_date']);
 		$request['reg_opening_time'] = !empty($request['reg_opening_time'])?$request['reg_opening_time']:'00:00:00';
 		$request['reg_closing_time'] = !empty($request['reg_closing_time'])?$request['reg_closing_time']:'00:00:00';
-
+		if( $request['enrollment_type'] == 'online' ){
+			$request['enrollment_fee'] = $request['price_per_enrolment'];
+		}
+		/////
 		Tournaments::whereId($id)->update($request->except(['_method','_token','facility_response','facility_response_name','files','filelist_photos','filelist_gallery','jfiler-items-exclude-files-0','user_id','account_holder_name','account_number','bank_name','branch','ifsc','filelist_file_upload']));
 		if(!empty($request['filelist_photos'])) {
 			Photo::where(['imageable_id'=>$id,'imageable_type' => config('constants.PHOTO.TOURNAMENT_LOGO')])->update(['is_album_cover' => 0]);

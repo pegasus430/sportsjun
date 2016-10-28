@@ -68,6 +68,7 @@ class CreateTournamentRequest extends Request
 				   'points_win' => 'numeric|min:0',
 				   'points_loose'=>'numeric|min:0',
 
+				   'enrollment_type' => 'required',
 				   'price_per_enrolment' => 'required_if:enrollment_type,online',
 				   // 'account_holder_name' => 'required_if:enrollment_type,online|required_without:vendor_bank_account_id',
 				   // 'account_number' => 'required_if:enrollment_type,online|required_without:vendor_bank_account_id',
