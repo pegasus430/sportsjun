@@ -46,6 +46,7 @@ use App\Model\TtPlayerMatchwiseStats;
 use App\Model\TtPlayerMatchScore;
 use App\Model\TtPlayerRubberScore;
 use App\Model\TtStatistic;
+use App\Model\TennisSet;
 
 
 class ScoreCard {
@@ -196,6 +197,14 @@ class ScoreCard {
 
 	public static function send_email_for_match(){
 
+	}
+
+	public static function tennis_active_set($match_id, $rubber_id, $set_number){
+			  $set_scoring = TennisSet::whereMatchId($match_id);
+               if($rubber_id) $set_scoring->whereRubberId($rubber_id);
+           $set_scoring  = $set_scoring->whereSet($set_number)->first();
+
+           return $set_scoring;
 	}
 
 

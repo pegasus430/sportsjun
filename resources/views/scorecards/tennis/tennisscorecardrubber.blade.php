@@ -164,8 +164,8 @@
                 <div class='col-sm-12'><br>
                 <input type='hidden' value="{{$match_data[0]['id']}}" name='match_id'>
                  <input type='hidden' value="{{$match_data[0]['tournament_id']}}" name='tournament_id'>
-                <input type='hidden' value="{{$team_a_name}}" name='team_a_name'>
-                <input type='hidden' value="{{$team_b_name}}" name='team_b_name'>
+                <input type='hidden' value="{{$team_a_name}}" name='team_a_name' id='team_a_name'>
+                <input type='hidden' value="{{$team_b_name}}" name='team_b_name' id='team_b_name'>
                 <center><input type='button' name='submit_preferences' value='SAVE' class="btn btn-primary" onclick="return savePreferences(this)"></center><br>
                 </div>    
                 </div>        
@@ -180,6 +180,16 @@
 @else
 
 {!! Form::open(array('url' => '', 'method' => 'POST','id'=>'tennis', 'onsubmit'=>'return manualScoring(this)')) !!}
+
+<?php 
+    $match_details = json_decode($rubber->match_details);
+    $current_set   = $match_details->current_set;
+
+    $set_score     = ScoreCard::tennis_active_set($rubber->match_id, $rubber->id, $current_set);
+    $game          = $set_score->active_game;
+
+
+?>
 
   <div class="row ">
     <div class="col-sm-12">
@@ -213,7 +223,7 @@
             </td>
                <td class="tb-hide tb tb-{{$set_index}}">
                    <span class='hidden-xs pull-left remove_button_left left_button_remove_set_tb_{{$set_index}}'></span>
-                 <input  readonly class="tgui-input validation allownumericwithdecimal runs_new " value="{{$rubber_a_array['set'.$set_index.'_tie_breaker']}}" name='a_set_tie{{$set_index}}'>
+                 <input  readonly class="tgui-input validation allownumericwithdecimal runs_new a_set{{$set_index}}_tie_breaker" value="{{$rubber_a_array['set'.$set_index.'_tie_breaker']}}" name='a_set_tie{{$set_index}}'>
                   <span class='hidden-xs pull-right add_button_left left_button_add_set_tb_{{$set_index}}'></span>
 
             </td>
@@ -236,7 +246,7 @@
               </td>
                  <td class="tb-hide tb tb-{{$set_index}}">
 
-                 <input  readonly class="  gui-input validation allownumericwithdecimal runs_new " value="{{$rubber_b_array['set'.$set_index.'_tie_breaker']}}" name='b_set_tie{{$set_index}}'>
+                 <input  readonly class="  gui-input validation allownumericwithdecimal runs_new b_set{{$set_index}}_tie_breaker" value="{{$rubber_b_array['set'.$set_index.'_tie_breaker']}}" name='b_set_tie{{$set_index}}'>
             </td>
             @endfor
              <td><input type="" class="gui-input validation allownumericwithdecimal runs_new b_aces" name="b_aces" value="{{$rubber_b_array['aces']}}" readonly=""> </td>
@@ -251,14 +261,133 @@
     </div>
   </div>
 
-    <CENTER> <button type="button" class="btn btn-event" id='tie_breaker'>Tie Breaker</button></CENTER>
+  @if($game)
+      <div class="col-sm-12" id='real_time_scoring_a'>
+          <div class="row">
+            <div class="col-xs-4">
+             <center> <h3 id='team_a_set_score'>  {{$rubber_a_array['set'.$current_set]}} </h3>   </center>
+            </div>
+            <div class="col-xs-4">
+               <center>   <h3> SET <span id='set_number_display'> {{$current_set}}</span> </h3> </center>
+            </div>
+            <div class="col-xs-4">
+              <center><h3 id='team_b_set_score'>  {{$rubber_b_array['set'.$current_set]}} </h3>   </center>
+            </div>
+      </div>
+      <div class="col-sm-12" style="border:inset 1px green;">
+
+           <div class="col-sm-8" style="background:#fdfffd">
+            <div class="row">
+              <center>  Game <span id='game_number_display'>{{$game->game_number}} </span> </center>
+
+              </div>
+                <div class="row">
+                <div class="col-sm-6 pull-left" >
+                    <center>
+                      @if(!is_null($rubber_a_array['team_id']))<b>{{$rubber_a_array['team_name']}}</b><br>@endif 
+                       <a style="font-size:30px;text-align:center;" id='team_a_game_score'> {{$game->team_a_score}} </a> 
+
+                       <button style="position:absolute; margin-left:25%;" class="btn" id='end_set'> End Set </button>
+                       </center>
+                    <center>
+                    <button class='btn btn-danger btn-circle' type='team_a' value="{{$rubber_a_array['team_id']}}" score_id="{{$rubber_a_array['id']}}">15</button>
+                    <button class='btn btn-danger btn-circle' type='team_a' value="{{$rubber_a_array['team_id']}}" score_id="{{$rubber_a_array['id']}}">30</button>
+                    <button class='btn btn-danger btn-circle' type='team_a' value="{{$rubber_a_array['team_id']}}" score_id="{{$rubber_a_array['id']}}">40</button>
+                    <button class='btn btn-danger btn-circle' type='team_a' value="{{$rubber_a_array['team_id']}}" score_id="{{$rubber_a_array['id']}}">Ace</button>
+                    <button class='btn btn-danger btn-circle' type='team_a' value="{{$rubber_a_array['team_id']}}" score_id="{{$rubber_a_array['id']}}">DB</button>
+                    <button class='btn btn-danger btn-circle' type='team_a' value="{{$rubber_a_array['team_id']}}" score_id="{{$rubber_a_array['id']}}">Win</button>
+                    </center>
+                </div>
+                <div class="col-sm-6 pull-left">
+                    <center>
+                          @if(!is_null($rubber_b_array['team_id']))<b>{{$rubber_b_array['team_name']}}</b><br>@endif  <a style="font-size:30px; text-align:center" id='team_b_game_score'> {{$game->team_b_score}} </a> 
+                    </center>
+                    <center>
+                    <button class='btn btn-danger btn-circle' type='team_b' value="{{$rubber_b_array['team_id']}}" score_id="{{$rubber_b_array['id']}}">15</button>
+                    <button class='btn btn-danger btn-circle' type='team_b'  value="{{$rubber_b_array['team_id']}}" score_id="{{$rubber_b_array['id']}}">30</button>
+                    <button class='btn btn-danger btn-circle' type='team_b' value="{{$rubber_b_array['team_id']}}" score_id="{{$rubber_b_array['id']}}">40</button>
+                    <button class='btn btn-danger btn-circle' type='team_b' value="{{$rubber_b_array['team_id']}}" score_id="{{$rubber_b_array['id']}}">Ace</button>
+                    <button class='btn btn-danger btn-circle' type='team_b' value="{{$rubber_b_array['team_id']}}" score_id="{{$rubber_b_array['id']}}">DB</button>
+                    <button class='btn btn-danger btn-circle' type='team_b' value="{{$rubber_b_array['team_id']}}" score_id="{{$rubber_b_array['id']}}">Win</button>
+                    </center>
+                </div>
+
+                 <a title="Start Tie Breaker" href="javascript:void(0)" style="color:green; position:absolute; margin-left:-50px; margin-top:-20px; font-size:30px" class="show-tie-breaker show_tb" onclick='show_tb()' >
+                           <i class="fa fa-caret-right"></i>
+                  </a>
+              </div>
+          </div>
+
+          <div class="col-sm-4 hide-tie-breaker hide_tb" style="" id='show_tie_breaker'>
+
+            <div class="col-sm-12">
+              <div class=''> <center>Tie Breaker  </center></div>     
+              <br>
+              <br>
+              </div>
+            <div class="row">
+                <div  class="col-sm-6 col-xs-6" style="">
+                    @if(!is_null($rubber_a_array['team_id']))<b>{{$rubber_a_array['team_name']}}</b><br>@endif 
+                      <div class="col-xs-4">
+                          <a href="javascript:void(0)" class="tb_scoring"  style="color:red; font-size:30px" type="team_a" action='remove' value="{{$rubber_a_array['team_id']}}">
+                              <i class="fa fa-caret-left"> </i>
+                          </a>
+                      </div>
+                      <div class="col-xs-4" style="font-size:30px" id='team_a_tb'>
+                            {{$rubber_a_array['set'.$current_set.'_tie_breaker']}}
+                      </div>
+                      <div class="col-xs-4">
+                           <a href="javascript:void(0)" class="tb_scoring"  style="color:green; font-size:30px" type="team_a" action='add' value="{{$rubber_a_array['team_id']}}">
+                              <i class="fa fa-caret-right"> </i>
+                          </a>
+                      </div>
+
+                </div>
+                <div class="col-sm-6 col-xs-6">
+                    @if(!is_null($rubber_b_array['team_id']))<b>{{$rubber_b_array['team_name']}}</b><br>@endif 
+
+                    <div class="col-sm-4 col-xs-4">
+                          <a href="javascript:void(0)" class="tb_scoring"  style="color:red; font-size:30px" type="team_b" action='remove' value="{{$rubber_b_array['team_id']}}">
+                              <i class="fa fa-caret-left"> </i>
+                          </a>
+                      </div>
+                      <div class="col-sm-4 col-xs-4" style="font-size:30px" id='team_b_tb'>
+                         {{$rubber_b_array['set'.$current_set.'_tie_breaker']}}
+                      </div>
+                      <div class="col-sm-4 col-xs-4">
+                           <a href="javascript:void(0)" class="tb_scoring" style="color:green; font-size:30px" type="team_b" action='add' value="{{$rubber_b_array['team_id']}}">
+                              <i class="fa fa-caret-right"> </i>
+                          </a>
+                      </div>
+                </div>
+
+             
+                      <a title="End Tie Breaker" href="javascript:void(0)" style="color:red; font-size:30px" style="position:absolute; margin-left:-50px; margin-top:20px;" class="show-tie-breaker" >
+                              <i class="fa fa-caret-left" onclick='hide_tb()'> </i>
+                      </a>
+        
+              </div>
+
+
+          </div>
+      </div>
+      <div class="col-sm-12"> &nbsp; 
+          <input type='hidden' id='set_number' value="{{$current_set}}">
+          <input type='hidden' id='game_number' value='{{$game->game_number}}'>
+          <input type='hidden' id='game_id'>
+      </div>
 </div>
+
+@endif
 
 
 <input type='hidden' value='{{$set}}' name="number_of_sets">
 <input type='hidden' value="{{$match_data[0]['id']}}" name='match_id'>
-<input type='hidden' value="{{$rubber_a_array['id']}}" name='score_a_id' class='arm_a_val'>
+<input type='hidden' value="{{$rubber->id}}" name='rubber_id' id='rubber_id'>
+<input type='hidden' value="{{$rubber_a_array['id']}}" name='score_a_id' class='arm_a_val' id=''>
 <input type='hidden' value="{{$rubber_b_array['id']}}" name='score_b_id' class='arm_b_val'>
+                <input type='hidden' value="{{$team_a_name}}" name='team_a_name' id='team_a_name'>
+                <input type='hidden' value="{{$team_b_name}}" name='team_b_name' id='team_b_name'>
 
 <div class="row" id='saveButton'>
     <div class='col-sm-12'>
@@ -272,99 +401,5 @@
 @endif
 
 
-<!-- If normal Match -->
- 
- @if( isset($rubber_a_array['team_name']))
-@if($match_data[0]['match_type']!='singles' )
-  
-
-<div class="row visible-xs-block" id='real_time_scoring'>
-  <div class="col-sm-6 col-xs-12 table-striped ">
-        <h3 class='team_bat team_title_head'>{{$rubber_a_array['team_name']}}</h3>
-       <div class='col-xs-9'>       
-            <div class='col-xs-12'>&nbsp;</div>
-            <div class='col-xs-12'>{{$rubber_a_array['player_name_a']}}</div>
-            <div class='col-xs-12'>&nbsp;</div>
-            <div class='col-xs-12'>{{$rubber_a_array['player_name_b']}}</div>
-            <div class='col-xs-12'>&nbsp;</div>
-        </div>
-
-       <div class='col-xs-3 visible-xs-block'>
-           <br>
-          <button class='btn btn-success btn-circle btn-sm  btn-circle btn-sm pull-right' id='score_team_b' team_id="{{$preferences->left_team_id}}" table_score_id="{{$rubber_a_array['id']}}" onclick='return addScore(this)'> + 
-          </button>
-
-              <br><br>
-          <button team_id="{{$preferences->left_team_id}}" table_score_id="{{$rubber_a_array['id']}}" onclick='return removeScore(this)'class='btn btn-danger btn-circle btn-sm pull-right'> <i class='fa fa-minus'></i> </button>
-            <br>&nbsp;
-       </div>
-  </div>
-
-  <div class='col-sm-6 col-xs-12 table-striped'>
-     <h3 class='team_fall team_title_head'>{{$rubber_a_array['team_name']}}</h3>
-      <div class='col-xs-9'>       
-            <div class='col-xs-12'>&nbsp;</div>
-            <div class='col-xs-12'><b>{{$rubber_b_array['player_name_a']}}</b></div>
-            <div class='col-xs-12'>&nbsp;</div>
-            <div class='col-xs-12'><b>{{$rubber_b_array['player_name_b']}}</b></div>
-            <div class='col-xs-12'>&nbsp;</div>
-
-
-      </div>
-      <div class='col-xs-3 visible-xs-block '>
-              <br>
-            <button class='btn btn-success btn-circle btn-sm  btn-circle btn-sm pull-right' id='score_team_b' team_id="{{$preferences->right_team_id}}" table_score_id="{{$rubber_b_array['id']}}" onclick='return addScore(this)'> + </button>
-
-              <br><br>
-            <button team_id="{{$preferences->right_team_id}}" table_score_id="{{$rubber_b_array['id']}}" onclick='return removeScore(this)' class='btn btn-danger btn-circle btn-sm pull-right'><i class='fa fa-minus'></i></button>
-        <br>&nbsp;
-      </div>
-  </div>
-</div>
-
-
- @else
-<div class="row visible-xs-block" id='real_time_scoring'>
-  <div class="col-sm-6 col-xs-12">
-    <h3 class='team_bat team_title_head'>&nbsp;</h3>
-      
-      <div class='col-xs-9'>       
-            <div class='col-xs-12'>&nbsp;</div>
-            <div class='col-xs-12'>{{$rubber_a_array['player_name_a']}}</div>
-            <div class='col-xs-12'>&nbsp;</div>
-
-      </div>
-      <div class='col-xs-3 visible-xs-block'>         
-               <br>
-          <button class='btn btn-success btn-circle btn-sm  btn-circle btn-sm pull-right' id='score_team_b' team_id="{{$preferences->left_team_id}}" table_score_id="{{$rubber_a_array['id']}}" onclick='return addScore(this)'> + 
-          </button>
-
-              <br><br>
-          <button  team_id="{{$preferences->left_team_id}}" table_score_id="{{$rubber_a_array['id']}}" onclick='return removeScore(this)'  class='btn btn-danger btn-circle btn-sm pull-right'> <i class='fa fa-minus'></i> </button>
-            <br>&nbsp;
-        </div>
-      </div>
-
-  <div class='col-xs-12 col-sm-6'>
-    <h3 class='team_fall team_title_head'>&nbsp;</h3>
-       <div class='col-xs-9'>
-                <div class='col-xs-12'>&nbsp;</div>
-                <div class='col-xs-12'>{{$rubber_b_array['player_name_a']}}</div>                    
-        
-      </div>
-      <div class='col-xs-3 visible-xs-block' >
-        <br>  
-        <!-- Add score button  -->
-      <button class='btn btn-success btn-circle btn-sm  btn-circle btn-sm pull-right' id='score_team_b' team_id="{{$preferences->right_team_id}}" table_score_id="{{$rubber_b_array['id']}}" onclick='return addScore(this)'> + </button>
-        <!-- Remove score button -->
-        <br><br>
-      <button team_id="{{$preferences->right_team_id}}" table_score_id="{{$rubber_b_array['id']}}" onclick='return removeScore(this)' class='btn btn-danger btn-circle btn-sm pull-right'><i class='fa fa-minus'></i></button>
-        <br>&nbsp;
-    </div>
-</div>
-
- @endif
-
- @endif
  <!-- End of Normal Match -->
 
