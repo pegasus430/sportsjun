@@ -16,11 +16,13 @@
                 <td>{{ $staff->roleForOrganization($id)->name }}</td>
                 <td>{{ $staff->pivot->created_at->format('M d, Y') }}</td>
                 <td>
+                    @if (!(isset($is_widget) && $is_widget))
                     <a href="javascript:void(0);"
                        class="btn btn-danger btn-circle btn-sm"
                     >
                         <i class="fa fa-remove"></i>
                     </a>
+                    @endif
                 </td>
             </tr>
         @endforeach

@@ -100,6 +100,29 @@ class MatchSchedule extends Model
      * Attributes
      */
 
+    public function getMatchDetailsPAttribute(){
+        return json_decode($this->match_details);
+    }
+    public function getMatchDetailsAAttribute(){
+        return json_decode($this->match_details,true);
+    }
+
+    public function getSideAAttribute(){
+        if ($this->schedule_type == 'team') {
+            return $this->scheduleteamone ? $this->scheduleteamone : $this->scheduleteamone()->get();
+        } else {
+            return $this->scheduleuserone ? $this->scheduleuserone : $this->scheduleuserone()->get();
+        }
+    }
+
+    public function getSideBAttribute(){
+        if ($this->schedule_type == 'team') {
+            return $this->scheduleteamtwo ? $this->scheduleteamtwo : $this->scheduleteamtwo()->get();
+        } else {
+            return $this->scheduleusertwo ? $this->scheduleusertwo : $this->scheduleusertwo()->get();
+        }
+    }
+
     public function getSideALogoAttribute()
     {
         if ($this->schedule_type == 'team') {
@@ -117,6 +140,42 @@ class MatchSchedule extends Model
             return User::logoImage($this->b_id);
         }
     }
+
+    function extractScoreString($id){
+        switch($this->sport_id){
+            case Sport::$BADMINTON:
+                $scores = $this->matchDetailsP->scores;
+                return $scores->{$id.'_score'}.' sets';
+            case Sport::$VOLEYBALL:
+            case Sport::$SQUASH:
+            case Sport::$THROW_BALL:
+                $scores = $this->matchDetailsP->scores;
+                return $scores->{$id.'_score'}.' sets';
+            case Sport::$SOCCER:
+            case Sport::$HOKKEY:
+                return $this->matchDetailsP->{$id}->goals;
+            case Sport::$BASKETBALL:
+            case Sport::$KABADDI:
+            case Sport::$ULTIMATE_FRISBEE:
+            case Sport::$WATER_POLO :
+                return $this->matchDetailsP->{$id}->total_points;
+            case Sport::$CRICKET:
+                return Team::find($id)->name . " (" . $this->matchDetailsP->{$id}->fst_ing_score . "/" . $this->matchDetailsP->{$id}->fst_ing_wkt . (!empty($this->matchDetailsP->{$id}->scnd_ing_overs) ? ", " . $this->matchDetailsP->{$id}->scnd_ing_score . "/" . $this->matchDetailsP->{$id}->scnd_ing_wkt : "") . ")";
+            default:
+                return '';
+        }
+
+    }
+
+    public function getSideAScoreAttribute(){
+        return $this->extractScoreString($this->a_id);
+    }
+
+    public function getSideBScoreAttribute(){
+        return $this->extractScoreString($this->b_id);
+    }
+
+
 
 
     public function getScoresAttribute()

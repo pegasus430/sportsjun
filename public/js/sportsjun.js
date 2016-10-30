@@ -469,6 +469,19 @@ function appendTabElement(a, b, c, d) {
     displaySportQuestions(a, b, c, d);
 }
 
+function selectSport(el){
+    var sport_id = $(el).data('id');
+    var sport = $('#sports_'+sport_id);
+    sport.prop("checked", !sport.prop("checked"));
+    $(el).toggleClass('active');
+    var selectedCount = $('.sports-checkbox:checked').length;
+    if (selectedCount)
+        $('#select_sports').removeClass('disabled').addClass('btn-primary').prop('disabled', false);
+    else
+        $('#select_sports').removeClass('btn-primary').addClass('disabled').prop('disabled', true);
+
+}
+
 function displaySportQuestions(a, b, c, d) {
     if (!b) return false;
     $.ajax({

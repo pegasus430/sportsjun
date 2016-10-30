@@ -7,18 +7,31 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="{{ URL::to('admin/dashboard') }}">SportsJun</a>
-				<a class="navbar-brand" href="{{ URL::to('admin/listusers') }}">Users</a>
-				<a class="navbar-brand" href="{{ URL::to('admin/team') }}">Teams</a>
-				<!--<a class="navbar-brand" href="{{ URL::to('admin/tournaments') }}">Tournaments</a>-->
-				<a class="navbar-brand" href="{{ URL::to('admin/facility') }}">Facilities</a>
-				<a class="navbar-brand" href="{{ URL::to('admin/viewcategories') }}">Marketplace</a>				
-                <a class="navbar-brand" href="{{ URL::to('admin/viewsports') }}">Sports</a>
-				  <a class="navbar-brand" href="{{ URL::to('admin/photos') }}">Photos</a>
-				  <a class="navbar-brand" href="{{ URL::to('admin/scheduledMatches') }}">Score Cards</a>
+                
             </div>
             <!-- /.navbar-header -->
-
+            <ul class="nav navbar-top-links navbar-left">   
+                <li><a class="navbar-brand" href="{{ URL::to('admin/listusers') }}">Users</a></li>
+                <li><a class="navbar-brand" href="{{ URL::to('admin/team') }}">Teams</a></li>
+                <li><a class="navbar-brand" href="{{ URL::to('admin/facility') }}">Facilities</a></li>
+                <li><a class="navbar-brand" href="{{ URL::to('admin/viewcategories') }}">Marketplace</a></li>
+                <li><a class="navbar-brand" href="{{ URL::to('admin/viewsports') }}">Sports</a></li>
+                <li><a class="navbar-brand" href="{{ URL::to('admin/photos') }}">Photos</a></li>
+                <li><a class="navbar-brand" href="{{ URL::to('admin/scheduledMatches') }}">Score Cards</a></li>
+                <li><a class="navbar-brand" href="{{ URL::to('admin/tournamentevents') }}">Tournaments</a></li>
+                <li><a class="navbar-brand" href="{{ URL::to('admin/bankaccounts') }}">Approvals</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle navbar-brand" data-toggle="dropdown" href="#">
+                        Setup <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-messages">
+                        <li><a class="navbar-brand" href="#">Membership & Commission setup</a></li>
+                        <li><a class="navbar-brand" href="#">Payment Gateway activation</a></li>
+                    </ul>
+                </li>
+            </ul>
             <ul class="nav navbar-top-links navbar-right">
+
                 <!--<li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-envelope fa-fw"></i>  <i class="fa fa-caret-down"></i>

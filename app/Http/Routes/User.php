@@ -61,10 +61,6 @@ Route::group(['prefix' => 'organization/{id}'], function () {
         'uses' => 'User\OrganizationMembersController@index',
     ]);
 
-    Route::get('teamlist', [
-        'as'   => 'organization.members.teamlist',
-        'uses' => 'User\OrganizationMembersController@teamList',
-    ]);
 
 
 
@@ -73,9 +69,11 @@ Route::group(['prefix' => 'organization/{id}'], function () {
         'uses' => 'User\OrganizationSchedulesController@index',
     ]);
 
-    Route::get('tournamentlist', [
-        'as'   => 'organization.schedules.tournamentlist',
-        'uses' => 'User\OrganizationSchedulesController@tournamentList',
+
+
+    Route::get('widget',[
+        'as' =>'organization.widget.code',
+        'uses' => 'User\OrganizationController@widgetCode'
     ]);
 
 
@@ -261,7 +259,10 @@ Route::get('formgallery/{id?}/{action?}', [
     'uses' => 'User\AlbumController@Formgallery',
 ]);
 Route::get('user/album/show/{test?}/{id?}/{team_id?}/{page?}',
-    'User\AlbumController@show');
+    [
+        'as'=>'user.album.show',
+        'uses'=>'User\AlbumController@show'
+    ]);
 Route::get('albumajax/{test?}/{id?}/{team_id?}/{page?}/{lastinsertedid?}',
     'User\AlbumController@albumajax');
 Route::get('galleryajax/{album_id}/{user_id}/{is_user?}/{action?}/{team_id?}/{page?}',
@@ -678,11 +679,7 @@ Route::get('sport/playerrequests/{id}', [
     'uses' => 'User\SportController@getplayerrequests',
 ]);
 
-//function to get requests for a player
-Route::get('sport/getviewmoreplayerrequests', [
-    'as'   => 'sport/getviewmoreplayerrequests',
-    'uses' => 'User\SportController@getviewmoreplayerrequests',
-]);
+
 
 Route::get('getquestions', [
     'as'   => 'getquestions',
@@ -717,6 +714,7 @@ Route::post('getplayers', [
     'uses' => 'User\InvitePlayerController@invitePlayers',
 ]);
 Route::post('/addemailtoplayer', 'User\InvitePlayerController@addEmailToPlayers');
+Route::post('user/set-sports', ['as'=>'select-sports','uses'=>'User\UserController@setSports']);
 
 Route::get('user/info/{id?}', 'User\UserController@info');
 Route::get('user/team/{id?}', 'User\UserController@team');
@@ -725,6 +723,8 @@ Route::get('user/viewmorenotifications',
     'User\UserController@getViewMoreNotifications');
 Route::resource('user/inviteplayer', 'User\InvitePlayerController');
 Route::resource('user', 'User\UserController');
+
+
 //End Users
 
 
@@ -748,6 +748,8 @@ Route::get('get_org_groups_list', [
     'as'   => 'organization.groups.get_list',
     'uses' => 'User\SearchOrgGroupsController@getGroupsList',
 ]);
+
+
 
 
 Route::resource('sport', 'User\SportController');

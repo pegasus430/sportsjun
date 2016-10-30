@@ -2,12 +2,47 @@
 
 Route::group(['prefix' => '/api/v1', 'middleware' => 'cors'], function ($router) {
 
-    $router->get('/', function () {
-        //return response()->json({'me'});
-    });
-
-    Route::post('login', 'Api\AuthApiController@login');
     Route::post('register', 'Api\AuthApiController@register');
+    Route::post('login', 'Api\AuthApiController@login');
+
+    Route::get('/cities','Api\DataApiController@cities');
+    Route::get('/countries','Api\DataApiController@countries');
+    Route::get('/states','Api\DataApiController@states');
+
+    Route::group(['middleware'=> ['jwt.api.auth'] , 'namespace'=>'Api','alias'=>'api'],function ($router){
+        $router->get('logout', 'AuthApiController@logout');
+
+
+        $router->get('/organizations','OrganizationApiController@index');
+        $router->get('/organizations/{id}','OrganizationApiController@show');
+
+        $router->get('/sports', ['as' => 'sports', 'uses' => 'SportApiController@index']);
+
+        $router->get('/teams', 'TeamApiController@index');
+        $router->get('/teams/{id}', 'TeamApiController@show');
+
+        $router->get('/tournaments/{filter?}', 'TournamentApiController@index')->where('filter', '[a-zA-Z]+');
+        $router->get('/tournaments/{id}', 'TournamentApiController@show')->where('id', '[0-9]+');
+        $router->get('/tournaments/{id}/parent', 'TournamentApiController@parent');
+        $router->get('/tournaments/{id}/groups', 'TournamentApiController@group_stage');
+        $router->get('/tournaments/{id}/groups_matches', 'TournamentApiController@group_stage_matches');
+        $router->get('/tournaments/{id}/final', 'TournamentApiController@final_stage');
+        $router->get('/tournaments/{id}/final_matches', 'TournamentApiController@final_stage_matches');
+        $router->get('/tournaments/{id}/player_standing', 'TournamentApiController@player_standing');
+        $router->get('/tournaments/{id}/follow', 'TournamentApiController@follow_tournament');
+        $router->get('/tournaments/{id}/un_follow', 'TournamentApiController@unfollow_tournament');
+        $router->get('/tournaments/{id}/gallery', 'TournamentApiController@gallery');
+
+
+        $router->get('/users','UserApiController@index');
+        $router->get('/users/{id}','UserApiController@show');
+        $router->get('/users/{id}/sports','UserApiController@sports');
+        $router->post('/users/{id?}','UserApiController@update');
+        $router->post('/users/{id}/sports','UserApiController@updateSports');
+
+
+
+    });
 
 //'jwt.refresh'
     Route::group(['middleware' => ['jwt.api.auth']], function ($router) {
@@ -15,28 +50,24 @@ Route::group(['prefix' => '/api/v1', 'middleware' => 'cors'], function ($router)
         Route::post('/otp/verify', ['uses' => 'Api\AuthApiController@verifyOTP']);
         Route::post('/otp/issent', ['uses' => 'Api\AuthApiController@isOtpSent']);
 
-        #$router->resource('/users', 'Api\UserApiController');
-        $router->post('users/{id?}','Api\UserApiController@update');
+
 
         //handle teams
-        $router->resource('/teams', 'Api\TeamApiController');
+
 
         //handle tournaments
-        $router->get('/tournaments/{filter?}', 'Api\TournamentApiController@index')->where('filter', '[a-zA-Z]+');;
-        $router->get('/tournaments/{id}', 'Api\TournamentApiController@show')->where('id', '[0-9]+');;
-        $router->get('/tournaments/{id}/parent', 'Api\TournamentApiController@parent');
-        $router->get('/tournaments/{id}/follow', 'Api\TournamentApiController@follow_tournament');
-        $router->get('/tournaments/{id}/un_follow', 'Api\TournamentApiController@unfollow_tournament');
-        $router->get('/tournaments/{id}/gallery', 'Api\TournamentApiController@gallery');
-        $router->get('/tournaments/{id}/groups', 'Api\TournamentApiController@group_stage');
-        $router->get('/tournaments/{id}/final', 'Api\TournamentApiController@final_stage');
-        $router->get('/tournaments/{id}/player_standing', 'Api\TournamentApiController@player_standing');
+
+
+
+
+
+
         //update tournament details;
         $router->post('/tournaments/{id}/update', 'Api\TournamentApiController@update');
         $router->get('/tournaments/search', 'Api\TournamentApiController@search');
 
         //get sports
-        $router->get('/sports', ['as' => 'get.sports', 'uses' => 'Api\SportApiController@index']);
+
 
         $router->get('/match-schedules',['uses'=>'Api\MatchSchedulesApiController@getList']);
 
@@ -45,9 +76,7 @@ Route::group(['prefix' => '/api/v1', 'middleware' => 'cors'], function ($router)
                 $router->get('/statistics', ['uses' => 'Api\SportCricketApiController@cricketStatistics']);
                 $router->get('/player-match-score', ['uses' => 'Api\SportCricketApiController@cricketPlayerMatchScore']);
                 $router->get('/overwise-score', ['uses' => 'Api\SportCricketApiController@cricketOverwiseScore']);
-
                 $router->post('/overwise-score/{id?}', ['uses' => 'Api\SportCricketApiController@setCricketOverwiseScore']);
-
             });
         });
 
@@ -57,7 +86,7 @@ Route::group(['prefix' => '/api/v1', 'middleware' => 'cors'], function ($router)
         $router->get('/send_feedback', 'Api\FunctionsApiController@sendFeedback');
         $router->get('/search', 'Api\FunctionsApiController@search');
 
-        $router->get('logout', 'Api\AuthApiController@logout');
+
 
     });
 });

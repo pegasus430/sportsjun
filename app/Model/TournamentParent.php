@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\Helpers\Helper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Sofa\Eloquence\Eloquence;
@@ -34,6 +35,8 @@ class TournamentParent extends Model
         'manager_id',
         'organization_id',
     ];
+
+    protected $appends = ['logoImage'];
 
     public function photos()
     {
@@ -91,6 +94,11 @@ class TournamentParent extends Model
                 $points=$points->points;
             }
             return $points;
+    }
+
+    public function getLogoImageAttribute()
+    {
+        return Helper::getImagePath($this->logo, 'tournaments');
     }
 }
 

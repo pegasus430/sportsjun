@@ -119,7 +119,11 @@
 @if ($tournaments->hasMorePages())
     <div id="viewmorediv">
         <a id="viewmorebutton" class="view_tageline_mkt" data-replace="#viewmorediv"
+           @if (isset($is_widget) && $is_widget)
+           data-url="{{route('widget.organization.schedule',['id'=>$id,'page'=>$tournaments->currentPage()+1,'filter-event'=>$filter_event])}}"
+           @else
            data-url="{{route('organization.schedules.list',['id'=>$id,'page'=>$tournaments->currentPage()+1,'filter-event'=>$filter_event])}}"
+           @endif
            onclick="return DataTableLoadMore(this);"
         >
                     <span class="market_place"><i

@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
+use App\Model\Requestsmodel;
 use App\Model\Sport;
 use App\Model\SportQuestion;
 use App\Model\SportQuestionAnswer;
@@ -446,41 +447,44 @@ class SportController extends Controller {
     //function to show the requests
     public function getplayerrequests($id)
     {
-        $limit = config('constants.LIMIT');
-        $offset = 0;
-        $type_ids = config('constants.REQUEST_TYPE.TEAM_TO_PLAYER').','.config('constants.REQUEST_TYPE.PLAYER_TO_TEAM').','.config('constants.REQUEST_TYPE.PLAYER_TO_TOURNAMENT').','.config('constants.REQUEST_TYPE.PLAYER_TO_PLAYER');
-        //pass type flag to get the request
-        $result = AllRequests::getrequests($id,$type_ids,$limit,$offset);
-        $result_count = AllRequests::getrequestscount($id,$type_ids);
-        //get sent request
-        $sent = AllRequests::getsentrequests($id,$type_ids,$limit,$offset);
-        $sent_count = AllRequests::getsentrequestscount($id,$type_ids);
+        $limit = config('constants.LIMIT',20);
+        $type_ids = [
+                        config('constants.REQUEST_TYPE.TEAM_TO_PLAYER'),
+                        config('constants.REQUEST_TYPE.PLAYER_TO_PLAYER')
+        ];
 
-        return view('sportprofile.playerrequests',['result'=>$result,'sent'=>$sent,'received_count'=>$result_count,'sent_count'=>$sent_count,'limit'=>$limit,'offset1'=>$limit+$offset,'offset2'=>$limit+$offset,'userId'=>isset(Auth::user()->id)?Auth::user()->id:0]);
-    }
-    //function to show the requests
-    public function getviewmoreplayerrequests()
-    {
-        $id = !empty(Request::get('id'))?Request::get('id'):0;
-        $flag = !empty(Request::get('flag'))?Request::get('flag'):'';
-        $limit = !empty(Request::get('limit'))?Request::get('limit'):0;
-        $offset1 = !empty(Request::get('offset1'))?Request::get('offset1'):0;
-        $offset2 = !empty(Request::get('offset2'))?Request::get('offset2'):0;
-        $type_ids = config('constants.REQUEST_TYPE.TEAM_TO_PLAYER').','.config('constants.REQUEST_TYPE.PLAYER_TO_TEAM').','.config('constants.REQUEST_TYPE.PLAYER_TO_TOURNAMENT').','.config('constants.REQUEST_TYPE.PLAYER_TO_PLAYER');
-        //pass type flag to get the request
-        if($flag == 'Received')
-        {
-            $result = AllRequests::getrequests($id,$type_ids,$limit,$offset1);
-            $offset1 = $offset1+$limit;
+        $type = \Request::get('type');
+        $received = false;
+        if ($type == null || $type === 'received') {
+            $received = Requestsmodel::requestQuery($type_ids)
+                ->where('request.to_id', $id)
+                ->paginate($limit)
+                ->appends('type','received');
         }
-        else
-        {
-            //get sent request
-            $result = AllRequests::getsentrequests($id,$type_ids,$limit,$offset2);
-            $offset2 = $offset2+$limit;
+        $sent = false;
+        $type_ids = [
+            config('constants.REQUEST_TYPE.PLAYER_TO_TEAM'),
+            config('constants.REQUEST_TYPE.PLAYER_TO_TOURNAMENT'),
+            config('constants.REQUEST_TYPE.PLAYER_TO_PLAYER')
+        ];
+        if ($type == null || $type === 'sent') {
+            $sent = Requestsmodel::requestQuery($type_ids)
+                ->where('request.from_id', $id)
+                ->paginate($limit)
+                ->appends('type','sent');
         }
-        return view('common.viewmorerequests',['sent'=>$result,'limit'=>$limit,'offset1'=>$offset1,'offset2'=>$offset2,'flag'=>$flag]);
+        if ($type){
+            if ($received)
+                return view('common.requestsList',['items'=>$received,'flag'=>'in']);
+            if ($sent)
+                return view('common.requestsList',['items'=>$sent]);
+            return \App::abort(404);
+        };
+
+        return view('sportprofile.playerrequests',compact('received','sent'),
+            ['userId'=>isset(Auth::user()->id)?Auth::user()->id:0]);
     }
+
     //function to get the sports
     public function getsports()
     {

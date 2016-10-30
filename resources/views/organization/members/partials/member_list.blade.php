@@ -37,7 +37,12 @@
         @if ($members->hasMorePages())
             <div id="viewmorediv">
                 <a id="viewmorebutton" class="view_tageline_mkt" data-replace="tr"
-                   data-url="{{route('organization.members.list',['id'=>$id,'page'=>$members->currentPage()+1,'filter-team'=>$filter_team])}}"
+                   @if (!(isset($is_widget) && $is_widget))
+                        data-url="{{route('organization.members.list',['id'=>$id,'page'=>$members->currentPage()+1,'filter-team'=>$filter_team])}}"
+                   @else
+                        data-url="{{route('widget.organization.members',['id'=>$id,'page'=>$members->currentPage()+1,'filter-team'=>$filter_team])}}"
+                   @endif
+
                    onclick="return DataTableLoadMore(this);"
                 >
                     <span class="market_place"><i

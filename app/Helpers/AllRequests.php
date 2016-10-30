@@ -310,67 +310,7 @@ class AllRequests {
 		$record_count = Requestsmodel::where('type',$request_type)->where('from_id',$from_id)->where('to_id',$to_id)->where('action_status',0)->count();
 		return $record_count;
 	}
-	//function to get playersrequests
-	public static function getrequests($id,$type_ids,$limit=0,$offset=0)
-	{
-		$condition = '';
-		if(!empty($type_ids))
-		{
-			$condition = " and r.type in ($type_ids) ";
-		}
-		$limit_condition = '';
-		if(!empty($limit))
-		{
-			$limit_condition = " limit $offset,$limit ";
-		}
-		$sent_requests = DB::select(DB::raw("
-					select r.*,
-					case r.type 
-						when 1  then (select logo from teams where id=r.from_id)
-						when 2  then (select logo from tournaments where id=r.from_id)
-						when 3  then (select logo from users where id=r.from_id)
-						when 4  then (select logo from tournaments where id=r.from_id)
-						when 5  then (select logo from teams where id=r.from_id)
-						when 6  then (select logo from users where id=r.from_id)
-						else 'logo'
-						end as logo,
-					case r.type 
-						when 1  then 'TEAMS_FOLDER_PATH'
-						when 2  then 'TOURNAMENT_PROFILE'
-						when 3  then 'USERS_PROFILE'
-						when 4  then 'TOURNAMENT_PROFILE'
-						when 5  then 'TEAMS_FOLDER_PATH'
-						when 6  then 'USERS_PROFILE'
-						else 'logo'
-						end as logo_type	
-					 from request r
-			where r.to_id=$id and r.action_status=0 and r.deleted_at is null $condition order by id DESC $limit_condition"));
-		
-		$result = array();
-		if(count($sent_requests))
-		{
-			$result = $sent_requests;
-		}
-		return $result;
-	}
-	//function to get playersrequests
-	public static function getrequestscount($id,$type_ids)
-	{
-		$condition = '';
-		if(!empty($type_ids))
-		{
-			$condition = " and type in ($type_ids) ";
-		}
-		$sent_requests = DB::select(DB::raw("select count(id) as req_count from request where to_id=$id and action_status=0 and deleted_at is null  $condition"));
-		
-		$result = 0;
-		if(count($sent_requests) && !empty($sent_requests[0]->req_count))
-		{
-			$result = $sent_requests[0]->req_count;
-		}
-		return $result;
-	}
-        
+
         //fucntion to get user name
 	public static function getUserNameAndEmail($id)
 	{
@@ -454,66 +394,7 @@ class AllRequests {
 			TeamPlayers::where('user_id',$user_id)->where('team_id',$team_id)->update(['status'=>$status]);
 		}
 	}
-	public static function getsentrequests($id,$type_ids,$limit,$offset)
-	{
-		$condition = '';
-		if(!empty($type_ids))
-		{
-			$condition = " and r.type in ($type_ids) ";
-		}
-		$limit_condition = '';
-		if(!empty($limit))
-		{
-			$limit_condition = " limit $offset,$limit ";
-		}		
-		/*$sent_requests = DB::select(DB::raw("select * from request where from_id=$id and action_status=0 and deleted_at is null $condition order by id DESC $limit_condition"));*/
-		$sent_requests = DB::select(DB::raw("
-				select r.*,
-				case r.type 
-					when 1  then (select logo from teams where id=r.to_id)
-					when 2  then (select logo from tournaments where id=r.to_id)
-					when 3  then (select logo from users where id=r.to_id)
-					when 4  then (select logo from tournaments where id=r.to_id)
-					when 5  then (select logo from teams where id=r.to_id)
-					when 6  then (select logo from users where id=r.to_id)
-					else 'logo'
-					end as logo,
-				case r.type 
-					when 1  then 'TEAMS_FOLDER_PATH'
-					when 2  then 'TOURNAMENT_PROFILE'
-					when 3  then 'USERS_PROFILE'
-					when 4  then 'TOURNAMENT_PROFILE'
-					when 5  then 'TEAMS_FOLDER_PATH'
-					when 6  then 'USERS_PROFILE'
-					else 'logo'
-					end as logo_type	
-				 from request r 
-				 where r.from_id=$id and r.action_status=0 and r.deleted_at is null $condition order by id DESC $limit_condition"));
 
-		$result = array();
-		if(count($sent_requests))
-		{
-			$result = $sent_requests;
-		}
-		return $result;
-
-	}
-	public static function getsentrequestscount($id,$type_ids=array())
-	{
-		$condition = '';
-		if(!empty($type_ids))
-		{
-			$condition = " and type in ($type_ids) ";
-		}
-		$sent_requests = DB::select(DB::raw("select count(id) as req_count from request where from_id=$id and action_status=0 and deleted_at is null $condition"));
-		
-		$result = 0;
-		if(count($sent_requests) && !empty($sent_requests[0]->req_count))
-		{
-			$result = $sent_requests[0]->req_count;
-		}
-		return $result;
-	}
        // function to send notification for match to team owner and manager Or player
         public static function sendMatchNotifications($tournament_id,$schedule_type,$a_id,$b_id,$match_start_date) {
                 if(!empty($tournament_id)) {

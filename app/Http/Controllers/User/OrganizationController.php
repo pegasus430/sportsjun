@@ -295,7 +295,10 @@ class OrganizationController extends Controller
         $limit = !empty(Request::get('limit')) ? Request::get('limit') : config('constants.LIMIT');
         $sports_array = $exist_array = $follow_array = [];
 
-        $user_id = Auth::user()->id;
+        if (\Auth::user())
+            $user_id = Auth::user()->id;
+        else
+            $user_id = false;
         $query = DB::table('tournament_parent')
             ->join('tournaments', 'tournaments.tournament_parent_id', '=', 'tournament_parent.id')
             ->select('tournament_parent.logo',
@@ -449,6 +452,17 @@ class OrganizationController extends Controller
             'user' => $user,
             'user_id'=>$user_id
         ]);
+    }
+
+    public function widgetCode($id){
+        $request['user_id'] = Auth::user()->id;
+        $organization = Organization::findOrFail($id);
+
+
+        return view('organization.widget_code', compact('organization'))->with(array(
+            'id' => $id,
+            'orgInfoObj'=>$organization,
+        ));
     }
 
 }

@@ -1,4 +1,4 @@
-@extends(Auth::user() ? 'layouts.app' : 'home.layout')
+@extends(Auth::user() || (isset($is_widget) && $is_widget)? 'layouts.app' : 'home.layout')
 @section('content')
 @if($action=='tournaments')
 	@include ('tournaments._leftmenu')

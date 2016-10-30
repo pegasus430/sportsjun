@@ -9,27 +9,64 @@ Route::get('public/scorecard/view/{match_id}', [
 	]); */
 
 Route::get('matchpublic/scorecard/view/{match_id}', [
-	'as' => 'matchpublic/scorecard/view', 'uses' => 'User\ScoreCardController@createScorecardpublicView'
+    'as' => 'matchpublic/scorecard/view',
+    'uses' => 'User\ScoreCardController@createScorecardpublicView'
 ]);
-Route::group(['prefix'=>'viewpublic'], function(){
-	Route::get('createphoto/{album_id}/{user_id}/{is_user?}/{action?}/{team_id?}/{page?}','User\AlbumController@createphotopublic');
-	Route::get('user/album/show/{test?}/{id?}/{team_id?}/{page?}', 'User\AlbumController@show');
-	Route::get('gettournamentdetails/{id}', 'User\TournamentsController@getTournamentDetails');
-	Route::get('tournaments/groups/{id}/player_standing','User\TournamentsController@playerStanding');
-	Route::get('tournaments/groups/{id}/{type?}','User\TournamentsController@groups');
-	Route::get('editsportprofile/{userId}', 'User\SportController@editSportProfile');
-	Route::get('showsportprofile/{userId}','User\SportController@showSportProfile');
-	Route::get('team/members/{team_id}/{status?}','User\TeamController@myteam');
 
-	Route::get('getquestions', 'User\SportController@getQuestions');
+Route::group([],function($route){
+    $route->get('organization/{id}/teamlist', [
+        'as'   => 'organization.members.teamlist',
+        'uses' => 'User\OrganizationMembersController@teamList',
+    ]);
 
-	// Routes for match details loaded with ajax
+    Route::get('organization/{id}/tournamentlist', [
+        'as'   => 'organization.schedules.tournamentlist',
+        'uses' => 'User\OrganizationSchedulesController@tournamentList',
+    ]);
+});
 
-	Route::get('/match/getBadmintonDetails', 'User\ScoreCard\BadmintonScoreCardController@getBadmintonDetails');
-	Route::get('/match/getSoccerDetails', 'User\ScoreCardController@getSoccerDetails');
+
+
+
+
+Route::group(['prefix' => 'viewpublic'], function () {
+    Route::get('createphoto/{album_id}/{user_id}/{is_user?}/{action?}/{team_id?}/{page?}',
+        'User\AlbumController@createphotopublic');
+    Route::get('user/album/show/{test?}/{id?}/{team_id?}/{page?}', 'User\AlbumController@show');
+    Route::get('gettournamentdetails/{id}', 'User\TournamentsController@getTournamentDetails');
+    Route::get('tournaments/groups/{id}/player_standing', 'User\TournamentsController@playerStanding');
+    Route::get('tournaments/groups/{id}/{type?}', 'User\TournamentsController@groups');
+    Route::get('editsportprofile/{userId}', 'User\SportController@editSportProfile');
+    Route::get('showsportprofile/{userId}', 'User\SportController@showSportProfile');
+    Route::get('team/members/{team_id}/{status?}', 'User\TeamController@myteam');
+
+    Route::get('getquestions', 'User\SportController@getQuestions');
+
+    // Routes for match details loaded with ajax
+
+    Route::get('/match/getBadmintonDetails', 'User\ScoreCard\BadmintonScoreCardController@getBadmintonDetails');
+    Route::get('/match/getSoccerDetails', 'User\ScoreCardController@getSoccerDetails');
 
     //Route::get('organization/{slug}','User\TeamController@getorgDetails');
-    Route::get('organization/{id}','User\TeamController@getorgDetails');
+    Route::get('organization/{id}', 'User\TeamController@getorgDetails');
+
+    Route::group(['as' => 'widget.'], function ($route) {
+        $route->group(['as' => 'organization.'], function ($route) {
+            $route->get('organization/{id}/widget/info', ['as' => 'info', 'uses' => 'Widget\OrganizationController@show']);
+            $route->get('organization/{id}/widget/staff',
+                ['as' => 'staff', 'uses' => 'Widget\OrganizationController@staff']);
+            $route->get('organization/{id}/widget/groups',
+                ['as' => 'groups', 'uses' => 'Widget\OrganizationController@groups']);
+            $route->get('organization/{id}/widget/members',
+                ['as' => 'members', 'uses' => 'Widget\OrganizationController@members']);
+            $route->get('organization/{id}/widget/tournaments',
+                ['as' => 'tournaments', 'uses' => 'Widget\OrganizationController@tournaments']);
+            $route->get('organization/{id}/widget/schedule',
+                ['as' => 'schedule', 'uses' => 'Widget\OrganizationController@schedule']);
+            $route->get('organization/{id}/widget/gallery',
+                ['as' => 'gallery', 'uses' => 'Widget\OrganizationController@gallery']);
+        });
+    });
 
 
 });

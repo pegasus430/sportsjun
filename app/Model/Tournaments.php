@@ -71,7 +71,20 @@ class Tournaments extends Model
         'match_type',
         'player_type',
         'game_type',
-        'number_of_rubber'
+        'enrollment_type',
+        'number_of_rubber',
+        'enrollment_type',
+        'is_sold_out',
+        'price_per_enrolment',
+        'reg_opening_date',
+        'reg_opening_time',
+        'reg_closing_date',
+        'reg_closing_time',
+        'total_enrollment',
+        'min_enrollment',
+        'max_enrollment',
+        'terms_conditions',
+        'vendor_bank_account_id',
     ];
 
     protected $appends = ['logoImage'];
@@ -98,7 +111,7 @@ class Tournaments extends Model
 
     public function sports()
     {
-        return $this->hasMany('App\Model\Sport', 'id', 'sports_id');
+        return $this->hasOne(Sport::class, 'id', 'sports_id');
     }
 
     public function logo()
@@ -201,7 +214,8 @@ class Tournaments extends Model
 
     function finalMatches()
     {
-        return $this->hasMany('App\Model\MatchSchedule')->where('tournament_round_number', '!=', null);
+        return $this->hasMany(MatchSchedule::class,'tournament_id')
+                        ->where('match_schedules.tournament_round_number','is not', null);
     }
 
     function settings()
@@ -222,7 +236,7 @@ class Tournaments extends Model
     {
         $logo = $this->logo ? $this->logo :
             (array_key_exists('tournament_parent_logo',$this->attributes) ?  $this->tournament_parent_logo : object_get($this->tournamentParent,'logo')) ;
-        return Helper::getImagePath($logo, 'teams');
+        return Helper::getImagePath($logo, 'tournaments');
     }
 
     public function getFinalStageTeamsListAttribute(){
@@ -243,6 +257,13 @@ class Tournaments extends Model
         }
 
         return $this->_finalStageTeams;
+    }
+    // 
+
+
+
+    public function getDateStringAttribute(){
+        return Helper::displayDate($this->start_date).' to '.Helper::displayDate($this->end_date);
     }
 
 }
