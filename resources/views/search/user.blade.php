@@ -1,6 +1,9 @@
 @extends('layouts.app')
 @section('content')
 @include ('search._usermenu')
+<?php
+$auth_user_id = \Auth::user() ? \Auth::user()->id : false;
+?>
 <div id="content" class="col-sm-10">
 		<div class="col-sm-9 viewmoreclass tournament_profile" id="searchresultsDiv"> 
 		<div class="search_header_msg">Search results for {{$sports_array[$sport_by]}} players @if($search_city)in {{$search_city}}  @endif @if($search_by_name)  with name "{{$search_by_name}}" @endif </div>	
@@ -41,6 +44,18 @@
                                 <div class="sb_join_p_main" id="{{$lis['user_id']}}" val="TEAM_TO_PLAYER"><a href="#" class="sj_add_but"><span><i class="fa fa-plus"></i>Add To Team</span></a></div>
                             <?php } ?>                            
                             <div class="follow_unfollow_player" id="follow_unfollow_player_{{$lis['user_id']}}" uid="{{$lis['user_id']}}" val="PLAYER" flag="{{ in_array($lis['user_id'],$follow_array)?0:1 }}"><a href="#" id="follow_unfollow_player_a_{{$lis['user_id']}}" class="{{ in_array($lis['user_id'],$follow_array)?'sj_unfollow':'sj_follow' }}"><span id="follow_unfollow_player_span_{{$lis['user_id']}}"><i class="{{ in_array($lis['user_id'],$follow_array)?'fa fa-remove':'fa fa-check' }}"></i>{{ in_array($lis['user_id'],$follow_array)?'Unfollow':'Follow' }}</span></a></div>
+                            @if ($auth_user_id)
+                                <?php $user_rating = \App\Model\Rating::activeUserRate($lis['user_id'],\App\Model\Rating::$RATE_USER); ?>
+                                @if ($user_rating)
+                                        <input type="hidden" class="rating b-rating" value="{{$user_rating}}" data-readonly data-filled="fa fa-star s-rating" data-empty="fa fa-star-o s-rating"/>
+                                @else
+                                     <!--   <a href="#" class="sj_follow">Rate a Player</a> -->
+                                        <input type="hidden" class="rating b-rating"
+                                                data-filled="fa fa-star s-rating" data-empty="fa fa-star-o s-rating"
+                                                data-target_id="{{$lis['user_id']}}" data-type="user"
+                                        />
+                                @endif
+                            @endif
                         </div>                       
 					</div>                      	
 				</div>
@@ -98,7 +113,24 @@ $(window).ready(function(){
                     viewMore(params,urls);
             });
          global_record_count = {{$totalcount}}
-        }       
+        }
+
+        $('input.b-rating').rating().on('change', function () {
+            var target_id = $(this).data('target_id');
+            var type = $(this).data('type');
+
+            $.post('/ajax/setrating',
+                    {
+                        'to_id':target_id,
+                        'type': type
+                    },
+                    function (){
+
+                    }
+            );
+
+            //Set rating here
+        });
     });
 
      $(document.body).on('click', '.sb_join_p_main' ,function(){
