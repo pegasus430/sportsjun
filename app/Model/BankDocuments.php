@@ -11,6 +11,7 @@ class BankDocuments extends Model
      */
     protected $table = 'bank_documents';
     public $timestamps = false;
+    protected $fillable = ['vendor_bank_account_id', 'name', 'location'];
 
     public function saveBankDocs($vendor_bank_account_id, $name, $location){
         $bankDocs = $this;

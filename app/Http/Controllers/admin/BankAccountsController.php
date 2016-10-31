@@ -14,6 +14,7 @@ use App\Model\Team;
 use App\Model\TournamentGroups;
 use App\Model\TournamentGroupTeams;
 use App\Model\Facilityprofile;
+use App\Model\BankDocuments;
 use Auth;
 use Illuminate\Support\Facades\DB;
 use Response;
@@ -67,8 +68,38 @@ class BankAccountsController extends Controller
     }
     public function getDetails($id){
         $bankDetails = VendorBankAccounts::with('user')->where('id',$id)->first();
-        if($bankDetails){
-            return  view('admin.bankaccounts.details', compact('bankDetails'));
+        $docs= BankDocuments::where('vendor_bank_account_id',$bankDetails->id)->get();
+        $img_array=array();
+
+
+        foreach($docs as $doc) {
+            $loc=$doc->location;
+            array_push($img_array,url($loc));
         }
+ 
+        
+        if($bankDetails){
+            return  view('admin.bankaccounts.details', compact('bankDetails','img_array'));
+        }
+    }
+
+
+
+
+
+    public function postDetails(){
+
+         $id=$_POST['id'];
+
+       
+        $bankDetails = VendorBankAccounts::with('user')->where('id',$id)->first();
+        if(isset($_POST['verified'])) {
+           VendorBankAccounts::where('id',$id)->update(['varified'=>1]);    
+        } else {
+             VendorBankAccounts::where('id',$id)->update(['varified'=>0]);
+        }
+         return redirect('admin/bankaccounts');
+        
+           
     }
 }

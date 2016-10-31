@@ -107,7 +107,7 @@
                 <label class="form_label">{{  trans('message.tournament.fields.price_per_enrolment') }}</label> 
                 <label for="price_per_enrolment" class="field prepend-icon">
                      
-                    {!! Form::text('price_per_enrolment', null, array('class'=>'gui-input','placeholder'=>trans('message.tournament.fields.price_per_enrolment'))) !!}
+                    {!! Form::text('online_enrollment_fee', $online_enrollment_fee, array('class'=>'gui-input','placeholder'=>trans('message.tournament.fields.price_per_enrolment'))) !!}
                     @if ($errors->has('price_per_enrolment')) <p class="help-block">{{ $errors->first('price_per_enrolment') }}</p> @endif
                 <label for="price_per_enrolment" class="field-icon"><i class="fa fa-inr"></i></label>  
                 </label>
