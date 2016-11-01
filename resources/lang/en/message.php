@@ -555,6 +555,10 @@ return [
     		'active_players' 	=> 'Playing Players Count',
     		'substitutes'			=> 'Substitute Players',
     		'max_substitutes' 	=> 'Maximum Substitute per Player'
+    ],
+    'rate'=>[
+        'success'=>'Rating is set',
+        'already_rated'=>'Already rated',
     ]
 
 ];

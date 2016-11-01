@@ -7,6 +7,7 @@ use App\Model\Followers;
 use App\Model\Organization;
 use App\Model\OrganizationRole;
 use App\Model\Photo;
+use App\Model\Rating;
 use App\Model\Tournaments;
 use Auth;
 use DB;
@@ -266,6 +267,7 @@ class User extends Model implements AuthenticatableContract,
         return $response;
     }
 
+
     public function userscheduleone()
     {
         return $this->hasMany('App\Model\MatchSchedule', 'a_id', 'id');
@@ -332,6 +334,5 @@ class User extends Model implements AuthenticatableContract,
             ->orwhere('tournaments.manager_id', $this->id)
             ->lists('tournaments.id');
     }
-
 
 }
