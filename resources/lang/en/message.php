@@ -569,6 +569,16 @@ return [
     		'active_players' 	=> 'Playing Players Count',
     		'substitutes'			=> 'Substitute Players',
     		'max_substitutes' 	=> 'Maximum Substitute per Player'
-    ]
+    ],
+    'payment_gate_way' => [
+    	'payment_gate_way_heading' => 'Add new payment gateway',
+    	'create_message' => 'Payment gateway added successfully',
+    	'update_message' => 'Payment gateway updated successfully',
+    	'fields' => [
+    		'name' => 'Payment Gateway Name',
+    		'status' => 'Status On/Off',
+
+    	]
+    ],
 
 ];

@@ -168,5 +168,6 @@ Route::group(array('middleware' => 'role'), function() {
     Route::resource('admin/team', 'admin\TeamController');
     Route::resource('admin/tournamentevents', 'admin\TournamentEventsController');
     Route::controller('admin/bankaccounts', 'admin\BankAccountsController');
+    Route::controller('admin/paymentgateways', 'admin\PaymentGateWaysController');
     Route::resource('admin', 'admin\UserController');
 });
