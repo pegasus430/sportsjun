@@ -44,14 +44,15 @@ if ($is_widget) {
             </div>
             <div class="more desc">{{ $orgInfoObj->about  or 'Description' }}</div>
 
-
-            <div class="follow_unfollow_organization" id="follow_unfollow_organization_{{$id}}" uid="{{$id}}"
-                 val="ORGANIZATION" flag="{{ $orgFollowed ?0:1 }}">
-                <a href="#" id="follow_unfollow_organization_a_{{$id}}"
-                   class="{{ $orgFollowed? 'sj_unfollow':'sj_follow' }}">
-                        <span id="follow_unfollow_organization_span_{{$id}}">
-                            <i class="{{ $orgFollowed ?'fa fa-remove':'fa fa-check' }}"></i>
-                            {{ $orgFollowed ?'Unfollow':'Follow' }}</span></a></div>
+            @if(!$is_widget)
+                <div class="follow_unfollow_organization" id="follow_unfollow_organization_{{$id}}" uid="{{$id}}"
+                     val="ORGANIZATION" flag="{{ $orgFollowed ?0:1 }}">
+                    <a href="#" id="follow_unfollow_organization_a_{{$id}}"
+                       class="{{ $orgFollowed? 'sj_unfollow':'sj_follow' }}">
+                       <span id="follow_unfollow_organization_span_{{$id}}">
+                           <i class="{{ $orgFollowed ?'fa fa-remove':'fa fa-check' }}"></i>
+                           {{ $orgFollowed ?'Unfollow':'Follow' }}</span></a></div>
+            @endif
         </div>
         <ul class="nav sidemenu_nav leftmenu-icon" id="side-menu">
             <li>
@@ -85,12 +86,12 @@ if ($is_widget) {
 
         <!--<li><a class="sidemenu_2" href="{{ url('/team/matches') }}">Matches</a></li>-->
         <!--<li>
-            <a class = "sidemenu_2"
-               href = "{{ url('/organizationTeamlist/'.$id) }}">
-                <span class = "ico ico-teams"></span>
-                Teams
-            </a>
-        </li>-->
+           <a class = "sidemenu_2"
+              href = "{{ url('/organizationTeamlist/'.$id) }}">
+               <span class = "ico ico-teams"></span>
+               Teams
+           </a>
+       </li>-->
 
             <li>
                 <a class="sidemenu_4"
@@ -112,11 +113,11 @@ if ($is_widget) {
             <li>
                 <a class="sidemenu_3"
                    @if (!$is_widget)
-                        href="{{ route($menu_routes['gallery'], ['test'=>'organization','id'=>0,'team_id'=>$id])}}"
-                    @else
-                        href="{{ route($menu_routes['gallery'], [$id])}}"
-                    @endif
-                    >
+                   href="{{ route($menu_routes['gallery'], ['test'=>'organization','id'=>0,'team_id'=>$id])}}"
+                   @else
+                   href="{{ route($menu_routes['gallery'], [$id])}}"
+                        @endif
+                >
                     <span class="ico ico-media-gallery"></span>
                     Media Gallery
                 </a>

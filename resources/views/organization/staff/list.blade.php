@@ -23,7 +23,9 @@
                     @endif
                 </div> {{-- /.panel-body --}}
                 <div id="staff_foot_info">Additional staff members can be invited using email</div>
-                @include('organization.staff.partials.invite_button')
+                @if (!(isset($is_widget)&&($is_widget)))
+                    @include('organization.staff.partials.invite_button')
+                @endif
             </div> {{-- /.panel --}}
         </div> {{-- /.col-md-12 --}}
     </div> {{-- /.staff --}}

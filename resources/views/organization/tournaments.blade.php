@@ -27,9 +27,12 @@
                         </div>
                         <div class="col-md-10 col-sm-9 col-xs-12">
                             <div class="t_tltle">
-
-                                <div class="pull-left">Event: <a href="
-                                        @if (!(isset($is_widget) && ($is_widget))) {{ url('/gettournamentdetails').'/'.$lis->id }} @else # @endif" id="{{'touname_'.$lis->id}}"><i class="fa fa-link"></i> {{ $lis->name }}</a></div>
+                                <div class="pull-left">Event: <a
+                                        @if (!(isset($is_widget) && ($is_widget)))
+                                        href="{{ url('/gettournamentdetails').'/'.$lis->id }}"
+                                    @else
+                                        href="#" style="pointer-events:none;text-decoration: none"
+                                   @endif id="{{'touname_'.$lis->id}}"><i class="fa fa-link"></i> {{ $lis->name }}</a></div>
                                 <p class="search_location t_by">{{ $lis->location }}</p>
                             </div>
                             <div class="clearfix"></div>

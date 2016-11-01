@@ -7,6 +7,7 @@
                 <div class="panel-top-container clearfix">
                     <div class="pull-left"><h4 class="panel-heading">Team Groups</h4></div>
                     <div class="pull-right panel-right-btn">
+                        @if (!(isset($is_widget) && $is_widget))
                         @can('createGroup', $organization)
                             <button type="button"
                                     class="btn btn-primary"
@@ -14,7 +15,6 @@
                                     data-target="#create_group">Create New Team Group
                             </button>
                         @endcan
-                        @if (!(isset($is_widget) && $is_widget))
                         <a href="{{route('organizationTeamlist',['id'=>$id])}}"
                                 class="btn btn-primary"
                             >List All Teams

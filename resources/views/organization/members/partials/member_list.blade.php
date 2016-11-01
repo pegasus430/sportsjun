@@ -7,12 +7,22 @@
 
     <tr>
         <td>
+            @if (!(isset($is_widget) && $is_widget))
             <a href="{{route('showsportprofile',['id'=>$member['id']])}}" class="member-image">
                 {!! Helper::Images( (count($member['user']['photos'])?$member['user']['photos'][0]['url']:''),'user_profile',array('height'=>60,'width'=>60,'class'=>'img-circle img-border ') ) !!}
             </a>
-            <span class="member-user-info">
-                        <a href="{{route('showsportprofile',['id'=>$member['id']])}}" class="member-user-info-name">{{ $member->name }}</a>
+            @else
+                <span class="member-image">
+                    {!! Helper::Images( (count($member['user']['photos'])?$member['user']['photos'][0]['url']:''),'user_profile',array('height'=>60,'width'=>60,'class'=>'img-circle img-border ') ) !!}
                 </span>
+            @endif
+            <span class="member-user-info">
+                @if (!(isset($is_widget) && $is_widget))
+                        <a href="{{route('showsportprofile',['id'=>$member['id']])}}" class="member-user-info-name">{{ $member->name }}</a>
+                @else
+                    <span class="member-user-info-name">{{ $member->name }}</span>
+                @endif
+            </span>
 
         </td>
         <td>

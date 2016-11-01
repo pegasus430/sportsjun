@@ -11,16 +11,15 @@
                         <div class="single_group_name">
                             @if (!(isset($is_widget) && $is_widget))
                                 <a href="{{route('organizationTeamlist',['id'=>$id, 'group'=>$group->id])}}">{{ $group->name }}</a>
+                                @can('createGroup', $organization)
+                                    <span class='pull-right '><a href='javascript:void(0)' class="red"
+                                                                 data-toggle="modal"
+                                                                 data-target="#edit_group_{{$group->id}}"><i
+                                                    class='fa fa-edit'></i> Edit</a></span>
+                                @endcan
                             @else
-                                <a href="#">{{ $group->name }}</a>
+                                <a href="{{route('widget.organization.teams',['id'=>$id, 'group_id'=>$group->id])}}">{{ $group->name }}</a>
                             @endif
-
-                            @can('createGroup', $organization)
-                                <span class='pull-right '><a href='javascript:void(0)' class="red"
-                                                             data-toggle="modal"
-                                                             data-target="#edit_group_{{$group->id}}"><i
-                                                class='fa fa-edit'></i> Edit</a></span>
-                            @endcan
                         </div>
                         <div class="single_group_fields">
                             <ul>
