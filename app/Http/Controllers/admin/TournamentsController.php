@@ -14,6 +14,7 @@ use App\Model\Team;
 use App\Model\TournamentGroups;
 use App\Model\TournamentGroupTeams;
 use App\Model\Facilityprofile;
+use App\Model\VendorBankAccounts;
 use Auth;
 use Illuminate\Support\Facades\DB;
 use Response;
@@ -224,9 +225,15 @@ class TournamentsController extends Controller
      */
     public function update(Requests\CreateTournamentRequest $request, $id)
     {	
-          $request['country_id'] = config('constants.COUNTRY_INDIA');
-		$request['country'] = Country::where('id', config('constants.COUNTRY_INDIA'))->first()->country_name;
-        $request['state'] = !empty($request['state_id']) ? State::where('id', $request['state_id'])->first()->state_name : 'null';
+         
+        $input_val = Request::all();
+       // echo "<pre>"; print_r($input_val); echo "</pre>"; exit;  
+        $manager_id = Tournaments::where('id', $id)->pluck('manager_id');
+        $country_id = !empty($request['country'])?$request['country']:config('constants.COUNTRY_INDIA');
+		//$request['country'] = Country::where('id', config('constants.COUNTRY_INDIA'))->first()->country_name;
+		$request['country'] = Country::where('id', $country_id)->first()->country_name;
+        //$request['country_id'] = config('constants.COUNTRY_INDIA');
+		$request['state'] = !empty($request['state_id']) ? State::where('id', $request['state_id'])->first()->state_name : 'null';
 		$request['city'] = !empty($request['city_id']) ? City::where('id', $request['city_id'])->first()->city_name : 'null';
 		$location=Helper::address($request['address'],$request['city'],$request['state'],$request['country']);
 	    $request['location']=trim($location,",");
@@ -234,6 +241,12 @@ class TournamentsController extends Controller
 		$request['end_date']=date('Y-m-d', strtotime($request['end_date']));
 		$request['created_by'] = Auth::user()->id;
 		$request['status'] = 1;
+
+
+        $request['manager_id'] = !empty($request['user_id'])?$request['user_id']:$manager_id;
+		$request['match_type'] = !empty($request['match_type'])?$request['match_type']:'';
+		$request['player_type'] = !empty($request['player_type'])?$request['player_type']:'';
+
 		if($request->input('facility_response')!=''&& $request->input('facility_response_name')!='')
 		{
 		$request['facility_id'] = $request->input('facility_response');
@@ -244,7 +257,57 @@ class TournamentsController extends Controller
 		$request['facility_id'] = NULL;
 		}
 	
-		Tournaments::whereId($id)->update($request->except(['_method','_token','facility_response','facility_response_name','files','filelist_photos','filelist_gallery']));
+
+        		// new vendor details and form data
+		if(!empty($request['account_holder_name']) && 
+			!empty($request['account_number']) &&
+			!empty($request['bank_name']) && 
+			!empty($request['branch']) &&
+			!empty($request['ifsc'])
+		 ){
+		 	$vendor = new VendorBankAccounts();
+			$vendor_bank_account_id = $vendor->saveBankDetails(
+				$request['account_holder_name'],
+				$request['account_number'],
+				$request['bank_name'],
+				$request['branch'],
+				$request['ifsc'],
+				Auth::user()->id
+			);
+			if($vendor_bank_account_id){
+				$request['vendor_bank_account_id'] = $vendor_bank_account_id;
+			}
+		}
+		$request['reg_opening_date']=Helper::storeDate($request['reg_opening_date']);
+		$request['reg_closing_date']=Helper::storeDate($request['reg_closing_date']);
+		$request['reg_opening_time'] = !empty($request['reg_opening_time'])?$request['reg_opening_time']:'00:00:00';
+		$request['reg_closing_time'] = !empty($request['reg_closing_time'])?$request['reg_closing_time']:'00:00:00';
+		if( $request['enrollment_type'] == 'online' ){
+			$request['enrollment_fee'] = $request['online_enrollment_fee'];
+		}
+		/////
+
+		if(!empty($request['filelist_file_upload'])) {
+
+           //  /*--files moving from temp directory to attachments directory--*/
+             $image_moved=Helper::moveImage($request['filelist_file_upload'],$vendor_bank_account_id);
+           /*--files moving from temp directory to attachments directory--*/
+          
+        }  
+
+
+
+
+
+
+
+
+
+
+
+
+
+		Tournaments::whereId($id)->update($request->except(['_method','_token','facility_response','facility_response_name','files','filelist_photos','filelist_gallery','user_id','account_holder_name','account_number','bank_name','branch','ifsc','filelist_file_upload','online_enrollment_fee']));
 		if (!empty($request['filelist_photos'])) {
 		Photo::where(['imageable_id'=>$id, 'imageable_type' => config('constants.PHOTO.TOURNAMENT_LOGO')])->update(['is_album_cover' => 0]);
 		 //Upload Photos
@@ -298,23 +361,63 @@ class TournamentsController extends Controller
 	}
 	 public function edit(Request $request)
     {
-	
+	    
+	    
 	    $enum = config('constants.ENUM.TOURNAMENTS.TYPE'); 
+	    $game_type_enum = config('constants.ENUM.TOURNAMENTS.GAME_TYPE');
+	    $enrollment_type = config('constants.ENUM.TOURNAMENTS.ENROLLMENT_TYPE');
+	    $player_types = array();
+	    $match_types = array();
+
+	    foreach (config('constants.ENUM.SCHEDULE.PLAYER_TYPE') as $key => $val) {
+			$player_types[$key] = $val;
+		}
 		$sports = Sport::where('isactive','=',1)->lists('sports_name', 'id');
-       // $delete_tournament_id = $request->delete;
-	    $edit_tournament_id = $request->modify;
+        $delete_tournament_id='';
+        $edit_tournament_id='';
+       
+        if(isset($_GET['delete'])) {
+        $delete_tournament_id = $_GET['delete'];
+        }
+        if(isset($_GET['modify'])) {
+	    $edit_tournament_id =$_GET['modify'];
+	    }
+		
 		if($delete_tournament_id!='' && $delete_tournament_id>0)
 		{
-			$tournament=Tournaments::find($delete_tournament_id )->delete();
+			$dt=date('Y-d-m');
+			//echo $dt; exit;
+            $tournament=Tournaments::where('id',$delete_tournament_id)->update(['isactive'=>0,'deleted_at'=>$dt]);   
+			//$tournament=Tournaments::find($delete_tournament_id )->delete();
 			return redirect()->route('admin.tournaments.index')->with('status', trans('message.tournament.delete'));
 		}
+		
 		else if( $edit_tournament_id!='' &&  $edit_tournament_id>0)
 		{
 		   $tournament = Tournaments::findOrFail($edit_tournament_id);
-	       $states = State::where('country_id', config('constants.COUNTRY_INDIA'))->orderBy('state_name')->lists('state_name', 'id')->all();
+		   $countries = Country::orderBy('country_name')->lists('country_name', 'id')->all();
+	       //$states = State::where('country_id', config('constants.COUNTRY_INDIA'))->orderBy('state_name')->lists('state_name', 'id')->all();
+	        $states = State::where('country_id', $tournament->country_id)->orderBy('state_name')->lists('state_name', 'id')->all();
 		   	$schedule_type_enum = config('constants.ENUM.TOURNAMENTS.SCHEDULE_TYPE'); 
 	       $cities = City::where('state_id',  $tournament->state_id)->orderBy('city_name')->lists('city_name', 'id')->all();
-	       return view('admin.tournaments.edit',compact('tournament'))->with(array('sports'=> $sports,'id'=> $edit_tournament_id,'states' =>  $states,'cities' => $cities,'enum'=>$enum,'tournament'=>$tournament,'type'=>'edit','roletype'=>'admin','schedule_type_enum'=>$schedule_type_enum));
+
+	       $sport_name = Sport::where('id', $tournament['sports_id'])->pluck('sports_name');
+	       $sport_name = !empty($sport_name) ? $sport_name : '';
+		   $match_types = Helper::getMatchTypes(strtoupper($sport_name));
+	       $manager_name='';
+		   $managerName = User::where('id',$tournament->manager_id)->first(['name']);
+		   if(count($managerName))
+			 $manager_name = $managerName->name;
+
+          $tournament_owner_id=$tournament->created_by;
+         
+		  $vendorBankAccounts = VendorBankAccounts::where('user_id',$tournament_owner_id)->get();
+		  $online_enrollment_fee=$tournament->enrollment_fee;
+
+
+         // echo "<pre>"; print_r($tournament); echo "</pre>"; exit;  
+
+	       return view('admin.tournaments.edit',compact('tournament'))->with(array('sports'=> $sports,'id'=> $edit_tournament_id,'countries' => $countries,'states' =>  $states,'cities' => $cities,'enum'=>$enum,'tournament'=>$tournament,'type'=>'edit','roletype'=>'admin','schedule_type_enum'=>$schedule_type_enum,'game_type_enum'=>$game_type_enum,'player_types'=>$player_types,'match_types'=>['' => 'Select Match Type'] + $match_types,'tournamentGroupCount'=>$tournament->groups_number,'enrollment_type'=>$enrollment_type,'manager_name'=>$manager_name,'online_enrollment_fee' => $online_enrollment_fee,'vendorBankAccounts' => $vendorBankAccounts));
 		}
     }
 		//function to display tournament groups
