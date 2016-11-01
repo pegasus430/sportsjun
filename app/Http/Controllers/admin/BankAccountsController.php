@@ -105,7 +105,7 @@ class BankAccountsController extends Controller
 
         foreach($docs as $doc) {
             $loc=$doc->location;
-            array_push($img_array,url($loc));
+            array_push($img_array,$loc);
         }
  
         
