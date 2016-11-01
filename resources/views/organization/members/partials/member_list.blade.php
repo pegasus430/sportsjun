@@ -29,6 +29,9 @@
                 {{$sport }}@if ($sport != last($sports)), @endif
             @endforeach
         </td>
+        <td>
+            {{ \App\Model\Rating::overralRate($member['id'],\App\Model\Rating::$RATE_USER) }}
+        </td>
         <td></td>
     </tr>
 @endforeach

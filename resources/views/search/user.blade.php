@@ -118,16 +118,33 @@ $(window).ready(function(){
         $('input.b-rating').rating().on('change', function () {
             var target_id = $(this).data('target_id');
             var type = $(this).data('type');
-
-            $.post('/ajax/setrating',
-                    {
+            var value = $(this).val();
+            $.ajax({
+                url: base_url+'/rating/set',
+                    type: "POST",
+                    dataType: 'JSON',
+                    data: {'_token': "{{csrf_token()}}",
                         'to_id':target_id,
-                        'type': type
+                        'type': type,
+                        'rate': value
                     },
-                    function (){
-
+                success: function(data){
+                    if ("error" in data){
+                        $.alert({
+                            title: "Error",
+                            content: data["error"]
+                        });
                     }
-            );
+                    if ("message" in data){
+                        $.alert({
+                            title: "Success!",
+                            content: data["message"]
+                        });
+                    }
+                    //alert(data.success);
+
+                }
+            });
 
             //Set rating here
         });
