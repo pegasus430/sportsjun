@@ -40,7 +40,12 @@
             @endforeach
         </td>
         <td>
-            {{ \App\Model\Rating::overralRate($member['id'],\App\Model\Rating::$RATE_USER) }}
+            @if (\Auth::user())
+                <?php $user_rating = \App\Model\Rating::activeUserRate($member->id,\App\Model\Rating::$RATE_USER); ?>
+                    <input type="hidden" class="rating b-rating" value="{{$user_rating}}" data-filled="fa fa-star s-rating" data-empty="fa fa-star-o s-rating"
+                           data-target_id="{{$member->id}}" data-type="user"
+                    />
+            @endif
         </td>
         <td></td>
     </tr>

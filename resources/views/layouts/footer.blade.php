@@ -1,3 +1,7 @@
+<script>
+    var data_token = "{{csrf_token()}}";
+</script>
+
 <?php $js_version = config('constants.JS_VERSION');$css_version = config('constants.CSS_VERSION'); ?>
 <script src="{{ asset('/js/jquery-ui.min.js') }}?v=<?php echo $js_version;?>"></script>
 <script src="{{ asset('/js/bootstrap.min.js') }}?v=<?php echo $js_version;?>"></script>

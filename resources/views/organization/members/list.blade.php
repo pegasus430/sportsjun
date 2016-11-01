@@ -34,7 +34,7 @@
                                 <th style="width:30%">Name</th>
                                 <th>Teams</th>
                                 <th>Sports</th>
-                                <th>Rating</th>
+                                <th style="min-width:90px;">Rating</th>
                                 <th>Stats/Notes</th>
                             </tr>
                             </thead>
