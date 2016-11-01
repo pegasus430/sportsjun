@@ -96,4 +96,20 @@ class PaymentGateWaysController extends Controller
 		'countries' => ['' => 'Select Country'] + $countries,
 		]);
     }
+
+
+
+      public function postAvailability(){
+
+        $id=$_POST['c_id'];
+        $countries = PaymentGateWays::where(['country_id'=>$id,'status'=>'on'])->get();
+        $available=count($countries);
+        return $available;
+    }
+
+
+
+
+
+
 }

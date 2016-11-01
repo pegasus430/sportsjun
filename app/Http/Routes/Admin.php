@@ -160,6 +160,13 @@ Route::group(array('middleware' => 'role'), function() {
     Route::get('admin/match/scorecard/view/{match_id}', [
     'as' => 'admin/match/scorecard/view', 'uses' => 'User\ScoreCardController@createScorecardView']);
 
+
+
+    //  Route::postt('admin/online/{c_id}', [
+    // 'as' => 'admin/online/availability', 'uses' => 'admin\ScoreCardController@createScorecardView']);
+
+
+
     //admin score card end
 
     Route::resource('admin/facility', 'admin\FacilityController');

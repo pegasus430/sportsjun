@@ -32,74 +32,79 @@ class TournamentsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-		 $globalurl=url(); 
-		$sports_array2 = Sport::select('sports_name', 'id')->get();
-		$sports_array1 = array('0'=>'select sport');
-		$sport_id_arr=array();
+
+
+
+ //    public function index()
+ //    {
+	// 	 $globalurl=url(); 
+	// 	$sports_array2 = Sport::select('sports_name', 'id')->get();
+	// 	$sports_array1 = array('0'=>'select sport');
+	// 	$sport_id_arr=array();
 		
-		foreach($sports_array2  as $cat)
-		{
-			$sports_array1[$cat->id] = $cat->sports_name;
-		}
+	// 	foreach($sports_array2  as $cat)
+	// 	{
+	// 		$sports_array1[$cat->id] = $cat->sports_name;
+	// 	}
 		
-       	$filter = \DataFilter::source(Tournaments::with('sports','photos'));	
-        $filter->add('name','Tournament Name','text');		
-		$filter->add('sports_id','Sports name','select')->options($sports_array1)
-        ->scope( function ($query, $value) use ($sports_array2) {
+ //       	$filter = \DataFilter::source(Tournaments::with('sports','photos'));	
+ //        $filter->add('name','Tournament Name','text');		
+	// 	$filter->add('sports_id','Sports name','select')->options($sports_array1)
+ //        ->scope( function ($query, $value) use ($sports_array2) {
 			
-			 if($value>0)
-			 {
-				 return $query->whereIn('sports_id', [$value] );  
-			 }else if($value==0)
-			 {
-				 $sports_array2 = Sport::where('isactive','=',1)->lists('sports_name', 'id')->toArray();
-				 foreach($sports_array2 as $key => $val)
-				 {
-					 $sport_id_arr[] = $key;
-				 }
+	// 		 if($value>0)
+	// 		 {
+	// 			 return $query->whereIn('sports_id', [$value] );  
+	// 		 }else if($value==0)
+	// 		 {
+	// 			 $sports_array2 = Sport::where('isactive','=',1)->lists('sports_name', 'id')->toArray();
+	// 			 foreach($sports_array2 as $key => $val)
+	// 			 {
+	// 				 $sport_id_arr[] = $key;
+	// 			 }
 				 
-				  return $query->whereIn('sports_id', $sport_id_arr);  
-			 }
+	// 			  return $query->whereIn('sports_id', $sport_id_arr);  
+	// 		 }
 			
-			});	
+	// 		});	
 			
-			$test = 'batt.png' ;
-		$filter->add('start_date','Date','daterange')->format('Y-m-d H:i:s', 'en')->attr("class","test");		
-        $filter->submit('search');
-        $filter->reset('reset');
-        $filter->build();
-		$grid = \DataGrid::source($filter);
-		$grid->attributes(array("class"=>"table table-striped"));
-        //$grid->add('id','ID', true)->style("width:100px");
-		//$grid->add('name','TOURNAMENT NAME',true);
-		$grid->add('<a href="admintournaments/groups/{{ $id }}">{{ $name }}</a>','NAME');
-		// $grid->add('{{ implode(", ", $photos->lists("url")->all()) }}','URL');
-		// $grid->add('logo','logo');
+	// 		$test = 'batt.png' ;
+	// 	$filter->add('start_date','Date','daterange')->format('Y-m-d H:i:s', 'en')->attr("class","test");		
+ //        $filter->submit('search');
+ //        $filter->reset('reset');
+ //        $filter->build();
+	// 	$grid = \DataGrid::source($filter);
+	// 	$grid->attributes(array("class"=>"table table-striped"));
+ //        //$grid->add('id','ID', true)->style("width:100px");
+	// 	//$grid->add('name','TOURNAMENT NAME',true);
+	// 	$grid->add('<a href="admintournaments/groups/{{ $id }}">{{ $name }}</a>','NAME');
+	// 	// $grid->add('{{ implode(", ", $photos->lists("url")->all()) }}','URL');
+	// 	// $grid->add('logo','logo');
 	
-		 $grid->add('<img src="http://localhost/sportsjun/public/uploads/tournaments/{{ $logo }}" onerror=this.onerror=null;this.src="http://localhost/sportsjun/public/images/default-profile-pic.jpg" height=30 width=30>','LOGO');
+	// 	 $grid->add('<img src="http://localhost/sportsjun/public/uploads/tournaments/{{ $logo }}" onerror=this.onerror=null;this.src="http://localhost/sportsjun/public/images/default-profile-pic.jpg" height=30 width=30>','LOGO');
 		 
 		 
-		 //$grid->add(" {!! Helper::Images($logo,'tournaments' )!!}",'TEST');
-	// $grid->add( "{!! HTML::image(url('uploads/tournaments/$logo')) !!}",'LOGO');
-		// $grid->add( "{!! HTML::image(url('uploads/tournaments/$test')) !!}",'LOGO');
-		// $grid->add('{{ implode(", ", $sport->lists("sports_name")->all()) }}','sports Name');
-	//  $grid->add( "{{ url('uploads/marketplace/market_place_default.png') }}"  ,'LOGO');
+	// 	 //$grid->add(" {!! Helper::Images($logo,'tournaments' )!!}",'TEST');
+	// // $grid->add( "{!! HTML::image(url('uploads/tournaments/$logo')) !!}",'LOGO');
+	// 	// $grid->add( "{!! HTML::image(url('uploads/tournaments/$test')) !!}",'LOGO');
+	// 	// $grid->add('{{ implode(", ", $sport->lists("sports_name")->all()) }}','sports Name');
+	// //  $grid->add( "{{ url('uploads/marketplace/market_place_default.png') }}"  ,'LOGO');
 	
 
 		
-	    $grid->add('{{ implode(", ", $sports->lists("sports_name")->all()) }}','sports Name');
-	    $grid->add('start_date','Start Date',true);		
-	    $grid->add('end_date','End Date',true);		
-        $grid->edit('editTournament', 'Operation','modify|delete');
-        $grid->orderBy('id','desc');		
-        $grid->link('admin/tournaments/create',"New Tournament", "TR");
-		$grid->paginate(
-        config('constants.DEFAULT_PAGINATION'));
-		//Helper::printQueries();
-        return  view('admin.tournaments.filtergrid', compact('filter', 'grid'));
-    }
+	//     $grid->add('{{ implode(", ", $sports->lists("sports_name")->all()) }}','sports Name');
+	//     $grid->add('start_date','Start Date',true);		
+	//     $grid->add('end_date','End Date',true);		
+ //        $grid->edit('editTournament', 'Operation','modify|delete');
+ //        $grid->orderBy('id','desc');		
+ //        $grid->link('admin/tournaments/create',"New Tournament", "TR");
+	// 	$grid->paginate(
+ //        config('constants.DEFAULT_PAGINATION'));
+	// 	//Helper::printQueries();
+ //        return  view('admin.tournaments.filtergrid', compact('filter', 'grid'));
+ //    }
+
+    
 
     /**
      * Show the form for creating a new resource.
@@ -335,7 +340,7 @@ class TournamentsController extends Controller
         //End Upload Photos
 		}
 	
-		return redirect()->route('admin.tournaments.index')->with('status', trans('message.tournament.update'));
+		return redirect('admin/tournamentevents')->with('status', trans('message.tournament.update'));
     }
 
     /**
@@ -389,7 +394,7 @@ class TournamentsController extends Controller
 			//echo $dt; exit;
             $tournament=Tournaments::where('id',$delete_tournament_id)->update(['isactive'=>0,'deleted_at'=>$dt]);   
 			//$tournament=Tournaments::find($delete_tournament_id )->delete();
-			return redirect()->route('admin.tournaments.index')->with('status', trans('message.tournament.delete'));
+			return redirect('admin/tournamentevents')->with('status', trans('message.tournament.delete'));
 		}
 		
 		else if( $edit_tournament_id!='' &&  $edit_tournament_id>0)

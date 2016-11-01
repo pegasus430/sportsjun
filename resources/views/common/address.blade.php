@@ -95,5 +95,12 @@ $(document).ready(function(){
         $("#city_id").val({{old('city_id')}}); ;
     @endif
 });
+
+ 
+
+
+
+
+
 </script>
 
