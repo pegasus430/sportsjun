@@ -6,6 +6,7 @@ if(!empty($matchScheduleCount) && $matchScheduleCount>0)
 
 
 
+
 <div class="main_tour_form{{$formType}}">
     <div class="row">
         <div class="col-sm-12">
