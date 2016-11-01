@@ -301,7 +301,7 @@ class TournamentsController extends Controller
 	
 	    $enum = config('constants.ENUM.TOURNAMENTS.TYPE'); 
 		$sports = Sport::where('isactive','=',1)->lists('sports_name', 'id');
-        $delete_tournament_id = $request->delete;
+       // $delete_tournament_id = $request->delete;
 	    $edit_tournament_id = $request->modify;
 		if($delete_tournament_id!='' && $delete_tournament_id>0)
 		{

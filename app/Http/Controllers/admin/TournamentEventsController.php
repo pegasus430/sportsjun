@@ -90,7 +90,7 @@ class TournamentEventsController extends Controller
 	   	// });
 	    //$grid->add('id','Registration count');
 
-        $grid->edit('edittournamentevent', 'Operation','modify|delete');
+        $grid->edit('editTournament', 'Operation','modify|delete');
         $grid->orderBy('id','desc');		
         // $grid->link('admin/tournaments/create',"New Tournament", "TR");
 		$grid->paginate(
