@@ -11,7 +11,7 @@
 		<p><b>IFSC</b>: {{$bankDetails->ifsc}}</p>
 		<p><b>DOCS</b>:<br>
 		@foreach ($img_array as $img)
-		<span><a href="{{URL::to('uploads/'.$img)}}">{{$img}}</a></span><br>
+		<span><a target="_blank" href="{{URL::to('uploads/'.$img)}}">{{$img}}</a></span><br>
 		@endforeach
 		</p>
 	</div>

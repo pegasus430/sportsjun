@@ -43,7 +43,7 @@ class TournamentEventsController extends Controller
 			$sports_array1[$cat->id] = $cat->sports_name;
 		}
 		
-       	$filter = \DataFilter::source(Tournaments::with('sports','photos'));	
+       	$filter = \DataFilter::source(Tournaments::with('sports','photos','bankAccount'));	
         $filter->add('tournament_parent_name','Tournament Name','text');
         $filter->add('email','Organizer email','text');
 
@@ -85,9 +85,15 @@ class TournamentEventsController extends Controller
 	    $grid->add('enrollment_type','Registration Type')->cell( function( $value, $row) {
 	        return config('constants.ENUM.TOURNAMENTS.ENROLLMENT_TYPE')[$value];
 	   	});
-	    // $grid->add('status','Status')->cell( function( $value, $row) {
-	    //     return config('constants.ENUM.TOURNAMENTS.STATUS')[$value];
-	   	// });
+	    $grid->add('bankAccount','Status')->cell( function( $value, $row) {
+	    	if($value !== null){
+	    		
+	    		return config('constants.ENUM.TOURNAMENTS.STATUS')[$value->varified];
+	    	} else {
+	    		return '';
+	    	}
+	        
+	   	});
 	    //$grid->add('id','Registration count');
 
         $grid->edit('editTournament', 'Operation','modify|delete');
