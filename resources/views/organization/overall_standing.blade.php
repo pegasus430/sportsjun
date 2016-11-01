@@ -117,11 +117,12 @@
 
 
 
-			<div class="modal-footer">	
-				@can('createTeam', $orgInfoObj)
-
-					<button class='button btn-primary' type="button" save='0' onclick="addSport({{$parent_tournament->id}}, this)">Add Sport</button>	
-				@endcan
+			<div class="modal-footer">
+				@if (!(isset($is_widget) && $is_widget))
+					@can('createTeam', $orgInfoObj)
+						<button class='button btn-primary' type="button" save='0' onclick="addSport({{$parent_tournament->id}}, this)">Add Sport</button>
+					@endcan
+				@endif
 				</form>			
 					<button type="button" class="button btn-secondary" data-dismiss="modal" >Close</button>
 				</div>
