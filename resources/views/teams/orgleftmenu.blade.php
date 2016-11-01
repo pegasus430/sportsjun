@@ -123,7 +123,7 @@ if ($is_widget) {
                 </a>
             </li>
 
-            @if (!$is_widget)
+            @if(!$is_widget && isset($userId) && isset($orgInfoObj) && ($userId == $orgInfoObj->user_id))
                 <li>
                     <a class="sidemenu_3"
                        href="{{ route($menu_routes['widget'],$id) }}">
