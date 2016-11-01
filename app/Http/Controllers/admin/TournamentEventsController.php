@@ -86,10 +86,11 @@ class TournamentEventsController extends Controller
 	        return config('constants.ENUM.TOURNAMENTS.ENROLLMENT_TYPE')[$value];
 	   	});
 	    $grid->add('bankAccount','Status')->cell( function( $value, $row) {
-	    	if($value !== null && $value->varified){
+	    	if($value !== null){
+	    		
 	    		return config('constants.ENUM.TOURNAMENTS.STATUS')[$value->varified];
 	    	} else {
-	    		return 'PENDING';
+	    		return '';
 	    	}
 	        
 	   	});
