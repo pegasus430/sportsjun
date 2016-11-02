@@ -159,4 +159,9 @@
     $('#editsubtournament').on('hidden.bs.modal', function () {
 	    window.location.reload();
 	})
+
+
+
+
+	
 </script>

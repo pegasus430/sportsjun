@@ -151,6 +151,9 @@ class Helper
             $photos = array_filter(explode(',', $imagearray));
             $oldFilePath = public_path('uploads/temp/'); 
             $newFilePath = public_path('uploads/attachments/');
+            if (!file_exists($newFilePath)) {
+            File::makeDirectory($newFilePath, $mode = 0777, true, true);
+            }
             $moved_images_names=array();
             $i=0;
             foreach ($photos as $key => $value) {

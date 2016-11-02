@@ -59,7 +59,7 @@ return [
                         'SCHEDULE_TYPE' => ['team' => 'TEAM', 'individual' => 'INDIVIDUAL'],
                         'GAME_TYPE'     => ['normal'    =>'NORMAL - ONE GAME',     'rubber'   =>   'RUBBER - MULTIPLE GAMES'],
                         'ENROLLMENT_TYPE'     => [''=>'LISTING TYPE','online'    =>'ONLINE PAYMENT',     'offline'   =>   'OFFLINE PAYMENT','onlylisting'   =>   'JUST LISTING'],
-                        'STATUS'     => ['notstarted'    =>'NOT STARTED',     'running'   =>   'IN PROGRESS','completed'   =>   'COMPLETED']
+                        'STATUS'     => ['0'    =>'PENDING',     '1'   =>   'APPROVED','2'   =>   'REJECTED']
                 ]
                 ,
                 'SCHEDULE'     => 

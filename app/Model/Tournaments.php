@@ -149,6 +149,10 @@ class Tournaments extends Model
         return $this->belongsTo('App\Model\Sport', 'sports_id');
     }
 
+    public function bankAccount()
+    {
+        return $this->belongsTo(VendorBankAccounts::class, 'vendor_bank_account_id','id');
+    }
     public function searchResults($req_params)
     {
         $offset = !empty($req_params['offset']) ? $req_params['offset'] : 0;
