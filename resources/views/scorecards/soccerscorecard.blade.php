@@ -377,6 +377,9 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 					</div>
 				</div>
 
+
+			{{--	@include('scorecards.common.add_referee') --}}
+
 				<!-- Setup Squads End -->
 
 			@else
