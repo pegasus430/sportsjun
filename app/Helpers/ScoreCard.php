@@ -207,6 +207,33 @@ class ScoreCard {
            return $set_scoring;
 	}
 
+	public static function display_role($user_id, $team_id){
+		$role=TeamPlayers::where(['user_id'=>$user_id,'team_id'=>$team_id])->first();
+		$text = '';
+
+		 if($role){
+			switch ($role->role) {
+				case in_array($role->role, ['owner', 'manager']):
+				$text ="<span style='color:orange'>$role->role </span>";
+					break;
+
+					case in_array($role->role, ['captain', 'physio','coach']):
+				$text ="<span style='color:blue'>$role->role </span>";
+					break;
+
+						case in_array($role->role, ['vice-captain', 'keeper']):
+				$text ="<span style='color:red'>$role->role </span>";
+					break;
+				
+				default:
+					# code...
+					break;
+			}
+		}
+
+		return $text;
+	}
+
 
 
 }

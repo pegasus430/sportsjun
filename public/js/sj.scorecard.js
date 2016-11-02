@@ -437,6 +437,35 @@ if (typeof SJ.SCORECARD === 'undefined')
                                           $('.scorescard_stats').show();
                                         }
                         },
+                        allow_match_edit_by_admin:function(match_id){
+                                    $.confirm({
+                                        title:"Alert",
+                                        content:"Match is already ended, do you still want to edit?",
+                                        confirm:function(){
+                                            $.ajax({
+                                                url:'/match/allow_match_edit_by_admin',
+                                                data:{match_id:match_id},
+                                                success:function(response){
+                                                    if(response.status=='ok'){
+                                                        window.location=window.location;
+                                                    }
+                                                    else {
+                                                        $.alert({
+                                                            title:"Alert",
+                                                            content:"You are not allowed to edit this scoresheet!"
+                                                        })
+                                                    }
+                                                }, 
+                                                error:function(){
+                                                      $.alert({
+                                                            title:"Alert",
+                                                            content:"You are not allowed to edit this scoresheet!"
+                                                        })
+                                                }
+                                            })
+                                        }
+                                    })
+                        },
                         tempData:{},
 
                 };

@@ -52,14 +52,16 @@ class RateController extends Controller
                         \Session::flash('status', trans('message.rate.success'));
                     }
                 }  else {
+                    $rating->rate = $data['rate'];
+                    $rating->save();
                     if (\Request::ajax()){
                         if (\Request::wantsJson()){
-                            return ['message'=>trans('message.rate.already_rated')];
+                            return ['message'=>trans('message.rate.success_update')];
                         } else {
 
                         }
                     } else {
-                        \Session::flash('error', trans('message.rate.already_rated'));
+                        \Session::flash('message', trans('message.rate.success_update'));
                     }
                 }
 

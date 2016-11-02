@@ -315,6 +315,7 @@ input:read-only {
 											<tr class="team_a_playing_row playing_a_{{$player_a['id']}}" >
 												<td class="option block select_player_squad" player_type='playing' team_type="team_a"  player_id="{{$player_a['id']}}">
 													{{ $player_a['name']   }}
+									{!!ScoreCard::display_role($player_a['id'], $team_a_id)!!}
 													<span class='pull-right icon-check'>   </span>
 												</td>
 											</tr>
@@ -340,6 +341,7 @@ input:read-only {
 												<td class="option block select_player_squad" player_type='playing' team_type="team_b" player_id="{{$player_b['id']}}">
 
 													{{ $player_b['name']   }}
+								{!!ScoreCard::display_role($player_b['id'], $team_b_id)!!}
 													<span class="pull-right icon-check"> </span>
 
 												</td>
@@ -372,6 +374,7 @@ input:read-only {
 												<td class="option block select_player_squad" player_type='substitute' team_type="team_a" player_id="{{$player_a['id']}}">
 
 													{{ $player_a['name']   }}
+										{!!ScoreCard::display_role($player_a['id'], $team_a_id)!!}
 													<span class='pull-right icon-check'></span>
 											</tr>
 										@endforeach
@@ -398,6 +401,7 @@ input:read-only {
 												<td class="option block select_player_squad" player_type='substitute' team_type="team_b" player_id="{{$player_b['id']}}">
 
 													{{ $player_b['name']   }}
+								{!!ScoreCard::display_role($player_b['id'], $team_b_id)!!}
 													<span class="pull-right icon-check"> </span>
 												</td>
 											</tr>

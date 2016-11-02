@@ -695,6 +695,10 @@ Route::get('/searchUser/{sport_id}/{team_id}', [
     'as'   => 'searchUser',
     'uses' => 'User\TeamController@searchUser',
 ]);
+Route::get('/searchUser', [
+    'as'   => 'searchAnyUser',
+    'uses' => 'User\TeamController@searchAnyUser',
+]);
 Route::post('/addplayer', [
     'as'   => 'addplayer',
     'uses' => 'User\TeamController@addplayer',

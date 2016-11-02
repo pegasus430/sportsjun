@@ -275,6 +275,8 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 											<tr class="team_a_playing_row playing_a_{{$player_a['id']}}" >
 												<td class="option block select_player_squad" player_type='playing' team_type="team_a"  player_id="{{$player_a['id']}}">
 													{{ $player_a['name']   }}
+
+								{!!ScoreCard::display_role($player_a['id'], $team_a_id)!!}
 													<span class='pull-right icon-check'>   </span>
 												</td>
 											</tr>
@@ -300,6 +302,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 												<td class="option block select_player_squad" player_type='playing' team_type="team_b" player_id="{{$player_b['id']}}">
 
 													{{ $player_b['name']   }}
+								{!!ScoreCard::display_role($player_b['id'], $team_b_id)!!}
 													<span class="pull-right icon-check"> </span>
 
 												</td>
@@ -332,6 +335,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 												<td class="option block select_player_squad" player_type='substitute' team_type="team_a" player_id="{{$player_a['id']}}">
 
 													{{ $player_a['name']   }}
+										{!!ScoreCard::display_role($player_a['id'], $team_a_id)!!}
 													<span class='pull-right icon-check'></span>
 											</tr>
 										@endforeach
@@ -358,6 +362,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 												<td class="option block select_player_squad" player_type='substitute' team_type="team_b" player_id="{{$player_b['id']}}">
 
 													{{ $player_b['name']   }}
+											{!!ScoreCard::display_role($player_b['id'], $team_b_id)!!}
 													<span class="pull-right icon-check"> </span>
 												</td>
 											</tr>
@@ -371,6 +376,9 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 						</div>
 					</div>
 				</div>
+
+
+			{{--	@include('scorecards.common.add_referee') --}}
 
 				<!-- Setup Squads End -->
 
@@ -1149,7 +1157,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 													<td colspan="3" class='select_left' class="team_a_goal_row player_select" player_id="{{$team_a_soccer['id']}} "  player_name="{{$team_a_soccer['player_name']}}" team_name="{{$team_a_name}}" >       {{$team_a_soccer['player_name']}}
 													</td>
 													<td colspan="1" >
-														<input type='checkbox' name="penalty_player_b_{{$p_index_b}}" {{$team_b_soccer['penalty']==1?'checked':''}}   >
+														<input type='checkbox' name="penalty_player_b_{{$p_index_b}}" {{$team_a_soccer['penalty']==1?'checked':''}}   >
 														<input type='hidden' name="penalty_player_id_b_{{$p_index_b}}" value="{{$team_a_soccer['id']}}" >
 														<input type='hidden' name="penalty_player_user_id_b_{{$p_index_b}}" value="{{$team_a_soccer['user_id']}}" >
 														<input type='hidden' name='penalty_player_score_b_{{$p_index_b}}' >

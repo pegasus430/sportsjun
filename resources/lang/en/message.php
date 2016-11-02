@@ -558,6 +558,7 @@ return [
     ],
     'rate'=>[
         'success'=>'Rating is set',
+        'success_update'=>'Rating updated',
         'already_rated'=>'Already rated',
     ],
     'payment_gate_way' => [

@@ -334,6 +334,18 @@ if($match_data[0]['game_type']=='rubber'){
 	<textarea name="rej_note" id="rej_note" rows="4" cols="50" placeholder="Reject Note" style="margin:20px 0 10px 0;"></textarea>
     @endif
     </div>
+
+          @if($isValidUser && $match_data[0]['match_status']=='completed')
+         <div class="sportsjun-forms text-center scorecards-buttons">
+            <input type="hidden" name="match_id" id="match_id" value="{{$match_data[0]['id']}}">
+            <br><br>
+
+            <button class="btn btn-event" type="button" onclick="return  SJ.SCORECARD.allow_match_edit_by_admin({{$match_data[0]['id']}})">
+                Edit Match
+            </button>              
+           
+        </div>
+     @endif
    </div>
    </div>
   </div>
