@@ -555,6 +555,8 @@ class UltimateFrisbeeScoreCardController extends parentScoreCardController
 
             }
 
+                 $this->deny_match_edit_by_admin();
+
         if($match_result=='walkover'){
                     $sub_match_details = json_decode($matchScheduleDetails->match_details);
                     $sub_match_details->{$winner_team_id}->total_points=13;

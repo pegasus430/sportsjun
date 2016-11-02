@@ -856,6 +856,7 @@ class SquashScoreCardController extends parentScoreCardController
                             $approved = 'approved';
                         }
                     }
+                     $this->deny_match_edit_by_admin();
 
             if(!empty($matchScheduleDetails['tournament_id'])) {
                 $tournamentDetails = Tournaments::where('id', '=', $matchScheduleDetails['tournament_id'])->first();
