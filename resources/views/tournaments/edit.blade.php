@@ -30,7 +30,7 @@
 					
 					
 			   @if( $roletype=='user')
-			   {!! Form::model( $tournament,(array('route' => array('tournaments.update',$id),'class'=>'form-horizontal','method' => 'put','id' => 'edit-tournaments'))) !!}   
+			   {!! Form::model( $tournament,(array('route' => array('tournaments.update',$id),'class'=>'form-horizontal edit-only','method' => 'put','id' => 'edit-tournaments'))) !!}   
 			         <div class="modal-body">
       	<div class="sportsjun-forms">
 				 
@@ -159,6 +159,72 @@
     $('#editsubtournament').on('hidden.bs.modal', function () {
 	    window.location.reload();
 	})
+
+
+
+$( document ).ready(function() {
+     var c_id=$('.edit-only #country_id').val();
+     var base_url = window.location.origin;
+       $.ajax({
+        type: "GET",
+        url: base_url + '/admin/paymentgateways/availability',
+        data: { 'c_id': c_id},
+        success: function(msg) {
+           if(msg==0) {
+              $(".edit-only #enrollment_type option[value='online']").remove();
+                $('.edit-only .btn-tournamentedit').hide();
+        		$('.edit-only .btn-createedit').show();
+        		$('.edit-only .enroltypeedit').show();
+           } else {
+              $('.edit-only #enrollment_type').append($('<option>', {
+                value: 'online',
+                text: 'ONLINE PAYMENT'
+              }));
+                
+           }
+        }
+    })
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$('.edit-only #country_id').change(function(){
+
+     var c_id=$('.edit-only #country_id').val();
+     var base_url = window.location.origin;
+       $.ajax({
+        type: "POST",
+        url: base_url + '/admin/paymentgateways/availability',
+        data: { 'c_id': c_id},
+        success: function(msg) {
+           if(msg==0) {
+             $(".edit-only #enrollment_type option[value='online']").remove();
+                $('.edit-only .btn-tournamentedit').hide();
+        		$('.edit-only .btn-createedit').show();
+        		$('.edit-only .enroltypeedit').show();
+           } else {
+              $('.edit-only #enrollment_type').append($('<option>', {
+                value: 'online',
+                text: 'ONLINE PAYMENT'
+              })); 
+                
+           }
+        }
+    })
+  
+}); 
+
 
 
 

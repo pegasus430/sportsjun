@@ -10,6 +10,7 @@
 				
                  {!! Form::model( $tournament ,(array('route' => array('admin.tournaments.update',$id),'class'=>'form-horizontal','method' => 'put','id' => 'my-tournaments'))) !!}   
 			     <div class="form-body">
+
                         @include ('tournaments._form', ['submitButtonText' => 'Update','formType'=>'edit'])
                         
                         @include ('tournaments._enrolform', ['submitButtonText' => 'Update','formType'=>'edit'])
@@ -17,7 +18,7 @@
 				 <div class="form-footer">
                   <button type="submit" class="button btn-primary btn-createedit">Update</button>
 
-                  <a class="button btn-primary btn-tournamentedit">Next</a>
+                  <a class="button btn-primary btn-tournamentedit" href="javascript:void(0)">Next</a>
                   
 
                 </div>	
@@ -68,7 +69,7 @@
 	            
 	            $('.main_tour_formedit').hide();
         	}
-        	// $("#sub-tournaments").valid();
+       // $("#sub-tournaments").valid();
         	
         })
         $("body").on('click','.add_account_divedit', function(){
@@ -92,6 +93,81 @@
             }
         })
     });
+
+
+
+$( document ).ready(function() {
+    var c_id=$('#country_id').val();
+     var base_url = window.location.origin;
+       $.ajax({
+        type: "GET",
+        url: base_url + '/admin/paymentgateways/availability',
+        data: { 'c_id': c_id},
+        success: function(msg) {
+           if(msg==0) {
+             $("#enrollment_type option[value='online']").remove();
+                $('.btn-tournamentedit').hide();
+                $('.btn-createedit').show();
+                $('.enroltypeedit').show();
+           } else {
+              $('#enrollment_type').append($('<option>', {
+                value: 'online',
+                text: 'ONLINE PAYMENT'
+              })); 
+                
+           }
+        }
+    })
+});
+
+
+
+
+
+
+
+
+
+
+
+
+$('#country_id').change(function(){
+     var c_id=$('#country_id').val();
+     var base_url = window.location.origin;
+       $.ajax({
+        type: "POST",
+        url: base_url + '/admin/paymentgateways/availability',
+        data: { 'c_id': c_id},
+        success: function(msg) {
+           if(msg==0) {
+             $("#enrollment_type option[value='online']").remove();
+                $('.btn-tournamentedit').hide();
+        		$('.btn-createedit').show();
+        		$('.enroltypeedit').show();
+           } else {
+              $('#enrollment_type').append($('<option>', {
+                value: 'online',
+                text: 'ONLINE PAYMENT'
+              })); 
+                
+           }
+        }
+    })
+  
+});  
+
+
+
+
+
+
+
+
+
+
+
+
+
  </script>
 
 
