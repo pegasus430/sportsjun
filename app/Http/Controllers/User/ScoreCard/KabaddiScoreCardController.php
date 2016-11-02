@@ -342,12 +342,16 @@ class KabaddiScoreCardController extends parentScoreCardController
                 "id"=>$team_a_id,
                 "total_points"=>0,
                 "fouls"=>0,
+                "red_card"=>0,
+                "yellow_card"=>0,
                 "players"=>$players_a_details,
                 ],
             "{$team_b_id}"=>[
                 "id"=>$team_b_id,
                 "total_points"=>0,
                 "fouls"=>0,
+                "red_card"=>0,
+                "yellow_card"=>0,
                 "players"=>$players_b_details
                 ] ,           
             "first_half"=>[
@@ -756,7 +760,11 @@ class KabaddiScoreCardController extends parentScoreCardController
                     break;
                     
                     default:
-                        # code...
+         
+          $kabaddi_model->{$record_type}++;
+          $match_details->{$team_id}->players->{'player_'.$user_id}->{$record_type} ++; 
+          $match_details->{$team_id}->players->{'player_'.$user_id}->{$quarter}->{$record_type}++;
+          $match_details->{$team_id}->{$record_type}++;
                         break;
                 }
 
