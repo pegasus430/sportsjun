@@ -4387,10 +4387,10 @@ if(!isset($match_details['penalties']['team_b']['players_ids']))$match_details['
 		$response_b="";
 		for($i=0; $i<$index_a; $i++){
 
-		  if(isset($request['penalty_player_a_'.$i]) ){
+		  if(isset($request['penalty_player_a_'.$i]) && $request['penalty_player_a_'.$i]=='on' ){
 
 			 if(!in_array($request['penalty_player_user_id_a_'.$i], $penalties['team_a']['players_ids'])){
-				array_push($penalties['team_a']['players_ids'], $request['penalty_player_user_id_a_'.$i]);
+				$penalties['team_a']['players_ids'][$i]=$request['penalty_player_user_id_a_'.$i];
 				
 				$player_id=$request['penalty_player_id_a_'.$i];
 				$matchwise_model=SoccerPlayerMatchwiseStats::find($player_id);
@@ -4402,7 +4402,7 @@ if(!isset($match_details['penalties']['team_b']['players_ids']))$match_details['
 					'goal'=>'',
 					'user_id'=>$request['penalty_player_user_id_a_'.$i],
 				];
-				array_push($penalties['team_a']['players'], $player);
+				$penalties['team_a']['players'][$i]=$player;
 
 				$response_a.="
 	  					<tr>
@@ -4417,10 +4417,10 @@ if(!isset($match_details['penalties']['team_b']['players_ids']))$match_details['
 		}
 
 		for($i=0; $i<$index_b; $i++){
-			if(isset($request['penalty_player_b_'.$i])){
+			if(isset($request['penalty_player_b_'.$i]) && $request['penalty_player_b_'.$i]=='on'){
 			 if(!in_array($request['penalty_player_user_id_b_'.$i], $penalties['team_b']['players_ids'])){
 
-				array_push($penalties['team_b']['players_ids'], $request['penalty_player_user_id_b_'.$i]);
+				$penalties['team_b']['players_ids'][$i]= $request['penalty_player_user_id_b_'.$i];
 				
 				$player_id=$request['penalty_player_id_b_'.$i];
 				$matchwise_model=SoccerPlayerMatchwiseStats::find($player_id);
@@ -4432,7 +4432,7 @@ if(!isset($match_details['penalties']['team_b']['players_ids']))$match_details['
 					'goal'=>'',
 					'user_id'=>$request['penalty_player_user_id_b_'.$i],
 				];
-				array_push($penalties['team_b']['players'], $player);
+				$penalties['team_b']['players'][$i]= $player;
 
 				$response_b.="
 	  					<tr>
@@ -4447,7 +4447,7 @@ if(!isset($match_details['penalties']['team_b']['players_ids']))$match_details['
 		}
 
 		$match_details['penalties']=$penalties;
-		$index_a--;
+		
 
 		$match_model['match_details']=json_encode($match_details);
 		$match_model->save();
