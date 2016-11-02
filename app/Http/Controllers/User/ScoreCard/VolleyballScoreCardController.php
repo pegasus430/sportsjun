@@ -173,7 +173,17 @@ class VolleyballscoreCardController extends parentScoreCardController
         $team_b_city = Helper::getTeamCity($match_data[0]['b_id']);
         $form_id = 'bascketball';
 
-        if($is_from_view==1 || (!empty($score_status_array['added_by']) && $score_status_array['added_by']!=$loginUserId && $match_data[0]['scoring_status']!='rejected') || $match_data[0]['match_status']=='completed' || $match_data[0]['scoring_status']=='approval_pending' || $match_data[0]['scoring_status']=='approved' || !$isValidUser)//volleyball score view only
+       $isAdminEdit = 0;
+        if(Session::has('is_allowed_to_edit_match')){
+            $session_data = Session::get('is_allowed_to_edit_match');
+
+            if($isValidUser && ($session_data[0]['id']==$match_data[0]['id'])){
+                $isAdminEdit=1;
+            }
+        }
+
+
+        if(($is_from_view==1 || (!empty($score_status_array['added_by']) && $score_status_array['added_by']!=$loginUserId && $match_data[0]['scoring_status']!='rejected') || $match_data[0]['match_status']=='completed' || $match_data[0]['scoring_status']=='approval_pending' || $match_data[0]['scoring_status']=='approved' || !$isValidUser) && !$isAdminEdit)//volleyball score view only
         {
             $player_name_array = array();
             $users = User::select('id', 'name')->get()->toArray(); //get player names

@@ -166,6 +166,9 @@ Route::group(['prefix'=>'match'], function(){
     Route::get('end_match_completely_tableTennis/{match_id?}', 'User\ScoreCard\TabletennisScoreCardController@endMatchCompletely');
      Route::get('end_match_completely_squash/{match_id?}', 'User\ScoreCard\SquashScoreCardController@endMatchCompletely');
      Route::get('end_match_completely_tennis/{match_id?}', 'User\ScoreCard\TennisScoreCardController@endMatchCompletely');
+
+
+     Route::get('allow_match_edit_by_admin', 'User\ScoreCardController@allow_match_edit_by_admin');
 });
 
 //End Matches
