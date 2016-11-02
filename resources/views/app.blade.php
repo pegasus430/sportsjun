@@ -7,7 +7,8 @@
         <title>Laravel</title>
         <link href="{{ asset('/css/app.css') }}" rel="stylesheet">
 		<link href="{{ asset('/css/bootstrap.css') }}" rel="stylesheet">
-		<link href="{{ asset('/css/sportsjun.css') }}" rel="stylesheet">
+        <link href="{{ asset('/js/bootstrap-rating/bootstrap-rating.css') }}" rel="stylesheet">
+        <link href="{{ asset('/css/sportsjun.css') }}" rel="stylesheet">
         <link href="{{ asset('/css/bootstrap-datepicker.css') }}" rel="stylesheet">
         <link href="{{ asset('/css/bootstrap-datetimepicker.css') }}" rel="stylesheet">
         <!-- Fonts -->

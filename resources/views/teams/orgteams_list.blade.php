@@ -18,25 +18,40 @@
                 </div>
                 <div class="col-sm-10">
                     <div class="t_tltle">
-                        <div class="pull-left">
-                            <a href="{{ url('/team/members').'/'.(!empty($t->id)?$t->id:0) }}">{{ !empty($t->teamname)?$t->teamname:'' }}</a>
+                        <div class="pull-left"><a
+                                    @if (!$is_widget)
+                                        href="{{ url('/team/members').'/'.(!empty($t->id)?$t->id:0) }}"
+                                    @else
+                                        href="#" style="pointer-events:none;text-decoration: none"
+                                        <?php /* href="{{ route('widget.team.info', (!empty($t->id)?$t->id:0))}}" */ ?>
+                                    @endif
+                            >{{ !empty($t->teamname)?$t->teamname:'' }}</a>
+
                             <p class="t_by">By <a target="_blank"
-                                                  href="{{ url('/editsportprofile/'.(!empty($t->team_owner_id)?$t->team_owner_id:0))}}">{{  !empty($t->name)?$t->name:'' }}</a>
+                                                  @if (!$is_widget)
+                                                    href="{{ url('/editsportprofile/'.(!empty($t->team_owner_id)?$t->team_owner_id:0))}}"
+                                                  @else
+                                                  href="#"  style="pointer-events:none;text-decoration: none"
+                                                  <?php /*  href="{{ route('widget.member.info', (!empty($t->team_owner_id)?$t->team_owner_id:0))}}" */ ?>
+                                                  @endif
+                                >{{  !empty($t->name)?$t->name:'' }}</a>
                             </p>
                         </div>
-                        @if(isset($userId) && ($userId == $t->team_owner_id))
-                            <div class="pull-right ed-btn">
-                                <a href="{{ url('/team/edit/'.(!empty($t->id)?$t->id:0))}}" class="edit"><i
-                                            class="fa fa-pencil"></i></a>
+                        @if (!$is_widget)
+                            @if(isset($userId) && ($userId == $t->team_owner_id))
+                                <div class="pull-right ed-btn">
+                                    <a href="{{ url('/team/edit/'.(!empty($t->id)?$t->id:0))}}" class="edit"><i
+                                                class="fa fa-pencil"></i></a>
 
 
-                                <a href="{{ url('/team/deleteteam/'.(!empty($t->id)?$t->id:0)).'/'.(empty($t->isactive)?'a':'d')}}"
-                                   class="delete" title="{{empty($t->isactive)?'Activate':'Deactivate'}}"
-                                   data-toggle="tooltip" data-placement="top">
-                                    {!! empty($t->isactive)?"<i class='fa fa-check'></i>":"<i class='fa fa-ban'></i>" !!}</a>
-                            </div>
+                                    <a href="{{ url('/team/deleteteam/'.(!empty($t->id)?$t->id:0)).'/'.(empty($t->isactive)?'a':'d')}}"
+                                       class="delete" title="{{empty($t->isactive)?'Activate':'Deactivate'}}"
+                                       data-toggle="tooltip" data-placement="top">
+                                        {!! empty($t->isactive)?"<i class='fa fa-check'></i>":"<i class='fa fa-ban'></i>" !!}</a>
+                                </div>
+                            @endif
                         @endif
-                        <div class="col-xs-4 teams-teamplayers">
+                        <div class="col-xs-8 teams-teamplayers">
                             <p><b>Owner's name:</b> {{ $t->ownersName }} </p>
                             <p><b>Manager name:</b> {{ $t->managersName }} </p>
                             <p><b>Coach:</b> {{ $t->coachsName }} </p>
@@ -46,11 +61,14 @@
                     <p class="lt-grey">{{ !empty($t->description)?$t->description:'' }}</p>
                     <br>
                     <?php
-                        $manager_ids = $t->playersByRole(\App\Model\TeamPlayers::$ROLE_MANAGER)->lists('id')->all();
+                         $manager_ids = $t->playersByRole(\App\Model\TeamPlayers::$ROLE_MANAGER)->lists('id')->all();
                     ?>
-                    @if(isset($userId) && ($userId == $t->team_owner_id  || $organization->user_id = $userId  || in_array($userId,$manager_ids)))
+                    @if(!$is_widget && isset($userId) && ($userId == $t->team_owner_id  || $organization->user_id = $userId  || in_array($userId,$manager_ids)))
                         <div class="pull-right">
-                            <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#transfer-owner-modal" data-team-id="{{$t->id}}"><i class="fa fa-exchange"></i> Transfer ownership</button>
+                            <button type="button" class="btn btn-info btn-block" data-toggle="modal"
+                                    data-target="#transfer-owner-modal" data-team-id="{{$t->id}}"><i
+                                        class="fa fa-exchange"></i> Transfer ownership
+                            </button>
                         </div>
                     @endif
                     <p>Sport : <span class='blue match_type_text'>{{Helper::getSportName($t->sports_id)}}</span> &nbsp;

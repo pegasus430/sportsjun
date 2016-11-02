@@ -367,6 +367,10 @@ class TournamentsController extends Controller
 	 */
 	public function store(Requests\CreateTournamentRequest $request)
 	{
+
+		// echo "<pre>";
+		//   print_r($request->all());
+		// die;
 		
 		if(!empty($request['isParent']) && $request['isParent']=='yes')
 		{
@@ -433,13 +437,26 @@ class TournamentsController extends Controller
 				$request['vendor_bank_account_id'] = $vendor_bank_account_id;
 			}
 		}
+
+
+         if(!empty($request['filelist_file_upload'])) {
+
+           //  /*--files moving from temp directory to attachments directory--*/
+             $image_moved=Helper::moveImage($request['filelist_file_upload'],$vendor_bank_account_id);
+           /*--files moving from temp directory to attachments directory--*/
+          
+        }  
+
+
+
+
 		$request['reg_opening_date']=Helper::storeDate($request['reg_opening_date']);
 		$request['reg_closing_date']=Helper::storeDate($request['reg_closing_date']);
 		$request['reg_opening_time'] = !empty($request['reg_opening_time'])?$request['reg_opening_time']:'00:00:00';
 		$request['reg_closing_time'] = !empty($request['reg_closing_time'])?$request['reg_closing_time']:'00:00:00';
 		/** @var Tournaments $Tournaments */
 		if( $request['enrollment_type'] == 'online' ){
-			$request['enrollment_fee'] = $request['price_per_enrolment'];
+			$request['enrollment_fee'] = $request['online_enrollment_fee'];
 		}
 		$Tournaments = Tournaments::create($request->all());
 		$last_inserted_sport_id = 0;
@@ -581,9 +598,13 @@ class TournamentsController extends Controller
      */
     public function update(Requests\CreateTournamentRequest $request, $id)
     {
-  //   	echo "<pre>";
-		// print_r($request->all());
+        
+  //       echo "<pre>";
+		// print_r($request['filelist_file_upload']);
 		// die;
+		       
+
+
 		if(!empty($request['isParent']) && $request['isParent']=='yes')
 		{
 
@@ -640,10 +661,20 @@ class TournamentsController extends Controller
 		$request['reg_opening_time'] = !empty($request['reg_opening_time'])?$request['reg_opening_time']:'00:00:00';
 		$request['reg_closing_time'] = !empty($request['reg_closing_time'])?$request['reg_closing_time']:'00:00:00';
 		if( $request['enrollment_type'] == 'online' ){
-			$request['enrollment_fee'] = $request['price_per_enrolment'];
+			$request['enrollment_fee'] = $request['online_enrollment_fee'];
 		}
 		/////
-		Tournaments::whereId($id)->update($request->except(['_method','_token','facility_response','facility_response_name','files','filelist_photos','filelist_gallery','jfiler-items-exclude-files-0','user_id','account_holder_name','account_number','bank_name','branch','ifsc','filelist_file_upload']));
+
+		if(!empty($request['filelist_file_upload'])) {
+
+           //  /*--files moving from temp directory to attachments directory--*/
+             $image_moved=Helper::moveImage($request['filelist_file_upload'],$vendor_bank_account_id);
+           /*--files moving from temp directory to attachments directory--*/
+          
+        }  
+
+
+		Tournaments::whereId($id)->update($request->except(['_method','_token','facility_response','facility_response_name','files','filelist_photos','filelist_gallery','jfiler-items-exclude-files-0','user_id','account_holder_name','account_number','bank_name','branch','ifsc','filelist_file_upload','online_enrollment_fee']));
 		if(!empty($request['filelist_photos'])) {
 			Photo::where(['imageable_id'=>$id,'imageable_type' => config('constants.PHOTO.TOURNAMENT_LOGO')])->update(['is_album_cover' => 0]);
 			//Upload Photos
@@ -656,6 +687,15 @@ class TournamentsController extends Controller
 				$coverPic = $input['cover_pic'];
 			Helper::uploadPhotos($request['filelist_photos'],config('constants.PHOTO_PATH.TOURNAMENT'),$id,$albumID,$coverPic,config('constants.PHOTO.TOURNAMENT_LOGO'),$user_id);
 			//End Upload Photos
+
+
+           //  /*--files moving from temp directory to attachments directory--*/
+           //   $image_moved=Helper::moveImage($request['filelist_file_upload'],$vendor_bank_account_id);
+           //  //cho "<pre>"; print_r($image_moved);echo "</pre>"; die;
+           // /*--files moving from temp directory to attachments directory--*/
+
+
+
 		}
 		if (!empty($request['filelist_gallery'])) {
 			//Photo::where(['user_id' => Auth::user()->id, 'imageable_type' => config('constants.PHOTO.TOURNAMENT_PROFILE')])->update(['is_album_cover' => 0]);
@@ -668,6 +708,13 @@ class TournamentsController extends Controller
 			if(isset($input['cover_pic']) && $input['cover_pic'])
 				$coverPic = $input['cover_pic'];
 			Helper::uploadPhotos($request['filelist_gallery'], config('constants.PHOTO_PATH.TOURNAMENT_PROFILE'), $id, $albumID, $coverPic, config('constants.PHOTO.TOURNAMENT_PROFILE'), $user_id);
+
+           
+
+
+
+
+
 
 
 			//End Upload Photos
@@ -689,6 +736,7 @@ class TournamentsController extends Controller
 	//update parent tournament
 	public function updateParentTournament($request,$id)
 	{
+		
 		$manager_id = TournamentParent::where('id', $id)->pluck('manager_id');
 		//$request = Request::all();
 		$request['manager_id'] = !empty($request['managerId'])?$request['managerId']:$manager_id;
@@ -752,6 +800,8 @@ class TournamentsController extends Controller
 	public function edit($id)
 	{
 
+        
+
 		$enum = config('constants.ENUM.TOURNAMENTS.TYPE');
 		$schedule_type_enum = config('constants.ENUM.TOURNAMENTS.SCHEDULE_TYPE');
 		$game_type_enum = config('constants.ENUM.TOURNAMENTS.GAME_TYPE');
@@ -760,6 +810,7 @@ class TournamentsController extends Controller
 		$sports = Helper::getDevelopedSport(1,1);
 		/** @var TournamentParent $tournament */
 		$tournament = TournamentParent::findOrFail($id);
+//		$tournament_data = Tournaments::findOrFail($id);
 
 		$loginUserId = Auth::user()->id;
 
@@ -838,6 +889,8 @@ class TournamentsController extends Controller
         // new data vendor bank accounts
         $vendorBankAccounts = VendorBankAccounts::where('user_id',$loginUserId)->get();
 
+       
+
         return view('tournaments.tournamentsedit',
             compact('tournament'))->with([
             'sports'              => ['' => 'Select Sport'] + $sports,
@@ -865,6 +918,8 @@ class TournamentsController extends Controller
             'groupsList'         => ['' => 'Select Team Group'] + $orgGroups,
             'groupId'         => $orgGroupIds,
             'vendorBankAccounts' => $vendorBankAccounts,
+          //  'online_enrollment_fee' => $tournament_data->enrollment_fee,
+             'online_enrollment_fee' => '',
         ]);
     }
 
@@ -931,6 +986,8 @@ class TournamentsController extends Controller
 
 		$vendorBankAccounts = VendorBankAccounts::where('user_id',Auth::user()->id)->get();
 
+		
+
 		$countries = Country::orderBy('country_name')->lists('country_name', 'id')->all();
 		$states = State::where('country_id', $tournament->country_id)->orderBy('state_name')->lists('state_name', 'id')->all();
 		$cities = City::where('state_id',  $tournament->state_id)->orderBy('city_name')->lists('city_name', 'id')->all();
@@ -938,7 +995,7 @@ class TournamentsController extends Controller
 			'schedule_type_enum'=>$schedule_type_enum,
 			'game_type_enum' 	=>$game_type_enum,
                         'enrollment_type' => config('constants.ENUM.TOURNAMENTS.ENROLLMENT_TYPE'),
-			'parent_id'=>$id,'tournament_name'=>$tournament['name'],'logo'=>$tournament['logo'],'manager_name'=>$manager_name,'matchTypes'=>$matchTypes,'playerTypes'=>$playerTypes,'match_types'=>['' => 'Select Match Type'] +$match_types,'player_types'=>['' => 'Select Player Type'] +$player_types,'matchScheduleCount'=>$matchScheduleCount,'tournamentGroupCount'=>$tournamentGroupCount,'vendorBankAccounts'=>$vendorBankAccounts));
+			'parent_id'=>$id,'tournament_name'=>$tournament['name'],'logo'=>$tournament['logo'],'manager_name'=>$manager_name,'matchTypes'=>$matchTypes,'playerTypes'=>$playerTypes,'match_types'=>['' => 'Select Match Type'] +$match_types,'player_types'=>['' => 'Select Player Type'] +$player_types,'matchScheduleCount'=>$matchScheduleCount,'tournamentGroupCount'=>$tournamentGroupCount,'vendorBankAccounts'=>$vendorBankAccounts,'online_enrollment_fee'=>$tournament->enrollment_fee));
 	}
 	//function to display tournament groups
 	public function groups($tournament_id,$type='', $from_api=false) {

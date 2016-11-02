@@ -23,4 +23,21 @@ class Rating extends Model {
 
 
 
+    public static function overralRate($id,$type){
+        return Rating::where('to_id', $id)
+            ->where('type',$type)
+            ->select(\DB::raw('SUM(rate)/COUNT(rate) as rate' ))
+            ->value('rate');
+    }
+
+    public static function activeUserRate($id,$type){
+        if (\Auth::user()) {
+            return Rating::where('to_id', $id)
+                ->where('type', $type)
+                ->where('user_id', \Auth::user()->id)
+                ->value('rate');
+        }
+    }
+
+
 }

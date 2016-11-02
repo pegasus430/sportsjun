@@ -57,10 +57,7 @@
 	<div id="content" class="col-sm-10">
 
 		@include('album.share')
-
-		<?php //echo $user_id. $loginid;exit;?>
-
-		<?php //echo "<pre>";print_r($photo_array);exit;?>
+		@if (!(isset($is_widget) && $is_widget))
 		@if($action=='team' )
 		@if(isset($uploadimage)&& count($uploadimage))
 		<a href="#" class="launch-modal uploadimgages add-tour" data-toggle="modal" data-target=".bs-example-modal-sm" style="width: 300px; margin-top: 15px;"><i class="fa fa-plus"></i> Upload Images </a>
@@ -90,11 +87,13 @@
 		@endif
 		@endif
 
+		@endif
 		@if (session('status'))
 		<div class="alert alert-success">
 			{{ session('status') }}
 		</div>
 		@endif
+
 		<?php //echo "<pre>";print_r($photo_array );exit;?>
 
 		<div id="marketplaceid" class="gallery-pg clear_both">

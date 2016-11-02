@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Model\Photo;
+use App\Model\BankDocuments;
 use App\Model\Team;
 use App\Model\Sport;
 use App\Model\UserStatistic;
@@ -143,6 +144,46 @@ class Helper
         return false;
 
     }
+
+
+   /*--------   file moving from temp to attachment function      ---------------------------*/
+    public static function moveImage($imagearray,$vendor_bank_account_id) {
+            $photos = array_filter(explode(',', $imagearray));
+            $oldFilePath = public_path('uploads/temp/'); 
+            $newFilePath = public_path('uploads/attachments/');
+            $moved_images_names=array();
+            $i=0;
+            foreach ($photos as $key => $value) {
+            $filename = explode('####SPORTSJUN####', $value);
+            $title = $filename[0];
+            $url = $filename[1];
+            $newFileName = str_random(10) . $title;
+           
+
+            if (File::move($oldFilePath.$value, $newFilePath. $newFileName)) {
+
+                $photosArray = array(
+                    'vendor_bank_account_id' => $vendor_bank_account_id,
+                    'name' => $newFileName,
+                    'location' => 'attachments/'. $newFileName,
+                );
+               
+
+                $photo = BankDocuments::create($photosArray);
+                $insertedphotoids[] = $photo->id;
+               
+              
+            }
+            $i++;
+        }
+          return $insertedphotoids;
+    }
+     
+     /*---------  file moving from temp to attachment function  ------------------------*/ 
+
+
+
+
 
 
     public static function printQueries()
