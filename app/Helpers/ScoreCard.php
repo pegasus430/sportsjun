@@ -46,6 +46,7 @@ use App\Model\TtPlayerMatchwiseStats;
 use App\Model\TtPlayerMatchScore;
 use App\Model\TtPlayerRubberScore;
 use App\Model\TtStatistic;
+use App\Model\TennisSet;
 
 
 class ScoreCard {
@@ -196,6 +197,41 @@ class ScoreCard {
 
 	public static function send_email_for_match(){
 
+	}
+
+	public static function tennis_active_set($match_id, $rubber_id, $set_number){
+			  $set_scoring = TennisSet::whereMatchId($match_id);
+               if($rubber_id) $set_scoring->whereRubberId($rubber_id);
+           $set_scoring  = $set_scoring->whereSet($set_number)->first();
+
+           return $set_scoring;
+	}
+
+	public static function display_role($user_id, $team_id){
+		$role=TeamPlayers::where(['user_id'=>$user_id,'team_id'=>$team_id])->first();
+		$text = '';
+
+		 if($role){
+			switch ($role->role) {
+				case in_array($role->role, ['owner', 'manager']):
+				$text ="<span style='color:orange'>$role->role </span>";
+					break;
+
+					case in_array($role->role, ['captain', 'physio','coach']):
+				$text ="<span style='color:blue'>$role->role </span>";
+					break;
+
+						case in_array($role->role, ['vice-captain', 'keeper']):
+				$text ="<span style='color:red'>$role->role </span>";
+					break;
+				
+				default:
+					# code...
+					break;
+			}
+		}
+
+		return $text;
 	}
 
 

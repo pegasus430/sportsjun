@@ -124,7 +124,8 @@ $css_version    = config('constants.CSS_VERSION');
 <body>
 <!--// Wrapper //-->
 <div class="kode-wrapper">
-        <header id="mainheader" class="kode-header-absolute">
+        @if (!(isset($is_widget) && $is_widget))
+                <header id="mainheader" class="kode-header-absolute">
 
                 <!--// TopBaar //-->
                 <div class="kode-topbar">
@@ -209,6 +210,7 @@ $css_version    = config('constants.CSS_VERSION');
                         </div>
                 </div>
         </header>
+        @endif
         @yield('content')
 </div> <div class="kd-divider divider4"><span></span></div>
 <footer id="footer1" class="kode-parallax kode-dark-overlay kode-bg-pattern">

@@ -14,8 +14,12 @@ class TournamentGroups extends Model {
 		return $this->hasMany('App\Model\TournamentGroupTeams','tournament_group_id','id');
 	}
 
-	public function matchSchedules(){
+	public function match_schedules(){
         return $this->hasMany(MatchSchedule::class,'tournament_group_id','id');
+    }
+
+    public function tournament(){
+        return $this->belongsTo(Tournaments::class,'tournament_id','id');
     }
 
 

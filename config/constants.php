@@ -57,7 +57,9 @@ return [
                 ['TYPE'          => ['league' => 'Group Tournament', 'knockout' => 'Knock-Out',
                                 'multistage' => 'Groups + Knock-Out'],
                         'SCHEDULE_TYPE' => ['team' => 'TEAM', 'individual' => 'INDIVIDUAL'],
-                        'GAME_TYPE'     => ['normal'    =>'NORMAL - ONE GAME',     'rubber'   =>   'RUBBER - MULTIPLE GAMES']
+                        'GAME_TYPE'     => ['normal'    =>'NORMAL - ONE GAME',     'rubber'   =>   'RUBBER - MULTIPLE GAMES'],
+                        'ENROLLMENT_TYPE'     => [''=>'LISTING TYPE','online'    =>'ONLINE PAYMENT',     'offline'   =>   'OFFLINE PAYMENT','onlylisting'   =>   'JUST LISTING'],
+                        'STATUS'     => ['0'    =>'PENDING',     '1'   =>   'APPROVED','2'   =>   'REJECTED']
                 ]
                 ,
                 'SCHEDULE'     => 

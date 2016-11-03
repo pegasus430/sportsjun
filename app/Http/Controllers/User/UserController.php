@@ -444,8 +444,12 @@ class UserController extends Controller {
                 $userId = \Auth::user()->id;
                 $userStatistic = UserStatistic::where('user_id', $userId)->first();
                 if (!$userStatistic){
-                    UserStatistic::create(['user_id' => $userId, 'following_sports' => ',' . $sports->implode('id',',') . ',']);
-                    return redirect('/');
+                    UserStatistic::create([
+                        'user_id' => $userId,
+                        'following_sports' => ',' . $sports->implode('id',',') . ',',
+                        'allowed_sports' => ',' . $sports->implode('id',',') . ','
+                    ]);
+                    return redirect('/editsportprofile/'.$userId);
                 }
             } else {
                 Session::flash('error', trans('message.sports.sports_not_exists'));

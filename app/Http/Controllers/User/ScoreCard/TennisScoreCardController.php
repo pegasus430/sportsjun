@@ -33,6 +33,8 @@ use DateTime;
 use App\Helpers\AllRequests;
 use Session;
 use Request;
+use App\Model\TennisSet;
+use App\Model\TennisSetGame;
 
 class TennisScoreCardController extends parentScoreCardController
 {
@@ -43,7 +45,7 @@ class TennisScoreCardController extends parentScoreCardController
 
         $game_type=$match_data[0]['game_type'];
             if($game_type=='rubber'){              
-                $rubbers=MatchscheduleRubber::whereMatchId($match_data[0]['id'])->get();
+                $rubbers=MatchscheduleRubber::whereMatchId($match_data[0]['id'])->get();              
 
                 if(!count($rubbers)){
                     $scheduleController = new ScheduleController;
@@ -230,7 +232,17 @@ class TennisScoreCardController extends parentScoreCardController
 
 
         //ONLY FOR VIEW SCORE CARD
-        if($is_from_view==1 || (!empty($score_status_array['added_by']) && $score_status_array['added_by']!=$loginUserId && $match_data[0]['scoring_status']!='rejected') || $match_data[0]['match_status']=='completed' || $match_data[0]['scoring_status']=='approval_pending' || $match_data[0]['scoring_status']=='approved' || !$isValidUser)
+          $isAdminEdit = 0;
+        if(Session::has('is_allowed_to_edit_match')){
+            $session_data = Session::get('is_allowed_to_edit_match');
+
+            if($isValidUser && ($session_data[0]['id']==$match_data[0]['id'])){
+                $isAdminEdit=1;
+            }
+        }
+
+
+        if(($is_from_view==1 || (!empty($score_status_array['added_by']) && $score_status_array['added_by']!=$loginUserId && $match_data[0]['scoring_status']!='rejected') || $match_data[0]['match_status']=='completed' || $match_data[0]['scoring_status']=='approval_pending' || $match_data[0]['scoring_status']=='approved' || !$isValidUser) && !$isAdminEdit)
         {
             
                 return view('scorecards.tennis.tennisscorecardview',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'user_a_name'=>$user_a_name,'user_b_name'=>$user_b_name,'user_a_logo'=>$user_a_logo,'user_b_logo'=>$user_b_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'is_singles'=>$is_singles,'score_a_array'=>$score_a_array,'score_b_array'=>$score_b_array,'b_players'=>$b_players,'a_players'=>$a_players,'team_a_player_images'=>$team_a_player_images,'team_b_player_images'=>$team_b_player_images,'decoded_match_details'=>$decoded_match_details,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,
@@ -429,6 +441,8 @@ class TennisScoreCardController extends parentScoreCardController
 
         $this->inserttennisPlayer($right_player_1, $right_player_2, $tournament_id, $right_team_id,$right_team_name, $match_id, $right_player_1_name, $right_player_2_name, $game_type, $rubber_number,$rubber_id);
 
+        $this->insertTennisSet($match_id, $rubber_id, $number_of_sets);
+
         $match_model->hasSetupSquad=1;
         $match_model->match_details=$match_details;
         $main_match_model->match_details=$match_details;
@@ -446,6 +460,7 @@ class TennisScoreCardController extends parentScoreCardController
         if($game_type!='rubber')   $match_score_model=new tennisPlayerMatchScore; 
         else    $match_score_model=new tennisPlayerRubberScore; 
 
+        if(!$team_name) $team_name='';
 
             $match_score_model->user_id_a       =$player_1_id;
             $match_score_model->user_id_b       =$player_2_id;
@@ -770,6 +785,9 @@ class TennisScoreCardController extends parentScoreCardController
 
                     $match_details_data->{"set".$i}->{$left_team_id."_score"}=(int)$request->{"a_set".$i}>$end_point?$end_point:(int)$request->{"a_set".$i};
                     $match_details_data->{"set".$i}->{$right_team_id."_score"}=(int)$request->{"b_set".$i}>$end_point?$end_point:(int)$request->{"b_set".$i};
+
+                    $match_details_data->{"set".$i."_tie_breaker"}->{$left_team_id."_score"}=$request->{"a_set_tie".$i};
+                    $match_details_data->{"set".$i."_tie_breaker"}->{$right_team_id."_score"}=$request->{"b_set_tie".$i};
                }
 
             //store aces
@@ -897,6 +915,8 @@ class TennisScoreCardController extends parentScoreCardController
                             $approved = 'approved';
                         }
                     }
+
+                         $this->deny_match_edit_by_admin();
 
             if(!empty($matchScheduleDetails['tournament_id'])) {
                 $tournamentDetails = Tournaments::where('id', '=', $matchScheduleDetails['tournament_id'])->first();
@@ -1134,59 +1154,19 @@ class TennisScoreCardController extends parentScoreCardController
         ];
     }
 
-    public function getCurrentSet($match_id, $game_type='normal'){
-                  
-
-            //first and second player(team) or left and right player(team)
-  
-
+    public function getCurrentSet($match_id, $game_type='normal', $old_number=0){
+ 
         if($game_type=='normal'){
-            $match_model=MatchSchedule::find($match_id);
-            $left_player_model=tennisPlayerMatchScore::where('match_id',$match_id)->first();
-            $right_player_model=tennisPlayerMatchScore::where('match_id',$match_id)->skip(1)->first();
+          $set_model=TennisSet::where('match_id',$match_id)->whereWinnerId(0)->first(); 
           }
-        else {
-            $match_model=MatchScheduleRubber::find($match_id);
-            $left_player_model=tennisPlayerRubberScore::where('rubber_id',$match_id)->first();
-            $right_player_model=tennisPlayerRubberScore::where('rubber_id',$match_id)->skip(1)->first();
+        else {      
+            $set_model=TennisSet::where('rubber_id',$match_id)->whereWinnerId(0)->first(); 
         } 
 
-    $match_score_model=$left_player_model;
-    $match_score_model_other=$right_player_model;
-
-
-        $preferences=json_decode($match_model->match_details)->preferences;
-
-
-            if($this->checkSet('set1', $match_score_model, $match_score_model_other, $preferences)){
-                    return 1;                   
-            }
-            else{           //set1 is complete
-
-                if($this->checkSet('set2', $match_score_model, $match_score_model_other, $preferences)){
-                    return 2;  
-                }
-
-                else{       //set2 is complete
-                        if($this->checkSet('set3', $match_score_model, $match_score_model_other, $preferences)){
-                            return 3;  
-                            }
-                        else{
-                      
-                                if($this->checkSet('set4', $match_score_model, $match_score_model_other, $preferences)){
-                                        return 4;
-                                            
-                                    }
-                                    else{
-                                        if($this->checkSet('set5', $match_score_model, $match_score_model_other, $preferences)){
-                                              return 5; 
-                                         }
-                                         else return 0;
-                                }
-                            
-                            }
-                        }
-                }
+        if($set_model){
+            return $set_model->set;
+        }
+        else return $old_number;
     }
 
 
@@ -1229,6 +1209,320 @@ class TennisScoreCardController extends parentScoreCardController
                         $sportName = Sport::where('id',$match_model->sports_id)->pluck('sports_name');
                         $this->insertPlayerStatistics($sportName,$match_id);
                         $this->updateStatitics($match_id, $winner_team_id, $looser_team_id); 
+    }
+
+    public function tennis_scoring(ObjectRequest $request){
+            $type       =     $request->type;
+            $set_number =     $request->set_number;
+            $game_number=     $request->game_number;
+            $team_type  =     $request->team_type;
+            $team_id    =     $request->team_id;
+            $omi = $match_id   =     $request->match_id;
+            $rubber_id  =     $request->rubber_id;
+            $score_a_id   =     $request->score_id;
+
+            $set_scoring = TennisSet::whereMatchId($match_id);
+               if($rubber_id) $set_scoring->whereRubberId($rubber_id);
+           $set_scoring  = $set_scoring->whereSet($set_number)->first();
+                  
+            if($rubber_id){
+                $game_type='rubber';
+                $score_a_model=tennisPlayerRubberScore::find($score_a_id);
+                $match_id=$score_a_model->rubber_id;   
+                $match_model=MatchScheduleRubber::find($match_id);   
+                
+            }
+            else{
+                $game_type='normal';
+                $score_a_model=tennisPlayerMatchScore::find($score_a_id);
+                $match_id=$score_a_model->match_id;    
+                $match_model=Matchschedule::find($match_id);
+            }       
+
+            $match_details=json_decode($match_model->match_details);
+            $match_details_data=$match_details->match_details;     
+
+           if($set_scoring){
+
+            $game = $set_scoring->active_game;
+
+                switch ($type) {
+                    case in_array($type, [15,30,40]):
+                            $game->{$team_type.'_score'}=$type;                            
+                        break;
+
+                    case 'Ace':
+                            $game->aces++;
+                            $set_scoring->aces++;
+                             $score_a_model->aces++;                             
+                             $match_details_data->aces->{$team_id."_score"}++;
+
+                    break;
+                    case 'DB':
+                            $game->double_faults++;
+                            $set_scoring->double_faults++;
+                            $score_a_model->double_faults++;
+                            $match_details_data->double_faults->{$team_id."_score"}++;
+
+                    break;
+
+                    case 'Win':
+                            $game->winner_id = $team_id;
+                            $game->save();
+                            $game=$this->enter_new_game($omi, $rubber_id, $game_number+1, $game->set, $game->table_sets_id);
+                            $set_scoring->{$team_type.'_score'}++;                          
+                            $score_a_model->{"set".$set_number}++;
+                            $match_details_data->{"set".$set_number}->{$team_id."_score"}++;
+
+                    break;
+                    
+                    default:
+                        # code...
+                        break;
+                }
+
+                $game->save();
+                $set_scoring->save();
+           }
+
+        $score_a_model->save();
+        $match_details->match_details=$match_details_data;
+        $match_details->scores=$this->getScoreSet($match_id, $game_type);
+        $match_details->current_set=$this->getCurrentSet($match_id, $game_type, $match_details->preferences->number_of_sets);     //get current active set
+
+        $match_model->match_details=json_encode($match_details);
+        $match_model->save();
+
+
+        return [
+            'set_scoring'=>$set_scoring,
+            'game'=>$game,
+            'match_details'=>$match_details
+        ];
+    }
+
+        public function tennis_scoring_tb(ObjectRequest $request){
+            $type       =     $request->type;
+            $set_number =     $request->set_number;
+            $game_number=     $request->game_number;
+            $team_type  =     $request->team_type;
+            $team_id    =     $request->team_id;
+            $omi = $match_id   =     $request->match_id;
+            $rubber_id  =     $request->rubber_id;
+            $score_a_id   =     $request->{$team_type.'_id'};
+
+            $set_scoring = TennisSet::whereMatchId($match_id);
+               if($rubber_id) $set_scoring->whereRubberId($rubber_id);
+           $set_scoring  = $set_scoring->whereSet($set_number)->first();
+                  
+            if($rubber_id){
+                $game_type='rubber';
+                $score_a_model=tennisPlayerRubberScore::find($score_a_id);
+                $match_id=$score_a_model->rubber_id;   
+                $match_model=MatchScheduleRubber::find($match_id);   
+                
+            }
+            else{
+                $game_type='normal';
+                $score_a_model=tennisPlayerMatchScore::find($score_a_id);
+                $match_id=$score_a_model->match_id;    
+                $match_model=Matchschedule::find($match_id);
+            }       
+
+            $match_details=json_decode($match_model->match_details);
+            $match_details_data=$match_details->match_details;     
+
+           if($set_scoring){
+            $game = $set_scoring->active_game;
+
+            switch ($type) {
+                case 'add':
+
+
+                    
+          $score_a_model->{"set".$set_number."_tie_breaker"}++;
+          $match_details_data->{"set".$set_number."_tie_breaker"}->{$team_id."_score"}++;
+          $set_scoring->{$team_type.'_tie_breaker'}++;
+                    break;
+
+                 case 'remove':
+                    if(  $score_a_model->{"set".$set_number."_tie_breaker"} >0){
+                        $score_a_model->{"set".$set_number."_tie_breaker"}--;
+                        $match_details_data->{"set".$set_number."_tie_breaker"}->{$team_id."_score"}--; 
+                         $set_scoring->{$team_type.'_tie_breaker'}--;
+                    }
+                    break;
+                
+                default:
+                    # code...
+                    break;
+            }
+
+              $set_scoring->save();
+
+            }
+
+
+        $score_a_model->save();
+
+       
+        $match_details->match_details=$match_details_data;
+        $match_details->scores=$this->getScoreSet($match_id, $game_type);
+        $match_details->current_set=$this->getCurrentSet($match_id, $game_type, $match_details->preferences->number_of_sets);     //get current active set
+
+        $match_model->match_details=json_encode($match_details);
+        $match_model->save();
+
+
+        return [
+            'set_scoring'=>$set_scoring,
+            'game'=>$game,
+            'match_details'=>$match_details
+        ];
+
+    }
+
+    public function insertTennisSet($match_id, $rubber_id=0, $number_of_sets=3){
+        $match_model = matchschedule::find($match_id);
+
+        if(!$rubber_id) $rubber_id=0;
+
+        for($i=1; $i<=$number_of_sets; $i++){
+            $set_scoring = new TennisSet;
+            $set_scoring->team_a = $match_model->a_id;
+            $set_scoring->team_b = $match_model->b_id;
+            $set_scoring->match_id= $match_model->id;
+            $set_scoring->set     = $i;
+            $set_scoring->rubber_id=$rubber_id;
+            $set_scoring->save();
+            $this->enter_new_game($match_id, $rubber_id, 1,$i,$set_scoring->id);           
+        }
+
+    }
+
+    public function enter_new_game($match_id, $rubber_id=0, $game_number=1, $set_number=1, $set_id ){
+    $match_model = matchschedule::find($match_id);
+
+          if(!$rubber_id) $rubber_id=0;
+            $game_scoring = new TennisSetGame;
+            $game_scoring->team_a = $match_model->a_id;
+            $game_scoring->team_b = $match_model->b_id;
+            $game_scoring->match_id= $match_model->id;
+            $game_scoring->set     = $set_number;
+            $game_scoring->rubber_id=$rubber_id;
+            $game_scoring->table_sets_id = $set_id;
+            $game_scoring->game_number   = $game_number;
+            $game_scoring->team_a_score =0;
+            $game_scoring->team_b_score =0;
+            $game_scoring->save();
+
+        return $game_scoring;
+    }
+
+
+    public function end_set(ObjectRequest $request){
+            $omi = $match_id   =     $request->match_id;
+            $rubber_id  =     $request->rubber_id;
+            $set_number =     $request->set_number;
+            $score_a_id   =     $request->score_a_id;
+            $score_b_id   =     $request->score_b_id;
+            $type         =     $request->type;
+
+            $set_scoring = TennisSet::whereMatchId($match_id);
+               if($rubber_id) $set_scoring->whereRubberId($rubber_id);
+           $set_scoring  = $set_scoring->whereSet($set_number)->first();
+
+            if($rubber_id){
+                       $game_type='rubber';
+                $score_a_model=tennisPlayerRubberScore::find($score_a_id);
+                $score_b_model=tennisPlayerRubberScore::find($score_b_id); 
+                $match_id=$score_a_model->rubber_id;   
+                $match_model=MatchScheduleRubber::find($match_id);   
+                
+            }
+            else{
+                       $game_type='normal';
+                $score_a_model=tennisPlayerMatchScore::find($score_a_id);
+                $score_b_model=tennisPlayerMatchScore::find($score_b_id); 
+                $match_id=$score_a_model->match_id;    
+                $match_model=Matchschedule::find($match_id);
+            }     
+
+            $match_details = json_decode($match_model->match_details);
+             $match_details_data=$match_details->match_details;  
+
+           if($set_scoring){
+
+        $game = $set_scoring->active_game;
+            if($score_a_model->{"set".$set_number."_tie_breaker"} != $score_b_model->{"set".$set_number."_tie_breaker"}){
+    
+                if($score_a_model->{"set".$set_number."_tie_breaker"} > $score_b_model->{"set".$set_number."_tie_breaker"}){
+                    $team_id = !empty($score_a_model->team_id)?$score_a_model->team_id:$score_a_model->user_id_a;
+                                             
+                            $set_scoring->{'team_a_score'}++;                          
+                            $score_a_model->{"set".$set_number}++;
+                            $match_details_data->{"set".$set_number}->{$team_id."_score"}++;
+                              $game->winner_id = $team_id;
+                            $game->save(); 
+                            $score_a_model->save();
+                }
+                else{
+                    $team_id = !empty($score_b_model->team_id)?$score_b_model->team_id:$score_b_model->user_id_a;
+                                                
+                            $set_scoring->{'team_b_score'}++;                          
+                            $score_b_model->{"set".$set_number}++;
+                            $match_details_data->{"set".$set_number}->{$team_id."_score"}++;
+                              $game->winner_id = $team_id;
+                            $game->save(); 
+                             $score_b_model->save(); 
+                }
+
+            }
+                if($score_a_model->{'set'.$set_number} > $score_b_model->{'set'.$set_number} ){
+                        //a is winner
+                    $winner=!empty($score_a_model->team_id)?$score_a_model->team_id:$score_a_model->user_id_a;
+                    $looser=!empty($score_b_model->team_id)?$score_b_model->team_id:$score_b_model->user_id_a;
+                }
+                else {
+                    $winner=!empty($score_b_model->team_id)?$score_b_model->team_id:$score_b_model->user_id_a;
+                    $looser=!empty($score_a_model->team_id)?$score_a_model->team_id:$score_a_model->user_id_a;
+                }
+
+                $set_scoring->winner_id  = $winner;
+                $set_scoring->looser_id  = $looser;
+                $set_scoring->save();
+
+                $match_details->match_details=$match_details_data;
+                $match_details->scores=$this->getScoreSet($match_id, $game_type);
+                $match_details->current_set=$this->getCurrentSet($match_id, $game_type, $match_details->preferences->number_of_sets);     
+                $match_model->match_details=json_encode($match_details);
+                $match_model->save();
+           }
+
+           $set_number++;
+           $new_set_scoring = TennisSet::whereMatchId($omi);
+               if($rubber_id) $new_set_scoring->whereRubberId($rubber_id);
+           $new_set_scoring  = $new_set_scoring->whereSet($set_number)->first();
+
+
+    if($new_set_scoring){
+        return [
+            'status'=>'scoring',
+            'set_scoring'=>$new_set_scoring,
+            'game'=>$new_set_scoring->active_game,
+            'match_details'=>$match_details
+        ];
+    }
+    else{
+        return [
+            'status'=>'finished',
+            'set_scoring'=>$set_scoring,
+            'game'=>$game,
+            'match_details'=>$match_details
+
+        ];
+    }
+
     }
 
 

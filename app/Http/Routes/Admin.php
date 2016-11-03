@@ -160,11 +160,23 @@ Route::group(array('middleware' => 'role'), function() {
     Route::get('admin/match/scorecard/view/{match_id}', [
     'as' => 'admin/match/scorecard/view', 'uses' => 'User\ScoreCardController@createScorecardView']);
 
+
+
+    //  Route::postt('admin/online/{c_id}', [
+    // 'as' => 'admin/online/availability', 'uses' => 'admin\ScoreCardController@createScorecardView']);
+
+
+
     //admin score card end
 
     Route::resource('admin/facility', 'admin\FacilityController');
     Route::resource('admin/organization', 'admin\OrganizationController');
     Route::resource('admin/marketplace', 'admin\MarketplaceController');
     Route::resource('admin/team', 'admin\TeamController');
+    Route::resource('admin/tournamentevents', 'admin\TournamentEventsController');
+    Route::controller('admin/bankaccounts', 'admin\BankAccountsController');
+    Route::controller('admin/paymentgateways', 'admin\PaymentGateWaysController');
     Route::resource('admin', 'admin\UserController');
+
+    //Route::get('admin/paymentgateways/availability/{c_id}', 'admin\PaymentGateWaysController@postAvailability');
 });

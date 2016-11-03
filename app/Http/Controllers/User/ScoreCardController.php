@@ -421,7 +421,17 @@ class ScoreCardController extends Controller {
 		}
 
 		//ONLY FOR VIEW SCORE CARD
-		if($is_from_view==1 || (!empty($score_status_array['added_by']) && $score_status_array['added_by']!=$loginUserId && $match_data[0]['scoring_status']!='rejected') || $match_data[0]['match_status']=='completed' || $match_data[0]['scoring_status']=='approval_pending' || $match_data[0]['scoring_status']=='approved' || !$isValidUser)
+   $isAdminEdit = 0;
+        if(Session::has('is_allowed_to_edit_match')){
+            $session_data = Session::get('is_allowed_to_edit_match');
+
+            if($isValidUser && ($session_data[0]['id']==$match_data[0]['id'])){
+                $isAdminEdit=1;
+            }
+        }
+
+
+        if(($is_from_view==1 || (!empty($score_status_array['added_by']) && $score_status_array['added_by']!=$loginUserId && $match_data[0]['scoring_status']!='rejected') || $match_data[0]['match_status']=='completed' || $match_data[0]['scoring_status']=='approval_pending' || $match_data[0]['scoring_status']=='approved' || !$isValidUser) && !$isAdminEdit)
 		{
 			if($match=='Tennis')
 			{
@@ -2887,8 +2897,17 @@ class ScoreCardController extends Controller {
 		$team_a_city = Helper::getTeamCity($match_data[0]['a_id']);
 		$team_b_city = Helper::getTeamCity($match_data[0]['b_id']);
 		$form_id = 'soccer';
+   $isAdminEdit = 0;
+        if(Session::has('is_allowed_to_edit_match')){
+            $session_data = Session::get('is_allowed_to_edit_match');
 
-		if($is_from_view==1 || (!empty($score_status_array['added_by']) && $score_status_array['added_by']!=$loginUserId && $match_data[0]['scoring_status']!='rejected') || $match_data[0]['match_status']=='completed' || $match_data[0]['scoring_status']=='approval_pending' || $match_data[0]['scoring_status']=='approved' || !$isValidUser)//soccer score view only
+            if($isValidUser && ($session_data[0]['id']==$match_data[0]['id'])){
+                $isAdminEdit=1;
+            }
+        }
+
+
+        if(($is_from_view==1 || (!empty($score_status_array['added_by']) && $score_status_array['added_by']!=$loginUserId && $match_data[0]['scoring_status']!='rejected') || $match_data[0]['match_status']=='completed' || $match_data[0]['scoring_status']=='approval_pending' || $match_data[0]['scoring_status']=='approved' || !$isValidUser) && !$isAdminEdit)//soccer score view only
 		{
 			$player_name_array = array();
 			$users = User::select('id', 'name')->get()->toArray(); //get player names
@@ -3286,6 +3305,8 @@ class ScoreCardController extends Controller {
 				}
 
 			}
+
+			 $this->deny_match_edit_by_admin();
 
 			if(!empty($matchScheduleDetails['tournament_id'])) {
 //                        dd($winner_team_id.'<>'.$looser_team_id);
@@ -4387,10 +4408,10 @@ if(!isset($match_details['penalties']['team_b']['players_ids']))$match_details['
 		$response_b="";
 		for($i=0; $i<$index_a; $i++){
 
-		  if(isset($request['penalty_player_a_'.$i]) ){
+		  if(isset($request['penalty_player_a_'.$i]) && $request['penalty_player_a_'.$i]=='on' ){
 
 			 if(!in_array($request['penalty_player_user_id_a_'.$i], $penalties['team_a']['players_ids'])){
-				array_push($penalties['team_a']['players_ids'], $request['penalty_player_user_id_a_'.$i]);
+				$penalties['team_a']['players_ids'][$i]=$request['penalty_player_user_id_a_'.$i];
 				
 				$player_id=$request['penalty_player_id_a_'.$i];
 				$matchwise_model=SoccerPlayerMatchwiseStats::find($player_id);
@@ -4402,7 +4423,7 @@ if(!isset($match_details['penalties']['team_b']['players_ids']))$match_details['
 					'goal'=>'',
 					'user_id'=>$request['penalty_player_user_id_a_'.$i],
 				];
-				array_push($penalties['team_a']['players'], $player);
+				$penalties['team_a']['players'][$i]=$player;
 
 				$response_a.="
 	  					<tr>
@@ -4417,10 +4438,10 @@ if(!isset($match_details['penalties']['team_b']['players_ids']))$match_details['
 		}
 
 		for($i=0; $i<$index_b; $i++){
-			if(isset($request['penalty_player_b_'.$i])){
+			if(isset($request['penalty_player_b_'.$i]) && $request['penalty_player_b_'.$i]=='on'){
 			 if(!in_array($request['penalty_player_user_id_b_'.$i], $penalties['team_b']['players_ids'])){
 
-				array_push($penalties['team_b']['players_ids'], $request['penalty_player_user_id_b_'.$i]);
+				$penalties['team_b']['players_ids'][$i]= $request['penalty_player_user_id_b_'.$i];
 				
 				$player_id=$request['penalty_player_id_b_'.$i];
 				$matchwise_model=SoccerPlayerMatchwiseStats::find($player_id);
@@ -4432,7 +4453,7 @@ if(!isset($match_details['penalties']['team_b']['players_ids']))$match_details['
 					'goal'=>'',
 					'user_id'=>$request['penalty_player_user_id_b_'.$i],
 				];
-				array_push($penalties['team_b']['players'], $player);
+				$penalties['team_b']['players'][$i]= $player;
 
 				$response_b.="
 	  					<tr>
@@ -4447,7 +4468,7 @@ if(!isset($match_details['penalties']['team_b']['players_ids']))$match_details['
 		}
 
 		$match_details['penalties']=$penalties;
-		$index_a--;
+		
 
 		$match_model['match_details']=json_encode($match_details);
 		$match_model->save();
@@ -4524,6 +4545,29 @@ if(!isset($match_details['penalties']['team_b']['players_ids']))$match_details['
 		$match_model = MatchSchedule::find($match_id);
 		$match_model->selected_half_or_quarter = explode('_', $half_time)[1];
 		$match_model->save();		
+	}
+
+	public function allow_match_edit_by_admin(){
+		$request=Request::all();
+		$match_id=$request['match_id'];
+		$match_data=matchSchedule::whereId($match_id)->get();
+
+		if(Auth::check() && Helper::isValidUserForScoreEnter($match_data)){
+
+			Session(['is_allowed_to_edit_match'=>$match_data]);
+				return [
+					'status'=>'ok'
+				];
+		}
+		else {
+			return [
+					'status'=>'error'
+				];
+		}
+	}
+
+	public function deny_match_edit_by_admin(){
+			Session::remove('is_allowed_to_edit_match');
 	}
 
 

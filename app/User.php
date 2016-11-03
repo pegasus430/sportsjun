@@ -7,6 +7,8 @@ use App\Model\Followers;
 use App\Model\Organization;
 use App\Model\OrganizationRole;
 use App\Model\Photo;
+use App\Model\Rating;
+use App\Model\TournamentParent;
 use App\Model\Tournaments;
 use Auth;
 use DB;
@@ -181,8 +183,9 @@ class User extends Model implements AuthenticatableContract,
             ->where('is_album_cover', '1');
     }
 
-    public function folowers(){
-        return $this->hasMany(Followers::class,'user_id','id')->where('deleted_at',null);
+    public function folowers()
+    {
+        return $this->hasMany(Followers::class, 'user_id', 'id')->where('deleted_at', null);
     }
 
     public function tournaments()
@@ -266,6 +269,7 @@ class User extends Model implements AuthenticatableContract,
         return $response;
     }
 
+
     public function userscheduleone()
     {
         return $this->hasMany('App\Model\MatchSchedule', 'a_id', 'id');
@@ -298,7 +302,8 @@ class User extends Model implements AuthenticatableContract,
         }
     }
 
-    public function getLogoImageAttribute(){
+    public function getLogoImageAttribute()
+    {
         return self::logoImage($this->id);
     }
 
@@ -333,5 +338,18 @@ class User extends Model implements AuthenticatableContract,
             ->lists('tournaments.id');
     }
 
+    public function getManagedParentTournamentQuery()
+    {
+        return TournamentParent
+            ::leftJoin('tournaments', 'tournament_parent.id', '=','tournaments.tournament_parent_id')
+            ->leftJoin(\DB::raw('users m'),'m.id','=','tournament_parent.manager_id')
+            ->leftJoin(\DB::raw('users o'),'o.id','=','tournament_parent.owner_id')
+            ->where('tournament_parent.manager_id', $this->id)
+            ->orwhere('tournament_parent.owner_id', $this->id)
+            ->orwhere('tournaments.manager_id', $this->id)
+            ->orderby('tournament_parent.created_at', 'desc')
+            ->select(['tournament_parent.*',\DB::raw('m.name as manager'),\DB::raw('o.name as owner')])
+            ->groupBy('tournament_parent.id');
+    }
 
 }

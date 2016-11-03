@@ -41,9 +41,9 @@
                                 <span class="match-detail-score">
                                     @if ($match['match_start_date'])
                                         {!!  Helper::displayDateFormat($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""), 'jS F, Y <\b\\r>g:i A' )  !!}</span>
-                                    @else
-                                        TBD
-                                    @endif
+                                @else
+                                    TBD
+                                @endif
                             </div>
                             <div class="col-md-1 text-capitalize">
                                 <span class="hidden-md hidden-lg"><b>Sport Name:</b></span>
@@ -92,18 +92,25 @@
                                 @endif
                                 <br>
                                 @if($match->scoreMore)
-                                    @if($match->scoreMore==trans('message.schedule.viewscore'))
-                                        <span class="tournament_score pull-left"><a
-                                                    href="{{ url('match/scorecard/view/'.$match['id']) }}"
-                                                    class="btn-primary "
-                                                    style="padding: .3em 1em;">{{$match->scoreMore}}</a></span>
-                                    @else
-                                        <span class="tournament_score pull-left"><a
-                                                    href="{{ url('match/scorecard/edit/'.$match['id']) }}"
-                                                    class="btn-primary "
-                                                    style="padding: .3em 1em;">{{$match->scoreMore}}</a></span>
-                                    @endif
+                                    @if (!$is_widget)
+                                        @if($match->scoreMore==trans('message.schedule.viewscore') || $is_widget)
+                                            <span class="tournament_score pull-left"><a
+                                                        @if (!$is_widget)
+                                                        href="{{ url('match/scorecard/view/'.$match['id']) }}"
+                                                        @else
+                                                        href="{{ route('widget.match.scorecard.view',$match['id']) }}"
+                                                        @endif
+                                                        class="btn-primary "
+                                                        style="padding: .3em 1em;">{{$match->scoreMore}}</a></span>
+                                        @else
 
+                                            <span class="tournament_score pull-left"><a
+                                                        href="{{ url('match/scorecard/edit/'.$match['id']) }}"
+                                                        class="btn-primary "
+                                                        style="padding: .3em 1em;">{{$match->scoreMore}}</a></span>
+
+                                        @endif
+                                    @endif
                                 @else
                                 @endif
 
@@ -119,7 +126,11 @@
 @if ($tournaments->hasMorePages())
     <div id="viewmorediv">
         <a id="viewmorebutton" class="view_tageline_mkt" data-replace="#viewmorediv"
+           @if (isset($is_widget) && $is_widget)
+           data-url="{{route('widget.organization.schedule',['id'=>$id,'page'=>$tournaments->currentPage()+1,'filter-event'=>$filter_event])}}"
+           @else
            data-url="{{route('organization.schedules.list',['id'=>$id,'page'=>$tournaments->currentPage()+1,'filter-event'=>$filter_event])}}"
+           @endif
            onclick="return DataTableLoadMore(this);"
         >
                     <span class="market_place"><i

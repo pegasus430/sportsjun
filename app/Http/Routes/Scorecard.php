@@ -154,6 +154,11 @@ Route::group(['prefix'=>'match'], function(){
 
     Route::post('updatePreferencestennis', ['as'=>'match/updatePreferencestennis', 'uses'=>'User\ScoreCard\TennisScoreCardController@updatePreferences']);
 
+    Route::post('tennis_scoring', ['as'=>'match/tennis_scoring', 'uses'=>'User\ScoreCard\TennisScoreCardController@tennis_scoring']);
+
+    Route::post('tennis_scoring_tb', ['as'=>'match/tennis_scoring_tb', 'uses'=>'User\ScoreCard\TennisScoreCardController@tennis_scoring_tb']);
+    Route::post('end_set', ['as'=>'match/end_set', 'uses'=>'User\ScoreCard\TennisScoreCardController@end_set']);
+
 
 //Match Helpers
     Route::get('set_active_rubber/{rubber_id?}', 'User\ScoreCardController@setActiveRubber');
@@ -161,6 +166,9 @@ Route::group(['prefix'=>'match'], function(){
     Route::get('end_match_completely_tableTennis/{match_id?}', 'User\ScoreCard\TabletennisScoreCardController@endMatchCompletely');
      Route::get('end_match_completely_squash/{match_id?}', 'User\ScoreCard\SquashScoreCardController@endMatchCompletely');
      Route::get('end_match_completely_tennis/{match_id?}', 'User\ScoreCard\TennisScoreCardController@endMatchCompletely');
+
+
+     Route::get('allow_match_edit_by_admin', 'User\ScoreCardController@allow_match_edit_by_admin');
 });
 
 //End Matches

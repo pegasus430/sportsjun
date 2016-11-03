@@ -14,8 +14,8 @@
     $match_data[0]['tournament_id']!=null?$disabled='readonly':$disabled='';
     $match_settings   =   Helper::getMatchSettings($match_data[0]['tournament_id'],$match_data[0]['sports_id']);
 
-    $team_a_id=$match_data[0]['a_id'];
-    $team_b_id=$match_data[0]['b_id'];
+    $team_a_id=$a_id=$match_data[0]['a_id'];
+    $team_b_id=$b_id=$match_data[0]['b_id'];
 
     $player_a_ids=$match_data[0]['player_a_ids'];
     $player_b_ids=$match_data[0]['player_b_ids'];
@@ -44,25 +44,17 @@
     $team_b_info='';
 
     if(isset($preferences)){
-    $current_set=$match_details->current_set;
+        $current_set=$match_details->current_set;
+     }
+  else{    
+    $current_set=1;
+  }
 
-    $player_or_team_left_button_add= "<button class='arm_a btn button_add btn-circle btn-sm arm btn-circle btn-sm pull-left' id='score_team_a' team_id='$preferences->left_team_id' table_score_id='{$score_a_array['id']}' onclick='return addScore(this)' class=''> <i class='fa fa-plus'></i></button>";
 
-    $player_or_team_left_button_remove="  <button team_id='$preferences->left_team_id' table_score_id='{$score_a_array['id']}' onclick='return removeScore(this)'class='arm_a btn button_remove btn-circle btn-sm pull-right' class=''> <i class='fa fa-minus'></i> </button>";
-
-    $player_or_team_right_button_add= "<button class='arm_b btn button_add btn-circle btn-sm arm btn-circle btn-sm pull-left' id='score_team_b' team_id='$preferences->right_team_id' table_score_id='{$score_b_array['id']}' onclick='return addScore(this)' class='arm_b'> <i class='fa fa-plus'></i></button>";
-
-    $player_or_team_right_button_remove=" <button team_id='$preferences->right_team_id' arm table_score_id=    '{$score_b_array['id']}' onclick='return removeScore(this)'class=' arm_b btn button_remove btn-circle btn-sm pull-right' class='arm_b'> <i class='fa fa-minus'></i> </button>";
-
-  ${'team_'.$preferences->left_team_id.'_score'}=$match_details->scores->{$preferences->left_team_id.'_score'}.' sets';
-  ${'team_'.$preferences->right_team_id.'_score'}=$match_details->scores->{$preferences->right_team_id.'_score'}.' sets';
-  }else{
-    $player_or_team_left_button_add='';
+  $player_or_team_left_button_add='';
     $player_or_team_left_button_remove='';
     $player_or_team_right_button_remove='';
     $player_or_team_right_button_add='';
-    $current_set='';
-  }
 
   if($match_data[0]['game_type']=='rubber'){
   ${'team_'.$team_a_id.'_score'}=$match_data[0]['a_score'];
@@ -94,6 +86,15 @@
         position: absolute;
     }
 
+  .btn-large{
+    padding:10px;
+    border-radius: 40%;
+    background: #aaaaee
+  }
+
+  .btn-active{
+
+  }
 
 
 </style>
@@ -382,8 +383,8 @@
                 <div class='col-sm-12'><br>
                 <input type='hidden' value="{{$match_data[0]['id']}}" name='match_id'>
                  <input type='hidden' value="{{$match_data[0]['tournament_id']}}" name='tournament_id'>
-                <input type='hidden' value="{{$team_a_name}}" name='team_a_name'>
-                <input type='hidden' value="{{$team_b_name}}" name='team_b_name'>
+                <input type='hidden' value="{{$team_a_name}}" name='team_a_name' id='team_a_name'>
+                <input type='hidden' value="{{$team_b_name}}" name='team_b_name' id='team_b_name'>
                 <center><input type='submit' name='submit_preferences' value='SAVE' class="btn btn-primary"></center><br>
                 </div>    
                 </div>        
@@ -427,6 +428,8 @@
               <th>SET {{$set_index}}</th>
               <th>TB {{$set_index}}    </th>
             @endfor
+              <th>Aces </th>
+              <th>D Faults</th>
              
           </tr>
         </thead>
@@ -444,9 +447,11 @@
             </td>
             <td>
 
-                 <input  readonly class="gui-input validation allownumericwithdecimal runs_new " value="{{$score_a_array['set'.$set_index.'_tie_breaker']}}" name='a_set_tie{{$set_index}}'>
+                 <input  readonly class="gui-input validation allownumericwithdecimal runs_new a_set{{$set_index}}_tie_breaker " value="{{$score_a_array['set'.$set_index.'_tie_breaker']}}" name='a_set_tie{{$set_index}}'>
             </td>
           @endfor
+            <td><input class="gui-input validation allownumericwithdecimal runs_new a_aces" type="" name="a_aces" value="{{$score_a_array['aces']}}" readonly=""> </td>
+            <td><input class="gui-input validation allownumericwithdecimal runs_new a_double_faults" type="" name="a_double_faults" value="{{$score_a_array['double_faults']}}" readonly="">  </td>
         </tr>
 
           <tr>
@@ -462,9 +467,11 @@
                 </td>
             <td>
 
-                 <input  readonly class="gui-input validation allownumericwithdecimal runs_new " value="{{$score_b_array['set'.$set_index.'_tie_breaker']}}" name='b_set_tie{{$set_index}}'>
+                 <input  readonly class="gui-input validation allownumericwithdecimal runs_new b_set{{$set_index}}_tie_breaker" value="{{$score_b_array['set'.$set_index.'_tie_breaker']}}" name='b_set_tie{{$set_index}}'>
               </td>
             @endfor
+            <td><input class="gui-input validation allownumericwithdecimal runs_new b_aces" type="" name="a_aces" value="{{$score_b_array['aces']}}" readonly=""> </td>
+            <td><input class="gui-input validation allownumericwithdecimal runs_new b_double_faults" type="" name="a_double_faults" value="{{$score_b_array['double_faults']}}" readonly="">  </td>
         </tr>
 
         </tbody>
@@ -477,10 +484,139 @@
 </div>
 
 
+<?php
+ $set_score     = ScoreCard::tennis_active_set($match_data[0]['id'], null, $current_set);
+    $game          = $set_score->active_game;
+?>
+
+
+  @if($game)
+      <div class="col-sm-12" id='real_time_scoring_a'>
+          <div class="row">
+            <div class="col-xs-4">
+             <center> <h3 id='team_a_set_score'>  {{$score_a_array['set'.$current_set]}} </h3>   </center>
+            </div>
+            <div class="col-xs-4">
+               <center>   <h3> SET <span id='set_number_display'> {{$current_set}}</span> </h3> </center>
+            </div>
+            <div class="col-xs-4">
+              <center><h3 id='team_b_set_score'>  {{$score_b_array['set'.$current_set]}} </h3>   </center>
+            </div>
+      </div>
+      <div class="col-sm-12" style="border:inset 1px green;">
+
+           <div class="col-sm-8" style="background:#fdfffd">
+            <div class="row">
+              <center>  Game <span id='game_number_display'>{{$game->game_number}} </span> </center>
+
+              </div>
+                <div class="row">
+                <div class="col-sm-6 pull-left" >
+                    <center>
+                    <b>{{$team_a_name}}</b><br>
+                       <a style="font-size:30px;text-align:center;" id='team_a_game_score'> {{$game->team_a_score}} </a> 
+
+                       <button style="position:absolute; margin-left:25%;" class="btn" id='end_set'> End Set </button>
+                       </center>
+                    <center>
+                    <button class='btn btn-danger btn-circle' type='team_a' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_model->user_id_a}}" score_id="{{$score_a_array['id']}}">15</button>
+                    <button class='btn btn-danger btn-circle' type='team_a' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_model->user_id_a}}" score_id="{{$score_a_array['id']}}">30</button>
+                    <button class='btn btn-danger btn-circle' type='team_a' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_model->user_id_a}}" score_id="{{$score_a_array['id']}}">40</button>
+                    <button class='btn btn-danger btn-circle' type='team_a' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_model->user_id_a}}" score_id="{{$score_a_array['id']}}">Ace</button>
+                    <button class='btn btn-danger btn-circle' type='team_a' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_model->user_id_a}}" score_id="{{$score_a_array['id']}}">DB</button>
+                    <button class='btn btn-danger btn-circle' type='team_a' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_model->user_id_a}}" score_id="{{$score_a_array['id']}}">Win</button>
+                    </center>
+                </div>
+                <div class="col-sm-6 pull-left">
+                    <center>
+                          <b>{{$team_b_name}}</b><br>
+                         <a style="font-size:30px; text-align:center" id='team_b_game_score'> {{$game->team_b_score}} </a> 
+                    </center>
+                    <center>
+                    <button class='btn btn-danger btn-circle' type='team_b' value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_model->user_id_a}}" score_id="{{$score_b_array['id']}}">15</button>
+                    <button class='btn btn-danger btn-circle' type='team_b'  value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_model->user_id_a}}" score_id="{{$score_b_array['id']}}">30</button>
+                    <button class='btn btn-danger btn-circle' type='team_b' value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_model->user_id_a}}" score_id="{{$score_b_array['id']}}">40</button>
+                    <button class='btn btn-danger btn-circle' type='team_b' value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_model->user_id_a}}" score_id="{{$score_b_array['id']}}">Ace</button>
+                    <button class='btn btn-danger btn-circle' type='team_b' value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_model->user_id_a}}" score_id="{{$score_b_array['id']}}">DB</button>
+                    <button class='btn btn-danger btn-circle' type='team_b' value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_model->user_id_a}}" score_id="{{$score_b_array['id']}}">Win</button>
+                    </center>
+                </div>
+
+                 <a title="Start Tie Breaker" href="javascript:void(0)" style="color:green; position:absolute; margin-left:-50px; margin-top:-20px; font-size:30px" class="show-tie-breaker show_tb" onclick='show_tb()' >
+                           <i class="fa fa-caret-right"></i>
+                  </a>
+              </div>
+          </div>
+
+          <div class="col-sm-4 hide-tie-breaker hide_tb" style="" id='show_tie_breaker'>
+
+            <div class="col-sm-12">
+              <div class=''> <center>Tie Breaker  </center></div>     
+              <br>
+              <br>
+              </div>
+            <div class="row">
+                <div  class="col-sm-6 col-xs-6" style="">
+                    @if(!is_null($score_a_array['team_id']))<b>{{$score_a_array['team_name']}}</b><br>@endif 
+                      <div class="col-xs-4">
+                          <a href="javascript:void(0)" class="tb_scoring"  style="color:red; font-size:30px" type="team_a" action='remove' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_model->user_id_a}}">
+                              <i class="fa fa-caret-left"> </i>
+                          </a>
+                      </div>
+                      <div class="col-xs-4" style="font-size:30px" id='team_a_tb'>
+                            {{$score_a_array['set'.$current_set.'_tie_breaker']}}
+                      </div>
+                      <div class="col-xs-4">
+                           <a href="javascript:void(0)" class="tb_scoring"  style="color:green; font-size:30px" type="team_a" action='add' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_model->user_id_a}}">
+                              <i class="fa fa-caret-right"> </i>
+                          </a>
+                      </div>
+
+                </div>
+                <div class="col-sm-6 col-xs-6">
+                    @if(!is_null($score_b_array['team_id']))<b>{{$score_b_array['team_name']}}</b><br>@endif 
+
+                    <div class="col-sm-4 col-xs-4">
+                          <a href="javascript:void(0)" class="tb_scoring"  style="color:red; font-size:30px" type="team_b" action='remove' value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_model->user_id_a}}" >
+                              <i class="fa fa-caret-left"> </i>
+                          </a>
+                      </div>
+                      <div class="col-sm-4 col-xs-4" style="font-size:30px" id='team_b_tb'>
+                         {{$score_b_array['set'.$current_set.'_tie_breaker']}}
+                      </div>
+                      <div class="col-sm-4 col-xs-4">
+                           <a href="javascript:void(0)" class="tb_scoring" style="color:green; font-size:30px" type="team_b" action='add' value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_model->user_id_a}}">
+                              <i class="fa fa-caret-right"> </i>
+                          </a>
+                      </div>
+                </div>
+
+             
+                      <a title="End Tie Breaker" href="javascript:void(0)" style="color:red; font-size:30px" style="position:absolute; margin-left:-50px; margin-top:20px;" class="show-tie-breaker" >
+                              <i class="fa fa-caret-left" onclick='hide_tb()'> </i>
+                      </a>
+        
+              </div>
+
+
+          </div>
+      </div>
+      <div class="col-sm-12"> &nbsp; 
+          <input type='hidden' id='set_number' value="{{$current_set}}">
+          <input type='hidden' id='game_number' value='{{$game->game_number}}'>
+          <input type='hidden' id='game_id'>
+      </div>
+</div>
+
+@endif
+
+
 <input type='hidden' value='{{$set}}' name="number_of_sets">
 <input type='hidden' value="{{$match_data[0]['id']}}" name='match_id'>
 <input type='hidden' value="{{$score_a_array['id']}}" name='score_a_id' class='arm_a_val'>
 <input type='hidden' value="{{$score_b_array['id']}}" name='score_b_id' class='arm_b_val'>
+                <input type='hidden' value="{{$team_a_name}}" name='team_a_name' id='team_a_name'>
+                <input type='hidden' value="{{$team_b_name}}" name='team_b_name' id='team_b_name'>
 
 <div class="row" id='saveButton'>
     <div class='col-sm-12'>
@@ -544,8 +680,8 @@
 
     <?php 
     if($rubber->rubber_number==$active_rubber){
-        $score_a_array=$rubber_a_array;
-        $score_b_array=$rubber_b_array;
+        $score_a_array=$score_a_array;
+        $score_b_array=$score_b_array;
       }
   ?>
 
@@ -1373,9 +1509,68 @@ function endMatchCompletely(match_id){
 }
 </script>
 
+
+<script type="text/javascript">
+   $('.hide_tb').hide();
+      function hide_tb(){
+
+         var set_number=$('#set_number').val();
+          var match_id  =$('#match_id').val();
+          var rubber_id =$('#rubber_id').val();
+
+           var data={          
+              set_number:set_number,
+              rubber_id:rubber_id,
+              match_id:match_id,
+              score_a_id:$('.arm_a_val').val(),
+              score_b_id:$('.arm_b_val').val(),
+              type:'end_tie_breaking',
+            }
+
+          $.confirm({
+            title:'Alert',
+            content:"Do you want to end tie Breaking?",
+            confirm:function(){
+
+              $.ajax({
+                url:'/match/end_set',
+                data:data,
+                type:'post',
+                success:function(response){
+                    $('.hide_tb').hide();
+                    $('.show_tb').show();
+                      update_tennis_content(response)     
+                     if(response.status=='finished'){
+                       $.confirm({
+                          title:"Alert!",
+                          content:"Scoring is done for all sets! Go up and end match"
+                       })
+                         $('#real_time_scoring_a').hide();
+                       return false;
+                     
+                     }
+                            
+
+                }
+
+
+              })
+                }
+          })
+        
+
+
+      }
+
+      function show_tb(){
+          $('.hide_tb').show();
+          $('.show_tb').hide();
+      }
+
+</script>
 <!-- Tie Breaking -->
 <script type="text/javascript">
-    $('.tb-hide').hide();
+   // $('.tb-hide').hide();
     var tie_breaker=false;
     var tb_set = 1; 
 
@@ -1400,11 +1595,11 @@ function endMatchCompletely(match_id){
         else{
            $.confirm({
               title:"Tie Breaking Alert",
-              content:'this is me',
+              content:'End Tie Breaking?',
               confirm:function(){
                   tie_breaker=false;
                   $('.tb-'+tb_set).hide(); 
-                  tb_set = tb_set +1; 
+                  tb_set = parseInt(tb_set) +1; 
                   addButtonSet(tb_set);
               }
           })
@@ -1412,6 +1607,174 @@ function endMatchCompletely(match_id){
            
         }
     })
+</script>
+
+<!-- Perform Scoring -->
+
+<script type="text/javascript">
+      $('.btn-circle').click(function(){
+          var attr=$(this);
+          var type=$(this).html();
+          var game_number=$('#game_number').val();
+          var set_number=$('#set_number').val();
+          var match_id  =$('#match_id').val();
+          var rubber_id =$('#rubber_id').val();
+          var team_type=attr.attr('type');
+          var team_id  =attr.attr('value');
+          var score_id =attr.attr('score_id');
+          var data={
+              type:type,
+              set_number:set_number,
+              game_number:game_number,
+              match_id:match_id,
+              rubber_id:rubber_id,
+              team_type:team_type,
+              team_id:team_id,
+              score_id:score_id
+          }
+
+          $('.btn-circle').removeClass('btn-success').addClass('btn-danger');
+     
+          if(type=='Win'){
+              $.confirm({
+                  title:"Alert",
+                  content:$('#'+team_type+'_name').val() + " is winning this game, do you approve?",
+                  confirm:function(){
+                      approve_scoring();
+                  }
+              })
+          }
+          else approve_scoring();
+
+      function approve_scoring(){
+          $.ajax({
+            url:'/match/tennis_scoring',
+            data:data,
+            type:'post',
+            success:function(response){
+               attr.removeClass('btn-danger');
+               attr.addClass('btn-success');
+
+               update_tennis_content(response)
+            }
+
+          })
+        }
+         
+        return false
+
+      })
+
+      $('#end_set').click(function(){
+
+          var set_number=$('#set_number').val();
+          var match_id  =$('#match_id').val();
+          var rubber_id =$('#rubber_id').val();
+
+           var data={          
+              set_number:set_number,
+              rubber_id:rubber_id,
+              match_id:match_id,
+              score_a_id:$('.arm_a_val').val(),
+              score_b_id:$('.arm_b_val').val()
+            }
+
+          $.confirm({
+            title:'Alert',
+            content:"Do you want to end set?",
+            confirm:function(){
+
+              $.ajax({
+                url:'/match/end_set',
+                data:data,
+                type:'post',
+                success:function(response){
+
+                  if(response.status=='finished'){
+                       $.confirm({
+                          title:"Alert!",
+                          content:"Scoring is done for all sets! Go up and end match"
+                       })
+
+                       $('#real_time_scoring_a').hide();
+                       return false;
+                  }
+
+                  update_tennis_content(response)
+
+                }
+              })
+                }
+          })
+
+          return false;
+      })
+
+
+      $('.tb_scoring').click(function(){
+                 var attr=$(this);
+          var type=attr.attr('action')
+          var game_number=$('#game_number').val();
+          var set_number=$('#set_number').val();
+          var match_id  =$('#match_id').val();
+          var rubber_id =$('#rubber_id').val();
+          var team_type=attr.attr('type');
+          var team_id  =attr.attr('value');
+              score_a_id=$('.arm_a_val').val(),
+              score_b_id=$('.arm_b_val').val()
+          var data={
+              type:type,
+              set_number:set_number,
+              game_number:game_number,
+              match_id:match_id,
+              rubber_id:rubber_id,
+              team_type:team_type,
+              team_id:team_id,
+              team_a_id:score_a_id,
+              team_b_id:score_b_id
+          }
+
+          $.ajax({
+            url:'/match/tennis_scoring_tb',
+            data:data,
+            type:'post',
+            success:function(response){
+                update_tennis_content(response)
+
+            }
+
+          })
+      })
+
+
+      function update_tennis_content(response){
+
+               $('#team_a_game_score').html(response.game.team_a_score);
+               $('#team_a_set_score').html(response.set_scoring.team_a_score);
+               $('#team_b_game_score').html(response.game.team_b_score);
+               $('#team_b_set_score').html(response.set_scoring.team_b_score);
+               $('#game_number').val(response.game.game_number);
+               $('#game_number_display').html(response.game.game_number);
+               $('#set_number').val(response.game.set)
+               $('#set_number_display').html(response.game.set);
+
+               $('#team_a_tb').html(response.set_scoring.team_a_tie_breaker);
+               $('#team_b_tb').html(response.set_scoring.team_b_tie_breaker);
+
+                response=response.match_details;
+                    var left_team_id=response.preferences.left_team_id;
+                          var right_team_id=response.preferences.right_team_id;
+
+                            $.each(response.match_details, function(key, value){
+
+                                $('.a_'+key).val(value[left_team_id+'_score']);
+                                $('.b_'+key).val(value[right_team_id+'_score']);
+                            })
+                         
+
+              $('#team_'+left_team_id+'_score').html(response.scores[left_team_id+"_score"] + ' sets');
+              $('#team_'+right_team_id+'_score').html(response.scores[right_team_id+"_score"]+ ' sets');
+      }
 </script>
 @endsection
 

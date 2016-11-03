@@ -5,9 +5,9 @@ Route::group(['prefix' => '/api/v1', 'middleware' => 'cors'], function ($router)
     Route::post('register', 'Api\AuthApiController@register');
     Route::post('login', 'Api\AuthApiController@login');
 
-    Route::get('/cities','DataApiController@cities');
-    Route::get('/countries','DataApiController@countries');
-    Route::get('/states','DataApiController@states');
+    Route::get('/cities','Api\DataApiController@cities');
+    Route::get('/countries','Api\DataApiController@countries');
+    Route::get('/states','Api\DataApiController@states');
 
     Route::group(['middleware'=> ['jwt.api.auth'] , 'namespace'=>'Api','alias'=>'api'],function ($router){
         $router->get('logout', 'AuthApiController@logout');

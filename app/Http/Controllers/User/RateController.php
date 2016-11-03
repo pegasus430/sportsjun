@@ -13,29 +13,38 @@ class RateController extends Controller
         if ($user){
             $data = \Request::all();
             $validator = \Validator::make($data, [
-                'to_id'=>'required|number',
-                'type'=>'required|number',
-                'rate'=>'required|in:1..5'
+                'to_id'=>'required|numeric',
+                'type'=>'required|in:user,team,organization,tournament,ptournament',
+                'rate'=>'required|between:1,5'
             ]);
 
            if (!$validator->fails()){
+                switch ($data['type']){
+                    case 'user': $type= Rating::$RATE_USER; break;
+                    case 'organization': $type= Rating::$RATE_ORGANIZATION; break;
+                    case 'team': $type= Rating::$RATE_TEAM; break;
+                    case 'tournament': $type= Rating::$RATE_TOURNAMENT; break;
+                    case 'ptournament': $type= Rating::$RATE_PARENT_TOURNAMENT; break;
+                }
+
+
                 $rating = Rating::where([
                     'user_id'=>$user->id,
-                    'type'=>$data['type'],
+                    'type'=>$type,
                     'to_id'=>$data['to_id']
-                ]);
+                ])->first();
 
                 if (!$rating){
                     $rating = Rating::create([
                         'user_id'=>$user->id,
-                        'type'=>$data['type'],
+                        'type'=>$type,
                         'to_id'=>$data['to_id'],
                         'rate' => $data['rate']
                     ]);
 
                     if (\Request::ajax()){
                         if (\Request::wantsJson()){
-                            return ['success'=>''];
+                            return ['message'=>trans('message.rate.success')];
                         } else {
 
                         }
@@ -43,10 +52,16 @@ class RateController extends Controller
                         \Session::flash('status', trans('message.rate.success'));
                     }
                 }  else {
+                    $rating->rate = $data['rate'];
+                    $rating->save();
                     if (\Request::ajax()){
+                        if (\Request::wantsJson()){
+                            return ['message'=>trans('message.rate.success_update')];
+                        } else {
 
+                        }
                     } else {
-                        \Session::flash('error', trans('message.rate.already_rated'));
+                        \Session::flash('message', trans('message.rate.success_update'));
                     }
                 }
 
@@ -54,7 +69,7 @@ class RateController extends Controller
             } else {
                if (\Request::ajax()){
                    if (\Request::wantsJson()){
-                       return ['error'=>''];
+                       return ['error'=>$validator->errors()->first()];
                    } else {
 
                    }

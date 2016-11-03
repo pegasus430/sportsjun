@@ -2863,3 +2863,11 @@ font-weight:bold;
     position:absolute;
     right:0;
 }
+
+.s-rating{
+    color: #65C178;
+
+}
+.s-rating:hover{
+    /*color: #FEFEFE;*/
+}

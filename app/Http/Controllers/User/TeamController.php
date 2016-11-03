@@ -1129,6 +1129,24 @@ class TeamController extends Controller
         return Response::json($results);
     }
 
+      public function searchAnyUser()
+    {
+        $user = Request::get('term');
+        $results = array();
+
+        $users = DB::table('users')
+            ->join('user_statistics', 'users.id', '=', 'user_statistics.user_id')
+            ->select('users.id', 'users.name')
+            ->where('users.name', 'LIKE', '%' . $user . '%')
+            ->get();
+        if (count($users) > 0) {
+            foreach ($users as $query) {
+                $results[] = ['id' => $query->id, 'value' => $query->name];
+            }
+        }
+        return Response::json($results);
+    }
+
     public function addplayer()
     {
         $user_id = Request::get('response');
