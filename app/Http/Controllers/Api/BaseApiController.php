@@ -55,10 +55,16 @@ class BaseApiController extends Controller
         foreach ($paginator as $item) {
             $item_data = [];
             foreach ($map as $key => $mapped) {
-                if (!is_integer($key)) {
-                    $item_data[$key] = object_get($item, $mapped);
+                if (is_string($mapped)) {
+                    if (!is_integer($key)) {
+                        $item_data[$key] = object_get($item, $mapped);
+                    } else {
+                        $item_data[$mapped] = object_get($item, $mapped);
+                    }
                 } else {
-                    $item_data[$mapped] = object_get($item, $mapped);
+                    if (is_array($mapped)){
+                        $item_data[$key] = $this->mappedExtract($mapped,$item,$item);
+                    }
                 }
             }
             $data[] = $item_data;

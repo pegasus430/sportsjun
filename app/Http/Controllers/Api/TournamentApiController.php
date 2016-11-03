@@ -44,8 +44,40 @@ class TournamentApiController extends BaseApiController
             if ($user) {
                 switch ($filter) {
                     case 'managed':
-                        $tournament_ids = $user->getManagedTournamentsIds();
-                        $tournaments = $tournaments->whereIn('tournaments.id', $tournament_ids);
+                        $tournaments = $user->getManagedParentTournamentQuery()
+                            ->with(['tournaments','tournaments.sports'])
+                            ->paginate(15);
+                        return $this->PaginatedMapResponse($tournaments,
+                            [
+                                'id',
+                                'name',
+                                'manager',
+                                'owner',
+                                'organization_id',
+                                'contact_number',
+                                'logoImage',
+                                'email',
+                                'description',
+                                'events'=>[
+                                    'type'=>'list',
+                                    'source'=>'tournaments',
+                                    'fields' => function($obj) {
+                                        return [
+                                            'id',
+                                            'image' => 'logoImage',
+                                            'name',
+                                            'address' => 'location',
+                                            'date' => 'dateString',
+                                            'status',
+                                            'sports_id',
+                                            'sport' => 'sports.sports_name'
+                                        ];
+                                    }
+                                ]
+                            ]
+                            );
+
+
                         break;
                     case 'joined':
                         $tournament_ids = $user->getJoinedTournamentsIds();
@@ -55,12 +87,15 @@ class TournamentApiController extends BaseApiController
                         $tournament_ids = $user->folowers()->tournaments()->lists('type_id');
                         $tournaments = $tournaments->whereIn('tournaments.id', $tournament_ids);
                         break;
-                    default:
+                    case false:
                         $tournaments->where(DB::raw('false'));
+                        break;
+                    default:
+                        return $this->ApiResponse(['error'=>'Unknown type requested',404]);
                         break;
                 }
             } else {
-                $tournaments->where(DB::raw('false'));
+                return $this->ApiResponse(['error'=>'Auth required',404]);
             }
         }
 
