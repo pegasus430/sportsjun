@@ -560,6 +560,16 @@ return [
         'success'=>'Rating is set',
         'success_update'=>'Rating updated',
         'already_rated'=>'Already rated',
-    ]
+    ],
+    'payment_gate_way' => [
+    	'payment_gate_way_heading' => 'Add new payment gateway',
+    	'create_message' => 'Payment gateway added successfully',
+    	'update_message' => 'Payment gateway updated successfully',
+    	'fields' => [
+    		'name' => 'Payment Gateway Name',
+    		'status' => 'Status On/Off',
+
+    	]
+    ],
 
 ];

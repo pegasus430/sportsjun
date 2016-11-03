@@ -602,7 +602,10 @@ class TournamentsController extends Controller
   //       echo "<pre>";
 		// print_r($request['filelist_file_upload']);
 		// die;
-		       
+		     
+
+		$input_val = Request::all();
+       // echo "<pre>"; print_r($input_val); echo "</pre>"; exit;    
 
 
 		if(!empty($request['isParent']) && $request['isParent']=='yes')
@@ -611,8 +614,9 @@ class TournamentsController extends Controller
 			return $this->updateParentTournament($request,$id);
 		}
 		$manager_id = Tournaments::where('id', $id)->pluck('manager_id');
-		$request['country_id'] = config('constants.COUNTRY_INDIA');
-		$request['country'] = Country::where('id', config('constants.COUNTRY_INDIA'))->first()->country_name;
+		$country_id = !empty($request['country'])?$request['country']:config('constants.COUNTRY_INDIA');
+		//$request['country'] = Country::where('id', config('constants.COUNTRY_INDIA'))->first()->country_name;
+		$request['country'] = Country::where('id', $country_id)->first()->country_name;
 		$request['state'] = !empty($request['state_id']) ? State::where('id', $request['state_id'])->first()->state_name : 'null';
 		$request['city'] = !empty($request['city_id']) ? City::where('id', $request['city_id'])->first()->city_name : 'null';
 		$location=Helper::address($request['address'],$request['city'],$request['state'],$request['country']);
@@ -806,7 +810,7 @@ class TournamentsController extends Controller
 		$schedule_type_enum = config('constants.ENUM.TOURNAMENTS.SCHEDULE_TYPE');
 		$game_type_enum = config('constants.ENUM.TOURNAMENTS.GAME_TYPE');
 		$enrollment_type = config('constants.ENUM.TOURNAMENTS.ENROLLMENT_TYPE');
-//		   $sports = Sport::where('isactive','=',1)->lists('sports_name', 'id')->all();
+//		$sports = Sport::where('isactive','=',1)->lists('sports_name', 'id')->all();
 		$sports = Helper::getDevelopedSport(1,1);
 		/** @var TournamentParent $tournament */
 		$tournament = TournamentParent::findOrFail($id);

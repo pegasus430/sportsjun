@@ -6,8 +6,10 @@ if(!empty($matchScheduleCount) && $matchScheduleCount>0)
 
 
 
+
 <div class="main_tour_form{{$formType}}">
     <div class="row">
+         
         <div class="col-sm-12">
             <div class="section">
                 <label class="form_label">TOURNAMENT - EVENT NAME <span  class='required'>*</span></label>
@@ -596,6 +598,35 @@ $(function () {
             } 
    
     })
+
+
+
+
+/* TODO: check this is needed
+$('#country_id').change(function(){
+     var c_id=$('#country_id').val();
+       $.ajax({
+        type: "POST",
+        url: 'paymentgateways/availability',
+        data: { 'c_id': c_id},
+        success: function(msg) {
+           if(msg==0) {
+             $("#enrollment_type option[value='online']").remove();
+           } else {
+              $('#enrollment_type').append($('<option>', {
+                value: 'online',
+                text: 'ONLINE PAYMENT'
+              })); 
+
+           }
+        }
+    })
+  
+});  
+
+*/
+
+
 
 
 </script>    
