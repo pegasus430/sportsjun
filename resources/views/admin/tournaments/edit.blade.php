@@ -17,7 +17,7 @@
 				 <div class="form-footer">
                   <button type="submit" class="button btn-primary btn-createedit">Update</button>
 
-                  <a class="button btn-primary btn-tournamentedit">Next</a>
+                  <a class="button btn-primary btn-tournamentedit" href="javascript:void(0)">Next</a>
                   
 
                 </div>	
@@ -92,6 +92,81 @@
             }
         })
     });
+
+
+
+$( document ).ready(function() {
+    var c_id=$('#country_id').val();
+     var base_url = window.location.origin;
+       $.ajax({
+        type: "GET",
+        url: base_url + '/admin/paymentgateways/availability',
+        data: { 'c_id': c_id},
+        success: function(msg) {
+           if(msg==0) {
+             $("#enrollment_type option[value='online']").remove();
+                $('.btn-tournamentedit').hide();
+                $('.btn-createedit').show();
+                $('.enroltypeedit').show();
+           } else {
+              $('#enrollment_type').append($('<option>', {
+                value: 'online',
+                text: 'ONLINE PAYMENT'
+              })); 
+                
+           }
+        }
+    })
+});
+
+
+
+
+
+
+
+
+
+
+
+
+$('#country_id').change(function(){
+     var c_id=$('#country_id').val();
+     var base_url = window.location.origin;
+       $.ajax({
+        type: "POST",
+        url: base_url + '/admin/paymentgateways/availability',
+        data: { 'c_id': c_id},
+        success: function(msg) {
+           if(msg==0) {
+             $("#enrollment_type option[value='online']").remove();
+                $('.btn-tournamentedit').hide();
+        		$('.btn-createedit').show();
+        		$('.enroltypeedit').show();
+           } else {
+              $('#enrollment_type').append($('<option>', {
+                value: 'online',
+                text: 'ONLINE PAYMENT'
+              })); 
+                
+           }
+        }
+    })
+  
+});  
+
+
+
+
+
+
+
+
+
+
+
+
+
  </script>
 
 

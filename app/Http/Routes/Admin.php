@@ -177,4 +177,6 @@ Route::group(array('middleware' => 'role'), function() {
     Route::controller('admin/bankaccounts', 'admin\BankAccountsController');
     Route::controller('admin/paymentgateways', 'admin\PaymentGateWaysController');
     Route::resource('admin', 'admin\UserController');
+
+    //Route::get('admin/paymentgateways/availability/{c_id}', 'admin\PaymentGateWaysController@postAvailability');
 });

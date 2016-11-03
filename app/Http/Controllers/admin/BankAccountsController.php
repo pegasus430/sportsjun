@@ -1,9 +1,11 @@
+
 <?php
 
 namespace App\Http\Controllers\admin;
 
 use Request;
 use App\Http\Requests;
+use App\Helpers\AllRequests;
 use App\Http\Controllers\Controller;
 use App\Model\Country;
 use App\Model\State;
@@ -121,14 +123,31 @@ class BankAccountsController extends Controller
     public function postDetails(){
 
          $id=$_POST['id'];
+         $base_url=url();;
+
 
        
         $bankDetails = VendorBankAccounts::with('user')->where('id',$id)->first();
+         //echo "<pre>"; print_r($base_url); echo "</pre>"; exit;
 
         if(isset($_POST['verified'])) {
-            VendorBankAccounts::where('id',$id)->update(['varified'=>$_POST['verified']]);    
+            if($_POST['verified']==2){
+                 if($bankDetails->varified!=2){
+                    VendorBankAccounts::where('id',$id)->update(['varified'=>$_POST['verified']]);
+                    $mail_id=$bankDetails->user->email;
+                    $user_id=$bankDetails->user->id;
+                    $name=$bankDetails->user->name;
+                    $msg="Hi ".$name." <br>Bank details could not be verified for event . Please check details in the message for reject reason.Please <a href='".$base_url."/tournaments'>click here</a> to upload required documents related to bank account. login with the credentials given below:<br>Email: ".$mail_id."<br>Password:<br>Cheers!<br>Regards,";
+                         
+                    $mail_send=AllRequests::sendemail($mail_id,$user_id,$name,$msg);
+                   // print_r($mail_send); exit; 
+                    }
+            }  else {
+             
+            VendorBankAccounts::where('id',$id)->update(['varified'=>$_POST['verified']]); 
+               }   
         } else {
-            VendorBankAccounts::where('id',$id)->update(['varified'=>0]);
+          VendorBankAccounts::where('id',$id)->update(['varified'=>0]);
         }
          return redirect('admin/bankaccounts/user/'.$_POST['user_id']);
         

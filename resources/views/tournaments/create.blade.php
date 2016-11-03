@@ -29,7 +29,7 @@
 				  
 				  
 			      @if( $roletype=='user')
-			      {!! Form::open(['route' => 'tournaments.store','class'=>'form-horizontal','method' => 'POST','id' => 'sub-tournaments']) !!}
+			      {!! Form::open(['route' => 'tournaments.store','class'=>'form-horizontal create-only','method' => 'POST','id' => 'sub-tournaments']) !!}
 		<div class="modal-body">
             
             <div class="sportsjun-forms sportsjun-container" >
@@ -141,4 +141,81 @@ $(function() {
             }
         })
     });
+
+
+
+$( document ).ready(function() {
+     var c_id=$('.create-only #country_id').val();
+     var base_url = window.location.origin;
+       $.ajax({
+        type: "GET",
+        url: base_url + '/admin/paymentgateways/availability',
+        data: { 'c_id': c_id},
+        success: function(msg) {
+           if(msg==0) {
+              $(".create-only #enrollment_type option[value='online']").remove();
+                $('.create-only .btn-tournament').hide();
+        		$('.create-only .btn-create').show();
+        		$('.create-only .enroltypeedit').show();
+           } else {
+              $('.create-only #enrollment_type').append($('<option>', {
+                value: 'online',
+                text: 'ONLINE PAYMENT'
+              }));
+                
+           }
+        }
+    })
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$('.create-only #country_id').change(function(){
+
+     var c_id=$('.create-only #country_id').val();
+     var base_url = window.location.origin;
+       $.ajax({
+        type: "POST",
+        url: base_url + '/admin/paymentgateways/availability',
+        data: { 'c_id': c_id},
+        success: function(msg) {
+           if(msg==0) {
+             $(".create-only #enrollment_type option[value='online']").remove();
+                $('.create-only .btn-tournament').hide();
+        		$('.create-only .btn-create').show();
+        		$('.create-only .enroltypeedit').show();
+           } else {
+              $('.create-only #enrollment_type').append($('<option>', {
+                value: 'online',
+                text: 'ONLINE PAYMENT'
+              })); 
+                
+           }
+        }
+    })
+  
+}); 
+
+
+
+
+
+
+
+
+
+
+
+
 </script>

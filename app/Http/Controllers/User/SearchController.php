@@ -208,6 +208,9 @@ class SearchController extends Controller
         //Start Global search
         public function searchresults(Request $request)
         {
+
+                // echo "hello"; exit;
+
                 $modelType      = $request['service'];
                 $model          = ucfirst($modelType);
                 $limit          = config('constants.LIMIT');
@@ -401,6 +404,9 @@ class SearchController extends Controller
                 //dd($sports_array);
                 if ($request->ajax())
                 {
+                    
+                        
+
                         return view('search.' . $modelType . 'ajax')->with(array(
                                         'result' => $result, 'exist_array' => $exist_items_array,
                                         'follow_array' => $follow_items_array, 'sports_array' => $sports_array,
@@ -419,6 +425,10 @@ class SearchController extends Controller
                 }
                 else
                 {
+                    
+                      //echo "<pre>"; print_r($result); echo "</pre>"; exit;
+                         
+
                         return view('search.' . $modelType)->with(array('result' => $result,
                                         'exist_array' => $exist_items_array, 'follow_array' => $follow_items_array,
                                         'sports_array' => $sports_array, 'request_params' => $request,
