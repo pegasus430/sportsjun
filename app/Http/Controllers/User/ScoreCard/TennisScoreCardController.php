@@ -1454,7 +1454,7 @@ class TennisScoreCardController extends parentScoreCardController
            if($set_scoring){
 
         $game = $set_scoring->active_game;
-            if($score_a_model->{"set".$set_number."_tie_breaker"} != $score_b_model->{"set".$set_number."_tie_breaker"})){
+            if($score_a_model->{"set".$set_number."_tie_breaker"} != $score_b_model->{"set".$set_number."_tie_breaker"}){
     
                 if($score_a_model->{"set".$set_number."_tie_breaker"} > $score_b_model->{"set".$set_number."_tie_breaker"}){
                     $team_id = !empty($score_a_model->team_id)?$score_a_model->team_id:$score_a_model->user_id_a;
