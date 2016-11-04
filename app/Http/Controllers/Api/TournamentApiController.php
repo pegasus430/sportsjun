@@ -253,9 +253,8 @@ class TournamentApiController extends BaseApiController
     public function group_stage_matches($id)
     {
         $groups = TournamentGroups
-            ::with('matchSchedules')
+            ::with('match_schedules')
             ->where('tournament_id', $id)->get();
-
 
         $result = [];
         foreach ($groups as $group) {
@@ -264,7 +263,7 @@ class TournamentApiController extends BaseApiController
                 'name' => $group->name,
                 'matches' => []
             ];
-            foreach ($group->matchSchedules as $schedule) {
+            foreach ($group->match_schedules as $schedule) {
 
                 $result_group['matches'][] = [
                     'Image1' => $schedule->sideALogo,
