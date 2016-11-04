@@ -1,3 +1,4 @@
+<?php $is_widget = (isset($is_widget) && $is_widget) ? $is_widget : false; ?>
 <html lang="en">
 <head>
     <script type="text/javascript">

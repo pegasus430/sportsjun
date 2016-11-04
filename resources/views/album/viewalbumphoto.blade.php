@@ -1,3 +1,4 @@
+<?php $is_widget = (isset($is_widget) && $is_widget) ? $is_widget : false; ?>
 @extends(Auth::user() ? 'layouts.app' : 'home.layout')
 @section('content')
 	@if($action=='tournaments')
