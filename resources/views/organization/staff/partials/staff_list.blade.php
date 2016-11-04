@@ -1,3 +1,4 @@
+<?php $is_widget = (isset($is_widget) && $is_widget) ? $is_widget : false; ?>
 <div class="table-responsive">
     <table class="table table-hover table-striped">
         <thead>

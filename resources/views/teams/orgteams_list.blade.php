@@ -1,3 +1,4 @@
+<?php $is_widget = (isset($is_widget) && $is_widget) ? $is_widget : false; ?>
 @if (session('status'))
     <div class="alert alert-success">
         {{ session('status') }}
