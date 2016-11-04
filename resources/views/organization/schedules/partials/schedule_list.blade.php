@@ -1,3 +1,4 @@
+<?php $is_widget = (isset($is_widget) && $is_widget) ? $is_widget : false; ?>
 @foreach($tournaments as $tournament)
     <div class="t_details">
         <div class="row main_tour">

@@ -1,5 +1,5 @@
 <?php
-$orgFollowed = isset($userId) ? $orgInfoObj->followers()->where('user_id', $userId)->count() > 0 : false;
+$orgFollowed = (isset($userId) && ($orgInfoObj)) ? $orgInfoObj->followers()->where('user_id', $userId)->count() > 0 : false;
 $is_widget = (isset($is_widget) && $is_widget) ? $is_widget : false;
 
 if ($is_widget) {
