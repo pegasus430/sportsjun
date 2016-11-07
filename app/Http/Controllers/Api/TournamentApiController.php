@@ -232,9 +232,13 @@ class TournamentApiController extends BaseApiController
                         'name',
                         'won',
                         'lost',
+                        'tie',
+                        'matches',
                         'points',
-                        'final_points'
+                        'final_points',
+
                     ];
+
                     $sports_id = object_get($obj,'tournament.sports_id');
                     if($sports_id == Sport::$CRICKET){
                         $fields['nrr']='nrr';
