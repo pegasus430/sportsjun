@@ -166,13 +166,39 @@ class MatchSchedule extends Model
             case Sport::$WATER_POLO :
                 return $this->matchDetailsP->{$id}->total_points;
             case Sport::$CRICKET:
-                return Team::find($id)->name . " (" . $this->matchDetailsP->{$id}->fst_ing_score . "/" . $this->matchDetailsP->{$id}->fst_ing_wkt . (!empty($this->matchDetailsP->{$id}->scnd_ing_overs) ? ", " . $this->matchDetailsP->{$id}->scnd_ing_score . "/" . $this->matchDetailsP->{$id}->scnd_ing_wkt : "") . ")";
+                return  $this->matchDetailsP->{$id}->fst_ing_score . "/" . $this->matchDetailsP->{$id}->fst_ing_wkt . (!empty($this->matchDetailsP->{$id}->scnd_ing_overs) ? ", " . $this->matchDetailsP->{$id}->scnd_ing_score . "/" . $this->matchDetailsP->{$id}->scnd_ing_wkt : "");
+            default:
+                return '';
+        }
+    }
 
+    function extractOversString($id)
+    {
+        switch ($this->sports_id) {
+            case Sport::$BADMINTON:
+                return '';
+            case Sport::$VOLEYBALL:
+            case Sport::$SQUASH:
+            case Sport::$THROW_BALL:
+              return '';
+            case Sport::$SOCCER:
+            case Sport::$HOKKEY:
+                return '';
+            case Sport::$BASKETBALL:
+            case Sport::$KABADDI:
+            case Sport::$ULTIMATE_FRISBEE:
+            case Sport::$WATER_POLO :
+                return $this->matchDetailsP->{$id}->total_points;
+            case Sport::$CRICKET:
+                return   $this->matchDetailsP->{$id}->fst_ing_overs . ($this->matchDetailsP->{$id}->scnd_ing_overs ? '/'.$this->matchDetailsP->{$id}->scnd_ing_overs : '');
             default:
                 return '';
         }
 
     }
+
+
+
 
     public function getSideAScoreAttribute()
     {
@@ -182,6 +208,14 @@ class MatchSchedule extends Model
     public function getSideBScoreAttribute()
     {
         return $this->extractScoreString($this->b_id);
+    }
+
+    public function getSideAOversAttribute(){
+        return $this->extractOversString($this->a_id);
+    }
+
+    public function getSideBOversAttribute(){
+        return $this->extractOversString($this->b_id);
     }
 
 
