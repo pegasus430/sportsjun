@@ -291,20 +291,27 @@ class User extends Model implements AuthenticatableContract,
         }
     }
 
-    public static function logoImage($id)
+    public static function logoImage($id, $ignore = false, $logo = null)
     {
-        $logo = Photo::where('imageable_id', $id)
-            ->where('imageable_type', config('constants.PHOTO.USER_PHOTO'))
-            ->orderBy('id', 'desc')
-            ->first();
-        if ($logo && $logo->url) {
-            return Helper::getImagePath($logo->url, 'user_profile');
+        if (!$ignore) {
+            $logo = User::whereId($id)->value('logo');
         }
+        if (!$logo) {
+            $logo = Photo::where('imageable_id', $id)
+                ->where('imageable_type', config('constants.PHOTO.USER_PHOTO'))
+                ->orderBy('id', 'desc')
+                ->first();
+            if ($logo && $logo->url) {
+                return Helper::getImagePath($logo->url, 'user_profile');
+            }
+        } else
+            return Helper::getImagePath($logo, 'user_profile');
+
     }
 
     public function getLogoImageAttribute()
     {
-        return self::logoImage($this->id);
+        return self::logoImage($this->id, true, $this->logo);
     }
 
     public function getJoinedTournamentsIds()
@@ -341,14 +348,14 @@ class User extends Model implements AuthenticatableContract,
     public function getManagedParentTournamentQuery()
     {
         return TournamentParent
-            ::leftJoin('tournaments', 'tournament_parent.id', '=','tournaments.tournament_parent_id')
-            ->leftJoin(\DB::raw('users m'),'m.id','=','tournament_parent.manager_id')
-            ->leftJoin(\DB::raw('users o'),'o.id','=','tournament_parent.owner_id')
+            ::leftJoin('tournaments', 'tournament_parent.id', '=', 'tournaments.tournament_parent_id')
+            ->leftJoin(\DB::raw('users m'), 'm.id', '=', 'tournament_parent.manager_id')
+            ->leftJoin(\DB::raw('users o'), 'o.id', '=', 'tournament_parent.owner_id')
             ->where('tournament_parent.manager_id', $this->id)
             ->orwhere('tournament_parent.owner_id', $this->id)
             ->orwhere('tournaments.manager_id', $this->id)
             ->orderby('tournament_parent.created_at', 'desc')
-            ->select(['tournament_parent.*',\DB::raw('m.name as manager'),\DB::raw('o.name as owner')])
+            ->select(['tournament_parent.*', \DB::raw('m.name as manager'), \DB::raw('o.name as owner')])
             ->groupBy('tournament_parent.id');
     }
 
