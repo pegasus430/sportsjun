@@ -766,3 +766,22 @@ Route::get('/updatehalftime/{match_id?}/{half_time}', 'User\ScoreCardController@
 Route::post('/rating/set','User\RateController@setUserRate');
 
 
+
+Route::get('tournaments/eventregistration/{id}', [
+    'as'   => 'eventregistration',
+    'uses' => 'User\TournamentsController@eventregistration',
+]);
+
+
+Route::post('tournaments/registrationdata', [
+    'as'   => 'registrationdata',
+    'uses' => 'User\TournamentsController@registrationdata',
+]);
+
+Route::get('tournaments/registerstep2/{id}', [
+    'as'   => 'registerstep2',
+    'uses' => 'User\TournamentsController@registerstep2',
+]);
+
+
+

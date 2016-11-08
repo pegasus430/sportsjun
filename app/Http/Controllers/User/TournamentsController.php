@@ -23,6 +23,8 @@ use App\Model\TournamentGroups;
 use App\Model\TournamentGroupTeams;
 use App\Model\TournamentParent;
 use App\Model\Tournaments;
+use App\Model\Carts;
+use App\Model\CartDetails;
 use App\Model\UserStatistic;
 use App\Model\VendorBankAccounts;
 use App\Model\TournamentMatchPreference as Settings;
@@ -2928,4 +2930,98 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
 		$request['ifsc'] = !empty($request['bank_name'])?$request['ifsc']:'';
 		Tournaments::whereId($id)->update($request);
 	}
+
+
+
+    public function eventregistration($id){
+         //echo $id; exit;
+         // $user_name = Request::get('term');
+          $parent_tournamet_id = Tournaments::where('id',$id)->value('tournament_parent_id');
+          $all_events = Tournaments::where('tournament_parent_id',$parent_tournamet_id)->get();
+          $parent_tournamet_details = TournamentParent::where('id',$parent_tournamet_id)->first();
+          //echo "<pre>"; print_r($parent_tournamet_details); echo "</pre>"; exit;
+          $user_id = Auth::user()->id;
+          if(isset($user_id)) {
+               $roletype='user';
+          }
+         return view('tournaments.eventregistration',compact('all_events','parent_tournamet_details'))->with([
+         	'roletype'=>$roletype,
+         	]);
+         
+
+	}
+
+	public function registrationdata(){
+        
+         $input = Request::all();
+         $post=$input['data'];
+         //dd($post);
+        //echo "<pre>"; print_r($post); echo "</pre>"; exit;
+       
+         
+         if (Auth::check()) {
+              $user_id = Auth::user()->id;
+          } else {
+          	 $user_id = Session::getId();
+          }
+          
+          $carts = new Carts;
+          //$cart_details = new CartDetails;
+          $cart_data=array();
+          $i=0;
+          $total_pay=0;
+
+          foreach($post as $key=>$value) {
+          	if($value['count']!=0) {
+            $cart_data[$i]['event_id']=$key;
+            $cart_data[$i]['enrollment_fee']=Tournaments::where('id',$cart_data[$i]['event_id'])->value('enrollment_fee');
+            $cart_data[$i]['match_type']=Tournaments::where('id',$cart_data[$i]['event_id'])->value('match_type');
+            $cart_data[$i]['participant_count']=$value['count'];
+            //$cart_data[$i]['cart_id']='';
+            $pay=$cart_data[$i]['participant_count'] * $cart_data[$i]['enrollment_fee'];
+            $total_pay+=$pay;
+             }
+
+            $i++;
+
+          }
+
+          $carts['user_id']=$user_id;
+          $carts['total_payment']=$total_pay; 
+
+          if($carts->save()) {
+           $cart_id=$carts->id;
+           $j=0;
+           $cart_details=array();
+           foreach($cart_data as $crt) {
+           	//$cart_details[$j]=$crt;
+           //$cart_details[$j]['cart_id']=$cart_id;
+           	$cart_details =CartDetails::create(['cart_id' => $cart_id,'event_id' => $crt['event_id'],'enrollment_fee' => $crt['enrollment_fee'],'match_type' => $crt['match_type'],'participant_count' => $crt['participant_count']]);
+            $j++;
+             }
+
+
+
+             return redirect('tournaments/registerstep2/'. $cart_id);
+             
+             
+           }  else {
+
+           	return back()->withInput();
+           }  
+
+         
+
+	}
+
+
+	public function registerstep2($id) {
+      $register_data = Carts::with('cart_details')->where('id',$id)->get();
+      
+      dd($register_data[0]->cart_details);
+	}
+
+
+
+
 }
