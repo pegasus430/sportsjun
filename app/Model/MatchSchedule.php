@@ -194,7 +194,7 @@ class MatchSchedule extends Model
             case Sport::$CRICKET:
                 return object_get($this->matchDetailsP,$id.'.fst_ing_overs').
                          (object_get($this->matchDetailsP,$id.'.scnd_ing_overs') ?
-                             '/'.object_get($this->matchDetailsP,$id.'.scnd_ing_overs')ouy :
+                             '/'.object_get($this->matchDetailsP,$id.'.scnd_ing_overs') :
                              '');
             default:
                 return '';
