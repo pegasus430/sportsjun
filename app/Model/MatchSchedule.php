@@ -150,23 +150,25 @@ class MatchSchedule extends Model
     {
         switch ($this->sports_id) {
             case Sport::$BADMINTON:
-                $scores = $this->matchDetailsP->scores;
-                return $scores->{$id . '_score'} . ' sets';
+                return object_get($this->matchDetailsP,'scores.'.$id.'_score'). ' sets';
             case Sport::$VOLEYBALL:
             case Sport::$SQUASH:
             case Sport::$THROW_BALL:
-                $scores = $this->matchDetailsP->scores;
-                return $scores->{$id . '_score'} . ' sets';
+                return object_get($this->matchDetailsP,'scores.'.$id.'_score'). ' sets';
             case Sport::$SOCCER:
             case Sport::$HOKKEY:
-                return $this->matchDetailsP->{$id}->goals;
+                return  object_get($this->matchDetailsP,$id.'.goals');
             case Sport::$BASKETBALL:
             case Sport::$KABADDI:
             case Sport::$ULTIMATE_FRISBEE:
             case Sport::$WATER_POLO :
-                return $this->matchDetailsP->{$id}->total_points;
+                return  object_get($this->matchDetailsP,$id.'.total_points');
             case Sport::$CRICKET:
-                return  $this->matchDetailsP->{$id}->fst_ing_score . "/" . $this->matchDetailsP->{$id}->fst_ing_wkt . (!empty($this->matchDetailsP->{$id}->scnd_ing_overs) ? ", " . $this->matchDetailsP->{$id}->scnd_ing_score . "/" . $this->matchDetailsP->{$id}->scnd_ing_wkt : "");
+                return  object_get($this->matchDetailsP,$id.'.fst_ing_score') . "/"
+                        . object_get($this->matchDetailsP,$id.'.fst_ing_wkt') .
+                        (!empty(object_get($this->matchDetailsP,$id.'.scnd_ing_overs')) ?
+                            ", " .object_get($this->matchDetailsP,$id.'.scnd_ing_overs') . "/" .
+                            object_get($this->matchDetailsP,$id.'.scnd_ing_wkt') : "");
             default:
                 return '';
         }
@@ -188,9 +190,12 @@ class MatchSchedule extends Model
             case Sport::$KABADDI:
             case Sport::$ULTIMATE_FRISBEE:
             case Sport::$WATER_POLO :
-                return $this->matchDetailsP->{$id}->total_points;
+                return object_get($this->matchDetailsP,$id.'.total_points');
             case Sport::$CRICKET:
-                return   $this->matchDetailsP->{$id}->fst_ing_overs . ($this->matchDetailsP->{$id}->scnd_ing_overs ? '/'.$this->matchDetailsP->{$id}->scnd_ing_overs : '');
+                return object_get($this->matchDetailsP,$id.'.fst_ing_overs').
+                         (object_get($this->matchDetailsP,$id.'.scnd_ing_overs') ?
+                             '/'.object_get($this->matchDetailsP,$id.'.scnd_ing_overs')ouy :
+                             '');
             default:
                 return '';
         }
