@@ -2943,6 +2943,8 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
           $user_id = Auth::user()->id;
           if(isset($user_id)) {
                $roletype='user';
+          } else {
+          	 $roletype='';
           }
          return view('tournaments.eventregistration',compact('all_events','parent_tournamet_details'))->with([
          	'roletype'=>$roletype,
@@ -2966,7 +2968,6 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
           }
           
           $carts = new Carts;
-          //$cart_details = new CartDetails;
           $cart_data=array();
           $i=0;
           $total_pay=0;
@@ -2985,11 +2986,14 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
             $i++;
 
           }
+          
 
-          $carts['user_id']=$user_id;
-          $carts['total_payment']=$total_pay; 
 
-          if($carts->save()) {
+        if(count($cart_data) > 0 ) {
+           $carts['user_id']=$user_id;
+           $carts['total_payment']=$total_pay; 
+
+           if($carts->save()) {
            $cart_id=$carts->id;
            $j=0;
            $cart_details=array();
@@ -2999,11 +3003,8 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
            	$cart_details =CartDetails::create(['cart_id' => $cart_id,'event_id' => $crt['event_id'],'enrollment_fee' => $crt['enrollment_fee'],'match_type' => $crt['match_type'],'participant_count' => $crt['participant_count']]);
             $j++;
              }
-
-
-
-             return redirect('tournaments/registerstep2/'. $cart_id);
-             
+            return redirect('tournaments/registerstep2/'. $cart_id);
+             }
              
            }  else {
 
@@ -3016,9 +3017,52 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
 
 
 	public function registerstep2($id) {
-      $register_data = Carts::with('cart_details')->where('id',$id)->get();
-      
-      dd($register_data[0]->cart_details);
+		$user_id = Auth::user()->id;
+          if(isset($user_id)) {
+               $roletype='user';
+          } else {
+          	 $roletype='';
+          }
+        $register_data = Carts::with('cart_details.tournaments')->where('id',$id)->first();
+        
+        $parent_tournament_details='';
+        foreach ($register_data->cart_details as $value) {
+        	$parent_tournament_details = TournamentParent::where('id',$value->tournaments->tournament_parent_id)->first();
+           break;
+        }
+      return view('tournaments.registerstep2',compact('register_data','parent_tournament_details'))->with([
+         	'roletype'=>$roletype,
+         	]);
+	
+
+	}
+
+	public function registerstep3($id) {
+	//$register_data = Carts::with('cart_details.tournaments')->where('id',$id)->first();
+	//$register_data =  Carts::with('cart_details.tournaments')->where([['id',$id],['cart_details.registered', 0]])->get();
+
+		$user_id = Auth::user()->id;
+          if(isset($user_id)) {
+               $roletype='user';
+          } else {
+          	 $roletype='';
+          }
+
+    $register_data = Carts::where('id','=',$id)
+                     ->whereHas('cart_details',function($q)
+                         {
+                         $q->where('registerd','=',0);
+                          })
+                     ->with('cart_details.tournaments') 
+                     ->get();
+
+     dd($register_data);
+    return view('tournaments.registerstep3',compact('register_data','parent_tournament_details'))->with([
+         	'roletype'=>$roletype,
+         	]);
+	    
+	   
+
 	}
 
 

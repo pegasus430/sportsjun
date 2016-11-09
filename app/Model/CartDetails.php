@@ -19,8 +19,13 @@ class CartDetails extends Model
 
    public function cart()
     {
-        return $this->belongsTo(CartDetails::class, 'cart_id',
+        return $this->belongsTo('App\Model\Cart', 'cart_id',
             'id');
+    }
+
+    public function tournaments()
+    {
+        return $this->belongsTo('App\Model\Tournaments', 'event_id', 'id');
     }
 
 

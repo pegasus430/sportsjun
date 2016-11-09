@@ -15,7 +15,7 @@ class Carts extends Model
 
   protected $table = 'carts';
   public $timestamps = false;
-  protected $fillable = ['user_id', 'total_payment'];
+  protected $fillable = ['user_id','total_payment'];
 
   public function cart_details()
     {

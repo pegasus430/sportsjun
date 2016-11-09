@@ -784,4 +784,7 @@ Route::get('tournaments/registerstep2/{id}', [
 ]);
 
 
-
+Route::get('tournaments/registerstep3/{id}', [
+    'as'   => 'registerstep3',
+    'uses' => 'User\TournamentsController@registerstep3',
+]);

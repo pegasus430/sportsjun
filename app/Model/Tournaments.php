@@ -270,4 +270,12 @@ class Tournaments extends Model
         return Helper::displayDate($this->start_date).' to '.Helper::displayDate($this->end_date);
     }
 
+
+    public function cart_details()
+    {
+        return $this->hasMany('App\Model\CartDetails', 'event_id', 'id');
+    }
+
+
+
 }
