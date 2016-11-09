@@ -158,6 +158,7 @@ class TournamentGroupTeams extends Model
 
     public function getTeamStatsAttribute(){
         if (!$this->_teamStats) {
+            $team_stats = [];
             foreach ($this->matchSchedules as $schedule) {
                 switch ($schedule->match_type) {
                     case 't20':
@@ -176,6 +177,7 @@ class TournamentGroupTeams extends Model
 
                 if ($match_stats) {
                     $team_ids = array_keys($match_stats);
+
                     foreach ($match_stats as $team_id => $team_stat) {
                         if (empty($team_stats[$team_id])) {
                             $team_stats[$team_id] = [];
