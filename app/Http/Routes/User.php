@@ -788,3 +788,14 @@ Route::get('tournaments/registerstep3/{id}', [
     'as'   => 'registerstep3',
     'uses' => 'User\TournamentsController@registerstep3',
 ]);
+
+
+Route::get('tournaments/registerstep3/{id}/{event_id}', [
+    'as'   => 'registerstep4',
+    'uses' => 'User\TournamentsController@registerstep4',
+]);
+
+Route::post('tournaments/registrationstep5', [
+    'as'   => 'registerstep5',
+    'uses' => 'User\TournamentsController@registerstep5',
+]);

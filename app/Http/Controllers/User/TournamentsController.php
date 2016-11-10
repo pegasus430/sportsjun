@@ -7,6 +7,7 @@ use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\User\InvitePlayerController;
 use App\Http\Requests;
+use App\Helpers\AllRequests;
 use App\Model\City;
 use App\Model\Country;
 use App\Model\Facilityprofile;
@@ -3038,34 +3039,128 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
 	}
 
 	public function registerstep3($id) {
-	//$register_data = Carts::with('cart_details.tournaments')->where('id',$id)->first();
-	//$register_data =  Carts::with('cart_details.tournaments')->where([['id',$id],['cart_details.registered', 0]])->get();
-
-		$user_id = Auth::user()->id;
+		//echo "hai"; exit;
+         $user_id = Auth::user()->id;
           if(isset($user_id)) {
                $roletype='user';
           } else {
           	 $roletype='';
           }
 
-    $register_data = Carts::where('id','=',$id)
-                     ->whereHas('cart_details',function($q)
-                         {
-                         $q->where('registerd','=',0);
-                          })
-                     ->with('cart_details.tournaments') 
-                     ->get();
+    // $register_data = Carts::where('id','=',$id)
+    //                  ->whereHas('cart_details',function($q)
+    //                      {
+    //                      $q->where('cart_details.registerd','=',0);
+    //                       })
+    //                  ->with('cart_details.tournaments') 
+    //                  ->first();
 
-     dd($register_data);
-    return view('tournaments.registerstep3',compact('register_data','parent_tournament_details'))->with([
-         	'roletype'=>$roletype,
-         	]);
+     //if(isset($register_data) && $register_data!=null){
+     // $event_id='';               
+     // foreach ($register_data as $value) {
+     //    	$event_id = $value->event_id;
+     //       break;
+     //    } 
+
+
+
+          $register_data = CartDetails::where('cart_id','=',$id)->where('registerd','=',0)->with('tournaments')->first();
+          if(isset($register_data) && $register_data!=null){
+          $event_id=$register_data->event_id;
+      
+    return redirect('tournaments/registerstep3/'. $id.'/'.$event_id);
+      } else {
+
+     echo "all registered"; exit;
+    
 	    
-	   
+	  } 
 
 	}
 
+   public function registerstep4($id,$event_id) {
+   	//echo $id.$event_id; exit;
+   	//$matchThese = ['field' => 'value', 'another_field' => 'another_value', ...];
+   	$register_data = CartDetails::where('cart_id',$id)->where('event_id',$event_id)->first();
+   	$parent_tournament_id = Tournaments::where('id',$event_id)->value('tournament_parent_id');
+   	//dd($parent_tournament_id);
 
+/*-----------------------------------------------------------------------------------------*/
+    $lef_menu_condition = 'display_gallery';
+
+		$tournamentInfo= Tournaments::select()->where('id',$event_id)->get();
+		$sport_name="";
+		$manager_name="";
+		$managerarray=array();
+		
+		if(count($tournamentInfo))
+		{
+			$tournamentInfo=$tournamentInfo->toArray();
+			$sports_id=$tournamentInfo[0]['sports_id'];
+			$manager_id=$tournamentInfo[0]['manager_id'];
+			$Sportsarray= Sport::where('id',$sports_id)->get(['id', 'sports_name'])->toArray();
+			if($manager_id>0)
+			{
+				$managerarray= User::where('id',$manager_id)->get(['id', 'name'])->toArray();
+			}
+
+		}
+		if(!empty($Sportsarray))
+		{
+			$sport_name=$Sportsarray[0]['sports_name'];
+		}
+		if(!empty($managerarray))
+		{
+			$manager_name=$managerarray[0]['name'];
+		}
+		$left_menu_data = array();
+		$left_menu_data = Helper::getLeftMenuData($tournamentInfo[0]['tournament_parent_id'],$tournamentInfo[0]['manager_id'],$tournamentInfo);
+		
+	
+		return view('tournaments.payregisterform')->with(array( 'tournamentInfo'=>$tournamentInfo,'action_id'=>$event_id,'left_menu_data'=>$left_menu_data, 'tournament_id' => $event_id, 'lef_menu_condition'=> $lef_menu_condition, 'tournament_type' => $tournamentInfo[0]['type'],'sport_name'=>$sport_name,'manager_name'=> $manager_name,'register_data'=>$register_data));
+
+
+/*-----------------------------------------------------------------------------------------*/
+
+      }
+
+ public function registerstep5() {
+ //	$mail_exist=User::where('email','gt')->value('id');
+ 	//echo "<pre>"; print_r($_REQUEST); echo "</pre>"; exit;
+  if($_REQUEST['match_type']=='singles'){
+     foreach($_REQUEST['single'] as $single_array){
+        $last_id='';
+     	$request=array();
+        $request['flag']='PLAYER_TO_TOURNAMENT';
+        $mail_exist=User::where('email',$single_array['email'])->value('id');
+        if($mail_exist!=''){
+          $request['player_tournament_id'] =$mail_exist;
+        } else {
+
+        	$last_id = DB::table('users')->insertGetId(
+    array('name' => $single_array['name'], 'email' => $single_array['email'],  'location' => $single_array['location'], 'club' => $single_array['club'], 'contact_number' => $single_array['number']));
+        	$request['player_tournament_id']=$last_id;
+        	  
+        }
+        $request['team_ids'][0]=$_REQUEST['event_id'];
+        
+        AllRequests::saverequest($request);
+
+         }
+
+
+
+         CartDetails::where('cart_id',$_REQUEST['cart_id'])->where('event_id',$_REQUEST['event_id'])->update(array('registerd' => 1));
+         return redirect('tournaments/registerstep3/'. $_REQUEST['cart_id']);
+       }
+
+
+
+  
+
+
+
+ }
 
 
 }
