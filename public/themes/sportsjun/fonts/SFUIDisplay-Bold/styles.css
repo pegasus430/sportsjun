@@ -1,0 +1,8 @@
+
+@font-face {
+  font-family: 'SFUIDisplay-Bold';
+  src: url('SFUIDisplay-Bold.eot?#iefix') format('embedded-opentype'),  url('SFUIDisplay-Bold.otf')  format('opentype'),
+	     url('SFUIDisplay-Bold.woff') format('woff'), url('SFUIDisplay-Bold.ttf')  format('truetype'), url('SFUIDisplay-Bold.svg#SFUIDisplay-Bold') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}

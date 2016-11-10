@@ -1,0 +1,597 @@
+
+/* Main Content */
+.kode-content {
+    float: left;
+    width: 100%;
+    padding: 40px 0px 0px 0px;
+}
+/* Call To Action starts */
+.kode-call-action {
+    float: left;
+    width: 100%;
+    text-align: right;
+}
+.kode-call-action .kode-simplebtn { float: right; }
+.kode-simplebtn {
+    display: inline-block;
+    padding: 12px 40px;
+    color: #ffffff;
+    border: 1px solid #fff;
+    font-size: 18px;
+    margin: 10px 0px 0px 0px;
+    position: relative;
+}
+.kode-simplebtn:before {
+    content: '';
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 0;
+    width: 100%;
+    background-color: rgba(0,0,0,0.1);
+}
+.kode-simplebtn:hover:before { height: 100%; }
+.kode-simplebtn ~ .kode-action-info {
+    padding: 0px 220px 0px 0px;
+}
+.kode-action-info h2 { text-transform: uppercase; }
+.kode-action-info h2,.kode-action-info span {
+    color: #ffffff;
+}
+.kode-action-info span {
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+/* Call To Action ends */
+
+/* Result's starts */
+.kode-section-title {
+    float: left;
+    width: 100%;
+    margin-bottom: 30px;
+}
+.kode-widget-title {
+    float: left;
+    width: 100%;
+    margin-bottom: 18px;
+}
+.kode-section-title h2,.kode-widget-title h2 {
+    text-transform: uppercase;
+    border-bottom: 1px solid;
+    display: inline-block;
+    padding: 0px 0px 7px 0px;
+}
+.widget-recent-news ul li:hover time { color: #ffffff; }
+.kode-section-title.kode-white h2 {
+    color: #ffffff !important;
+    border-bottom-color: #fff !important;
+}
+.kode-white.heading-12 p,
+.kode-white.heading-12 h2{
+    color:#fff !important;
+}
+
+/* Result's ends */
+
+.kode-content{
+    color: #505050;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    background-color: #ffffff;
+    float:none;
+    display:block;
+}
+
+
+/* Heading Typo */
+.kode-content h1, .kode-content h2, .kode-content h3, .kode-content h4, .kode-content h5, .kode-content h6 {
+    color: #333333;
+    font-family: 'Oswald', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.5;
+    margin: 0px 0px 8px 0px;
+}
+
+.kode-content h1 {
+    font-size: 26px;
+}
+
+.kode-content h2 {
+    font-size: 24px;
+}
+
+.kode-content h3 {
+    font-size: 22px;
+}
+
+.kode-content h4 {
+    font-size: 20px;
+}
+
+.kode-content h5 {
+    font-size: 18px;
+}
+
+.kode-content h6 {
+    font-size: 16px;
+}
+
+.kode-content h1 a, .kode-content h2 a, .kode-content h3 a, .kode-content h4 a, .kode-content h5 a, .kode-content h6 a {
+    color: #333333;
+}
+
+
+
+/* SubHeader css starts */
+.kode-subheader {
+    float: left;
+    width: 100%;
+    background-color: #eb1a1a;
+    height: 236px;
+    position: relative;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    background-color: #ffffff;
+}
+.subheader-height:before {
+    content: '';
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    width: 52.2%;
+    height: 100%;
+    background-color: #c50000;
+}
+.subheader-height:after {
+    border-bottom: 198px solid #c50000;
+    border-left: 152px solid transparent;
+    bottom: 0;
+    content: "";
+    position: absolute;
+    right: 52.2%;
+}
+.kode-subheader.subheader-height {
+    padding: 165px 0px 0px 0px;
+}
+.kode-subheader h1 {
+    color: #ffffff;
+    text-transform: uppercase;
+    font-family: 'Oswald', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.5;
+    margin: 0px 0px 8px 0px;
+    font-size: 26px;
+}
+.kode-breadcrumb {
+    float: right;
+    padding: 9px 0px 0px 0px;
+}
+.kode-breadcrumb li {
+    display: inline-block;
+    list-style: none;
+    padding: 0px 15px;
+    position: relative;
+    line-height: 28px;
+    list-style: disc outside none;
+}
+.kode-breadcrumb li:before {
+    content: "\f101";
+    font-family: FontAwesome;
+    position: absolute;
+    right: -5px;
+    top: 0px;
+    color: #ffffff;
+}
+.kode-breadcrumb li:last-child { padding-right: 0px; }
+.kode-breadcrumb li:last-child:before { display: none; }
+.kode-breadcrumb li a {
+    color: #ffffff;
+}
+
+/* SubHeader css ends */
+
+/* ThemeColor */
+.thcolor,.thcolorhover:hover,.kode-section-title h2,.kode-pro-inner:hover figcaption h4 a,.next-prev-style .owl-nav div,
+.kode-blog-list ul li:hover .kode-time-zoon h5 a,.kode-large-blog ul li:hover .kode-blog-btn,.children li a:before,
+.kode-grid-blog .kode-blog-options li a:hover,.widget-tabnav li:hover a,.widget-tabnav li.active a,
+.kode-recent-blog > ul > li:hover h6 a,.widget-recent-news ul li:hover h6 a,.widget_categories ul li:hover a,
+.widget_categories ul li:hover a:before,.kode-related-blog ul li:hover h6 a,
+.kode-gallery ul li:hover h2 a,.player-nav li.active a,.fixer-pagination a:hover,.next-prev-style .owl-nav div {
+    color: #65c178 !important;
+}
+
+.heading-12 span.left, .heading-12 span.right, .thbg-color,.thbg-colorhover:hover,.navbar-nav > li > a:before,.owl-nav div:hover,.kode-team-network li a:hover,
+.kode-team-list figure:hover figcaption h2 a,.kode-services ul li:hover .service-info,.kode-table thead,
+.kode-blog-list ul li:hover .kode-time-zoon time,.kode-blog-list ul li:hover .kode-time-zoon:before,.kode-bottom-footer,
+.children > li:hover > a,.pagination a:hover,.pagination span,.widget-tabnav li a:before,.widget-recent-news ul li:hover time,
+.kode-table caption,.shop-btn a:hover,.fixer-btn a:hover,.kode-underconstruction .kode-innersearch form input[type="submit"] {
+    /* background-color: #195D10;*/
+    background-color:#65c178;
+}
+.next-prev-style .owl-nav div,
+.th-bordercolor,.th-bordercolorhover:hover,.kd-headbar,.kode-section-title h2,.owl-nav div:hover,
+.kode-team-list figure:hover figcaption h2 a,.next-prev-style .owl-nav div,.kode-table,
+.kode-simple-form ul li input[type="submit"],.children,.kode-grid-blog .kode-blog-info:before,.kode-modrenbtn:hover,
+.kode-widget-title h2,.widget-recent-news ul li:hover time,blockquote,.kode-inner-fixer,
+#koderespond form p input[type="button"],#koderespond form p input[type="submit"],.kode-header-three .navbar-nav > li > a::before {
+    border-color: #195D10 !important;
+}
+.tab-widget {
+    box-shadow: 0px 2px 0px 0px #195D10,0px 2px 0px 0px #195D10 inset;
+}
+
+
+.kode-admin-post:before,
+.kode-result-list article:before,
+.kode-testimonial figure:before,
+.countdown-amount:before{
+    border-top-color: #195D10;
+}
+/* 2nd ThemeColor */
+.thcolortwo,.thcolortwohover:hover,.kode-medium-blog >ul >li:hover h5 a,.kode-medium-blog .kode-blog-options li a:hover {
+    color: #ffe325;
+}
+.subheader-height:after{
+    border-bottom-color: #65c178;
+}
+.subheader-height:before{
+    background: #65c178;
+}
+.kode-subheader{
+    background:#84cd93;
+}
+.thbg-colortwo,.thbg-colortwohover:hover,#mainbanner .flex-control-paging li a.flex-active,.kode-pro-inner:hover .kode-pro-info,
+.kode-medium-blog >ul >li:hover .medium-info time, .kode-caption h2{
+    background-color: #ffe325;
+}
+.kode-caption h2:before, .kode-caption h2:after{
+    border-bottom-color: #ffe325;
+}
+
+.kode-modren-btn, .th-bordertwocolor,.th-bordercolortwohover:hover,.kode-medium-blog,.kode-medium-blog >ul >li:hover .medium-info time,
+.kode-loginform p input[type="submit"] {
+    border-color: #ffe325;
+}
+
+/*.kode-caption h2{background-color: rgba(0, 0, 0, 0.3); color:#fff;}*/
+.kode-caption h2{ background:none !important; color:#FFFFFF;}
+.kode-caption h2 span{ color:#fee31e;}
+
+
+
+
+/* Modal Window Starts */
+
+.modal-dialog-old { width:400px; }
+.modal-content-old { border-radius: 0px; }
+.modal-body-old {
+    display: inline-block;
+    width: 100%;
+    padding: 15px 22px 4px 22px;
+}
+.modal-header-old h4 {
+    text-transform: uppercase;
+    color: #ffffff;
+}
+.kode-loginform {
+    display: inline-block;
+    width: 100%;
+}
+.kode-loginform p {
+    display: inline-block;
+    width: 100%;
+}
+.kode-loginform p > span {
+    font-size: 14px;
+    color: #333333;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 6px;
+}
+.kode-loginform p input[type="text"],.kode-loginform p input[type="password"] {
+    float: left;
+    width: 100%;
+    border: 1px solid #e2e2e2;
+    height: 42px;
+}
+.kode-loginform p label {
+    float: left;
+    margin: 0px;
+}
+.kode-loginform p input[type="checkbox"] {
+    float: left;
+    margin: 7px 10px 0px 0px;
+}
+.kode-loginform p label span,.kode-loginform p a {
+    font-size: 14px;
+    color: #333333;
+    font-weight: bold;
+}
+.kode-loginform p a {
+    float: left;
+    margin: 14px 0px 0px 0px;
+}
+.kode-loginform p.kode-submit {
+    padding: 18px 0px 0px 0px;
+    border-top: 1px solid #dfdfdf;
+}
+.kode-loginform p input[type="submit"] {
+    float: right;
+    padding: 5px 30px;
+    color: #333;
+    text-transform: uppercase;
+    box-shadow: 0px 0px 0px 1px #333 inset;
+    border: 7px solid;
+    font-weight: bold;
+}
+.close-old { opacity: 0.4 }
+
+/* Modal Window Ends */
+
+
+
+/* bootstrap issue fix - scrollbar */
+body.modal-open {
+    padding-right: 0 !important;
+}
+.modal-scrollbar-measure {
+    overflow: hidden;
+}
+
+.modal-header h4 {
+    display: inline-block !important;
+}
+span.modal-title-right-msg {
+    float: right;
+    color: #fff;
+    margin-right: 16px;
+    margin-top: 3px;
+}
+span.modal-title-right-msg a {
+    color: #FFEB3B;
+    margin-left: 5px;
+    border-bottom: 1px dotted #FFEB3B;
+}
+span.modal-title-right-msg a:hover {
+    color: #333;
+    border-bottom: 1px dotted #333;
+}
+.btn-home-login {
+    width: 100%;
+}
+span.btn-home-forgot a {
+    font-weight: normal;
+    float: right;
+    position: relative;
+    top: -12px;
+}
+span.btn-home-forgot a:hover {
+    text-decoration: underline;
+}
+.tagline {
+    clear: both;
+    height: 0;
+    border-top: 1px solid #d9dde5;
+    text-align: center;
+    margin-bottom: 10px;
+    position: relative;
+    top: -8px;
+}
+.tagline span {
+    text-transform: uppercase;
+    display: inline-block;
+    position: relative;
+    padding: 0 15px;
+    background: #fff;
+    color: #AEB2BB;
+    top: -10px;
+}
+.col-md-6.social_but {
+    margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {.social-buttons.reg-social {width: 300px;}}
+@media (max-width: 400px) {.social-buttons.reg-social .social_but {margin-left: 15px; margin-right: 15px;}}
+.btn-social{position:relative;padding-left:44px;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn-social>:first-child{position:absolute;left:0;top:0;bottom:0;width:40px;line-height:34px;font-size:1.6em;text-align:center;border-right:1px solid rgba(0,0,0,0.2)}
+.btn-social.btn-lg{padding-left:61px}.btn-social.btn-lg>:first-child{line-height:45px;width:45px;font-size:1.8em}
+.btn-social.btn-sm{padding-left:38px}.btn-social.btn-sm>:first-child{line-height:28px;width:28px;font-size:1.4em}
+.btn-social.btn-xs{padding-left:30px}.btn-social.btn-xs>:first-child{line-height:20px;width:20px;font-size:1.2em}
+.btn-social-icon{position:relative;padding-left:44px;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;height:34px;width:34px;padding:0}.btn-social-icon>:first-child{position:absolute;left:0;top:0;bottom:0;width:32px;line-height:34px;font-size:1.6em;text-align:center;border-right:1px solid rgba(0,0,0,0.2)}
+.btn-social-icon.btn-lg{padding-left:61px}.btn-social-icon.btn-lg>:first-child{line-height:45px;width:45px;font-size:1.8em}
+.btn-social-icon.btn-sm{padding-left:38px}.btn-social-icon.btn-sm>:first-child{line-height:28px;width:28px;font-size:1.4em}
+.btn-social-icon.btn-xs{padding-left:30px}.btn-social-icon.btn-xs>:first-child{line-height:20px;width:20px;font-size:1.2em}
+.btn-social-icon>:first-child{border:none;text-align:center;width:100% !important}
+.btn-social-icon.btn-lg{height:45px;width:45px;padding-left:0;padding-right:0}
+.btn-social-icon.btn-sm{height:30px;width:30px;padding-left:0;padding-right:0}
+.btn-social-icon.btn-xs{height:22px;width:22px;padding-left:0;padding-right:0}
+.btn-twitter{color:#fff;background-color:#55acee;border-color:rgba(0,0,0,0.2)}.btn-twitter:focus,.btn-twitter.focus{color:#fff;background-color:#2795e9;border-color:rgba(0,0,0,0.2)}
+.btn-twitter:hover{color:#fff !important;background-color:#2795e9;border-color:rgba(0,0,0,0.2)}
+.btn-twitter:active,.btn-twitter.active,.open>.dropdown-toggle.btn-twitter{color:#fff;background-color:#2795e9;border-color:rgba(0,0,0,0.2)}.btn-twitter:active:hover,.btn-twitter.active:hover,.open>.dropdown-toggle.btn-twitter:hover,.btn-twitter:active:focus,.btn-twitter.active:focus,.open>.dropdown-toggle.btn-twitter:focus,.btn-twitter:active.focus,.btn-twitter.active.focus,.open>.dropdown-toggle.btn-twitter.focus{color:#fff;background-color:#1583d7;border-color:rgba(0,0,0,0.2)}
+.btn-twitter:active,.btn-twitter.active,.open>.dropdown-toggle.btn-twitter{background-image:none}
+.btn-twitter.disabled,.btn-twitter[disabled],fieldset[disabled] .btn-twitter,.btn-twitter.disabled:hover,.btn-twitter[disabled]:hover,fieldset[disabled] .btn-twitter:hover,.btn-twitter.disabled:focus,.btn-twitter[disabled]:focus,fieldset[disabled] .btn-twitter:focus,.btn-twitter.disabled.focus,.btn-twitter[disabled].focus,fieldset[disabled] .btn-twitter.focus,.btn-twitter.disabled:active,.btn-twitter[disabled]:active,fieldset[disabled] .btn-twitter:active,.btn-twitter.disabled.active,.btn-twitter[disabled].active,fieldset[disabled] .btn-twitter.active{background-color:#55acee;border-color:rgba(0,0,0,0.2)}
+.btn-twitter .badge{color:#55acee;background-color:#fff}
+.btn-facebook{color:#fff;background-color:#3b5998;border-color:rgba(0,0,0,0.2)}.btn-facebook:focus,.btn-facebook.focus{color:#fff;background-color:#2d4373;border-color:rgba(0,0,0,0.2)}
+.btn-facebook:hover{color:#fff !important;background-color:#2d4373;border-color:rgba(0,0,0,0.2)}
+.btn-facebook:active,.btn-facebook.active,.open>.dropdown-toggle.btn-facebook{color:#fff;background-color:#2d4373;border-color:rgba(0,0,0,0.2)}.btn-facebook:active:hover,.btn-facebook.active:hover,.open>.dropdown-toggle.btn-facebook:hover,.btn-facebook:active:focus,.btn-facebook.active:focus,.open>.dropdown-toggle.btn-facebook:focus,.btn-facebook:active.focus,.btn-facebook.active.focus,.open>.dropdown-toggle.btn-facebook.focus{color:#fff;background-color:#23345a;border-color:rgba(0,0,0,0.2)}
+.btn-facebook:active,.btn-facebook.active,.open>.dropdown-toggle.btn-facebook{background-image:none}
+.btn-facebook.disabled,.btn-facebook[disabled],fieldset[disabled] .btn-facebook,.btn-facebook.disabled:hover,.btn-facebook[disabled]:hover,fieldset[disabled] .btn-facebook:hover,.btn-facebook.disabled:focus,.btn-facebook[disabled]:focus,fieldset[disabled] .btn-facebook:focus,.btn-facebook.disabled.focus,.btn-facebook[disabled].focus,fieldset[disabled] .btn-facebook.focus,.btn-facebook.disabled:active,.btn-facebook[disabled]:active,fieldset[disabled] .btn-facebook:active,.btn-facebook.disabled.active,.btn-facebook[disabled].active,fieldset[disabled] .btn-facebook.active{background-color:#3b5998;border-color:rgba(0,0,0,0.2)}
+.btn-facebook .badge{color:#3b5998;background-color:#fff}
+.btn-google{color:#fff;background-color:#dd4b39;border-color:rgba(0,0,0,0.2)}.btn-google:focus,.btn-google.focus{color:#fff;background-color:#c23321;border-color:rgba(0,0,0,0.2)}
+.btn-google:hover{color:#fff!important;background-color:#c23321;border-color:rgba(0,0,0,0.2)}
+.btn-google:active,.btn-google.active,.open>.dropdown-toggle.btn-google{color:#fff;background-color:#c23321;border-color:rgba(0,0,0,0.2)}.btn-google:active:hover,.btn-google.active:hover,.open>.dropdown-toggle.btn-google:hover,.btn-google:active:focus,.btn-google.active:focus,.open>.dropdown-toggle.btn-google:focus,.btn-google:active.focus,.btn-google.active.focus,.open>.dropdown-toggle.btn-google.focus{color:#fff;background-color:#a32b1c;border-color:rgba(0,0,0,0.2)}
+.btn-google:active,.btn-google.active,.open>.dropdown-toggle.btn-google{background-image:none}
+.btn-google.disabled,.btn-google[disabled],fieldset[disabled] .btn-google,.btn-google.disabled:hover,.btn-google[disabled]:hover,fieldset[disabled] .btn-google:hover,.btn-google.disabled:focus,.btn-google[disabled]:focus,fieldset[disabled] .btn-google:focus,.btn-google.disabled.focus,.btn-google[disabled].focus,fieldset[disabled] .btn-google.focus,.btn-google.disabled:active,.btn-google[disabled]:active,fieldset[disabled] .btn-google:active,.btn-google.disabled.active,.btn-google[disabled].active,fieldset[disabled] .btn-google.active{background-color:#dd4b39;border-color:rgba(0,0,0,0.2)}
+.btn-google .badge{color:#dd4b39;background-color:#fff}
+.btn-linkedin{color:#fff;background-color:#007bb6;border-color:rgba(0,0,0,0.2)}.btn-linkedin:focus,.btn-linkedin.focus{color:#fff;background-color:#005983;border-color:rgba(0,0,0,0.2)}
+.btn-linkedin:hover{color:#fff !important;background-color:#005983;border-color:rgba(0,0,0,0.2)}
+.btn-linkedin:active,.btn-linkedin.active,.open>.dropdown-toggle.btn-linkedin{color:#fff;background-color:#005983;border-color:rgba(0,0,0,0.2)}.btn-linkedin:active:hover,.btn-linkedin.active:hover,.open>.dropdown-toggle.btn-linkedin:hover,.btn-linkedin:active:focus,.btn-linkedin.active:focus,.open>.dropdown-toggle.btn-linkedin:focus,.btn-linkedin:active.focus,.btn-linkedin.active.focus,.open>.dropdown-toggle.btn-linkedin.focus{color:#fff;background-color:#00405f;border-color:rgba(0,0,0,0.2)}
+.btn-linkedin:active,.btn-linkedin.active,.open>.dropdown-toggle.btn-linkedin{background-image:none}
+.btn-linkedin.disabled,.btn-linkedin[disabled],fieldset[disabled] .btn-linkedin,.btn-linkedin.disabled:hover,.btn-linkedin[disabled]:hover,fieldset[disabled] .btn-linkedin:hover,.btn-linkedin.disabled:focus,.btn-linkedin[disabled]:focus,fieldset[disabled] .btn-linkedin:focus,.btn-linkedin.disabled.focus,.btn-linkedin[disabled].focus,fieldset[disabled] .btn-linkedin.focus,.btn-linkedin.disabled:active,.btn-linkedin[disabled]:active,fieldset[disabled] .btn-linkedin:active,.btn-linkedin.disabled.active,.btn-linkedin[disabled].active,fieldset[disabled] .btn-linkedin.active{background-color:#007bb6;border-color:rgba(0,0,0,0.2)}
+.btn-linkedin .badge{color:#007bb6;background-color:#fff}
+
+div#footer-partners img { width:120px }
+div#footer-partners a {display: block;margin-top: 20px;}
+.kd-divider span {display:block;}
+@media (max-width: 420px) {
+    .or_text {font-size:14px;}
+    .modal-content { border:0; }
+    .modal-dialog { width:100%;margin:0 auto; }
+    span.modal-title-right-msg{float:none;display:block;}
+}
+
+@media (max-width: 320px) {
+    body {width: 320px;}.modal,.modal-dialog{margin:0;width:320px}.modal form{padding:0 10px;}.modal-body{padding:20px 0 0 0}.modal-content{border:0}div.about-widget ul.kode-form-list li p{width:235px}.header-8 .logo img{width:90%}
+}
+
+img.feature-img { width: 100%; }
+
+
+
+/*
+==========================================
+				TEAM STYLE 2 Starts
+==========================================
+*/
+
+section{
+    float:left;
+    width:100%;
+}
+
+/* Counter */
+.kd-counter {
+    float: left;
+    width: 100%;
+}
+.kd-counter ul li {
+    list-style: none;
+    text-align: center;
+}
+.kd-counter ul li i {
+    color: #ffffff;
+    margin: 0px 0px 18px 0px;
+}
+.kd-counter ul li span {
+    color: #ffffff;
+    display: block;
+    font-size: 50px;
+    font-weight: bold;
+    padding: 0px 0px 16px 0px;
+    position: relative;
+    margin-bottom: 5px;
+}
+.kd-counter ul li span:before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0px;
+    width: 80px;
+    height: 3px;
+    border-bottom: 2px solid #ffffff;
+    margin: 0px 0px 0px -40px;
+}
+.kd-counter ul li small {
+    color: #ffffff;
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.widget{
+    float:left;
+    width:100%;
+}
+.kode-team-list.kode-team-modern figure figcaption{
+    left:0;
+}
+.kode-team-list.kode-team-modern figure figcaption h2{
+    text-align:center;
+}
+.kode-team-list.kode-team-modern .kode-team-thumb{
+    width:100%;
+}
+.kode-team-list.kode-team-modern .kode-team-network li{
+    background:#fff;
+}
+.kode-team-list.kode-team-modern .kode-team-network{float:none;text-align:center;margin:10px 0;}
+.kode-team-list.kode-team-modern .kode-modren-btn{display:none;}
+.kode-team-list.kode-team-modern.kode-small figure figcaption h2 a{
+    padding:10px;font-size:18px;
+}
+.kode-team-list.kode-team-modern figure figcaption h2{box-shadow:inherit;}
+.kode-team-list.kode-team-modern > ul > li.col-md-5{float:none;display:inline-block;text-align:center;margin:0 auto;}
+.kode-align-center{text-align:center;}
+.links_widget{ position:relative;}
+.links_widget ul{}
+.links_widget ul li{}
+.links_widget ul li a{ cursor:pointer;}
+.links_widget ul li a:hover { text-decoration:underline; }
+.bg-squre-pattren{ /*background:url(extra-images/squre-bg.png) repeat;*/ background:#f8f8f8;}
+.how_text{ /*margin:20px 0;*/ position:relative; margin:20px 0px 0px 0px;}
+.how_text_head{ position:relative;}
+.how_text_head h1{ font-size:60px; color:#82cc8d; float:left; margin:0 20px 0 0; line-height:60px; font-weight:300;}
+.how_text_head h2{ margin:0 0 0 0; text-transform:uppercase; margin:0; font-family: "Open Sans",sans-serif; text-transform:none; font-weight:300; line-height:30px; color:#2d3746;}
+.how_text_des{ clear:both;}
+.features-bg{ background:#1c2734 !important;}
+.features_text{ margin:20px 0; position:relative;}
+.features_text i{ margin:5px 0;}
+.features_text h3{ text-transform:uppercase; color:#FFFFFF; font-family: "Oswald",sans-serif; font-size:28px; font-weight:300;}
+.features_text p{ color:#e0e1e1; padding:0 20px; margin-bottom:0;}
+.label_more{ color:#fee31e; font-size:30px;  cursor:pointer; display:inline-block; line-height:24px; letter-spacing:5px;}
+.player_color{ color:#1abc9c !important;}
+.team_color{color:#3498db !important;}
+.organization_color{color:#e74c3c !important;}
+.online_score_color{color:#6a56d2 !important;}
+.league_color{color:#e67e22 !important;}
+.gallery_color{color:#65c178 !important;}
+.market_place_color{color:#19b5fe !important;}
+.sj_white_bg{ background:#fff;}
+.kode_blog_btn_link{ font-size:30px; letter-spacing:6px;}
+
+.feaures_list_view {
+    padding: 50px 0 0;
+}
+.feature_line .fa{ margin-top:25px; }
+.feature_line .fa-thumbs-o-up { color: #64bc5c; }
+.feature_line .fa-share-square-o { color: #34a3cd }
+.feature_line .fa-bar-chart { color: #f07818; }
+.feature_line .fa-user { color: #d96459; }
+.green_alert_box{ background:#d9edd1; border:1px solid #b2dba1; color:#3c763d; width:90%; margin:5px auto; padding:10px; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px;}
+.full_div { margin:0; padding:0; width: 100%; clear: both; background: #ffffff; border-top:1px solid #e9e9e9; z-index:2; position: relative; }
+.set_background { background-color: #f5f5f5 !important;}
+.white_color { background-color: #ffffff !important;}
+.feature_line{ height:45px; position:relative; background:#fff;}
+.half-circle { /*width: 200px; height: 100px; border-top-left-radius: 110px; border-top-right-radius: 110px; border: 2px solid #e9e9e9; border-bottom: 0;
+border-radius: 50%/50%; border-style: solid solid none; border-width: 1px 1px 0; height: 50px; width: 100px;*/
+    background:url(extra-images/half_circle.png) center center no-repeat;  width: 176px; height:45px; /*border-bottom:1px solid #e9e9e9;*/ text-align: center; z-index:999; position: relative; margin:0 auto; top:1px;}
+.how_img_dis{ margin:25px auto; text-align:center;}
+.how_img_dis h1{ margin:0 0 20px 0; font-family: "Open Sans",sans-serif; text-transform:uppercase; font-weight:600; font-size:24px;}
+.features_bg_greay{ background:#fafafa; padding:50px 0;}
+.features_bg_whitee{ background:#ffffff; padding:50px 0;}
+.features_txt_dis_new{ padding:0 15px;}
+.features_txt_dis_new ul{ margin:0 0 10px 10px !important;}
+.values_text{ margin:20px 0;}
+.about_content{ position:relative;}
+.about_content img{ float:left; margin:0 20px 0 0;}
+.sj_linkweb{ color:#0099FF !important; font-weight:600;}
+.privacy_page p{ margin-bottom:20px;}
+.privacy_page ul{ margin:0 0 20px 50px;}
+.sport_icon_bg{ background:#f8f8f8; height:100px; width:100px; text-align:center; -webkit-border-radius: 80px; -moz-border-radius: 80px; border-radius: 80px; margin:10px auto;}
+.sport_icon_bg img{ vertical-align:middle; margin-top:20px;}
+.sports_list{ margin:20px 0; height:150px;}
+.scorecard_avila{ background:#ff9800; padding:5px 8px; color:#FFFFFF; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; font-size:12px;}
+.or_text{ color:#FFFFFF; font-weight:600; font-size:18px;}
+.sports_list h4{ font-size:16px; font-family: "Open Sans",sans-serif; font-weight:600;}
+
+
+
+/*
+==========================================
+				TEAM STYLE 2 Ends
+==========================================
+*/
