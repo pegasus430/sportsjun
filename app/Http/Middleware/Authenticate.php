@@ -46,7 +46,8 @@ class Authenticate
                         else
                         {
                                 // return redirect()->guest('auth/login');
-                                return view('home');
+                                $controller=  new \App\Http\Controllers\HomeController();
+                                return $controller->index();
                         }
                 }
                 else
@@ -74,8 +75,14 @@ class Authenticate
                                 {
                                         return redirect(url('/showsportprofile', [$this->auth->user()->id]));
                                 }
+                        } else {
+                            return redirect(route('user.edit', [$this->auth->user()->id]));
                         }
+
+                    return redirect(url('/myschedule',[$this->auth->user()->id]));
                 }
+
+
 
                 return $next($request);
         }

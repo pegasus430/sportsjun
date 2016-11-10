@@ -8,6 +8,7 @@ use App\Model\Organization;
 use App\Model\OrganizationRole;
 use App\Model\Photo;
 use App\Model\Rating;
+use App\Model\Sport;
 use App\Model\TournamentParent;
 use App\Model\Tournaments;
 use Auth;
@@ -30,6 +31,8 @@ class User extends Model implements AuthenticatableContract,
     static $USER_EXISTS = -1;
     static $USER_EMAIL_REQUIRED = -2;
 
+    static $TYPE_REGULAR = 0;
+    static $TYPE_ORGANIZATION = 1;
 
     use Authenticatable,
         Authorizable,
@@ -102,6 +105,14 @@ class User extends Model implements AuthenticatableContract,
             ->first();
     }
 
+    public function scopeRegular($query){
+        return $query->whereType(self::$TYPE_REGULAR);
+    }
+
+    public function scopeOrganizations($query){
+        return $query->whereType(self::$TYPE_ORGANIZATION);
+    }
+
     /**
      * A user can be staff of many organizations.
      *
@@ -168,8 +179,9 @@ class User extends Model implements AuthenticatableContract,
 
     public function usersfollowingsports()
     {
-        return $this->hasMany('App\Model\UserStatistic', 'user_id');
+        return $this->hasOne('App\Model\UserStatistic', 'user_id');
     }
+
 
     //a user can be a multiple team player
     public function userdetails()
@@ -183,7 +195,7 @@ class User extends Model implements AuthenticatableContract,
             ->where('is_album_cover', '1');
     }
 
-    public function folowers()
+    public function UserStatistic()
     {
         return $this->hasMany(Followers::class, 'user_id', 'id')->where('deleted_at', null);
     }
@@ -359,4 +371,15 @@ class User extends Model implements AuthenticatableContract,
             ->groupBy('tournament_parent.id');
     }
 
+    public function getSportListAttribute(){
+        $sports = collect();
+        if ($this->usersfollowingsports) {
+           $sport_ids = explode(',',trim($this->usersfollowingsports->following_sports,','));
+            $allSports= Sport::get()->keyBy('id');
+            foreach($sport_ids as $id){
+                $sports->push(array_get($allSports,$id));
+            }
+        }
+        return $sports;
+    }
 }
