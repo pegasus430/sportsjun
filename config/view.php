@@ -1,5 +1,6 @@
 <?php
 
+
 return [
 
     /*
@@ -14,6 +15,7 @@ return [
     */
 
     'paths' => [
+        env('THEME',false) ? realpath(base_path('resources/themes/'.env('THEME'))):false,
         realpath(base_path('resources/views')),
     ],
 
