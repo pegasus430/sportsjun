@@ -55,7 +55,7 @@ class Team extends Model
     public function photos()
     {
         return $this->morphMany('App\Model\Photo', 'imageable')
-                    ->where('is_album_cover', '1');
+            ->where('is_album_cover', '1');
     }
 
     public function matchscheduleone()
@@ -133,9 +133,9 @@ class Team extends Model
         $totalresult = $query->get();
         $total = count($totalresult);
         $result = $query->limit($limit)
-                        ->offset($offset)
-                        ->orderBy('updated_at', 'desc')
-                        ->get();
+            ->offset($offset)
+            ->orderBy('updated_at', 'desc')
+            ->get();
         $response = ['result' => $result, 'total' => $total];
 
         // Helper::printQueries();exit;
@@ -173,45 +173,58 @@ class Team extends Model
         return $this->hasMany('App\Model\RequestsModel', 'to_id', 'id');
     }
 
-    public function playersByRole($role){
+    public function playersByRole($role)
+    {
         if ($this->teamplayers)
-           return $this->teamplayers->where('role',$role);
+            return $this->teamplayers->where('role', $role);
         else
-            return $this->teamplayers()->where('role',$role)->get();
+            return $this->teamplayers()->where('role', $role)->get();
     }
 
     /**
      * Attributes
      */
 
-    public static function logoImage($id){
-        $logo = Photo::where('imageable_id', $id)
-            ->where('imageable_type', config('constants.PHOTO.TEAM_PHOTO'))
-            ->orderBy('id', 'desc')
-            ->first();
-        if ($logo && $logo->url) {
-            return Helper::getImagePath($logo->url,'teams');
+    public static function logoImage($id, $ignore = false, $logo= null)
+    {
+        if (!$ignore) {
+            $logo = Team::whereId($id)->value('logo');
         }
+        if (!$logo) {
+            $logo = Photo::where('imageable_id', $id)
+                ->where('imageable_type', config('constants.PHOTO.TEAM_PHOTO'))
+                ->orderBy('id', 'desc')
+                ->first();
+            if ($logo && $logo->url) {
+                return Helper::getImagePath($logo->url, 'teams');
+            }
+        } else
+            return Helper::getImagePath($logo, 'teams');
+
+
     }
 
     public function getLogoImageAttribute()
     {
-        return self::logoImage($this->id);
+        return self::logoImage($this->id,true,$this->logo);
     }
 
-    public function getOwnersNameAttribute(){
-        if( $this->teamplayers)
-            return $this->teamplayers->where('role','owner')->implode('user.name',',');
+    public function getOwnersNameAttribute()
+    {
+        if ($this->teamplayers)
+            return $this->teamplayers->where('role', 'owner')->implode('user.name', ',');
     }
 
-    public function getManagersNameAttribute(){
-        if( $this->teamplayers)
-            return $this->teamplayers->where('role','manager')->implode('user.name',',');
+    public function getManagersNameAttribute()
+    {
+        if ($this->teamplayers)
+            return $this->teamplayers->where('role', 'manager')->implode('user.name', ',');
     }
 
-    public function getCoachsNameAttribute(){
-        if( $this->teamplayers)
-            return $this->teamplayers->where('role','coach')->implode('user.name',',');
+    public function getCoachsNameAttribute()
+    {
+        if ($this->teamplayers)
+            return $this->teamplayers->where('role', 'coach')->implode('user.name', ',');
     }
 
 }

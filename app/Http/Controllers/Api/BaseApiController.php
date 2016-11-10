@@ -62,8 +62,8 @@ class BaseApiController extends Controller
                         $item_data[$mapped] = object_get($item, $mapped);
                     }
                 } else {
-                    if (is_array($mapped)){
-                        $item_data[$key] = $this->mappedExtract($mapped,$item,$item);
+                    if (is_array($mapped)) {
+                        $item_data[$key] = $this->mappedExtract($mapped, $item, $item);
                     }
                 }
             }
@@ -76,21 +76,22 @@ class BaseApiController extends Controller
         return $this->ApiResponse($result);
     }
 
-    function mappedExtract($mapped,$item,$base){
-        $source = array_get ($mapped,'source');
-        $type = array_get($mapped,'type');
+    function mappedExtract($mapped, $item, $base)
+    {
+        $source = array_get($mapped, 'source');
+        $type = array_get($mapped, 'type');
 
-        $data = object_get($item,$source);
-        if ($data){
-            switch($type) {
+        $data = object_get($item, $source);
+        if ($data) {
+            switch ($type) {
                 case 'list':
                     $fields = $mapped['fields'];
                     if (is_callable($fields))
                         $fields = $fields($item);
                     $result = [];
-                    $counter=1;
-                    foreach ($data as $sub){
-                        $item_data =[];
+                    $counter = 1;
+                    foreach ($data as $sub) {
+                        $item_data = [];
                         foreach ($fields as $key => $mapped) {
                             if (is_string($mapped)) {
                                 if (!is_integer($key)) {
@@ -103,20 +104,40 @@ class BaseApiController extends Controller
                                     $item_data[$key] = $counter;
                                     continue;
                                 }
-                                if (is_array($mapped)){
-                                    $item_data[$key] = $this->mappedExtract($mapped,$sub,$base);
+                                if (is_array($mapped)) {
+                                    $item_data[$key] = $this->mappedExtract($mapped, $sub, $base);
                                 }
                             }
                         }
-                        $result[]= $item_data;
+                        $result[] = $item_data;
                         $counter++;
                     }
                     return $result;
                     break;
+                case 'model':
+                    $fields = $mapped['fields'];
+                    if (is_callable($fields))
+                        $fields = $fields($item);
+                    $item_data = [];
+                    foreach ($fields as $key => $mapped) {
+                        if (is_string($mapped)) {
+                            if (!is_integer($key)) {
+                                $item_data[$key] = object_get($data, $mapped);
+                            } else {
+                                $item_data[$mapped] = object_get($data, $mapped);
+                            }
+                        } else {
+                            if (is_array($mapped)) {
+                                $item_data[$key] = $this->mappedExtract($mapped, $data, $base);
+                            }
+                        }
+                    }
+                    return $item_data;
+                    break;
                 case 'value':
                     $value = $mapped['value'];
-                    if (is_callable($value)){
-                        $value= $value($item,$base);
+                    if (is_callable($value)) {
+                        $value = $value($item, $base);
                     }
                     return $value;
                 default:
@@ -142,8 +163,8 @@ class BaseApiController extends Controller
                         $item_data[$mapped] = object_get($item, $mapped);
                     }
                 } else {
-                    if (is_array($mapped)){
-                        $item_data[$key] = $this->mappedExtract($mapped,$item,$item);
+                    if (is_array($mapped)) {
+                        $item_data[$key] = $this->mappedExtract($mapped, $item, $item);
                     }
                 }
 
@@ -158,10 +179,16 @@ class BaseApiController extends Controller
     {
         $data = [];
         foreach ($map as $key => $mapped) {
-            if (!is_integer($key)) {
-                $data[$key] = object_get($model, $mapped);
+            if (is_string($mapped)) {
+                if (!is_integer($key)) {
+                    $data[$key] = object_get($model, $mapped);
+                } else {
+                    $data[$mapped] = object_get($model, $mapped);
+                }
             } else {
-                $data[$mapped] = object_get($model, $mapped);
+                if (is_array($mapped)) {
+                    $data[$key] = $this->mappedExtract($mapped, $model, $model);
+                }
             }
         }
 
