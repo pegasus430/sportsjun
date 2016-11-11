@@ -11,11 +11,13 @@ use Carbon\Carbon;
 
 class HomeController extends Controller {
 
-
     public function index(){
+        if (\Auth::user()){
+            return redirect(url('/myschedule',[\Auth::user()->id]));
+        }
+
         $testimonials = Infolist::testimonials()->active()->get();
         $our_clients = Infolist::clients()->active()->get();
-
 
         return view('home',
             compact('testimonials','our_clients'));

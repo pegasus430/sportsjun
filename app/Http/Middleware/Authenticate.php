@@ -78,12 +78,7 @@ class Authenticate
                         } else {
                             return redirect(route('user.edit', [$this->auth->user()->id]));
                         }
-
-                    return redirect(url('/myschedule',[$this->auth->user()->id]));
                 }
-
-
-
                 return $next($request);
         }
 }
