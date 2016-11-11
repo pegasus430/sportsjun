@@ -3,8 +3,10 @@
 namespace App\Model;
 
 use App\Helpers\Helper;
+use App\Repository\CityRepository;
+use App\Repository\CountryRepository;
+use App\Repository\StateRepository;
 use App\User;
-use DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
@@ -144,6 +146,11 @@ class Tournaments extends Model
         return $this->belongsTo('App\User', 'id');
     }
 
+    public function manager()
+    {
+        return $this->belongsTo(User::class, 'manager_id');
+    }
+
     public function sport()
     {
         return $this->belongsTo('App\Model\Sport', 'sports_id');
@@ -271,11 +278,25 @@ class Tournaments extends Model
     }
 
 
+
     public function cartDetails()
+
     {
         return $this->hasMany('App\Model\CartDetails', 'event_id', 'id');
     }
 
+    public function getCityAttribute(){
+        // return $this->attributes['city'];
+        return object_get(CityRepository::getModel($this->city_id),'city_name');
+    }
 
+    public function getStateAttribute(){
+        // return $this->attributes['state'];
+        return object_get(StateRepository::getModel($this->state_id),'state_name');
+    }
 
+    public function getCountryAttribute(){
+        // return $this->attributes['country'];
+        return object_get(CountryRepository::getModel($this->country_id),'country_name');
+    }
 }

@@ -158,6 +158,7 @@ class TournamentGroupTeams extends Model
 
     public function getTeamStatsAttribute(){
         if (!$this->_teamStats) {
+            $team_stats = [];
             foreach ($this->matchSchedules as $schedule) {
                 switch ($schedule->match_type) {
                     case 't20':
@@ -176,6 +177,7 @@ class TournamentGroupTeams extends Model
 
                 if ($match_stats) {
                     $team_ids = array_keys($match_stats);
+
                     foreach ($match_stats as $team_id => $team_stat) {
                         if (empty($team_stats[$team_id])) {
                             $team_stats[$team_id] = [];
@@ -198,11 +200,11 @@ class TournamentGroupTeams extends Model
     public function getNrrAttribute(){
         $team_stats = $this->teamStats;
         $nrr = '';
-        if ($team_stats[$this->team_id]['total_overs_faced'] > 0
-            && $team_stats[$this->team_id]['total_overs_bowled'] > 0)
+        if (array_get($team_stats,$this->team_id.'.total_overs_faced',0) > 0
+            && array_get($team_stats,$this->team_id.'.total_overs_bowled',0) > 0)
         {
-            $nrr = ($team_stats[$this->team_id]['total_runs_scored'] / $team_stats[$this->team_id]['total_overs_faced']);
-            $nrr -= ($team_stats[$this->team_id]['total_runs_conceded'] / $team_stats[$this->team_id]['total_overs_bowled']);
+            $nrr = (array_get($team_stats,$this->team_id.'.total_runs_scored',0) / array_get($team_stats,$this->team_id.'.total_overs_faced',0));
+            $nrr -= (array_get($team_stats,$this->team_id.'.total_runs_conceded',0) /  array_get($team_stats,$this->team_id.'.total_overs_bowled',0));
             $nrr = round($nrr, 3);
         }
         return $nrr;

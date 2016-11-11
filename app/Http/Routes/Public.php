@@ -123,13 +123,12 @@ Route::get('testshare', array(
     }
 ));
 Route::get('/', 'HomeController@index');
-Route::get('/{page}.html', function ($page) {
-    if ($page == 'index') {
-        return view('home');
-    }
-    return view('home.' . $page);
-});
+Route::get('/{page}.html', 'HomeController@page');
 Route::get('/skip', 'HomeController@skip');
+
+Route::get('/home/search',['as'=>'public.search.list','uses'=>'SearchController@search']);
+Route::get('/home/{type}/{id}',['as'=>'public.search.view','uses'=>'SearchController@view'])->where('id', '[0-9]+');
+
 
 // Default Laravel Routes for login,registration and reset password
 Route::controllers([
