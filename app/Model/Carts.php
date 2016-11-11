@@ -17,7 +17,7 @@ class Carts extends Model
   public $timestamps = false;
   protected $fillable = ['user_id','total_payment'];
 
-  public function cart_details()
+  public function cartDetails()
     {
         return $this->hasMany('App\Model\CartDetails', 'cart_id', 'id');
     }

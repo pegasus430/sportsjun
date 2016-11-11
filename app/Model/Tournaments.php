@@ -271,7 +271,7 @@ class Tournaments extends Model
     }
 
 
-    public function cart_details()
+    public function cartDetails()
     {
         return $this->hasMany('App\Model\CartDetails', 'event_id', 'id');
     }

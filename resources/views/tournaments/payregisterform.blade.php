@@ -130,11 +130,19 @@ $count=$register_data->participant_count;
 <div class="col-sm-5">
     <div class="section">
     
-    <label class="field select">
-                  <?php $options=array(0=>0,1=>1,2=>2,3=>3,4=>4,5=>5,6=>6,7=>7,8=>8,9=>9);    ?>
-            {!! Form::select("data[count]",$options, null,array('class'=>'gui-input')) !!}
-            <i class="arrow double"></i>   
-    </label>
+    
+            @if (count($teams_array) > 0)
+            <label class="field select">
+            {!! Form::select("team_id",$teams_array, null,array('class'=>'gui-input')) !!}
+             <i class="arrow double"></i>
+             </label>   
+            @else
+              <label class="field prepend-icon">
+              {!! Form::text("team_name", '', array('required','class'=>'gui-input','placeholder' => 'Team Name' )) !!}
+              </label>
+            @endif
+           
+    
 
          
     
@@ -150,6 +158,10 @@ $count=$register_data->participant_count;
 
 </div><!--end row -->
 
+<?php $j=1;?>
+@for ($i = 0; $i < 2; $i++)
+
+
 <div class="row">
 
 
@@ -158,7 +170,7 @@ $count=$register_data->participant_count;
 <div class="col-sm-5">
       <div class="section">
           <label class="field prepend-icon">
-            {!! Form::text("data[name]", '', array('required','class'=>'gui-input','placeholder' => 'Player 1' )) !!}
+            {!! Form::text("doubles[$i][name]", '', array('required','class'=>'gui-input','placeholder' => 'Player'.$j )) !!}
             
             </label>
            </div>
@@ -167,7 +179,7 @@ $count=$register_data->participant_count;
 <div class="col-sm-6">
   <div class="section">
     <label class="field prepend-icon">
-            {!! Form::text("data[email]", '', array('required','class'=>'gui-input','placeholder' => 'Email' )) !!}
+            {!! Form::text("doubles[$i][email]", '', array('required','class'=>'gui-input','placeholder' => 'Email' )) !!}
            
             </label>
      
@@ -187,7 +199,7 @@ $count=$register_data->participant_count;
 <div class="col-sm-5">
       <div class="section">
           <label class="field prepend-icon">
-            {!! Form::text("data[club]", '', array('required','class'=>'gui-input','placeholder' => 'Club' )) !!}
+            {!! Form::text("doubles[$i][club]", '', array('required','class'=>'gui-input','placeholder' => 'Club' )) !!}
             
             </label>
            </div>
@@ -196,89 +208,7 @@ $count=$register_data->participant_count;
 <div class="col-sm-6">
   <div class="section">
     <label class="field prepend-icon">
-            {!! Form::text("data[number]", '', array('required','class'=>'gui-input','placeholder' => 'Contact Number' )) !!}
-           
-            </label>
-     
-    </div>
- </div>
-<!-- end section -->  
-
-
-
-</div><!--end row -->
-
-
-<div class="row">
-
-
-
-
-<div class="col-sm-11">
-      <div class="section">
-          <label class="field prepend-icon">
-            {!! Form::textarea("data[location]", '', array('required','class'=>'gui-input','placeholder' => 'Location' )) !!}
-            
-            </label>
-           </div>
-        </div>
-
-
-<!-- end section -->  
-
-
-
-</div><!--end row -->
-
-
-<div class="row">
-
-
-
-
-<div class="col-sm-5">
-      <div class="section">
-          <label class="field prepend-icon">
-            {!! Form::text("data[name]", '', array('required','class'=>'gui-input','placeholder' => 'Player 2' )) !!}
-            
-            </label>
-           </div>
-        </div>
-
-<div class="col-sm-6">
-  <div class="section">
-    <label class="field prepend-icon">
-            {!! Form::text("data[email]", '', array('required','class'=>'gui-input','placeholder' => 'Email' )) !!}
-           
-            </label>
-     
-    </div>
- </div>
-<!-- end section -->  
-
-
-
-</div><!--end row -->
-
-
-<div class="row">
-
-
-
-
-<div class="col-sm-5">
-      <div class="section">
-          <label class="field prepend-icon">
-            {!! Form::text("data[club]", '', array('required','class'=>'gui-input','placeholder' => 'Club' )) !!}
-            
-            </label>
-           </div>
-        </div>
-
-<div class="col-sm-6">
-  <div class="section">
-    <label class="field prepend-icon">
-            {!! Form::text("data[number]", '', array('required','class'=>'gui-input','placeholder' => 'Contact Number' )) !!}
+            {!! Form::text("doubles[$i][number]", '', array('required','class'=>'gui-input','placeholder' => 'Contact Number' )) !!}
            
             </label>
      
@@ -299,7 +229,7 @@ $count=$register_data->participant_count;
 <div class="col-sm-11">
       <div class="section">
           <label class="field prepend-icon">
-            {!! Form::textarea("data[location]", '', array('required','class'=>'gui-input','placeholder' => 'Location' )) !!}
+            {!! Form::textarea("doubles[$i][location]", '', array('required','class'=>'gui-input','placeholder' => 'Location' )) !!}
             
             </label>
            </div>
@@ -311,6 +241,10 @@ $count=$register_data->participant_count;
 
 
 </div><!--end row -->
+<?php $j++; ?>
+@endfor
+
+
 
 @else
 

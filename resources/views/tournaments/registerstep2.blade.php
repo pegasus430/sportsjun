@@ -12,7 +12,7 @@
 $options=array();?>
 
 
-@foreach ($register_data->cart_details as $value) 
+@foreach ($register_data->cartDetails as $value) 
 
 
 <div class="row">
