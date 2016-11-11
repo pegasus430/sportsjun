@@ -277,16 +277,11 @@ class Tournaments extends Model
         return Helper::displayDate($this->start_date).' to '.Helper::displayDate($this->end_date);
     }
 
-
-<<<<<<< HEAD
     public function cart_details()
     {
         return $this->hasMany('App\Model\CartDetails', 'event_id', 'id');
     }
 
-
-
-=======
     public function getCityAttribute(){
         // return $this->attributes['city'];
         return object_get(CityRepository::getModel($this->city_id),'city_name');
@@ -301,5 +296,4 @@ class Tournaments extends Model
         // return $this->attributes['country'];
         return object_get(CountryRepository::getModel($this->country_id),'country_name');
     }
->>>>>>> origin/dev-homepage-1
 }
