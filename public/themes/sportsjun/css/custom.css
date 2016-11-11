@@ -1,0 +1,114 @@
+@charset "UTF-8";
+
+
+@media (min-width:1199px) {
+	.na_pad_desk{ padding:0px;}
+	.desk_flot_right{ float:right;}
+	
+	
+}
+@media (max-width:1199px) {
+	
+	.logoL{ width:220px;}
+	.logoL img{ width:100%;}
+	.logoL:after { display:none;}
+	.menuright{padding:16px 15px 0;}
+	.searchWrapp{padding:5px 15px;}
+	.searchWrapp input:focus ~ label, input:valid ~ label 		{
+  top:-5px;
+  font-size:12px;
+  color:#999;
+}
+	.searchWrapp .serachBt{padding: 14px;width: 11% !important; margin:0px;}
+	.searchWrapp label{ font-size:14px;}
+	.arrow1::after, .arrow2::after, .arrow3::after, .arrow4::after, .arrow5::after, .arrownew4::after{ display:none;}
+	
+	
+	
+	}
+
+
+
+
+	
+@media (max-width:978px) {
+	
+	.menuright ul li a{ font-size:11.5px;padding:8px 5px;}
+	
+	
+}
+
+
+
+@media (max-width:767px) {
+	
+	.menuright{padding: 0 15px;width:100%; float:none; margin-top:-50px;}
+	.menuright ul li{ float:none; padding:3px 0; width:100%; border-bottom:1px dotted #FFF;}
+	.menuright ul li a{ width:100%; display:block; }
+	.menuright ul li a:hover{border-radius: 0;}
+	.navbar-toggle{border-radius: 1px;}
+	.arowSty .owl-next{ right:0px;}
+	.arowSty .owl-prev{ left:0px;}
+	.searchWrapp .group{ width:68%;}
+	.searchWrapp{padding:5px 2px;}
+	.serchIco{ padding:0px;}
+	.searchWrapp .serachBt{ width:21% !important;font:11px SFUIDisplay-Bold;}
+	.deskRight{ float:none !important;}
+	
+	
+	
+	
+	}
+
+
+	
+@media (max-width:616px){
+	
+	.playlist{ width:100%; margin:auto;}
+	.profile_flex{display:inline-block;}
+	.followingBox{ margin:auto; height:95px; padding:10px 0; margin-bottom:10px;}
+	.leftBG{display:block; height:150px !important; background-position:center;
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover; }
+  .hedcric{display: inherit;}
+  .headingtable td{ border:1px solid #eaeaea;text-align:center;}
+  .play_details td{border:1px solid #eaeaea;text-align:center;}
+  .SportPlayerWrap{display:inherit;}
+	
+	
+}
+  
+
+@media (max-width: 490px){
+	
+	.searchWrapp label{ font-size:11.5px;}
+	.searchWrapp input:focus ~ label, input:valid ~ label 		{font-size:9px;}
+	.imgWrppaBox h3{ font-size:14px;}
+	.tournamentWhteWrap h1{ font-size:25px;}.tournamentWhteWrap h2{ font-size:15px;}
+	.rightCt h1{ text-align:center; font-size:22px;}.rightCt{ margin:15px auto; display:table;}
+	.testimonialsWrapp h1, .tournamentsGrayDown h1, .ourClientsWrapp h1{ font-size:23px;}
+	.profileRound{ width:68px; height:68px; float:none; margin:auto}.testimornialBox p{ text-align:center; font-size:12.5px;}
+	.slideBox h1{font-size:25px;}
+	.bgSlider{padding:50px 0 58px;}
+	.slideBox h2{ font-size:13px;}
+	.tournamentWhteWrap h2{margin: 0 0 22px;}
+	.tournamentWhteWrap{padding: 24px 0;}
+	.arowSty .owl-prev, .arowSty .owl-next{background-size:17px;width:14px;}
+	.testimornialBox h4{text-align:center;}
+	.testimonialsWrapp h1{margin:0 0 29px;}.testimonialsWrapp{ padding:20px 0;}
+	.plrTeamBox{ text-align:center; margin:0 0 20px 0;}.tournamentsGrayDown h5{margin: 0 0 24px; font-family:17px;}
+	.tournamentsGrayDown{ padding:25px 0;}
+	.tournamentsGrayDown h5{ font-size:13px;}.tournamentsGrayDown h2{margin:0 0 18px;}
+	
+}
+
+@media (max-width: 360px){
+	.spoertRight{ padding:0 5px !important;} 
+	.profileWrapp{ padding:21px 5px !important;}
+	.headingtable{ font-size:9.2px;}
+	.headingtable td{padding:4px 2px;}
+	.play_details{ font-size:9.5px;}
+	
+}

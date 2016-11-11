@@ -1,0 +1,8 @@
+
+@font-face {
+  font-family: 'SFUIDisplay-Heavy';
+  src: url('SFUIDisplay-Heavy.eot?#iefix') format('embedded-opentype'),  url('SFUIDisplay-Heavy.otf')  format('opentype'),
+	     url('SFUIDisplay-Heavy.woff') format('woff'), url('SFUIDisplay-Heavy.ttf')  format('truetype'), url('SFUIDisplay-Heavy.svg#SFUIDisplay-Heavy') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
