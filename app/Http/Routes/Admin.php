@@ -4,6 +4,17 @@ Route::group(array('middleware' => 'role'), function() {
     Route::get("admin/dashboard", array("as"=>"admin", 'uses'=>"admin\DashboardController@index") );
     //End Dashboard
 
+    //Home
+    Route::group(["as"=>'admin.home.',"prefix"=>"admin","namespace"=>"admin"],function(\Illuminate\Routing\Router $router){
+        $router->get('infolist/{infolist}',['as'=>'infolists.edit','uses'=>"HomepageInfolistsController@edit"]);
+        $router->put('infolist/{infolist}',['uses'=>"HomepageInfolistsController@update"]);
+        $router->delete('infolist/{infolist}',['as'=>'infolists.delete','uses'=>"HomepageInfolistsController@delete"]);
+
+        $router->get('infolists/{type}',['as'=>'infolists','uses'=>"HomepageInfolistsController@index"]);
+        $router->get('infolists/{type}/create',['as'=>'infolists.add','uses'=>"HomepageInfolistsController@create"]);
+        $router->post('infolists/{type}/create',['uses'=>"HomepageInfolistsController@store"]);
+
+       });
 
 
     //Sports

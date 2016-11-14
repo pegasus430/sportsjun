@@ -12,6 +12,7 @@ class Infolist extends Model
 
     protected $fillable = [
         'name',
+        'type',
         'weight',
         'description',
         'active'

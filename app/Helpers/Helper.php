@@ -142,7 +142,24 @@ class Helper
             Log::error($ex->getMessage());
         }
         return false;
+    }
 
+    public static function uploadImageSimple($image,$type){
+        $newFilePath = public_path('uploads/' . $type . '/');
+
+        if (!file_exists($newFilePath)) {
+            \File::makeDirectory($newFilePath, $mode = 0777, true, true);
+        }
+
+        $newFileName = str_random(20) . '.' . $image->getClientOriginalExtension();
+        try {
+            $image->move($newFilePath, $newFileName);
+            return true;
+        } catch (FileException $ex) {
+
+            Log::error($ex->getMessage());
+        }
+        return false;
     }
 
 

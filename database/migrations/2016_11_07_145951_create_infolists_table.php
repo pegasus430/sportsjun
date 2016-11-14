@@ -17,11 +17,12 @@ class CreateInfolistsTable extends Migration
             $table->integer('user_id');
             $table->integer('created_by');
             $table->boolean('active');
-            $table->string('type',32)->unique();
+            $table->string('type',32);
             $table->string('image');
             $table->string('name');
             $table->text('description');
             $table->text('data');
+            $table->integer('weight');
             $table->timestamps();
         });
 
