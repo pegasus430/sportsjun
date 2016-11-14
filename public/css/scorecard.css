@@ -1326,3 +1326,11 @@ div#playerOfTheMatchNote {
 	text-transform: uppercase;
 	font-weight: bold;
 }
+
+.tb{
+	padding-right: 20px !important; padding-left: 0px !important;
+}
+
+.btn-ace{
+	background: #df983d;
+}

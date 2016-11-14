@@ -219,9 +219,13 @@ if($match_data[0]['game_type']=='rubber'){
           @for($set_index=1; $set_index<=$set; $set_index++)
                  
                <td class='a_set{{$set_index}} ' >
-         
+                    <span class="score_data_bold">
                       {{$score_a_array['set'.$set_index]}}
-                      <span class="tie_breaker"> {{Helper::displayEmptyDash($score_a_array['set'.$set_index.'_tie_breaker'])}}</span>
+                    </span>
+
+                    <sup>
+                    {{Helper::displayEmptyDash($score_a_array['set'.$set_index.'_tie_breaker'])}}
+                    </sup>
                 
                </td>
           @endfor
@@ -237,10 +241,12 @@ if($match_data[0]['game_type']=='rubber'){
             @for($set_index=1; $set_index<=$set; $set_index++)
                   
                <td class='b_set{{$set_index}}  '>
-                
+                               <span class="score_data_bold">
                       {{$score_b_array['set'.$set_index]}}
-                      <span class="tie_breaker"> {{Helper::displayEmptyDash($score_b_array['set'.$set_index.'_tie_breaker'])}}</span>
-         
+                                </span>
+                                <sup>
+                        {{Helper::displayEmptyDash($score_b_array['set'.$set_index.'_tie_breaker'])}}
+                                </sup>         
                 </td>
           @endfor
         </tr>
