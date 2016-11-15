@@ -2,8 +2,9 @@
     <div class="container">
         <div class="marketPlaceWrap">
 
-            <h1>Tournament1</h1>
-
+            <h1>Tournament</h1>
+            <img width="100%" src="<?php echo e(asset('/home/extra-images/how-it-works-tournaments.png')); ?>">
+            @if (false)
             <ul class="nav nav-tabs tournamentBt" role="tablist">
 
                 <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab"
@@ -80,7 +81,7 @@
                 <div role="tabpanel" class="tab-pane" id="profile"></div>
 
             </div>
-
+            @endif
 
         </div>
     </div>

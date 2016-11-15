@@ -16,11 +16,15 @@ class HomeController extends Controller {
             return redirect(url('/myschedule',[\Auth::user()->id]));
         }
 
-        $testimonials = Infolist::testimonials()->active()->get();
-        $our_clients = Infolist::clients()->active()->get();
+
+        $banners = Infolist::banners()->active()->orderBy('weight','desc')->get();
+        $testimonials = Infolist::testimonials()->active()->orderBy('weight','desc')->get();
+        $our_clients = Infolist::clients()->active()->orderBy('weight','desc')->get();
+
 
         return view('home',
-            compact('testimonials','our_clients'));
+
+            compact('testimonials','our_clients','banners'));
     }
 
     public function page($page){

@@ -16,6 +16,7 @@
                         Homepage <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-messages">
+                        <li><a class="navbar-brand" href="{{ route('admin.home.infolists','banners')  }}">Banners</a></li>
                         <li><a class="navbar-brand" href="{{ route('admin.home.infolists','testimonials')  }}">Testimonials</a></li>
                         <li><a class="navbar-brand" href="{{ route('admin.home.infolists','clients')  }}">Our clients</a></li>
                     </ul>
