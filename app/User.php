@@ -195,7 +195,7 @@ class User extends Model implements AuthenticatableContract,
             ->where('is_album_cover', '1');
     }
 
-    public function UserStatistic()
+    public function followers()
     {
         return $this->hasMany(Followers::class, 'user_id', 'id')->where('deleted_at', null);
     }

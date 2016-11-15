@@ -17,7 +17,7 @@
                     </div>
                     <div class="followingBox">
                         <h2>Followers</h2>
-                        <h3>{{ $user->UserStatistic->count() }}</h3>
+                        <h3>{{ $user->followers->count() }}</h3>
                     </div>
                 </div>
                 <div class="playlist">
