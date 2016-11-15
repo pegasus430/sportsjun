@@ -1326,3 +1326,11 @@ div#playerOfTheMatchNote {
 	text-transform: uppercase;
 	font-weight: bold;
 }
+
+
+h4.error_validation {
+    font-family: inherit;
+    font-size: 17px;
+    color: red;
+    font-weight: 400;
+}

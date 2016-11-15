@@ -2940,12 +2940,11 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
           $parent_tournamet_id = Tournaments::where('id',$id)->value('tournament_parent_id');
           $all_events = Tournaments::where('tournament_parent_id',$parent_tournamet_id)->get();
           $parent_tournamet_details = TournamentParent::where('id',$parent_tournamet_id)->first();
-          $user_id = Auth::user()->id;
-          if(isset($user_id)) {
+           if(Auth::user()) {
                $roletype='user';
-          } else {
-          	 $roletype='';
-          }
+           } else {
+          	 $roletype='guest';
+           }
          return view('tournaments.eventregistration',compact('all_events','parent_tournamet_details'))->with([
          	'roletype'=>$roletype,
          	]);
@@ -2957,12 +2956,18 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
         
          $input = Request::all();
          $post=$input['data'];
-         
+
+        
         if (Auth::check()) {
               $user_id = Auth::user()->id;
           } else {
-          	 $user_id = Session::getId();
+          	 $u_id=str_random(15);
+          	 session(['user_id' => $u_id]);
+          	 $user_id = session('user_id');
+         
           }
+          
+          
           
           $carts = new Carts;
           $cart_data=array();
@@ -2975,7 +2980,6 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
             $cart_data[$i]['enrollment_fee']=Tournaments::where('id',$cart_data[$i]['event_id'])->value('enrollment_fee');
             $cart_data[$i]['match_type']=Tournaments::where('id',$cart_data[$i]['event_id'])->value('match_type');
             $cart_data[$i]['participant_count']=$value['count'];
-            //$cart_data[$i]['cart_id']='';
             $pay=$cart_data[$i]['participant_count'] * $cart_data[$i]['enrollment_fee'];
             $total_pay+=$pay;
              }
@@ -2999,12 +3003,19 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
            	$cart_details =CartDetails::create(['cart_id' => $cart_id,'event_id' => $crt['event_id'],'enrollment_fee' => $crt['enrollment_fee'],'match_type' => $crt['match_type'],'participant_count' => $crt['participant_count'],'registerd' => 0]);
             $j++;
              }
-            return redirect('tournaments/registerstep2/'. $cart_id);
+
+
+                  if (Auth::check()) {
+                    return redirect('tournaments/registerstep2/'. $cart_id);
+                  } else {
+          	        return redirect('guest/tournaments/guestregisterstep2/'. $cart_id);
+                  }
+           
              }
              
            }  else {
 
-           	return back()->withInput();
+           	return back()->withErrors(['Please select  atleast one event']);
            }  
 
          
@@ -3013,11 +3024,11 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
 
 
 	public function registerstep2($id) {
-		$user_id = Auth::user()->id;
-          if(isset($user_id)) {
-               $roletype='user';
+
+		if (Auth::check()) {
+		     $roletype='user';
           } else {
-          	 $roletype='';
+          	  $roletype='guest';
           }
         $register_data = Carts::with('cartDetails.tournaments')->where('id',$id)->first();
         
@@ -3034,26 +3045,24 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
 	}
 
 	public function registerstep3($id) {
-		
-         $user_id = Auth::user()->id;
-          if(isset($user_id)) {
-               $roletype='user';
-          } else {
-          	 $roletype='';
-          }
+		   
+		   if (Auth::check()) {
+             $roletype='user';
+           } else {
+          	 $roletype='guest';
+           }
 
    $register_data = CartDetails::where('cart_id','=',$id)->where('registerd','=',0)->with('tournaments')->first();
           if(isset($register_data) && $register_data!=null){
           $event_id=$register_data->event_id;
-      
-    return redirect('tournaments/registerstep3/'. $id.'/'.$event_id);
+           if (Auth::check()) { 
+              return redirect('tournaments/registerstep3/'. $id.'/'.$event_id);
+           } else{
+           	  return redirect('guest/tournaments/guestregisterstep3/'. $id.'/'.$event_id);
+           }
       } else {
-
-    // echo "Payment Page"; exit;
-     return view('tournaments.paymentpage',['roletype' => $roletype]);
-    
-	    
-	  } 
+         return view('tournaments.paymentpage',['roletype' => $roletype]);
+      } 
 
 	}
 
@@ -3063,9 +3072,16 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
    	$parent_tournament_id = Tournaments::where('id',$event_id)->value('tournament_parent_id');
    	$sports_id = Tournaments::where('id',$event_id)->value('sports_id');
    	$sports_type = Tournaments::where('id',$event_id)->value('sports_id');
+   	$user_data=array();
+   	if (Auth::check()) { 
    	$user_id = Auth::user()->id;
+   	$user_data = User::where('id',$user_id)->first();
+   	//dd($user_data);
+    }else {
+      $user_id = '';
+    }
+    
    	$teams=Team::where('team_owner_id',$user_id)->where('sports_id',$sports_id)->where('isactive',1)->get();
-   	//dd
    	$teams_array=array();
     if($teams!=''){
     	foreach($teams as $tm){
@@ -3106,7 +3122,7 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
 		$left_menu_data = Helper::getLeftMenuData($tournamentInfo[0]['tournament_parent_id'],$tournamentInfo[0]['manager_id'],$tournamentInfo);
 		
 	
-		return view('tournaments.payregisterform')->with(array( 'tournamentInfo'=>$tournamentInfo,'action_id'=>$event_id,'left_menu_data'=>$left_menu_data, 'tournament_id' => $event_id, 'lef_menu_condition'=> $lef_menu_condition, 'tournament_type' => $tournamentInfo[0]['type'],'sport_name'=>$sport_name,'manager_name'=> $manager_name,'register_data'=>$register_data,'teams_array'=>$teams_array));
+		return view('tournaments.payregisterform')->with(array( 'tournamentInfo'=>$tournamentInfo,'action_id'=>$event_id,'left_menu_data'=>$left_menu_data, 'tournament_id' => $event_id, 'lef_menu_condition'=> $lef_menu_condition, 'tournament_type' => $tournamentInfo[0]['type'],'sport_name'=>$sport_name,'manager_name'=> $manager_name,'register_data'=>$register_data,'teams_array'=>$teams_array,'user_data'=>$user_data));
 
 
 /*-----------------------------------------------------------------------------------------*/
@@ -3126,8 +3142,21 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
 
  	$sports_id = Tournaments::where('id',$_REQUEST['event_id'])->value('sports_id');
    	$sports_type = Tournaments::where('id',$_REQUEST['event_id'])->value('sports_id');
+
+
+    
+
+
+   	if (Auth::check()) { 
    	$user_id = Auth::user()->id;
+    }else {
+      $user_id = '';
+    }
   
+ 
+
+
+
   if($_REQUEST['match_type']=='singles'){
 
 
@@ -3262,5 +3291,29 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
 
  }
 
+
+
+ public function getGuestRegister($id,$event_id) {
+
+  return view('tournaments.guestregisterform')->with(array('id'=>$id,'event_id'=>$event_id));
+}
+    
+
+ public function postGuestRegister() {
+  //echo "<pre>"; print_r($_REQUEST); echo "</pre>"; exit;
+  $data=$_REQUEST['guest'];
+   //dd($data);
+      $mail_exist=User::where('email',$data['email'])->value('id');
+         if($mail_exist!=''){
+         	// Session::flash('message', "Special message goes here");
+          //   return Redirect::back();
+          return back()->withErrors(['Email already exist.Please login to continue']);
+          } else {
+          $last_id = DB::table('users')->insertGetId(array('name' =>$data['name'], 'email' => $data['email'],  'location' => $data['location'], 'club' => $data['club'], 'contact_number' => $data['number']));
+        	$request['player_tournament_id']=$last_id;
+        	Auth::loginUsingId($last_id);
+        	return redirect('tournaments/registerstep3/'. $_REQUEST['id'].'/'. $_REQUEST['event_id']);
+          }
+}
 
 }
