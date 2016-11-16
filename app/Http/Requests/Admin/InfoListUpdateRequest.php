@@ -30,9 +30,12 @@ class InfoListUpdateRequest extends Request {
         ];
         if ($type == 'testimonials'){
             $fields['description']='required';
+            $fields['data']='array';
+            $fields['data.date']='required|date_format:"Y-m-d H:i"';
         }
         if ($type == 'banners'){
             $fields['data']= 'array';
+
         }
         return $fields;
     }

@@ -10,6 +10,7 @@
                 <thead>
                     <tr>
                         <th>Name</th>
+                        <th>Image</th>
                         <th>Description</th>
                         <th>Weight</th>
                         <th></th>
@@ -20,8 +21,9 @@
                     @foreach ($lists as $item)
                         <tr>
                             <td>{{$item->name}}</td>
+                            <td><img src="{{Helper::getImagePath($item->image,$item->type)}}" class="img-responsive" style="height:100px"/></td>
                             <td>{{$item->description}}</td>
-                            <td><input type="number" value="{{$item->order }}"/></td>
+                            <td><input type="number" value="{{ $item->weight }}"/></td>
                             <td>
                                 <a href="{{route('admin.home.infolists.edit',['id'=>$item->id])}}" class="btn btn-info" >edit</a>
                                 <button class="btn btn-danger" onclick="return removeConfirm(this);">X</button>

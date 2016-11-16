@@ -48,6 +48,8 @@ class HomepageInfolistsController extends Controller {
         }
         $infolist->name = $request->name;
         $infolist->description = object_get($request,'description','');
+        $infolist->data = object_get($request,'data',[]);
+
         $infolist->weight = object_get($request,'weight',0);
         $infolist->save();
 

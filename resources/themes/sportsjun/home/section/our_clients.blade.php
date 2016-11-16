@@ -4,8 +4,10 @@
         <div class="clientsSlide container arowSty ">
             @foreach ($our_clients as $client)
                 <div class="clintBox">
-                    <div class="bgcc"><img src="/themes/sportsjun/images/clients1.png"></div>
-                    <h2>Microsoft</h2>
+                    <div class="bgcc">
+                        <img src="{{Helper::getImagePath($client->image,$client->type)}}">
+                    </div>
+                    <h2>{{$client->name}}</h2>
                 </div>
             @endforeach
         </div>

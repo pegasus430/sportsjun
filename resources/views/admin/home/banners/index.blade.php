@@ -10,6 +10,7 @@
                 <thead>
                 <tr>
                     <th>Name</th>
+                    <th>Image</th>
                     <th>Weight</th>
                     <th></th>
                 </tr>
