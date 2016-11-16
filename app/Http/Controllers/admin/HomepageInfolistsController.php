@@ -22,14 +22,15 @@ class HomepageInfolistsController extends Controller {
     public function store(InfoListStoreRequest $request,$type){
 
         $img = Helper::uploadImageSimple($request->image,$type);
-
         $infolist = Infolist::create([
             'name'=>$request->name,
-            'description'=>object_get($request,'description'),
+            'description'=>object_get($request,'description',''),
             'type'=>$type,
             'image'=>$img,
+            'data'=>object_get($request,'data',[]),
             'active'=>1,
-            'weight'=>object_get($request,'weight',0)
+            'weight'=>object_get($request,'weight',0),
+            'created_by'=>\Auth::user()->id
         ]);
 
         \Session::flash('message','Successfully created');
@@ -46,7 +47,9 @@ class HomepageInfolistsController extends Controller {
             $infolist->image =  Helper::uploadImageSimple($request->image,$infolist->type);
         }
         $infolist->name = $request->name;
-        $infolist->description = object_get($request,'description');
+        $infolist->description = object_get($request,'description','');
+        $infolist->data = object_get($request,'data',[]);
+
         $infolist->weight = object_get($request,'weight',0);
         $infolist->save();
 

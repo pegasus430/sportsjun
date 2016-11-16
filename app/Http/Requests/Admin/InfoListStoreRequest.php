@@ -26,10 +26,15 @@ class InfoListStoreRequest extends Request {
         $fields = [
             'name'=> 'required',
             'image'=> 'required|image|mimes:jpeg,bmp,png',
-            'weight'=> 'required|numeric'
+            'weight'=> 'numeric'
         ];
         if ($type == 'testimonials'){
             $fields['description']='required';
+            $fields['data']='array';
+            $fields['data.date']='required|date_format:"Y-m-d H:i"';
+        }
+        if ($type == 'banners'){
+            $fields['data']= 'array';
         }
         return $fields;
     }

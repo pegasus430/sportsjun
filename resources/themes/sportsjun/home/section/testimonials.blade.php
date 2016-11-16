@@ -2,17 +2,14 @@
     <h1>TESTIMONIALS</h1>
     <div class="container">
         <div class="testiWrapp testimornial arowSty">
-            @foreach ($testimonials as $item)
+            @foreach ($testimonials as $testimonial)
             <div class="testimornialBox ">
-                <div class="profileRound"><img src="/themes/sportsjun/images/profile.png"></div>
+                <div class="profileRound">
+                    <img src="{{Helper::getImagePath($testimonial->image,$testimonial->type)}}">
+                </div>
                 <div class="col-lg-7 col-md-7">
-                    <p>"The app designed to take the stress
-                        out of managing the delivery drivers
-                        and let you focus on running your business
-                        more efficiently......."</p>
-
-                    <h4>-John Doe <span>2.30pm 23 Aug 2016</span></h4>
-
+                    <p>{!! $testimonial->description !!}}</p>
+                    <h4>-{{ $testimonial->name }} <span> {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i',array_get($testimonial->data,'date','2016-08-23 14:30'))->format('g:ia j M Y') }}</span></h4>
                 </div>
             </div>
             @endforeach

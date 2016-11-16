@@ -16,7 +16,10 @@ class Infolist extends Model
         'type',
         'weight',
         'description',
-        'active'
+        'active',
+        'data',
+        'image',
+        'created_by'
     ];
     protected $casts = [
         'data'=>'array',

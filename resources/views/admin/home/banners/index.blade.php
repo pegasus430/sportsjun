@@ -6,19 +6,26 @@
             <div class="pull-right">
                 <a href="{{ route('admin.home.infolists.add','banners') }}" class="btn btn-primary"><i class="fa fa-plus"></i> Add</a>
             </div>
-            <table>
+            <table class="table table-striped">
                 <thead>
-
+                <tr>
+                    <th>Name</th>
+                    <th>Image</th>
+                    <th>Weight</th>
+                    <th></th>
+                </tr>
                 </thead>
                 <tbody>
                 @if ($lists->count())
                     @foreach ($lists as $item)
                         <tr>
                             <td>{{$item->name}}</td>
-                            <td><input type="number" value="{{$item->order }}"/></td>
+                            <td><img src="{{Helper::getImagePath($item->image,$item->type)}}" class="img-responsive" style="height:100px"/></td>
+                            <td><input type="number" value="{{ $item->weight }}"/></td>
+
                             <td>
-                                <button class="btn btn-info" href="{{route('admin.home.infolists.edit',['id'=>$item->id])}}">edit</button>
-                                <button class="btn btn-danger" onclick="return removeConfirm(this);">delete</button>
+                                <a class="btn btn-info" href="{{route('admin.home.infolists.edit',['id'=>$item->id])}}">edit</a>
+                                <button class="btn btn-danger" onclick="return removeConfirm(this);">X</button>
                             </td>
                         </tr>
                     @endforeach

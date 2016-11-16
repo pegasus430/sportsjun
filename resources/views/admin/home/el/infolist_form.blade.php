@@ -10,7 +10,8 @@
     </div>
 @endif
 
-{!!  Form::open(['method'=> $item ? "PUT":"POST"])  !!}
+
+{!!  Form::open(['method'=> $item ? "PUT":"POST",'files'=> true])  !!}
     {{csrf_field()}}
 
 
