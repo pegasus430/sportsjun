@@ -26,10 +26,13 @@ class InfoListStoreRequest extends Request {
         $fields = [
             'name'=> 'required',
             'image'=> 'required|image|mimes:jpeg,bmp,png',
-            'weight'=> 'required|numeric'
+            'weight'=> 'numeric'
         ];
         if ($type == 'testimonials'){
             $fields['description']='required';
+        }
+        if ($type == 'banners'){
+            $fields['data']= 'array';
         }
         return $fields;
     }

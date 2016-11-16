@@ -154,7 +154,7 @@ class Helper
         $newFileName = str_random(20) . '.' . $image->getClientOriginalExtension();
         try {
             $image->move($newFilePath, $newFileName);
-            return true;
+            return $newFileName;
         } catch (FileException $ex) {
 
             Log::error($ex->getMessage());
