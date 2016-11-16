@@ -3,8 +3,11 @@
 @if (count($errors) > 0)
     <div class="alert alert-danger">
         <ul>
+            <?php $i =0; //TODO: beatify this
+            ?>
             @foreach ($errors->all() as $error)
-                <li> {{ $error }}</li>
+                <li> {{ $errors->keys()[$i] . ': '. $error }}</li>
+                <?php $i++;?>
             @endforeach
         </ul>
     </div>

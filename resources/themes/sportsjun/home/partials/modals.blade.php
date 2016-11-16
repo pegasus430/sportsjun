@@ -102,7 +102,8 @@
                     <h1>Organization</h1>
                     <h6>For Organization we need Organization name</h6>
                     <div class="registerWrap">
-                        <form method="POST" action="/register">
+                        <form method="POST" action="/auth/register-organization" enctype="multipart/form-data" >
+                            {{csrf_field()}}
                             <h3>Organization Name</h3>
                             <input name="org_name" class="regPop" placeHolder="Organization Name" type="text">
                             <h3>Organization Type</h3>
@@ -110,8 +111,7 @@
                             <h3>Organization Logo</h3>
                             <input name="org_logo" class="regPop" type="file">
                             <h3>About</h3>
-                            <textarea name="org_about"  class="regPop" rows="4">
-                        </textarea>
+                            <textarea name="org_about"  class="regPop" rows="4"></textarea>
                             <!-- -->
                             <h3>First Name</h3>
                             <input name="name" class="regPop" placeHolder="First Name" type="text">
@@ -120,9 +120,9 @@
                             <h3>Email</h3>
                             <input name="email" class="regPop" placeHolder="Email" type="text">
                             <h3>Password</h3>
-                            <input name="password" class="regPop" placeHolder="Password" type="text">
+                            <input name="password" class="regPop" placeHolder="Password" type="password">
                             <h3>Retype Password</h3>
-                            <input name="password_confirmation" class="regPop" placeHolder="Password" type="text">
+                            <input name="password_confirmation" class="regPop" placeHolder="Password" type="password">
 
                             <h3>Address</h3>
                              <input name="address" class="regPop" placeHolder="Address" type="text">
@@ -178,8 +178,9 @@
                         Umpire profile and find my schedule and as well follow events of great
                         talent on SportsJun.com</h6>
                     <div class="registerWrap">
-                        <form id="home-register-modal-form" class="kode-loginform"
+                        <form id="home-register-modal-form" class="kode-loginform" method="POST" action="/auth/register" enctype="multipart/form-data"
                               onsubmit="SJ.USER.registerValidation(this.id);return false;">
+                            {{csrf_field()}}
                             <h3>First Name</h3>
                             <input name="firstname" class="regPop" placeHolder="Organization Name" type="text">
                             <h3>Last Name</h3>

@@ -27,6 +27,15 @@
 
 <body>
 @include('home.partials.header')
+<?php
+if (isset($errors) && ($errors->count()))
+    $error = $errors->keys()[0] . ': ' . $errors->first();
+?>
+@if(isset($error) && ($error))
+    <script>
+        alert('{{$error}}');
+    </script>
+@endif
 <div class="clearfix">
     @yield('content')
 </div>
