@@ -11,19 +11,22 @@ use Carbon\Carbon;
 
 class HomeController extends Controller {
 
+    public function shareResource(){
+        $idNameCountry = \App\Repository\CountryRepository::idList('country_name');
+        \View::share(compact('idNameCountry'));
+    }
+
     public function index(){
+        $this->shareResource();
         if (\Auth::user()){
             return redirect(url('/myschedule',[\Auth::user()->id]));
         }
-
 
         $banners = Infolist::banners()->active()->orderBy('weight','desc')->get();
         $testimonials = Infolist::testimonials()->active()->orderBy('weight','desc')->get();
         $our_clients = Infolist::clients()->active()->orderBy('weight','desc')->get();
 
-
         return view('home',
-
             compact('testimonials','our_clients','banners'));
     }
 
@@ -31,6 +34,7 @@ class HomeController extends Controller {
             if ($page == 'index') {
                 return $this->index();
             }
+            $this->shareResource();
             return view('home.' . $page);
     }
     
