@@ -11,13 +11,13 @@ use Carbon\Carbon;
 
 class HomeController extends Controller {
 
-    public function shareResource(){
+    public static function shareResource(){
         $idNameCountry = \App\Repository\CountryRepository::idList('country_name');
         \View::share(compact('idNameCountry'));
     }
 
     public function index(){
-        $this->shareResource();
+        self::shareResource();
         if (\Auth::user()){
             return redirect(url('/myschedule',[\Auth::user()->id]));
         }
@@ -34,7 +34,7 @@ class HomeController extends Controller {
             if ($page == 'index') {
                 return $this->index();
             }
-            $this->shareResource();
+            self::shareResource();
             return view('home.' . $page);
     }
     
