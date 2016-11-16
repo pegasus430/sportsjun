@@ -1122,10 +1122,10 @@ class Helper
         return $sportName;
     }
 
-    public static function getImagePath($imgsrc, $imgtype, $details = '')
+    public static function getImagePath($imgsrc, $imgtype, $details = '',$default = '/images/default-profile-pic.jpg')
     {
-        if (!$imgsrc || $imgsrc == '') {
-            return '/images/default-profile-pic.jpg';
+        if (!$imgsrc || $imgsrc == '')  {
+            return $default;
         }
         $uploads = 'uploads';
         switch ($imgtype) {
@@ -1156,10 +1156,11 @@ class Helper
         }
     }
 
-    public static function Images($imgsrc, $imgtype, $details = '', $from_local = false)
+    public static function Images($imgsrc, $imgtype, $details = '', $from_local = false,$default = true)
     {
-        $path = self::getImagePath($imgsrc, $imgtype, $details);
-        return self::makeImageHtml($path, $details, $from_local);
+        $path = self::getImagePath($imgsrc, $imgtype, $details,$default ?  '/images/default-profile-pic.jpg': false);
+        if ($path)
+            return self::makeImageHtml($path, $details, $from_local);
 
     }
 

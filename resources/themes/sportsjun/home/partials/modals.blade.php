@@ -110,7 +110,7 @@
                             <h3>Organization Logo</h3>
                             <input name="org_logo" class="regPop" type="file">
                             <h3>About</h3>
-                            <textarea name="org_about">
+                            <textarea name="org_about"  class="regPop" rows="4">
                         </textarea>
                             <!-- -->
                             <h3>First Name</h3>
@@ -125,13 +125,14 @@
                             <input name="password_confirmation" class="regPop" placeHolder="Password" type="text">
 
                             <h3>Address</h3>
-                            <input name="address" class="regPop" placeHolder="Address" type="text">
+                             <input name="address" class="regPop" placeHolder="Address" type="text">
 
                             <h3>Country</h3>
-
+                                {!! Form::select('country_id',$idNameCountry,null,['class'=>'regPop']) !!}
                             <h3>State</h3>
-
+                                 <select name="state_id"  class="regPop"></select>
                             <h3>City</h3>
+                                <select name="city_id"  class="regPop"></select>
                             <div class="form-group">
                                 <label class="">I agree to the
                                     <a href="/terms-and-conditions.html" target="_blank">terms and conditions</a> of

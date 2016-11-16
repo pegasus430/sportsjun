@@ -250,6 +250,13 @@ class Tournaments extends Model
         return Helper::getImagePath($logo, 'tournaments');
     }
 
+    public function getLogoImageRealAttribute()
+    {
+        $logo = $this->logo ? $this->logo :
+            (array_key_exists('tournament_parent_logo',$this->attributes) ?  $this->tournament_parent_logo : object_get($this->tournamentParent,'logo')) ;
+        return Helper::getImagePath($logo, 'tournaments','',false,false);
+    }
+
     public function getFinalStageTeamsListAttribute(){
         if (!$this->_finalStageTeams) {
             $schedule_type = $this->schedule_type ? $this->schedule_type : 'team';

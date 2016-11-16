@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="tourn_topBanar_wrapp">
-        <div class="banarImg"><img src="{{ $tournament->logoImage }}"></div>
+        <div class="banarImg"><img src="{{ $tournament->logoImageReal }}"></div>
         <div class="registerTopWrap">
             <div class="col-lg-6 col-md-6 topLeftTT">
                 <h1>{{ $tournament->name }}</h1>
