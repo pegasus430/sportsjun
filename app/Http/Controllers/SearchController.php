@@ -30,6 +30,7 @@ class SearchController extends Controller
 
     public function search()
     {
+        HomeController::shareResource();
         $what = \Request::get('what');
 
         $searches = [];
@@ -56,6 +57,7 @@ class SearchController extends Controller
 
     public function view($type, $id)
     {
+        HomeController::shareResource();
         switch ($type) {
             case 'tournaments':
                 $tournament = Tournaments::find($id);
