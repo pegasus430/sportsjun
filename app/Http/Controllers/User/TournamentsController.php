@@ -40,6 +40,7 @@ use Request;
 use Response;
 use Session;
 use View;
+use Input;
 
 
 use App\Model\SoccerPlayerMatchwiseStats;
@@ -2934,7 +2935,8 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
 	}
 
 
-
+/*----------------------------------------------------event registration with payment-------------------------------------*/
+    
     public function eventregistration($id){
 
           $parent_tournamet_id = Tournaments::where('id',$id)->value('tournament_parent_id');
@@ -3061,7 +3063,8 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
            	  return redirect('guest/tournaments/guestregisterstep3/'. $id.'/'.$event_id);
            }
       } else {
-         return view('tournaments.paymentpage',['roletype' => $roletype]);
+      	  return redirect('tournaments/paymentform/'. $id);
+         //return view('tournaments.paymentpage',['roletype' => $roletype]);
       } 
 
 	}
@@ -3315,5 +3318,94 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
         	return redirect('tournaments/registerstep3/'. $_REQUEST['id'].'/'. $_REQUEST['event_id']);
           }
 }
+
+
+
+ public function getPaymentform($id) {
+
+ 	 if (Auth::check()) {
+             $roletype='user';
+           } else {
+          	 $roletype='';
+           }
+
+      $key='gtKFFx';
+      $random=uniqid();
+      Carts::where('id','=',$id)->update(['payment_token' => $random]);
+      $txnid=$random;
+      $amount=Carts::where('id',$id)->value('total_payment');
+      //$amount=number_format($amount,2);
+      $productinfo=array();
+      $register_data = CartDetails::where('cart_id','=',$id)->where('registerd','=',1)->get();
+      
+      $i=0;
+      foreach($register_data as $value){
+      	$productinfo['paymentParts'][$i]['name']=Tournaments::where('id',$value->event_id)->value('name');
+      	$productinfo['paymentParts'][$i]['description']=Tournaments::where('id',$value->event_id)->value('description');
+      	$productinfo['paymentParts'][$i]['value']=$value->enrollment_fee * $value->participant_count;
+      	$productinfo['paymentParts'][$i]['isRequired']='true';
+      	$productinfo['paymentParts'][$i]['settlementEvent']='EmailConfirmation';
+      	$i++;
+      }
+      $productinfo['paymentIdentifiers'][0]['field']='CompletionDate';
+      $dt=date('d/m/Y');
+      $productinfo['paymentIdentifiers'][0]['value']=$dt;
+      $productinfo['paymentIdentifiers'][1]['field']='TxnId';
+      $productinfo['paymentIdentifiers'][1]['value']=$id;
+      $productinfo=json_encode($productinfo);
+
+       
+           
+     return view('tournaments.paymentpage')->with(array('roletype' => $roletype,'key' => $key,'txnid' => $txnid,'amount' => $amount, 'productinfo' => $productinfo));
+     
+ }
+
+
+  public function postPaymentform() {
+    //dd(Input::all());
+    $data=Input::except('_token');
+    $SALT = "eCwWELxi";
+    $data['surl']=url("tournaments/payment_success");
+    //dd($data['surl']);
+    $data['furl']=url("tournaments/payment_failure");;
+    
+    $hash = '';
+    // Hash Sequence
+    $hashSequence = "key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10";
+    $hashVarsSeq = explode('|', $hashSequence);
+    $hash_string = '';	
+	foreach($hashVarsSeq as $hash_var) {
+      $hash_string .= isset($data[$hash_var]) ? $data[$hash_var] : '';
+      $hash_string .= '|';
+    }
+
+    $hash_string .= $SALT;
+    $hash = strtolower(hash('sha512', $hash_string));
+    $data['hash']=$hash;
+    $data['service_provider']='';
+   // dd($data);  
+
+    return view('tournaments.hiddenpaymentpage')->with(array('data' => $data));
+
+   
+ }
+
+
+
+
+public function postPaymentsuccess() {
+	//echo "<pre>"; print_r($_POST); echo "</pre>"; 
+    echo "success"; exit;
+}
+
+
+
+public function postPaymentfailure() {
+	//echo "<pre>"; print_r($_POST); echo "</pre>"; 
+    echo "failure"; exit;
+}
+
+
+
 
 }
