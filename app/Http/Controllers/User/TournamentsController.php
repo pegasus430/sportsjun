@@ -27,6 +27,7 @@ use App\Model\TournamentParent;
 use App\Model\Tournaments;
 use App\Model\Carts;
 use App\Model\CartDetails;
+use App\Model\PaymentDetails;
 use App\Model\UserStatistic;
 use App\Model\VendorBankAccounts;
 use App\Model\TournamentMatchPreference as Settings;
@@ -59,6 +60,9 @@ class TournamentsController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index($id = '') {
+
+
+
 
 
 		if ($id == '')
@@ -2938,9 +2942,12 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
 /*----------------------------------------------------event registration with payment-------------------------------------*/
     
     public function eventregistration($id){
-
+          $tournment_enrollment_type=Tournaments::where('id',$id)->value('enrollment_type');
+          if($tournment_enrollment_type!='online'){
+          	 return redirect('tournaments')->withErrors(['Select an event with enrollment type online']);
+          }
           $parent_tournamet_id = Tournaments::where('id',$id)->value('tournament_parent_id');
-          $all_events = Tournaments::where('tournament_parent_id',$parent_tournamet_id)->get();
+          $all_events = Tournaments::where('tournament_parent_id',$parent_tournamet_id)->where('enrollment_type','online')->get();
           $parent_tournamet_details = TournamentParent::where('id',$parent_tournamet_id)->first();
            if(Auth::user()) {
                $roletype='user';
@@ -3027,12 +3034,18 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
 
 	public function registerstep2($id) {
 
+
+
+
 		if (Auth::check()) {
 		     $roletype='user';
           } else {
           	  $roletype='guest';
           }
         $register_data = Carts::with('cartDetails.tournaments')->where('id',$id)->first();
+        if($register_data->payment_token!=''){
+        	 return redirect('tournaments')->withErrors(['Payment already completed for  cart id '.$id]);
+        }
         
         $parent_tournament_details='';
         foreach ($register_data->cartDetails as $value) {
@@ -3054,6 +3067,10 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
           	 $roletype='guest';
            }
 
+     $cart_data = Carts::where('id',$id)->first();
+     if($cart_data->payment_token!=''){
+        	 return redirect('tournaments')->withErrors(['Payment already completed for  cart id '.$id]);
+        }
    $register_data = CartDetails::where('cart_id','=',$id)->where('registerd','=',0)->with('tournaments')->first();
           if(isset($register_data) && $register_data!=null){
           $event_id=$register_data->event_id;
@@ -3072,6 +3089,9 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
    public function registerstep4($id,$event_id) {
    
    	$register_data = CartDetails::where('cart_id',$id)->where('event_id',$event_id)->first();
+   	 if($register_data->registerd==1){
+        	 return redirect('tournaments')->withErrors(['Payment already completed for  cart id '.$id]);
+        }
    	$parent_tournament_id = Tournaments::where('id',$event_id)->value('tournament_parent_id');
    	$sports_id = Tournaments::where('id',$event_id)->value('sports_id');
    	$sports_type = Tournaments::where('id',$event_id)->value('sports_id');
@@ -3325,67 +3345,81 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
 
  	 if (Auth::check()) {
              $roletype='user';
-           } else {
-          	 $roletype='';
-           }
+             $user_id = Auth::user()->id;
+        } else {
+             $roletype='';
+             $user_id='';
+        }
 
-      $key='gtKFFx';
-      $random=uniqid();
-      Carts::where('id','=',$id)->update(['payment_token' => $random]);
-      $txnid=$random;
-      $amount=Carts::where('id',$id)->value('total_payment');
-      //$amount=number_format($amount,2);
-      $productinfo=array();
-      $register_data = CartDetails::where('cart_id','=',$id)->where('registerd','=',1)->get();
-      
-      $i=0;
-      foreach($register_data as $value){
-      	$productinfo['paymentParts'][$i]['name']=Tournaments::where('id',$value->event_id)->value('name');
-      	$productinfo['paymentParts'][$i]['description']=Tournaments::where('id',$value->event_id)->value('description');
-      	$productinfo['paymentParts'][$i]['value']=$value->enrollment_fee * $value->participant_count;
-      	$productinfo['paymentParts'][$i]['isRequired']='true';
-      	$productinfo['paymentParts'][$i]['settlementEvent']='EmailConfirmation';
-      	$i++;
-      }
-      $productinfo['paymentIdentifiers'][0]['field']='CompletionDate';
-      $dt=date('d/m/Y');
-      $productinfo['paymentIdentifiers'][0]['value']=$dt;
-      $productinfo['paymentIdentifiers'][1]['field']='TxnId';
-      $productinfo['paymentIdentifiers'][1]['value']=$id;
-      $productinfo=json_encode($productinfo);
+        $cart_data = Carts::where('id',$id)->first();
+        if($cart_data->payment_token!=''){
+        	 return redirect('tournaments')->withErrors(['Payment already completed for  cart id '.$id]);
+        }
 
-       
-           
-     return view('tournaments.paymentpage')->with(array('roletype' => $roletype,'key' => $key,'txnid' => $txnid,'amount' => $amount, 'productinfo' => $productinfo));
+       $user_data = User::where('id',$user_id)->first();  
+       return view('tournaments.paymentpage')->with(array('roletype' => $roletype,'id' => $id,'user_data' => $user_data));
      
  }
 
 
   public function postPaymentform() {
-    //dd(Input::all());
-    $data=Input::except('_token');
-    $SALT = "eCwWELxi";
-    $data['surl']=url("tournaments/payment_success");
-    //dd($data['surl']);
-    $data['furl']=url("tournaments/payment_failure");;
+     $data=Input::except('_token');
     
+    $payment_id='';
+    $payment_id = DB::table('payment_details')->insertGetId(array('cart_id' =>$data['cart_id'], 'payment_firstname' => $data['firstname'],  'payment_address' => $data['address'], 'payment_country' => $data['country'], 'payment_state' => $data['state'],'payment_city' => $data['city'],'payment_zipcode' => $data['zipcode'],'payment_phone' => $data['phone']));
+            
+            
+    $payment_params=array();
+    $payment_params['key']='gtKFFx';
+    $random=uniqid();
+    Carts::where('id','=',$data['cart_id'])->update(['payment_token' => $random]);
+    $payment_params['txnid']=$random; 
+    $payment_params['amount']=Carts::where('id',$data['cart_id'])->value('total_payment'); 
+        $productinfo=array();
+        $register_data = CartDetails::where('cart_id','=',$data['cart_id'])->where('registerd','=',1)->get();
+      
+        $i=0;
+        foreach($register_data as $value){
+             $productinfo['paymentParts'][$i]['name']=Tournaments::where('id',$value->event_id)->value('name');
+             $productinfo['paymentParts'][$i]['description']=Tournaments::where('id',$value->event_id)->value('description');
+             $productinfo['paymentParts'][$i]['value']=$value->enrollment_fee * $value->participant_count;
+             $productinfo['paymentParts'][$i]['isRequired']='true';
+             $productinfo['paymentParts'][$i]['settlementEvent']='EmailConfirmation';
+             $i++;
+         }
+       $productinfo['paymentIdentifiers'][0]['field']='CompletionDate';
+       $dt=date('d/m/Y');
+       $productinfo['paymentIdentifiers'][0]['value']=$dt;
+       $productinfo['paymentIdentifiers'][1]['field']='TxnId';
+       $productinfo['paymentIdentifiers'][1]['value']=$data['cart_id'];
+   $payment_params['productinfo']=json_encode($productinfo);
+   $payment_params['firstname']=$data['firstname'];
+   $user_id = Auth::user()->id;
+   $user_email = User::where('id',$user_id)->value('email');  
+   $payment_params['email']=$user_email;
+   $payment_params['phone']=$data['phone'];
+   $payment_params['udf1']=$payment_id;
+   $payment_params['surl']=url("tournaments/payment_success");
+   //dd($data['surl']);
+    $payment_params['furl']=url("tournaments/payment_failure");;
+    $SALT = "eCwWELxi";
     $hash = '';
     // Hash Sequence
     $hashSequence = "key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10";
     $hashVarsSeq = explode('|', $hashSequence);
-    $hash_string = '';	
-	foreach($hashVarsSeq as $hash_var) {
-      $hash_string .= isset($data[$hash_var]) ? $data[$hash_var] : '';
+    $hash_string = '';  
+      foreach($hashVarsSeq as $hash_var) {
+      $hash_string .= isset($payment_params[$hash_var]) ? $payment_params[$hash_var] : '';
       $hash_string .= '|';
     }
-
+    //dd($hash_string);
     $hash_string .= $SALT;
-    $hash = strtolower(hash('sha512', $hash_string));
-    $data['hash']=$hash;
-    $data['service_provider']='';
-   // dd($data);  
+    $payment_params['hash']= strtolower(hash('sha512', $hash_string));
+   
+    $payment_params['service_provider']='';
+    //dd($payment_params);  
 
-    return view('tournaments.hiddenpaymentpage')->with(array('data' => $data));
+    return view('tournaments.hiddenpaymentpage')->with(array('payment_params' => $payment_params));
 
    
  }
@@ -3394,15 +3428,16 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
 
 
 public function postPaymentsuccess() {
-	//echo "<pre>"; print_r($_POST); echo "</pre>"; 
-    echo "success"; exit;
+	$dt=$_POST;
+	PaymentDetails::where('id', $_POST['udf1'])->update(['status' => $dt['status']],['mihpayid' => $dt['mihpayid']],['amount' => $dt['amount']]);
+	return view('tournaments.paymentsuccess')->with(array('data' => $dt));
+    
 }
 
 
 
 public function postPaymentfailure() {
-	//echo "<pre>"; print_r($_POST); echo "</pre>"; 
-    echo "failure"; exit;
+   return view('tournaments.paymentfailure')->with(array('data' => $dt));
 }
 
 

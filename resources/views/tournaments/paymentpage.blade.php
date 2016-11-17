@@ -6,32 +6,22 @@
 <div class="sportsjun-forms sportsjun-container wrap-2">
 
 
-<div class="form-header header-primary"><h4>Register Form</h4></div>
+<div class="form-header header-primary"><h4>Payment Form</h4></div>
 @if($errors->any())
 <h4 class="error_validation">{{$errors->first()}}</h4>
 @endif
 <div class="form-body">
 {!! Form::open(array('url' => 'tournaments/paymentform', 'method' => 'post')) !!}
 
-
-{!! Form::hidden("key", $key) !!}
-{!! Form::hidden("txnid", $txnid) !!}
-{!! Form::hidden("amount", $amount) !!}
-{!! Form::hidden("productinfo", $productinfo) !!}
-
-
-
-
-
 <div class="row">
-
+{!! Form::hidden("cart_id", $id) !!}
 
 
 
 <div class="col-sm-5">
       <div class="section">
           <label class="field prepend-icon">
-            {!! Form::text("firstname", '', array('required','class'=>'gui-input','placeholder' => 'First Name' )) !!}
+            {!! Form::text("firstname", $user_data->firstname, array('required','class'=>'gui-input','placeholder' => 'Name' )) !!}
             
             </label>
            </div>
@@ -40,7 +30,8 @@
 <div class="col-sm-6">
   <div class="section">
     <label class="field prepend-icon">
-             {!! Form::text("lastname", '', array('class'=>'gui-input','placeholder' => 'Last Name' )) !!}
+        {!! Form::text("address", $user_data->address, array('required','class'=>'gui-input','placeholder' => 'Address' )) !!}
+            
             
            
             </label>
@@ -63,7 +54,7 @@
 <div class="col-sm-5">
       <div class="section">
           <label class="field prepend-icon">
-            {!! Form::text("address1", '', array('class'=>'gui-input','placeholder' => 'Address1' )) !!}
+             {!! Form::text("country", $user_data->country, array('required','class'=>'gui-input','placeholder' => 'Country' )) !!}
             
             </label>
            </div>
@@ -72,7 +63,7 @@
 <div class="col-sm-6">
   <div class="section">
     <label class="field prepend-icon">
-             {!! Form::text("address2", '', array('class'=>'gui-input','placeholder' => 'Address2' )) !!}
+            {!! Form::text("state", '', array('required','class'=>'gui-input','placeholder' => 'State' )) !!}
             
            
             </label>
@@ -95,7 +86,7 @@
 <div class="col-sm-5">
       <div class="section">
           <label class="field prepend-icon">
-            {!! Form::text("city", '', array('class'=>'gui-input','placeholder' => 'City' )) !!}
+            {!! Form::text("city", '', array('required','class'=>'gui-input','placeholder' => 'city' )) !!}
             
             </label>
            </div>
@@ -104,7 +95,7 @@
 <div class="col-sm-6">
   <div class="section">
     <label class="field prepend-icon">
-             {!! Form::text("State", '', array('class'=>'gui-input','placeholder' => 'State' )) !!}
+              {!! Form::text("zipcode", '', array('required','class'=>'gui-input','placeholder' => 'Zipcode' )) !!}
             
            
             </label>
@@ -126,7 +117,7 @@
 <div class="col-sm-5">
       <div class="section">
           <label class="field prepend-icon">
-            {!! Form::text("country", '', array('class'=>'gui-input','placeholder' => 'Country' )) !!}
+            {!! Form::text("phone", $user_data->contact_number, array('required','class'=>'gui-input','placeholder' => 'Country' )) !!}
             
             </label>
            </div>
@@ -135,8 +126,8 @@
 <div class="col-sm-6">
   <div class="section">
     <label class="field prepend-icon">
-             {!! Form::text("zipcode", '', array('class'=>'gui-input','placeholder' => 'Zipcode' )) !!}
-            
+             
+             
            
             </label>
      
@@ -151,34 +142,7 @@
 
 
 
-<div class="row">
 
-
-
-
-<div class="col-sm-5">
-      <div class="section">
-          <label class="field prepend-icon">
-            {!! Form::email("email", '', array('required','class'=>'gui-input','placeholder' => 'Email' )) !!}
-           
-            </label>
-           </div>
-        </div>
-
-<div class="col-sm-6">
-  <div class="section">
-    <label class="field prepend-icon">
-            {!! Form::text("phone", '', array('required','class'=>'gui-input','placeholder' => 'Contact Number' )) !!}
-           
-            </label>
-     
-    </div>
- </div>
-<!-- end section -->  
-
-
-
-</div><!--end row -->
 
 
 

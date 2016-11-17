@@ -6,7 +6,7 @@
 
 
 
-@foreach ($data as $key=>$dt)
+@foreach ($payment_params as $key=>$dt)
 {!! Form::hidden($key, $dt) !!}
 @endforeach
 
