@@ -3317,6 +3317,9 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
 
 
  public function getGuestRegister($id,$event_id) {
+ 	 if (Auth::check()) { 
+   	    return redirect('tournaments')->withErrors(['Already logged']);
+      }
 
   return view('tournaments.guestregisterform')->with(array('id'=>$id,'event_id'=>$event_id));
 }
