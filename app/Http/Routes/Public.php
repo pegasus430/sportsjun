@@ -197,3 +197,27 @@ Route::group(['prefix' => 'download'], function () {
 Route::group(['prefix' => 'download_pdf'], function () {
     Route::get('schedules', 'User\PdfController@print_schedules');
 });
+
+
+Route::group(['prefix' => 'guest'], function () {
+   Route::get('tournaments/guesteventregistration/{id}', 'User\TournamentsController@eventregistration');
+   Route::post('tournaments/guestregistrationdata', 'User\TournamentsController@registrationdata');
+   Route::get('tournaments/guestregisterstep2/{id}', 'User\TournamentsController@registerstep2');
+   Route::get('tournaments/guestregisterstep3/{id}', 'User\TournamentsController@registerstep3');
+   Route::get('tournaments/guestregisterstep3/{id}/{event_id}', 'User\TournamentsController@getGuestRegister');
+   Route::post('tournaments/guestregisterstep3', 'User\TournamentsController@postGuestRegister');
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+

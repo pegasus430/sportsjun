@@ -35,7 +35,7 @@
                         Setup <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-messages">
-                        <li><a class="navbar-brand" href="#">Membership & Commission setup</a></li>
+                        <li><a class="navbar-brand" href="{{ URL::to('admin/paymentgateways/setup') }}">Membership & Commission setup</a></li>
                         <li><a class="navbar-brand" href="{{ URL::to('admin/paymentgateways') }}">Payment Gateway activation</a></li>
                     </ul>
                 </li>
