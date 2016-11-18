@@ -5,7 +5,7 @@
 <div class="sportsjun-forms sportsjun-container wrap-2">
 
 
-<div class="form-header header-primary"><h4>Register Form</h4></div>
+<div class="form-header header-primary register_form_head"><h4 class='register_form_title'>Register Form</h4></div>
 @if($errors->any())
 <h4 class="error_validation">{{$errors->first()}}</h4>
 @endif

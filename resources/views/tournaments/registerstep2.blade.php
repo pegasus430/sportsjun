@@ -3,7 +3,7 @@
 <div class="">
 <div class="sportsjun-wrap">
 <div class="sportsjun-forms sportsjun-container wrap-2">
-<div class="form-header header-primary"><h4>{{$parent_tournament_details->name}}<br>{{$parent_tournament_details->contact_number}}</h4></div>
+<div class="form-header header-primary register_form_head"><h4 class='register_form_title'>{{$parent_tournament_details->name}}<br>{{$parent_tournament_details->contact_number}}</h4></div>
 
 <div class="form-body">
 
@@ -60,8 +60,8 @@ $options=array();?>
    <div class="section">
       <label class="field prepend-icon">
        <label class="field-icon"><i class="fa fa-trophy"></i></label>
-        <input  class="gui-input" readonly="true"  type="text" value="{{$value->tournaments->name}}">
-            <label class="form_label">{{$value->tournaments->match_type}} {{$value->tournaments->end_date}}</label>  
+        <input  class="gui-input form_rows" readonly="true"  type="text" value="{{$value->tournaments->name}}">
+            <label  class="form_label last_date_span">Last Date:{{$value->tournaments->end_date}}</label>
        </label>
            </div>
   </div>
@@ -103,11 +103,14 @@ $options=array();?>
 
  <div class="col-sm-3">
   <div class="section">
-   <label class="form_label"><i class="fa fa-inr"></i> {{$register_data->total_payment}}</label>
+   <label class="form_label"><i class="fa fa-inr"></i> {{$amount_without_charges}}</label>
    </div>
  </div>
 </div>
 
+ @if($amount_data!='' && count($amount_data) > 0)
+ @foreach($amount_data->paymentSetups as $amnt) 
+          
 <div class="row">
   
   <div class="col-sm-3">
@@ -118,39 +121,20 @@ $options=array();?>
 
   <div class="col-sm-5">
   <div class="section">
-    <label class="form_label">Service Charge</label>
+    <label class="form_label">{{$amnt->setup_name}}</label>
      
     </div>
  </div>
 
  <div class="col-sm-3">
   <div class="section">
-   <label class="form_label"><i class="fa fa-inr"></i> 100.00</label>
+   <label class="form_label"><i class="fa fa-inr"></i>{{$amount_without_charges*($amnt->setup_value/100)}}</label>
    </div>
  </div>
 </div>
 
-<div class="row">
-  
-  <div class="col-sm-3">
-   <div class="section">
-      
-           </div>
-  </div>
-
-  <div class="col-sm-5">
-  <div class="section">
-    <label class="form_label">Payment Gateway Fee</label>
-     
-    </div>
- </div>
-
- <div class="col-sm-3">
-  <div class="section">
-   <label class="form_label"><i class="fa fa-inr"></i> 200.00</label>
-   </div>
- </div>
-</div>
+@endforeach
+@endif
 
 <div class="row">
   
@@ -166,13 +150,10 @@ $options=array();?>
      
     </div>
  </div>
-<?php $tot=0;
-$tot=$register_data->total_payment + 200.00 + 100.00;
-$tot=number_format((float)$tot, 2, '.', '');
- ?>
+
  <div class="col-sm-3" style="border-top:1px solid #000">
   <div class="section">
-   <label class="form_label"><i class="fa fa-inr"></i> {{$tot}}</label>
+   <label class="form_label"><i class="fa fa-inr"></i> {{$register_data->total_payment}}</label>
    </div>
  </div>
 </div>

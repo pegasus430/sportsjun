@@ -3070,3 +3070,35 @@ span.white_space {
     width: 15px;
     display: inline-block;
 }
+
+
+.form_rows {
+    border: none!important;
+    color: #499b4e!important;
+    
+}
+
+label.form_label.last_date_span {
+    margin-left: 40px!important;
+    display: block;
+}
+
+.register_form_head {
+    border: none!important;
+    background-color: #84cd93!important;
+   } 
+
+
+ .register_form_title {
+    color: #fff!important;
+    font-weight: 500!important;
+}
+
+
+.register_tournament_title {
+  color: #499b4e;;
+}
+
+.form_titles {
+ color: #499b4e!important;
+}

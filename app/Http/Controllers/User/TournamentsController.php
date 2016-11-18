@@ -28,6 +28,7 @@ use App\Model\Tournaments;
 use App\Model\Carts;
 use App\Model\CartDetails;
 use App\Model\PaymentDetails;
+use App\Model\PaymentGateWays;
 use App\Model\UserStatistic;
 use App\Model\VendorBankAccounts;
 use App\Model\TournamentMatchPreference as Settings;
@@ -2943,11 +2944,13 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
     
     public function eventregistration($id){
           $tournment_enrollment_type=Tournaments::where('id',$id)->value('enrollment_type');
+          $country_id=Tournaments::where('id',$id)->value('country_id');
+          
           if($tournment_enrollment_type!='online'){
           	 return redirect('tournaments')->withErrors(['Select an event with enrollment type online']);
           }
           $parent_tournamet_id = Tournaments::where('id',$id)->value('tournament_parent_id');
-          $all_events = Tournaments::where('tournament_parent_id',$parent_tournamet_id)->where('enrollment_type','online')->get();
+          $all_events = Tournaments::where('tournament_parent_id',$parent_tournamet_id)->where('enrollment_type','online')->where('country_id',$country_id)->get();
           $parent_tournamet_details = TournamentParent::where('id',$parent_tournamet_id)->first();
            if(Auth::user()) {
                $roletype='user';
@@ -3046,14 +3049,44 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
         if($register_data->payment_token!=''){
         	 return redirect('tournaments')->withErrors(['Payment already completed for  cart id '.$id]);
         }
+
+
         
         $parent_tournament_details='';
         foreach ($register_data->cartDetails as $value) {
         	$parent_tournament_details = TournamentParent::where('id',$value->tournaments->tournament_parent_id)->first();
+        	$trn_country_id=Tournaments::where('id',$value->tournaments->tournament_parent_id)->value('country_id');
            break;
         }
-      return view('tournaments.registerstep2',compact('register_data','parent_tournament_details'))->with([
-         	'roletype'=>$roletype,
+        
+        $amount_data = PaymentGateWays::with(['paymentSetups' => function($query){
+            $query->where('status','active'); 
+            $query->select();
+        }])->where('country_id',$trn_country_id)->first();
+
+
+        $amount=Carts::where('id',$id)->value('total_payment');
+        $amount_without_charges=$amount;
+        $amount_array=array();
+        $i=0;
+        $serv_amount=0;
+        if($amount_data!='' && count($amount_data) > 0) {
+        foreach($amount_data->paymentSetups as $amnt) {
+           $amount_array[$i]['name']=$amnt->setup_name;
+           $amount_array[$i]['value']=$amnt->setup_value;
+           $serv_amount=$serv_amount+($amount*($amnt->setup_value/100));
+           $i++;
+        }
+
+        }
+        $amount=$amount+$serv_amount;
+        Carts::where('id',$id)->update(['total_payment'=> $amount]);
+        $register_data->total_payment=$amount;
+
+        //dd($register_data->total_payment);
+
+      return view('tournaments.registerstep2',compact('register_data','parent_tournament_details','amount_data'))->with([
+         	'roletype'=>$roletype,'amount_without_charges'=>$amount_without_charges
          	]);
 	
 

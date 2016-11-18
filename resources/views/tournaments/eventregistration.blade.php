@@ -5,7 +5,7 @@
 <div class="sportsjun-forms sportsjun-container wrap-2">
 
 
-<div class="form-header header-primary"><h4>{{$parent_tournamet_details->name}}<br>{{$parent_tournamet_details->contact_number}}</h4></div>
+<div class="form-header header-primary register_form_head"><h4 class='register_form_title'>{{$parent_tournamet_details->name}}<br>{{$parent_tournamet_details->contact_number}}</h4></div>
 @if($errors->any())
 <h4 class="error_validation">{{$errors->first()}}</h4>
 @endif
@@ -80,8 +80,8 @@ $options=array();?>
       <div class="section">
           <label class="field prepend-icon">
            <label class="field-icon"><i class="fa fa-trophy"></i></label>
-            {!! Form::text("data[$events->id][name]", $events->name, array('required','class'=>'gui-input','readonly' => 'true' )) !!}
-            <label  class="form_label">{{$events->match_type}}  {{$events->end_date}}</label>  
+            {!! Form::text("data[$events->id][name]", $events->name, array('required','class'=>'gui-input form_rows','readonly' => 'true' )) !!}
+            <label  class="form_label last_date_span">Last Date:{{$events->end_date}}</label>  
             </label>
           
 

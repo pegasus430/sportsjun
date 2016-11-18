@@ -4,7 +4,7 @@
 
 <div id="content" class="col-sm-10 tournament_profile">
 	<div class="col-md-6">
-	<div class="form-header header-primary"><h4>Register Form<!-- (No of Participants {{ $register_data->participant_count }}   Total Amount <i class="fa fa-inr"></i> {{$register_data->participant_count*$register_data->enrollment_fee}}) --></h4></div>
+	<!-- <div class="form-header header-primary"><h4 class="register_tournament_title">Register Form(No of Participants {{ $register_data->participant_count }}   Total Amount <i class="fa fa-inr"></i> {{$register_data->participant_count*$register_data->enrollment_fee}})</h4></div> -->
     	
        
 	</div> 
@@ -32,7 +32,7 @@ $count=$register_data->participant_count;
 
 @for ($i = 0; $i < $register_data->participant_count; $i++)
 
-<h4>{{$sport_name}}({{$register_data->match_type}})</h4>
+<h4 class="form_titles">{{$sport_name}}({{$register_data->match_type}})</h4>
 
 <div class="row">
 
@@ -158,7 +158,7 @@ $count=$register_data->participant_count;
 
 @elseif ($register_data->match_type === 'doubles')
 
-<h4>{{$sport_name}}({{$register_data->match_type}})</h4>
+<h4 class="form_titles">{{$sport_name}}({{$register_data->match_type}})</h4>
 
 <div class="row">
 
@@ -324,7 +324,7 @@ $count=$register_data->participant_count;
 @else
 
 
-<h4>{{$sport_name}}({{$register_data->match_type}})</h4>
+<h4 class="form_titles">{{$sport_name}}({{$register_data->match_type}})</h4>
 <div class="row">
 
 
