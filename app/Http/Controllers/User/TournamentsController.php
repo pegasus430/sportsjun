@@ -43,6 +43,7 @@ use Response;
 use Session;
 use View;
 use Input;
+use Hash;
 
 
 use App\Model\SoccerPlayerMatchwiseStats;
@@ -2950,7 +2951,7 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
           	 return redirect('tournaments')->withErrors(['Select an event with enrollment type online']);
           }
           $parent_tournamet_id = Tournaments::where('id',$id)->value('tournament_parent_id');
-          $all_events = Tournaments::where('tournament_parent_id',$parent_tournamet_id)->where('enrollment_type','online')->where('country_id',$country_id)->get();
+          $all_events = Tournaments::with('bankAccount')->where('tournament_parent_id',$parent_tournamet_id)->where('enrollment_type','online')->where('country_id',$country_id)->get();
           $parent_tournamet_details = TournamentParent::where('id',$parent_tournamet_id)->first();
            if(Auth::user()) {
                $roletype='user';
@@ -3260,7 +3261,7 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
 
           // $team_players = DB::table('team_players')->insertGetId(array('team_id' => $t_id, 'user_id' => $user_id, 'role' => 'owner', 'status' => 'accepted'));	
 
-             
+            $dou=0; 
        	   foreach($_REQUEST['doubles'] as $doubles_array){
            $last_id='';
      	   $request=array();
@@ -3275,8 +3276,14 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
         	
         	 }
         $team_players_exist=TeamPlayers::where('team_id',$t_id)->where('user_id',$last_id)->value('id');
-        if($mail_exist==''){
-        $team_players = DB::table('team_players')->insertGetId(array('team_id' => $t_id, 'user_id' => $last_id, 'role' => 'player', 'status' => 'accepted'));
+        if($dou==0){
+        	$role='owner';
+        } else {
+        	$role='player';
+        }
+        if( $team_players_exist==''){
+
+        $team_players = DB::table('team_players')->insertGetId(array('team_id' => $t_id, 'user_id' => $last_id, 'role' => $role, 'status' => 'accepted'));
         }	
         //echo $t_id; die;
         $request['player_tournament_id'] =$_REQUEST['event_id'];	 
@@ -3285,7 +3292,7 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
         $mn=AllRequests::saverequest($request);
 
         //dd($mn);
-
+          $dou++;
          }
                     
          CartDetails::where('cart_id',$_REQUEST['cart_id'])->where('event_id',$_REQUEST['event_id'])->update(array('registerd' => 1));
@@ -3322,7 +3329,7 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
         	
         	 }
         $team_players_exist=TeamPlayers::where('team_id',$t_id)->where('user_id',$last_id)->value('id');
-        if($mail_exist==''){
+        if($team_players_exist==''){
         $team_players = DB::table('team_players')->insertGetId(array('team_id' => $t_id, 'user_id' => $last_id, 'role' => 'owner', 'status' => 'accepted'));
         }	
         //echo $t_id; die;
@@ -3350,30 +3357,34 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
 
 
  public function getGuestRegister($id,$event_id) {
- 	 if (Auth::check()) { 
+     if (Auth::check()) { 
    	    return redirect('tournaments')->withErrors(['Already logged']);
-      }
-
-  return view('tournaments.guestregisterform')->with(array('id'=>$id,'event_id'=>$event_id));
-}
+       }
+      return view('tournaments.guestregisterform')->with(array('id'=>$id,'event_id'=>$event_id));
+  }
     
 
  public function postGuestRegister() {
-  //echo "<pre>"; print_r($_REQUEST); echo "</pre>"; exit;
-  $data=$_REQUEST['guest'];
-   //dd($data);
-      $mail_exist=User::where('email',$data['email'])->value('id');
-         if($mail_exist!=''){
-         	// Session::flash('message', "Special message goes here");
-          //   return Redirect::back();
-          return back()->withErrors(['Email already exist.Please login to continue']);
-          } else {
-          $last_id = DB::table('users')->insertGetId(array('name' =>$data['name'], 'email' => $data['email'],  'location' => $data['location'], 'club' => $data['club'], 'contact_number' => $data['number']));
+ 	   $data_array=$_REQUEST;
+       $data=$_REQUEST['guest'];
+       
+         $mail_exist=User::where('email',$data['email'])->value('id');
+           if($mail_exist!=''){
+             return back()->withErrors(['Email already exist.Please login to continue']);
+            } else {
+           $random_pwd=uniqid();
+           $last_id = DB::table('users')->insertGetId(array('name' =>$data['name'], 'email' => $data['email'],  'location' => $data['location'], 'club' => $data['club'], 'contact_number' => $data['number'], 'password' => bcrypt($random_pwd), 'profile_updated' => 1 ,'is_verified' => 1, 'isactive' => 1));
         	$request['player_tournament_id']=$last_id;
-        	Auth::loginUsingId($last_id);
-        	return redirect('tournaments/registerstep3/'. $_REQUEST['id'].'/'. $_REQUEST['event_id']);
-          }
-}
+        	$login_data=User::where('id',$last_id)->first();
+         
+           if (Auth::attempt(['email' => $login_data['email'], 'password' => $random_pwd])) {
+             return redirect('tournaments/registerstep3/'. $data_array['id'].'/'. $data_array['event_id']);
+           } 
+
+              
+              
+        }
+  }
 
 
 
