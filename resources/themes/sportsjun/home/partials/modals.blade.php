@@ -1,12 +1,12 @@
 <!-- Modal -->
 <div class="modal fade" id="home-login-modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-login-dialog">
         <div class="modal-content">
             <div class="modal-header thbg-color">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Login</h4>
-                <span class="modal-title-right-msg">Don't have an account?
+                <h4 class="modal-login-title">Login</h4>
+                <span class="modal-login-title-right-msg">Don't have an account?
                                                         <a href="javascript:void(0);" data-toggle="modal"
                                                            data-target="#home-register-modal">Register here</a>
                                                 </span>

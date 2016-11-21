@@ -1,4 +1,40 @@
-.s_result_item{
-    display:block;
-    margin:10px 0;
+body{
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.s_result_item {
+    display: block;
+    margin: 10px 0;
+}
+
+.modal-login-title {
+    text-transform: uppercase;
+    color: #ffffff;
+    display: inline-block !important;
+    margin: 0;
+    line-height: 1.42857143;
+    font-size: 20px;
+    font-family: 'Oswald', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+}
+
+.modal-login-title-right-msg {
+    float: right;
+    color: #fff;
+    margin-right: 16px;
+    margin-top: 3px;
+}
+
+.modal-login-title-right-msg a {
+    color: #FFEB3B;
+    margin-left: 5px;
+    border-bottom: 1px dotted #FFEB3B;
+}
+
+.modal-login-dialog{
+    width: 400px;
+
 }

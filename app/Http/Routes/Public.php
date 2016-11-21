@@ -126,6 +126,7 @@ Route::get('/', 'HomeController@index');
 Route::get('/{page}.html', 'HomeController@page');
 Route::get('/skip', 'HomeController@skip');
 
+Route::get('/home/search/guess',['as'=>'public.search.guess','uses'=>'SearchController@searchGuess']);
 Route::get('/home/search',['as'=>'public.search.list','uses'=>'SearchController@search']);
 Route::get('/home/{type}/{id}',['as'=>'public.search.view','uses'=>'SearchController@view'])->where('id', '[0-9]+');
 
