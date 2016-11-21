@@ -13,6 +13,10 @@
 			<?php 
 			    $lis_object=$lis;
                 $lis = $lis->toArray();
+
+
+                   
+
                 if ($i%2 == 0) { $alt_class = ''; }
                 else { $alt_class = 'bg_white'; }
             ?>
@@ -54,13 +58,13 @@
 
                         <div class="sj_actions_new">
 	                        <?php if(!in_array($lis['id'],$exist_array) && (!empty($lis['end_date'] && $lis['end_date']!='0000-00-00')?strtotime($lis['end_date']) >= strtotime(date(config('constants.DATE_FORMAT.DB_STORE_DATE_FORMAT'))):strtotime($lis['start_date']) >= strtotime(date(config('constants.DATE_FORMAT.DB_STORE_DATE_FORMAT'))))) {?>
-							<div class="sb_join_tournament_main" id="{{$lis['id']}}" spid="{{$lis['sports_id']}}" val="{{!empty($lis['schedule_type'])?(($lis['schedule_type']=='individual')?'PLAYER_TO_TOURNAMENT':'TEAM_TO_TOURNAMENT'):''}}"><a href="#" class="sj_add_but"><span><i class="fa fa-check"></i>
-							     
-                                 @if($lis['enrollment_type'] == 'online' && $lis_object->bankaccount !== null && $lis_object->bankaccount->varified == 1)Event Registration (Online Payment)
+							<div class="sb_join_tournament_main" id="{{$lis['id']}}" spid="{{$lis['sports_id']}}" val="{{!empty($lis['schedule_type'])?(($lis['schedule_type']=='individual')?'PLAYER_TO_TOURNAMENT':'TEAM_TO_TOURNAMENT'):''}}">
+
+						@if($lis['enrollment_type'] == 'online' && $lis_object->bankaccount !== null && $lis_object->bankaccount->varified == 1)<a href="{{ url('/tournaments/eventregistration').'/'.$lis['id'] }}" class="sj_add_but"><span><i class="fa fa-check"></i>Event Registration (Online Payment)</span></a>
 							@else
-                             Event Registration (Offline Payment)
+                            <a href="#" class="sj_add_but"><span><i class="fa fa-check"></i> Event Registration (Offline Payment)</span></a>
                             @endif
-							</span></a></div>
+							</div>
 
 							
 							
