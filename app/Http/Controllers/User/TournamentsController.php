@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\User\InvitePlayerController;
 use App\Http\Requests;
 use App\Helpers\AllRequests;
+use App\Helpers\SendMail;
 use App\Model\City;
 use App\Model\Country;
 use App\Model\Facilityprofile;
@@ -2965,7 +2966,7 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
 
 	}
 
-	public function registrationdata(){
+	public function registrationdata() {
         
          $input = Request::all();
          $post=$input['data'];
@@ -3226,9 +3227,21 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
            $request['player_tournament_id'] =$mail_exist;
           } else {
 
-          $last_id = DB::table('users')->insertGetId(array('name' => $single_array['name'], 'email' => $single_array['email'],  'location' => $single_array['location'], 'club' => $single_array['club'], 'contact_number' => $single_array['number']));
+          $last_id = DB::table('users')->insertGetId(array('name' => $single_array['name'], 'email' => $single_array['email'],  'location' => $single_array['location'], 'club' => $single_array['club'], 'contact_number' => $single_array['number'], 'verification_key' => md5($single_array['email'])));
         	$request['player_tournament_id']=$last_id;
-          }
+
+        	$verification_key = md5($single_array['email']);
+                $to_email_id      = $single_array['email'];
+                $user_name        = $single_array['name'];
+                $subject          = 'Welcome to SportsJun';
+                $view_data        = array('name' => $user_name, 'verification_key' => $verification_key);
+                $view             = 'emails.welcome';
+                $mail_data        = array('view' => $view, 'subject' => $subject,
+                        'to_email_id' => $to_email_id, 'view_data' => $view_data,
+                        'flag' => 'user', 'send_flag' => 1, 'verification_key' => $verification_key, 'to_user_id' => $last_id);
+                SendMail::sendmail($mail_data);
+
+             }
         $request['team_ids'][0]=$_REQUEST['event_id'];
         AllRequests::saverequest($request);
 
@@ -3272,7 +3285,18 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
             $last_id=$mail_exist;
            } else {
 
-        	  $last_id=DB::table('users')->insertGetId(array('name' => $doubles_array['name'], 'email' => $doubles_array['email'],  'location' => $doubles_array['location'], 'club' => $doubles_array['club'], 'contact_number' => $doubles_array['number']));
+        	  $last_id=DB::table('users')->insertGetId(array('name' => $doubles_array['name'], 'email' => $doubles_array['email'],  'location' => $doubles_array['location'], 'club' => $doubles_array['club'], 'contact_number' => $doubles_array['number'], 'verification_key' => md5($doubles_array['email'])));
+
+        	  $verification_key = md5($doubles_array['email']);
+                $to_email_id      = $doubles_array['email'];
+                $user_name        = $doubles_array['name'];
+                $subject          = 'Welcome to SportsJun';
+                $view_data        = array('name' => $user_name, 'verification_key' => $verification_key);
+                $view             = 'emails.welcome';
+                $mail_data        = array('view' => $view, 'subject' => $subject,
+                        'to_email_id' => $to_email_id, 'view_data' => $view_data,
+                        'flag' => 'user', 'send_flag' => 1, 'verification_key' => $verification_key, 'to_user_id' => $last_id);
+                SendMail::sendmail($mail_data);
         	
         	 }
         $team_players_exist=TeamPlayers::where('team_id',$t_id)->where('user_id',$last_id)->value('id');
@@ -3325,7 +3349,20 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
             $last_id=$mail_exist;
            } else {
 
-        	  $last_id=DB::table('users')->insertGetId(array('name' => $_REQUEST['team_owner']['name'], 'email' => $_REQUEST['team_owner']['email'],  'location' => $_REQUEST['team_owner']['location'], 'club' => $_REQUEST['team_owner']['club'], 'contact_number' => $_REQUEST['team_owner']['number']));
+        	  $last_id=DB::table('users')->insertGetId(array('name' => $_REQUEST['team_owner']['name'], 'email' => $_REQUEST['team_owner']['email'],  'location' => $_REQUEST['team_owner']['location'], 'club' => $_REQUEST['team_owner']['club'], 'contact_number' => $_REQUEST['team_owner']['number'], 'verification_key' => md5($_REQUEST['team_owner']['email'])));
+
+
+               $verification_key = md5($_REQUEST['team_owner']['email']);
+                $to_email_id      = $_REQUEST['team_owner']['email'];
+                $user_name        = $_REQUEST['team_owner']['name'];
+                $subject          = 'Welcome to SportsJun';
+                $view_data        = array('name' => $user_name, 'verification_key' => $verification_key);
+                $view             = 'emails.welcome';
+                $mail_data        = array('view' => $view, 'subject' => $subject,
+                        'to_email_id' => $to_email_id, 'view_data' => $view_data,
+                        'flag' => 'user', 'send_flag' => 1, 'verification_key' => $verification_key, 'to_user_id' => $last_id);
+                SendMail::sendmail($mail_data);
+
         	
         	 }
         $team_players_exist=TeamPlayers::where('team_id',$t_id)->where('user_id',$last_id)->value('id');
@@ -3476,7 +3513,10 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
 
 public function postPaymentsuccess() {
 	$dt=$_POST;
-	PaymentDetails::where('id', $_POST['udf1'])->update(['status' => $dt['status']],['mihpayid' => $dt['mihpayid']],['amount' => $dt['amount']]);
+
+    //dd(gettype($dt['mihpayid']));
+
+	PaymentDetails::where('id', $_POST['udf1'])->update(['status' => $dt['status'],'mihpayid' => $dt['mihpayid'],'amount' => $dt['amount']]);
 	return view('tournaments.paymentsuccess')->with(array('data' => $dt));
     
 }
