@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Model\MatchSchedule;
+use App\User;
 
 
 class  MatchSchedulesApiController extends BaseApiController
@@ -92,7 +93,18 @@ class  MatchSchedulesApiController extends BaseApiController
                                 $fields['players'] = [
                                     'type' => 'value',
                                     'value' => function ($obj, $base) {
-                                        return explode(',',trim($base->player_a_ids,','));
+                                        $result = [];
+                                        $ids = explode(',', trim($base->player_a_ids, ','));
+                                        $users = User::whereIn('id', $ids)
+                                            ->get()->keyBy('id');
+                                        foreach ($ids as $id) {
+                                            if (isset($users[$id]))
+                                                $result[] = [
+                                                    'id'=>$id,
+                                                    'name' => $users[$id]['name']
+                                                ];
+                                        }
+                                        return $result;
                                     }
                                 ];
                             }
@@ -109,7 +121,18 @@ class  MatchSchedulesApiController extends BaseApiController
                                 $fields['players'] = [
                                     'type' => 'value',
                                     'value' => function ($obj, $base) {
-                                        return explode(',',trim($base->player_b_ids,','));
+                                        $result = [];
+                                        $ids = explode(',', trim($base->player_b_ids, ','));
+                                        $users = User::whereIn('id', $ids)
+                                            ->get()->keyBy('id');
+                                        foreach ($ids as $id) {
+                                            if (isset($users[$id]))
+                                                $result[] = [
+                                                    'id'=>$id,
+                                                    'name' => $users[$id]['name']
+                                                ];
+                                        }
+                                        return $result;
                                     }
                                 ];
                             }
