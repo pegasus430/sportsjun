@@ -26,6 +26,7 @@ use App\Model\Organization;
 use File;
 use Auth;
 use DB;
+use Intervention\Image\Facades\Image;
 use Log;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -163,7 +164,36 @@ class Helper
     }
 
 
-   /*--------   file moving from temp to attachment function      ---------------------------*/
+    public static function ImageFit($path, $w, $h, $position = 'top')
+    {
+        if (!trim($path)) {
+            return;
+        }
+        $parts = pathinfo($path);
+        if (!isset($parts['dirname'])) {
+            return;
+        }
+        $relative_path =$parts['dirname'] . '/fit/';
+        $filename =  $relative_path . $parts['filename'] . '_' . $w . '_' . $h . '.' . $parts['extension'];
+
+        $filepath = public_path($filename);
+        if (\File::exists($filepath) && ($modified = File::lastModified($filepath)) &&  $modified <  Carbon::yesterday()->timestamp) {
+            return $filename;
+        } else {
+            if (\File::exists(public_path($path))) {
+                if(!\File::exists(public_path($relative_path))) {
+                    \File::makeDirectory(public_path($relative_path));
+                }
+                Image::make(public_path($path))->fit($w, $h,null,$position)->save(public_path($filename));
+                return $filename;
+            } else {
+                return '';
+            }
+        }
+    }
+
+
+    /*--------   file moving from temp to attachment function      ---------------------------*/
     public static function moveImage($imagearray,$vendor_bank_account_id) {
             $photos = array_filter(explode(',', $imagearray));
             $oldFilePath = public_path('uploads/temp/'); 

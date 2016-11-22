@@ -4,9 +4,22 @@ body{
     font-weight: normal;
 }
 
-.s_result_item {
+.searchWrapp{
+    overflow:hidden;
+}
+
+.s-result-item {
     display: block;
     margin: 10px 0;
+    font-size:1.5em;
+}
+
+.s-r-i-title{
+
+}
+.s-r-i-type{
+    display:block;
+    font-size:0.8em;
 }
 
 .modal-login-title {

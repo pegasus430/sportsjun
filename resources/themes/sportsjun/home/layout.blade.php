@@ -46,7 +46,7 @@ if (isset($errors) && ($errors->count()))
 @include('home.partials.modals')
 
 <script src="/themes/sportsjun/js/jquery.min.js" type="text/javascript"></script>
-<script src="{{ asset('/js/jquery-ui.min.gs') }}?v=<?php echo $js_version;?>" type="text/javascript"></script>
+<script src="{{ asset('/js/jquery-ui.min.js') }}?v=<?php echo $js_version;?>" type="text/javascript"></script>
 <script src="/themes/sportsjun/js/bootstrap.min.js"></script>
 <script src="{{ asset('/home/js/sj.global.js') }}? v = <?php echo $js_version;?>"></script>
 <script src="{{ asset('/home/js/sj.user.js') }}?v=<?php echo $js_version;?>"></script>

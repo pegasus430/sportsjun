@@ -153,6 +153,7 @@ return [
         Proengsoft\JsValidation\JsValidationServiceProvider::class,
         Mews\Captcha\CaptchaServiceProvider::class,
         'Sofa\Eloquence\ServiceProvider',
+        Intervention\Image\ImageServiceProvider::class,
 
 		//Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 		SKAgarwal\Generators\GeneratorsServiceProvider::class,
@@ -224,6 +225,8 @@ return [
         //'Whatsapi'      => 'Xaamin\Whatsapi\Facades\Laravel\Whatsapi',
         //'WhatsapiTool'  => 'Xaamin\Whatsapi\Facades\Laravel\Registration',
         'PDF' => Barryvdh\DomPDF\Facade::class,
+        'Image' => Intervention\Image\Facades\Image::class
+
 
     ],
 

@@ -22,10 +22,10 @@ class SearchController extends Controller
     public function searchGuess()
     {
         $what = \Request::get('term');
-        $searches[] = Team::where('name', 'like', $what . '%')->select('name')->get();
+       # $searches[] = Team::where('name', 'like', $what . '%')->select('name')->get();
         $searches[] = User::regular()->where('name', 'like', $what . '%')->select('name')->get();
         $searches[] = Tournaments::where('name', 'like', $what . '%')->select('name')->get();
-        $searches[] = Organization::where('name','like',$what.'%')->select('name')->get();
+   #     $searches[] = Organization::where('name','like',$what.'%')->select('name')->get();
         $search_data = collect();
         foreach ($searches as $items)
             foreach ($items as $item)
@@ -39,10 +39,10 @@ class SearchController extends Controller
         $what = \Request::get('what');
 
         $searches = [];
-        $searches[] = Team::where('name', 'like', $what . '%')->get();
+       # $searches[] = Team::where('name', 'like', $what . '%')->get();
         $searches[] = User::regular()->where('name', 'like', $what . '%')->get();
         $searches[] = Tournaments::where('name', 'like', $what . '%')->get();
-        $searches[] = Organization::where('name','like',$what.'%')->get();
+       # $searches[] = Organization::where('name','like',$what.'%')->get();
         $search_data = collect();
         foreach ($searches as $items)
             foreach ($items as $item)
