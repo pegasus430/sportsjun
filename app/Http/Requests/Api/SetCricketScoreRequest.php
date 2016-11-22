@@ -2,9 +2,8 @@
 
 namespace App\Http\Requests\Api;
 
-use App\Http\Requests\Request;
 
-class SetCricketScoreRequest extends Request
+class SetCricketScoreRequest extends BaseApiRequest
 {
 
     /**
