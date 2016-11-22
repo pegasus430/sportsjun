@@ -87,7 +87,7 @@ class BaseApiController extends Controller
                 case 'list':
                     $fields = $mapped['fields'];
                     if (is_callable($fields))
-                        $fields = $fields($item);
+                        $fields = $fields($item,$base);
                     $result = [];
                     $counter = 1;
                     foreach ($data as $sub) {
@@ -117,7 +117,7 @@ class BaseApiController extends Controller
                 case 'model':
                     $fields = $mapped['fields'];
                     if (is_callable($fields))
-                        $fields = $fields($item);
+                        $fields = $fields($item,$base);
                     $item_data = [];
                     foreach ($fields as $key => $mapped) {
                         if (is_string($mapped)) {
@@ -140,6 +140,27 @@ class BaseApiController extends Controller
                         $value = $value($item, $base);
                     }
                     return $value;
+
+                case 'array':
+                    $fields = $mapped['fields'];
+                    if (is_callable($fields))
+                        $fields = $fields($item,$base);
+                    $item_data = [];
+                    foreach ($fields as $key => $mapped) {
+                        if (is_string($mapped)) {
+                            if (!is_integer($key)) {
+                                $item_data[$key] = object_get($data, $mapped);
+                            } else {
+                                $item_data[] = object_get($data, $mapped);
+                            }
+                        } else {
+                            if (is_array($mapped)) {
+                                $item_data[$key] = $this->mappedExtract($mapped, $data, $base);
+                            }
+                        }
+                    }
+                    return $item_data;
+                    break;
                 default:
                     return [];
             }

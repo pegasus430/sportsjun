@@ -40,6 +40,7 @@ Route::group(['prefix' => '/api/v1', 'middleware' => 'cors'], function ($router)
         $router->post('/users/{id?}','UserApiController@update');
         $router->post('/users/{id}/sports','UserApiController@updateSports');
 
+        $router->get('/match-schedules/{id}',['uses'=>'MatchSchedulesApiController@getInfo']);
         $router->get('/match-schedules',['uses'=>'MatchSchedulesApiController@getList']);
 
 
