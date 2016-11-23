@@ -4,9 +4,22 @@ body{
     font-weight: normal;
 }
 
-.s_result_item {
+.searchWrapp{
+    overflow:hidden;
+}
+
+.s-result-item {
     display: block;
     margin: 10px 0;
+    font-size:1.5em;
+}
+
+.s-r-i-title{
+
+}
+.s-r-i-type{
+    display:block;
+    font-size:0.8em;
 }
 
 .modal-login-title {
@@ -36,5 +49,48 @@ body{
 
 .modal-login-dialog{
     width: 400px;
+}
 
+
+.social-links-footer li {
+    display: inline-block;
+    margin: 0 10px 0 0;
+    list-style:none;
+}
+
+.footTop .social-links-footer  li a{
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    padding: 3px 0;
+    display: block;
+    font-size: 16px;
+    line-height:30px;
+    color: #fff;
+    overflow: hidden;
+    position: relative;
+    z-index: 11;
+    box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.3);
+    -moz-box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.3);
+    -webkit-box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.3);
+}
+
+.user-stats table{
+    padding: 10px 0;
+    font: 12px SFUIDisplay-Bold;
+    color: #434f5e;
+}
+.user-stats > div.table-responsive{
+    overflow-x:auto;
+}
+
+
+.user-stats th{
+    font-weight:bold;
+}
+
+.user-stats h4{
+    color: #65c178;
+    font: 15px SFUIDisplay-Bold;
+    padding: 15px 0;
 }

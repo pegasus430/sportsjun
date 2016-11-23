@@ -19,7 +19,7 @@
             <h2>CONNECT WITH US</h2>
             <p>Follow us to stay updated and connected
                 – using your favorite social media.</p>
-            <ul class="social-links1">
+            <ul class="social-links-footer">
                 <li>
                     <a target="_blank" href="https://twitter.com/sj_sportsjun" class="tw-bg1"><i class="fa fa-twitter"></i></a>
                 </li>

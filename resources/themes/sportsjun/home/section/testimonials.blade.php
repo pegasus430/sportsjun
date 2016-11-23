@@ -5,7 +5,7 @@
             @foreach ($testimonials as $testimonial)
             <div class="testimornialBox ">
                 <div class="profileRound">
-                    <img src="{{Helper::getImagePath($testimonial->image,$testimonial->type)}}">
+                    <img src="{{Helper::ImageFit(Helper::getImagePath($testimonial->image,$testimonial->type),104,104)}}">
                 </div>
                 <div class="col-lg-7 col-md-7">
                     <p>{!! $testimonial->description !!}}</p>
