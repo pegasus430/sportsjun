@@ -9,6 +9,8 @@ use App\Model\OrganizationRole;
 use App\Model\Photo;
 use App\Model\Rating;
 use App\Model\Sport;
+use App\Model\SportQuestion;
+use App\Model\SportQuestionAnswer;
 use App\Model\TournamentParent;
 use App\Model\Tournaments;
 use Auth;
@@ -105,11 +107,13 @@ class User extends Model implements AuthenticatableContract,
             ->first();
     }
 
-    public function scopeRegular($query){
+    public function scopeRegular($query)
+    {
         return $query->whereType(self::$TYPE_REGULAR);
     }
 
-    public function scopeOrganizations($query){
+    public function scopeOrganizations($query)
+    {
         return $query->whereType(self::$TYPE_ORGANIZATION);
     }
 
@@ -142,7 +146,6 @@ class User extends Model implements AuthenticatableContract,
     {
         return $this->hasMany(Organization::class, 'user_id', 'id');
     }
-
 
     /**
      *
@@ -371,15 +374,48 @@ class User extends Model implements AuthenticatableContract,
             ->groupBy('tournament_parent.id');
     }
 
-    public function getSportListAttribute(){
+    public function getSportListAttribute()
+    {
         $sports = collect();
         if ($this->usersfollowingsports) {
-           $sport_ids = explode(',',trim($this->usersfollowingsports->following_sports,','));
-            $allSports= Sport::get()->keyBy('id');
-            foreach($sport_ids as $id){
-                $sports->push(array_get($allSports,$id));
+            $sport_ids = explode(',', trim($this->usersfollowingsports->following_sports, ','));
+            $allSports = Sport::get()->keyBy('id');
+            foreach ($sport_ids as $id) {
+                $sports->push(array_get($allSports, $id));
             }
         }
         return $sports;
     }
+
+    public function getSkillSetAttribute()
+    {
+        $userId = $this->id;
+        return SportQuestion::with(['answers' => function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        }, 'answers.options'])->get()->GroupBy('sports_id');
+    }
+
+    public function sportStats($sportsId)
+    {
+        if ($sportsId == config('constants.SPORT_ID.Cricket')) {
+            $model = config('constants.SPORT.' . $sportsId);
+            $appPrefix = 'App\\Model\\';
+            $modelName = $appPrefix . $model;
+            if (class_exists($modelName)) {
+                $stats = $modelName::where('user_id', $this->id);
+                if ($sportsId == config('constants.SPORT_ID.Cricket')) {
+                    $stats
+                        ->groupBy('match_type')
+                        ->select("*", DB::raw('SUM( innings_bat ) innings_bat, SUM(notouts) notouts, SUM(totalruns) totalruns, SUM(totalballs) totalballs, '
+                            . 'SUM(fifties) fifties,SUM(hundreds) hundreds,SUM(fours) fours,SUM(sixes) sixes,CAST(AVG(average_bat) AS DECIMAL(10,2)) average_bat,'
+                            . 'CAST(AVG(strikerate) AS DECIMAL(10,2)) strikerate, SUM(catches) catches, SUM(stumpouts) stumpouts, SUM(runouts) runouts,'
+                            . 'SUM(innings_bowl) innings_bowl, SUM(wickets) wickets, SUM(runs_conceded) runs_conceded, SUM(overs_bowled) overs_bowled, SUM(wides_bowl) wides_bowl, SUM(noballs_bowl) noballs_bowl,'
+                            . 'CAST(AVG(average_bowl) AS DECIMAL(10,2)) average_bowl, CAST(AVG(ecomony) AS DECIMAL(10,2)) ecomony'));
+                }
+                return $stats->get();
+            }
+        }
+        return collect();
+    }
+
 }

@@ -1,16 +1,27 @@
 @extends('home.layout')
 
 @section('content')
+    <?php
+    $start_date = Carbon\Carbon::createFromFormat("Y-m-d", $tournament->start_date);
+    $end_date = Carbon\Carbon::createFromFormat("Y-m-d", $tournament->start_date);
+
+    ?>
     <div class="tourn_topBanar_wrapp">
         <div class="banarImg"><img src="{{ $tournament->logoImageReal }}"></div>
         <div class="registerTopWrap">
             <div class="col-lg-6 col-md-6 topLeftTT">
                 <h1>{{ $tournament->name }}</h1>
-                <h2>Sunday, 27th Oct 2016 to Wednesday 30 Oct 2016 </h2>
+                <h2>{{ $start_date->format('l, jS M Y') }}
+                    @if ($end_date)
+                        to {{ $end_date->format('l, jS M Y') }}
+                    @endif
+                </h2>
                 <h3>{{ $tournament->location}}</h3>
             </div>
             <div class="col-lg-2 col-md-2 desk_flot_right">
-                <a href="" class="regNew">REGISTER</a>
+                @if ($start_date > Carbon\Carbon::today())
+                    <a href="" class="regNew">REGISTER</a>
+                @endif
             </div>
         </div>
     </div>
@@ -22,9 +33,9 @@
             'Sports' => $tournament->sport->sports_name,
             'Tournament Type' => $tournament->type,
             'Player Type' => $tournament->player_type,
-            'Start-End Dates' => '',
+            'Start-End Dates' => $start_date->format('d/m/Y').' to '.$end_date->format('d/m/Y'),
             'Number of groups' => $tournament->groups_number,
-            'Number of Teams in a Group' =>$tournament->groups_teams
+            'Number of Teams in a Group' => $tournament->groups_teams
     ]
     ?>
 

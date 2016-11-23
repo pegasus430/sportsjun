@@ -70,7 +70,8 @@ class SearchController extends Controller
                     return view('home.search.tournament', compact('tournament'));
                 break;
             case 'users':
-                $user = User::regular()->find($id);
+                $user = User::regular()
+                    ->find($id);
                 if ($user)
                     return view('home.search.user', compact('user'));
                 break;

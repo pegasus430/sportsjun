@@ -28,7 +28,9 @@
             </div>
         </div>
         @foreach ($user->sportList as $sport)
-            @include('home.search.user.sport_card',$sport)
+            @if (View::exists('home.search.user.'.strtolower($sport->sports_name)))
+                @include('home.search.user.'.strtolower($sport->sports_name))
+            @endif
         @endforeach
     </div>
 @endsection
