@@ -1,19 +1,33 @@
 @extends('layouts.app')
 @section('content')
-@include ('tournaments._leftmenu')
-
-<div id="content" class="col-sm-10 tournament_profile">
-	<div class="col-md-6">
-	<!-- <div class="form-header header-primary"><h4 class="register_tournament_title">Register Form(No of Participants {{ $register_data->participant_count }}   Total Amount <i class="fa fa-inr"></i> {{$register_data->participant_count*$register_data->enrollment_fee}})</h4></div> -->
-    	
-       
-	</div> 
 
 
+<div class="">
 <div class="sportsjun-wrap">
-<div class="sportsjun-forms sportsjun-container">
+<div class="sportsjun-forms sportsjun-container wrap-2">
 
+<?php 
+$lis = $tournament_data->toArray();
+?>
+<div class="form-header header-primary register_form_head">
+<div class="col-md-2 col-sm-3 col-xs-12 text-center">
+    {!! Helper::Images( $lis['logo']['url'] ,'tournaments',array('height'=>90,'width'=>90,'class'=>'img-circle img-border img-scale-down img-responsive') )!!}
+</div>
 
+<h4 class='register_form_title'>{{$parent_tournament_details->name}}</h4><br><br>
+<?php
+$open_timestamp = strtotime($tournament_data->reg_opening_date);
+$open_day = date('D', $open_timestamp);
+$newopen = date("d-m-Y", strtotime($tournament_data->reg_opening_date));
+$opentime=date("h:i a", strtotime($tournament_data->reg_opening_time));
+$close_timestamp = strtotime($tournament_data->reg_closing_date);
+$close_day = date('D', $close_timestamp);
+$newclose = date("d-m-Y", strtotime($tournament_data->reg_closing_date));
+$closetime=date("h:i a", strtotime($tournament_data->reg_closing_time));
+?>
+<h4><i class="fa fa-calendar-o"></i>{{$open_day}} {{$newopen}} - {{$open_day}} {{$newclose}} | {{$opentime}} - {{$closetime}}</h4><br>
+<h4><i class="fa fa-map-marker"></i>{{$tournament_data->location}}</h4>
+</div>
 
 
 

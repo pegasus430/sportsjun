@@ -2947,6 +2947,9 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
     public function eventregistration($id){
           $tournment_enrollment_type=Tournaments::where('id',$id)->value('enrollment_type');
           $country_id=Tournaments::where('id',$id)->value('country_id');
+          $tournament_data=Tournaments::with('logo')->where('id',$id)->first();
+          
+          
           
           if($tournment_enrollment_type!='online'){
           	 return redirect('tournaments')->withErrors(['Select an event with enrollment type online']);
@@ -2959,7 +2962,9 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
            } else {
           	 $roletype='guest';
            }
-         return view('tournaments.eventregistration',compact('all_events','parent_tournamet_details'))->with([
+
+          
+         return view('tournaments.eventregistration',compact('all_events','parent_tournamet_details','tournament_data'))->with([
          	'roletype'=>$roletype,
          	]);
          
@@ -2997,6 +3002,7 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
             $pay=$cart_data[$i]['participant_count'] * $cart_data[$i]['enrollment_fee'];
             $total_pay+=$pay;
              }
+
 
             $i++;
 
@@ -3058,8 +3064,11 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
         foreach ($register_data->cartDetails as $value) {
         	$parent_tournament_details = TournamentParent::where('id',$value->tournaments->tournament_parent_id)->first();
         	$trn_country_id=Tournaments::where('id',$value->tournaments->tournament_parent_id)->value('country_id');
+        	$trnament_id=$value->tournaments->id;
            break;
         }
+     
+        $tournament_data=Tournaments::with('logo')->where('id',$trnament_id)->first();
         
         $amount_data = PaymentGateWays::with(['paymentSetups' => function($query){
             $query->where('status','active'); 
@@ -3087,7 +3096,7 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
 
         //dd($register_data->total_payment);
 
-      return view('tournaments.registerstep2',compact('register_data','parent_tournament_details','amount_data'))->with([
+      return view('tournaments.registerstep2',compact('register_data','parent_tournament_details','amount_data','tournament_data'))->with([
          	'roletype'=>$roletype,'amount_without_charges'=>$amount_without_charges
          	]);
 	
@@ -3107,6 +3116,7 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
         	 return redirect('tournaments')->withErrors(['Payment already completed for  cart id '.$id]);
         }
    $register_data = CartDetails::where('cart_id','=',$id)->where('registerd','=',0)->with('tournaments')->first();
+
           if(isset($register_data) && $register_data!=null){
           $event_id=$register_data->event_id;
            if (Auth::check()) { 
@@ -3130,6 +3140,11 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
    	$parent_tournament_id = Tournaments::where('id',$event_id)->value('tournament_parent_id');
    	$sports_id = Tournaments::where('id',$event_id)->value('sports_id');
    	$sports_type = Tournaments::where('id',$event_id)->value('sports_id');
+    $parent_tournament_details = TournamentParent::where('id',$parent_tournament_id)->first();
+    $tournament_data=Tournaments::with('logo')->where('id',$event_id)->first();
+
+
+
    	$user_data=array();
    	if (Auth::check()) { 
    	$user_id = Auth::user()->id;
@@ -3180,7 +3195,7 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
 		$left_menu_data = Helper::getLeftMenuData($tournamentInfo[0]['tournament_parent_id'],$tournamentInfo[0]['manager_id'],$tournamentInfo);
 		
 	
-		return view('tournaments.payregisterform')->with(array( 'tournamentInfo'=>$tournamentInfo,'action_id'=>$event_id,'left_menu_data'=>$left_menu_data, 'tournament_id' => $event_id, 'lef_menu_condition'=> $lef_menu_condition, 'tournament_type' => $tournamentInfo[0]['type'],'sport_name'=>$sport_name,'manager_name'=> $manager_name,'register_data'=>$register_data,'teams_array'=>$teams_array,'user_data'=>$user_data));
+		return view('tournaments.payregisterform')->with(array( 'tournamentInfo'=>$tournamentInfo,'action_id'=>$event_id,'left_menu_data'=>$left_menu_data, 'tournament_id' => $event_id, 'lef_menu_condition'=> $lef_menu_condition, 'tournament_type' => $tournamentInfo[0]['type'],'sport_name'=>$sport_name,'manager_name'=> $manager_name,'register_data'=>$register_data,'teams_array'=>$teams_array,'user_data'=>$user_data,'tournament_data'=>$tournament_data,'parent_tournament_details'=>$parent_tournament_details));
 
 
 /*-----------------------------------------------------------------------------------------*/
