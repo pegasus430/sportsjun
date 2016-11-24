@@ -3,7 +3,28 @@
 <div class="">
 <div class="sportsjun-wrap">
 <div class="sportsjun-forms sportsjun-container wrap-2">
-<div class="form-header header-primary register_form_head"><h4 class='register_form_title'>{{$parent_tournament_details->name}}<br>{{$parent_tournament_details->contact_number}}</h4></div>
+<?php 
+$lis = $tournament_data->toArray();
+?>
+
+<div class="form-header header-primary register_form_head">
+<div class="col-md-2 col-sm-3 col-xs-12 text-center">
+    {!! Helper::Images( $lis['logo']['url'] ,'tournaments',array('height'=>90,'width'=>90,'class'=>'img-circle img-border img-scale-down img-responsive') )!!}
+</div>
+<h4 class='register_form_title'>{{$parent_tournament_details->name}}</h4><br><br>
+<?php
+$open_timestamp = strtotime($tournament_data->reg_opening_date);
+$open_day = date('D', $open_timestamp);
+$newopen = date("d-m-Y", strtotime($tournament_data->reg_opening_date));
+$opentime=date("h:i a", strtotime($tournament_data->reg_opening_time));
+$close_timestamp = strtotime($tournament_data->reg_closing_date);
+$close_day = date('D', $close_timestamp);
+$newclose = date("d-m-Y", strtotime($tournament_data->reg_closing_date));
+$closetime=date("h:i a", strtotime($tournament_data->reg_closing_time));
+?>
+<h4><i class="fa fa-calendar-o"></i>{{$open_day}} {{$newopen}} - {{$open_day}} {{$newclose}} | {{$opentime}} - {{$closetime}}</h4><br>
+<h4><i class="fa fa-map-marker"></i>{{$tournament_data->location}}</h4>
+</div>
 
 <div class="form-body">
 

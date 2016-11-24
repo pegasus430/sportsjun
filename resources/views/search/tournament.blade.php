@@ -6,6 +6,7 @@
 		<div class="col-sm-9 viewmoreclass tournament_profile" id="searchresultsDiv">
 			
 			<div class="search_header_msg">Search results for {{$sports_array[$sport_by]}} tournaments @if($search_city)in {{$search_city}}  @endif @if($search_by_name)  with name "{{$search_by_name}}" @endif </div>
+
 			
 			@if(count($result) > 0)
 			<?php $i = 0;?>
@@ -20,6 +21,7 @@
                 if ($i%2 == 0) { $alt_class = ''; }
                 else { $alt_class = 'bg_white'; }
             ?>
+            
 			<div class="teams_search_display row main_tour <?php echo $alt_class;?>">	       	            
 				<div class="search_thumbnail right-caption">
                 
