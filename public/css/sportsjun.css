@@ -3102,3 +3102,8 @@ label.form_label.last_date_span {
 .form_titles {
  color: #499b4e!important;
 }
+
+.payment_header_logo {
+   width:100%;
+   overflow:hidden;
+ }

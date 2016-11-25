@@ -6,11 +6,12 @@
 <?php 
 $lis = $tournament_data->toArray();
 ?>
-
-<div class="form-header header-primary register_form_head">
-<div class="col-md-2 col-sm-3 col-xs-12 text-center">
-    {!! Helper::Images( $lis['logo']['url'] ,'tournaments',array('height'=>90,'width'=>90,'class'=>'img-circle img-border img-scale-down img-responsive') )!!}
+<div class="payment_header_logo">
+{!! Helper::Images( $lis['logo']['url'] ,'tournaments')!!}
 </div>
+<br>
+<div class="form-header header-primary register_form_head">
+
 <h4 class='register_form_title'>{{$parent_tournamet_details->name}}</h4><br><br>
 <?php
 $open_timestamp = strtotime($tournament_data->reg_opening_date);

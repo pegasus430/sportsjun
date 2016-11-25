@@ -176,10 +176,15 @@ $( document ).ready(function() {
         		$('.edit-only .btn-createedit').show();
         		$('.edit-only .enroltypeedit').show();
            } else {
+             if($(".edit-only #enrollment_type option[value='online']").length > 0) {
+
+            } else {
               $('.edit-only #enrollment_type').append($('<option>', {
                 value: 'online',
                 text: 'ONLINE PAYMENT'
               }));
+
+            }
                 
            }
         }
@@ -214,10 +219,15 @@ $('.edit-only #country_id').change(function(){
         		$('.edit-only .btn-createedit').show();
         		$('.edit-only .enroltypeedit').show();
            } else {
+              if($(".edit-only #enrollment_type option[value='online']").length > 0) {
+
+            } else {
               $('.edit-only #enrollment_type').append($('<option>', {
                 value: 'online',
                 text: 'ONLINE PAYMENT'
               })); 
+
+            }
                 
            }
         }
@@ -226,7 +236,21 @@ $('.edit-only #country_id').change(function(){
 }); 
 
 
+$( ".btn-tournamentedit" ).click(function() {
+  var isChecked = $("#disclaimer_agree").is(":checked");
+         if($('#disclaimer_agree:visible').length == 0){
+                 
+          } else {
+            if (isChecked) {
+                $('#agree_conditions-val').hide();
+            } else {
+                $('#agree_conditions-val').show();
+                 return false;
+            }
+                
+          }
 
+});
 
 
 	

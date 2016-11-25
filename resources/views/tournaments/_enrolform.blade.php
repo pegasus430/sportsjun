@@ -137,6 +137,26 @@
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="section">
+                
+                    <label for="comment" class="field prepend-icon">
+                    {!! Form::checkbox('agree', 'yes',false, array('required','class'=>'gui-checkbox', 'id'=>'disclaimer_agree')) !!}
+                    <span class="agree_conditions">{{$disclaimer_content}}</span>
+                    <p class="help-block" id="agree_conditions-val">Please agree our Terms and Conditions</p> 
+                    
+                </label>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
 </div>
 <div class="payment_details{{$formType}}">
     <div class="row">
