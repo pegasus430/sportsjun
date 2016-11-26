@@ -14,8 +14,16 @@
 			<?php 
 			    $lis_object=$lis;
                 $lis = $lis->toArray();
-
-
+                $open_dt=$lis_object->reg_opening_date.' '.$lis_object->reg_opening_time;
+                $open_dt_tm=new DateTime($open_dt);
+                $close_dt=$lis_object->reg_closing_date.' '.$lis_object->reg_closing_time;
+                $close_dt_tm=new DateTime($close_dt);
+                $current_dt=date('Y-m-d h:i:s a');
+                $current_dt_24=date("H:i:s", strtotime($current_dt));
+                $current_dt_tm=new DateTime($current_dt_24);
+                //dd($current_dt_tm);
+                
+              
                    
 
                 if ($i%2 == 0) { $alt_class = ''; }
@@ -62,7 +70,25 @@
 	                        <?php if(!in_array($lis['id'],$exist_array) && (!empty($lis['end_date'] && $lis['end_date']!='0000-00-00')?strtotime($lis['end_date']) >= strtotime(date(config('constants.DATE_FORMAT.DB_STORE_DATE_FORMAT'))):strtotime($lis['start_date']) >= strtotime(date(config('constants.DATE_FORMAT.DB_STORE_DATE_FORMAT'))))) {?>
 							<div class="sb_join_tournament_main" id="{{$lis['id']}}" spid="{{$lis['sports_id']}}" val="{{!empty($lis['schedule_type'])?(($lis['schedule_type']=='individual')?'PLAYER_TO_TOURNAMENT':'TEAM_TO_TOURNAMENT'):''}}">
 
-						@if($lis['enrollment_type'] == 'online' && $lis_object->bankaccount !== null && $lis_object->bankaccount->varified == 1)<a href="{{ url('/tournaments/eventregistration').'/'.$lis['id'] }}" class="sj_add_but"><span><i class="fa fa-check"></i>Event Registration (Online Payment)</span></a>
+						@if($lis['enrollment_type'] == 'online' && $lis_object->bankaccount !== null && $lis_object->bankaccount->varified == 1)
+
+						    @if($lis_object->is_sold_out==1)
+                                <a href="#" class="sj_add_but"><span><i class="fa fa-check"></i>Sold Out / Registrations closed</span></a>
+						    @else
+                            
+                            @if($open_dt_tm < $current_dt_tm && $close_dt_tm > $current_dt_tm) 
+                	           <a href="{{ url('/tournaments/eventregistration').'/'.$lis['id'] }}" class="sj_add_but"><span><i class="fa fa-check"></i>Event Registration (Online Payment)</span></a>
+                	           @elseif($open_dt_tm > $current_dt_tm)
+                                <a href="#" class="sj_add_but"><span><i class="fa fa-check"></i>Registration Not Started</span></a>
+                              @elseif($close_dt_tm < $current_dt_tm)
+                              <a href="#" class="sj_add_but"><span><i class="fa fa-check"></i>Registration Closed</span></a>
+                              @else
+                              <a href="#" class="sj_add_but"><span><i class="fa fa-check"></i>Registration Not Available</span></a>
+                              @endif
+
+                              
+                              @endif
+
 							@else
                             <a href="#" class="sj_add_but"><span><i class="fa fa-check"></i> Event Registration (Offline Payment)</span></a>
                             @endif

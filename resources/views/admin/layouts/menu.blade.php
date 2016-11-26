@@ -37,6 +37,7 @@
                     <ul class="dropdown-menu dropdown-messages">
                         <li><a class="navbar-brand" href="{{ URL::to('admin/paymentgateways/setup') }}">Membership & Commission setup</a></li>
                         <li><a class="navbar-brand" href="{{ URL::to('admin/paymentgateways') }}">Payment Gateway activation</a></li>
+                        <li><a class="navbar-brand" href="{{ URL::to('admin/settings') }}">Settings</a></li>
                     </ul>
                 </li>
             </ul>

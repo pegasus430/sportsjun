@@ -109,6 +109,10 @@ $(function() {
         $('#reg_closing_time').datetimepicker({ format: 'h:mm A' });
         $('.payment_form').hide();
         $("body").on('click','.btn-tournament', function(){
+
+        
+
+
         	if($("#sub-tournaments").valid()){
         		if($('.form_enrol').css('display') == 'block'){
 	        		$('.form_enrol').hide();
@@ -121,7 +125,12 @@ $(function() {
 	            
 	            $('.main_tour_form').hide();
         	}
-        	// $("#sub-tournaments").valid();
+
+
+
+         
+            
+        	
         	
         })
         $("body").on('click','.add_account_div', function(){
@@ -158,10 +167,16 @@ $( document ).ready(function() {
         		$('.create-only .btn-create').show();
         		$('.create-only .enroltypeedit').show();
            } else {
+             if($(".create-only #enrollment_type option[value='online']").length > 0) {
+
+            } else {
+
               $('.create-only #enrollment_type').append($('<option>', {
                 value: 'online',
                 text: 'ONLINE PAYMENT'
               }));
+
+             }
                 
            }
         }
@@ -196,10 +211,16 @@ $('.create-only #country_id').change(function(){
         		$('.create-only .btn-create').show();
         		$('.create-only .enroltypeedit').show();
            } else {
+             
+            if($(".create-only #enrollment_type option[value='online']").length > 0) {
+
+            } else {
               $('.create-only #enrollment_type').append($('<option>', {
                 value: 'online',
                 text: 'ONLINE PAYMENT'
               })); 
+
+            }
                 
            }
         }
@@ -211,11 +232,21 @@ $('.create-only #country_id').change(function(){
 
 
 
+$( ".btn-tournament" ).click(function() {
+  var isChecked = $("#disclaimer_agree").is(":checked");
+         if($('#disclaimer_agree:visible').length == 0){
+                 
+          } else {
+            if (isChecked) {
+                $('#agree_conditions-val').hide();
+            } else {
+                $('#agree_conditions-val').show();
+                 return false;
+            }
+                
+          }
 
-
-
-
-
+});
 
 
 </script>

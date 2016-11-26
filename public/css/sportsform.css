@@ -2871,3 +2871,8 @@ font-weight:bold;
 .s-rating:hover{
     /*color: #FEFEFE;*/
 }
+
+#agree_conditions-val {
+    display:none;
+    color:#a94442;
+    }
