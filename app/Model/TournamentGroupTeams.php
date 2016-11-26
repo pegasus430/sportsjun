@@ -7,6 +7,7 @@ class TournamentGroupTeams extends Model
 {
     protected $_matchSchedules;
     protected $_teamStats;
+    protected $_group_details;
 
     use SoftDeletes;
     protected $table = 'tournament_group_teams';
@@ -60,6 +61,14 @@ class TournamentGroupTeams extends Model
             ->count();
     }
 
+    public function getWonAttribute(){
+        return $this->attributes['won'] ? $this->attributes['won'] : 0;
+    }
+
+    public function getLostAttribute(){
+        return $this->attributes['lost'] ? $this->attributes['lost'] : 0;
+    }
+
     public function getTieAttribute()
     {
         return $this->matchSchedules
@@ -68,44 +77,26 @@ class TournamentGroupTeams extends Model
     }
 
 
-    public function groupDetails()
+    public function getGfAttribute(){
+        return $this->groupDetails['gf'];
+    }
+
+    public function getGaAttribute(){
+        return $this->groupDetails['ga'];
+    }
+
+
+    public function getGroupDetailsAttribute()
     {
-        $details = [];
-        $details['gf'] = 0;
-        $details['ga'] = 0;
-        $sports_id = $this->tournament->sports_id;
-        switch ($sports_id) {
-            case ($sports_id == Sport::$SOCCER || $sports_id == Sport::$HOKKEY):
-                //die(json_encode($team_id));
-                foreach ($this->matchSchedules as $key => $match) {
-                    if ($match->a_id == $this->team_id) {         //sets the home and againts team
-                        $gf_team = $match->a_id;
-                        $ga_team = $match->b_id;
-                    } elseif ($match->b_id == $this->team_id) {
-                        $gf_team = $match->b_id;
-                        $ga_team = $match->a_id;
-                    }
-                    $match_details = json_decode($match->match_details);
-                    if (!empty($match->match_details)) {
-                        $details['gf'] += $match_details->{$gf_team}->goals;
-                        $details['ga'] += $match_details->{$ga_team}->goals;
-                    }
-
-                }
-                break;
-
-            case in_array($sports_id, [
-                Sport::$TABLE_TENNIS,
-                Sport::$BADMINTON,
-                Sport::$SQUASH,
-                Sport::$THROW_BALL,
-                Sport::$KABADDI,
-                Sport::$VOLEYBALL
-            ]):
-                //die(json_encode($team_id));
-                foreach ($this->matchSchedules as $key => $match) {
-
-                    if ($match->game_type == 'normal') {
+        if (!$this->_group_details) {
+            $details = [];
+            $details['gf'] = 0;
+            $details['ga'] = 0;
+            $sports_id = $this->tournament->sports_id;
+            switch ($sports_id) {
+                case ($sports_id == Sport::$SOCCER || $sports_id == Sport::$HOKKEY):
+                    //die(json_encode($team_id));
+                    foreach ($this->matchSchedules as $key => $match) {
                         if ($match->a_id == $this->team_id) {         //sets the home and againts team
                             $gf_team = $match->a_id;
                             $ga_team = $match->b_id;
@@ -115,44 +106,74 @@ class TournamentGroupTeams extends Model
                         }
                         $match_details = json_decode($match->match_details);
                         if (!empty($match->match_details)) {
-                            $details['gf'] += $match_details->scores->{$gf_team . '_score'};
-                            $details['ga'] += $match_details->scores->{$ga_team . '_score'};
+                            $details['gf'] += $match_details->{$gf_team}->goals;
+                            $details['ga'] += $match_details->{$ga_team}->goals;
                         }
-                    } else {
+
+                    }
+                    break;
+
+                case in_array($sports_id, [
+                    Sport::$TABLE_TENNIS,
+                    Sport::$BADMINTON,
+                    Sport::$SQUASH,
+                    Sport::$THROW_BALL,
+                    Sport::$KABADDI,
+                    Sport::$VOLEYBALL
+                ]):
+                    //die(json_encode($team_id));
+                    foreach ($this->matchSchedules as $key => $match) {
+
+                        if ($match->game_type == 'normal') {
+                            if ($match->a_id == $this->team_id) {         //sets the home and againts team
+                                $gf_team = $match->a_id;
+                                $ga_team = $match->b_id;
+                            } elseif ($match->b_id == $this->team_id) {
+                                $gf_team = $match->b_id;
+                                $ga_team = $match->a_id;
+                            }
+                            $match_details = json_decode($match->match_details);
+                            if (!empty($match->match_details)) {
+                                $details['gf'] += $match_details->scores->{$gf_team . '_score'};
+                                $details['ga'] += $match_details->scores->{$ga_team . '_score'};
+                            }
+                        } else {
+                            if ($match->a_id == $this->team_id) {         //sets the home and againts team
+                                $details['gf'] += $match->a_score;
+                                $details['ga'] += $match->b_score;
+                            } elseif ($match->b_id == $this->team_id) {
+                                $details['gf'] += $match->b_score;
+                                $details['ga'] += $match->a_score;
+                            }
+                        }
+
+                    }
+
+                    break;
+                case ($sports_id == Sport::$BASKETBALL
+                    || $sports_id == Sport::$ULTIMATE_FRISBEE
+                    || $sports_id == Sport::$WATER_POLO):
+                    foreach ($this->matchSchedules as $key => $match) {
                         if ($match->a_id == $this->team_id) {         //sets the home and againts team
-                            $details['gf'] += $match->a_score;
-                            $details['ga'] += $match->b_score;
+                            $gf_team = $match->a_id;
+                            $ga_team = $match->b_id;
                         } elseif ($match->b_id == $this->team_id) {
-                            $details['gf'] += $match->b_score;
-                            $details['ga'] += $match->a_score;
+                            $gf_team = $match->b_id;
+                            $ga_team = $match->a_id;
+                        }
+                        $match_details = json_decode($match->match_details);
+                        if (!empty($match->match_details)) {
+                            $details['gf'] += $match_details->{$gf_team}->total_points;
+                            $details['ga'] += $match_details->{$ga_team}->total_points;
                         }
                     }
-
-                }
-
-                break;
-            case ($sports_id == Sport::$BASKETBALL
-                || $sports_id == Sport::$ULTIMATE_FRISBEE
-                || $sports_id == Sport::$WATER_POLO):
-                foreach ($this->matchSchedules as $key => $match) {
-                    if ($match->a_id == $this->team_id) {         //sets the home and againts team
-                        $gf_team = $match->a_id;
-                        $ga_team = $match->b_id;
-                    } elseif ($match->b_id == $this->team_id) {
-                        $gf_team = $match->b_id;
-                        $ga_team = $match->a_id;
-                    }
-                    $match_details = json_decode($match->match_details);
-                    if (!empty($match->match_details)) {
-                        $details['gf'] += $match_details->{$gf_team}->total_points;
-                        $details['ga'] += $match_details->{$ga_team}->total_points;
-                    }
-                }
-                break;
-            default:
-                break;
+                    break;
+                default:
+                    break;
+            }
+            $this->_group_details = $details;
         }
-        return $details;
+        return $this->_group_details;
     }
 
 
