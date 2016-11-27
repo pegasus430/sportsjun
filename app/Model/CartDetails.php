@@ -15,7 +15,7 @@ class CartDetails extends Model
 
   protected $table = 'cart_details';
   public $timestamps = false;
-  protected $fillable = ['cart_id','event_id', 'enrollment_fee', 'match_type','participant_count'];
+  protected $fillable = ['cart_id','event_id', 'enrollment_fee', 'match_type','participant_count','registerd'];
 
    public function cart()
     {

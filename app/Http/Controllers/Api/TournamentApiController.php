@@ -84,7 +84,7 @@ class TournamentApiController extends BaseApiController
                         $tournaments = $tournaments->whereIn('tournaments.id', $tournament_ids);
                         break;
                     case 'following':
-                        $tournament_ids = $user->folowers()->tournaments()->lists('type_id');
+                        $tournament_ids = $user->followers()->tournaments()->lists('type_id');
                         $tournaments = $tournaments->whereIn('tournaments.id', $tournament_ids);
                         break;
                     case false:

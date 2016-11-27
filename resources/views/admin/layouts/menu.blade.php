@@ -10,7 +10,17 @@
                 
             </div>
             <!-- /.navbar-header -->
-            <ul class="nav navbar-top-links navbar-left">   
+            <ul class="nav navbar-top-links navbar-left">
+                <li class="dropdown">
+                    <a class="dropdown-toggle navbar-brand" data-toggle="dropdown" href="#">
+                        Homepage <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-messages">
+                        <li><a class="navbar-brand" href="{{ route('admin.home.infolists','banners')  }}">Banners</a></li>
+                        <li><a class="navbar-brand" href="{{ route('admin.home.infolists','testimonials')  }}">Testimonials</a></li>
+                        <li><a class="navbar-brand" href="{{ route('admin.home.infolists','clients')  }}">Our clients</a></li>
+                    </ul>
+                </li>
                 <li><a class="navbar-brand" href="{{ URL::to('admin/listusers') }}">Users</a></li>
                 <li><a class="navbar-brand" href="{{ URL::to('admin/team') }}">Teams</a></li>
                 <li><a class="navbar-brand" href="{{ URL::to('admin/facility') }}">Facilities</a></li>
@@ -25,8 +35,9 @@
                         Setup <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-messages">
-                        <li><a class="navbar-brand" href="#">Membership & Commission setup</a></li>
+                        <li><a class="navbar-brand" href="{{ URL::to('admin/paymentgateways/setup') }}">Membership & Commission setup</a></li>
                         <li><a class="navbar-brand" href="{{ URL::to('admin/paymentgateways') }}">Payment Gateway activation</a></li>
+                        <li><a class="navbar-brand" href="{{ URL::to('admin/settings') }}">Settings</a></li>
                     </ul>
                 </li>
             </ul>

@@ -8,6 +8,11 @@
     				<div class="alert alert-info">{{ Session::get('message') }}</div>
                 @endif
             <!-- /.panel-heading -->
+           
+          @if($errors->any())
+            <h4 class="error_validation">{{$errors->first()}}</h4>
+          @endif
+
             <div class="panel-body">
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs nav-justified">

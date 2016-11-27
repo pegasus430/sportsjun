@@ -26,4 +26,18 @@ class ModelRepository
 
         return array_get($collection,$id);
     }
+
+    public static function idList($name){
+        if(\Cache::getStore() instanceof \Illuminate\Cache\TaggableStore) {
+            $cache = \Cache::tags(static::$tags);
+        } else {
+            $cache = Cache::getFacadeRoot();
+        }
+        $model = static::$model;
+
+        return $cache->remember(static::$prefix.'_IN_'.$name,10,function() use($model,$name){
+           return $model::select(['id',$name])->get()->lists($name,'id');
+        });
+
+    }
 }

@@ -3054,3 +3054,56 @@ div#tournament_details_cover img {
     padding: 0;
     color: red;
 }
+
+label.field.prepend-icon.head_tr {
+    font-size: 15px;
+}
+h4.error_validation {
+    font-family: inherit;
+    font-size: 17px;
+    color: red;
+    font-weight: 400;
+}
+
+span.white_space {
+    background-color: red;
+    width: 15px;
+    display: inline-block;
+}
+
+
+.form_rows {
+    border: none!important;
+    color: #499b4e!important;
+    
+}
+
+label.form_label.last_date_span {
+    margin-left: 40px!important;
+    display: block;
+}
+
+.register_form_head {
+    border: none!important;
+    background-color: #84cd93!important;
+   } 
+
+
+ .register_form_title {
+    color: #fff!important;
+    font-weight: 500!important;
+}
+
+
+.register_tournament_title {
+  color: #499b4e;;
+}
+
+.form_titles {
+ color: #499b4e!important;
+}
+
+.payment_header_logo {
+   width:100%;
+   overflow:hidden;
+ }

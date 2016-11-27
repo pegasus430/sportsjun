@@ -21,22 +21,28 @@ class SearchController extends Controller
 
     public function searchGuess()
     {
-        $query = \Request::get('query');
-        $teams = Team::where('name', 'like', $query . '%')->lists('id', 'name');
-        $users = User::regular()->where('name', 'like', $query . '%')->lists('id', 'name');
-        $tournaments = Tournaments::where('name', 'like', $query . '%')->lists('id', 'name');
-        return compact('teams', 'users', 'tournaments');
+        $what = \Request::get('term');
+       # $searches[] = Team::where('name', 'like', $what . '%')->select('name')->get();
+        $searches[] = User::regular()->where('name', 'like', $what . '%')->select('name')->get();
+        $searches[] = Tournaments::where('name', 'like', $what . '%')->select('name')->get();
+   #     $searches[] = Organization::where('name','like',$what.'%')->select('name')->get();
+        $search_data = collect();
+        foreach ($searches as $items)
+            foreach ($items as $item)
+                $search_data->push(['id'=>$item->name,'value'=>$item->name]);
+        return $search_data->unique('value');
     }
 
     public function search()
     {
+        HomeController::shareResource();
         $what = \Request::get('what');
 
         $searches = [];
-        $searches[] = Team::where('name', 'like', $what . '%')->get();
+       # $searches[] = Team::where('name', 'like', $what . '%')->get();
         $searches[] = User::regular()->where('name', 'like', $what . '%')->get();
         $searches[] = Tournaments::where('name', 'like', $what . '%')->get();
-        $searches[] = Organization::where('name','like',$what.'%')->get();
+       # $searches[] = Organization::where('name','like',$what.'%')->get();
         $search_data = collect();
         foreach ($searches as $items)
             foreach ($items as $item)
@@ -56,6 +62,7 @@ class SearchController extends Controller
 
     public function view($type, $id)
     {
+        HomeController::shareResource();
         switch ($type) {
             case 'tournaments':
                 $tournament = Tournaments::find($id);
@@ -63,7 +70,8 @@ class SearchController extends Controller
                     return view('home.search.tournament', compact('tournament'));
                 break;
             case 'users':
-                $user = User::regular()->find($id);
+                $user = User::regular()
+                    ->find($id);
                 if ($user)
                     return view('home.search.user', compact('user'));
                 break;

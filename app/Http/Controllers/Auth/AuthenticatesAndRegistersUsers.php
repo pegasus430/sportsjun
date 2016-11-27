@@ -53,6 +53,9 @@ trait AuthenticatesAndRegistersUsers
 
                 //$request->verification_key = md5($request->email);
                 //dd($request);
+
+               
+
                 $this->create($request->all());
                 //$this->auth->login($this->create($request->all()));
                 //return redirect($this->redirectPath());

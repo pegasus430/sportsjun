@@ -1,12 +1,12 @@
 <!-- Modal -->
 <div class="modal fade" id="home-login-modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-login-dialog">
         <div class="modal-content">
             <div class="modal-header thbg-color">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Login</h4>
-                <span class="modal-title-right-msg">Don't have an account?
+                <h4 class="modal-login-title">Login</h4>
+                <span class="modal-login-title-right-msg">Don't have an account?
                                                         <a href="javascript:void(0);" data-toggle="modal"
                                                            data-target="#home-register-modal">Register here</a>
                                                 </span>
@@ -102,7 +102,8 @@
                     <h1>Organization</h1>
                     <h6>For Organization we need Organization name</h6>
                     <div class="registerWrap">
-                        <form method="POST" action="/register">
+                        <form method="POST" action="/auth/register-organization" enctype="multipart/form-data" >
+                            {{csrf_field()}}
                             <h3>Organization Name</h3>
                             <input name="org_name" class="regPop" placeHolder="Organization Name" type="text">
                             <h3>Organization Type</h3>
@@ -110,8 +111,7 @@
                             <h3>Organization Logo</h3>
                             <input name="org_logo" class="regPop" type="file">
                             <h3>About</h3>
-                            <textarea name="org_about">
-                        </textarea>
+                            <textarea name="org_about"  class="regPop" rows="4"></textarea>
                             <!-- -->
                             <h3>First Name</h3>
                             <input name="name" class="regPop" placeHolder="First Name" type="text">
@@ -120,18 +120,19 @@
                             <h3>Email</h3>
                             <input name="email" class="regPop" placeHolder="Email" type="text">
                             <h3>Password</h3>
-                            <input name="password" class="regPop" placeHolder="Password" type="text">
+                            <input name="password" class="regPop" placeHolder="Password" type="password">
                             <h3>Retype Password</h3>
-                            <input name="password_confirmation" class="regPop" placeHolder="Password" type="text">
+                            <input name="password_confirmation" class="regPop" placeHolder="Password" type="password">
 
                             <h3>Address</h3>
-                            <input name="address" class="regPop" placeHolder="Address" type="text">
+                             <input name="address" class="regPop" placeHolder="Address" type="text">
 
                             <h3>Country</h3>
-
+                                {!! Form::select('country_id',$idNameCountry,null,['class'=>'regPop']) !!}
                             <h3>State</h3>
-
+                                 <select name="state_id"  class="regPop"></select>
                             <h3>City</h3>
+                                <select name="city_id"  class="regPop"></select>
                             <div class="form-group">
                                 <label class="">I agree to the
                                     <a href="/terms-and-conditions.html" target="_blank">terms and conditions</a> of
@@ -177,8 +178,9 @@
                         Umpire profile and find my schedule and as well follow events of great
                         talent on SportsJun.com</h6>
                     <div class="registerWrap">
-                        <form id="home-register-modal-form" class="kode-loginform"
+                        <form id="home-register-modal-form" class="kode-loginform" method="POST" action="/auth/register" enctype="multipart/form-data"
                               onsubmit="SJ.USER.registerValidation(this.id);return false;">
+                            {{csrf_field()}}
                             <h3>First Name</h3>
                             <input name="firstname" class="regPop" placeHolder="Organization Name" type="text">
                             <h3>Last Name</h3>

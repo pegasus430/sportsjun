@@ -26,4 +26,8 @@ class SportQuestionAnswer extends Model {
         return $this->belongsTo('App\Model\SportQuestion', 'sports_questions_id');
     }
 
+    public function options(){
+        return $this->belongsTo(SportQuestionOption::class,'sports_option_id');
+    }
+
 }

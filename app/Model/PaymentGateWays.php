@@ -22,4 +22,10 @@ class PaymentGateWays extends Model
     {
         return $this->belongsTo(Country::class, 'country_id', 'id');
     }
+
+    public function paymentSetups()
+    {
+        return $this->hasMany('App\Model\PaymentSetups', 'gateway_id', 'id');
+    }
+
 }

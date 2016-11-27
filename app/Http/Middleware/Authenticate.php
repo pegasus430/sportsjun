@@ -65,7 +65,16 @@ class Authenticate
                                 'editsportprofile/{userId}',
                                 'schedule/getstates', 'sport/getsports', 'getquestions', 'user/set-sports',
                                 'sport/{sport}',
-                                'sport/updateUserStats'];
+                                'sport/updateUserStats',
+                                'tournaments/registerstep3/{id}/{event_id}',
+                                'tournaments/registrationstep5',
+                                'tournaments/paymentform/{id}',
+                                'tournaments/paymentform',
+                                'tournaments/payment_success',
+                                'tournaments/payment_failure',
+                                'tournaments/registerstep3/{id}',
+                                'tournaments/registerstep3/{id}/{event_id}'
+                                ];
 
                         $followingSports = Helper::getFollowingSportIds($this->auth->user()->id);
                         

@@ -806,3 +806,27 @@ Route::post('tournaments/registrationstep5', [
     'as'   => 'registerstep5',
     'uses' => 'User\TournamentsController@registerstep5',
 ]);
+
+
+
+Route::get('tournaments/paymentform/{id}', [
+    'as'   => 'paymentform',
+    'uses' => 'User\TournamentsController@getPaymentform',
+]);
+
+Route::post('tournaments/paymentform', [
+    'as'   => 'paymentform',
+    'uses' => 'User\TournamentsController@postPaymentform',
+]);
+
+
+Route::post('tournaments/payment_success', [
+    'as'   => 'paymentsuccess',
+    'uses' => 'User\TournamentsController@postPaymentsuccess',
+]);
+
+
+Route::post('tournaments/payment_failure', [
+    'as'   => 'paymentsuccess',
+    'uses' => 'User\TournamentsController@postPaymentfailure',
+]);

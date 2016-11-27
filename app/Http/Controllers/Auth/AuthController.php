@@ -111,7 +111,7 @@ class AuthController extends Controller
     }
 
 
-    public function registerOrganization()
+    public function postRegisterOrganization()
     {
         $data = \Request::all();
         $validator = \Validator::make($data, [
@@ -124,14 +124,14 @@ class AuthController extends Controller
             'email' => 'required|unique:users,email|email|max:255',
             'password' => 'required|min:6|confirmed',
             'address' => 'required',
-            'country' => 'required',
-            'state' => 'required',
-            'city' => 'required',
+            'country_id' => 'required',
+            'state_id' => 'required',
+            'city_id' => 'required',
             'terms_accept' => 'required'
         ]);
-        $logo = Helper::uploadImageSimple($data['logo'],'organization');
 
         if (!$validator->fails()) {
+            $logo = Helper::uploadImageSimple($data['org_logo'],'organization');
             $user = User::create([
                 'firstname' => $data['firstname'],
                 'lastname' => $data['lastname'],
@@ -150,12 +150,12 @@ class AuthController extends Controller
                         'organization_type' => $data['org_type'],
                         'email' => $data['email'],
                         'address' => $data['address'],
-                        'city_id' => $data['city'],
-                        'city' => object_get(CityRepository::getModel($data['city']), 'city_title'),
-                        'state_id' => $data['state'],
-                        'state' => object_get(StateRepository::getModel($data['state']), 'state_title'),
-                        'country_id' => $data['country'],
-                        'country' => object_get(CityRepository::getModel($data['country']), 'country_title'),
+                        'city_id' => $data['city_id'],
+                        'city' => object_get(CityRepository::getModel($data['city_id']), 'city_title'),
+                        'state_id' => $data['state_id'],
+                        'state' => object_get(StateRepository::getModel($data['state_id']), 'state_title'),
+                        'country_id' => $data['country_id'],
+                        'country' => object_get(CityRepository::getModel($data['country_id']), 'country_title'),
                         'logo' => $logo,
                         'about' => $data['about'],
                         'user_id'=>$user->id
@@ -163,7 +163,7 @@ class AuthController extends Controller
                 );
                 if ($organization){
                     #\Event::fire(new OrganizationCreated($organization));
-                    if (\Request::is_ajax()){
+                    if (\Request::is()){
                         return ['message'=>'Organization successfully registered.'];
                     } else{
                         \Session::flash('message','Organization successfully registered.');
@@ -181,11 +181,11 @@ class AuthController extends Controller
             $error = $validator->errors()->first();
         }
 
-        if (\Request::isAjax()) {
+        if (\Request::ajax()) {
             return ['error' => $error];
         };
 
-        Session::flash('error', $error);
+        \Session::flash('error', $error);
         return redirect()->back();
     }
 

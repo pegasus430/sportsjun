@@ -8,13 +8,18 @@ class Infolist extends Model
 {
     static $TESTIMONIALS = 'testimonials';
     static $CLIENTS = 'clients';
+    static $BANNERS = 'banners';
 
 
     protected $fillable = [
         'name',
+        'type',
         'weight',
         'description',
-        'active'
+        'active',
+        'data',
+        'image',
+        'created_by'
     ];
     protected $casts = [
         'data'=>'array',
@@ -27,6 +32,10 @@ class Infolist extends Model
 
     public function scopeTestimonials($query){
         return $query->whereType(self::$TESTIMONIALS);
+    }
+
+    public function scopeBanners($query){
+        return $query->whereType(self::$BANNERS);
     }
 
     public function scopeClients($query){

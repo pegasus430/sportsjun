@@ -1,22 +1,34 @@
 @extends('layouts.app')
 @section('content')
-@include ('tournaments._leftmenu')
 
-<div id="content" class="col-sm-10 tournament_profile">
-	<div class="col-md-6">
-    	<div class="group_no clearfix">
-        	<h4 class="stage_head">No of Registrations {{ $register_data->participant_count }}   Total Amount INR {{$register_data->participant_count*$register_data->enrollment_fee}}</h4>
-        </div>
-       
-	</div> 
-<br>
-<h4>Registration Details</h4>
-<br>
 
+<div class="">
 <div class="sportsjun-wrap">
-<div class="sportsjun-forms sportsjun-container">
+<div class="sportsjun-forms sportsjun-container wrap-2">
 
+<?php 
+$lis = $tournament_data->toArray();
+?>
+<div class="payment_header_logo">
+{!! Helper::Images( $lis['logo']['url'] ,'tournaments')!!}
+</div>
+<br>
+<div class="form-header header-primary register_form_head">
 
+<h4 class='register_form_title'>{{$parent_tournament_details->name}}</h4><br><br>
+<?php
+$open_timestamp = strtotime($tournament_data->reg_opening_date);
+$open_day = date('D', $open_timestamp);
+$newopen = date("d-m-Y", strtotime($tournament_data->reg_opening_date));
+$opentime=date("h:i a", strtotime($tournament_data->reg_opening_time));
+$close_timestamp = strtotime($tournament_data->reg_closing_date);
+$close_day = date('D', $close_timestamp);
+$newclose = date("d-m-Y", strtotime($tournament_data->reg_closing_date));
+$closetime=date("h:i a", strtotime($tournament_data->reg_closing_time));
+?>
+<h4><i class="fa fa-calendar-o"></i>{{$open_day}} {{$newopen}} - {{$open_day}} {{$newclose}} | {{$opentime}} - {{$closetime}}</h4><br>
+<h4><i class="fa fa-map-marker"></i>{{$tournament_data->location}}</h4>
+</div>
 
 
 
@@ -35,7 +47,7 @@ $count=$register_data->participant_count;
 
 @for ($i = 0; $i < $register_data->participant_count; $i++)
 
-<h4>{{$sport_name}}({{$register_data->match_type}})</h4>
+<h4 class="form_titles">{{$sport_name}}({{$register_data->match_type}})</h4>
 
 <div class="row">
 
@@ -45,16 +57,36 @@ $count=$register_data->participant_count;
 <div class="col-sm-5">
       <div class="section">
           <label class="field prepend-icon">
-            {!! Form::text("single[$i][name]", '', array('required','class'=>'gui-input','placeholder' => 'Full Name' )) !!}
+            <label class="field-icon"><i class="fa fa-user"></i></label>
+            <?php
+            if($i==0 && isset($user_data->name)) {
+            	$nm=$user_data->name;
+            } else {
+            	$nm='';
+            } ?>
+
+            {!! Form::text("single[$i][name]",$nm, array('required','class'=>'gui-input','placeholder' => 'Full Name' )) !!}
             
             </label>
+
+
+              
+
+
            </div>
         </div>
 
 <div class="col-sm-6">
   <div class="section">
     <label class="field prepend-icon">
-            {!! Form::text("single[$i][email]", '', array('required','class'=>'gui-input','placeholder' => 'Email' )) !!}
+            <label class="field-icon"><i class="fa fa-envelope"></i></label>
+            <?php
+            if($i==0 && isset($user_data->email)) {
+            	$mail=$user_data->email;
+            } else {
+            	$mail='';
+            } ?>
+            {!! Form::email("single[$i][email]", $mail, array('required','class'=>'gui-input','placeholder' => 'Email' )) !!}
            
             </label>
      
@@ -74,7 +106,14 @@ $count=$register_data->participant_count;
 <div class="col-sm-5">
       <div class="section">
           <label class="field prepend-icon">
-            {!! Form::text("single[$i][club]", '', array('required','class'=>'gui-input','placeholder' => 'Club' )) !!}
+             <label class="field-icon"><i class="fa fa-group"></i></label>
+              <?php
+            if($i==0 && isset($user_data->club)) {
+            	$clb=$user_data->club;
+            } else {
+            	$clb='';
+            } ?>
+            {!! Form::text("single[$i][club]",$clb, array('required','class'=>'gui-input','placeholder' => 'Club' )) !!}
             
             </label>
            </div>
@@ -83,7 +122,14 @@ $count=$register_data->participant_count;
 <div class="col-sm-6">
   <div class="section">
     <label class="field prepend-icon">
-            {!! Form::text("single[$i][number]", '', array('required','class'=>'gui-input','placeholder' => 'Contact Number' )) !!}
+             <label class="field-icon"><i class="fa fa-mobile"></i></label>
+              <?php
+            if($i==0 && isset($user_data->contact_number)) {
+            	$c_no=$user_data->contact_number;
+            } else {
+            	$c_no='';
+            } ?>
+            {!! Form::text("single[$i][number]", $c_no, array('required','class'=>'gui-input','placeholder' => 'Contact Number' )) !!}
            
             </label>
      
@@ -104,7 +150,14 @@ $count=$register_data->participant_count;
 <div class="col-sm-11">
       <div class="section">
           <label class="field prepend-icon">
-            {!! Form::textarea("single[$i][location]", '', array('required','class'=>'gui-input','placeholder' => 'Location' )) !!}
+             <label class="field-icon"><i class="fa fa-map-marker"></i></label>
+             <?php
+            if($i==0 && isset($user_data->location)) {
+            	$loc=$user_data->location;
+            } else {
+            	$loc='';
+            } ?>
+            {!! Form::textarea("single[$i][location]", $loc, array('required','class'=>'gui-input','placeholder' => 'Location' )) !!}
             
             </label>
            </div>
@@ -120,7 +173,7 @@ $count=$register_data->participant_count;
 
 @elseif ($register_data->match_type === 'doubles')
 
-<h4>{{$sport_name}}({{$register_data->match_type}})</h4>
+<h4 class="form_titles">{{$sport_name}}({{$register_data->match_type}})</h4>
 
 <div class="row">
 
@@ -138,6 +191,7 @@ $count=$register_data->participant_count;
              </label>   
             @else
               <label class="field prepend-icon">
+               <label class="field-icon"><i class="fa fa-group"></i></label>
               {!! Form::text("team_name", '', array('required','class'=>'gui-input','placeholder' => 'Team Name' )) !!}
               </label>
             @endif
@@ -170,7 +224,15 @@ $count=$register_data->participant_count;
 <div class="col-sm-5">
       <div class="section">
           <label class="field prepend-icon">
-            {!! Form::text("doubles[$i][name]", '', array('required','class'=>'gui-input','placeholder' => 'Player'.$j )) !!}
+           <label class="field-icon"><i class="fa fa-user"></i></label>
+            <?php
+            if($i==0 && isset($user_data->name)) {
+            	$nm=$user_data->name;
+            } else {
+            	$nm='';
+            } ?>
+
+            {!! Form::text("doubles[$i][name]", $nm, array('required','class'=>'gui-input','placeholder' => 'Player'.$j )) !!}
             
             </label>
            </div>
@@ -179,7 +241,14 @@ $count=$register_data->participant_count;
 <div class="col-sm-6">
   <div class="section">
     <label class="field prepend-icon">
-            {!! Form::text("doubles[$i][email]", '', array('required','class'=>'gui-input','placeholder' => 'Email' )) !!}
+    <label class="field-icon"><i class="fa fa-envelope"></i></label>
+     <?php
+            if($i==0 && isset($user_data->email)) {
+            	$mail=$user_data->email;
+            } else {
+            	$mail='';
+            } ?>
+            {!! Form::email("doubles[$i][email]",$mail, array('required','class'=>'gui-input','placeholder' => 'Email' )) !!}
            
             </label>
      
@@ -199,7 +268,14 @@ $count=$register_data->participant_count;
 <div class="col-sm-5">
       <div class="section">
           <label class="field prepend-icon">
-            {!! Form::text("doubles[$i][club]", '', array('required','class'=>'gui-input','placeholder' => 'Club' )) !!}
+          <label class="field-icon"><i class="fa fa-group"></i></label>
+          <?php
+            if($i==0 && isset($user_data->club)) {
+            	$clb=$user_data->club;
+            } else {
+            	$clb='';
+            } ?>
+            {!! Form::text("doubles[$i][club]", $clb, array('required','class'=>'gui-input','placeholder' => 'Club' )) !!}
             
             </label>
            </div>
@@ -208,7 +284,14 @@ $count=$register_data->participant_count;
 <div class="col-sm-6">
   <div class="section">
     <label class="field prepend-icon">
-            {!! Form::text("doubles[$i][number]", '', array('required','class'=>'gui-input','placeholder' => 'Contact Number' )) !!}
+    <label class="field-icon"><i class="fa fa-mobile"></i></label>
+     <?php
+            if($i==0 && isset($user_data->contact_number)) {
+            	$c_no=$user_data->contact_number;
+            } else {
+            	$c_no='';
+            } ?>
+            {!! Form::text("doubles[$i][number]", $c_no, array('required','class'=>'gui-input','placeholder' => 'Contact Number' )) !!}
            
             </label>
      
@@ -229,7 +312,14 @@ $count=$register_data->participant_count;
 <div class="col-sm-11">
       <div class="section">
           <label class="field prepend-icon">
-            {!! Form::textarea("doubles[$i][location]", '', array('required','class'=>'gui-input','placeholder' => 'Location' )) !!}
+          <label class="field-icon"><i class="fa fa-map-marker"></i></label>
+           <?php
+            if($i==0 && isset($user_data->location)) {
+            	$loc=$user_data->location;
+            } else {
+            	$loc='';
+            } ?>
+            {!! Form::textarea("doubles[$i][location]", $loc, array('required','class'=>'gui-input','placeholder' => 'Location' )) !!}
             
             </label>
            </div>
@@ -249,22 +339,36 @@ $count=$register_data->participant_count;
 @else
 
 
-<h4>{{$sport_name}}({{$register_data->match_type}})</h4>
+<h4 class="form_titles">{{$sport_name}}({{$register_data->match_type}})</h4>
 <div class="row">
+
+
+
+
 <div class="col-sm-5">
     <div class="section">
     
-    <label class="field select">
-                  <?php $options=array(0=>0,1=>1,2=>2,3=>3,4=>4,5=>5,6=>6,7=>7,8=>8,9=>9);    ?>
-            {!! Form::select("data[count]",$options, null,array('class'=>'gui-input')) !!}
-            <i class="arrow double"></i>   
-    </label>
+    
+            @if (count($teams_array) > 0)
+            <label class="field select">
+            
+            {!! Form::select("team_id",$teams_array, null,array('class'=>'gui-input')) !!}
+             <i class="arrow double"></i>
+             </label>   
+            @else
+              <label class="field prepend-icon">
+              <label class="field-icon"><i class="fa fa-group"></i></label>
+           
+              {!! Form::text("team_name", '', array('required','class'=>'gui-input','placeholder' => 'Team Name' )) !!}
+              </label>
+            @endif
+           
+    
 
          
     
     </div>
 </div>
-
 
 <div class="col-sm-6">
   
@@ -283,7 +387,14 @@ $count=$register_data->participant_count;
 <div class="col-sm-5">
       <div class="section">
           <label class="field prepend-icon">
-            {!! Form::text("data[name]", '', array('required','class'=>'gui-input','placeholder' => 'owner Nmae' )) !!}
+          <label class="field-icon"><i class="fa fa-user"></i></label>
+           <?php
+            if(isset($user_data->name)) {
+            	$nm=$user_data->contact_number;
+            } else {
+            	$nm='';
+            } ?>
+            {!! Form::text("team_owner[name]", $nm, array('required','class'=>'gui-input','placeholder' => 'Full Name' )) !!}
             
             </label>
            </div>
@@ -292,7 +403,14 @@ $count=$register_data->participant_count;
 <div class="col-sm-6">
   <div class="section">
     <label class="field prepend-icon">
-            {!! Form::text("data[email]", '', array('required','class'=>'gui-input','placeholder' => 'Owner Email' )) !!}
+    <label class="field-icon"><i class="fa fa-envelope"></i></label>
+           <?php
+            if(isset($user_data->email)) {
+            	$mail=$user_data->email;
+            } else {
+            	$mail='';
+            } ?>
+            {!! Form::email("team_owner[email]", $mail, array('required','class'=>'gui-input','placeholder' => 'Email' )) !!}
            
             </label>
      
@@ -312,7 +430,14 @@ $count=$register_data->participant_count;
 <div class="col-sm-5">
       <div class="section">
           <label class="field prepend-icon">
-            {!! Form::text("data[club]", '', array('required','class'=>'gui-input','placeholder' => 'Club' )) !!}
+          <label class="field-icon"><i class="fa fa-group"></i></label>
+           <?php
+            if(isset($user_data->club)) {
+            	$clb=$user_data->club;
+            } else {
+            	$clb='';
+            } ?>
+            {!! Form::text("team_owner[club]", $clb, array('required','class'=>'gui-input','placeholder' => 'Club' )) !!}
             
             </label>
            </div>
@@ -321,7 +446,14 @@ $count=$register_data->participant_count;
 <div class="col-sm-6">
   <div class="section">
     <label class="field prepend-icon">
-            {!! Form::text("data[number]", '', array('required','class'=>'gui-input','placeholder' => 'Contact Number' )) !!}
+    <label class="field-icon"><i class="fa fa-mobile"></i></label>
+           <?php
+            if(isset($user_data->contact_number)) {
+            	$c_no=$user_data->contact_number;
+            } else {
+            	$c_no='';
+            } ?>
+            {!! Form::text("team_owner[number]", $c_no, array('required','class'=>'gui-input','placeholder' => 'Contact Number' )) !!}
            
             </label>
      
@@ -342,7 +474,14 @@ $count=$register_data->participant_count;
 <div class="col-sm-11">
       <div class="section">
           <label class="field prepend-icon">
-            {!! Form::textarea("data[location]", '', array('required','class'=>'gui-input','placeholder' => 'Location' )) !!}
+          <label class="field-icon"><i class="fa fa-map-marker"></i></label>
+           <?php
+            if(isset($user_data->location)) {
+            	$loc=$user_data->location;
+            } else {
+            	$loc='';
+            } ?>
+            {!! Form::textarea("team_owner[location]", $loc, array('required','class'=>'gui-input','placeholder' => 'Location' )) !!}
             
             </label>
            </div>
