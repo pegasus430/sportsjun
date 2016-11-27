@@ -728,6 +728,13 @@ Route::get('user/viewmorenotifications',
 Route::resource('user/inviteplayer', 'User\InvitePlayerController');
 Route::resource('user', 'User\UserController');
 
+Route::post('/add_referee', 'User\InvitePlayerController@add_referee');
+Route::post('/invite_referee', 'User\InvitePlayerController@invite_referee');
+
+
+
+
+
 
 //End Users
 

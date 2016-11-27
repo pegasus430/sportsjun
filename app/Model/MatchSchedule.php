@@ -267,5 +267,9 @@ class MatchSchedule extends Model
         }
     }
 
+   public function referees(){
+        return $this->hasMany('App\Model\RefereeSchedule', 'match_id');    
+    }
+
 
 }
