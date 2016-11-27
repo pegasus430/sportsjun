@@ -2,16 +2,12 @@
 
 @section('content')
     <div class="profileWrapp">
-
         <div class="container">
             <h1>MY PROFILE</h1>
-
             <div class="profileDetaiWrap">
-
                 <div class="profile_flex">
 
                     <div class="followingBox">
-
                         <h2>Following</h2>
                         <h3>0289</h3>
 

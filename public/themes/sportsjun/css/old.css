@@ -1302,3 +1302,40 @@ section {
 .linkedin-bg1{
     background-color:#5182aa;
 }
+
+
+
+#pricing_modal{
+    text-align:center;
+}
+#pricing_modal .modal-dialog{
+    width:600px;
+}
+
+#pricing_modal P {
+    letter-spacing: 0.2px;
+    margin-bottom: 10px;
+    line-height: 1.8;
+}
+
+#pricing_modal strong{
+    font-size: 1.2em;
+}
+
+.sj-modal-title {
+    display: inline-block !important;
+    font-family: 'Oswald', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    text-transform: uppercase;
+    color: #ffffff;
+    font-size:20px;
+}
+
+#home-email-verify-modal .modal-dialog,
+#home-forgot-password-modal .modal-dialog{
+    width: 400px;
+}
+.kode-submit input{
+    width:100%;
+}
