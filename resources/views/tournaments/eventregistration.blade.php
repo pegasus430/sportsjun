@@ -93,7 +93,7 @@ $closetime=date("h:i a", strtotime($tournament_data->reg_closing_time));
 <?php $i=0;
 $options=array();?>
 @foreach ($all_events as $events)
-<div class="row">
+<div class="row inner_events">
 
 
 
@@ -141,6 +141,8 @@ $options=array();?>
 </div>
 
 </div><!--end row -->
+<br>
+<br>
 <?php $i++;?>
 @endforeach
 

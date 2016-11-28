@@ -157,7 +157,7 @@ $count=$register_data->participant_count;
             } else {
             	$loc='';
             } ?>
-            {!! Form::textarea("single[$i][location]", $loc, array('required','class'=>'gui-input','placeholder' => 'Location' )) !!}
+            {!! Form::textarea("single[$i][location]", $loc, array('required','class'=>'gui-input','placeholder' => 'Location', 'rows' => 2, 'cols' => 40)) !!}
             
             </label>
            </div>
@@ -319,7 +319,7 @@ $count=$register_data->participant_count;
             } else {
             	$loc='';
             } ?>
-            {!! Form::textarea("doubles[$i][location]", $loc, array('required','class'=>'gui-input','placeholder' => 'Location' )) !!}
+            {!! Form::textarea("doubles[$i][location]", $loc, array('required','class'=>'gui-input','placeholder' => 'Location','rows' => 2, 'cols' => 40 )) !!}
             
             </label>
            </div>
@@ -481,7 +481,7 @@ $count=$register_data->participant_count;
             } else {
             	$loc='';
             } ?>
-            {!! Form::textarea("team_owner[location]", $loc, array('required','class'=>'gui-input','placeholder' => 'Location' )) !!}
+            {!! Form::textarea("team_owner[location]", $loc, array('required','class'=>'gui-input','placeholder' => 'Location','rows' => 2, 'cols' => 40 )) !!}
             
             </label>
            </div>

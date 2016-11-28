@@ -155,7 +155,7 @@
 
 
 
-{!! Form::submit('Register Now', array('class' => 'button btn-primary')) !!}
+{!! Form::submit('Proceed to Pay', array('class' => 'button btn-primary')) !!}
 
 
 {!! Form::close() !!}
