@@ -3107,3 +3107,7 @@ label.form_label.last_date_span {
    width:100%;
    overflow:hidden;
  }
+
+ .validation_msg {
+  color: red;
+ }

@@ -253,5 +253,55 @@ $( ".btn-tournamentedit" ).click(function() {
 });
 
 
+
+
+
+
+$(".btn-createedit").click(function(){
+if($( "#enrollment_type option:selected" ).text() == "ONLINE PAYMENT") {
+
+  $('.validation_msg').hide();
+  if (!$('input[name=vendor_bank_account_id]:checked').val() ) {          
+     
+     if($('#add_bank_account_form:visible').length == 0){
+        $('.bank_account_validation').show(); 
+        return false;    
+      } else{
+
+                if(document.getElementsByName("account_holder_name")[0].value==''){
+                      $('#account_name_validator').show(); 
+                      return false;    
+                }
+                if(document.getElementsByName("account_number")[0].value==''){
+                      $('#account_number_validator').show(); 
+                      return false;    
+                } 
+                if(document.getElementsByName("bank_name")[0].value==''){
+                      $('#account_bankname_validator').show(); 
+                      return false;    
+                }
+                if(document.getElementsByName("branch")[0].value==''){
+                      $('#account_branch_validator').show(); 
+                      return false;    
+                }
+                
+                if(document.getElementsByName("ifsc")[0].value==''){
+                      $('#account_ifsc_validator').show(); 
+                      return false;    
+                }
+
+                
+          }
+            
+    } else {
+      
+  } 
+
+}
+
+
+})
+
+
 	
 </script>

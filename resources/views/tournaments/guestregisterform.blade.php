@@ -87,7 +87,7 @@
 <div class="col-sm-11">
       <div class="section">
           <label class="field prepend-icon">
-            {!! Form::textarea("guest[location]", '', array('required','class'=>'gui-input','placeholder' => 'Location' )) !!}
+            {!! Form::textarea("guest[location]", '', array('required','class'=>'gui-input','placeholder' => 'Location' ,'rows' => 2, 'cols' => 40)) !!}
             
             </label>
            </div>

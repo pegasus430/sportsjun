@@ -13,6 +13,171 @@
 <h4>We have received a payment of INR. {{$data['amount']}} .</h4>
 
 
+
+<div class="form-body">
+
+
+
+<div class="row">
+
+
+
+
+<div class="col-sm-3">
+      <div class="section">
+        <label class="field prepend-icon head_tr">
+            Tournament Events
+            </label>
+          
+
+           </div>
+        </div>
+
+<div class="col-sm-2">
+<label class="field prepend-icon">
+  <div class="section">
+    <label class="field prepend-icon head_tr">Payment name</label>
+     
+    </div>
+ </div>
+<!-- end section -->  
+
+<div class="col-sm-3">
+    <div class="section">
+    
+    
+
+
+    <label class="field prepend-icon head_tr">
+             Payment email
+            </label>
+
+         
+    
+    </div>
+</div>
+
+
+<div class="col-sm-2">
+    <div class="section">
+    
+    
+
+
+    <label class="field prepend-icon head_tr">
+             Payment phone
+            </label>
+
+         
+    
+    </div>
+</div>
+
+
+
+
+
+
+<div class="col-sm-2">
+      <div class="section">
+        <label class="field prepend-icon head_tr">
+            Amount
+            </label>
+          
+
+           </div>
+        </div>
+
+</div><!--end row -->
+
+
+
+
+
+
+
+
+
+
+
+<?php $i=0;
+$options=array();?>
+@foreach ($details as $details)
+<div class="row inner_events">
+
+
+
+
+<div class="col-sm-3">
+      <div class="section">
+          <label class="field prepend-icon">
+           
+            
+            <label for="Pointstolosingteam" class="field-icon">{{$details['tournament']}}</label>  
+            </label>
+          
+
+           </div>
+        </div>
+
+<div class="col-sm-2">
+  <div class="section">
+    <label class="form_label">{{$details['name']}}</label>
+     
+    </div>
+ </div>
+<!-- end section -->  
+
+<div class="col-sm-3">
+    <div class="section">
+    
+    
+
+
+   
+                        
+             <label for="Pointstolosingteam" class="field-icon">{{$details['email']}}</label>
+            
+
+         
+    
+    </div>
+</div>
+<div class="col-sm-2">
+  <div class="section">
+    <label class="form_label">{{$details['phone']}}</label>
+     
+    </div>
+ </div>
+ <div class="col-sm-2">
+  <div class="section">
+    <label class="form_label"></label>
+     
+    </div>
+ </div>
+ <div class="col-sm-2">
+  <div class="section">
+    <label class="form_label">{{$details['price']}}</label>
+     
+    </div>
+ </div>
+
+</div><!--end row -->
+<br>
+<br>
+<?php $i++;?>
+@endforeach
+
+
+ 
+</div>
+
+
+
+
+
+
+
 </div>
 
 </div>
