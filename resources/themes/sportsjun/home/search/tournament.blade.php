@@ -6,8 +6,9 @@
     $end_date = Carbon\Carbon::createFromFormat("Y-m-d", $tournament->start_date);
     ?>
     <div class="tourn_topBanar_wrapp">
-        <div class="banarImg"><img
-                    src="{{Helper::ImageFit(Helper::getImagePath($tournament->logoImageReal ,'tournaments'),1382,364,'center')}}">
+        <div class="banarImg">
+            <img
+                    src="{{Helper::ImageFit($tournament->logoImageReal,1382,364,'center')}}">
         </div>
         <div class="registerTopWrap">
             <div class="col-lg-6 col-md-6 topLeftTT">
