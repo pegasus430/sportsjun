@@ -187,7 +187,7 @@ $options=array();?>
             <div class="section">
                 
                     <label for="comment" class="field prepend-icon" id='terms_agree_label'>
-                    <input type="checkbox" class="'gui-checkbox" name="agree" id="terms_agree" value="yes">Agree terms and conditions of the tournament<br>
+                    <input type="checkbox" class="'gui-checkbox" name="agree" id="terms_agree" value="yes">{{$terms_and_conditions}}<br>
                    <p class="help-block" id="agree_conditions-val">Please agree our Terms and Conditions</p> 
                     
                 </label>

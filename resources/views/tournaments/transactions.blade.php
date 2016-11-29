@@ -4,17 +4,10 @@
 <div class="col-lg-8 col-md-10 col-sm-12 col-md-offset-1 col-lg-offset-2 tournament_profile teamslist-pg" style="padding-top: 3px !important;">
  <div class="panel panel-default">
    <div class="panel-body">
+     
 
 
-<div class="form-header header-primary register_form_head"><h4 class='register_form_title successpage'>Payment Result</h4></div>
-
-<h3>Thank You. Your order status is {{$data['status']}}.</h3>
-<h4>Your Transaction ID for this transaction is {{$data['txnid']}}</h4>
-<h4>We have received a payment of INR. {{$data['amount']}} .</h4>
-
-
-
-<div class="form-body">
+     <div class="form-body">
 
 
 
@@ -91,8 +84,8 @@
 </div><!--end row -->
 
 
-<br><br>
 
+<br><br>
 
 
 
@@ -103,15 +96,19 @@
 <?php $i=0;
 $options=array();?>
 @foreach ($details as $details)
-<div class="row inner_events successpage">
+<div class="row inner_events">
 
 
 
 
 <div class="col-sm-3">
       <div class="section">
-           <label class="form_label">{{$details['tournament']}}</label>  
+          <label class="field prepend-icon">
            
+            
+            
+            <label class="form_label">{{$details['tournament']}}</label>  
+            </label>
           
 
            </div>
@@ -133,7 +130,7 @@ $options=array();?>
 
    
                         
-              <label class="form_label"><i class="fa fa-envelope"></i> {{$details['email']}}</label>
+             <label class="form_label"><i class="fa fa-envelope"></i> {{$details['email']}}</label>
             
 
          
@@ -146,7 +143,12 @@ $options=array();?>
      
     </div>
  </div>
-
+ <div class="col-sm-2">
+  <div class="section">
+    <label class="form_label"></label>
+     
+    </div>
+ </div>
  <div class="col-sm-2">
   <div class="section">
     <label class="form_label"><i class="fa fa-inr"></i> {{$details['price']}}</label>
@@ -165,14 +167,9 @@ $options=array();?>
 </div>
 
 
+   </div>
+  </div>
+ </div>
 
 
-
-
-
-</div>
-
-</div>
-</div>
-</div>
 @endsection
