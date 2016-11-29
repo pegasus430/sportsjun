@@ -3,10 +3,13 @@ use \App\Model\Sport;
 
 ?>
 <div class="groupstageWrapp">
-    <h1>GROUP STAGE</h1>
     <h2>GROUP POINT TABLE</h2>
+    <?php
+        $groups_count = $tournament->groups->count();
+        $class_name = $groups_count>1 ? 'col-lg-6 col-md-6':'col-lg-12 col-md-12'
+    ?>
     @foreach($tournament->groups as $group)
-        <div class="col-lg-6 col-md-6">
+        <div class="{{$class_name}} col-sm-12">
             <div class="groupbox_AB">
                 <h3>{{ $group->name }}</h3>
                 <table width="100%" border="1">
@@ -35,8 +38,9 @@ use \App\Model\Sport;
                         @endif
                         <td>PTS</td>
                         @if ( $tournament['sports_id'] == Sport::$CRICKET )
-                            <th class="text-center">Net Run Rate</th>
+                            <td>Net Run Rate</td>
                         @endif
+                        <td> Final Points </td>
                     </tr>
                     @if ($group->group_teams)
                         <?php $index = 1; ?>
@@ -60,6 +64,7 @@ use \App\Model\Sport;
                                 @if ( $tournament['sports_id'] == Sport::$CRICKET )
                                     <td>{{ $team->nrr }}</td>
                                 @endif
+                                <td>{{ $team->final_points }}</td>
                             </tr>
                             <?php $index++;?>
                         @endforeach

@@ -40,7 +40,7 @@
             'Number of Teams in a Group' => $tournament->groups_teams
     ]
     ?>
-    <ul class="nav nav-tabs">
+    <ul class="nav nav-tabs search-tournament-tabs">
         <li class="active"><a data-toggle="tab" href="#tournament_info">Details</a></li>
         <li><a data-toggle="tab" href="#tournament_group_stage">Group Stage</a></li>
         <li><a data-toggle="tab" href="#tournament_group_matches">Matches</a></li>

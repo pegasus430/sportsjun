@@ -1,25 +1,26 @@
-body{
+body {
     font-family: 'Open Sans', sans-serif;
     font-size: 14px;
     font-weight: normal;
 }
 
-.searchWrapp{
-    overflow:hidden;
+.searchWrapp {
+    overflow: hidden;
 }
 
 .s-result-item {
     display: block;
     margin: 10px 0;
-    font-size:1.5em;
+    font-size: 1.5em;
 }
 
-.s-r-i-title{
+.s-r-i-title {
 
 }
-.s-r-i-type{
-    display:block;
-    font-size:0.8em;
+
+.s-r-i-type {
+    display: block;
+    font-size: 0.8em;
 }
 
 .modal-login-title {
@@ -93,4 +94,20 @@ body{
     color: #65c178;
     font: 15px SFUIDisplay-Bold;
     padding: 15px 0;
+}
+.search-tournament-tabs{
+    witdh:100%;
+    background: #65c178;
+    padding: 20px 20px 0;
+}
+
+.search-tournament-tabs li a {
+    font: 18px Montserrat-Bold;
+    color: #FFF;
+
+}
+
+.search-tournament-tabs li.active a{
+    background: white;
+    color: #285331;
 }

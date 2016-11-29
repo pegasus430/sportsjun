@@ -1339,3 +1339,41 @@ section {
 .kode-submit input{
     width:100%;
 }
+
+
+.kode-loginform p > span.error,.kode-loginform > span.error {
+    font-weight: normal;
+    font-size: 11px;
+    margin: 4px 0 0 0;
+    display: block;
+    color: #F44336;
+}
+
+.kode-loginform p input.error,.kode-loginform input.error {
+    border-color:#F44336 !important;
+}
+
+.kode-loginform p input.error::-webkit-input-placeholder {
+    color: #F44336 !important;
+}
+.kode-loginform p input.error:-moz-placeholder {
+    color: #F44336 !important;
+}
+.kode-loginform p input.error::-moz-placeholder {
+    color: #F44336 !important;
+}
+.kode-loginform p input.error:-ms-input-placeholder {
+    color: #F44336 !important;
+}
+.kode-loginform input.error::-webkit-input-placeholder {
+    color: #F44336 !important;
+}
+.kode-loginform input.error:-moz-placeholder {
+    color: #F44336 !important;
+}
+.kode-loginform input.error::-moz-placeholder {
+    color: #F44336 !important;
+}
+.kode-loginform input.error:-ms-input-placeholder {
+    color: #F44336 !important;
+}

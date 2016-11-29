@@ -69,7 +69,8 @@ if (!isset($idNameCountry))
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header thbg-color">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">×</span></button>
                 <h4 class="modal-title sj-modal-title">Register</h4>
             </div>
             <div class="modal-body popNewWrpa">
@@ -102,16 +103,19 @@ if (!isset($idNameCountry))
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header thbg-color">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">×</span></button>
                 <h4 class="modal-title sj-modal-title">Register Organization</h4>
             </div>
             <div class="modal-body popNewWrpa">
                 <div class="col-lg-12 orgUserBox naBorder">
                     <img src="/themes/sportsjun/images/Organization_ico.png">
                     <h1>Organization</h1>
-                    <h6>For Organization we need Organization name</h6>
+                    <!--<h6></h6>-->
                     <div class="registerWrap">
-                        <form method="POST" action="/auth/register-organization" enctype="multipart/form-data">
+                        <form method="POST" action="/auth/register-organization" enctype="multipart/form-data"
+                              onsubmit="SJ.USER.ajaxSubmitModalRegister(this);return false;"
+                        >
                             {{csrf_field()}}
                             <h3>Organization Name</h3>
                             <input name="org_name" class="regPop" placeHolder="Organization Name" type="text">
@@ -137,11 +141,19 @@ if (!isset($idNameCountry))
                             <input name="address" class="regPop" placeHolder="Address" type="text">
 
                             <h3>Country</h3>
-                            {!! Form::select('country_id',$idNameCountry,null,['class'=>'regPop']) !!}
+                            {!! Form::select('country_id',$idNameCountry,null,['class'=>'regPop','onChange'=>'loadState(this)']) !!}
                             <h3>State</h3>
-                            <select name="state_id" class="regPop"></select>
+                            <select name="state_id" class="regPop" onchange="loadCity(this);"></select>
                             <h3>City</h3>
                             <select name="city_id" class="regPop"></select>
+                            <input name="password_confirmation" class="regPop" placeHolder="Password" type="text">
+                            <span class="capcha"> {!!Captcha::img('flat')!!}</span> <a href="javascript:void(0)"
+                                                                                       onclick="SJ.USER.refreshCaptcha('home-register-modal-form');"
+                                                                                       class="signup_capthca"><img
+                                        src="{{ asset('/images/refresh.png') }}"
+                                        alt="Refresh Captcha Image"/></a><br/>
+                            <input type="text" name="captcha" class="captcha-input regPop"
+                                   placeholder="Enter the above captcha">
                             <div class="form-group">
                                 <label class="">I agree to the
                                     <a href="/terms-and-conditions.html" target="_blank">terms and conditions</a> of
@@ -173,7 +185,8 @@ if (!isset($idNameCountry))
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header thbg-color">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">×</span></button>
                 <h4 class="modal-title sj-modal-title">Register User</h4>
             </div>
             <div class="modal-body popNewWrpa">
@@ -182,20 +195,18 @@ if (!isset($idNameCountry))
 
                     <img src="/themes/sportsjun/images/user_iocn.png" width="129" height="92">
                     <h1>User</h1>
-                    <h6>I am a Player, Coach, Umpire, Parent, Follower and would like to maintain my Sports, Coach,
-                        Umpire profile and find my schedule and as well follow events of great
-                        talent on SportsJun.com</h6>
+                    <!--<h6></h6>-->
                     <div class="registerWrap">
                         <form id="home-register-modal-form" class="kode-loginform" method="POST" action="/auth/register"
                               enctype="multipart/form-data"
-                              onsubmit="SJ.USER.registerValidation(this.id);return false;">
+                              onsubmit="SJ.USER.ajaxSubmitModalRegister(this);return false;">
                             {{csrf_field()}}
                             <h3>First Name</h3>
-                            <input name="firstname" class="regPop" placeHolder="Organization Name" type="text">
+                            <input name="firstname" class="regPop" placeHolder="First Name" type="text">
                             <h3>Last Name</h3>
                             <input name="lastname" class="regPop" placeHolder="Last Name" type="text">
                             <h3>Email</h3>
-                            <input name="enail" class="regPop" placeHolder="Email" type="text">
+                            <input name="email" class="regPop" placeHolder="Email" type="text">
                             <h3>Password</h3>
                             <input name="password" class="regPop" placeHolder="Password" type="text">
                             <h3>Retype Password</h3>
@@ -241,12 +252,14 @@ if (!isset($idNameCountry))
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header thbg-color">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title sj-modal-title">Lost Your Password</h4>
             </div>
             <div class="modal-body">
-                <form id="home-forgot-password-modal-form" class="kode-loginform" onsubmit="SJ.USER.forgotPasswordValidation(this.id);return false;">
-                    <p><span>Email address</span> <input type="text" placeholder="Enter your email" name="email" /></p>
+                <form id="home-forgot-password-modal-form" class="kode-loginform"
+                      onsubmit="SJ.USER.forgotPasswordValidation(this.id);return false;">
+                    <p><span>Email address</span> <input type="text" placeholder="Enter your email" name="email"/></p>
                     <p class="kode-submit">
                         <input class="thbg-colortwo" type="submit" value="Submit">
                     </p>
@@ -262,13 +275,15 @@ if (!isset($idNameCountry))
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header thbg-color">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title  sj-modal-title">Thank you!</h4>
             </div>
             <div class="modal-body verify-msg">
-                The activation link has been sent to your email <span id="verify-email-id"></span><br />
-                Please check your email and click on the link to activate your account.<br />
-                <a class="kode-modren-btn thbg-colortwo" href="javascript:void(0);" data-toggle="modal" data-target="#home-login-modal">Login</a>
+                The activation link has been sent to your email <span id="verify-email-id"></span><br/>
+                Please check your email and click on the link to activate your account.<br/>
+                <a class="kode-modren-btn thbg-colortwo" href="javascript:void(0);" data-toggle="modal"
+                   data-target="#home-login-modal">Login</a>
             </div>
         </div>
     </div>
@@ -279,13 +294,16 @@ if (!isset($idNameCountry))
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header thbg-color">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">×</span></button>
                 <h4 class="modal-title sj-modal-title">Contact Us</h4>
             </div>
             <div class="modal-body">
-                <p><strong>All sports event organizers (School's, Colleges, corporate's, Organizations, Individual Organizers)</strong></p>
+                <p><strong>All sports event organizers (School's, Colleges, corporate's, Organizations, Individual
+                        Organizers)</strong></p>
                 <p>Contact us now for pricing your sports events (tournaments/leagues)</p>
-                <p><span class="contact-email"><a href="mailto:contact@sportsjun.com"><strong>contact@sportsjun.com</strong></a></span></p>
+                <p><span class="contact-email"><a href="mailto:contact@sportsjun.com"><strong>contact@sportsjun
+                                .com</strong></a></span></p>
             </div>
         </div>
     </div>
