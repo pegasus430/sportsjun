@@ -13,7 +13,7 @@ if (!isset($idNameCountry))
                 <h4 class="modal-login-title">Login</h4>
                 <span class="modal-login-title-right-msg">Don't have an account?
                                                         <a href="javascript:void(0);" data-toggle="modal"
-                                                           data-target="#home-register-modal">Register here</a>
+                                                           data-target="#myModal">Register here</a>
                                                 </span>
             </div>
             <div class="modal-body">
