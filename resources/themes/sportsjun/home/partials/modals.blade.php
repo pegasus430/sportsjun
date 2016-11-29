@@ -197,6 +197,28 @@ if (!isset($idNameCountry))
                     <h1>User</h1>
                     <!--<h6></h6>-->
                     <div class="registerWrap">
+                        <div class="col-md-6 social_but">
+                            <a class="btn btn-block btn-social btn-facebook" href="{{ route('social.login', ['facebook']) }}">
+                                <span class="fa fa-facebook"></span> Facebook
+                            </a>
+                        </div>
+                        <div class="col-md-6 social_but">
+                            <a class="btn btn-block btn-social btn-twitter" href="{{ route('social.login', ['twitter']) }}">
+                                <span class="fa fa-twitter"></span> Twitter
+                            </a>
+                        </div>
+                        <div class="col-md-6 social_but">
+                            <a class="btn btn-block btn-social btn-google" href="{{ route('social.login', ['google']) }}">
+                                <span class="fa fa-google-plus"></span> Google
+                            </a>
+                        </div>
+                        <div class="col-md-6 social_but">
+                            <a class="btn btn-block btn-social btn-linkedin" href="{{ route('social.login', ['linkedin']) }}">
+                                <span class="fa fa-linkedin"></span> LinkedIn
+                            </a>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="tagline" style="margin:40px auto 20px auto;width:95%;"><span>OR</span></div>
                         <form id="home-register-modal-form" class="kode-loginform" method="POST" action="/auth/register"
                               enctype="multipart/form-data"
                               onsubmit="SJ.USER.ajaxSubmitModalRegister(this);return false;">
