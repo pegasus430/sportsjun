@@ -374,7 +374,13 @@ class TournamentApiController extends BaseApiController
         if ($tournament) {
             $groups = $tournament->finalStageTeamsList;
 
-            return $this->ApiResponse($groups);
+            $map = [
+                'id',
+                'name',
+                'logoImage'
+            ];
+
+            return $this->CollectionMapResponse($groups, $map);
         } else {
             return $this->ApiResponse(['error' => 'Tournament not found'], 404);
         }
