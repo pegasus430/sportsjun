@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Helpers\Helper;
+use App\Http\Controllers\User\TournamentsController;
 use App\Model\Album;
 use App\Model\Followers;
 use App\Model\MatchSchedule;
@@ -386,14 +387,35 @@ class TournamentApiController extends BaseApiController
         }
     }
 
+    public function brackets($id)
+    {
+        $isOwner = 0;
+        $tournament = Tournaments::find($id);
+
+        if (!$tournament) {
+            return $this->ApiResponse(['error' => "Tournament not exists"], 500);
+        }
+        if ($tournament->final_stage_teams) {
+            $matchScheduleData = MatchSchedule::where('tournament_id', $id)->whereNull('tournament_group_id')
+                ->orderBy('tournament_round_number')
+                ->get();
+
+            $maxRoundNumber = $matchScheduleData->max('tournament_round_number');
+            $schedule_type = !empty($tournament->schedule_type) ? $tournament->schedule_type : 'team';
+            $bracket = TournamentsController::getBracketTeams($id, $maxRoundNumber, $schedule_type, $isOwner);
+            return $this->ApiResponse($bracket);
+
+        }
+        return $this->ApiResponse([]);
+    }
+
     public function final_stage_matches($id)
     {
         $tournament = Tournaments::with(
             ['finalMatches' => function ($with) {
-                $with->orderby('match_start_date', 'desc')->orderby('match_start_time', 'desc');
+                    $with->orderby('match_start_date', 'desc')->orderby('match_start_time', 'desc');
             }]
         )->find($id);
-
         $map = [
             'Image1' => 'sideALogo',
             'Name1' => 'sideA.name',
@@ -435,12 +457,12 @@ class TournamentApiController extends BaseApiController
         $imageable_type_album = config('constants.PHOTO.GALLERY_TOURNAMENTS');
         $loginUserId = \Auth::user()->id;
         $allowed = Helper::isValidUserForTournamentGallery($id, $loginUserId);
-       # $allowed = true;
+        # $allowed = true;
         if ($allowed) {
             $albums = Album::select('id', 'title', 'user_id')
                 ->where('imageable_type', $imageable_type_album)
                 ->where('imageable_id', $id)
-                ->with(['photos'=> function($with){
+                ->with(['photos' => function ($with) {
                     $imageable_type_name = array(config('constants.PHOTO.GALLERY_TOURNAMENTS'));
                     $with->where('imageable_type', $imageable_type_name);
                 }])
@@ -449,7 +471,7 @@ class TournamentApiController extends BaseApiController
                 'id',
                 'title',
                 'user_id',
-                'photos'=>[
+                'photos' => [
                     'type' => 'list',
                     'source' => 'photos',
                     'fields' => [
@@ -465,12 +487,9 @@ class TournamentApiController extends BaseApiController
             ];
 
 
-
-
-            return $this->CollectionMapResponse($albums,$map);
+            return $this->CollectionMapResponse($albums, $map);
         }
         return $this->ApiResponse(['error' => 'Not allowed'], 500);
-
 
 
     }
