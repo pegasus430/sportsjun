@@ -1423,7 +1423,7 @@ class TournamentsController extends Controller
 				//                            }
 				//                        }
 
-				$bracketTeamArray = $this->getBracketTeams($tournament_id, $maxRoundNumber, $schedule_type, $isOwner);
+				$bracketTeamArray = self::getBracketTeams($tournament_id, $maxRoundNumber, $schedule_type, $isOwner);
 
 				if (!empty($bracketTeamArray))
 				{
@@ -1692,7 +1692,7 @@ class TournamentsController extends Controller
 			->with('matchScheduleData', !empty($matchScheduleData) ? $matchScheduleData : []);
 	}
 
-	function getBracketTeams($tournament_id, $maxRoundNumber, $scheduleType, $isOwner) {
+	static function getBracketTeams($tournament_id, $maxRoundNumber, $scheduleType, $isOwner) {
 		$bracketTeamArray = [];
 		$match_ids=[];
 		$k = 0;
