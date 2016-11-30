@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 
-<div class="col-lg-8 col-md-10 col-sm-12 col-md-offset-1 col-lg-offset-2 tournament_profile teamslist-pg" style="padding-top: 3px !important;">
+<div class="col-lg-8 col-md-10 col-sm-14 col-md-offset-1 col-lg-offset-2 tournament_profile teamslist-pg" style="padding-top: 3px !important;">
  <div class="panel panel-default">
    <div class="panel-body">
      
@@ -51,7 +51,7 @@
 </div>
 
 
-<div class="col-sm-2">
+<!-- <div class="col-sm-2">
     <div class="section">
     
     
@@ -64,8 +64,22 @@
          
     
     </div>
-</div>
+</div> -->
 
+<div class="col-sm-2">
+    <div class="section">
+    
+    
+
+
+    <label class="field prepend-icon head_tr">
+             Date
+            </label>
+
+         
+    
+    </div>
+</div>
 
 
 
@@ -137,12 +151,21 @@ $options=array();?>
     
     </div>
 </div>
-<div class="col-sm-2">
+<!-- <div class="col-sm-2">
   <div class="section">
     <label class="form_label"><i class="fa fa-phone"></i> {{$details['phone']}}</label>
      
     </div>
  </div>
+ -->
+<div class="col-sm-2">
+  <div class="section">
+    <label class="form_label"><i class="fa fa-phone"></i> {{$details['date']}}</label>
+     
+    </div>
+ </div>
+
+
  <div class="col-sm-2">
   <div class="section">
     <label class="form_label"></label>
