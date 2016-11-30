@@ -27,6 +27,7 @@ Route::group(['prefix' => '/api/v1', 'middleware' => 'cors'], function ($router)
         $router->get('/tournaments/{id}/groups', 'TournamentApiController@group_stage');
         $router->get('/tournaments/{id}/groups_matches', 'TournamentApiController@group_stage_matches');
         $router->get('/tournaments/{id}/final', 'TournamentApiController@final_stage');
+        $router->get('/tournaments/{id}/brackets', 'TournamentApiController@brackets');
         $router->get('/tournaments/{id}/final_matches', 'TournamentApiController@final_stage_matches');
         $router->get('/tournaments/{id}/player_standing', 'TournamentApiController@player_standing');
         $router->get('/tournaments/{id}/follow', 'TournamentApiController@follow_tournament');

@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Helpers\Helper;
+use App\Http\Controllers\User\TournamentsController;
+use App\Model\Album;
 use App\Model\Followers;
 use App\Model\MatchSchedule;
+use App\Model\Photo;
 use App\Model\Sport;
 use App\Model\TournamentGroups;
 use App\Model\TournamentGroupTeams;
@@ -333,7 +336,7 @@ class TournamentApiController extends BaseApiController
     public function group_stage_matches($id)
     {
         $groups = TournamentGroups
-            ::with(['match_schedules'=>function($with){
+            ::with(['match_schedules' => function ($with) {
                 $with->orderby('match_start_date', 'desc')->orderby('match_start_time', 'desc');
             }])
             ->where('tournament_id', $id)->get();
@@ -372,20 +375,47 @@ class TournamentApiController extends BaseApiController
         if ($tournament) {
             $groups = $tournament->finalStageTeamsList;
 
-            return $this->ApiResponse($groups);
+            $map = [
+                'id',
+                'name',
+                'logoImage'
+            ];
+
+            return $this->CollectionMapResponse($groups, $map);
         } else {
             return $this->ApiResponse(['error' => 'Tournament not found'], 404);
         }
     }
 
+    public function brackets($id)
+    {
+        $isOwner = 0;
+        $tournament = Tournaments::find($id);
+
+        if (!$tournament) {
+            return $this->ApiResponse(['error' => "Tournament not exists"], 500);
+        }
+        if ($tournament->final_stage_teams) {
+            $matchScheduleData = MatchSchedule::where('tournament_id', $id)->whereNull('tournament_group_id')
+                ->orderBy('tournament_round_number')
+                ->get();
+
+            $maxRoundNumber = $matchScheduleData->max('tournament_round_number');
+            $schedule_type = !empty($tournament->schedule_type) ? $tournament->schedule_type : 'team';
+            $bracket = TournamentsController::getBracketTeams($id, $maxRoundNumber, $schedule_type, $isOwner);
+            return $this->ApiResponse($bracket);
+
+        }
+        return $this->ApiResponse([]);
+    }
+
     public function final_stage_matches($id)
     {
         $tournament = Tournaments::with(
-           ['finalMatches'=>function ($with){
-               $with->orderby('match_start_date', 'desc')->orderby('match_start_time', 'desc');
-           }]
+            ['finalMatches' => function ($with) {
+                    $with->orderby('match_start_date', 'desc')->orderby('match_start_time', 'desc');
+            }]
         )->find($id);
-
         $map = [
             'Image1' => 'sideALogo',
             'Name1' => 'sideA.name',
@@ -419,5 +449,48 @@ class TournamentApiController extends BaseApiController
     {
         $players = $this->tournamentsApi->playerStanding($id, true);
         return $this->ApiResponse($players);
+    }
+
+
+    public function gallery($id)
+    {
+        $imageable_type_album = config('constants.PHOTO.GALLERY_TOURNAMENTS');
+        $loginUserId = \Auth::user()->id;
+        $allowed = Helper::isValidUserForTournamentGallery($id, $loginUserId);
+        # $allowed = true;
+        if ($allowed) {
+            $albums = Album::select('id', 'title', 'user_id')
+                ->where('imageable_type', $imageable_type_album)
+                ->where('imageable_id', $id)
+                ->with(['photos' => function ($with) {
+                    $imageable_type_name = array(config('constants.PHOTO.GALLERY_TOURNAMENTS'));
+                    $with->where('imageable_type', $imageable_type_name);
+                }])
+                ->get();
+            $map = [
+                'id',
+                'title',
+                'user_id',
+                'photos' => [
+                    'type' => 'list',
+                    'source' => 'photos',
+                    'fields' => [
+                        'id',
+                        'user_id',
+                        'album_id',
+                        'imagePath',
+                        'like_count',
+                        'is_album_cover',
+                        'isactive'
+                    ],
+                ]
+            ];
+
+
+            return $this->CollectionMapResponse($albums, $map);
+        }
+        return $this->ApiResponse(['error' => 'Not allowed'], 500);
+
+
     }
 }
