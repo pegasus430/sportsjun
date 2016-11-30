@@ -285,6 +285,13 @@ class Tournaments extends Model
     }
 
 
+
+    public function cartDetails()
+
+    {
+        return $this->hasMany('App\Model\CartDetails', 'event_id', 'id');
+    }
+
     public function getCityAttribute(){
         // return $this->attributes['city'];
         return object_get(CityRepository::getModel($this->city_id),'city_name');

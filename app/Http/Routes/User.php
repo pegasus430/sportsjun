@@ -766,3 +766,60 @@ Route::get('/updatehalftime/{match_id?}/{half_time}', 'User\ScoreCardController@
 Route::post('/rating/set','User\RateController@setUserRate');
 
 
+
+Route::get('tournaments/eventregistration/{id}', [
+    'as'   => 'eventregistration',
+    'uses' => 'User\TournamentsController@eventregistration',
+]);
+
+
+Route::post('tournaments/registrationdata', [
+    'as'   => 'registrationdata',
+    'uses' => 'User\TournamentsController@registrationdata',
+]);
+
+Route::get('tournaments/registerstep2/{id}', [
+    'as'   => 'registerstep2',
+    'uses' => 'User\TournamentsController@registerstep2',
+]);
+
+
+Route::get('tournaments/registerstep3/{id}', [
+    'as'   => 'registerstep3',
+    'uses' => 'User\TournamentsController@registerstep3',
+]);
+
+
+Route::get('tournaments/registerstep3/{id}/{event_id}', [
+    'as'   => 'registerstep4',
+    'uses' => 'User\TournamentsController@registerstep4',
+]);
+
+Route::post('tournaments/registrationstep5', [
+    'as'   => 'registerstep5',
+    'uses' => 'User\TournamentsController@registerstep5',
+]);
+
+
+
+Route::get('tournaments/paymentform/{id}', [
+    'as'   => 'paymentform',
+    'uses' => 'User\TournamentsController@getPaymentform',
+]);
+
+Route::post('tournaments/paymentform', [
+    'as'   => 'paymentform',
+    'uses' => 'User\TournamentsController@postPaymentform',
+]);
+
+
+Route::post('tournaments/payment_success', [
+    'as'   => 'paymentsuccess',
+    'uses' => 'User\TournamentsController@postPaymentsuccess',
+]);
+
+
+Route::post('tournaments/payment_failure', [
+    'as'   => 'paymentsuccess',
+    'uses' => 'User\TournamentsController@postPaymentfailure',
+]);

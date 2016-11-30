@@ -209,7 +209,6 @@ class SearchController extends Controller
         public function searchresults(Request $request)
         {
 
-                // echo "hello"; exit;
 
                 $modelType      = $request['service'];
                 $model          = ucfirst($modelType);

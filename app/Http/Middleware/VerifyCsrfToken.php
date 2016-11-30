@@ -14,5 +14,7 @@ class VerifyCsrfToken extends BaseVerifier
     protected $except = [
         //
     	'/api/*',
+    	'tournaments/payment_failure',
+    	'tournaments/payment_success'
     ];
 }

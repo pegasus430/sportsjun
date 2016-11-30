@@ -1326,3 +1326,18 @@ div#playerOfTheMatchNote {
 	text-transform: uppercase;
 	font-weight: bold;
 }
+
+.tb{
+	padding-right: 20px !important; padding-left: 0px !important;
+}
+
+.btn-ace{
+	background: #df983d;
+}
+h4.error_validation {
+    font-family: inherit;
+    font-size: 17px;
+    color: red;
+    font-weight: 400;
+
+}
