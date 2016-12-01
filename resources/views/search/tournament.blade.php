@@ -10,10 +10,11 @@
 			
 			@if(count($result) > 0)
 			<?php $i = 0;?>
+			
 			@foreach($result as $lis)
 			<?php 
 			    $lis_object=$lis;
-                $lis = $lis->toArray();
+			    $lis = $lis->toArray();
                 $open_dt=$lis_object->reg_opening_date.' '.$lis_object->reg_opening_time;
                 $open_dt_tm=new DateTime($open_dt);
                 $close_dt=$lis_object->reg_closing_date.' '.$lis_object->reg_closing_time;
