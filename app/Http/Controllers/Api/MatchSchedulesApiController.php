@@ -47,7 +47,11 @@ class  MatchSchedulesApiController extends BaseApiController
             'match_status',
             'match_invite_status',
             'a_id',
+            'a_name'=>'sideA.name',
+            'a_logo'=>'sideA.logoImage',
             'b_id',
+            'b_name'=>'sideB.name',
+            'b_logo'=>'sideB.logoImage',
             'player_a_ids',
             'player_b_ids',
             'winner_id',
@@ -87,7 +91,7 @@ class  MatchSchedulesApiController extends BaseApiController
                         'type' => 'model',
                         'source' => 'SideA',
                         'fields' => function ($obj, $base) {
-                            $fields = ['id'];
+                            $fields = ['id','name','logoImage'];
 
                             if ($base->schedule_type == 'team') {
                                 $fields['players'] = [
@@ -101,7 +105,8 @@ class  MatchSchedulesApiController extends BaseApiController
                                             if (isset($users[$id]))
                                                 $result[] = [
                                                     'id'=>$id,
-                                                    'name' => $users[$id]['name']
+                                                    'name' => $users[$id]['name'],
+                                                    'logoImage'=>$users[$id]->logoImage,
                                                 ];
                                         }
                                         return $result;
