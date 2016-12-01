@@ -347,7 +347,7 @@ class TournamentsController extends Controller
 
        // dd($manageTeamArray);
 
-/*---------------------------------------custom code for joined tournaments-------------------------------------*/
+/*----------------------------------custom code for joined tournaments-----------------------------------*/
 
     $user_id = Auth::user()->id;
     $register_data = Carts::with('cartDetails.tournaments')->where('user_id',$user_id)->where('payment_token','!=','')->get();
@@ -367,7 +367,7 @@ class TournamentsController extends Controller
     }
    //'joinTeamArray' => $joinTeamArray,
 
-/*---------------------------------------custom code for joined tournaments-------------------------------------*/
+/*----------------------------------custom code for joined tournaments----------------------------------*/
 
 
 
@@ -3035,7 +3035,7 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
 
 
           $parent_tournamet_id = Tournaments::where('id',$id)->value('tournament_parent_id');
-          $all_events = Tournaments::with('bankAccount')->where('tournament_parent_id',$parent_tournamet_id)->where('enrollment_type','online')->where('country_id',$country_id)->where('is_sold_out',0)->whereDate('reg_opening_date', '<=', date('Y-m-d'))->whereDate('reg_closing_date', '>=', date('Y-m-d'))->get();
+          $all_events = Tournaments::with('bankAccount')->where('tournament_parent_id',$parent_tournamet_id)->where('enrollment_type','online')->where('country_id',$country_id)->where('is_sold_out',0)->whereDate('reg_opening_date', '<=', date('Y-m-d'))->whereDate('reg_closing_date', '>=', date('Y-m-d'))->where('vendor_bank_account_id','!=',0)->get();
           $parent_tournamet_details = TournamentParent::where('id',$parent_tournamet_id)->first();
            if(Auth::user()) {
                $roletype='user';
@@ -3339,13 +3339,14 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
              }
         $request['team_ids'][0]=$_REQUEST['event_id'];
         AllRequests::saverequest($request);
+        
 
      }
 
      CartDetails::where('cart_id',$_REQUEST['cart_id'])->where('event_id',$_REQUEST['event_id'])->update(array('registerd' => 1));
      return redirect('tournaments/registerstep3/'. $_REQUEST['cart_id']);
       
-    } else if($_REQUEST['match_type']=='doubles'){
+    } else if($_REQUEST['match_type']=='doubles') {
 
 
        	   $t_id='';
@@ -3365,18 +3366,32 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
             
            }
 
+        $request=array();
+        $request['flag']='TEAM_TO_TOURNAMENT';
+        $request['player_tournament_id'] =$_REQUEST['event_id'];	 
+        $request['team_ids'][0]= $t_id;
+        //dd($request);
+        $mn=AllRequests::saverequest($request);
+        $result=$mn->getData();
+        if($result->status=='exist'){
+        	return back()->withErrors(['This Registration already exist']);
+        } else if($result->status=='fail'){
+        	return back()->withErrors(['Registration failed']);
+        } else {
+
            //dd($t_id);
 
           // $team_players = DB::table('team_players')->insertGetId(array('team_id' => $t_id, 'user_id' => $user_id, 'role' => 'owner', 'status' => 'accepted'));	
 
             $dou=0; 
+            $reg=0;
        	   foreach($_REQUEST['doubles'] as $doubles_array){
            $last_id='';
-     	   $request=array();
+     	   
 
-           $request['flag']='TEAM_TO_TOURNAMENT';
+           
            $mail_exist=User::where('email',$doubles_array['email'])->value('id');
-           if($mail_exist!=''){
+           if($mail_exist!='') {
             $last_id=$mail_exist;
            } else {
 
@@ -3405,23 +3420,16 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
         $team_players = DB::table('team_players')->insertGetId(array('team_id' => $t_id, 'user_id' => $last_id, 'role' => $role, 'status' => 'accepted'));
         }	
         //echo $t_id; die;
-        $request['player_tournament_id'] =$_REQUEST['event_id'];	 
-        $request['team_ids'][0]= $t_id;
-        //dd($request);
-        $mn=AllRequests::saverequest($request);
-
-        //dd($mn);
-        // $mg=json_decode($mn);
-        // dd($mg['data']);
-
-
-         $dou++;
-         }
+        
+         
+           $dou++;
+        }
+        
                     
          CartDetails::where('cart_id',$_REQUEST['cart_id'])->where('event_id',$_REQUEST['event_id'])->update(array('registerd' => 1));
          return redirect('tournaments/registerstep3/'. $_REQUEST['cart_id']);
 
-
+        }
     } else {
       
        $t_id='';
@@ -3473,14 +3481,18 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
         $request['team_ids'][0]= $t_id;
         //dd($request);
         $mn=AllRequests::saverequest($request);
-
+        $result=$mn->getData();
+        if($result->status=='exist'){
+        	return back()->withErrors(['This Registration already exist']);
+        } else if($result->status=='fail'){
+        	return back()->withErrors(['Registration failed']);
+        } else {
         
-
-        //dd($mn);
+        //echo "<pre>"; print_r($result->status); echo "</pre>"; exit;
 
         CartDetails::where('cart_id',$_REQUEST['cart_id'])->where('event_id',$_REQUEST['event_id'])->update(array('registerd' => 1));
          return redirect('tournaments/registerstep3/'. $_REQUEST['cart_id']);
-
+         }
 
     }
 
