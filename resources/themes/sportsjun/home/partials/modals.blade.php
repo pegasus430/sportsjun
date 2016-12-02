@@ -74,9 +74,9 @@ if (!isset($idNameCountry))
                 <h4 class="modal-title sj-modal-title">Register</h4>
             </div>
             <div class="modal-body popNewWrpa">
-                <p>About Organization and User some text to popular belief, Lorem Ipsum is not simply random text. It
+               <!-- <p>About Organization and User some text to popular belief, Lorem Ipsum is not simply random text. It
                     has roots in a piece of classical
-                    Latin literature from BC, </p>
+                    Latin literature from BC, </p>-->
                 <div class="col-lg-6 col-md-6 orgUserBox">
                     <img src="/themes/sportsjun/images/Organization_ico.png">
                     <h1>Organization</h1>
@@ -113,7 +113,7 @@ if (!isset($idNameCountry))
                     <h1>Organization</h1>
                     <!--<h6></h6>-->
                     <div class="registerWrap">
-                        <form method="POST" action="/auth/register-organization" enctype="multipart/form-data"
+                        <form method="POST" action="/auth/register-organization"  class="kode-loginform" enctype="multipart/form-data"
                               onsubmit="SJ.USER.ajaxSubmitModalRegister(this);return false;"
                         >
                             {{csrf_field()}}
@@ -121,6 +121,8 @@ if (!isset($idNameCountry))
                             <input name="org_name" class="regPop" placeHolder="Organization Name" type="text">
                             <h3>Organization Type</h3>
                             <input name="org_type" class="regPop" placeHolder="Organization Type" type="text">
+                            <h3>Subdomain wanted</h3>
+                            <input name="subdomain" class="regPop" placeholder="ex. organization.sportsjun.com" type="text"/>
                             <h3>Organization Logo</h3>
                             <input name="org_logo" class="regPop" type="file">
                             <h3>About</h3>
@@ -141,11 +143,13 @@ if (!isset($idNameCountry))
                             <input name="address" class="regPop" placeHolder="Address" type="text">
 
                             <h3>Country</h3>
-                            {!! Form::select('country_id',$idNameCountry,null,['class'=>'regPop','onChange'=>'loadState(this)']) !!}
+                            {!! Form::select('country_id',array_merge([null=>'Select country'],$idNameCountry->toArray()),null,['class'=>'regPop','onChange'=>'ajaxLoadOption(this)',
+                            'data-url'=>route('data.states'),'data-target'=>"#reg_state_id",'data-name'=>'state','placeholder'=>'Select country']) !!}
                             <h3>State</h3>
-                            <select name="state_id" class="regPop" onchange="loadCity(this);"></select>
+                            <select id="reg_state_id" name="state_id" class="regPop" onchange="ajaxLoadOption(this);"
+                                    data-url="{{route('data.cities')}}" data-target="#reg_city_id" data-name="city"></select>
                             <h3>City</h3>
-                            <select name="city_id" class="regPop"></select>
+                            <select id="reg_city_id" name="city_id" class="regPop"></select>
                             <input name="password_confirmation" class="regPop" placeHolder="Password" type="text">
                             <span class="capcha"> {!!Captcha::img('flat')!!}</span> <a href="javascript:void(0)"
                                                                                        onclick="SJ.USER.refreshCaptcha('home-register-modal-form');"

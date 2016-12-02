@@ -14,6 +14,6 @@
             </div>
             @endforeach
         </div>
-        <a href="#" class="readAll">READ ALL</a>
+        <!--<a href="#" class="readAll">READ ALL</a>-->
     </div>
 </div>

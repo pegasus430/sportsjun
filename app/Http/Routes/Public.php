@@ -8,6 +8,23 @@ Route::get('public/scorecard/view/{match_id}', [
 			'as' => 'public/scorecard/view', 'uses' => 'Auth\ScoreCardController@createScorecardView'
 	]); */
 
+Route::get('data/cities',[
+    'as'=>'data.cities',
+    'uses'=>'DataController@cities'
+]);
+
+
+Route::get('data/states',[
+    'as'=>'data.states',
+    'uses'=>'DataController@states'
+]);
+
+Route::get('data/countries',[
+    'as'=>'data.countries',
+    'uses'=>'DataController@countries'
+]);
+
+
 Route::get('matchpublic/scorecard/view/{match_id}', [
     'as' => 'matchpublic/scorecard/view',
     'uses' => 'User\ScoreCardController@createScorecardpublicView'
