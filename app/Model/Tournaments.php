@@ -196,7 +196,7 @@ class Tournaments extends Model
     {
         $points = OrganizationGroupTeamPoint::whereTournamentId($tournament_id)->whereOrganizationGroupId($organization_group_id)->first();
         if (empty($points)) {
-            $team_id = DB::table('organization_group_teams')
+            $team_id = \DB::table('organization_group_teams')
                 ->where('organization_group_id', $organization_group_id)
                 ->lists('team_id');
             $teams = null;

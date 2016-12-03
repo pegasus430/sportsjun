@@ -28,6 +28,8 @@ return [
 
     'url' => 'http://localhost',
 
+    'domain' => env('SITE_DOMAIN','sportsjun.com'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
