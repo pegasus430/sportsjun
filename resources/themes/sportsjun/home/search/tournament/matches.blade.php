@@ -9,6 +9,7 @@
             <td>Team 1</td>
             <td>Team 2</td>
             <td>Team Won</td>
+            <td>Scores</td>
         </tr>
         @foreach ($tournament->matches as $match)
             <tr class="playList matchList">
@@ -18,6 +19,7 @@
                 <td>{{ object_get($match->sideA,'name') }}</td>
                 <td>{{ object_get($match->sideB,'name') }}</td>
                 <td>{{ $match->winner }} </td>
+                <td>{{$match->scores}} </td>
             </tr>
         @endforeach
         </tbody>
