@@ -36,7 +36,8 @@ class OrganizationRegisterRequest extends Request {
             'state_id' => 'required',
             'city_id' => 'required',
             'terms_accept' => 'required',
-            'captcha' => 'required|captcha'
+            'captcha' => 'required|captcha',
+            'subdomain'=> 'unique:organization,subdomain|max:50',
         ];
     }
 
