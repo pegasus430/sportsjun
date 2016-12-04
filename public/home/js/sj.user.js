@@ -245,7 +245,7 @@ if (typeof SJ.USER === 'undefined') {
                     url: $(form).attr('action'),
                     data: $(form).serialize(), // serializes the form's elements.
                     success: function (data) {
-                        var email = jForm.find('[name=email');
+                        var email = jForm.find('[name=email]');
                         jForm.find('.error').removeClass('error');
                         jForm.parents('.modal').hide();
                         $('#verify-email-id').html(email.val());
