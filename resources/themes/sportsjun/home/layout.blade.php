@@ -9,20 +9,12 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $page_title or 'Sportsjun - Connecting Sports Community' }}</title>
     <!-- ********** CSS ********** -->
-    <link href="{{ asset('/css/jquery-ui.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
-    <link href="/themes/sportsjun/css/style.css" rel="stylesheet" type="text/css">
-    <link href="/themes/sportsjun/css/font-awesome.css" rel="stylesheet" type="text/css">
-    <link href="/themes/sportsjun/css/bootstrap.css" rel="stylesheet" type="text/css">
-    <link href="/themes/sportsjun/css/stylesheet.css" rel="stylesheet" type="text/css">
+    <link href="{{ elixir('themes/sportsjun/css/bootstrap.css') }}" rel="stylesheet"/>
+    <link href="{{ elixir('themes/sportsjun/css/base.css') }}" rel="stylesheet"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="/themes/sportsjun/css/owl.carousel.css" rel="stylesheet" type="text/css">
-    <link href="/themes/sportsjun/css/custom.css" rel="stylesheet" type="text/css">
-    <link href="/themes/sportsjun/css/backslider.css" rel="stylesheet" type="text/css">
-    <link href="/themes/sportsjun/css/old.css" rel="stylesheet" type="text/css">
-    <link href="/themes/sportsjun/css/style_add.css" rel="stylesheet" type="text/css">
+    <link href="{{ elixir('themes/sportsjun/css/all.css') }}" rel="stylesheet"/>
 
     @yield('head')
-
 
 </head>
 
