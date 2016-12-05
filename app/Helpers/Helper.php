@@ -2415,12 +2415,16 @@ class Helper
     }
 
 
+    public static function displayEmptyDash($number, $type=null){
 
-    public static function displayEmptyDash($number){
             if($number){
                 return $number;
             }
-            else return '-';
+            else {
+
+                if($type || $type==0)  return $type;
+                else       return '-';
+            }
 
     }
 
