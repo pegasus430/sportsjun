@@ -1015,6 +1015,10 @@ class TournamentsController extends Controller
 		$tournament = Tournaments::findOrFail($id);
 		$tournament->start_date = Helper::displayDate($tournament->start_date);
 		$tournament->end_date = Helper::displayDate($tournament->end_date);
+
+
+		$tournament->reg_opening_date = Helper::displayDate($tournament->reg_opening_date);
+		$tournament->reg_closing_date = Helper::displayDate($tournament->reg_closing_date);
 		//get tournament group count
 		$tournamentGroupCount = TournamentGroups::where('tournament_id',$tournament['id'])->count();
 
@@ -3212,10 +3216,11 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
 	}
 
    public function registerstep4($id,$event_id) {
-   
+   //dd(hhh);
    	$register_data = CartDetails::where('cart_id',$id)->where('event_id',$event_id)->first();
    	 if($register_data->registerd==1){
-        	 return redirect('tournaments')->withErrors(['Payment already completed for  cart id '.$id]);
+        	 //return redirect('tournaments')->withErrors(['Payment already completed for  cart id '.$id]);
+   	 	return redirect('tournaments/paymentform/'. $id);
         }
    	$parent_tournament_id = Tournaments::where('id',$event_id)->value('tournament_parent_id');
    	$sports_id = Tournaments::where('id',$event_id)->value('sports_id');
@@ -3285,7 +3290,13 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
  public function registerstep5() {
    //echo "<pre>"; print_r($_REQUEST); echo "</pre>"; exit;
 
-    
+   $register_data = CartDetails::where('cart_id',$_REQUEST['cart_id'])->where('event_id',$_REQUEST['event_id'])->first();
+   	 if($register_data->registerd==1){
+        	return redirect('tournaments/paymentform/'. $_REQUEST['cart_id'])->withErrors(['Registrations already completed for the purchase']);;
+     }
+
+
+
 
 
 
@@ -3322,7 +3333,7 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
            $request['player_tournament_id'] =$mail_exist;
           } else {
 
-          $last_id = DB::table('users')->insertGetId(array('name' => $single_array['name'], 'email' => $single_array['email'],  'location' => $single_array['location'], 'club' => $single_array['club'], 'contact_number' => $single_array['number'], 'verification_key' => md5($single_array['email'])));
+          $last_id = DB::table('users')->insertGetId(array('name' => $single_array['name'], 'email' => $single_array['email'],'club' => $single_array['club'], 'contact_number' => $single_array['number'], 'verification_key' => md5($single_array['email'])));
         	$request['player_tournament_id']=$last_id;
 
         	$verification_key = md5($single_array['email']);
@@ -3395,7 +3406,7 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
             $last_id=$mail_exist;
            } else {
 
-        	  $last_id=DB::table('users')->insertGetId(array('name' => $doubles_array['name'], 'email' => $doubles_array['email'],  'location' => $doubles_array['location'], 'club' => $doubles_array['club'], 'contact_number' => $doubles_array['number'], 'verification_key' => md5($doubles_array['email'])));
+        	  $last_id=DB::table('users')->insertGetId(array('name' => $doubles_array['name'], 'email' => $doubles_array['email'],'club' => $doubles_array['club'], 'contact_number' => $doubles_array['number'], 'verification_key' => md5($doubles_array['email'])));
 
         	  $verification_key = md5($doubles_array['email']);
                 $to_email_id      = $doubles_array['email'];
@@ -3456,7 +3467,7 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
             $last_id=$mail_exist;
            } else {
 
-        	  $last_id=DB::table('users')->insertGetId(array('name' => $_REQUEST['team_owner']['name'], 'email' => $_REQUEST['team_owner']['email'],  'location' => $_REQUEST['team_owner']['location'], 'club' => $_REQUEST['team_owner']['club'], 'contact_number' => $_REQUEST['team_owner']['number'], 'verification_key' => md5($_REQUEST['team_owner']['email'])));
+        	  $last_id=DB::table('users')->insertGetId(array('name' => $_REQUEST['team_owner']['name'], 'email' => $_REQUEST['team_owner']['email'], 'club' => $_REQUEST['team_owner']['club'], 'contact_number' => $_REQUEST['team_owner']['number'], 'verification_key' => md5($_REQUEST['team_owner']['email'])));
 
 
                $verification_key = md5($_REQUEST['team_owner']['email']);

@@ -2891,3 +2891,13 @@ font-weight:bold;
 .admin-setups a:hover {
     text-decoration: none;
 }
+
+.enrollment-validations {
+    color: #a94442;
+    display:none;
+}
+
+span.required.validation {
+    color: red;
+    margin-right: 5px;
+}

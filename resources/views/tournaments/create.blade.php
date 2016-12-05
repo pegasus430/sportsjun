@@ -233,6 +233,50 @@ $('.create-only #country_id').change(function(){
 
 
 $( ".btn-tournament" ).click(function() {
+
+
+var tot_enrollment= $('#tot_enrollment').val();
+if(tot_enrollment!=''){
+ if(/^\+?\d+$/.test(tot_enrollment)==false){
+    $('#tot-enrollment-val').show();
+    return false;
+ } else {
+  $('#tot-enrollment-val').hide();
+  
+ }
+}
+
+var min_enrollment= $('#min_enrollment').val();
+if(min_enrollment!=''){
+ if(/^\+?\d+$/.test(min_enrollment)==false){
+    $('#min-enrollment-val').show();
+    return false;
+ } else {
+  $('#min-enrollment-val').hide();
+ }
+}
+
+
+var max_enrollment= $('#max_enrollment').val();
+if(max_enrollment!=''){
+ if(/^\+?\d+$/.test(max_enrollment)==false){
+    $('#max-enrollment-val').show();
+    return false;
+ } else {
+  $('#max-enrollment-val').hide();
+  
+ }
+}
+
+
+
+
+
+
+
+
+
+
   var isChecked = $("#disclaimer_agree").is(":checked");
          if($('#disclaimer_agree:visible').length == 0){
                  
@@ -255,15 +299,7 @@ $( ".btn-tournament" ).click(function() {
 
 
 $(".btn-create").click(function(){
-
-
-
-
- if($( "#enrollment_type option:selected" ).text() == "ONLINE PAYMENT") {
-
-            
-
-
+if($( "#enrollment_type option:selected" ).text() == "ONLINE PAYMENT") {
 
   $('.validation_msg').hide();
   if (!$('input[name=vendor_bank_account_id]:checked').val() ) {          

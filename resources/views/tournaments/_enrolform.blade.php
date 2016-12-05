@@ -72,9 +72,10 @@
                 <label class="form_label">{{  trans('message.tournament.fields.total_enrollment') }}</label> 
                 <label for="total_enrollment" class="field prepend-icon">
                      
-                    {!! Form::text('total_enrollment', null, array('class'=>'gui-input','placeholder'=>trans('message.tournament.fields.total_enrollment'))) !!}
+                    {!! Form::text('total_enrollment', null, array('class'=>'gui-input','id'=>'tot_enrollment','placeholder'=>trans('message.tournament.fields.total_enrollment'))) !!}
                     @if ($errors->has('total_enrollment')) <p class="help-block">{{ $errors->first('total_enrollment') }}</p> @endif
-                <label for="total_enrollment" class="field-icon"><i class="fa fa-users"></i></label>  
+                <label for="total_enrollment" class="field-icon"><i class="fa fa-users"></i></label>
+                <p class="help-block enrollment-validations" id="tot-enrollment-val">Invalid number</p>    
                 </label>
             </div>
         </div>
@@ -83,9 +84,10 @@
                 <label class="form_label">{{  trans('message.tournament.fields.min_enrollment') }}</label> 
                 <label for="min_enrollment" class="field prepend-icon">
                      
-                    {!! Form::text('min_enrollment', null, array('class'=>'gui-input','placeholder'=>trans('message.tournament.fields.min_enrollment'))) !!}
+                    {!! Form::text('min_enrollment', null, array('class'=>'gui-input','id'=>'min_enrollment','placeholder'=>trans('message.tournament.fields.min_enrollment'))) !!}
                     @if ($errors->has('min_enrollment')) <p class="help-block">{{ $errors->first('min_enrollment') }}</p> @endif
-                <label for="min_enrollment" class="field-icon"><i class="fa fa-users"></i></label>  
+                <label for="min_enrollment" class="field-icon"><i class="fa fa-users"></i></label> 
+                 <p class="help-block enrollment-validations" id="min-enrollment-val">Invalid number</p>   
                 </label>
             </div>
         </div>
@@ -94,9 +96,10 @@
                 <label class="form_label">{{  trans('message.tournament.fields.max_enrollment') }}</label> 
                 <label for="max_enrollment" class="field prepend-icon">
                      
-                    {!! Form::text('max_enrollment', null, array('class'=>'gui-input','placeholder'=>trans('message.tournament.fields.max_enrollment'))) !!}
+                    {!! Form::text('max_enrollment', null, array('class'=>'gui-input','id'=>'max_enrollment','placeholder'=>trans('message.tournament.fields.max_enrollment'))) !!}
                     @if ($errors->has('max_enrollment')) <p class="help-block">{{ $errors->first('max_enrollment') }}</p> @endif
-                <label for="max_enrollment" class="field-icon"><i class="fa fa-users"></i></label>  
+                <label for="max_enrollment" class="field-icon"><i class="fa fa-users"></i></label>
+                 <p class="help-block enrollment-validations" id="max-enrollment-val">Invalid number</p>    
                 </label>
             </div>
         </div>
