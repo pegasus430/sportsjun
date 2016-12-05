@@ -120,9 +120,13 @@ if (!isset($idNameCountry))
                             <h3>Organization Name</h3>
                             <input name="org_name" class="regPop" placeHolder="Organization Name" type="text">
                             <h3>Organization Type</h3>
-                            <input name="org_type" class="regPop" placeHolder="Organization Type" type="text">
-                            <h3>Subdomain wanted</h3>
-                            <input name="subdomain" class="regPop" placeholder="ex. organization.sportsjun.com" type="text"/>
+                            {!! Form::select('org_type',config('constants.ENUM.ORGANIZATION.ORGANIZATION_TYPE'),null,['class'=>'regPop','placeholder'=>'Organization Type']) !!}
+
+                            <h3>Subdomain</h3>
+                            <div>
+                                <span class="reg-subdomain">http://</span><input name="subdomain" class="reg-subdomain" placeholder="" type="text"/><span class="reg-subdomain">.{{ config('app.domain') }}</span>
+                            </div>
+
                             <h3>Organization Logo</h3>
                             <input name="org_logo" class="regPop" type="file">
                             <h3>About</h3>

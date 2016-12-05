@@ -111,3 +111,13 @@ body {
     background: white;
     color: #285331;
 }
+
+.kode-loginform .reg-subdomain,.kode-loginform input.reg-subdomain{
+    width:auto;
+    display:inline-block;
+    height:42px;
+    margin:13px auto;
+}
+.kode-loginform input.reg-subdomain{
+    margin:13px 3px;
+}
