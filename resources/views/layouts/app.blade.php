@@ -83,6 +83,8 @@
         });
     </script>
 
+
+
 </head>
 
 <div id="fb-root"></div>
@@ -128,5 +130,71 @@
     </div>
     @include ('layouts.footer')
 </div>
+
+
+    <script>
+     // $(document).ready(function() {
+     //   // $('#payment_sub').prop('disabled', true);
+     //    //$('#guest_payment_sub').prop('disabled', true);
+        
+     //    var isChecked = $("#terms_agree").is(":checked");
+     //        if (isChecked) {
+     //             //$('#payment_sub').prop('disabled', false);
+     //             //$('#guest_payment_sub').prop('disabled', false);
+     //        } else {
+                
+     //        }
+
+
+     // //        $("#terms_agree_label").click(function() { alert('asdasd');
+     // //           var agreeChecked = $("#terms_agree").is(":checked");
+              
+     // //                if (agreeChecked) {
+     // //                     $('#payment_sub').prop('disabled', true);
+     // //                     $('#agree_conditions-val').show();
+     // //                     $('#guest_payment_sub').prop('disabled', true);
+                         
+     // //                  }else{
+     // //                     $('#payment_sub').prop('disabled', false);
+     // //                      $('#agree_conditions-val').hide();
+     // //                      $('#guest_payment_sub').prop('disabled', false);
+     // //                  }
+             
+     // //         });
+     // });
+
+    
+     $('#payment_sub').click(function() {
+        
+        var agreeChecked = $("#terms_agree").is(":checked");
+              
+                    if (agreeChecked) {
+                         $('#agree_conditions-val').hide();
+                    }else{
+                      $('#agree_conditions-val').show();
+                      return false  
+                    }
+        });
+
+
+     $('#guest_payment_sub').click(function() {
+             var agreeChecked = $("#terms_agree").is(":checked");
+              
+                    if (agreeChecked) {
+                         $('#agree_conditions-val').hide();
+                    }else{
+                      $('#agree_conditions-val').show();
+                      return false  
+                    }
+            });
+
+
+
+     
+
+   </script>
+
+
+
 </body>
 </html>

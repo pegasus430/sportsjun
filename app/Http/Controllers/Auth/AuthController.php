@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Events\UserRegistered;
 use App\Helpers\Helper;
+use App\Http\Requests\Auth\OrganizationRegisterRequest;
 use App\Model\Organization;
 use App\Repository\CityRepository;
 use App\User;
@@ -111,74 +113,55 @@ class AuthController extends Controller
     }
 
 
-    public function postRegisterOrganization()
+    public function postRegisterOrganization(OrganizationRegisterRequest $request)
     {
-        $data = \Request::all();
-        $validator = \Validator::make($data, [
-            'org_name' => 'required',
-            'org_type' => 'required',
-            'org_logo' => 'required|file',
-            'about' => 'required',
-            'firstname' => 'required|max:255',
-            'lastname' => 'required|max:255',
-            'email' => 'required|unique:users,email|email|max:255',
-            'password' => 'required|min:6|confirmed',
-            'address' => 'required',
-            'country_id' => 'required',
-            'state_id' => 'required',
-            'city_id' => 'required',
-            'terms_accept' => 'required'
+        $data = $request->all();
+        $logo = Helper::uploadImageSimple($data['org_logo'], 'organization');
+        $user = User::create([
+            'firstname' => $data['firstname'],
+            'lastname' => $data['lastname'],
+            'name' => $data['firstname'] . ' ' . $data['lastname'],
+            'email' => $data['email'],
+            'contact_number' => array_get($data, 'mobile'),
+            'password' => bcrypt($data['password']),
+            'newsletter' => !empty($data['newsletter']) ? 1 : 0,
+            'verification_key' => md5($data['email']) //TODO:: these thing should be changed across all site
         ]);
+        if ($user) {
+            \Event::fire(new UserRegistered($user));
 
-        if (!$validator->fails()) {
-            $logo = Helper::uploadImageSimple($data['org_logo'],'organization');
-            $user = User::create([
-                'firstname' => $data['firstname'],
-                'lastname' => $data['lastname'],
-                'name' => $data['firstname'] . ' ' . $data['lastname'],
-                'email' => $data['email'],
-                'contact_number' => array_get($data, 'mobile'),
-                'password' => bcrypt($data['password']),
-                'newsletter' => !empty($data['newsletter']) ? 1 : 0,
-                'verification_key' => md5($data['email']) //TODO:: these thing should be changed across all site
-            ]);
-            if ($user) {
-                \Event::fire(new UserRegistered($user));
-
-                $organization = Organization::create([
-                        'name' => $data['org_name'],
-                        'organization_type' => $data['org_type'],
-                        'email' => $data['email'],
-                        'address' => $data['address'],
-                        'city_id' => $data['city_id'],
-                        'city' => object_get(CityRepository::getModel($data['city_id']), 'city_title'),
-                        'state_id' => $data['state_id'],
-                        'state' => object_get(StateRepository::getModel($data['state_id']), 'state_title'),
-                        'country_id' => $data['country_id'],
-                        'country' => object_get(CityRepository::getModel($data['country_id']), 'country_title'),
-                        'logo' => $logo,
-                        'about' => $data['about'],
-                        'user_id'=>$user->id
-                    ]
-                );
-                if ($organization){
-                    #\Event::fire(new OrganizationCreated($organization));
-                    if (\Request::is()){
-                        return ['message'=>'Organization successfully registered.'];
-                    } else{
-                        \Session::flash('message','Organization successfully registered.');
-                        return redirect()->back();
-                    }
+            $organization = Organization::create([
+                    'name' => $data['org_name'],
+                    'organization_type' => $data['org_type'],
+                    'email' => $data['email'],
+                    'address' => $data['address'],
+                    'city_id' => $data['city_id'],
+                    'city' => object_get(CityRepository::getModel($data['city_id']), 'city_title'),
+                    'state_id' => $data['state_id'],
+                    'state' => object_get(StateRepository::getModel($data['state_id']), 'state_title'),
+                    'country_id' => $data['country_id'],
+                    'country' => object_get(CityRepository::getModel($data['country_id']), 'country_title'),
+                    'logo' => $logo,
+                    'about' => $data['about'],
+                    'user_id' => $user->id,
+                    'subdomain'=>array_get($data,'subdomain')
+                ]
+            );
+            if ($organization) {
+                #\Event::fire(new OrganizationCreated($organization));
+                if (\Request::is()) {
+                    return ['message' => 'Organization successfully registered.'];
                 } else {
-
-                    $user->delete();
-                    $error = 'Failed create organization';
+                    \Session::flash('message', 'Organization successfully registered.');
+                    return redirect()->back();
                 }
             } else {
-                $error = 'Failed to create user';
+
+                $user->delete();
+                $error = 'Failed create organization';
             }
         } else {
-            $error = $validator->errors()->first();
+            $error = 'Failed to create user';
         }
 
         if (\Request::ajax()) {

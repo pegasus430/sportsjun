@@ -2,11 +2,11 @@
     <div class="topHeadWrap">
         <div class="topHeaderInside">
             <ul>
-                <li><a href="#">Supports</a></li>
+                <!--<li><a href="#">Supports</a></li>-->
                 <li><a id="top_bar_login" href="javascript:void(0);" data-toggle="modal"
                        data-target="#home-login-modal"><i class="fa fa-sign-in"></i> Login</a></li>
                 <li><a href="#" data-toggle="modal" data-target="#myModal">Get Started </a></li>
-                <li><a href="#">Pricing</a></li>
+                <li><a href="#" data-toggle="modal" data-target="#pricing_modal">Pricing</a></li>
             </ul>
         </div>
     </div>

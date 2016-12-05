@@ -12,6 +12,7 @@ use Response;
 use App\Helpers\Helper;
 use App\Model\BasicSettings;
 use Carbon\Carbon;
+use Input;
 
 
 class SettingsController extends Controller
@@ -24,16 +25,20 @@ class SettingsController extends Controller
     public function getIndex()
     {
 
-      $settings = BasicSettings::first();
-     // dd($settings);
+      $settings = BasicSettings::get();
+      //dd($settings);
       return view('admin.settings.index')->with(array('settings' => $settings));
 
       }
        public function postIndex()
     {
 
-      //dd($_POST);
-      BasicSettings::where('id', 1)->update(['description' => $_POST['description']]);
+      
+      $data=Input::except('_token');
+      //dd($data);
+      foreach($data as $key => $value) {
+        BasicSettings::where('name', str_replace('_', ' ',$key))->update(['description' => $value]);
+      }
       return redirect('admin/settings');
 
       }

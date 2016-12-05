@@ -3107,3 +3107,17 @@ label.form_label.last_date_span {
    width:100%;
    overflow:hidden;
  }
+
+ .validation_msg {
+  color: red;
+ }
+
+h4.register_form_title.successpage {
+    padding: 10px!important;
+}
+
+.row.inner_events.successpage {
+    background-color: #eee;
+    padding: 5px 0;
+    border: solid 1px #fff;
+}

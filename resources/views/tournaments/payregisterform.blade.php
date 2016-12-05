@@ -30,7 +30,9 @@ $closetime=date("h:i a", strtotime($tournament_data->reg_closing_time));
 <h4><i class="fa fa-map-marker"></i>{{$tournament_data->location}}</h4>
 </div>
 
-
+@if($errors->any())
+<h4 class="error_validation">{{$errors->first()}}</h4>
+@endif
 
 <div class="form-body">
 {!! Form::open(array('url' => '/tournaments/registrationstep5', 'method' => 'post')) !!}
@@ -157,7 +159,7 @@ $count=$register_data->participant_count;
             } else {
             	$loc='';
             } ?>
-            {!! Form::textarea("single[$i][location]", $loc, array('required','class'=>'gui-input','placeholder' => 'Location' )) !!}
+            {!! Form::textarea("single[$i][location]", $loc, array('required','class'=>'gui-input','placeholder' => 'Location', 'rows' => 2, 'cols' => 40)) !!}
             
             </label>
            </div>
@@ -319,7 +321,7 @@ $count=$register_data->participant_count;
             } else {
             	$loc='';
             } ?>
-            {!! Form::textarea("doubles[$i][location]", $loc, array('required','class'=>'gui-input','placeholder' => 'Location' )) !!}
+            {!! Form::textarea("doubles[$i][location]", $loc, array('required','class'=>'gui-input','placeholder' => 'Location','rows' => 2, 'cols' => 40 )) !!}
             
             </label>
            </div>
@@ -481,7 +483,7 @@ $count=$register_data->participant_count;
             } else {
             	$loc='';
             } ?>
-            {!! Form::textarea("team_owner[location]", $loc, array('required','class'=>'gui-input','placeholder' => 'Location' )) !!}
+            {!! Form::textarea("team_owner[location]", $loc, array('required','class'=>'gui-input','placeholder' => 'Location','rows' => 2, 'cols' => 40 )) !!}
             
             </label>
            </div>

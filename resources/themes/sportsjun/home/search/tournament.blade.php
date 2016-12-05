@@ -6,8 +6,9 @@
     $end_date = Carbon\Carbon::createFromFormat("Y-m-d", $tournament->start_date);
     ?>
     <div class="tourn_topBanar_wrapp">
-        <div class="banarImg"><img
-                    src="{{Helper::ImageFit(Helper::getImagePath($tournament->logoImageReal ,'tournaments'),1382,364,'center')}}">
+        <div class="banarImg">
+            <img
+                    src="{{Helper::ImageFit($tournament->logoImageReal,1382,364,'center')}}">
         </div>
         <div class="registerTopWrap">
             <div class="col-lg-6 col-md-6 topLeftTT">
@@ -39,7 +40,7 @@
             'Number of Teams in a Group' => $tournament->groups_teams
     ]
     ?>
-    <ul class="nav nav-tabs">
+    <ul class="nav nav-tabs search-tournament-tabs">
         <li class="active"><a data-toggle="tab" href="#tournament_info">Details</a></li>
         <li><a data-toggle="tab" href="#tournament_group_stage">Group Stage</a></li>
         <li><a data-toggle="tab" href="#tournament_group_matches">Matches</a></li>

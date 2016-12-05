@@ -183,6 +183,20 @@ $options=array();?>
 
 
 <div class="row">
+        <div class="col-sm-12">
+            <div class="section">
+                
+                <label for="comment" class="field prepend-icon" id='terms_agree_label'>
+                    <input type="checkbox" class="gui-checkbox" name="agree" id="terms_agree" value="yes">{{$terms_and_conditions}}<br>
+                   <p class="help-block" id="agree_conditions-val">Please agree our Terms and Conditions</p> 
+                    
+                </label>
+            </div>
+        </div>
+    </div>
+
+
+<div class="row">
   
   <div class="col-sm-8">
    <div class="section">
@@ -196,9 +210,9 @@ $options=array();?>
  <div class="col-sm-3">
   <div class="section">
   @if (Auth::check()) 
-   <a href="/tournaments/registerstep3/{{$register_data->id}}"><input class="button btn-primary" type="submit" value="Pay Now"></a>
+   <a href="/tournaments/registerstep3/{{$register_data->id}}"><input class="button btn-primary" id="payment_sub" type="submit" value="Pay Now"></a>
   @else
-   <a href="/guest/tournaments/guestregisterstep3/{{$register_data->id}}"><input class="button btn-primary" type="submit" value="Register Now"></a>
+   <a href="/guest/tournaments/guestregisterstep3/{{$register_data->id}}"><input class="button btn-primary" id="guest_payment_sub" type="submit" value="Register Now"></a>
 @endif 
    </div>
  </div>
@@ -215,3 +229,5 @@ $options=array();?>
 </div>
 </div>
 @endsection
+
+

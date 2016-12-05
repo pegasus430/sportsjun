@@ -830,3 +830,21 @@ Route::post('tournaments/payment_failure', [
     'as'   => 'paymentsuccess',
     'uses' => 'User\TournamentsController@postPaymentfailure',
 ]);
+
+
+Route::post('tournaments/payment_details', [
+    'as'   => 'paymentdetails',
+    'uses' => 'User\TournamentsController@getPaymentdetails',
+]);
+
+
+// Route::get('tournaments/transactions/{id}', [
+//     'as'   => 'transactions',
+//     'uses' => 'User\TournamentsController@Transactions',
+// ]);
+
+
+Route::get('mytransactions/{userId}', [
+    'as'   => 'mytransactions',
+    'uses' => 'User\TournamentsController@Transactions',
+]);

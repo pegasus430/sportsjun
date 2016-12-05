@@ -16,15 +16,15 @@ $(document).ready(function () {
 
 
 });
-    $(document).ready(function () {
+$(document).ready(function () {
 
-        $('#page_effect').fadeIn(2000);
-        $(".round_test").addClass("round");
+    $('#page_effect').fadeIn(2000);
+    $(".round_test").addClass("round");
 
-    });
+});
 
 //homepage slide show
-$(function($) {
+$(function ($) {
     var url = 'images';
 
 
@@ -139,12 +139,29 @@ $(document).ready(function () {
 
 
 $(function () {
-    $('.jq-autocomplete').each(function() {
+    $('.jq-autocomplete').each(function () {
         $(this).autocomplete({
             source: $(this).data('source'),
             minLength: 3,
         });
     });
-
-
 });
+
+function ajaxLoadOption(el) {
+    var targetUrl = $(el).data('url');
+    var selected = $(el).val();
+    var targetSelect = $(el).data('target')
+    var name = $(el).data('name');
+    $.get(targetUrl, {
+            'selected': selected
+        }, function (data) {
+            var options = '<option selected disabled>Select '+name+'</option>';
+            for (var key in data) {
+                options += '<option value="' + key + '">'+data[key]+'</option>';
+            }
+            $(targetSelect).html(options);
+        }
+    );
+
+
+}
