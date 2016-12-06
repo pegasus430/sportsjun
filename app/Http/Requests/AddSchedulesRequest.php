@@ -30,7 +30,7 @@ class AddSchedulesRequest extends Request {
         $validationArray = [
       'scheduletype' => 'required',
       'my_team_id' => 'required',
-      'opp_team_id' => 'required',
+      //'opp_team_id' => 'required',
       'match_start_date' => 'required|date_format:'.config('constants.DATE_FORMAT.VALIDATION_DATE_FORMAT'),
       'match_start_time' => 'date_format:'.config('constants.DATE_FORMAT.VALIDATION_TIME_FORMAT'),
       // 'start_time' => 'required|',
