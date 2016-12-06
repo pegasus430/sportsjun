@@ -193,15 +193,15 @@ header, nav, article, aside, footer, hgroup, section { display: block }
 }
 
 /* ANIMATIONS ================ */
-.searchWrapp @-webkit-keyframes inputHighlighter {
+ @-webkit-keyframes inputHighlighter {
 	from { background:#5264AE; }
   to 	{ width:0; background:transparent; }
 }
-.searchWrapp @-moz-keyframes inputHighlighter {
+@-moz-keyframes inputHighlighter {
 	from { background:#5264AE; }
   to 	{ width:0; background:transparent; }
 }
-.searchWrapp @keyframes inputHighlighter {
+ @keyframes inputHighlighter {
 	from { background:#5264AE; }
   to 	{ width:0; background:transparent; }
 }
