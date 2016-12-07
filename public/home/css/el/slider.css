@@ -1,0 +1,78 @@
+.slidcontentholder {
+    height: 50%;
+    overflow: auto;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.mainwarppslide {
+    height: 480px;
+    overflow: hidden;
+}
+
+.mainwarppslide img {
+    width: 100%;
+}
+
+
+/*-------------------------------*/
+.bgSlider {
+    padding: 0px 0 70px 0;
+    text-align: center;
+}
+
+.slideBox {
+    position: relative;
+}
+
+.slideBox h1 {
+    font: 38px SFUIDisplay-Bold;
+    color: #FFF;
+    text-transform: uppercase;
+}
+
+.slideBox h2 {
+    font: 18px SFUIDisplay-Regular;
+    color: #FFF;
+    margin: 20px 0 40px 0;
+}
+
+.slideBox h2 i {
+    color: #65c178 !important;
+    margin: 0 11px;
+}
+
+.slideBox h3 {
+    color: #fee31e;
+    font: 20px SFUIDisplay-Bold;
+    margin: 0 0 39px 0;
+    text-transform: uppercase;
+}
+
+.btBox {
+    display: table;
+    margin: auto;
+    padding: 15px;
+}
+
+.loginL {
+    background: #fee31e;
+    padding: 18px 36px;
+    color: #242628;
+    font: 16px SFUIDisplay-Regular;
+    -webkit-border-radius: 9px 0 0 9px;
+    border-radius: 9px 0 0 9px;
+}
+
+.registerR {
+    background: #fee31e;
+    padding: 18px 36px;
+    color: #242628;
+    font: 16px SFUIDisplay-Regular;
+    -webkit-border-radius: 0 9px 9px 0;
+    border-radius: 0 9px 9px 0;
+}
