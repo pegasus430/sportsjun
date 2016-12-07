@@ -22,21 +22,8 @@ $css_version    = config('constants.CSS_VERSION');
         <link href="{{ asset('/css/_all.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
 
 
-
         <link href="{{ asset('/home/css/bootstrap.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
-        <link href="{{ asset('/home/css/font-awesome.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
-        <link href="{{ asset('/home/css/themetypo.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
-        <link href="{{ asset('/home/css/style.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
-        <link href="{{ asset('/home/css/widget.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
-        <link href="{{ asset('/home/css/color.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
-        <link href="{{ asset('/home/css/flexslider.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
-        <link href="{{ asset('/home/css/owl.carousel.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
-        <link href="{{ asset('/home/css/jquery.bxslider.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
-        <link href="{{ asset('/home/css/prettyphoto.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
-        <link href="{{ asset('/home/css/responsive.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
-
-        
-
+        <link href="{{ elixir('home/css/home_mix.css') }}?>" rel="stylesheet">
 
 
         <link rel="stylesheet" href="{{ asset('/css/sidebar-menu.css') }}?v=<?php echo $css_version;?>" />
@@ -471,6 +458,7 @@ $css_version    = config('constants.CSS_VERSION');
 <script src="{{ asset('/home/js/jquery.prettyphoto.js') }}?v=<?php echo $js_version;?>"></script>
 <script src="{{ asset('/home/js/kode_pp.js') }}?v=<?php echo $js_version;?>"></script>
 <script src="{{ asset('/home/js/functions.js') }}?v=<?php echo $js_version;?>"></script>
+<script src="{{ elixir('home/js/sportsjun.js') }}"></script>
 
 </body>
 </html>
