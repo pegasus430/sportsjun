@@ -2806,10 +2806,10 @@ body.viewport-xs {
 }
 .txt_align_center{ text-align:center !important;} 
 .signup_link_new{ color:#f27676 !important;}
-.signup_capthca{margin-top: 6px; display: inline-block; position:absolute; top:0; right:30px;}
+.signup_capthca{margin-top: 6px; display: inline-block;  top:0; right:30px;}
 
 @media (max-width: 320px) {
-.signup_capthca{margin-top: 6px; display: inline-block; position:absolute; top:0; right:20px;}
+.signup_capthca{margin-top: 6px; display: inline-block;  top:0; right:20px;}
 
 }
 .switch_but_show{ background:#8e9bd0; border:1px solid #cccccc; padding:2px 10px; color:#FFFFFF;}

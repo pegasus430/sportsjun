@@ -1,6 +1,8 @@
 @extends('home.layout')
 
 @section('content')
+    <div class="clearfix"></div>
+
     <?php
     $start_date = Carbon\Carbon::createFromFormat("Y-m-d", $tournament->start_date);
     $end_date = Carbon\Carbon::createFromFormat("Y-m-d", $tournament->start_date);

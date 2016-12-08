@@ -1,477 +1,1620 @@
 @charset "UTF-8";
 /* RESET */
 html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, address, cite, code, del, dfn, em, font, img, ins, kbd, q, samp, small, strong, sub, sup, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, header, nav, article, aside, footer, hgroup, section {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	outline: 0;
-	font-weight: inherit;
-	font-style: inherit;
-	font-size: 100%;
-	font-family: inherit;
-	
-	
-	
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-weight: inherit;
+    font-style: inherit;
+    font-size: 100%;
+    font-family: inherit;
+
 }
 
-body{ height:100%;}
+body {
+    height: 100%;
+}
 
-a{text-decoration:none !important;outline:none;}
-html{ height:100%;}
-:focus, :active { outline: 0 }
+a {
+    text-decoration: none !important;
+    outline: none;
+}
 
-ul { list-style:none }
+html {
+    height: 100%;
+}
 
-blockquote:before, blockquote:after { content: "" }
-blockquote { quotes: "" "" }
+:focus, :active {
+    outline: 0
+}
 
-header, nav, article, aside, footer, hgroup, section { display: block }
+ul {
+    list-style: none
+}
+
+blockquote:before, blockquote:after {
+    content: ""
+}
+
+blockquote {
+    quotes: "" ""
+}
+
+header, nav, article, aside, footer, hgroup, section {
+    display: block
+}
 
 /* Clearfix */
 .clearfix:after {
-	visibility: hidden;
-	display: block;
-	font-size: 0;
-	content: " ";
-	clear: both;
-	height: 0;
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
 }
-* html .clearfix             { zoom: 1 } /* IE6 */
-*:first-child+html .clearfix { zoom: 1 } /* IE7 */
-.left_r { float: left; }
-.right_r { float: right; }
-.clear { clear: both; }
-.img100 img{ width:100%;}
 
-.align_left {text-align: left;}
-.align_right {text-align: right;}
-.center { text-align: center; }
+* html .clearfix {
+    zoom: 1
+}
 
-.display_none { display: none; }
-.display_block { display: block; }
-.absolute { position: absolute; }
+/* IE6 */
+*:first-child + html .clearfix {
+    zoom: 1
+}
 
-.absolute_topleft { position: absolute; top: 0; left: 0; }
-.absolute_topright { position: absolute; top: 0; right: 0; }
-.absolute_btmleft { position: absolute; bottom: 0; left: 0; }
-.absolute_btmright { position: absolute; bottom: 0; right: 0; }
+/* IE7 */
+.left_r {
+    float: left;
+}
 
-.relative { position: relative; }
-.strikethru { text-decoration: line-through; }
-.bold { font-weight: bold; }
-.underline { text-decoration: underline; }
-.italic { font-style: italic; }
+.right_r {
+    float: right;
+}
 
-.font10px { font-size: 10px; }
-.font11px { font-size: 11px; }
-.font12px { font-size: 12px; }
-.font13px { font-size: 13px; }
-.font14px { font-size: 14px; }
-.font15px { font-size: 15px; }
-.font20px { font-size: 20px; }
-.font40px { font-size: 40px; }
-.font50px { font-size: 50px; }
+.clear {
+    clear: both;
+}
 
+.img100 img {
+    width: 100%;
+}
 
+.align_left {
+    text-align: left;
+}
 
-.clr_black {color:#1a1a1a;}
-.clr_white {color:#ffffff;}
-.clr_grey {color:#666666;}
-.clr_gold1{color:#937B19;}
-.clr_gold2 {color:#B79F39;}
+.align_right {
+    text-align: right;
+}
+
+.center {
+    text-align: center;
+}
+
+.display_none {
+    display: none;
+}
+
+.display_block {
+    display: block;
+}
+
+.absolute {
+    position: absolute;
+}
+
+.absolute_topleft {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.absolute_topright {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.absolute_btmleft {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.absolute_btmright {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.relative {
+    position: relative;
+}
+
+.strikethru {
+    text-decoration: line-through;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+.italic {
+    font-style: italic;
+}
+
+.font10px {
+    font-size: 10px;
+}
+
+.font11px {
+    font-size: 11px;
+}
+
+.font12px {
+    font-size: 12px;
+}
+
+.font13px {
+    font-size: 13px;
+}
+
+.font14px {
+    font-size: 14px;
+}
+
+.font15px {
+    font-size: 15px;
+}
+
+.font20px {
+    font-size: 20px;
+}
+
+.font40px {
+    font-size: 40px;
+}
+
+.font50px {
+    font-size: 50px;
+}
+
+.clr_black {
+    color: #1a1a1a;
+}
+
+.clr_white {
+    color: #ffffff;
+}
+
+.clr_grey {
+    color: #666666;
+}
+
+.clr_gold1 {
+    color: #937B19;
+}
+
+.clr_gold2 {
+    color: #B79F39;
+}
 
 /*-------------------------------*/
-.topHeadWrap{ background:#434f5e; padding:9px 0; width:100%; display:table;}
-.topHeadWrap .container{ max-width:1366px;}
-.topHeadWrap ul{ float:right;}
-.topHeadWrap ul li{ float:left; padding:0 15px;}
-.topHeadWrap ul li a{color:#FFF; font:12.5px Montserrat-Regular;}
-.topHeaderInside{ display:table; width:100%;}
-.menuLogWrap{background-color: rgba(101, 193, 120, .9);width:100%; display:table;}
-.logoL{float:left; padding:5px 56px 19px 0; background:#434f5e;}
-
-
-.logoL{
-    position: relative;
-    
-    padding: 10px 20px;
-    
-    position: relative;
-    
-    color: #2E8DEF;
-    
+.topHeadWrap {
+    background: #434f5e;
+    padding: 9px 0;
+    width: 100%;
+    display: table;
 }
+
+.topHeadWrap .container {
+    max-width: 1366px;
+}
+
+.topHeadWrap ul {
+    float: right;
+}
+
+.topHeadWrap ul li {
+    float: left;
+    padding: 0 15px;
+}
+
+.topHeadWrap ul li a {
+    color: #FFF;
+    font: 12.5px Montserrat-Regular;
+}
+
+.topHeaderInside {
+    display: table;
+    width: 100%;
+}
+
+.menuLogWrap {
+    background-color: rgba(101, 193, 120, .9);
+    width: 100%;
+    display: table;
+}
+
+.logoL {
+    float: left;
+    padding: 5px 56px 19px 0;
+    background: #434f5e;
+}
+
+.logoL {
+    position: relative;
+
+    padding: 10px 20px;
+
+    position: relative;
+
+    color: #2E8DEF;
+
+}
+
 .logoL:after {
     content: "";
     position: absolute;
     display: block;
-    background:url(../images/arrow.png) no-repeat center left; width:123px; height:71px; right: -107px; top:0px;
+    background: url(../images/arrow.png) no-repeat center left;
+    width: 123px;
+    height: 71px;
+    right: -107px;
+    top: 0px;
 }
-.menuright{ float:right !important; padding:25px 15px 0}
-.menuright ul li{ float:left; padding:0 2px;}
-.menuright ul li a{ font:12.5px Montserrat-Regular; color:#FFF; text-transform:uppercase; padding:8px 14px;}
-.menuright ul li a:hover{ background:#fee31e; border-radius:5px; color:#333}
 
+.menuright {
+    float: right !important;
+    padding: 25px 15px 0
+}
+
+.menuright ul li {
+    float: left;
+    padding: 0 2px;
+}
+
+.menuright ul li a {
+    font: 12.5px Montserrat-Regular;
+    color: #FFF;
+    text-transform: uppercase;
+    padding: 8px 14px;
+}
+
+.menuright ul li a:hover {
+    background: #fee31e;
+    border-radius: 5px;
+    color: #333
+}
 
 /* form starting stylings ------------------------------ */
-.searchWrapp .group 			  { 
-  position:relative;float:left; width:83%; 
-  
+.searchWrapp .group {
+    position: relative;
+    float: left;
+    width: 83%;
+
 }
-.searchWrapp{background:#e8e7e6; padding:15px 15px;width:100%;display:table;} 
-.searchWrapp input 				{
-  font-size:18px;
-  padding:10px 10px 10px 5px;
-  display:block;
-  width:100%;
-  border:none; background:transparent; 
+
+.searchWrapp {
+    background: #e8e7e6;
+    padding: 15px 15px;
+    width: 100%;
+    display: table;
 }
-.searchWrapp input:focus 		{ outline:none; }
+
+.searchWrapp input {
+    font-size: 18px;
+    padding: 10px 10px 10px 5px;
+    display: block;
+    width: 100%;
+    border: none;
+    background: transparent;
+}
+
+.searchWrapp input:focus {
+    outline: none;
+}
 
 /* LABEL ======================================= */
-.searchWrapp label 				 {
-  color:#999; 
-  font:16px SFUIDisplay-Regular;
-  
-  position:absolute;
-  pointer-events:none;
-  left:5px;
-  top:10px;
-  transition:0.2s ease all; 
-  -moz-transition:0.2s ease all; 
-  -webkit-transition:0.2s ease all;
+.searchWrapp label {
+    color: #999;
+    font: 16px SFUIDisplay-Regular;
+
+    position: absolute;
+    pointer-events: none;
+    left: 5px;
+    top: 10px;
+    transition: 0.2s ease all;
+    -moz-transition: 0.2s ease all;
+    -webkit-transition: 0.2s ease all;
 }
 
 /* active state */
-.searchWrapp input:focus ~ label, input:valid ~ label 		{
-  top:-10px;
-  font-size:14px;
-  color:#999;
+.searchWrapp input:focus ~ label, input:valid ~ label {
+    top: -10px;
+    font-size: 14px;
+    color: #999;
 }
 
 /* BOTTOM BARS ================================= */
-.searchWrapp .bar 	{ position:relative; display:block; width:100%; }
-.searchWrapp .bar:before, .bar:after 	{
-  content:'';
-  height:2px; 
-  width:0;
-  bottom:1px; 
-  position:absolute;
-  background:#00838f; 
-  transition:0.2s ease all; 
-  -moz-transition:0.2s ease all; 
-  -webkit-transition:0.2s ease all;
+.searchWrapp .bar {
+    position: relative;
+    display: block;
+    width: 100%;
 }
+
+.searchWrapp .bar:before, .bar:after {
+    content: '';
+    height: 2px;
+    width: 0;
+    bottom: 1px;
+    position: absolute;
+    background: #00838f;
+    transition: 0.2s ease all;
+    -moz-transition: 0.2s ease all;
+    -webkit-transition: 0.2s ease all;
+}
+
 .searchWrapp .bar:before {
-  left:50%;
+    left: 50%;
 }
+
 .searchWrapp .bar:after {
-  right:50%; 
+    right: 50%;
 }
 
 /* active state */
 .searchWrapp input:focus ~ .bar:before, input:focus ~ .bar:after {
-  width:50%;
+    width: 50%;
 }
 
 /* HIGHLIGHTER ================================== */
 .searchWrapp .highlight {
-  position:absolute;
-  height:60%; 
-  width:100px; 
-  top:25%; 
-  left:0;
-  pointer-events:none;
-  opacity:0.5;
+    position: absolute;
+    height: 60%;
+    width: 100px;
+    top: 25%;
+    left: 0;
+    pointer-events: none;
+    opacity: 0.5;
 }
 
 /* active state */
 .searchWrapp input:focus ~ .highlight {
-  -webkit-animation:inputHighlighter 0.3s ease;
-  -moz-animation:inputHighlighter 0.3s ease;
-  animation:inputHighlighter 0.3s ease;
+    -webkit-animation: inputHighlighter 0.3s ease;
+    -moz-animation: inputHighlighter 0.3s ease;
+    animation: inputHighlighter 0.3s ease;
 }
 
 /* ANIMATIONS ================ */
-.searchWrapp @-webkit-keyframes inputHighlighter {
-	from { background:#5264AE; }
-  to 	{ width:0; background:transparent; }
+@-webkit-keyframes inputHighlighter {
+    from {
+        background: #5264AE;
+    }
+    to {
+        width: 0;
+        background: transparent;
+    }
 }
-.searchWrapp @-moz-keyframes inputHighlighter {
-	from { background:#5264AE; }
-  to 	{ width:0; background:transparent; }
+
+@-moz-keyframes inputHighlighter {
+    from {
+        background: #5264AE;
+    }
+    to {
+        width: 0;
+        background: transparent;
+    }
 }
-.searchWrapp @keyframes inputHighlighter {
-	from { background:#5264AE; }
-  to 	{ width:0; background:transparent; }
+
+@keyframes inputHighlighter {
+    from {
+        background: #5264AE;
+    }
+    to {
+        width: 0;
+        background: transparent;
+    }
 }
-.serchIco{ float:left;padding:0 10px 0 0; border-right:1px solid #dcdcdc; margin:8px 5px 0 0;}
-.searchWrapp .serachBt{ float:right; width:13% !important; background:#fee31e !important; color:#FFF;font:15px SFUIDisplay-Bold; margin:-15px; padding:27px;}
+
+.serchIco {
+    float: left;
+    padding: 0 10px 0 0;
+    border-right: 1px solid #dcdcdc;
+    margin: 8px 5px 0 0;
+}
+
+.searchWrapp .serachBt {
+    float: right;
+    width: 13% !important;
+    background: #fee31e !important;
+    color: #FFF;
+    font: 15px SFUIDisplay-Bold;
+    margin: -15px;
+    padding: 27px;
+}
+
 /*-------------------------------*/
-.bgSlider{ padding:0px 0 70px 0; text-align:center;}
-.slideBox{ position:relative;}
-.slideBox h1{ font:38px SFUIDisplay-Bold; color:#FFF; text-transform:uppercase;}
-.slideBox h2{ font:18px  SFUIDisplay-Regular; color:#FFF; margin:20px 0 40px 0;}
-.slideBox h2 i{ color:#65c178 !important; margin:0 11px;}
-.slideBox h3{ color:#fee31e; font:20px SFUIDisplay-Bold; margin:0 0 39px 0; text-transform:uppercase;}
-.btBox{ display:table;margin:auto; padding:15px;}
-.loginL{ background:#fee31e;padding:18px 36px; color:#242628; font:16px SFUIDisplay-Regular;-webkit-border-radius: 9px 0 0 9px;
-border-radius: 9px 0 0 9px;}
-.registerR{background:#fee31e;padding:18px 36px; color:#242628; font:16px SFUIDisplay-Regular;-webkit-border-radius: 0 9px 9px 0;
-border-radius: 0 9px 9px 0;}
+.bgSlider {
+    padding: 0px 0 70px 0;
+    text-align: center;
+}
 
-.tournamentWhteWrap{ background:#FFF; padding:0px 0;}
-.tournamentWhteWrap h3{ font:35px SFUIDisplay-Regular; color:#434f5e; text-transform:uppercase; text-align:center; padding:15px 0;}
-.tournamentWhteWrap h2{font:25px SFUIDisplay-Regular; color:#65c178; text-transform:uppercase; text-align:center; margin:0 0 53px 0;}
-.tournametSlide{ margin:25px auto 35px auto;}
-.imgWrppaBox{ text-align:center;}
-.imgWrppaBox img{ width:100%; height:auto;}
-.imgWrppaBox h3{ font:22px SFUIDisplay-Regular;color:#434f5e; text-transform:uppercase; padding:25px 0;}
-.box_tourn{ padding:0 15px;}
-.plrTeamBox{ text-align:center; margin:0 0 77px 0;}
-.plrTeamBox h3{font-family: SFUIDisplay-Light;font-size: 18px;font-style:italic;}
-.plrTeamBox h3{}
-.roundWrap{width:169px;height:169px; background:#f3f3f3; border:1px solid #e3e3e3; overflow:hidden;margin:auto; margin:19px auto;border-radius:150px; text-align:center;}
-.arrowNew{}
-.arrow1::after {content: ""; width:294px;height:71px; background:url(../images/arrow1.png) no-repeat left center;position:absolute; z-index:1;top:14%;left:59%;}
-.arrow2::after {content: ""; width:294px;height:71px; background:url(../images/arrow2.png) no-repeat left center;position:absolute; z-index:1;top:48%;left:59%;}
-.arrow3::after {content: ""; width:71px;height:239px; background:url(../images/arrow3.png) no-repeat left center;position:absolute; z-index:1;top:48%;left:59%;}
-.arrow4::after {content: ""; width:294px;height:71px; background:url(../images/arrow4.png) no-repeat left center;position:absolute; z-index:1;top:15%;left:62%;}
-.arrow5::after {content: ""; width:294px;height:71px; background:url(../images/arrow5.png) no-repeat left center;position:absolute; z-index:1;top:42%;left:62%;}
-.arrow6{width:44px;height:44px; background:#;position:absolute; z-index:1;}
-.arrownew4::after {content: ""; width:294px;height:71px; background:url(../images/arrownew4.png) no-repeat left center;position:absolute; z-index:1;top:42%;left:62%;}
-.arrow6{width:44px;height:44px; background:#;position:absolute; z-index:1;}
+.slideBox {
+    position: relative;
+}
 
-.appdetailsWrapp{ background:url(../images/bgphone.png) no-repeat;webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover; padding:40px 0 0 0;}
-.appdetailsWrapp h1{ padding:15px 0;}
-.appImg img{ width:100%;}
-.rightCt{}
-.rightCt h1{ color:#FFF; font:30px SFUIDisplay-Bold; margin:23% 0 0 0;}
-.appsoreWrap{ margin:10% 0 0 0;}
-.appsoreWrap a{ margin:25px 15px 0 0;}
+.slideBox h1 {
+    font: 38px SFUIDisplay-Bold;
+    color: #FFF;
+    text-transform: uppercase;
+}
 
-.testimonialsWrapp{ background:#f6f6f6; padding:65px 0px 35px;}
-.testimonialsWrapp h1{ font:35px SFUIDisplay-Regular; color:#434f5e; text-transform:uppercase; text-align:center; margin:0 0 66px 0;}
-.profileRound{ width:104px; height:104px; overflow:hidden;border-radius:150px; float:left;}
-.profileRound img{ width:100%;}
-.testimornialBox{ padding:5px 18px;}
-.testimornialBox p{font:15px SFUIDisplay-Light; color:#434f5e; margin:14px 0 15px 5px; font-style:italic;}
-.testimornialBox h4{font:17px SFUIDisplay-Bold;}
-.testimornialBox h4 span{font:14px SFUIDisplay-Regular; margin:0 0 0 10px; color:#434f5e;}
-.readAll{ background:url(../images/greenBg.png) no-repeat center center; width:174px; display:block; text-align:center; padding:16px 10px; font:14px SFUIDisplay-Regular; margin:32px auto; color:#FFF;}
+.slideBox h2 {
+    font: 18px SFUIDisplay-Regular;
+    color: #FFF;
+    margin: 20px 0 40px 0;
+}
 
-.tournamentsGrayDown{ background:#f5f6f7; padding:72px 0; display:table; width:100%;}
-.tournamentsGrayDown h1{ font:35px SFUIDisplay-Regular; color:#434f5e; text-transform:uppercase; text-align:center;}
-.tournamentsGrayDown h2{font:25px SFUIDisplay-Regular; color:#65c178; text-transform:uppercase; text-align:center; margin:0 0 53px 0;}
-.tournamentsGrayDown h5{ font:27px SFUIDisplay-Regular; color:#434f5e; margin:0 0 71px  0; text-align:center;}
+.slideBox h2 i {
+    color: #65c178 !important;
+    margin: 0 11px;
+}
 
-.ourClientsWrapp{ background:#FFF; padding:40px 0;}
-.ourClientsWrapp h1{ font:35px SFUIDisplay-Regular; color:#434f5e; text-transform:uppercase; text-align:center;}
-.clintBox{ text-align:center;}
-.clintBox img{ width:100%;}
-.clintBox h2{ color:#434f5e; font:22px SFUIDisplay-Regular;}
-.bgcc{ width:102px; margin:35px auto;}
+.slideBox h3 {
+    color: #fee31e;
+    font: 20px SFUIDisplay-Bold;
+    margin: 0 0 39px 0;
+    text-transform: uppercase;
+}
 
-footer{background:#efefef;}
-.footTop{ padding:42px 0;}
-.footTop h2{ font:20px SFUIDisplay-Bold; margin:0 0 29px 0; color:#1c2227;} 
-.footTop p{ font:15px SFUIDisplay-Bold; color:#505356; margin:0 0 20px 0;}
-.footTop ul li a{font:15px SFUIDisplay-Regular; color:#505356; margin:5px 0 ; display:block;}
+.btBox {
+    display: table;
+    margin: auto;
+    padding: 15px;
+}
 
-.arowSty .owl-prev{ width:40px;height:57px; background:url(../images/a_left.png) no-repeat left center;top: 25%; left:-2%; position:absolute; text-indent:-2555px;}
-.arowSty .owl-next{ width:40px;height:57px; background:url(../images/a_right.png) no-repeat left center;top: 25%; right:-2%; position:absolute;text-indent:-2555px;}
-.deskRight{ float:right !important;}
+.loginL {
+    background: #fee31e;
+    padding: 18px 36px;
+    color: #242628;
+    font: 16px SFUIDisplay-Regular;
+    -webkit-border-radius: 9px 0 0 9px;
+    border-radius: 9px 0 0 9px;
+}
 
-.profileWrapp{ padding:21px 15px; background:#FFF;-webkit-box-shadow: 0 -3px 3px 0 rgba(0,0,0,.1);
-box-shadow: 0 -3px 3px 0 rgba(0,0,0,.1);}
-.profileWrapp h1{font:23px SFUIDisplay-Regular; padding:15px 0; text-align:center; background:#65c178; color:#FFF;}
-.profileDetaiWrap{ padding:28px 0 45px 0;}
-.profile_flex{width:100%; display: -webkit-flex; /* Safari */
+.registerR {
+    background: #fee31e;
+    padding: 18px 36px;
+    color: #242628;
+    font: 16px SFUIDisplay-Regular;
+    -webkit-border-radius: 0 9px 9px 0;
+    border-radius: 0 9px 9px 0;
+}
+
+.tournamentWhteWrap {
+    background: #FFF;
+    padding: 0px 0;
+}
+
+.tournamentWhteWrap h3 {
+    font: 35px SFUIDisplay-Regular;
+    color: #434f5e;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 15px 0;
+}
+
+.tournamentWhteWrap h2 {
+    font: 25px SFUIDisplay-Regular;
+    color: #65c178;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 0 0 53px 0;
+}
+
+.tournametSlide {
+    margin: 25px auto 35px auto;
+}
+
+.imgWrppaBox {
+    text-align: center;
+}
+
+.imgWrppaBox img {
+    width: 100%;
+    height: auto;
+}
+
+.imgWrppaBox h3 {
+    font: 22px SFUIDisplay-Regular;
+    color: #434f5e;
+    text-transform: uppercase;
+    padding: 25px 0;
+}
+
+.box_tourn {
+    padding: 0 15px;
+}
+
+.plrTeamBox {
+    text-align: center;
+    margin: 0 0 77px 0;
+}
+
+.plrTeamBox h3 {
+    font-family: SFUIDisplay-Light;
+    font-size: 18px;
+    font-style: italic;
+}
+
+.plrTeamBox h3 {
+}
+
+.roundWrap {
+    width: 169px;
+    height: 169px;
+    background: #f3f3f3;
+    border: 1px solid #e3e3e3;
+    overflow: hidden;
+    margin: auto;
+    margin: 19px auto;
+    border-radius: 150px;
+    text-align: center;
+}
+
+.arrowNew {
+}
+
+.arrow1::after {
+    content: "";
+    width: 294px;
+    height: 71px;
+    background: url(../images/arrow1.png) no-repeat left center;
+    position: absolute;
+    z-index: 1;
+    top: 14%;
+    left: 59%;
+}
+
+.arrow2::after {
+    content: "";
+    width: 294px;
+    height: 71px;
+    background: url(../images/arrow2.png) no-repeat left center;
+    position: absolute;
+    z-index: 1;
+    top: 48%;
+    left: 59%;
+}
+
+.arrow3::after {
+    content: "";
+    width: 71px;
+    height: 239px;
+    background: url(../images/arrow3.png) no-repeat left center;
+    position: absolute;
+    z-index: 1;
+    top: 48%;
+    left: 59%;
+}
+
+.arrow4::after {
+    content: "";
+    width: 294px;
+    height: 71px;
+    background: url(../images/arrow4.png) no-repeat left center;
+    position: absolute;
+    z-index: 1;
+    top: 15%;
+    left: 62%;
+}
+
+.arrow5::after {
+    content: "";
+    width: 294px;
+    height: 71px;
+    background: url(../images/arrow5.png) no-repeat left center;
+    position: absolute;
+    z-index: 1;
+    top: 42%;
+    left: 62%;
+}
+
+.arrow6 {
+    width: 44px;
+    height: 44px;
+    position: absolute;
+    z-index: 1;
+}
+
+.arrownew4::after {
+    content: "";
+    width: 294px;
+    height: 71px;
+    background: url(../images/arrownew4.png) no-repeat left center;
+    position: absolute;
+    z-index: 1;
+    top: 42%;
+    left: 62%;
+}
+
+.arrow6 {
+    width: 44px;
+    height: 44px;
+    position: absolute;
+    z-index: 1;
+}
+
+.appdetailsWrapp {
+    background: url(../images/bgphone.png) no-repeat;
+    webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    padding: 40px 0 0 0;
+}
+
+.appdetailsWrapp h1 {
+    padding: 15px 0;
+}
+
+.appImg img {
+    width: 100%;
+}
+
+.rightCt {
+}
+
+.rightCt h1 {
+    color: #FFF;
+    font: 30px SFUIDisplay-Bold;
+    margin: 23% 0 0 0;
+}
+
+.appsoreWrap {
+    margin: 10% 0 0 0;
+}
+
+.appsoreWrap a {
+    margin: 25px 15px 0 0;
+}
+
+.testimonialsWrapp {
+    background: #f6f6f6;
+    padding: 65px 0px 35px;
+}
+
+.testimonialsWrapp h1 {
+    font: 35px SFUIDisplay-Regular;
+    color: #434f5e;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 0 0 66px 0;
+}
+
+.profileRound {
+    width: 104px;
+    height: 104px;
+    overflow: hidden;
+    border-radius: 150px;
+    float: left;
+}
+
+.profileRound img {
+    width: 100%;
+}
+
+.testimornialBox {
+    padding: 5px 18px;
+}
+
+.testimornialBox p {
+    font: 15px SFUIDisplay-Light;
+    color: #434f5e;
+    margin: 14px 0 15px 5px;
+    font-style: italic;
+}
+
+.testimornialBox h4 {
+    font: 17px SFUIDisplay-Bold;
+}
+
+.testimornialBox h4 span {
+    font: 14px SFUIDisplay-Regular;
+    margin: 0 0 0 10px;
+    color: #434f5e;
+}
+
+.readAll {
+    background: url(../images/greenBg.png) no-repeat center center;
+    width: 174px;
+    display: block;
+    text-align: center;
+    padding: 16px 10px;
+    font: 14px SFUIDisplay-Regular;
+    margin: 32px auto;
+    color: #FFF;
+}
+
+.tournamentsGrayDown {
+    background: #f5f6f7;
+    padding: 72px 0;
+    display: table;
+    width: 100%;
+}
+
+.tournamentsGrayDown h1 {
+    font: 35px SFUIDisplay-Regular;
+    color: #434f5e;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.tournamentsGrayDown h2 {
+    font: 25px SFUIDisplay-Regular;
+    color: #65c178;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 0 0 53px 0;
+}
+
+.tournamentsGrayDown h5 {
+    font: 27px SFUIDisplay-Regular;
+    color: #434f5e;
+    margin: 0 0 71px 0;
+    text-align: center;
+}
+
+.ourClientsWrapp {
+    background: #FFF;
+    padding: 40px 0;
+}
+
+.ourClientsWrapp h1 {
+    font: 35px SFUIDisplay-Regular;
+    color: #434f5e;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.clintBox {
+    text-align: center;
+}
+
+.clintBox img {
+    width: 100%;
+}
+
+.clintBox h2 {
+    color: #434f5e;
+    font: 22px SFUIDisplay-Regular;
+}
+
+.bgcc {
+    width: 102px;
+    margin: 35px auto;
+}
+
+footer {
+    background: #efefef;
+}
+
+.footTop {
+    padding: 42px 0;
+}
+
+.footTop h2 {
+    font: 20px SFUIDisplay-Bold;
+    margin: 0 0 29px 0;
+    color: #1c2227;
+}
+
+.footTop p {
+    font: 15px SFUIDisplay-Bold;
+    color: #505356;
+    margin: 0 0 20px 0;
+}
+
+.footTop ul li a {
+    font: 15px SFUIDisplay-Regular;
+    color: #505356;
+    margin: 5px 0;
+    display: block;
+}
+
+.arowSty .owl-prev {
+    width: 40px;
+    height: 57px;
+    background: url(../images/a_left.png) no-repeat left center;
+    top: 25%;
+    left: -2%;
+    position: absolute;
+    text-indent: -2555px;
+}
+
+.arowSty .owl-next {
+    width: 40px;
+    height: 57px;
+    background: url(../images/a_right.png) no-repeat left center;
+    top: 25%;
+    right: -2%;
+    position: absolute;
+    text-indent: -2555px;
+}
+
+.deskRight {
+    float: right !important;
+}
+
+.profileWrapp {
+    padding: 21px 15px;
+    background: #FFF;
+    -webkit-box-shadow: 0 -3px 3px 0 rgba(0, 0, 0, .1);
+    box-shadow: 0 -3px 3px 0 rgba(0, 0, 0, .1);
+}
+
+.profileWrapp h1 {
+    font: 23px SFUIDisplay-Regular;
+    padding: 15px 0;
+    text-align: center;
+    background: #65c178;
+    color: #FFF;
+}
+
+.profileDetaiWrap {
+    padding: 28px 0 45px 0;
+}
+
+.profile_flex {
+    width: 100%;
+    display: -webkit-flex; /* Safari */
     -webkit-justify-content: space-around; /* Safari 6.1+ */
     display: flex;
-    justify-content: space-around;}
-	
-.detailPro{ width:194px;background:#033; }
-.followingBox{width:194px; background:#fafafa; border:1px  solid #d9d9d9; padding:24px 0; text-align:center;border-radius:14px;height:127px;margin-top:35px;}
-.followingBox h2{ color:#434f5e; font:23px SFUIDisplay-Regular; margin:0 0 10px 0;}
-.followingBox h3{color:#65c178;font:26px Montserrat-Bold;}
-.profileBox{ width:194px; height:194px; overflow:hidden;-webkit-border-radius: 150px;border-radius:150px; margin:auto;}
-.profiledetailWrapp{ text-align:center;}
-.profiledetailWrapp h2{color:#364e6b; font:23px SFUIDisplay-Bold; margin:20px auto 10px; text-transform:uppercase;}
-.profiledetailWrapp h4{color:#073267; font:16px SFUIDisplay-Regular; margin:0px auto 10px; text-transform:uppercase;}
+    justify-content: space-around;
+}
 
-.playlist{ width:584px; margin:20px auto; list-style: none;
-  
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  
-  -webkit-flex-flow: row wrap;
-  justify-content: space-around;}
-.playBox{width:178px; color:#FFF; font:16px SFUIDisplay-Regular; background:#999; text-align:center; padding:13px 0;-webkit-border-radius: 28px;
-border-radius:28px; margin:10px 0; height:47px;}
-.playBox:nth-child(1) { background:#ee9821;}
-.playBox:nth-child(2) { background:#507f9b;}
-.playBox:nth-child(3) { background:#58825a;}
-.playBox:nth-child(4) { background:#f27e45;}
-.playBox:nth-child(5) { background:#6cb9ca;}
-.playBox:nth-child(6) { background:#ee9821;}
-.playBox:nth-child(7) { background:#507f9b;}
-.playBox:nth-child(8) { background:#58825a;}
+.detailPro {
+    width: 194px;
+    background: #033;
+}
 
+.followingBox {
+    width: 194px;
+    background: #fafafa;
+    border: 1px solid #d9d9d9;
+    padding: 24px 0;
+    text-align: center;
+    border-radius: 14px;
+    height: 127px;
+    margin-top: 35px;
+}
 
+.followingBox h2 {
+    color: #434f5e;
+    font: 23px SFUIDisplay-Regular;
+    margin: 0 0 10px 0;
+}
 
+.followingBox h3 {
+    color: #65c178;
+    font: 26px Montserrat-Bold;
+}
 
+.profileBox {
+    width: 194px;
+    height: 194px;
+    overflow: hidden;
+    -webkit-border-radius: 150px;
+    border-radius: 150px;
+    margin: auto;
+}
 
+.profiledetailWrapp {
+    text-align: center;
+}
 
-.SportPlayerWrap{ border:1px solid #d9d9d9; display:table; width:100%; margin-bottom:18px;}
-.leftBG{ padding:0px !important;height:408px !important; display:table;}
-.hedcric{ text-align:center;display:table-cell;vertical-align:middle;}
-.hedcric h3{ font:16px Montserrat-Bold; color:#FFF; margin:10px 0;}
-.cricketbg{ background:#65c178 url(../images/cricket.png) no-repeat left;}
-.soccer{ background:#65c178 url(../images/soccer.png) no-repeat left;}
-.swimming{ background:#65c178 url(../images/swimming.png) no-repeat left;}
-.badminton{ background:#65c178 url(../images/badminton.png) no-repeat left;}
+.profiledetailWrapp h2 {
+    color: #364e6b;
+    font: 23px SFUIDisplay-Bold;
+    margin: 20px auto 10px;
+    text-transform: uppercase;
+}
 
-.spoertSkillLeft{ padding:17px 15px;}
-.spoertSkillLeft h2{ padding:0 14px 19px 0; border-bottom:1px solid #d6d6d6;font:19px SFUIDisplay-Bold; color:#434f5e;}
-.pleft{ width:62.17616580310881%; float:left; color:#434f5e; font:16px SFUIDisplay-Bold;}
-.pright{ width:36.26943005181347%; float:right;color:#434f5e; font:14.5px SFUIDisplay-Regular;}
-.skill_listing{ padding:13px 0; display:table; width:100%;}
+.profiledetailWrapp h4 {
+    color: #073267;
+    font: 16px SFUIDisplay-Regular;
+    margin: 0px auto 10px;
+    text-transform: uppercase;
+}
 
-.spoertRight{ padding:17px 15px;}
-.spoertRight h2{ padding:0 14px 19px 0; border-bottom:1px solid #d6d6d6;font:19px SFUIDisplay-Bold; color:#434f5e;}
-.spoertRight h5{ color:#65c178;font:15px SFUIDisplay-Bold; padding:15px 0;}
-.headingtable{ padding:10px 0; font:13px SFUIDisplay-Bold; color:#434f5e;}
-.play_details{ text-align:left;font:12.5px SFUIDisplay-Light; color:#434f5e;}
-.play_details td{ padding:10px 0;}
-.play_details{}
+.playlist {
+    width: 584px;
+    margin: 20px auto;
+    list-style: none;
+
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+
+    -webkit-flex-flow: row wrap;
+    justify-content: space-around;
+}
+
+.playBox {
+    width: 178px;
+    color: #FFF;
+    font: 16px SFUIDisplay-Regular;
+    background: #999;
+    text-align: center;
+    padding: 13px 0;
+    -webkit-border-radius: 28px;
+    border-radius: 28px;
+    margin: 10px 0;
+    height: 47px;
+}
+
+.playBox:nth-child(1) {
+    background: #ee9821;
+}
+
+.playBox:nth-child(2) {
+    background: #507f9b;
+}
+
+.playBox:nth-child(3) {
+    background: #58825a;
+}
+
+.playBox:nth-child(4) {
+    background: #f27e45;
+}
+
+.playBox:nth-child(5) {
+    background: #6cb9ca;
+}
+
+.playBox:nth-child(6) {
+    background: #ee9821;
+}
+
+.playBox:nth-child(7) {
+    background: #507f9b;
+}
+
+.playBox:nth-child(8) {
+    background: #58825a;
+}
+
+.SportPlayerWrap {
+    border: 1px solid #d9d9d9;
+    display: table;
+    width: 100%;
+    margin-bottom: 18px;
+}
+
+.leftBG {
+    padding: 0px !important;
+    height: 408px !important;
+    display: table;
+}
+
+.hedcric {
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.hedcric h3 {
+    font: 16px Montserrat-Bold;
+    color: #FFF;
+    margin: 10px 0;
+}
+
+.cricketbg {
+    background: #65c178 url(../images/cricket.png) no-repeat left;
+}
+
+.soccer {
+    background: #65c178 url(../images/soccer.png) no-repeat left;
+}
+
+.swimming {
+    background: #65c178 url(../images/swimming.png) no-repeat left;
+}
+
+.badminton {
+    background: #65c178 url(../images/badminton.png) no-repeat left;
+}
+
+.spoertSkillLeft {
+    padding: 17px 15px;
+}
+
+.spoertSkillLeft h2 {
+    padding: 0 14px 19px 0;
+    border-bottom: 1px solid #d6d6d6;
+    font: 19px SFUIDisplay-Bold;
+    color: #434f5e;
+}
+
+.pleft {
+    width: 62.17616580310881%;
+    float: left;
+    color: #434f5e;
+    font: 16px SFUIDisplay-Bold;
+}
+
+.pright {
+    width: 36.26943005181347%;
+    float: right;
+    color: #434f5e;
+    font: 14.5px SFUIDisplay-Regular;
+}
+
+.skill_listing {
+    padding: 13px 0;
+    display: table;
+    width: 100%;
+}
+
+.spoertRight {
+    padding: 17px 15px;
+}
+
+.spoertRight h2 {
+    padding: 0 14px 19px 0;
+    border-bottom: 1px solid #d6d6d6;
+    font: 19px SFUIDisplay-Bold;
+    color: #434f5e;
+}
+
+.spoertRight h5 {
+    color: #65c178;
+    font: 15px SFUIDisplay-Bold;
+    padding: 15px 0;
+}
+
+.headingtable {
+    padding: 10px 0;
+    font: 13px SFUIDisplay-Bold;
+    color: #434f5e;
+}
+
+.play_details {
+    text-align: left;
+    font: 12.5px SFUIDisplay-Light;
+    color: #434f5e;
+}
+
+.play_details td {
+    padding: 10px 0;
+}
+
+.play_details {
+}
+
 /*-----------------------------*/
-.tournamentDetailWrap{ max-width:1500px; margin:auto;}
-.banarImg img{ width:100%; }
-.topLeftTT{}
-.registerTopWrap h1{ font:26px Montserrat-Bold; margin:0 0 13px 0; color:#434f5e;}
-.topLeftTT h2{ font:18px Montserrat-Regular; margin:0 0 12px 0; color:#434f5e;}
-.registerTopWrap h3{ font:14.5px Montserrat-Bold; margin:0 0 0; color:#59606a;}
+.tournamentDetailWrap {
+    max-width: 1500px;
+    margin: auto;
+}
 
-.regNew{ padding:22px; font:27px SFUIDisplay-Regular; color:#FFF; background:#65c178; display:inline-block;}
-.registerTopWrap{ display:table; width:#FFF; background:#FFF; width:100%;padding:27px 15px; border-bottom:3px solid #e1e1e1;}
-.tournamentDetailWrapp{ background:#FFF; padding:51px 30px 30px 30px;}
-.tournamentDetailWrapp h1{font:26px Montserrat-Bold; margin:0 0 13px 0; color:#434f5e;}
-.TudetailLeft{border:1px solid #d9d9d9; padding:0px !important;}
-.tounamentNameList{ padding:14px; display:table; width:100%;}
+.banarImg img {
+    width: 100%;
+}
+
+.topLeftTT {
+}
+
+.registerTopWrap h1 {
+    font: 26px Montserrat-Bold;
+    margin: 0 0 13px 0;
+    color: #434f5e;
+}
+
+.topLeftTT h2 {
+    font: 18px Montserrat-Regular;
+    margin: 0 0 12px 0;
+    color: #434f5e;
+}
+
+.registerTopWrap h3 {
+    font: 14.5px Montserrat-Bold;
+    margin: 0 0 0;
+    color: #59606a;
+}
+
+.regNew {
+    padding: 22px;
+    font: 27px SFUIDisplay-Regular;
+    color: #FFF;
+    background: #65c178;
+    display: inline-block;
+}
+
+.registerTopWrap {
+    display: table;
+    width: #FFF;
+    background: #FFF;
+    width: 100%;
+    padding: 27px 15px;
+    border-bottom: 3px solid #e1e1e1;
+}
+
+.tournamentDetailWrapp {
+    background: #FFF;
+    padding: 51px 30px 30px 30px;
+}
+
+.tournamentDetailWrapp h1 {
+    font: 26px Montserrat-Bold;
+    margin: 0 0 13px 0;
+    color: #434f5e;
+}
+
+.TudetailLeft {
+    border: 1px solid #d9d9d9;
+    padding: 0px !important;
+}
+
+.tounamentNameList {
+    padding: 14px;
+    display: table;
+    width: 100%;
+}
+
 .TudetailLeft > div.tounamentNameList:nth-of-type(odd) {
     background: #fafafa;
 }
 
-.tourLeftRight{ width:48%; float:left;}
-.tourLeftRight h2{ font:16px Montserrat-Bold; color:#434f5e;}
-.tourLeftRight h3{ font:18px Montserrat-Regular; color:#434f5e;}
-.regiRight{ padding:30px 0 !important; text-align:center;}
-.feeBox{ width:264px;height:74px; background:url(../images/yellow_priz.png) no-repeat center center; margin:auto; padding:20px 0 0 0;}
-.feeBox h2{font:25px Montserrat-Bold;color:#434f5e;}
-.feeBox h2 span{ color:#65c178;}
-.regiRight h3{font:18px Montserrat-Bold;color:#434f5e; padding:15px 0; text-align:center; border-bottom:1px solid #c3c3c3; border-top:1px solid #c3c3c3; margin:25px 20px;}
-.regiRight h4{font:23px Montserrat-Regular;color:#434f5e; padding:15px 0; text-align:center;}
+.tourLeftRight {
+    width: 48%;
+    float: left;
+}
 
-.socilaWrap{list-style: none;
-  
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  
-  -webkit-flex-flow: row wrap;
-  justify-content: space-around;}
-  
-.socilaWrap a{ width:44px; height:44px;}
+.tourLeftRight h2 {
+    font: 16px Montserrat-Bold;
+    color: #434f5e;
+}
 
-.discription{ margin:15px 0; padding:15px !important;}
-.discription h4{font:18px Montserrat-Bold; margin:15px 0; color:#434f5e;}
-.discription p{color:#434f5e;font:13px/24px Montserrat-Regular;}
+.tourLeftRight h3 {
+    font: 18px Montserrat-Regular;
+    color: #434f5e;
+}
+
+.regiRight {
+    padding: 30px 0 !important;
+    text-align: center;
+}
+
+.feeBox {
+    width: 264px;
+    height: 74px;
+    background: url(../images/yellow_priz.png) no-repeat center center;
+    margin: auto;
+    padding: 20px 0 0 0;
+}
+
+.feeBox h2 {
+    font: 25px Montserrat-Bold;
+    color: #434f5e;
+}
+
+.feeBox h2 span {
+    color: #65c178;
+}
+
+.regiRight h3 {
+    font: 18px Montserrat-Bold;
+    color: #434f5e;
+    padding: 15px 0;
+    text-align: center;
+    border-bottom: 1px solid #c3c3c3;
+    border-top: 1px solid #c3c3c3;
+    margin: 25px 20px;
+}
+
+.regiRight h4 {
+    font: 23px Montserrat-Regular;
+    color: #434f5e;
+    padding: 15px 0;
+    text-align: center;
+}
+
+.socilaWrap {
+    list-style: none;
+
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+
+    -webkit-flex-flow: row wrap;
+    justify-content: space-around;
+}
+
+.socilaWrap a {
+    width: 44px;
+    height: 44px;
+}
+
+.discription {
+    margin: 15px 0;
+    padding: 15px !important;
+}
+
+.discription h4 {
+    font: 18px Montserrat-Bold;
+    margin: 15px 0;
+    color: #434f5e;
+}
+
+.discription p {
+    color: #434f5e;
+    font: 13px/24px Montserrat-Regular;
+}
 
 /*-------------------*/
-.teamIco{ width:115px; height:115px; border:1px solid #d6d6d6;border-radius: 150px; text-align:center; overflow:hidden; background:#FFF;}
-.teamIco img{ width:100%;}
-.groupstageWrapp{ background:#FFF;}
-.groupstageWrapp h1{ font:18px Montserrat-Bold; color:#FFF; background:#65c178; padding:20px 20px;}
-.groupstageWrapp h2{ color:#434f5e; font:20px Montserrat-Regular; padding:15px;}
-.groupbox_AB{-webkit-box-shadow: 0 1px 3px 1px rgba(0,0,0,.1);
-box-shadow: 0 1px 3px 1px rgba(0,0,0,.1);}
-.groupbox_AB h3{ padding:30px 10px;font:18px Montserrat-Bold; color:#424e5d;}
+.teamIco {
+    width: 115px;
+    height: 115px;
+    border: 1px solid #d6d6d6;
+    border-radius: 150px;
+    text-align: center;
+    overflow: hidden;
+    background: #FFF;
+}
 
-.headingMAT{}
-.headingMAT td{font:17px Montserrat-Regular; text-align:center; padding:15px 0; background:#f5f6f7;}
-.playList td{text-align:center;font:15px Montserrat-Regular;padding:18px 0;color:#565656;border-bottom:1px solid #e0e2e4;}
+.teamIco img {
+    width: 100%;
+}
+
+.groupstageWrapp {
+    background: #FFF;
+}
+
+.groupstageWrapp h1 {
+    font: 18px Montserrat-Bold;
+    color: #FFF;
+    background: #65c178;
+    padding: 20px 20px;
+}
+
+.groupstageWrapp h2 {
+    color: #434f5e;
+    font: 20px Montserrat-Regular;
+    padding: 15px;
+}
+
+.groupbox_AB {
+    -webkit-box-shadow: 0 1px 3px 1px rgba(0, 0, 0, .1);
+    box-shadow: 0 1px 3px 1px rgba(0, 0, 0, .1);
+}
+
+.groupbox_AB h3 {
+    padding: 30px 10px;
+    font: 18px Montserrat-Bold;
+    color: #424e5d;
+}
+
+.headingMAT {
+}
+
+.headingMAT td {
+    font: 17px Montserrat-Regular;
+    text-align: center;
+    padding: 15px 0;
+    background: #f5f6f7;
+}
+
+.playList td {
+    text-align: center;
+    font: 15px Montserrat-Regular;
+    padding: 18px 0;
+    color: #565656;
+    border-bottom: 1px solid #e0e2e4;
+}
+
 .TudetailLeft > div.tounamentNameList:nth-of-type(odd) {
     background: #fafafa;
 }
-.matchesN{ color:#65c178;}
+
+.matchesN {
+    color: #65c178;
+}
+
 /*------------------------------*/
-.tournamentLeagWrapp{background:#f8f8f8; padding:41px 0;-webkit-box-shadow: 0 5px 5px 1px rgba(0,0,0,.2);
-box-shadow: 0 5px 5px 1px rgba(0,0,0,.2); position:relative; display:table; width:100%;}
-.tournamBoxNe{text-align:center;}
-.tourRound{width:150px;height:150px; background:#FFF; border:1px solid #eaeaea; margin:auto; text-align:center;display: flex;
-  align-items:center;justify-content:center;border-radius: 150px;}
-.tournamentLeagWrapp h1{font:22px Montserrat-Bold; color:#65c178;margin:24px 0 27px 0;}
-.tournamentLeagWrapp p{font:16px/36px SFUIDisplay-Regular; color:#434f5e;padding:0 18px;}
-.marketPlaceWrap{padding:31px 0; background:#FFF; display:table; width:100%;}
-.marketPlaceWrap h1{ font:40px SFUIDisplay-Regular; text-align:center; color:#434f5e; margin:0 0 29px 0;}
+.tournamentLeagWrapp {
+    background: #f8f8f8;
+    padding: 41px 0;
+    -webkit-box-shadow: 0 5px 5px 1px rgba(0, 0, 0, .2);
+    box-shadow: 0 5px 5px 1px rgba(0, 0, 0, .2);
+    position: relative;
+    display: table;
+    width: 100%;
+}
+
+.tournamBoxNe {
+    text-align: center;
+}
+
+.tourRound {
+    width: 150px;
+    height: 150px;
+    background: #FFF;
+    border: 1px solid #eaeaea;
+    margin: auto;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 150px;
+}
+
+.tournamentLeagWrapp h1 {
+    font: 22px Montserrat-Bold;
+    color: #65c178;
+    margin: 24px 0 27px 0;
+}
+
+.tournamentLeagWrapp p {
+    font: 16px/36px SFUIDisplay-Regular;
+    color: #434f5e;
+    padding: 0 18px;
+}
+
+.marketPlaceWrap {
+    padding: 31px 0;
+    background: #FFF;
+    display: table;
+    width: 100%;
+}
+
+.marketPlaceWrap h1 {
+    font: 40px SFUIDisplay-Regular;
+    text-align: center;
+    color: #434f5e;
+    margin: 0 0 29px 0;
+}
 
 /*-----------------------------*/
-.marketBox{ background:#FFF;border:1px solid #e7e7e7; margin:0 0 15px 0;width:100%; display:table;}
-.topImageHolder{ background:#e4e4e4; text-align:center;display:flex;align-items:center;justify-content:center;height:227px;}
-.marketBox h2{ margin:20px 0; font:17px SFUIDisplay-Bold; color:#4d4d4d; text-align:center;}
-.starHolder{ margin:0 auto 15px auto;display: flex;justify-content:center;}
-.starHolder i{ font-size:19px;color:#cccccc; margin:0 3px;}
-.staRating{color:#fee31e !important;}
-.marketWrapp{ max-width:1500px; margin:auto; padding:0 0 1px 0;}
-.marketBox h3{ color:#FFF; font:18px SFUIDisplay-Bold; padding:14px 0; width:50%; text-align:center; background:#434f5e; float:left;}
-.buynow{font:18px SFUIDisplay-Bold; padding:14px 0;background:#65c178; width:50%; text-align:center; color:#FFF; display:block; float:right;}
-.buynow:hover{background:#10b2b8; color:#FFF;}
-/*-----------------------------*/
-.tournamentBt{ padding:0 30px !important;}
-.tournamentBt .active{ background:#65c178; color:#FFF;}
-.tournamentBt li a{ outline:none;}
-.tournamentBt .active a{ color:#FFF;}
-.tournamentBt li{ width:50%; text-align:center;background:#ededed;font:18px SFUIDisplay-Bold; padding:8px 0;}
-.tournamentBt li a{color:#434f5e;}
+.marketBox {
+    background: #FFF;
+    border: 1px solid #e7e7e7;
+    margin: 0 0 15px 0;
+    width: 100%;
+    display: table;
+}
 
-.menu_fix{ position:fixed; top:0px;z-index:500;}
+.topImageHolder {
+    background: #e4e4e4;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 227px;
+}
+
+.marketBox h2 {
+    margin: 20px 0;
+    font: 17px SFUIDisplay-Bold;
+    color: #4d4d4d;
+    text-align: center;
+}
+
+.starHolder {
+    margin: 0 auto 15px auto;
+    display: flex;
+    justify-content: center;
+}
+
+.starHolder i {
+    font-size: 19px;
+    color: #cccccc;
+    margin: 0 3px;
+}
+
+.staRating {
+    color: #fee31e !important;
+}
+
+.marketWrapp {
+    max-width: 1500px;
+    margin: auto;
+    padding: 0 0 1px 0;
+}
+
+.marketBox h3 {
+    color: #FFF;
+    font: 18px SFUIDisplay-Bold;
+    padding: 14px 0;
+    width: 50%;
+    text-align: center;
+    background: #434f5e;
+    float: left;
+}
+
+.buynow {
+    font: 18px SFUIDisplay-Bold;
+    padding: 14px 0;
+    background: #65c178;
+    width: 50%;
+    text-align: center;
+    color: #FFF;
+    display: block;
+    float: right;
+}
+
+.buynow:hover {
+    background: #10b2b8;
+    color: #FFF;
+}
+
+/*-----------------------------*/
+.tournamentBt {
+    padding: 0 30px !important;
+}
+
+.tournamentBt .active {
+    background: #65c178;
+    color: #FFF;
+}
+
+.tournamentBt li a {
+    outline: none;
+}
+
+.tournamentBt .active a {
+    color: #FFF;
+}
+
+.tournamentBt li {
+    width: 50%;
+    text-align: center;
+    background: #ededed;
+    font: 18px SFUIDisplay-Bold;
+    padding: 8px 0;
+}
+
+.tournamentBt li a {
+    color: #434f5e;
+}
+
+.menu_fix {
+    position: fixed;
+    top: 0px;
+    z-index: 500;
+}
 
 .TudetailLeft > div.tounamentNameList:nth-of-type(odd) {
     background: #fafafa;
 }
-.test > tr.matchList:nth-of-type(odd){ background:#000 !important;}
-.slidcontentholder{
-  height: 50%;
-  overflow: auto;
-  margin: auto;
-  position: absolute;
-  top: 0; left: 0; bottom: 0; right: 0;}
 
-.mainwarppslide{ height:480px; overflow:hidden;}
-.mainwarppslide img{ width:100%;}
+.test > tr.matchList:nth-of-type(odd) {
+    background: #000 !important;
+}
+
+.slidcontentholder {
+    height: 50%;
+    overflow: auto;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.mainwarppslide {
+    height: 480px;
+    overflow: hidden;
+}
+
+.mainwarppslide img {
+    width: 100%;
+}
+
 /*--------------------------*/
-.popNewWrpa{ background:#edf1f4 url(../images/popBgIco.png) no-repeat left 15px center;margin:0px auto;}
-.popNewWrpa p{ color:#464646; font:13.5px/25px SFUIDisplay-Light; text-align:center; width:80%; margin:auto; padding:32px 0;}
-.orgUserBox{ text-align:center; padding:1px 15px 25px; border-right:1px solid #FFF;}
-.orgUserBox h1{ font:14px Montserrat-Bold; color:#535252; padding:16px 0; text-transform:uppercase;}
-.orgUserBox h6{font:12px/22px SFUIDisplay-Light; color:#535252; padding:4px 0 15px 0;}
-.continueBt{ font:13.5px Montserrat-Regular; padding:16px 0; text-align:center; min-width:244px; margin:auto; color:#FFF; background:#237b9f; display:inline-block; border-radius:2px; text-transform:uppercase;}
-.continueBt:hover{ background:#e46f08; color:#FFF;}
-.orgC{ background:#e46f08 !important;}
-.naBorder{ border:none;}
-.regPop{ height:42px; width:320px; margin:13px auto; border:none;font:13.1px SFUIDisplay-Light; padding:0 0 0 15px; color:#666;letter-spacing:1px;}
-.popNewWrpa .registerWrap{ text-align:left; width:320px;margin:25px auto;}
-.registerWrap h3{font:13.5px Montserrat-Regular; color:#333;}
-.closeNew{ position:absolute; right:0px; background:#333;position:absolute; z-index:250;right:-13px;top:-10px;}
+.popNewWrpa {
+    background: #edf1f4 url(../images/popBgIco.png) no-repeat left 15px center;
+    margin: 0px auto;
+}
+
+.popNewWrpa p {
+    color: #464646;
+    font: 13.5px/25px SFUIDisplay-Light;
+    text-align: center;
+    width: 80%;
+    margin: auto;
+    padding: 32px 0;
+}
+
+.orgUserBox {
+    text-align: center;
+    padding: 1px 15px 25px;
+    border-right: 1px solid #FFF;
+}
+
+.orgUserBox h1 {
+    font: 14px Montserrat-Bold;
+    color: #535252;
+    padding: 16px 0;
+    text-transform: uppercase;
+}
+
+.orgUserBox h6 {
+    font: 12px/22px SFUIDisplay-Light;
+    color: #535252;
+    padding: 4px 0 15px 0;
+}
+
+.continueBt {
+    font: 13.5px Montserrat-Regular;
+    padding: 16px 0;
+    text-align: center;
+    min-width: 244px;
+    margin: auto;
+    color: #FFF;
+    background: #237b9f;
+    display: inline-block;
+    border-radius: 2px;
+    text-transform: uppercase;
+}
+
+.continueBt:hover {
+    background: #e46f08;
+    color: #FFF;
+}
+
+.orgC {
+    background: #e46f08 !important;
+}
+
+.naBorder {
+    border: none;
+}
+
+.regPop {
+    height: 42px;
+    width: 320px;
+    margin: 13px auto;
+    border: none;
+    font: 13.1px SFUIDisplay-Light;
+    padding: 0 0 0 15px;
+    color: #666;
+    letter-spacing: 1px;
+}
+
+.popNewWrpa .registerWrap {
+    text-align: left;
+    width: 320px;
+    margin: 25px auto;
+}
+
+.registerWrap h3 {
+    font: 13.5px Montserrat-Regular;
+    color: #333;
+}
+
+.closeNew {
+    position: absolute;
+    right: 0px;
+    background: #333;
+    position: absolute;
+    z-index: 250;
+    right: -13px;
+    top: -10px;
+}
 
 
 

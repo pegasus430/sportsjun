@@ -1,6 +1,8 @@
 @extends('home.layout')
 
 @section('content')
+    <div class="clearfix"></div>
+
     <div class="profileWrapp">
         <div class="container">
             <h1>Teams</h1>

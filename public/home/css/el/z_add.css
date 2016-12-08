@@ -4,9 +4,6 @@ body {
     font-weight: normal;
 }
 
-.searchWrapp {
-    overflow: hidden;
-}
 
 .s-result-item {
     display: block;
@@ -95,57 +92,6 @@ body {
     padding: 15px 0;
 }
 
-.searchWrapp{
-    background:#434f5e;
-    padding:0;
-    margin:0;
-
-}
-
-.searchWrapp .row{
-    background-color: white;
-    color: black;
-    border: 2px outset black;
-    border-radius: 6px;
-    padding: 10px 5px 2px 5px;
-    max-width: 1200px;
-    margin: 10px auto;
-}
-
-.search-info {
-    padding-left: 2%;
-}
-
-.serchIco {
-    max-width: 6%;
-    margin: 8px 0 0 0;
-}
-
-.serchIco img {
-    max-height: 28px;
-}
-
-.search-button {
-    width: 11%;
-    float: right;
-
-}
-
-.searchWrapp input.search-button-input {
-
-    background: #fee31e;
-    color: #333;
-    font: 15px SFUIDisplay-Bold;
-}
-
-.searchWrapp .group label {
-    font-weight: 500;
-    color: #333;
-}
-
-.searchWrapp input:focus ~ label, input:valid ~ label {
-    color: #333;
-}
 
 .search-tournament-tabs{
     witdh:100%;
