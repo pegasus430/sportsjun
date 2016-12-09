@@ -2901,3 +2901,30 @@ span.required.validation {
     color: red;
     margin-right: 5px;
 }
+
+.clear {
+    clear: both;
+}
+
+
+h4.left_head {
+    float: left;
+    color:#8acf98;
+}
+
+h4.right_head {
+    float: right;
+
+}
+
+h4.right_head a:hover {
+    text-decoration: none;
+    color: #000;
+}
+
+h4.right_head a {
+    background-color: #8acf98;
+    color: #fff;
+    padding: 5px;
+    border-radius: 3px;
+}

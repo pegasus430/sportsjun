@@ -36,7 +36,7 @@ $lis = $tournament_data->toArray();
 
 ?>
 <h4><i class="fa fa-calendar-o"></i>{{$open_day}} {{$newopen}} - {{$close_day}} {{$newclose}}</h4><br>
-<h4><i class="fa fa-map-marker"></i>{{$tournament_data->location}}</h4>
+<h4><i class="fa fa-map-marker"></i>{{preg_replace('/(?<!\d),|,(?!\d{3})/', ', ',$tournament_data->location)}}</h4>
 </div>
 
 <div class="form-body">

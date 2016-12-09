@@ -67,11 +67,19 @@
                         @endif
 
 
+                        	
+
                         <div class="sj_actions_new">
 	                        <?php if(!in_array($lis['id'],$exist_array) && (!empty($lis['end_date'] && $lis['end_date']!='0000-00-00')?strtotime($lis['end_date']) >= strtotime(date(config('constants.DATE_FORMAT.DB_STORE_DATE_FORMAT'))):strtotime($lis['start_date']) >= strtotime(date(config('constants.DATE_FORMAT.DB_STORE_DATE_FORMAT'))))) {?>
 							<div class="sb_join_tournament_main" id="{{$lis['id']}}" spid="{{$lis['sports_id']}}" val="{{!empty($lis['schedule_type'])?(($lis['schedule_type']=='individual')?'PLAYER_TO_TOURNAMENT':'TEAM_TO_TOURNAMENT'):''}}">
 
+
+
+
 						@if($lis['enrollment_type'] == 'online' && $lis_object->bankaccount !== null && $lis_object->bankaccount->varified == 1)
+
+
+                                      
 
 						    @if($lis_object->is_sold_out==1)
                                 <a href="#" class="sj_add_but"><span><i class="fa fa-check"></i>Sold Out / Registrations closed</span></a>
@@ -89,6 +97,8 @@
 
                               
                               @endif
+
+                             
 
 							@else
                             <a href="#" class="sj_add_but"><span><i class="fa fa-check"></i> Event Registration (Offline Payment)</span></a>
