@@ -4,10 +4,10 @@
 <div class="col-lg-8 col-md-10 col-sm-14 col-md-offset-1 col-lg-offset-2 tournament_profile teamslist-pg" style="padding-top: 3px !important;">
  <div class="panel panel-default">
    <div class="panel-body">
-
+ 
 <div class="transcations_head">    
-<h4 class="left_head">Your Payments</h4>
-<h4 class="right_head"><a href="/mytournamentregistrations/{{$u_id}}">Registrations of Your Tournaments</a></h4>
+<h4 class="left_head">Registrations of Your Tournaments</h4>
+<h4 class="right_head"><a href="/mytransactions/{{$u_id}}">Your Payments</a></h4>
 <div class="clear"></div>
 <br>
 </div>

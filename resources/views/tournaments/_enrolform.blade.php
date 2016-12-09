@@ -5,7 +5,7 @@
                 <h3>{{ trans('message.tournament.fields.reg_reg_heading') }}</h3>
             </div>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-6">
             <div class="section">
                 <label class="form_label">{{  trans('message.tournament.fields.reg_opening_date') }} <span  class='required'>*</span></label>         
                 <label class='field' >
@@ -20,7 +20,7 @@
             
             </div>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-6">
             <div class="section">
                 <label class="form_label">{{  trans('message.tournament.fields.reg_opening_time') }}</label>         
                 <label class='field' >
@@ -35,7 +35,7 @@
             
             </div>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-6">
             <div class="section">
                 <label class="form_label">{{  trans('message.tournament.fields.reg_closing_date') }} <span  class='required'>*</span></label>         
                 <label class='field' >
@@ -50,7 +50,7 @@
             
             </div>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-6">
             <div class="section">
                 <label class="form_label">{{  trans('message.tournament.fields.reg_closing_time') }}</label>         
                 <label class='field' >
