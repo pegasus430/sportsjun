@@ -2,16 +2,30 @@
 /* form starting stylings ------------------------------ */
 .searchWrapp .group {
     position: relative;
-    float: left;
-    width: 83%;
-
+    display:inline-block;
+    width:80%;
 }
 
+@media (max-width:767px){
+    .searchWrapp .group {
+        margin-bottom: 30px;
+    }
+}
+@media (max-width:479px){
+    .searchWrapp .group {
+        margin-bottom: 50px;
+    }
+}
+
+
+
 .searchWrapp {
-    background: #e8e7e6;
+    margin:5px 0;
+    background: white;
     padding: 15px 15px;
     width: 100%;
     display: table;
+    overflow: hidden;
 }
 
 .searchWrapp input {
@@ -31,7 +45,7 @@
 .searchWrapp label {
     color: #999;
     font: 16px SFUIDisplay-Regular;
-
+    line-height:20px;
     position: absolute;
     pointer-events: none;
     left: 5px;
@@ -137,11 +151,8 @@
 }
 
 .searchWrapp .serachBt {
-    float: right;
-    width: 13% !important;
-    background: #fee31e !important;
+    background: #65c178 !important;
     color: #FFF;
     font: 15px SFUIDisplay-Bold;
-    margin: -15px;
-    padding: 27px;
+    padding: 15px 5px;
 }

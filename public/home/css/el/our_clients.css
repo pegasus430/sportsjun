@@ -2,6 +2,8 @@
 .ourClientsWrapp {
     background: #FFF;
     padding: 40px 0;
+    width:100%;
+    overflow-x:hidden;
 }
 
 .ourClientsWrapp h1 {

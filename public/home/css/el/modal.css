@@ -1,0 +1,111 @@
+
+/*--------------------------*/
+.popNewWrpa {
+    background: #edf1f4 url(../images/popBgIco.png) no-repeat left 15px center;
+    margin: 0px auto;
+}
+
+.popNewWrpa p {
+    color: #464646;
+    font: 13.5px/25px SFUIDisplay-Light;
+    text-align: center;
+    width: 80%;
+    margin: auto;
+    padding: 32px 0;
+}
+
+.orgUserBox {
+    text-align: center;
+    padding: 1px 15px 25px;
+    border-right: 1px solid #FFF;
+}
+
+.orgUserBox h1 {
+    font: 14px Montserrat-Bold;
+    color: #535252;
+    padding: 16px 0;
+    text-transform: uppercase;
+}
+
+.orgUserBox h6 {
+    font: 12px/22px SFUIDisplay-Light;
+    color: #535252;
+    padding: 4px 0 15px 0;
+}
+.continueBt {
+    font: 13.5px Montserrat-Regular;
+    padding: 16px 0;
+    text-align: center;
+    min-width: 244px;
+    margin: auto;
+    color: #FFF;
+    background: #237b9f;
+    display: inline-block;
+    border-radius: 2px;
+    text-transform: uppercase;
+}
+
+.continueBt:hover {
+    background: #e46f08;
+    color: #FFF;
+}
+
+.orgC {
+    background: #e46f08 !important;
+}
+
+.naBorder {
+    border: none;
+}
+
+.regPop {
+    height: 42px;
+    width: 100%;
+    max-width:320px;
+    margin: 13px auto;
+    border: none;
+    font: 13.1px SFUIDisplay-Light;
+    padding: 0 0 0 15px;
+    color: #666;
+    letter-spacing: 1px;
+}
+
+.popNewWrpa .registerWrap {
+    text-align: left;
+    width: 100%;
+    max-width:320px;
+    margin: 25px auto;
+}
+
+.registerWrap h3 {
+    font: 13.5px Montserrat-Regular;
+    color: #333;
+}
+
+.closeNew {
+    position: absolute;
+    right: 0px;
+    background: #333;
+    position: absolute;
+    z-index: 250;
+    right: -13px;
+    top: -10px;
+}
+
+.modal-dialog{
+    width:auto;
+    max-width:600px;
+
+}
+
+
+@media (max-width:767px){
+    .modal-dialog{
+        width:100%;
+    }
+}
+
+#home-login-modal .modal-dialog{
+    width:400px;
+}
+

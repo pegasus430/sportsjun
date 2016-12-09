@@ -1,6 +1,8 @@
 @extends('home.layout')
 
 @section('content')
+    <div class="clearfix"></div>
+
     <div class="profileWrapp">
         <div class="container">
             <h1>MY PROFILE</h1>
@@ -36,7 +38,9 @@
                     </div>
                 </div>
                 <?php
-                $skillset = array_get($user->skillSet, $sport->id)->lists('answers.0.options.options', 'sports_question');
+                    $skillsSport = array_get($user->skillSet, $sport->id);
+
+                $skillset = $skillsSport ? $skillsSport->lists('answers.0.options.options', 'sports_question') : [] ;
                 ?>
 
                 <div class="spoertSkillLeft col-lg-3 col-md-3 col-sm-12">

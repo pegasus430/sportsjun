@@ -3,6 +3,7 @@
 @section('content')
     <div class="container">
         @if (count($search_data))
+            <div class="clearfix"></div>
             <ul class="search_results">
             @foreach ($search_data as $item)
                 <?php $type= array_get(\App\Http\Controllers\SearchController::$TYPES_STRING,get_class($item)); ?>
