@@ -759,6 +759,12 @@ function DataTableLoadMore(el){
 function editMatchSchedule(a, b, c, modal_id) {
      $(".modal-body #schedule_id").val(a);
      $(".modal-body #main_schedule_id").val(a);
+
+
+    $(".modal-body #my_team_id").addClass('bracket_2');
+    $(".modal-body #opp_team_id").addClass('bracket_2');
+
+
     if ($(".qtip").length) $(".qtip").qtip("hide");
     var roundNumber = c;
     $.get(base_url + "/editteamschedule", {
