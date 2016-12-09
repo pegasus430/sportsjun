@@ -15,11 +15,14 @@
                  			<th>  </th>
                  		</tr>
                  		</thead>
-                 		<tbody>
+                 		<tbody id='referee_list'>
+
+                    @foreach(ScoreCard::get_referees($match_data[0]['id']) as $referee)
                  			<tr class="record">
-                 				<td>Yossa michel </td>
-                 				<td><button class="btn btn-circle btn-danger"><i class="fa fa-remove"></i></button></td>
+                 				<td><a href='/editsportprofile/{{$referee->user_id}}'>Yossa michel</a> </td>
+                 				<td><button class="btn btn-circle btn-danger" type='button' onclick='removeReferee({{$referee->id}},this)'><i class="fa fa-remove"></i></button></td>
                  			</tr>
+                    @endforeach
 
                  		</tbody>
                   </table>
@@ -113,24 +116,10 @@ $(document).ready(function() {
         }
         $.ajax({
             url: base_url+'/add_referee',
-            type: "post",
-            dataType: 'JSON',
+            type: "post",           
             data: {'response': response,'match_id':match_id},
             success: function(data) {
-                if(data.status == 'success') {
-						$("#Response").html('');
-							
-                        $("#Response").append(data.msg);
-						$("#Response").show();
-						setTimeout(function() { $("#Response").hide(); }, 3000);					
-						$('#user').val('');
-                        //location.reload();
-                }else
-                {
-                        $("#nameResponse").append(data.msg);
-						$("#nameResponse").show();
-						setTimeout(function() { $("#nameResponse").hide(); }, 3000);
-                }
+                  $('#referee_list').append(data);
             }
         });
     }
@@ -171,7 +160,6 @@ $(document).ready(function() {
 			url: "http://localhost:8000/invite_referee",
 			type : 'POST',
 			data : {name:name,email:email, match_id:match_id},
-			dataType: 'json',
 			beforeSend: function () {
 				//$.blockUI({ width:'50px', message: $("#spinner").html() });
 			},
@@ -180,19 +168,10 @@ $(document).ready(function() {
 					
 						$('#id1').val('');
 						$('#id2').val('');
-					
-					$("#inviteResponse1").append(data.msg);
-					$("#inviteResponse1").show();
-					setTimeout(function() { $("#inviteResponse1").hide(); }, 3000);
+          $('#referee_list').append(data.data);
+
 				}
-				if(data.status == 'fail') {
-					$.each(data.msg, function(key, value){
-							
-                                        	$("#inviteResponse").html(value);
-											$("#inviteResponse").show();
-							setTimeout(function() { $("#inviteResponse").hide(); }, 3000);
-					});
-				}
+		
 			}
 		});
 	}
@@ -201,6 +180,19 @@ $(document).ready(function() {
             $("#id1").val('');
             $("#id2").val('');
         });
+
+
+      function removeReferee(referee_id,that){
+          $.ajax({
+                    url: "http://localhost:8000/remove_referee",
+                  type : 'POST',
+                  data : {id:referee_id, match_id:match_id},
+                  success:function(){
+                      $(that).parents('.record').hide('slow');
+                  }
+          })
+
+      }
 </script>   
                         </div>
                     </div>

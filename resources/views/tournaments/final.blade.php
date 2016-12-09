@@ -243,7 +243,9 @@
 
               <div class="round"><p> THIRD POSITION    </p></div>
 
-                <?php $schedule  = Helper::getThirdPosition($tournament_id, $round);                                                 
+                <?php $schedule  = Helper::getThirdPosition($tournament_id, $round);        
+
+                                                   
                           ?>                    
                                 
  <div class="match_set" style="height: 10px;">

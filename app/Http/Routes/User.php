@@ -730,6 +730,7 @@ Route::resource('user', 'User\UserController');
 
 Route::post('/add_referee', 'User\InvitePlayerController@add_referee');
 Route::post('/invite_referee', 'User\InvitePlayerController@invite_referee');
+Route::post('/remove_referee', 'User\InvitePlayerController@remove_referee');
 
 
 

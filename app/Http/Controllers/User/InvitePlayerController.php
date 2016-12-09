@@ -394,19 +394,22 @@ class InvitePlayerController extends Controller
 
     		$referee = referee::whereUserId($user_id)->first();
     		if($referee){
-    			$referee->schedule_matches++;
+    			$referee->scheduled_matches++;
     			$referee->save();
     		}
     		else{
     			$referee = new referee;
     			$referee->user_id = $user_id;
-    			$referee->schedule_matches =1; 
+    			$referee->scheduled_matches =1; 
     			$referee->save();
     		}
 
+    		$referee_schedule->referee_id = $referee->id;
+    		$referee_schedule->save();
+
     		return "<tr class='record'>
-    					<td>$referee->user->name</td>
-    					<td></td>
+    					<td>{$referee->user->name}</td>
+    					<td><button class='btn btn-circle btn-danger' type='button' onclick='removeReferee($referee_schedule->id,this)'><i class='fa fa-remove'></i></button></td>
     				</tr>";
 
 
@@ -421,8 +424,10 @@ class InvitePlayerController extends Controller
     	$user = $this->invitePlayerToTournament($match_model->tournament_id, $email, $name, $match_id);
 
     	if($user){
-    		$request->user_id = $user->id;
+
+    		$request->response = $user->id;
     		$data = $this->add_referee($request);
+
     			return [
     			'message'=>'This email already exist',
     			'error'=>'no',
@@ -438,4 +443,22 @@ class InvitePlayerController extends Controller
     			];
     	}
     }
+
+    public function remove_referee(Request $request){
+    		$match_id = $request->match_id;
+    		$id  = $request->id; 
+    	
+    		$referee_schedule = refereeSchedule::find($id); 
+
+    		$referee = $referee_schedule->referee;
+    		
+			$referee->scheduled_matches--;
+			$referee->save(); 	
+
+    		$referee_schedule->delete();
+
+    		return "ok";
+    }
+
+
 }

@@ -234,6 +234,10 @@ class ScoreCard {
 		return $text;
 	}
 
+	public static function get_referees($match_id){
+		return MatchSchedule::find($match_id)->referees;
+	}
+
 
 
 }
