@@ -404,7 +404,7 @@ header, nav, article, aside, footer, hgroup, section {
  @keyframes inputHighlighter {
 	from { background:#5264AE; }
   to 	{ width:0; background:transparent; }
-
+}
 .serchIco {
     float: left;
     padding: 0 10px 0 0;
