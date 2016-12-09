@@ -1,6 +1,8 @@
 
 .testimonialsWrapp {
     background: #f6f6f6;
+    width:100%;
+    overflow-x: hidden;
     padding: 65px 0px 35px;
 }
 
