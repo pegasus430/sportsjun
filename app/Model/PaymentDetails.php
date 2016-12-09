@@ -15,7 +15,7 @@ class PaymentDetails extends Model
 
   protected $table = 'payment_details';
   public $timestamps = false;
-  protected $fillable = ['cart_id','payment_firstname','payment_address','payment_country','payment_state','payment_city','payment_zipcode','payment_phone','mihpayid','status','amount'];
+  protected $fillable = ['cart_id','payment_firstname','payment_address','payment_country','payment_state','payment_city','payment_zipcode','payment_phone','mihpayid','status','amount','date'];
 
   
 

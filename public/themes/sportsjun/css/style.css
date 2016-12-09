@@ -393,36 +393,18 @@ header, nav, article, aside, footer, hgroup, section {
 }
 
 /* ANIMATIONS ================ */
-@-webkit-keyframes inputHighlighter {
-    from {
-        background: #5264AE;
-    }
-    to {
-        width: 0;
-        background: transparent;
-    }
+ @-webkit-keyframes inputHighlighter {
+	from { background:#5264AE; }
+  to 	{ width:0; background:transparent; }
 }
-
 @-moz-keyframes inputHighlighter {
-    from {
-        background: #5264AE;
-    }
-    to {
-        width: 0;
-        background: transparent;
-    }
+	from { background:#5264AE; }
+  to 	{ width:0; background:transparent; }
 }
-
-@keyframes inputHighlighter {
-    from {
-        background: #5264AE;
-    }
-    to {
-        width: 0;
-        background: transparent;
-    }
+ @keyframes inputHighlighter {
+	from { background:#5264AE; }
+  to 	{ width:0; background:transparent; }
 }
-
 .serchIco {
     float: left;
     padding: 0 10px 0 0;

@@ -3085,7 +3085,7 @@ label.form_label.last_date_span {
 
 .register_form_head {
     border: none!important;
-    background-color: #84cd93!important;
+    background-color: #4BB060!important;
    } 
 
 
@@ -3101,4 +3101,23 @@ label.form_label.last_date_span {
 
 .form_titles {
  color: #499b4e!important;
+}
+
+.payment_header_logo {
+   width:100%;
+   overflow:hidden;
+ }
+
+ .validation_msg {
+  color: red;
+ }
+
+h4.register_form_title.successpage {
+    padding: 10px!important;
+}
+
+.row.inner_events.successpage {
+    background-color: #eee;
+    padding: 5px 0;
+    border: solid 1px #fff;
 }

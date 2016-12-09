@@ -6,23 +6,37 @@
 <?php 
 $lis = $tournament_data->toArray();
 ?>
-
-<div class="form-header header-primary register_form_head">
-<div class="col-md-2 col-sm-3 col-xs-12 text-center">
-    {!! Helper::Images( $lis['logo']['url'] ,'tournaments',array('height'=>90,'width'=>90,'class'=>'img-circle img-border img-scale-down img-responsive') )!!}
+<div class="payment_header_logo">
+{!! Helper::Images( $lis['logo']['url'] ,'tournaments')!!}
 </div>
+<br>
+<div class="form-header header-primary register_form_head">
+
 <h4 class='register_form_title'>{{$parent_tournamet_details->name}}</h4><br><br>
 <?php
-$open_timestamp = strtotime($tournament_data->reg_opening_date);
-$open_day = date('D', $open_timestamp);
-$newopen = date("d-m-Y", strtotime($tournament_data->reg_opening_date));
-$opentime=date("h:i a", strtotime($tournament_data->reg_opening_time));
-$close_timestamp = strtotime($tournament_data->reg_closing_date);
-$close_day = date('D', $close_timestamp);
-$newclose = date("d-m-Y", strtotime($tournament_data->reg_closing_date));
-$closetime=date("h:i a", strtotime($tournament_data->reg_closing_time));
+// $open_timestamp = strtotime($tournament_data->reg_opening_date);
+// $open_timestamp = strtotime($tournament_data->start_date);
+// $open_day = date('D', $open_timestamp);
+// $newopen = date("d-m-Y", strtotime($tournament_data->reg_opening_date));
+// $opentime=date("h:i A", strtotime($tournament_data->reg_opening_time));
+// $close_timestamp = strtotime($tournament_data->reg_closing_date);
+// $close_day = date('D', $close_timestamp);
+// $newclose = date("d-m-Y", strtotime($tournament_data->reg_closing_date));
+// $closetime=date("h:i A", strtotime($tournament_data->reg_closing_time));
+// <h4><i class="fa fa-calendar-o"></i>{{$open_day}} {{$newopen}} - {{$close_day}} {{$newclose}} | {{$opentime}} - {{$closetime}}</h4><br>
+// <h4><i class="fa fa-map-marker"></i>{{$tournament_data->location}}</h4>
+
+  
+  $open_timestamp = strtotime($tournament_data->start_date);
+  $open_day = date('D', $open_timestamp);
+  $newopen = date("d-m-Y", strtotime($tournament_data->start_date));
+
+  $close_timestamp = strtotime($tournament_data->end_date);
+  $close_day = date('D', $close_timestamp);
+  $newclose = date("d-m-Y", strtotime($tournament_data->end_date));
+
 ?>
-<h4><i class="fa fa-calendar-o"></i>{{$open_day}} {{$newopen}} - {{$open_day}} {{$newclose}} | {{$opentime}} - {{$closetime}}</h4><br>
+<h4><i class="fa fa-calendar-o"></i>{{$open_day}} {{$newopen}} - {{$close_day}} {{$newclose}} </h4><br>
 <h4><i class="fa fa-map-marker"></i>{{$tournament_data->location}}</h4>
 </div>
 
@@ -92,7 +106,7 @@ $closetime=date("h:i a", strtotime($tournament_data->reg_closing_time));
 <?php $i=0;
 $options=array();?>
 @foreach ($all_events as $events)
-<div class="row">
+<div class="row inner_events">
 
 
 
@@ -102,7 +116,7 @@ $options=array();?>
           <label class="field prepend-icon">
            <label class="field-icon"><i class="fa fa-trophy"></i></label>
             {!! Form::text("data[$events->id][name]", $events->name, array('required','class'=>'gui-input form_rows','readonly' => 'true' )) !!}
-            <label  class="form_label last_date_span">Last Date:{{$events->end_date}}</label>  
+            <label  class="form_label last_date_span">Last Date : {{$events->end_date}}</label>  
             </label>
           
 
@@ -140,6 +154,8 @@ $options=array();?>
 </div>
 
 </div><!--end row -->
+<br>
+<br>
 <?php $i++;?>
 @endforeach
 

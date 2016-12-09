@@ -9,27 +9,39 @@
 <?php 
 $lis = $tournament_data->toArray();
 ?>
-<div class="form-header header-primary register_form_head">
-<div class="col-md-2 col-sm-3 col-xs-12 text-center">
-    {!! Helper::Images( $lis['logo']['url'] ,'tournaments',array('height'=>90,'width'=>90,'class'=>'img-circle img-border img-scale-down img-responsive') )!!}
+<div class="payment_header_logo">
+{!! Helper::Images( $lis['logo']['url'] ,'tournaments')!!}
 </div>
+<br>
+<div class="form-header header-primary register_form_head">
 
 <h4 class='register_form_title'>{{$parent_tournament_details->name}}</h4><br><br>
 <?php
-$open_timestamp = strtotime($tournament_data->reg_opening_date);
-$open_day = date('D', $open_timestamp);
-$newopen = date("d-m-Y", strtotime($tournament_data->reg_opening_date));
-$opentime=date("h:i a", strtotime($tournament_data->reg_opening_time));
-$close_timestamp = strtotime($tournament_data->reg_closing_date);
-$close_day = date('D', $close_timestamp);
-$newclose = date("d-m-Y", strtotime($tournament_data->reg_closing_date));
-$closetime=date("h:i a", strtotime($tournament_data->reg_closing_time));
+// $open_timestamp = strtotime($tournament_data->reg_opening_date);
+// $open_day = date('D', $open_timestamp);
+// $newopen = date("d-m-Y", strtotime($tournament_data->reg_opening_date));
+// $opentime=date("h:i A", strtotime($tournament_data->reg_opening_time));
+// $close_timestamp = strtotime($tournament_data->reg_closing_date);
+// $close_day = date('D', $close_timestamp);
+// $newclose = date("d-m-Y", strtotime($tournament_data->reg_closing_date));
+// $closetime=date("h:i A", strtotime($tournament_data->reg_closing_time));
+
+
+ $open_timestamp = strtotime($tournament_data->start_date);
+  $open_day = date('D', $open_timestamp);
+  $newopen = date("d-m-Y", strtotime($tournament_data->start_date));
+
+  $close_timestamp = strtotime($tournament_data->end_date);
+  $close_day = date('D', $close_timestamp);
+  $newclose = date("d-m-Y", strtotime($tournament_data->end_date));
 ?>
-<h4><i class="fa fa-calendar-o"></i>{{$open_day}} {{$newopen}} - {{$open_day}} {{$newclose}} | {{$opentime}} - {{$closetime}}</h4><br>
+<h4><i class="fa fa-calendar-o"></i>{{$open_day}} {{$newopen}} - {{$open_day}} {{$newclose}}</h4><br>
 <h4><i class="fa fa-map-marker"></i>{{$tournament_data->location}}</h4>
 </div>
 
-
+@if($errors->any())
+<h4 class="error_validation">{{$errors->first()}}</h4>
+@endif
 
 <div class="form-body">
 {!! Form::open(array('url' => '/tournaments/registrationstep5', 'method' => 'post')) !!}
@@ -56,7 +68,7 @@ $count=$register_data->participant_count;
 <div class="col-sm-5">
       <div class="section">
           <label class="field prepend-icon">
-            <label class="field-icon"><i class="fa fa-user"></i></label>
+            <label class="field-icon"><span  class='required validation'>*</span><i class="fa fa-user"></i></label>
             <?php
             if($i==0 && isset($user_data->name)) {
             	$nm=$user_data->name;
@@ -78,7 +90,7 @@ $count=$register_data->participant_count;
 <div class="col-sm-6">
   <div class="section">
     <label class="field prepend-icon">
-            <label class="field-icon"><i class="fa fa-envelope"></i></label>
+            <label class="field-icon"><span  class='required validation'>*</span><i class="fa fa-envelope"></i></label>
             <?php
             if($i==0 && isset($user_data->email)) {
             	$mail=$user_data->email;
@@ -105,7 +117,7 @@ $count=$register_data->participant_count;
 <div class="col-sm-5">
       <div class="section">
           <label class="field prepend-icon">
-             <label class="field-icon"><i class="fa fa-group"></i></label>
+             <label class="field-icon"><span  class='required validation'>*</span><i class="fa fa-group"></i></label>
               <?php
             if($i==0 && isset($user_data->club)) {
             	$clb=$user_data->club;
@@ -121,7 +133,7 @@ $count=$register_data->participant_count;
 <div class="col-sm-6">
   <div class="section">
     <label class="field prepend-icon">
-             <label class="field-icon"><i class="fa fa-mobile"></i></label>
+             <label class="field-icon"><span  class='required validation'>*</span><i class="fa fa-mobile"></i></label>
               <?php
             if($i==0 && isset($user_data->contact_number)) {
             	$c_no=$user_data->contact_number;
@@ -141,33 +153,7 @@ $count=$register_data->participant_count;
 </div><!--end row -->
 
 
-<div class="row">
 
-
-
-
-<div class="col-sm-11">
-      <div class="section">
-          <label class="field prepend-icon">
-             <label class="field-icon"><i class="fa fa-map-marker"></i></label>
-             <?php
-            if($i==0 && isset($user_data->location)) {
-            	$loc=$user_data->location;
-            } else {
-            	$loc='';
-            } ?>
-            {!! Form::textarea("single[$i][location]", $loc, array('required','class'=>'gui-input','placeholder' => 'Location' )) !!}
-            
-            </label>
-           </div>
-        </div>
-
-
-<!-- end section -->  
-
-
-
-</div><!--end row -->
 @endfor
 
 @elseif ($register_data->match_type === 'doubles')
@@ -190,7 +176,7 @@ $count=$register_data->participant_count;
              </label>   
             @else
               <label class="field prepend-icon">
-               <label class="field-icon"><i class="fa fa-group"></i></label>
+               <label class="field-icon"><span  class='required validation'>*</span><i class="fa fa-group"></i></label>
               {!! Form::text("team_name", '', array('required','class'=>'gui-input','placeholder' => 'Team Name' )) !!}
               </label>
             @endif
@@ -223,7 +209,7 @@ $count=$register_data->participant_count;
 <div class="col-sm-5">
       <div class="section">
           <label class="field prepend-icon">
-           <label class="field-icon"><i class="fa fa-user"></i></label>
+           <label class="field-icon"><span  class='required validation'>*</span><i class="fa fa-user"></i></label>
             <?php
             if($i==0 && isset($user_data->name)) {
             	$nm=$user_data->name;
@@ -240,7 +226,7 @@ $count=$register_data->participant_count;
 <div class="col-sm-6">
   <div class="section">
     <label class="field prepend-icon">
-    <label class="field-icon"><i class="fa fa-envelope"></i></label>
+    <label class="field-icon"><span  class='required validation'>*</span><i class="fa fa-envelope"></i></label>
      <?php
             if($i==0 && isset($user_data->email)) {
             	$mail=$user_data->email;
@@ -267,7 +253,7 @@ $count=$register_data->participant_count;
 <div class="col-sm-5">
       <div class="section">
           <label class="field prepend-icon">
-          <label class="field-icon"><i class="fa fa-group"></i></label>
+          <label class="field-icon"><span  class='required validation'>*</span><i class="fa fa-group"></i></label>
           <?php
             if($i==0 && isset($user_data->club)) {
             	$clb=$user_data->club;
@@ -283,7 +269,7 @@ $count=$register_data->participant_count;
 <div class="col-sm-6">
   <div class="section">
     <label class="field prepend-icon">
-    <label class="field-icon"><i class="fa fa-mobile"></i></label>
+    <label class="field-icon"><span  class='required validation'>*</span><i class="fa fa-mobile"></i></label>
      <?php
             if($i==0 && isset($user_data->contact_number)) {
             	$c_no=$user_data->contact_number;
@@ -308,28 +294,7 @@ $count=$register_data->participant_count;
 
 
 
-<div class="col-sm-11">
-      <div class="section">
-          <label class="field prepend-icon">
-          <label class="field-icon"><i class="fa fa-map-marker"></i></label>
-           <?php
-            if($i==0 && isset($user_data->location)) {
-            	$loc=$user_data->location;
-            } else {
-            	$loc='';
-            } ?>
-            {!! Form::textarea("doubles[$i][location]", $loc, array('required','class'=>'gui-input','placeholder' => 'Location' )) !!}
-            
-            </label>
-           </div>
-        </div>
 
-
-<!-- end section -->  
-
-
-
-</div><!--end row -->
 <?php $j++; ?>
 @endfor
 
@@ -346,17 +311,19 @@ $count=$register_data->participant_count;
 
 <div class="col-sm-5">
     <div class="section">
-    
+            
     
             @if (count($teams_array) > 0)
+
             <label class="field select">
             
             {!! Form::select("team_id",$teams_array, null,array('class'=>'gui-input')) !!}
              <i class="arrow double"></i>
+             
              </label>   
             @else
               <label class="field prepend-icon">
-              <label class="field-icon"><i class="fa fa-group"></i></label>
+              <label class="field-icon"><span  class='required validation'>*</span><i class="fa fa-group"></i></label>
            
               {!! Form::text("team_name", '', array('required','class'=>'gui-input','placeholder' => 'Team Name' )) !!}
               </label>
@@ -385,8 +352,9 @@ $count=$register_data->participant_count;
 
 <div class="col-sm-5">
       <div class="section">
+      
           <label class="field prepend-icon">
-          <label class="field-icon"><i class="fa fa-user"></i></label>
+          <label class="field-icon"><span  class='required validation'>*</span><i class="fa fa-user"></i></label>
            <?php
             if(isset($user_data->name)) {
             	$nm=$user_data->contact_number;
@@ -401,8 +369,9 @@ $count=$register_data->participant_count;
 
 <div class="col-sm-6">
   <div class="section">
+  
     <label class="field prepend-icon">
-    <label class="field-icon"><i class="fa fa-envelope"></i></label>
+    <label class="field-icon"><span  class='required validation'>*</span><i class="fa fa-envelope"></i></label>
            <?php
             if(isset($user_data->email)) {
             	$mail=$user_data->email;
@@ -428,8 +397,9 @@ $count=$register_data->participant_count;
 
 <div class="col-sm-5">
       <div class="section">
+      
           <label class="field prepend-icon">
-          <label class="field-icon"><i class="fa fa-group"></i></label>
+          <label class="field-icon"><span  class='required validation'>*</span><i class="fa fa-group"></i></label>
            <?php
             if(isset($user_data->club)) {
             	$clb=$user_data->club;
@@ -444,8 +414,10 @@ $count=$register_data->participant_count;
 
 <div class="col-sm-6">
   <div class="section">
+ 
     <label class="field prepend-icon">
-    <label class="field-icon"><i class="fa fa-mobile"></i></label>
+    
+    <label class="field-icon"><span  class='required validation'>*</span><i class="fa fa-mobile"></i></label>
            <?php
             if(isset($user_data->contact_number)) {
             	$c_no=$user_data->contact_number;
@@ -465,33 +437,7 @@ $count=$register_data->participant_count;
 </div><!--end row -->
 
 
-<div class="row">
 
-
-
-
-<div class="col-sm-11">
-      <div class="section">
-          <label class="field prepend-icon">
-          <label class="field-icon"><i class="fa fa-map-marker"></i></label>
-           <?php
-            if(isset($user_data->location)) {
-            	$loc=$user_data->location;
-            } else {
-            	$loc='';
-            } ?>
-            {!! Form::textarea("team_owner[location]", $loc, array('required','class'=>'gui-input','placeholder' => 'Location' )) !!}
-            
-            </label>
-           </div>
-        </div>
-
-
-<!-- end section -->  
-
-
-
-</div><!--end row -->
 
 
 @endif

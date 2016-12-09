@@ -176,10 +176,15 @@ $( document ).ready(function() {
         		$('.edit-only .btn-createedit').show();
         		$('.edit-only .enroltypeedit').show();
            } else {
+             if($(".edit-only #enrollment_type option[value='online']").length > 0) {
+
+            } else {
               $('.edit-only #enrollment_type').append($('<option>', {
                 value: 'online',
                 text: 'ONLINE PAYMENT'
               }));
+
+            }
                 
            }
         }
@@ -214,10 +219,15 @@ $('.edit-only #country_id').change(function(){
         		$('.edit-only .btn-createedit').show();
         		$('.edit-only .enroltypeedit').show();
            } else {
+              if($(".edit-only #enrollment_type option[value='online']").length > 0) {
+
+            } else {
               $('.edit-only #enrollment_type').append($('<option>', {
                 value: 'online',
                 text: 'ONLINE PAYMENT'
               })); 
+
+            }
                 
            }
         }
@@ -226,7 +236,110 @@ $('.edit-only #country_id').change(function(){
 }); 
 
 
+$( ".btn-tournamentedit" ).click(function() {
 
+
+var tot_enrollment= $('#tot_enrollment').val();
+if(tot_enrollment!=''){
+ if(/^\+?\d+$/.test(tot_enrollment)==false){
+    $('#tot-enrollment-val').show();
+    return false;
+ } else {
+  $('#tot-enrollment-val').hide();
+  
+ }
+}
+
+var min_enrollment= $('#min_enrollment').val();
+if(min_enrollment!=''){
+ if(/^\+?\d+$/.test(min_enrollment)==false){
+    $('#min-enrollment-val').show();
+    return false;
+ } else {
+  $('#min-enrollment-val').hide();
+  
+ }
+}
+
+
+var max_enrollment= $('#max_enrollment').val();
+if(max_enrollment!=''){
+ if(/^\+?\d+$/.test(max_enrollment)==false){
+    $('#max-enrollment-val').show();
+    return false;
+ } else {
+  $('#max-enrollment-val').hide();
+  
+ }
+}
+
+
+
+
+  var isChecked = $("#disclaimer_agree").is(":checked");
+         if($('#disclaimer_agree:visible').length == 0){
+                 
+          } else {
+            if (isChecked) {
+                $('#agree_conditions-val').hide();
+            } else {
+                $('#agree_conditions-val').show();
+                 return false;
+            }
+                
+          }
+
+});
+
+
+
+
+
+
+$(".btn-createedit").click(function(){
+if($( "#enrollment_type option:selected" ).text() == "ONLINE PAYMENT") {
+
+  $('.validation_msg').hide();
+  if (!$('input[name=vendor_bank_account_id]:checked').val() ) {          
+     
+     if($('#add_bank_account_form:visible').length == 0){
+        $('.bank_account_validation').show(); 
+        return false;    
+      } else{
+
+                if(document.getElementsByName("account_holder_name")[0].value==''){
+                      $('#account_name_validator').show(); 
+                      return false;    
+                }
+                if(document.getElementsByName("account_number")[0].value==''){
+                      $('#account_number_validator').show(); 
+                      return false;    
+                } 
+                if(document.getElementsByName("bank_name")[0].value==''){
+                      $('#account_bankname_validator').show(); 
+                      return false;    
+                }
+                if(document.getElementsByName("branch")[0].value==''){
+                      $('#account_branch_validator').show(); 
+                      return false;    
+                }
+                
+                if(document.getElementsByName("ifsc")[0].value==''){
+                      $('#account_ifsc_validator').show(); 
+                      return false;    
+                }
+
+                
+          }
+            
+    } else {
+      
+  } 
+
+}
+
+
+})
 
 
 	

@@ -16,6 +16,13 @@ class SetCricketScoreRequest extends BaseApiRequest
         return true;
     }
 
+    public function all()
+    {
+        $json = array_get($this->input(), 'JSON');
+        if ($json)
+            return json_decode($json, true);
+        return [];
+    }
 
     /**
      * Get the validation rules that apply to the request.
@@ -60,41 +67,40 @@ class SetCricketScoreRequest extends BaseApiRequest
                 $rules[$i . ".Wicket.Retired"] = 'numeric';
                 $rules[$i . ".Wicket.Obstructing_The_Filed"] = 'numeric';
 
-                $rules[$i. ".Player_Batman.Player_Name"] = 'string';
-                $rules[$i. ".Player_Batman.Innings"] = 'string';
-                $rules[$i. ".Player_Batman.TotalRuns"] = 'numeric';
-                $rules[$i. ".Player_Batman.Balls_played"] = 'numeric';
-                $rules[$i. ".Player_Batman.Fifties"] = 'numeric';
-                $rules[$i. ".Player_Batman.Hundreds"] = 'numeric';
-                $rules[$i. ".Player_Batman.Total_Fours"] = 'numeric';
-                $rules[$i. ".Player_Batman.Total_Sixes"] = 'numeric';
-                $rules[$i. ".Player_Batman.Average_Bat"] = 'numeric';
-                $rules[$i. ".Player_Batman.StrikeRate"] = 'numeric';
+                $rules[$i . ".Player_Batman.Player_Name"] = 'string';
+                $rules[$i . ".Player_Batman.Innings"] = 'string';
+                $rules[$i . ".Player_Batman.TotalRuns"] = 'numeric';
+                $rules[$i . ".Player_Batman.Balls_played"] = 'numeric';
+                $rules[$i . ".Player_Batman.Fifties"] = 'numeric';
+                $rules[$i . ".Player_Batman.Hundreds"] = 'numeric';
+                $rules[$i . ".Player_Batman.Total_Fours"] = 'numeric';
+                $rules[$i . ".Player_Batman.Total_Sixes"] = 'numeric';
+                $rules[$i . ".Player_Batman.Average_Bat"] = 'numeric';
+                $rules[$i . ".Player_Batman.StrikeRate"] = 'numeric';
 
 
+                $rules[$i . ".Player_Bowler.Bowler_Name"] = 'string';
+                $rules[$i . ".Player_Bowler.Innings"] = 'string';
+                $rules[$i . ".Player_Bowler.TotalRuns"] = 'numeric';
+                $rules[$i . ".Player_Bowler.Fours"] = 'numeric';
+                $rules[$i . ".Player_Bowler.Sixes"] = 'numeric';
+                $rules[$i . ".Player_Bowler.Wickets"] = 'numeric';
+                $rules[$i . ".Player_Bowler.Overs_Bowled"] = 'numeric';
+                $rules[$i . ".Player_Bowler.Overs_Maiden"] = 'numeric';
+                $rules[$i . ".Player_Bowler.Wides_Bowl"] = 'numeric';
+                $rules[$i . ".Player_Bowler.NoBalls_Bowl"] = 'numeric';
+                $rules[$i . ".Player_Bowler.Average_Bowl"] = 'numeric';
+                $rules[$i . ".Player_Bowler.Ecomony"] = 'numeric';
 
-                $rules[$i. ".Player_Bowler.Bowler_Name"] = 'string';
-                $rules[$i. ".Player_Bowler.Innings"] = 'string';
-                $rules[$i. ".Player_Bowler.TotalRuns"] = 'numeric';
-                $rules[$i. ".Player_Bowler.Fours"] = 'numeric';
-                $rules[$i. ".Player_Bowler.Sixes"] = 'numeric';
-                $rules[$i. ".Player_Bowler.Wickets"] = 'numeric';
-                $rules[$i. ".Player_Bowler.Overs_Bowled"] = 'numeric';
-                $rules[$i. ".Player_Bowler.Overs_Maiden"] = 'numeric';
-                $rules[$i. ".Player_Bowler.Wides_Bowl"] = 'numeric';
-                $rules[$i. ".Player_Bowler.NoBalls_Bowl"] = 'numeric';
-                $rules[$i. ".Player_Bowler.Average_Bowl"] = 'numeric';
-                $rules[$i. ".Player_Bowler.Ecomony"] = 'numeric';
-
-                $rules[$i. ".Player_Fielder.Fielder_Od"] = 'numeric';
-                $rules[$i. ".Player_Fielder.Fielder_Name"] = 'string';
-                $rules[$i. ".Player_Fielder.Innings"] = 'string';
-                $rules[$i. ".Player_Fielder.Catches"] = 'numeric';
-                $rules[$i. ".Player_Fielder.StumpOuts"] = 'numeric';
-                $rules[$i. ".Player_Fielder.RunOuts"] = 'numeric';
+                $rules[$i . ".Player_Fielder.Fielder_Od"] = 'numeric';
+                $rules[$i . ".Player_Fielder.Fielder_Name"] = 'string';
+                $rules[$i . ".Player_Fielder.Innings"] = 'string';
+                $rules[$i . ".Player_Fielder.Catches"] = 'numeric';
+                $rules[$i . ".Player_Fielder.StumpOuts"] = 'numeric';
+                $rules[$i . ".Player_Fielder.RunOuts"] = 'numeric';
             }
         }
-        
+
         return $rules;
     }
 

@@ -132,10 +132,10 @@ class PaymentGateWaysController extends Controller
         $filter->reset('reset');
         $filter->build();
         $grid = \DataGrid::source($filter);
-        $grid->attributes(array("class"=>"table table-striped"));
+        $grid->attributes(array("class"=>"table table-striped admin-setups"));
 
         $grid->add('id','S#');
-        $grid->add('<a href="newsetup/{{ $id }}">{{ $name }}</a>','Gateways');
+        $grid->add('<a href="newsetup/{{ $id }}">{{ $name }}</a>','Gateways(Click the name for Setup page)');
         $grid->link('name','Gateway Name');
        
 

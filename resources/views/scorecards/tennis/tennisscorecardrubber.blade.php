@@ -186,7 +186,9 @@
     $current_set   = $match_details->current_set;
 
     $set_score     = ScoreCard::tennis_active_set($rubber->match_id, $rubber->id, $current_set);
-    $game          = $set_score->active_game;
+
+    if($set_score)  $game  = $set_score->active_game;
+    else            $game  = null;
 
 
 ?>

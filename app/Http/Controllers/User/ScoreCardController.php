@@ -3637,7 +3637,7 @@ class ScoreCardController extends Controller {
 				if(strtolower($sport_name)==strtolower('Tennis'))//if match is related to tennis
 				{
 					//return  $this->tennisOrTableTennisScoreCard($match_data,$match='Tennis',$sportsDetails,$tournamentDetails,$is_from_view=1);
-					$tt = new ScoreCard\TabletennisScoreCardController;
+					$tt = new ScoreCard\TennisScoreCardController;
 					return $tt->tennisScoreCard($match_data,[],$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}else if(strtolower($sport_name)==strtolower('Table Tennis'))//if match is related to table tennis
 				{

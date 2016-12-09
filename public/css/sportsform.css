@@ -2871,3 +2871,33 @@ font-weight:bold;
 .s-rating:hover{
     /*color: #FEFEFE;*/
 }
+
+#agree_conditions-val {
+    display:none;
+    color:#a94442;
+    }
+
+.admin-setups a {
+    height: 40px;
+    width: 160px;
+    background-color: #4285f4;
+    display: block;
+    padding: 5px;
+    text-align: center;
+    color: #fff;
+    font-size: 15px;
+}
+
+.admin-setups a:hover {
+    text-decoration: none;
+}
+
+.enrollment-validations {
+    color: #a94442;
+    display:none;
+}
+
+span.required.validation {
+    color: red;
+    margin-right: 5px;
+}

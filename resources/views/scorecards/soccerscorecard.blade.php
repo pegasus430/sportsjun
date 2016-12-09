@@ -895,6 +895,9 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 	<input type="hidden" name="winner_team_id" value="" id="winner_team_id">
 	<input type="hidden" name="delted_ids" value="" id="delted_ids">
 
+
+	@include('scorecards.common.add_referee')
+
 	<div class="sportsjun-forms text-center scorecards-buttons">
 		<center>
 			<ul class="list-inline sportsjun-forms">

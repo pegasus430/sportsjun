@@ -17,6 +17,10 @@ use App\Helpers\AllRequests;
 use App\Model\UserStatistic;
 use App\Model\Sport;
 use App\Model\Tournaments;
+use App\Model\MatchSchedule;
+use App\Model\RefereeSchedule; 
+use App\Model\Referee;
+
 
 class InvitePlayerController extends Controller
 {
@@ -328,7 +332,7 @@ class InvitePlayerController extends Controller
     			'error'=>'no'];
     }
 
-    public function invitePlayerToTournament($tournament_id, $email, $name){
+    public function invitePlayerToTournament($tournament_id, $email, $name, $match_id=null){
 
 		 $user = new User();
 		 $user->name =  $name;
@@ -375,5 +379,63 @@ class InvitePlayerController extends Controller
 
 		return false;
 
+    }
+
+    public function add_referee(Request $request){
+    		$match_id = $request->match_id;
+    		$user_id  = $request->response; 
+
+    		$match_model = matchSchedule::find($match_id);
+    		$referee_schedule = new refereeSchedule; 
+
+    		$referee_schedule->match_id = $match_id; 
+    		$referee_schedule->user_id  = $user_id; 
+    		$referee_schedule->save();
+
+    		$referee = referee::whereUserId($user_id)->first();
+    		if($referee){
+    			$referee->schedule_matches++;
+    			$referee->save();
+    		}
+    		else{
+    			$referee = new referee;
+    			$referee->user_id = $user_id;
+    			$referee->schedule_matches =1; 
+    			$referee->save();
+    		}
+
+    		return "<tr class='record'>
+    					<td>$referee->user->name</td>
+    					<td></td>
+    				</tr>";
+
+
+    }
+
+    public function invite_referee(Request $request){
+    		$match_id = $request->match_id;
+    		$email  = $request->email;
+    		$name   = $request->name; 
+
+    	$match_model = matchSchedule::find($match_id);
+    	$user = $this->invitePlayerToTournament($match_model->tournament_id, $email, $name, $match_id);
+
+    	if($user){
+    		$request->user_id = $user->id;
+    		$data = $this->add_referee($request);
+    			return [
+    			'message'=>'This email already exist',
+    			'error'=>'no',
+    			'data' => $data,
+    			'status' => 'success'
+    			];
+    	}
+    	else{
+    			return [
+    			'message'=>'This email already exist',
+    			'error'=>'yes',
+    			'status' => 'fail'
+    			];
+    	}
     }
 }
