@@ -41,9 +41,11 @@
 								<li><input type="text" name="address" id="address" placeholder="Address:"></li>
 								<li><textarea name="message" id="message" placeholder="add your message"></textarea></li>
 								<li>
-									<label for="verify">Are you human?</label>
-									<iframe src="" height="29" width="80" scrolling="no" frameborder="0" marginheight="0" marginwidth="0" class="capcha_image_frame" name="capcha_image_frame"></iframe>
-									<input class="verify" type="text" id="verify" name="verify" />
+                                    <span class="capcha"> {!!Captcha::img('flat')!!}</span> <a href="javascript:void(0)"
+                                                                                               onclick="SJ.USER.refreshCaptcha('contactform');"
+                                                                                               class="signup_capthca"><i class="fa fa-refresh"></i></a><br/>
+                                    <input type="text" name="captcha" class="captcha-input regPop"
+                                           placeholder="Enter the above captcha">
 								</li>
 								<li><input class="thbg-color" type="submit" value="send"></li>
                             </ul>

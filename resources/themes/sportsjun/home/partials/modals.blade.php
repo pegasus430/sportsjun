@@ -147,7 +147,7 @@ if (!isset($idNameCountry))
                             <input name="address" class="regPop" placeHolder="Address" type="text">
 
                             <h3>Country</h3>
-                            {!! Form::select('country_id',array_merge([null=>'Select country'],$idNameCountry->toArray()),null,['class'=>'regPop','onChange'=>'ajaxLoadOption(this)',
+                            {!! Form::select('country_id',$idNameCountry,null,['class'=>'regPop','onChange'=>'ajaxLoadOption(this)',
                             'data-url'=>route('data.states'),'data-target'=>"#reg_state_id",'data-name'=>'state','placeholder'=>'Select country']) !!}
                             <h3>State</h3>
                             <select id="reg_state_id" name="state_id" class="regPop" onchange="ajaxLoadOption(this);"

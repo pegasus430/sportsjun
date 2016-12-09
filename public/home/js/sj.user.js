@@ -252,6 +252,7 @@ if (typeof SJ.USER === 'undefined') {
                         $('#home-email-verify-modal').modal('show');
                     },
                     error: function (data) {
+                        jForm.find('span.error').remove();
                         var data = jQuery.parseJSON(data.responseText);
                         $.each(data, function (key, value) {
                             var el = jForm.find('[name=' + key + ']');

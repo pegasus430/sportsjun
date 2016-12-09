@@ -149,7 +149,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\ComposerServiceProvider::class,
         'SocialiteProviders\Manager\ServiceProvider',
-        'Illuminate\Html\HtmlServiceProvider',
+      #  'Illuminate\Html\HtmlServiceProvider',
+        Collective\Html\HtmlServiceProvider::class,
 		Zofe\Rapyd\RapydServiceProvider::class,
 		App\Providers\HelperServiceProvider::class,
         Proengsoft\JsValidation\JsValidationServiceProvider::class,
@@ -157,11 +158,12 @@ return [
         'Sofa\Eloquence\ServiceProvider',
         Intervention\Image\ImageServiceProvider::class,
 
-		//Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+		Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 		SKAgarwal\Generators\GeneratorsServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
         'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
         Barryvdh\DomPDF\ServiceProvider::class,
+
         //'Xaamin\Whatsapi\WhatsapiServiceProvider'
     ],
 
@@ -212,8 +214,10 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
-        'Form'      => 'Illuminate\Html\FormFacade',
-        'HTML'      => 'Illuminate\Html\HtmlFacade',
+      #  'Form'      => 'Illuminate\Html\FormFacade',
+       # 'HTML'      => 'Illuminate\Html\HtmlFacade',
+        'Form' => Collective\Html\FormFacade::class,
+        'Html' => Collective\Html\HtmlFacade::class,
 		'Helper'	=> App\Helpers\Helper::class,
         'ScoreCard' => App\Helpers\ScoreCard::class,
 //        'URL'       => 'IlluminateSupportFacadesURL',

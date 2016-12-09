@@ -245,16 +245,15 @@
                             <input name="address" class="regPop" placeHolder="Address" type="text">
 
                             <h3>Country</h3>
-                            {!! Form::select('country_id',array_merge([null=>'Select country'],$idNameCountry->toArray()),null,['class'=>'regPop','onChange'=>'ajaxLoadOption(this)',
+                            {!! Form::select('country_id',$idNameCountry,null,['class'=>'regPop','onChange'=>'ajaxLoadOption(this)',
                             'data-url'=>route('data.states'),'data-target'=>"#reg_state_id",'data-name'=>'state','placeholder'=>'Select country']) !!}
                             <h3>State</h3>
                             <select id="reg_state_id" name="state_id" class="regPop" onchange="ajaxLoadOption(this);"
                                     data-url="{{route('data.cities')}}" data-target="#reg_city_id" data-name="city"></select>
                             <h3>City</h3>
                             <select id="reg_city_id" name="city_id" class="regPop"></select>
-                            <input name="password_confirmation" class="regPop" placeHolder="Password" type="text">
                             <span class="capcha"> {!!Captcha::img('flat')!!}</span> <a href="javascript:void(0)"
-                                                                                       onclick="SJ.USER.refreshCaptcha('home-register-modal-form');"
+                                                                                       onclick="SJ.USER.refreshCaptcha('registerOrganizationModal');"
                                                                                        class="signup_capthca"><img
                                         src="{{ asset('/images/refresh.png') }}"
                                         alt="Refresh Captcha Image"/></a><br/>
@@ -336,11 +335,11 @@
                             <h3>Email</h3>
                             <input name="email" class="regPop" placeHolder="Email" type="text">
                             <h3>Password</h3>
-                            <input name="password" class="regPop" placeHolder="Password" type="text">
+                            <input name="password" class="regPop" placeHolder="Password" type="password">
                             <h3>Retype Password</h3>
-                            <input name="password_confirmation" class="regPop" placeHolder="Password" type="text">
+                            <input name="password_confirmation" class="regPop" placeHolder="Password" type="password">
                             <span class="capcha"> {!!Captcha::img('flat')!!}</span> <a href="javascript:void(0)"
-                                                                                       onclick="SJ.USER.refreshCaptcha('home-register-modal-form');"
+                                                                                       onclick="SJ.USER.refreshCaptcha('registerUserModal');"
                                                                                        class="signup_capthca"><img
                                         src="{{ asset('/images/refresh.png') }}"
                                         alt="Refresh Captcha Image"/></a><br/>
