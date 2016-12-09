@@ -1,5 +1,5 @@
 <div class="ourClientsWrapp clearfix">
-    <h1>OUR CLIENTS</h1>
+    <h1>PRODUCT USERS</h1>
     <div class="clientsSlide container arowSty ">
         @foreach ($our_clients as $client)
             <div class="clintBox">
