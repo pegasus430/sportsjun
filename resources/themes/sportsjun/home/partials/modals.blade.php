@@ -113,7 +113,8 @@ if (!isset($idNameCountry))
                     <h1>Organization</h1>
                     <!--<h6></h6>-->
                     <div class="registerWrap">
-                        <form method="POST" action="/auth/register-organization"  class="kode-loginform" enctype="multipart/form-data"
+                        <form method="POST" action="/auth/register-organization"  class="kode-loginform"
+                              enctype="multipart/form-data"
                               onsubmit="SJ.USER.ajaxSubmitModalRegister(this);return false;"
                         >
                             {{csrf_field()}}
@@ -157,7 +158,7 @@ if (!isset($idNameCountry))
                             <input name="password_confirmation" class="regPop" placeHolder="Password" type="text">
                             <span class="capcha"> {!!Captcha::img('flat')!!}</span> <a href="javascript:void(0)"
                                                                                        onclick="SJ.USER.refreshCaptcha('home-register-modal-form');"
-                                                                                       class="signup_capthca"><img
+                                                                                       class="captcha-refresh"><img
                                         src="{{ asset('/images/refresh.png') }}"
                                         alt="Refresh Captcha Image"/></a><br/>
                             <input type="text" name="captcha" class="captcha-input regPop"
@@ -243,7 +244,7 @@ if (!isset($idNameCountry))
                             <input name="password_confirmation" class="regPop" placeHolder="Password" type="text">
                             <span class="capcha"> {!!Captcha::img('flat')!!}</span> <a href="javascript:void(0)"
                                                                                        onclick="SJ.USER.refreshCaptcha('home-register-modal-form');"
-                                                                                       class="signup_capthca"><img
+                                                                                       class="captcha-refresh"><img
                                         src="{{ asset('/images/refresh.png') }}"
                                         alt="Refresh Captcha Image"/></a><br/>
                             <input type="text" name="captcha" class="captcha-input regPop"

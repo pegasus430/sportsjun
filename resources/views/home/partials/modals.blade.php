@@ -91,7 +91,7 @@
                     <!-- p><label><input type="checkbox"><span>Remember Me</span></label></p -->
                     <span class="capcha"> {!!Captcha::img('flat')!!}</span><br />
                     <input type="text" name="captcha" class="captcha-input" placeholder="Enter the above captcha">
-                    <a href="javascript:void(0)" onclick="SJ.USER.refreshCaptcha('home-register-modal-form');" class="signup_capthca"><img src="{{ asset('/images/refresh.png') }}" alt="Refresh Captcha Image" /></a>
+                    <a href="javascript:void(0)" onclick="SJ.USER.refreshCaptcha('home-register-modal-form');" class="captcha-refresh"><img src="{{ asset('/images/refresh.png') }}" alt="Refresh Captcha Image" /></a>
                     <p class="p_checkbox first"><label><input name="tos" type="checkbox" checked="checked"><span>I agree to the <a href="{{ url('/terms-and-conditions.html') }}" target="_blank">terms and conditions</a> of this site.</span></label></p>
                     <p class="p_checkbox last"><label><input name="newsletter" type="checkbox" checked="checked"><span>I wish to receive the weekly bulletin</span></label></p>
                     <p class="kode-submit"><a href="javascript:void(0);" data-toggle="modal" data-target="#home-forgot-password-modal">Lost Your Password</a> <input class="thbg-colortwo" type="submit" value="Sign Up"></p>
@@ -231,7 +231,7 @@
                             <textarea name="org_about" class="regPop" rows="4"></textarea>
                             <!-- -->
                             <h3>First Name</h3>
-                            <input name="name" class="regPop" placeHolder="First Name" type="text">
+                            <input name="firstname" class="regPop" placeHolder="First Name" type="text">
                             <h3>Last Name</h3>
                             <input name="lastname" class="regPop" placeHolder="Last Name" type="text">
                             <h3>Email</h3>
@@ -254,9 +254,8 @@
                             <select id="reg_city_id" name="city_id" class="regPop"></select>
                             <span class="capcha"> {!!Captcha::img('flat')!!}</span> <a href="javascript:void(0)"
                                                                                        onclick="SJ.USER.refreshCaptcha('registerOrganizationModal');"
-                                                                                       class="signup_capthca"><img
-                                        src="{{ asset('/images/refresh.png') }}"
-                                        alt="Refresh Captcha Image"/></a><br/>
+                                                                                       class="captcha-refresh">
+                                <i class="fa fa-refresh"></i></a><br/>
                             <input type="text" name="captcha" class="captcha-input regPop"
                                    placeholder="Enter the above captcha">
                             <div class="form-group">
@@ -340,9 +339,7 @@
                             <input name="password_confirmation" class="regPop" placeHolder="Password" type="password">
                             <span class="capcha"> {!!Captcha::img('flat')!!}</span> <a href="javascript:void(0)"
                                                                                        onclick="SJ.USER.refreshCaptcha('registerUserModal');"
-                                                                                       class="signup_capthca"><img
-                                        src="{{ asset('/images/refresh.png') }}"
-                                        alt="Refresh Captcha Image"/></a><br/>
+                                                                                       class="captcha-refresh"> <i class="fa fa-refresh"></i></a><br/>
                             <input type="text" name="captcha" class="captcha-input regPop"
                                    placeholder="Enter the above captcha">
 

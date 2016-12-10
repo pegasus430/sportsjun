@@ -25,8 +25,8 @@ class OrganizationRegisterRequest extends Request {
         return [
             'org_name' => 'required',
             'org_type' => 'required',
-            'org_logo' => 'required|file',
-            'about' => 'required',
+            'org_logo' => 'required|image',
+            'org_about' => 'required',
             'firstname' => 'required|max:255',
             'lastname' => 'required|max:255',
             'email' => 'required|unique:users,email|email|max:255',
