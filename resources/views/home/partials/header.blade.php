@@ -1,4 +1,4 @@
-<header id="mainheader" class="kode-header-absolute">
+<header id="mainheader" class="kode-header-absolute clearfix">
 
     <!--// TopBaar //-->
     <div class="kode-topbar">

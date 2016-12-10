@@ -11,7 +11,7 @@ use App\Model\Infolist;
 class HomepageInfolistsController extends Controller {
 
     public function index($type){
-        $lists = InfoList::whereType($type)->paginate(15);
+        $lists = InfoList::whereType($type)->orderBy('weight',"DESC")->paginate(15);
         return view('admin.home.'.$type.'.index',compact('lists'));
     }
 
@@ -28,14 +28,13 @@ class HomepageInfolistsController extends Controller {
             'type'=>$type,
             'image'=>$img,
             'data'=>object_get($request,'data',[]),
-            'active'=>1,
+            'active'=>object_get($request,'active',1),
             'weight'=>object_get($request,'weight',0),
             'created_by'=>\Auth::user()->id
         ]);
 
         \Session::flash('message','Successfully created');
         return redirect()->route('admin.home.infolists',$type);
-
     }
 
     public function edit(Infolist $infolist){
@@ -49,7 +48,7 @@ class HomepageInfolistsController extends Controller {
         $infolist->name = $request->name;
         $infolist->description = object_get($request,'description','');
         $infolist->data = object_get($request,'data',[]);
-
+        $infolist->active =  object_get($request,'active',1);
         $infolist->weight = object_get($request,'weight',0);
         $infolist->save();
 
@@ -65,6 +64,24 @@ class HomepageInfolistsController extends Controller {
         return redirect()->route('admin.home.infolists',$type);
 
     }
+
+    public function order()
+    {
+        $weights = \Request::input('weight_data');
+        if ($weights)
+            foreach ($weights as $weight){
+                $infolist = Infolist::whereId($weight['id'])->first();
+                if ($infolist){
+                    $infolist->weight = $weight['val'];
+                    $infolist->save();
+                }
+            }
+        return ['results'=>['message'=>'ok']];
+    }
+
+
+
+
 
 }
 ?>

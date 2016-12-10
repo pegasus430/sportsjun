@@ -1,31 +1,37 @@
-
 <!-- Modal -->
 <div class="modal fade" id="home-login-modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header thbg-color">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Login</h4>
                 <span class="modal-title-right-msg">Don't have an account?
-                                                        <a href="javascript:void(0);" data-toggle="modal" data-target="#home-register-modal">Register here</a>
+                                                        <a href="javascript:void(0);" data-toggle="modal"
+                                                           data-target="#home-register-modal">Register here</a>
                                                 </span>
             </div>
             <div class="modal-body">
-                <form id="home-login-modal-form" class="kode-loginform" onsubmit="SJ.USER.loginValidation(this.id);return false;">
-                    <p><span>Email address</span> <input type="text" placeholder="Enter your email" name="email" /></p>
-                    <p><span>Password</span> <input type="password" placeholder="Enter your password" name="password" /></p>
+                <form id="home-login-modal-form" class="kode-loginform"
+                      onsubmit="SJ.USER.loginValidation(this.id);return false;">
+                    <p><span>Email address</span> <input type="text" placeholder="Enter your email" name="email"/></p>
+                    <p><span>Password</span> <input type="password" placeholder="Enter your password" name="password"/>
+                    </p>
                     <!-- p><label><input type="checkbox"><span>Remember Me</span></label></p -->
                     <p class="kode-submit">
                         <input class="thbg-colortwo btn-home-login" type="submit" value="Login">
                     </p>
                     <p>
                                                                 <span class="btn-home-forgot">
-                                                                        <a href="javascript:void(0);" data-toggle="modal" data-target="#home-forgot-password-modal">Forgot Password?</a>
+                                                                        <a href="javascript:void(0);"
+                                                                           data-toggle="modal"
+                                                                           data-target="#home-forgot-password-modal">Forgot Password?</a>
                                                                 </span>
                     </p>
                     <div class="tagline"><span>OR</span></div>
                     <div class="col-md-6 social_but">
-                        <a class="btn btn-block btn-social btn-facebook" href="{{ route('social.login', ['facebook']) }}">
+                        <a class="btn btn-block btn-social btn-facebook"
+                           href="{{ route('social.login', ['facebook']) }}">
                             <span class="fa fa-facebook"></span> Facebook
                         </a>
                     </div>
@@ -40,7 +46,8 @@
                         </a>
                     </div>
                     <div class="col-md-6 social_but">
-                        <a class="btn btn-block btn-social btn-linkedin" href="{{ route('social.login', ['linkedin']) }}">
+                        <a class="btn btn-block btn-social btn-linkedin"
+                           href="{{ route('social.login', ['linkedin']) }}">
                             <span class="fa fa-linkedin"></span> LinkedIn
                         </a>
                     </div>
@@ -56,7 +63,8 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header thbg-color">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Register</h4>
             </div>
             <div class="modal-body">
@@ -82,19 +90,28 @@
                 </div>
                 <div class="clearfix"></div>
                 <div class="tagline" style="margin:40px auto 20px auto;width:95%;"><span>OR</span></div>
-                <form id="home-register-modal-form" class="kode-loginform" onsubmit="SJ.USER.registerValidation(this.id);return false;">
+                <form id="home-register-modal-form" class="kode-loginform"
+                      onsubmit="SJ.USER.registerValidation(this.id);return false;">
                     <p><span>First Name</span> <input name="firstname" type="text" placeholder="First Name"></p>
                     <p><span>Last Name</span> <input name="lastname" type="text" placeholder="Last Name"></p>
                     <p><span>Email</span> <input name="email" type="text" placeholder="Email"></p>
                     <p><span>Password</span> <input name="password" type="password" placeholder="Password"></p>
-                    <p><span>Retype Password</span> <input name="password_confirmation" type="password" placeholder="Retype Password"></p>
+                    <p><span>Retype Password</span> <input name="password_confirmation" type="password"
+                                                           placeholder="Retype Password"></p>
                     <!-- p><label><input type="checkbox"><span>Remember Me</span></label></p -->
-                    <span class="capcha"> {!!Captcha::img('flat')!!}</span><br />
+                    <span class="capcha"> {!!Captcha::img('flat')!!}</span><br/>
                     <input type="text" name="captcha" class="captcha-input" placeholder="Enter the above captcha">
-                    <a href="javascript:void(0)" onclick="SJ.USER.refreshCaptcha('home-register-modal-form');" class="signup_capthca"><img src="{{ asset('/images/refresh.png') }}" alt="Refresh Captcha Image" /></a>
-                    <p class="p_checkbox first"><label><input name="tos" type="checkbox" checked="checked"><span>I agree to the <a href="{{ url('/terms-and-conditions.html') }}" target="_blank">terms and conditions</a> of this site.</span></label></p>
-                    <p class="p_checkbox last"><label><input name="newsletter" type="checkbox" checked="checked"><span>I wish to receive the weekly bulletin</span></label></p>
-                    <p class="kode-submit"><a href="javascript:void(0);" data-toggle="modal" data-target="#home-forgot-password-modal">Lost Your Password</a> <input class="thbg-colortwo" type="submit" value="Sign Up"></p>
+                    <a href="javascript:void(0)" onclick="SJ.USER.refreshCaptcha('home-register-modal-form');"
+                       class="captcha-refresh"><img src="{{ asset('/images/refresh.png') }}"
+                                                    alt="Refresh Captcha Image"/></a>
+                    <p class="p_checkbox first"><label><input name="tos" type="checkbox" checked="checked"><span>I agree to the <a
+                                        href="{{ url('/terms-and-conditions.html') }}" target="_blank">terms and conditions</a> of this site.</span></label>
+                    </p>
+                    <p class="p_checkbox last"><label><input name="newsletter" type="checkbox" checked="checked"><span>I wish to receive the weekly bulletin</span></label>
+                    </p>
+                    <p class="kode-submit"><a href="javascript:void(0);" data-toggle="modal"
+                                              data-target="#home-forgot-password-modal">Lost Your Password</a> <input
+                                class="thbg-colortwo" type="submit" value="Sign Up"></p>
                 </form>
             </div>
         </div>
@@ -107,12 +124,14 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header thbg-color">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Lost Your Password</h4>
             </div>
             <div class="modal-body">
-                <form id="home-forgot-password-modal-form" class="kode-loginform" onsubmit="SJ.USER.forgotPasswordValidation(this.id);return false;">
-                    <p><span>Email address</span> <input type="text" placeholder="Enter your email" name="email" /></p>
+                <form id="home-forgot-password-modal-form" class="kode-loginform"
+                      onsubmit="SJ.USER.forgotPasswordValidation(this.id);return false;">
+                    <p><span>Email address</span> <input type="text" placeholder="Enter your email" name="email"/></p>
                     <p class="kode-submit">
                         <input class="thbg-colortwo" type="submit" value="Submit">
                     </p>
@@ -128,13 +147,15 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header thbg-color">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Thank you!</h4>
             </div>
             <div class="modal-body verify-msg">
-                The activation link has been sent to your email <span id="verify-email-id"></span><br />
-                Please check your email and click on the link to activate your account.<br />
-                <a class="kode-modren-btn thbg-colortwo" href="javascript:void(0);" data-toggle="modal" data-target="#home-login-modal">Login</a>
+                The activation link has been sent to your email <span id="verify-email-id"></span><br/>
+                Please check your email and click on the link to activate your account.<br/>
+                <a class="kode-modren-btn thbg-colortwo" href="javascript:void(0);" data-toggle="modal"
+                   data-target="#home-login-modal">Login</a>
             </div>
         </div>
     </div>
@@ -151,15 +172,16 @@
                 <h4 class="modal-title">Contact Us</h4>
             </div>
             <div class="modal-body">
-                <p><strong>All sports event organizers (School's, Colleges, corporate's, Organizations, Individual Organizers)</strong></p>
+                <p><strong>All sports event organizers (School's, Colleges, corporate's, Organizations, Individual
+                        Organizers)</strong></p>
                 <p>Contact us now for pricing your sports events (tournaments/leagues)</p>
-                <p><span class="contact-email"><a href="mailto:contact@sportsjun.com"><strong>contact@sportsjun.com</strong></a></span></p>
+                <p><span class="contact-email"><a href="mailto:contact@sportsjun.com"><strong>contact@sportsjun
+                                .com</strong></a></span></p>
             </div>
         </div>
     </div>
 </div>
 <!-- Modal -->
-
 
 
 <!-- Modal -->
@@ -181,7 +203,8 @@
                     <h6>We are Organization (School, College, Corporate, Association, Event management Company) and
                         wanting to create an account to manage our Sports Events Oragnization and tournament's with
                         SportsJun.com</h6>
-                    <a href="#" data-toggle="modal" data-target="#registerOrganizationModal" class="continueBt">Continue</a>
+                    <a href="#" data-toggle="modal" data-target="#registerOrganizationModal"
+                       class="continueBt">Continue</a>
                 </div>
                 <div class="col-lg-6 col-md-6 orgUserBox">
                     <img src="/themes/sportsjun/images/user_iocn.png">
@@ -189,7 +212,8 @@
                     <h6>I am a Player, Coach, Umpire, Parent, Follower and would like to maintain my Sports, Coach,
                         Umpire profile and find my schedule and as well follow events of great<br> talent on
                         SportsJun.com</h6>
-                    <a href="#" data-toggle="modal" data-target="#registerUserModal" class="continueBt orgC">Continue</a>
+                    <a href="#" data-toggle="modal" data-target="#registerUserModal"
+                       class="continueBt orgC">Continue</a>
                 </div>
                 <div class="clear"></div>
             </div>
@@ -211,60 +235,67 @@
                     <h1>Organization</h1>
                     <!--<h6></h6>-->
                     <div class="registerWrap">
-                        <form method="POST" action="/auth/register-organization"  class="kode-loginform" enctype="multipart/form-data"
+                        <form method="POST" action="/auth/register-organization" class="kode-loginform"
+                              enctype="multipart/form-data"
                               onsubmit="SJ.USER.ajaxSubmitModalRegister(this);return false;"
                         >
                             {{csrf_field()}}
-                            <h3>Organization Name</h3>
+                            <label>Organization Name</label>
                             <input name="org_name" class="regPop" placeHolder="Organization Name" type="text">
-                            <h3>Organization Type</h3>
+                            <label>Organization Type</label>
                             {!! Form::select('org_type',config('constants.ENUM.ORGANIZATION.ORGANIZATION_TYPE'),null,['class'=>'regPop','placeholder'=>'Organization Type']) !!}
 
-                            <h3>Subdomain</h3>
+                            <label>Subdomain</label>
                             <div>
-                                <span class="reg-subdomain">http://</span><input name="subdomain" class="reg-subdomain" placeholder="" type="text"/><span class="reg-subdomain">.{{ config('app.domain') }}</span>
+                                <span class="reg-subdomain">http://</span><input name="subdomain" class="reg-subdomain"
+                                                                                 placeholder="" type="text"/><span
+                                        class="reg-subdomain">.{{ config('app.domain') }}</span>
                             </div>
 
-                            <h3>Organization Logo</h3>
+                            <label>Organization Logo</label>
                             <input name="org_logo" class="regPop" type="file">
-                            <h3>About</h3>
+                            <label>About</label>
                             <textarea name="org_about" class="regPop" rows="4"></textarea>
                             <!-- -->
-                            <h3>First Name</h3>
-                            <input name="name" class="regPop" placeHolder="First Name" type="text">
-                            <h3>Last Name</h3>
+                            <label>First Name</label>
+                            <input name="firstname" class="regPop" placeHolder="First Name" type="text">
+                            <label>Last Name</label>
                             <input name="lastname" class="regPop" placeHolder="Last Name" type="text">
-                            <h3>Email</h3>
+                            <label>Email</label>
                             <input name="email" class="regPop" placeHolder="Email" type="text">
-                            <h3>Password</h3>
+                            <label>Password</label>
                             <input name="password" class="regPop" placeHolder="Password" type="password">
-                            <h3>Retype Password</h3>
+                            <label>Retype Password</label>
                             <input name="password_confirmation" class="regPop" placeHolder="Password" type="password">
 
-                            <h3>Address</h3>
+                            <label>Address</label>
                             <input name="address" class="regPop" placeHolder="Address" type="text">
 
-                            <h3>Country</h3>
+                            <label>Country</label>
                             {!! Form::select('country_id',$idNameCountry,null,['class'=>'regPop','onChange'=>'ajaxLoadOption(this)',
                             'data-url'=>route('data.states'),'data-target'=>"#reg_state_id",'data-name'=>'state','placeholder'=>'Select country']) !!}
-                            <h3>State</h3>
+                            <label>State</label>
                             <select id="reg_state_id" name="state_id" class="regPop" onchange="ajaxLoadOption(this);"
-                                    data-url="{{route('data.cities')}}" data-target="#reg_city_id" data-name="city"></select>
-                            <h3>City</h3>
+                                    data-url="{{route('data.cities')}}" data-target="#reg_city_id"
+                                    data-name="city"></select>
+                            <label>City</label>
                             <select id="reg_city_id" name="city_id" class="regPop"></select>
-                            <span class="capcha"> {!!Captcha::img('flat')!!}</span> <a href="javascript:void(0)"
-                                                                                       onclick="SJ.USER.refreshCaptcha('registerOrganizationModal');"
-                                                                                       class="signup_capthca"><img
-                                        src="{{ asset('/images/refresh.png') }}"
-                                        alt="Refresh Captcha Image"/></a><br/>
-                            <input type="text" name="captcha" class="captcha-input regPop"
-                                   placeholder="Enter the above captcha">
-                            <div class="form-group">
-                                <label class="">I agree to the
+                            <div class="clearfix">
+                                <span class="capcha"> {!!Captcha::img('flat')!!}</span> <a href="javascript:void(0)"
+                                                                                           onclick="SJ.USER.refreshCaptcha('registerOrganizationModal');"
+                                                                                           class="captcha-refresh">
+                                    <i class="fa fa-refresh"></i></a><br/>
+                                <input type="text" name="captcha" class="captcha-input regPop"
+                                       placeholder="Enter the above captcha">
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input name="terms_accept" type="checkbox">
+                                    I agree to the
                                     <a href="/terms-and-conditions.html" target="_blank">terms and conditions</a> of
                                     this site
                                 </label>
-                                <input name="terms_accept" type="checkbox">
+
                             </div>
 
                             <input type="submit" class="continueBt" value="Sign up"/>
@@ -303,22 +334,26 @@
                     <!--<h6></h6>-->
                     <div class="registerWrap">
                         <div class="col-md-6 social_but">
-                            <a class="btn btn-block btn-social btn-facebook" href="{{ route('social.login', ['facebook']) }}">
+                            <a class="btn btn-block btn-social btn-facebook"
+                               href="{{ route('social.login', ['facebook']) }}">
                                 <span class="fa fa-facebook"></span> Facebook
                             </a>
                         </div>
                         <div class="col-md-6 social_but">
-                            <a class="btn btn-block btn-social btn-twitter" href="{{ route('social.login', ['twitter']) }}">
+                            <a class="btn btn-block btn-social btn-twitter"
+                               href="{{ route('social.login', ['twitter']) }}">
                                 <span class="fa fa-twitter"></span> Twitter
                             </a>
                         </div>
                         <div class="col-md-6 social_but">
-                            <a class="btn btn-block btn-social btn-google" href="{{ route('social.login', ['google']) }}">
+                            <a class="btn btn-block btn-social btn-google"
+                               href="{{ route('social.login', ['google']) }}">
                                 <span class="fa fa-google-plus"></span> Google
                             </a>
                         </div>
                         <div class="col-md-6 social_but">
-                            <a class="btn btn-block btn-social btn-linkedin" href="{{ route('social.login', ['linkedin']) }}">
+                            <a class="btn btn-block btn-social btn-linkedin"
+                               href="{{ route('social.login', ['linkedin']) }}">
                                 <span class="fa fa-linkedin"></span> LinkedIn
                             </a>
                         </div>
@@ -328,32 +363,34 @@
                               enctype="multipart/form-data"
                               onsubmit="SJ.USER.ajaxSubmitModalRegister(this);return false;">
                             {{csrf_field()}}
-                            <h3>First Name</h3>
+                            <label>First Name</label>
                             <input name="firstname" class="regPop" placeHolder="First Name" type="text">
-                            <h3>Last Name</h3>
+                            <label>Last Name</label>
                             <input name="lastname" class="regPop" placeHolder="Last Name" type="text">
-                            <h3>Email</h3>
+                            <label>Email</label>
                             <input name="email" class="regPop" placeHolder="Email" type="text">
-                            <h3>Password</h3>
+                            <label>Password</label>
                             <input name="password" class="regPop" placeHolder="Password" type="password">
-                            <h3>Retype Password</h3>
+                            <label>Retype Password</label>
                             <input name="password_confirmation" class="regPop" placeHolder="Password" type="password">
-                            <span class="capcha"> {!!Captcha::img('flat')!!}</span> <a href="javascript:void(0)"
-                                                                                       onclick="SJ.USER.refreshCaptcha('registerUserModal');"
-                                                                                       class="signup_capthca"><img
-                                        src="{{ asset('/images/refresh.png') }}"
-                                        alt="Refresh Captcha Image"/></a><br/>
-                            <input type="text" name="captcha" class="captcha-input regPop"
-                                   placeholder="Enter the above captcha">
+                            <div class="clearfix">
+                                <span class="capcha"> {!!Captcha::img('flat')!!}</span> <a href="javascript:void(0)"
+                                                                                           onclick="SJ.USER.refreshCaptcha('registerUserModal');"
+                                                                                           class="captcha-refresh">
+                                    <i
+                                            class="fa fa-refresh"></i></a><br/>
+                                <input type="text" name="captcha" class="captcha-input regPop"
+                                       placeholder="Enter the above captcha">
+                            </div>
 
-                            <div class="form-group"><h3><input name="tos" type="checkbox"
-                                                               checked="checked">I agree to the <a
+                            <div class="checkbox"><label><input name="tos" type="checkbox"
+                                                                checked="checked">I agree to the <a
                                             href="{{ url('/terms-and-conditions.html') }}" target="_blank">terms and
-                                        conditions</a> of this site.</h3></div>
+                                        conditions</a> of this site.</label></div>
 
-                            <div class="form-group"><h3><input name="newsletter" type="checkbox"
-                                                               checked="checked"> I wish to receive the weekly bulletin
-                                </h3>
+                            <div class="checkbox"><label><input name="newsletter" type="checkbox"
+                                                                checked="checked"> I wish to receive the weekly bulletin
+                                </label>
                             </div>
                             <input class="continueBt" type="submit" value="Sign Up"></p>
                         </form>

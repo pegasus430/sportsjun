@@ -17,7 +17,7 @@
 	margin-top: 0px !important;
 	}
 	.modal-body input,.modal-body textarea {
-	width: 100%;
+	/*  Don't  width: 100%;*/
 	/*margin-top: 10px;*/
 	padding: 5px;
 	} 

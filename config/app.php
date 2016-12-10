@@ -217,7 +217,7 @@ return [
       #  'Form'      => 'Illuminate\Html\FormFacade',
        # 'HTML'      => 'Illuminate\Html\HtmlFacade',
         'Form' => Collective\Html\FormFacade::class,
-        'Html' => Collective\Html\HtmlFacade::class,
+        'HTML' => Collective\Html\HtmlFacade::class,
 		'Helper'	=> App\Helpers\Helper::class,
         'ScoreCard' => App\Helpers\ScoreCard::class,
 //        'URL'       => 'IlluminateSupportFacadesURL',

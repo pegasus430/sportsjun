@@ -239,11 +239,18 @@ if (typeof SJ.USER === 'undefined') {
             ajaxSubmitModalRegister: function (form) {
                 var errors = 0;
                 var jForm = $(form);
-
+                var formData = new FormData(form);
+                var token = $('input[name=_token]');
                 $.ajax({
                     type: "POST",
                     url: $(form).attr('action'),
-                    data: $(form).serialize(), // serializes the form's elements.
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    headers: {
+                        'X-CSRF-TOKEN': token.val()
+                    },
+
                     success: function (data) {
                         var email = jForm.find('[name=email]');
                         jForm.find('.error').removeClass('error');
@@ -259,6 +266,7 @@ if (typeof SJ.USER === 'undefined') {
                             el.addClass('error');
                             el.after('<span class="error">' + value + '</span>');
                         });
+                        jForm.find('.captcha-refresh').click();
                     }
                 });
             },
