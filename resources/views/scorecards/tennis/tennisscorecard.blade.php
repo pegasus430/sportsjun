@@ -381,6 +381,8 @@
 
               <!-- Save -->
 
+              @include('scorecards.common.add_referee')
+
                 <div class="row">
                 <div class='col-sm-12'><br>
                 <input type='hidden' value="{{$match_data[0]['id']}}" name='match_id'>

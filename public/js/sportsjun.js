@@ -1459,4 +1459,10 @@ function filterDiv(that, index){
         });
     });
 
+    
+    $("button[type=submit]").click(function(){      
+        $(this).hide();             
+    })
+
+
 

@@ -1,7 +1,7 @@
 
 
-<div class="col-sm-12" style="background:#eee;border:#eee inset 1px; ">
-		<div class="col-sm-8 col-sm-offset-2 sidebar-right ">
+<div class="col-sm-12" style="background:#f3f3f3;border:#eee inset 1px; ">
+		<div class="col-sm-10 col-sm-offset-1 sidebar-right ">
 				
 
           
@@ -28,7 +28,7 @@
                   </table>
 
                  </div>
-                    <ul class="nav nav-tabs nav-justified">
+                    <ul class="nav nav-tabs ">
                         <li class="active"><a href="#addplayer" data-toggle="tab" aria-expanded="false">Add Referee</a></li>
                         <li class=""><a href="#inviteplayer" data-toggle="tab" aria-expanded="true">Invite Referee</a></li>
                     </ul>

@@ -558,12 +558,18 @@
 
     </thead>
     </table>
+
+    
+          @include('scorecards.common.referees')
     </div>
+
 
     </div>
 
     </div>
     <!-- Team B Goals End-->
+
+
 
 
     </div>

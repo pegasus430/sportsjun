@@ -16,10 +16,12 @@
 
     isset($match_details->preferences)?$preferences=$match_details->preferences:[];
     
-    // if(isset($preferences->number_of_sets))$set=$preferences->number_of_sets ;
-    // else $set=3;
+     if(isset($preferences->number_of_sets))$set=$preferences->number_of_sets ;
+     else {
+       $set=isset($match_settings->number_of_sets)?$match_settings->number_of_sets:3;
+    }
 
-     $set=$match_settings->number_of_sets;
+    
 
     ${'team_'.$match_data[0]['a_id'].'_score'}='0 sets';
     ${'team_'.$match_data[0]['b_id'].'_score'}='0 sets'; 
@@ -140,7 +142,7 @@ if($match_data[0]['game_type']=='rubber'){
                     </div>
                 </div>
             </div>
-			<h5 class="scoreboard_title">tableTennis Scorecard @if($match_data[0]['match_type']!='other')
+			<h5 class="scoreboard_title">Table Tennis Scorecard @if($match_data[0]['match_type']!='other')
 											<span class='match_type_text'>({{ $match_data[0]['match_type']=='odi'?strtoupper($match_data[0]['match_type']):ucfirst($match_data[0]['match_type'])}}, {{ucfirst($match_data[0]['match_category']) }})</span>
 									@endif</h5>
         </div>

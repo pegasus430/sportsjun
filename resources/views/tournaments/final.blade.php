@@ -495,16 +495,7 @@ function addRoundMatchesSchedule(tournamentId,roundNumber, matchNumber) {
     $(document).ready(function(){
         var m=window.matches;
         var l={{$lastRoundWinner}}
-      
-        // for(i=l; i>=1; i--){
-
-        //     for(j=ml; j>=(i*2); j--){
-        //      $('.tourn_'+i+'_remove_'+j).remove();
-        //     }
-        // }   
-
-        $('.tourn_3_remove_2').remove();   
-         
+            
 
     })
 

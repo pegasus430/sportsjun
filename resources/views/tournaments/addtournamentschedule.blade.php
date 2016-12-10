@@ -285,8 +285,8 @@
         ).change(function (e) {
             var selected = this.value;
             $("#opp_team_id option").prop('disabled', false)
-            if (selected)
-                $("#opp_team_id option[value=" + selected + "]").prop('disabled', true);
+            //if (selected)
+            //    $("#opp_team_id option[value=" + selected + "]").prop('disabled', true);
             $("#opp_team_id").select2({width: "100%"});
         });
         $("#opp_team_id").select2(
@@ -294,8 +294,8 @@
         ).change(function (e) {
             var selected = this.value;
             $("#my_team_id option").prop('disabled', false)
-            if (selected)
-                $("#my_team_id option[value=" + selected + "]").prop('disabled', true);
+            // if (selected)
+            //    $("#my_team_id option[value=" + selected + "]").prop('disabled', true);
             $("#my_team_id").select2({width: "100%"});
         });
 
