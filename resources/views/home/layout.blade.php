@@ -114,6 +114,7 @@ $css_version    = config('constants.CSS_VERSION');
         @if (!(isset($is_widget) && $is_widget))
              @include('home.partials.header')
         @endif
+                @include('home.partials.search')
         @yield('content')
 </div> <div class="kd-divider divider4"><span></span></div>
 

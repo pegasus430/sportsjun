@@ -571,5 +571,8 @@ return [
 
     	]
     ],
+    'search'=>[
+        'empty'=>'There are no results for your search.'
+    ]
 
 ];

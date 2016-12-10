@@ -32,7 +32,7 @@
             <div class="row">
                 <div class="col-md-12" style="min-height:300px;padding:30px;">
                     <div class="alert alert-info" role="alert">
-                        <b>{{ trans('search.empty') }}</b>
+                        <b>{{ trans('message.search.empty',['search'=>$what]) }}</b>
                     </div>
                 </div>
             </div>
