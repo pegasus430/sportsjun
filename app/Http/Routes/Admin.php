@@ -1,7 +1,7 @@
 <?php
 Route::group(array('middleware' => 'role'), function() {
     //Dashboard
-    Route::get("admin/dashboard", array("as"=>"admin", 'uses'=>"admin\DashboardController@index") );
+    Route::get("admin/dashboard", array("as"=>"admin", 'uses'=>'admin\DashboardController@index') );
     //End Dashboard
 
     //Home
@@ -12,6 +12,7 @@ Route::group(array('middleware' => 'role'), function() {
 
         $router->get('infolists/{type}',['as'=>'infolists','uses'=>"HomepageInfolistsController@index"]);
         $router->get('infolists/{type}/create',['as'=>'infolists.add','uses'=>"HomepageInfolistsController@create"]);
+        $router->post('infolist/{type}/order',['as'=>'infolists.order','uses'=>"HomepageInfolistsController@order"]);
         $router->post('infolists/{type}/create',['uses'=>"HomepageInfolistsController@store"]);
 
        });

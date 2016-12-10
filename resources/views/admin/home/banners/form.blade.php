@@ -7,6 +7,10 @@
     </div>
 
     <div class="form-group">
+        <label class="form-label">Enabled</label>
+        {!! Form::select('active',['0'=>'no','1'=>'yes'],object_get($item,'active',old('active'))) !!}
+    </div>
+    <div class="form-group">
         <label class="form-label">Weight</label>
         <input class="form-control" name="weight" value="{{ object_get($item,'weight',old('weight')) }}"/>
     </div>
