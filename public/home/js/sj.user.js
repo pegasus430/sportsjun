@@ -237,45 +237,57 @@ if (typeof SJ.USER === 'undefined') {
                 return false;
             },
             ajaxSubmitModalRegister: function (form) {
-                var errors = 0;
                 var jForm = $(form);
-                var formData = new FormData(form);
-                $.get('/data/token', function (result) {
-                    var token = result;
-                    $.ajax({
-                        type: "POST",
-                        url: $(form).attr('action'),
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        headers: {
-                            'X-CSRF-TOKEN': token
-                        },
+                var button = jForm.find('.continueBt');
+                $(button).prop('disabled', true);
+                var errors = 0;
 
-                        success: function (data) {
-                            var email = jForm.find('[name=email]');
-                            $('#verify-email-id').html(email.val());
-                            jForm.find('span.error').remove();
-                            jForm.find('.error').removeClass('error');
-                            jForm.find('input').val('');
-                            jForm.find('select').prop('selectedIndex', 0);
-                            jForm.parents('.modal').hide();
-                            $('#home-email-verify-modal').modal('show');
-                        },
-                        error: function (data) {
-                            jForm.find('span.error').remove();
-                            var data = jQuery.parseJSON(data.responseText);
-                            $.each(data, function (key, value) {
-                                var el = jForm.find('[name=' + key + ']');
-                                el.addClass('error');
-                                if (el.attr('type') != 'checkbox')
-                                    el.after('<span class="error">' + value + '</span>');
-                                else
-                                    el.parent('label').after('<span class="error">' + value + '</span>');
-                            });
-                            jForm.find('.captcha-refresh').click();
-                        }
-                    });
+                var formData = new FormData(form);
+                $.ajax({
+                    type: "GET",
+                    url: '/data/token',
+                    success: function (result) {
+                        var token = result;
+                        $.ajax({
+                            type: "POST",
+                            url: $(form).attr('action'),
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                            headers: {
+                                'X-CSRF-TOKEN': token
+                            },
+
+                            success: function (data) {
+                                var email = jForm.find('[name=email]');
+                                $('#verify-email-id').html(email.val());
+                                jForm.find('span.error').remove();
+                                jForm.find('.error').removeClass('error');
+                                jForm.find('input').val('');
+                                jForm.find('select').prop('selectedIndex', 0);
+                                jForm.parents('.modal').hide();
+                                $('#home-email-verify-modal').modal('show');
+                                $(button).prop('disabled', false);
+                            },
+                            error: function (data) {
+                                jForm.find('span.error').remove();
+                                var data = jQuery.parseJSON(data.responseText);
+                                $.each(data, function (key, value) {
+                                    var el = jForm.find('[name=' + key + ']');
+                                    el.addClass('error');
+                                    if (el.attr('type') != 'checkbox')
+                                        el.after('<span class="error">' + value + '</span>');
+                                    else
+                                        el.parent('label').after('<span class="error">' + value + '</span>');
+                                });
+                                jForm.find('.captcha-refresh').click();
+                                $(button).prop('disabled', false);
+                            }
+                        });
+                    },
+                    error: function (data) {
+                        $(button).prop('disabled', false);
+                    }
                 });
             },
             registerValidation: function (form_id) {

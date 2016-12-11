@@ -290,7 +290,7 @@
                             </div>
                             <div class="checkbox">
                                 <label>
-                                    <input name="terms_accept" type="checkbox">
+                                    <input name="terms_accept" type="checkbox" checked="checked">
                                     I agree to the
                                     <a href="/terms-and-conditions.html" target="_blank">terms and conditions</a> of
                                     this site
