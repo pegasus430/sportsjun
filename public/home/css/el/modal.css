@@ -116,3 +116,8 @@
     display: block;
     color: #F44336;
 }
+
+.kode-loginform select:active,.kode-loginform select:focus,
+.kode-loginform select:hover{
+    outline:1px solid black;
+}
