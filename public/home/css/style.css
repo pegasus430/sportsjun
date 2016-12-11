@@ -3615,12 +3615,11 @@ form#home-register-modal-form p.p_checkbox.last {
     margin-bottom: 10px;
 }
 form#home-register-modal-form span.capcha {
-    display: block;
-    position: relative;
+    display: inline-block;
     top: 12px;
     clear: both;
     height: 46px;
-    width: 100%;
+    width: auto;
 }
 
 .modal-body.verify-msg {
