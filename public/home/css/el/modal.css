@@ -121,3 +121,16 @@
 .kode-loginform select:hover{
     outline:1px solid black;
 }
+
+
+.kode-loginform .checkbox label{
+    font-weight:bold;
+}
+
+.kode-loginform .checkbox a {
+    text-decoration: underline;
+}
+
+.kode-loginform input[disabled]{
+    background:gray;
+}
