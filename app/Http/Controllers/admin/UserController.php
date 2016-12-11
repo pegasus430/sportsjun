@@ -83,7 +83,7 @@ class UserController extends Controller {
         $grid->add('{{ implode(", ", $providers->lists("provider")->all()) }}','Providers');
 	
 	   // $grid->add('{{ implode(", ", $usersfollowingsports->lists("following_sports")->all()) }}','sports');
-	    $grid->add('{{  Helper::getUserFollowingSportNames(implode(", ", $usersfollowingsports->lists("following_sports")->all())) }}','sports');
+	    $grid->add('{{  Helper::getUserFollowingSportNames(implode(", ", $usersfollowingsports->following_sports)) }}','sports');
 		
 		
 		

@@ -1,0 +1,59 @@
+
+.testimonialsWrapp {
+    background: #f6f6f6;
+    width:100%;
+    overflow-x: hidden;
+    padding: 65px 0px 35px;
+}
+
+.testimonialsWrapp h1 {
+    font: 35px SFUIDisplay-Regular;
+    color: #434f5e;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 0 0 66px 0;
+}
+
+.profileRound {
+    width: 104px;
+    height: 104px;
+    overflow: hidden;
+    border-radius: 150px;
+    float: left;
+}
+
+.profileRound img {
+    width: 100%;
+}
+
+.testimornialBox {
+    padding: 5px 18px;
+}
+
+.testimornialBox p {
+    font: 15px SFUIDisplay-Light;
+    color: #434f5e;
+    margin: 14px 0 15px 5px;
+    font-style: italic;
+}
+
+.testimornialBox h4 {
+    font: 17px SFUIDisplay-Bold;
+}
+
+.testimornialBox h4 span {
+    font: 14px SFUIDisplay-Regular;
+    margin: 0 0 0 10px;
+    color: #434f5e;
+}
+
+.readAll {
+    background: url(../images/greenBg.png) no-repeat center center;
+    width: 174px;
+    display: block;
+    text-align: center;
+    padding: 16px 10px;
+    font: 14px SFUIDisplay-Regular;
+    margin: 32px auto;
+    color: #FFF;
+}

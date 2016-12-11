@@ -1091,10 +1091,13 @@ class TennisScoreCardController extends parentScoreCardController
 
     public function updatePreferences(ObjectRequest $request){
             $match_id=$request->match_id;
+            $rubber_id = $request->rubber_id;       
 
-            $match_model=MatchSchedule::find($match_id);
+        $match_model = MatchSchedule::find($match_id);
+            if($match_model->game_type=="rubber") $match_model = MatchScheduleRubber::find($rubber_id);
+
+
             $match_details=json_decode($match_model->match_details);
-
             $preferences=$match_details->preferences;
 
             $preferences->number_of_sets=$request->number_of_sets;
@@ -1109,6 +1112,9 @@ class TennisScoreCardController extends parentScoreCardController
             $match_model->match_details=$match_details;
 
             $match_model->save();
+
+            $this->insertTennisSet($match_id, $rubber_id=$rubber_id, $request->number_of_sets);
+          
 
             return "preferences updated";
     }
@@ -1388,14 +1394,18 @@ class TennisScoreCardController extends parentScoreCardController
         if(!$rubber_id) $rubber_id=0;
 
         for($i=1; $i<=$number_of_sets; $i++){
-            $set_scoring = new TennisSet;
-            $set_scoring->team_a = $match_model->a_id;
-            $set_scoring->team_b = $match_model->b_id;
-            $set_scoring->match_id= $match_model->id;
-            $set_scoring->set     = $i;
-            $set_scoring->rubber_id=$rubber_id;
-            $set_scoring->save();
-            $this->enter_new_game($match_id, $rubber_id, 1,$i,$set_scoring->id);           
+
+            $check = tennisset::where(['match_id'=>$match_id,'rubber_id'=>$rubber_id,'set'=>$i])->first();
+            if(!$check){
+                $set_scoring = new TennisSet;
+                $set_scoring->team_a = $match_model->a_id;
+                $set_scoring->team_b = $match_model->b_id;
+                $set_scoring->match_id= $match_model->id;
+                $set_scoring->set     = $i;
+                $set_scoring->rubber_id=$rubber_id;
+                $set_scoring->save();
+                $this->enter_new_game($match_id, $rubber_id, 1,$i,$set_scoring->id); 
+            }          
         }
 
     }

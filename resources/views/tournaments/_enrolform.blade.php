@@ -5,7 +5,7 @@
                 <h3>{{ trans('message.tournament.fields.reg_reg_heading') }}</h3>
             </div>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-6">
             <div class="section">
                 <label class="form_label">{{  trans('message.tournament.fields.reg_opening_date') }} <span  class='required'>*</span></label>         
                 <label class='field' >
@@ -20,7 +20,7 @@
             
             </div>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-6">
             <div class="section">
                 <label class="form_label">{{  trans('message.tournament.fields.reg_opening_time') }}</label>         
                 <label class='field' >
@@ -35,7 +35,7 @@
             
             </div>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-6">
             <div class="section">
                 <label class="form_label">{{  trans('message.tournament.fields.reg_closing_date') }} <span  class='required'>*</span></label>         
                 <label class='field' >
@@ -50,7 +50,7 @@
             
             </div>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-6">
             <div class="section">
                 <label class="form_label">{{  trans('message.tournament.fields.reg_closing_time') }}</label>         
                 <label class='field' >
@@ -72,9 +72,10 @@
                 <label class="form_label">{{  trans('message.tournament.fields.total_enrollment') }}</label> 
                 <label for="total_enrollment" class="field prepend-icon">
                      
-                    {!! Form::text('total_enrollment', null, array('class'=>'gui-input','placeholder'=>trans('message.tournament.fields.total_enrollment'))) !!}
+                    {!! Form::text('total_enrollment', null, array('class'=>'gui-input','id'=>'tot_enrollment','placeholder'=>trans('message.tournament.fields.total_enrollment'))) !!}
                     @if ($errors->has('total_enrollment')) <p class="help-block">{{ $errors->first('total_enrollment') }}</p> @endif
-                <label for="total_enrollment" class="field-icon"><i class="fa fa-users"></i></label>  
+                <label for="total_enrollment" class="field-icon"><i class="fa fa-users"></i></label>
+                <p class="help-block enrollment-validations" id="tot-enrollment-val">Invalid number</p>    
                 </label>
             </div>
         </div>
@@ -83,9 +84,10 @@
                 <label class="form_label">{{  trans('message.tournament.fields.min_enrollment') }}</label> 
                 <label for="min_enrollment" class="field prepend-icon">
                      
-                    {!! Form::text('min_enrollment', null, array('class'=>'gui-input','placeholder'=>trans('message.tournament.fields.min_enrollment'))) !!}
+                    {!! Form::text('min_enrollment', null, array('class'=>'gui-input','id'=>'min_enrollment','placeholder'=>trans('message.tournament.fields.min_enrollment'))) !!}
                     @if ($errors->has('min_enrollment')) <p class="help-block">{{ $errors->first('min_enrollment') }}</p> @endif
-                <label for="min_enrollment" class="field-icon"><i class="fa fa-users"></i></label>  
+                <label for="min_enrollment" class="field-icon"><i class="fa fa-users"></i></label> 
+                 <p class="help-block enrollment-validations" id="min-enrollment-val">Invalid number</p>   
                 </label>
             </div>
         </div>
@@ -94,9 +96,10 @@
                 <label class="form_label">{{  trans('message.tournament.fields.max_enrollment') }}</label> 
                 <label for="max_enrollment" class="field prepend-icon">
                      
-                    {!! Form::text('max_enrollment', null, array('class'=>'gui-input','placeholder'=>trans('message.tournament.fields.max_enrollment'))) !!}
+                    {!! Form::text('max_enrollment', null, array('class'=>'gui-input','id'=>'max_enrollment','placeholder'=>trans('message.tournament.fields.max_enrollment'))) !!}
                     @if ($errors->has('max_enrollment')) <p class="help-block">{{ $errors->first('max_enrollment') }}</p> @endif
-                <label for="max_enrollment" class="field-icon"><i class="fa fa-users"></i></label>  
+                <label for="max_enrollment" class="field-icon"><i class="fa fa-users"></i></label>
+                 <p class="help-block enrollment-validations" id="max-enrollment-val">Invalid number</p>    
                 </label>
             </div>
         </div>
@@ -137,13 +140,33 @@
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="section">
+                
+                    <label for="comment" class="field prepend-icon">
+                    {!! Form::checkbox('agree', 'yes',false, array('required','class'=>'gui-checkbox', 'id'=>'disclaimer_agree')) !!}
+                    <span class="agree_conditions">{{$disclaimer_content}}</span>
+                    <p class="help-block" id="agree_conditions-val">Please agree our Terms and Conditions</p> 
+                    
+                </label>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
 </div>
 <div class="payment_details{{$formType}}">
     <div class="row">
         @if($vendorBankAccounts !== null)
             @foreach($vendorBankAccounts as $vendorBankAccount)
                 <div class="col-sm-6">
-                    <div class="account-holder-box">
+                    <div class="account-holder-box existing_accounts">
                         {!! Form::radio('vendor_bank_account_id', $vendorBankAccount->id, null, ['id' => 'foo_$vendorBankAccount->id', 'class'=>'gui-input']) !!}
                         <label for="{{$vendorBankAccount->id}}">
                             <div>{{$vendorBankAccount->account_holder_name}}</div>
@@ -163,14 +186,15 @@
             <div class="add_account_div{{$formType}}"><i style="font-size:40px;cursor: pointer;" class="fa fa-plus-circle"></i> <br/> Add another account</div>
         </div>
     </div>
-    <div class="payment_form{{$formType}}">
+    <div class="payment_form{{$formType}}" id="add_bank_account_form">
         <div class="row">
             <div class="col-sm-6">                       
                 <div class="section">
                     <label class="form_label">{{  trans('message.tournament.fields.account_holder_name') }}</label> 
                     <label for="account_holder_name" class="field prepend-icon">
                          
-                        {!! Form::text('account_holder_name', null, array('class'=>'gui-input','placeholder'=>trans('message.tournament.fields.account_holder_name'))) !!}
+                        {!! Form::text('account_holder_name', null, array('required','class'=>'gui-input','placeholder'=>trans('message.tournament.fields.account_holder_name'))) !!}
+                        <p class="help-block validation_msg" id="account_name_validator" style="display:none">Please enter your name</p>
                         @if ($errors->has('account_holder_name')) <p class="help-block">{{ $errors->first('account_holder_name') }}</p> @endif
                     <label for="account_holder_name" class="field-icon"><i class="fa fa-user"></i></label>  
                     </label>
@@ -181,7 +205,8 @@
                     <label class="form_label">{{  trans('message.tournament.fields.account_number') }}</label> 
                     <label for="account_number" class="field prepend-icon">
                          
-                        {!! Form::text('account_number', null, array('class'=>'gui-input','placeholder'=>trans('message.tournament.fields.account_number'))) !!}
+                        {!! Form::text('account_number', null, array('required','class'=>'gui-input','placeholder'=>trans('message.tournament.fields.account_number'))) !!}
+                        <p class="help-block validation_msg" id="account_number_validator" style="display:none">Please enter a valid account number</p>
                         @if ($errors->has('account_number')) <p class="help-block">{{ $errors->first('account_number') }}</p> @endif
                     <label for="account_number" class="field-icon"><i class="fa fa-credit-card"></i></label>  
                     </label>
@@ -194,7 +219,8 @@
                     <label class="form_label">{{  trans('message.tournament.fields.bank_name') }}</label> 
                     <label for="bank_name" class="field prepend-icon">
                          
-                        {!! Form::text('bank_name', null, array('class'=>'gui-input','placeholder'=>trans('message.tournament.fields.bank_name'))) !!}
+                        {!! Form::text('bank_name', null, array('required','class'=>'gui-input','placeholder'=>trans('message.tournament.fields.bank_name'))) !!}
+                        <p class="help-block validation_msg" id="account_bankname_validator" style="display:none">Please enter your bank name</p>
                         @if ($errors->has('bank_name')) <p class="help-block">{{ $errors->first('bank_name') }}</p> @endif
                     <label for="bank_name" class="field-icon"><i class="fa fa-university"></i></label>  
                     </label>
@@ -205,7 +231,8 @@
                     <label class="form_label">{{  trans('message.tournament.fields.branch') }}</label> 
                     <label for="branch" class="field prepend-icon">
                          
-                        {!! Form::text('branch', null, array('class'=>'gui-input','placeholder'=>trans('message.tournament.fields.branch'))) !!}
+                        {!! Form::text('branch', null, array('required','class'=>'gui-input','placeholder'=>trans('message.tournament.fields.branch'))) !!}
+                        <p class="help-block validation_msg" id="account_branch_validator" style="display:none">Please enter your  branch</p>
                         @if ($errors->has('branch')) <p class="help-block">{{ $errors->first('branch') }}</p> @endif
                     <label for="branch" class="field-icon"><i class="fa fa-briefcase"></i></label>  
                     </label>
@@ -218,7 +245,8 @@
                     <label class="form_label">{{  trans('message.tournament.fields.ifsc') }}</label> 
                     <label for="ifsc" class="field prepend-icon">
                          
-                        {!! Form::text('ifsc', null, array('class'=>'gui-input','placeholder'=>trans('message.tournament.fields.ifsc'))) !!}
+                        {!! Form::text('ifsc', null, array('required','class'=>'gui-input','placeholder'=>trans('message.tournament.fields.ifsc'))) !!}
+                        <p class="help-block validation_msg" id="account_ifsc_validator" style="display:none">Please enter your  IFSC</p>
                         @if ($errors->has('ifsc')) <p class="help-block">{{ $errors->first('ifsc') }}</p> @endif
                     <label for="ifsc" class="field-icon"><i class="fa fa-university"></i></label>  
                     </label>
@@ -240,7 +268,13 @@
                 {{  trans('message.tournament.bank_form_warning') }}
             </div>
         </div>
+         
     </div>
+    <div class="row">
+            <div class="col-sm-12 validation_msg bank_account_validation"" style="display:none;">
+               please select/add account to make transactions
+            </div>
+        </div>
 </div>
 <style type="text/css">
     .account-holder-box{

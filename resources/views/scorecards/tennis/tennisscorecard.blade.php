@@ -35,6 +35,8 @@
     if(isset($preferences->number_of_sets))$set=$preferences->number_of_sets ;
     else $set=$match_settings->number_of_sets;
 
+
+
    // $set=$match_settings->number_of_sets;
 
     ${'team_'.$match_data[0]['a_id'].'_score'}='0 sets';
@@ -379,6 +381,8 @@
 
               <!-- Save -->
 
+              @include('scorecards.common.add_referee')
+
                 <div class="row">
                 <div class='col-sm-12'><br>
                 <input type='hidden' value="{{$match_data[0]['id']}}" name='match_id'>
@@ -426,7 +430,7 @@
              
             @for($set_index=1; $set_index<=$set; $set_index++)
               <th>SET {{$set_index}}</th>
-              <th>TB {{$set_index}}    </th>
+              <th style="padding-left:0px; padding-right:20px;">TB {{$set_index}}    </th>
             @endfor
               <th>Aces </th>
               <th>D Faults</th>
@@ -445,7 +449,7 @@
                  <input  readonly class="gui-input validation allownumericwithdecimal runs_new a_set{{$set_index}}" value="{{$score_a_array['set'.$set_index]}}" name='a_set{{$set_index}}'>
                 <span class='hidden-xs pull-right add_button_left left_button_add_set_{{$set_index}}'></span>
             </td>
-            <td>
+            <td style="padding-left:0px; padding-right:20px;" >
 
                  <input  readonly class="gui-input validation allownumericwithdecimal runs_new a_set{{$set_index}}_tie_breaker " value="{{$score_a_array['set'.$set_index.'_tie_breaker']}}" name='a_set_tie{{$set_index}}'>
             </td>
@@ -465,7 +469,7 @@
                   <input  readonly class="gui-input validation allownumericwithdecimal runs_new b_set{{$set_index}}" value="{{$score_b_array['set'.$set_index]}}" name='b_set{{$set_index}}'>
                 <span class='hidden-xs pull-right add_button_right right_button_add_set_{{$set_index}}'></span>
                 </td>
-            <td>
+            <td style="padding-left:0px; padding-right:20px;" class="append_after_a">
 
                  <input  readonly class="gui-input validation allownumericwithdecimal runs_new b_set{{$set_index}}_tie_breaker" value="{{$score_b_array['set'.$set_index.'_tie_breaker']}}" name='b_set_tie{{$set_index}}'>
               </td>
@@ -486,7 +490,8 @@
 
 <?php
  $set_score     = ScoreCard::tennis_active_set($match_data[0]['id'], null, $current_set);
-    $game          = $set_score->active_game;
+  if($set_score) $game          = $set_score->active_game;
+  else $game = null;
 ?>
 
 
@@ -522,9 +527,9 @@
                     <button class='btn btn-danger btn-circle' type='team_a' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_model->user_id_a}}" score_id="{{$score_a_array['id']}}">15</button>
                     <button class='btn btn-danger btn-circle' type='team_a' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_model->user_id_a}}" score_id="{{$score_a_array['id']}}">30</button>
                     <button class='btn btn-danger btn-circle' type='team_a' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_model->user_id_a}}" score_id="{{$score_a_array['id']}}">40</button>
-                    <button class='btn btn-danger btn-circle' type='team_a' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_model->user_id_a}}" score_id="{{$score_a_array['id']}}">Ace</button>
-                    <button class='btn btn-danger btn-circle' type='team_a' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_model->user_id_a}}" score_id="{{$score_a_array['id']}}">DB</button>
-                    <button class='btn btn-danger btn-circle' type='team_a' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_model->user_id_a}}" score_id="{{$score_a_array['id']}}">Win</button>
+                    <button class='btn btn-danger btn-circle btn-ace' type='team_a' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_model->user_id_a}}" score_id="{{$score_a_array['id']}}">Ace</button>
+                    <button class='btn btn-danger btn-circle btn-ace' type='team_a' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_model->user_id_a}}" score_id="{{$score_a_array['id']}}">DB</button>
+                    <button class='btn btn-danger btn-circle ' type='team_a' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_model->user_id_a}}" score_id="{{$score_a_array['id']}}">Win</button>
                     </center>
                 </div>
                 <div class="col-sm-6 pull-left">
@@ -536,14 +541,14 @@
                     <button class='btn btn-danger btn-circle' type='team_b' value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_model->user_id_a}}" score_id="{{$score_b_array['id']}}">15</button>
                     <button class='btn btn-danger btn-circle' type='team_b'  value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_model->user_id_a}}" score_id="{{$score_b_array['id']}}">30</button>
                     <button class='btn btn-danger btn-circle' type='team_b' value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_model->user_id_a}}" score_id="{{$score_b_array['id']}}">40</button>
-                    <button class='btn btn-danger btn-circle' type='team_b' value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_model->user_id_a}}" score_id="{{$score_b_array['id']}}">Ace</button>
-                    <button class='btn btn-danger btn-circle' type='team_b' value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_model->user_id_a}}" score_id="{{$score_b_array['id']}}">DB</button>
-                    <button class='btn btn-danger btn-circle' type='team_b' value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_model->user_id_a}}" score_id="{{$score_b_array['id']}}">Win</button>
+                    <button class='btn btn-danger btn-circle btn-ace' type='team_b' value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_model->user_id_a}}" score_id="{{$score_b_array['id']}}">Ace</button>
+                    <button class='btn btn-danger btn-circle btn-ace' type='team_b' value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_model->user_id_a}}" score_id="{{$score_b_array['id']}}">DB</button>
+                    <button class='btn btn-danger btn-circle ' type='team_b' value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_model->user_id_a}}" score_id="{{$score_b_array['id']}}">Win</button>
                     </center>
                 </div>
 
-                 <a title="Start Tie Breaker" href="javascript:void(0)" style="color:green; position:absolute; margin-left:-50px; margin-top:-20px; font-size:30px" class="show-tie-breaker show_tb" onclick='show_tb()' >
-                           <i class="fa fa-caret-right"></i>
+                 <a title="Start Tie Breaker" href="javascript:void(0)" style="color:green; position:absolute; margin-left:-50px; margin-top:-20px; font-size:10px" class="show-tie-breaker show_tb" onclick='show_tb()' >
+                          Tie Break
                   </a>
               </div>
           </div>
@@ -592,8 +597,8 @@
                 </div>
 
              
-                      <a title="End Tie Breaker" href="javascript:void(0)" style="color:red; font-size:30px" style="position:absolute; margin-left:-50px; margin-top:20px;" class="show-tie-breaker" >
-                              <i class="fa fa-caret-left" onclick='hide_tb()'> </i>
+                      <a title="End Tie Breaker" href="javascript:void(0)" style="color:red; font-size:12px" style="position:absolute; margin-left:-50px; margin-top:20px;" class="show-tie-breaker" onclick='hide_tb()' >
+                            end TB
                       </a>
         
               </div>
@@ -680,10 +685,17 @@
 
     <?php 
     if($rubber->rubber_number==$active_rubber){
-        $score_a_array=$score_a_array;
-        $score_b_array=$score_b_array;
+        $score_a_array=$rubber_a_array;
+        $score_b_array=$rubber_b_array;
       }
   ?>
+
+    <?php
+      $match_details_rubber = json_decode($rubber->match_details);
+    if(isset($match_details_rubber->preferences))$set=$match_details_rubber->preferences->number_of_sets ;
+    
+    ?>
+
 
         @if($rubber->rubber_number==$active_rubber)
 
@@ -935,7 +947,7 @@
                      <div class="col-sm-12"><center><h3>Update Preferences</h3> </center></div>
                     <div class='col-sm-4'>
                         <label>Number of Sets</label>
-                        <select class='form-control select-picker' name='number_of_sets' readonly {{$disabled}}>
+                        <select class='form-control select-picker' name='number_of_sets' >
                             <option value=1  {{$preferences->number_of_sets==1?'selected':''}}>1</option>
                             <option value=2  {{$preferences->number_of_sets==2?'selected':''}}>2</option>
                             <option value=3 {{$preferences->number_of_sets==3?'selected':''}}>3</option>
@@ -944,18 +956,22 @@
                         </select>
                       {!!csrf_field()!!}
                       <input type='hidden' name='match_id' value="{{$match_data[0]['id']}}">
-                                           
+                      <input type='hidden' name='game_type' value="{{$match_data[0]['game_type']}}
+                      ">
+                      @if($match_data[0]['game_type']=='rubber' && isset($score_a_array['rubber_id']))
+                        <input type='hidden' name='rubber_id' value="{{$score_a_array['rubber_id']}}">
+                      @endif               
                     </div>
 
                     <div class='col-sm-4'>
                         <label>Score to Win</label>
-                        <input type='text' name='score_to_win' class="form-control gui-input allownumericwithdecimal" required="" value="{{$preferences->score_to_win}}" readonly="" {{$disabled}}>
+                        <input type='text' name='score_to_win' class="form-control gui-input allownumericwithdecimal" required="" value="{{$preferences->score_to_win}}" >
 
                     </div>
 
                     <div class='col-sm-4'>
                         <label>Set End Point</label>
-                        <input type='text' name='set_end_point' class="form-control gui-input allownumewithdecimal" required="" value="{{$preferences->end_point}}" readonly="" {{$disabled}}>
+                        <input type='text' name='set_end_point' class="form-control gui-input allownumewithdecimal" required="" value="{{$preferences->end_point}}" >
 
                     </div>
 
@@ -1563,8 +1579,16 @@ function endMatchCompletely(match_id){
       }
 
       function show_tb(){
-          $('.hide_tb').show();
-          $('.show_tb').hide();
+          $.confirm({
+            title:'Alert!',
+            content:"Do you want to start Tie Break?", 
+            confirm:function(){
+                 $('.hide_tb').show();
+                 $('.show_tb').hide();
+            }
+          })
+
+         
       }
 
 </script>

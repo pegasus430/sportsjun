@@ -1144,25 +1144,23 @@ input:read-only {
 
 									<br>
 
-									<div class="row">
-							<center> <button class='btn btn-primary' type="submit" >Save</button></center>
-						</div>
+								
 								</div>
 
 							</div>
 
-						
 
-						</form>
-					</div>
+							@include('scorecards.common.add_referee')		
 
+			
 				</div>
 
 			</div>
 			<div class="modal-footer">
-
+				<button class='btn btn-primary' type="submit" >Save</button>
 				<button type="button" class="button btn-secondary" data-dismiss="modal">Close</button>
 			</div>
+			</form>
 		</div>
 	</div>
 	</div>

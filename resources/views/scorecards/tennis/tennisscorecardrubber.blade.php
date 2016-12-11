@@ -186,7 +186,9 @@
     $current_set   = $match_details->current_set;
 
     $set_score     = ScoreCard::tennis_active_set($rubber->match_id, $rubber->id, $current_set);
-    $game          = $set_score->active_game;
+
+    if($set_score)  $game  = $set_score->active_game;
+    else            $game  = null;
 
 
 ?>
@@ -293,9 +295,9 @@
                     <button class='btn btn-danger btn-circle' type='team_a' value="{{$rubber_a_array['team_id']}}" score_id="{{$rubber_a_array['id']}}">15</button>
                     <button class='btn btn-danger btn-circle' type='team_a' value="{{$rubber_a_array['team_id']}}" score_id="{{$rubber_a_array['id']}}">30</button>
                     <button class='btn btn-danger btn-circle' type='team_a' value="{{$rubber_a_array['team_id']}}" score_id="{{$rubber_a_array['id']}}">40</button>
-                    <button class='btn btn-danger btn-circle' type='team_a' value="{{$rubber_a_array['team_id']}}" score_id="{{$rubber_a_array['id']}}">Ace</button>
-                    <button class='btn btn-danger btn-circle' type='team_a' value="{{$rubber_a_array['team_id']}}" score_id="{{$rubber_a_array['id']}}">DB</button>
-                    <button class='btn btn-danger btn-circle' type='team_a' value="{{$rubber_a_array['team_id']}}" score_id="{{$rubber_a_array['id']}}">Win</button>
+                    <button class='btn btn-danger btn-circle btn-ace' type='team_a' value="{{$rubber_a_array['team_id']}}" score_id="{{$rubber_a_array['id']}}">Ace</button>
+                    <button class='btn btn-danger btn-circle btn-ace' type='team_a' value="{{$rubber_a_array['team_id']}}" score_id="{{$rubber_a_array['id']}}">DB</button>
+                    <button class='btn btn-danger btn-circle ' type='team_a' value="{{$rubber_a_array['team_id']}}" score_id="{{$rubber_a_array['id']}}">Win</button>
                     </center>
                 </div>
                 <div class="col-sm-6 pull-left">
@@ -306,14 +308,14 @@
                     <button class='btn btn-danger btn-circle' type='team_b' value="{{$rubber_b_array['team_id']}}" score_id="{{$rubber_b_array['id']}}">15</button>
                     <button class='btn btn-danger btn-circle' type='team_b'  value="{{$rubber_b_array['team_id']}}" score_id="{{$rubber_b_array['id']}}">30</button>
                     <button class='btn btn-danger btn-circle' type='team_b' value="{{$rubber_b_array['team_id']}}" score_id="{{$rubber_b_array['id']}}">40</button>
-                    <button class='btn btn-danger btn-circle' type='team_b' value="{{$rubber_b_array['team_id']}}" score_id="{{$rubber_b_array['id']}}">Ace</button>
-                    <button class='btn btn-danger btn-circle' type='team_b' value="{{$rubber_b_array['team_id']}}" score_id="{{$rubber_b_array['id']}}">DB</button>
-                    <button class='btn btn-danger btn-circle' type='team_b' value="{{$rubber_b_array['team_id']}}" score_id="{{$rubber_b_array['id']}}">Win</button>
+                    <button class='btn btn-danger btn-circle btn-ace' type='team_b' value="{{$rubber_b_array['team_id']}}" score_id="{{$rubber_b_array['id']}}">Ace</button>
+                    <button class='btn btn-danger btn-circle btn-ace' type='team_b' value="{{$rubber_b_array['team_id']}}" score_id="{{$rubber_b_array['id']}}">DB</button>
+                    <button class='btn btn-danger btn-circle ' type='team_b' value="{{$rubber_b_array['team_id']}}" score_id="{{$rubber_b_array['id']}}">Win</button>
                     </center>
                 </div>
 
-                 <a title="Start Tie Breaker" href="javascript:void(0)" style="color:green; position:absolute; margin-left:-50px; margin-top:-20px; font-size:30px" class="show-tie-breaker show_tb" onclick='show_tb()' >
-                           <i class="fa fa-caret-right"></i>
+                 <a title="Start Tie Breaker" href="javascript:void(0)" style="color:green; position:absolute; margin-left:-50px; margin-top:-20px; font-size:14px" class="show-tie-breaker show_tb" onclick='show_tb()' >
+                          Tie Break
                   </a>
               </div>
           </div>
@@ -321,7 +323,11 @@
           <div class="col-sm-4 hide-tie-breaker hide_tb" style="" id='show_tie_breaker'>
 
             <div class="col-sm-12">
-              <div class=''> <center>Tie Breaker  </center></div>     
+              <div class=''> 
+              <center>Tie Breaker  </center>
+              <a title="End Tie Breaker" href="javascript:void(0)" style="color:red; font-size:12px" class="show-tie-breaker pull-right" onclick='hide_tb()' >
+                              End TB
+                      </a></div>     
               <br>
               <br>
               </div>
@@ -362,9 +368,7 @@
                 </div>
 
              
-                      <a title="End Tie Breaker" href="javascript:void(0)" style="color:red; font-size:30px" style="position:absolute; margin-left:-50px; margin-top:20px;" class="show-tie-breaker" >
-                              <i class="fa fa-caret-left" onclick='hide_tb()'> </i>
-                      </a>
+                    
         
               </div>
 

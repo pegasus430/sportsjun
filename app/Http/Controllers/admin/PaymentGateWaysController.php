@@ -15,6 +15,11 @@ use Carbon\Carbon;
 use App\Model\UserStatistic;
 use App\User;
 use App\Model\MatchSchedule;
+use App\Model\PaymentSetups;
+use Illuminate\Support\Facades\Validator;
+
+use Input;
+
 
 class PaymentGateWaysController extends Controller
 {
@@ -117,7 +122,105 @@ class PaymentGateWaysController extends Controller
     }
 
 
+    public function getSetup(){
+        $globalurl=url(); 
+        
+        $filter = \DataFilter::source(PaymentGateWays::with('country'));    
+        $filter->add('name','Gateway Name','text');
+        
+        $filter->submit('search');
+        $filter->reset('reset');
+        $filter->build();
+        $grid = \DataGrid::source($filter);
+        $grid->attributes(array("class"=>"table table-striped admin-setups"));
 
+        $grid->add('id','S#');
+        $grid->add('<a href="newsetup/{{ $id }}">{{ $name }}</a>','Gateways(Click the name for Setup page)');
+        $grid->link('name','Gateway Name');
+       
+
+        
+        $grid->orderBy('id','desc');        
+        $grid->link('admin/paymentgateways/create',"New Payment Gateway", "TR");
+        $grid->paginate(
+            config('constants.DEFAULT_PAGINATION')
+        );
+        //Helper::printQueries();
+        return  view('admin.paymentgateways.setup', compact('filter', 'grid'));
+        
+    }
+
+
+     public function getNewsetup($id){
+        $globalurl=url(); 
+        
+        $filter = \DataFilter::source(PaymentSetups::where('gateway_id',$id)->where('status','active'));    
+        $filter->add('name','Service Name','text');
+        $filter->add('value','Service chare','text','ghhg');
+        
+        $filter->submit('add');
+        
+        $filter->build();
+
+        
+        $filter->submit('search');
+
+        $grid = \DataGrid::source($filter);
+        $grid->attributes(array("class"=>"table table-striped"));
+
+        $grid->add('id','S#');
+        $grid->add('setup_name','Service Name');
+        $grid->add('setup_value','Service Charge(In percentage)');
+        $grid->add('<a href="/admin/paymentgateways/delete/{{ $id }}">Delete</a>','Operations');
+        $grid->orderBy('id','desc');        
+        
+        $grid->paginate(
+            config('constants.DEFAULT_PAGINATION')
+        );
+        //Helper::printQueries();
+        return  view('admin.paymentgateways.addsetup', compact('filter', 'grid'))->with(['id' => $id]);
+        //echo $id; exit;
+        
+    }
+
+    public function postNewsetup(){
+       //dd($_REQUEST);
+        $validator = Validator::make($_REQUEST, [
+            'setup_value' => 'required|numeric',
+        ]);
+
+        if ($validator->fails()) {
+            //dd($validator);
+            return back()->withErrors($validator)->withInput();
+        }
+
+
+       $data=Input::except('_token');
+       $data['status']='active';
+       
+       $paymentsetups = new PaymentSetups;
+      // $paymentsetups=$data;
+       foreach($data as $key=>$value){
+        $paymentsetups->$key=$value;
+       }
+       //dd($paymentsetups);
+       if($paymentsetups->save()) {
+       return redirect('admin/paymentgateways/newsetup/'. $data['gateway_id']);
+       } else {
+            return back()->withErrors(['Operation failed']);
+       }
+   }
+       
+       public function getDelete($id){
+    
+        $gateway_id=PaymentSetups::where('id', $id)->value('gateway_id');
+        PaymentSetups::where('id', $id)->update(['status' => 'inactive']);
+        return redirect('admin/paymentgateways/newsetup/'. $gateway_id);
+       
+       
+
+        
+    }
 
 
 

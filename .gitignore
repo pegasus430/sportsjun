@@ -10,4 +10,6 @@ config/database.php
 *.sublime-*
 .DS_Store
 Thumbs.db
+node_modules/
+_ide_helper.php
 

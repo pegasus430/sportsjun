@@ -371,6 +371,14 @@
 
               <!-- Save -->
 
+              <div class="row">
+                <div class="col-sm-12">
+                  <br>
+                  
+               @include('scorecards.common.add_referee')
+                </div>
+              </div>
+
                 <div class="row">
                 <div class='col-sm-12'><br>
                 <input type='hidden' value="{{$match_data[0]['id']}}" name='match_id'>
@@ -721,7 +729,7 @@
 
 
                   <div class="modal-footer">
-                    <button class='btn btn-primary  ' onclick="" type='submit'> Save</button>
+                    <button class='btn btn-primary  ' onclick="" type='submit' id='disable_on_click'> Save</button>
                     <button type="button" class="button btn-secondary" data-dismiss="modal">Cancel</button>
                   </div>
                 </div>
@@ -1279,6 +1287,9 @@ function getTeamPlayers(that){
             success:function(response){
 
                 window.location=window.location;
+            },
+            error:function(){              
+               $('#disable_on_click').attr('disabled',false);
             }
         })
         return false;

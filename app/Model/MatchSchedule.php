@@ -100,14 +100,18 @@ class MatchSchedule extends Model
      * Attributes
      */
 
-    public function getMatchDetailsPAttribute(){
+    public function getMatchDetailsPAttribute()
+    {
         return json_decode($this->match_details);
     }
-    public function getMatchDetailsAAttribute(){
-        return json_decode($this->match_details,true);
+
+    public function getMatchDetailsAAttribute()
+    {
+        return json_decode($this->match_details, true);
     }
 
-    public function getSideAAttribute(){
+    public function getSideAAttribute()
+    {
         if ($this->schedule_type == 'team') {
             return $this->scheduleteamone ? $this->scheduleteamone : $this->scheduleteamone()->get();
         } else {
@@ -115,7 +119,8 @@ class MatchSchedule extends Model
         }
     }
 
-    public function getSideBAttribute(){
+    public function getSideBAttribute()
+    {
         if ($this->schedule_type == 'team') {
             return $this->scheduleteamtwo ? $this->scheduleteamtwo : $this->scheduleteamtwo()->get();
         } else {
@@ -141,41 +146,82 @@ class MatchSchedule extends Model
         }
     }
 
-    function extractScoreString($id){
-        switch($this->sport_id){
+    function extractScoreString($id)
+    {
+        switch ($this->sports_id) {
             case Sport::$BADMINTON:
-                $scores = $this->matchDetailsP->scores;
-                return $scores->{$id.'_score'}.' sets';
+                return object_get($this->matchDetailsP,'scores.'.$id.'_score'). ' sets';
             case Sport::$VOLEYBALL:
             case Sport::$SQUASH:
             case Sport::$THROW_BALL:
-                $scores = $this->matchDetailsP->scores;
-                return $scores->{$id.'_score'}.' sets';
+                return object_get($this->matchDetailsP,'scores.'.$id.'_score'). ' sets';
             case Sport::$SOCCER:
             case Sport::$HOKKEY:
-                return $this->matchDetailsP->{$id}->goals;
+                return  object_get($this->matchDetailsP,$id.'.goals');
             case Sport::$BASKETBALL:
             case Sport::$KABADDI:
             case Sport::$ULTIMATE_FRISBEE:
             case Sport::$WATER_POLO :
-                return $this->matchDetailsP->{$id}->total_points;
+                return  object_get($this->matchDetailsP,$id.'.total_points');
             case Sport::$CRICKET:
-                return Team::find($id)->name . " (" . $this->matchDetailsP->{$id}->fst_ing_score . "/" . $this->matchDetailsP->{$id}->fst_ing_wkt . (!empty($this->matchDetailsP->{$id}->scnd_ing_overs) ? ", " . $this->matchDetailsP->{$id}->scnd_ing_score . "/" . $this->matchDetailsP->{$id}->scnd_ing_wkt : "") . ")";
+                return  object_get($this->matchDetailsP,$id.'.fst_ing_score') . "/"
+                        . object_get($this->matchDetailsP,$id.'.fst_ing_wkt') .
+                        (!empty(object_get($this->matchDetailsP,$id.'.scnd_ing_overs')) ?
+                            ", " .object_get($this->matchDetailsP,$id.'.scnd_ing_overs') . "/" .
+                            object_get($this->matchDetailsP,$id.'.scnd_ing_wkt') : "");
+            default:
+                return '';
+        }
+    }
+
+    function extractOversString($id)
+    {
+        switch ($this->sports_id) {
+            case Sport::$BADMINTON:
+                return '';
+            case Sport::$VOLEYBALL:
+            case Sport::$SQUASH:
+            case Sport::$THROW_BALL:
+              return '';
+            case Sport::$SOCCER:
+            case Sport::$HOKKEY:
+                return '';
+            case Sport::$BASKETBALL:
+            case Sport::$KABADDI:
+            case Sport::$ULTIMATE_FRISBEE:
+            case Sport::$WATER_POLO :
+                return object_get($this->matchDetailsP,$id.'.total_points');
+            case Sport::$CRICKET:
+                return object_get($this->matchDetailsP,$id.'.fst_ing_overs').
+                         (object_get($this->matchDetailsP,$id.'.scnd_ing_overs') ?
+                             '/'.object_get($this->matchDetailsP,$id.'.scnd_ing_overs') :
+                             '');
             default:
                 return '';
         }
 
     }
 
-    public function getSideAScoreAttribute(){
+
+
+
+    public function getSideAScoreAttribute()
+    {
         return $this->extractScoreString($this->a_id);
     }
 
-    public function getSideBScoreAttribute(){
+    public function getSideBScoreAttribute()
+    {
         return $this->extractScoreString($this->b_id);
     }
 
+    public function getSideAOversAttribute(){
+        return $this->extractOversString($this->a_id);
+    }
 
+    public function getSideBOversAttribute(){
+        return $this->extractOversString($this->b_id);
+    }
 
 
     public function getScoresAttribute()
@@ -219,6 +265,10 @@ class MatchSchedule extends Model
                 }
             }
         }
+    }
+
+   public function referees(){
+        return $this->hasMany('App\Model\RefereeSchedule', 'match_id');    
     }
 
 

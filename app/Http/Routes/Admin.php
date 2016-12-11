@@ -1,9 +1,21 @@
 <?php
 Route::group(array('middleware' => 'role'), function() {
     //Dashboard
-    Route::get("admin/dashboard", array("as"=>"admin", 'uses'=>"admin\DashboardController@index") );
+    Route::get("admin/dashboard", array("as"=>"admin", 'uses'=>'admin\DashboardController@index') );
     //End Dashboard
 
+    //Home
+    Route::group(["as"=>'admin.home.',"prefix"=>"admin","namespace"=>"admin"],function(\Illuminate\Routing\Router $router){
+        $router->get('infolist/{infolist}',['as'=>'infolists.edit','uses'=>"HomepageInfolistsController@edit"]);
+        $router->put('infolist/{infolist}',['uses'=>"HomepageInfolistsController@update"]);
+        $router->delete('infolist/{infolist}',['as'=>'infolists.delete','uses'=>"HomepageInfolistsController@delete"]);
+
+        $router->get('infolists/{type}',['as'=>'infolists','uses'=>"HomepageInfolistsController@index"]);
+        $router->get('infolists/{type}/create',['as'=>'infolists.add','uses'=>"HomepageInfolistsController@create"]);
+        $router->post('infolist/{type}/order',['as'=>'infolists.order','uses'=>"HomepageInfolistsController@order"]);
+        $router->post('infolists/{type}/create',['uses'=>"HomepageInfolistsController@store"]);
+
+       });
 
 
     //Sports
@@ -176,6 +188,7 @@ Route::group(array('middleware' => 'role'), function() {
     Route::resource('admin/tournamentevents', 'admin\TournamentEventsController');
     Route::controller('admin/bankaccounts', 'admin\BankAccountsController');
     Route::controller('admin/paymentgateways', 'admin\PaymentGateWaysController');
+    Route::controller('admin/settings', 'admin\SettingsController');
     Route::resource('admin', 'admin\UserController');
 
     //Route::get('admin/paymentgateways/availability/{c_id}', 'admin\PaymentGateWaysController@postAvailability');

@@ -1,0 +1,31 @@
+
+.ourClientsWrapp {
+    background: #FFF;
+    padding: 40px 0;
+    width:100%;
+    overflow-x:hidden;
+}
+
+.ourClientsWrapp h1 {
+    font: 35px SFUIDisplay-Regular;
+    color: #434f5e;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.clintBox {
+    text-align: center;
+}
+
+.clintBox img {
+    width: 100%;
+}
+
+.clintBox h2 {
+    color: #434f5e;
+    font: 22px SFUIDisplay-Regular;
+}
+.bgcc {
+    width: 102px;
+    margin: 35px auto;
+}

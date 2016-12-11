@@ -19,7 +19,7 @@ class OrganizationGroupTeamPoint extends Model
     }
 
     function Tournament(){
-    		return $this->belongsTo('App\Model\Tournament');
+    		return $this->belongsTo(Tournaments::class);
     }
 
     function getGroupPoints($tournament_parent_id, $organization_group_id, $sport_id){

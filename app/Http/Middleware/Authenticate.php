@@ -46,7 +46,8 @@ class Authenticate
                         else
                         {
                                 // return redirect()->guest('auth/login');
-                                return view('home');
+                                $controller=  new \App\Http\Controllers\HomeController();
+                                return $controller->index();
                         }
                 }
                 else
@@ -64,7 +65,16 @@ class Authenticate
                                 'editsportprofile/{userId}',
                                 'schedule/getstates', 'sport/getsports', 'getquestions', 'user/set-sports',
                                 'sport/{sport}',
-                                'sport/updateUserStats'];
+                                'sport/updateUserStats',
+                                'tournaments/registerstep3/{id}/{event_id}',
+                                'tournaments/registrationstep5',
+                                'tournaments/paymentform/{id}',
+                                'tournaments/paymentform',
+                                'tournaments/payment_success',
+                                'tournaments/payment_failure',
+                                'tournaments/registerstep3/{id}',
+                                'tournaments/registerstep3/{id}/{event_id}'
+                                ];
 
                         $followingSports = Helper::getFollowingSportIds($this->auth->user()->id);
                         
@@ -74,9 +84,10 @@ class Authenticate
                                 {
                                         return redirect(url('/showsportprofile', [$this->auth->user()->id]));
                                 }
+                        } else {
+                            return redirect(route('user.edit', [$this->auth->user()->id]));
                         }
                 }
-
                 return $next($request);
         }
 }

@@ -8,6 +8,27 @@ Route::get('public/scorecard/view/{match_id}', [
 			'as' => 'public/scorecard/view', 'uses' => 'Auth\ScoreCardController@createScorecardView'
 	]); */
 
+Route::get('data/cities',[
+    'as'=>'data.cities',
+    'uses'=>'DataController@cities'
+]);
+
+Route::get('data/states',[
+    'as'=>'data.states',
+    'uses'=>'DataController@states'
+]);
+
+Route::get('data/countries',[
+    'as'=>'data.countries',
+    'uses'=>'DataController@countries'
+]);
+
+Route::get('data/token',[
+    'as'=>'data.token',
+    'uses'=>'DataController@token'
+]);
+
+
 Route::get('matchpublic/scorecard/view/{match_id}', [
     'as' => 'matchpublic/scorecard/view',
     'uses' => 'User\ScoreCardController@createScorecardpublicView'
@@ -123,13 +144,13 @@ Route::get('testshare', array(
     }
 ));
 Route::get('/', 'HomeController@index');
-Route::get('/{page}.html', function ($page) {
-    if ($page == 'index') {
-        return view('home');
-    }
-    return view('home.' . $page);
-});
+Route::get('/{page}.html', 'HomeController@page');
 Route::get('/skip', 'HomeController@skip');
+
+Route::get('/home/search/guess',['as'=>'public.search.guess','uses'=>'SearchController@searchGuess']);
+Route::get('/home/search',['as'=>'public.search.list','uses'=>'SearchController@search']);
+Route::get('/home/{type}/{id}',['as'=>'public.search.view','uses'=>'SearchController@view'])->where('id', '[0-9]+');
+
 
 // Default Laravel Routes for login,registration and reset password
 Route::controllers([
@@ -198,3 +219,27 @@ Route::group(['prefix' => 'download'], function () {
 Route::group(['prefix' => 'download_pdf'], function () {
     Route::get('schedules', 'User\PdfController@print_schedules');
 });
+
+
+Route::group(['prefix' => 'guest'], function () {
+   Route::get('tournaments/guesteventregistration/{id}', 'User\TournamentsController@eventregistration');
+   Route::post('tournaments/guestregistrationdata', 'User\TournamentsController@registrationdata');
+   Route::get('tournaments/guestregisterstep2/{id}', 'User\TournamentsController@registerstep2');
+   Route::get('tournaments/guestregisterstep3/{id}', 'User\TournamentsController@registerstep3');
+   Route::get('tournaments/guestregisterstep3/{id}/{event_id}', 'User\TournamentsController@getGuestRegister');
+   Route::post('tournaments/guestregisterstep3', 'User\TournamentsController@postGuestRegister');
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+

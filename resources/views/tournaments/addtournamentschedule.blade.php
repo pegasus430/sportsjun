@@ -285,8 +285,8 @@
         ).change(function (e) {
             var selected = this.value;
             $("#opp_team_id option").prop('disabled', false)
-            if (selected)
-                $("#opp_team_id option[value=" + selected + "]").prop('disabled', true);
+            //if (selected)
+            //    $("#opp_team_id option[value=" + selected + "]").prop('disabled', true);
             $("#opp_team_id").select2({width: "100%"});
         });
         $("#opp_team_id").select2(
@@ -294,8 +294,8 @@
         ).change(function (e) {
             var selected = this.value;
             $("#my_team_id option").prop('disabled', false)
-            if (selected)
-                $("#my_team_id option[value=" + selected + "]").prop('disabled', true);
+            // if (selected)
+            //    $("#my_team_id option[value=" + selected + "]").prop('disabled', true);
             $("#my_team_id").select2({width: "100%"});
         });
 
@@ -311,14 +311,23 @@
                 for (var i = 0; i < data.length; i++) {
                     data[i].text = data[i].value;
                 }
-                $("#opp_team_id").select2({
-                    width: "100%",
-                    data: data
-                }).val('').trigger('change');
-                $("#my_team_id").select2({
-                    width: "100%",
-                    data: data
-                }).val('').trigger('change');
+
+                if(!$('.modal-body #opp_team_id').hasClass('bracket_2')){
+                         $("#opp_team_id").select2({
+                            width: "100%",
+                            data: data
+                        }).val('').trigger('change');
+                }
+
+                if(!$('.modal-body #my_team_id').hasClass('bracket_2')){       
+                    $("#my_team_id").select2({
+                        width: "100%",
+                        data: data
+                    }).val('').trigger('change');
+                }
+
+                $('.modal-body #opp_team_id').removeClass('bracket_2')
+                $('.modal-body #my_team_id').removeClass('bracket_2')
 
             });
         });
@@ -468,6 +477,7 @@
     }
 
     function editschedulegroupmatches(schedule_id, is_owner, disableflag) {
+
         $.get(base_url + '/editteamschedule', {
             'scheduleId': schedule_id,
             'isOwner': is_owner

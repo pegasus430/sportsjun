@@ -685,7 +685,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 
 
 									<div class="modal-footer">
-									 <button class='btn btn-primary f' onclick="" type='submit'> Save</button>
+									 <button class='btn btn-primary f' onclick="" type='submit' > Save</button>
 										<button type="button" class="button btn-secondary" data-dismiss="modal">Cancel</button>
 									</div>
 								</div>
@@ -894,6 +894,14 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 	<input type="hidden" name="team_a_name" value="{{ $team_a_name }}" id="team_a_name">
 	<input type="hidden" name="winner_team_id" value="" id="winner_team_id">
 	<input type="hidden" name="delted_ids" value="" id="delted_ids">
+
+
+	@if(!$match_data[0]['hasSetupSquad'])
+		@if($isValidUser)
+			@include('scorecards.common.add_referee')
+		@endif
+
+	@endif
 
 	<div class="sportsjun-forms text-center scorecards-buttons">
 		<center>

@@ -8,6 +8,9 @@ use App\Model\Organization;
 use App\Model\OrganizationRole;
 use App\Model\Photo;
 use App\Model\Rating;
+use App\Model\Sport;
+use App\Model\SportQuestion;
+use App\Model\SportQuestionAnswer;
 use App\Model\TournamentParent;
 use App\Model\Tournaments;
 use Auth;
@@ -30,6 +33,8 @@ class User extends Model implements AuthenticatableContract,
     static $USER_EXISTS = -1;
     static $USER_EMAIL_REQUIRED = -2;
 
+    static $TYPE_REGULAR = 0;
+    static $TYPE_ORGANIZATION = 1;
 
     use Authenticatable,
         Authorizable,
@@ -102,6 +107,16 @@ class User extends Model implements AuthenticatableContract,
             ->first();
     }
 
+    public function scopeRegular($query)
+    {
+        return $query->whereType(self::$TYPE_REGULAR);
+    }
+
+    public function scopeOrganizations($query)
+    {
+        return $query->whereType(self::$TYPE_ORGANIZATION);
+    }
+
     /**
      * A user can be staff of many organizations.
      *
@@ -131,7 +146,6 @@ class User extends Model implements AuthenticatableContract,
     {
         return $this->hasMany(Organization::class, 'user_id', 'id');
     }
-
 
     /**
      *
@@ -168,8 +182,9 @@ class User extends Model implements AuthenticatableContract,
 
     public function usersfollowingsports()
     {
-        return $this->hasMany('App\Model\UserStatistic', 'user_id');
+        return $this->hasOne('App\Model\UserStatistic', 'user_id');
     }
+
 
     //a user can be a multiple team player
     public function userdetails()
@@ -183,7 +198,7 @@ class User extends Model implements AuthenticatableContract,
             ->where('is_album_cover', '1');
     }
 
-    public function folowers()
+    public function followers()
     {
         return $this->hasMany(Followers::class, 'user_id', 'id')->where('deleted_at', null);
     }
@@ -291,20 +306,27 @@ class User extends Model implements AuthenticatableContract,
         }
     }
 
-    public static function logoImage($id)
+    public static function logoImage($id, $ignore = false, $logo = null)
     {
-        $logo = Photo::where('imageable_id', $id)
-            ->where('imageable_type', config('constants.PHOTO.USER_PHOTO'))
-            ->orderBy('id', 'desc')
-            ->first();
-        if ($logo && $logo->url) {
-            return Helper::getImagePath($logo->url, 'user_profile');
+        if (!$ignore) {
+            $logo = User::whereId($id)->value('logo');
         }
+        if (!$logo) {
+            $logo = Photo::where('imageable_id', $id)
+                ->where('imageable_type', config('constants.PHOTO.USER_PHOTO'))
+                ->orderBy('id', 'desc')
+                ->first();
+            if ($logo && $logo->url) {
+                return Helper::getImagePath($logo->url, 'user_profile');
+            }
+        } else
+            return Helper::getImagePath($logo, 'user_profile');
+
     }
 
     public function getLogoImageAttribute()
     {
-        return self::logoImage($this->id);
+        return self::logoImage($this->id, true, $this->logo);
     }
 
     public function getJoinedTournamentsIds()
@@ -341,15 +363,59 @@ class User extends Model implements AuthenticatableContract,
     public function getManagedParentTournamentQuery()
     {
         return TournamentParent
-            ::leftJoin('tournaments', 'tournament_parent.id', '=','tournaments.tournament_parent_id')
-            ->leftJoin(\DB::raw('users m'),'m.id','=','tournament_parent.manager_id')
-            ->leftJoin(\DB::raw('users o'),'o.id','=','tournament_parent.owner_id')
+            ::leftJoin('tournaments', 'tournament_parent.id', '=', 'tournaments.tournament_parent_id')
+            ->leftJoin(\DB::raw('users m'), 'm.id', '=', 'tournament_parent.manager_id')
+            ->leftJoin(\DB::raw('users o'), 'o.id', '=', 'tournament_parent.owner_id')
             ->where('tournament_parent.manager_id', $this->id)
             ->orwhere('tournament_parent.owner_id', $this->id)
             ->orwhere('tournaments.manager_id', $this->id)
             ->orderby('tournament_parent.created_at', 'desc')
-            ->select(['tournament_parent.*',\DB::raw('m.name as manager'),\DB::raw('o.name as owner')])
+            ->select(['tournament_parent.*', \DB::raw('m.name as manager'), \DB::raw('o.name as owner')])
             ->groupBy('tournament_parent.id');
+    }
+
+    public function getSportListAttribute()
+    {
+        $sports = collect();
+        if ($this->usersfollowingsports) {
+            $sport_ids = explode(',', trim($this->usersfollowingsports->following_sports, ','));
+            $allSports = Sport::get()->keyBy('id');
+            foreach ($sport_ids as $id) {
+                $sports->push(array_get($allSports, $id));
+            }
+        }
+        return $sports;
+    }
+
+    public function getSkillSetAttribute()
+    {
+        $userId = $this->id;
+        return SportQuestion::with(['answers' => function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        }, 'answers.options'])->get()->GroupBy('sports_id');
+    }
+
+    public function sportStats($sportsId)
+    {
+        if ($sportsId == config('constants.SPORT_ID.Cricket')) {
+            $model = config('constants.SPORT.' . $sportsId);
+            $appPrefix = 'App\\Model\\';
+            $modelName = $appPrefix . $model;
+            if (class_exists($modelName)) {
+                $stats = $modelName::where('user_id', $this->id);
+                if ($sportsId == config('constants.SPORT_ID.Cricket')) {
+                    $stats
+                        ->groupBy('match_type')
+                        ->select("*", DB::raw('SUM( innings_bat ) innings_bat, SUM(notouts) notouts, SUM(totalruns) totalruns, SUM(totalballs) totalballs, '
+                            . 'SUM(fifties) fifties,SUM(hundreds) hundreds,SUM(fours) fours,SUM(sixes) sixes,CAST(AVG(average_bat) AS DECIMAL(10,2)) average_bat,'
+                            . 'CAST(AVG(strikerate) AS DECIMAL(10,2)) strikerate, SUM(catches) catches, SUM(stumpouts) stumpouts, SUM(runouts) runouts,'
+                            . 'SUM(innings_bowl) innings_bowl, SUM(wickets) wickets, SUM(runs_conceded) runs_conceded, SUM(overs_bowled) overs_bowled, SUM(wides_bowl) wides_bowl, SUM(noballs_bowl) noballs_bowl,'
+                            . 'CAST(AVG(average_bowl) AS DECIMAL(10,2)) average_bowl, CAST(AVG(ecomony) AS DECIMAL(10,2)) ecomony'));
+                }
+                return $stats->get();
+            }
+        }
+        return collect();
     }
 
 }

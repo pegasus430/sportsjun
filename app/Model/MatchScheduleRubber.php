@@ -35,5 +35,9 @@ class MatchScheduleRubber extends Model
 
     public function  match(){
         return $this->belongsTo('App\Model\MatchSchedule', 'match_id');
-      }
+    }
+
+    public function referees(){
+        return $this->hasMany('App\Model\RefereeSchedule', 'rubber_id');    
+    }
 }

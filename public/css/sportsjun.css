@@ -2806,10 +2806,10 @@ body.viewport-xs {
 }
 .txt_align_center{ text-align:center !important;} 
 .signup_link_new{ color:#f27676 !important;}
-.signup_capthca{margin-top: 6px; display: inline-block; position:absolute; top:0; right:30px;}
+.signup_capthca{margin-top: 6px; display: inline-block;  top:0; right:30px;}
 
 @media (max-width: 320px) {
-.signup_capthca{margin-top: 6px; display: inline-block; position:absolute; top:0; right:20px;}
+.signup_capthca{margin-top: 6px; display: inline-block;  top:0; right:20px;}
 
 }
 .switch_but_show{ background:#8e9bd0; border:1px solid #cccccc; padding:2px 10px; color:#FFFFFF;}
@@ -3053,4 +3053,71 @@ div#tournament_details_cover img {
     font-size: 24px;
     padding: 0;
     color: red;
+}
+
+label.field.prepend-icon.head_tr {
+    font-size: 15px;
+}
+h4.error_validation {
+    font-family: inherit;
+    font-size: 17px;
+    color: red;
+    font-weight: 400;
+}
+
+span.white_space {
+    background-color: red;
+    width: 15px;
+    display: inline-block;
+}
+
+
+.form_rows {
+    border: none!important;
+    color: #499b4e!important;
+    
+}
+
+label.form_label.last_date_span {
+    margin-left: 40px!important;
+    display: block;
+}
+
+.register_form_head {
+    border: none!important;
+    background-color: #4BB060!important;
+   } 
+
+
+ .register_form_title {
+    color: #fff!important;
+    font-weight: 500!important;
+}
+
+
+.register_tournament_title {
+  color: #499b4e;;
+}
+
+.form_titles {
+ color: #499b4e!important;
+}
+
+.payment_header_logo {
+   width:100%;
+   overflow:hidden;
+ }
+
+ .validation_msg {
+  color: red;
+ }
+
+h4.register_form_title.successpage {
+    padding: 10px!important;
+}
+
+.row.inner_events.successpage {
+    background-color: #eee;
+    padding: 5px 0;
+    border: solid 1px #fff;
 }

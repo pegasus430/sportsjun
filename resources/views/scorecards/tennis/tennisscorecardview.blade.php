@@ -219,9 +219,16 @@ if($match_data[0]['game_type']=='rubber'){
           @for($set_index=1; $set_index<=$set; $set_index++)
                  
                <td class='a_set{{$set_index}} ' >
-         
-                      {{$score_a_array['set'.$set_index]}}
-                      <span class="tie_breaker"> {{Helper::displayEmptyDash($score_a_array['set'.$set_index.'_tie_breaker'])}}</span>
+                   @if($score_a_array['set'.$set_index] || $score_b_array['set'.$set_index]  )
+                    <span class="score_data_bold">
+                     {{Helper::displayEmptyDash($score_a_array['set'.$set_index],'0')}}
+                    
+                    </span>
+
+                    <sup>
+                    {{Helper::displayEmptyDash($score_a_array['set'.$set_index.'_tie_breaker'],'0')}}
+                    </sup>
+                  @endif
                 
                </td>
           @endfor
@@ -237,10 +244,15 @@ if($match_data[0]['game_type']=='rubber'){
             @for($set_index=1; $set_index<=$set; $set_index++)
                   
                <td class='b_set{{$set_index}}  '>
-                
-                      {{$score_b_array['set'.$set_index]}}
-                      <span class="tie_breaker"> {{Helper::displayEmptyDash($score_b_array['set'.$set_index.'_tie_breaker'])}}</span>
-         
+                   @if($score_a_array['set'.$set_index] || $score_b_array['set'.$set_index]  )
+
+                               <span class="score_data_bold">
+                      {{Helper::displayEmptyDash($score_b_array['set'.$set_index],'0')}}
+                                </span>
+                                <sup>
+                        {{Helper::displayEmptyDash($score_b_array['set'.$set_index.'_tie_breaker'],'0')}}
+                                </sup>  
+                    @endif       
                 </td>
           @endfor
         </tr>
@@ -349,6 +361,7 @@ if($match_data[0]['game_type']=='rubber'){
    </div>
    </div>
   </div>
+</div>
 </div>
 </div>
 </div>

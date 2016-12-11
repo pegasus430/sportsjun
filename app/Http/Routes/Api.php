@@ -27,6 +27,7 @@ Route::group(['prefix' => '/api/v1', 'middleware' => 'cors'], function ($router)
         $router->get('/tournaments/{id}/groups', 'TournamentApiController@group_stage');
         $router->get('/tournaments/{id}/groups_matches', 'TournamentApiController@group_stage_matches');
         $router->get('/tournaments/{id}/final', 'TournamentApiController@final_stage');
+        $router->get('/tournaments/{id}/brackets', 'TournamentApiController@brackets');
         $router->get('/tournaments/{id}/final_matches', 'TournamentApiController@final_stage_matches');
         $router->get('/tournaments/{id}/player_standing', 'TournamentApiController@player_standing');
         $router->get('/tournaments/{id}/follow', 'TournamentApiController@follow_tournament');
@@ -40,7 +41,12 @@ Route::group(['prefix' => '/api/v1', 'middleware' => 'cors'], function ($router)
         $router->post('/users/{id?}','UserApiController@update');
         $router->post('/users/{id}/sports','UserApiController@updateSports');
 
+        $router->get('/match-schedules/{id}',['uses'=>'MatchSchedulesApiController@getInfo']);
+        $router->get('/match-schedules',['uses'=>'MatchSchedulesApiController@getList']);
 
+
+
+        $router->post('/scores/cricket','ScoreApiController@setScoreCricket');
 
     });
 
@@ -69,9 +75,7 @@ Route::group(['prefix' => '/api/v1', 'middleware' => 'cors'], function ($router)
         //get sports
 
 
-        $router->get('/match-schedules',['uses'=>'Api\MatchSchedulesApiController@getList']);
-
-        $router->group(['prefix'=>'sports',],function($router){
+       $router->group(['prefix'=>'sports',],function($router){
             $router->group(['prefix'=>'cricket'],function($router){
                 $router->get('/statistics', ['uses' => 'Api\SportCricketApiController@cricketStatistics']);
                 $router->get('/player-match-score', ['uses' => 'Api\SportCricketApiController@cricketPlayerMatchScore']);

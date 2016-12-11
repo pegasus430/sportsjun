@@ -13,7 +13,7 @@
         "laravel/socialite": "^2.0",
         "league/oauth2-client": "^1.1",
         "socialiteproviders/linkedin": "^1.1",
-        "illuminate/html": "5.*",
+        "laravelcollective/html": "5.1.*",
         "nesbot/carbon": "~1.14",
         "proengsoft/laravel-jsvalidation": "~1.1",
         "mews/captcha": "^2.1",
@@ -22,7 +22,9 @@
         "barryvdh/laravel-cors": "^0.8.1",
         "tymon/jwt-auth": "^0.5.9",
         "xaamin/whatsapi": "^1.1",
-        "barryvdh/laravel-dompdf": "^0.7.0"
+        "barryvdh/laravel-dompdf": "^0.7.0",
+        "intervention/image": "2.3.8",
+        "illuminate/html": "5.*"
            },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

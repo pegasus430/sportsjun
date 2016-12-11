@@ -418,6 +418,8 @@ input:read-only {
 
 				<!-- Setup Squads End -->
 
+			@include('scorecards.common.add_referee')
+
 
 			@else
 			<!-- Scoring Start -->

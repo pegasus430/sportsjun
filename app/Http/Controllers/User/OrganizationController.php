@@ -428,7 +428,7 @@ class OrganizationController extends Controller
             ->orderBy('isactive', 'desc')
             ->get();
 
-        $followingIds = $user ? $user->folowers()->organizations()->lists('type_id') : [];
+        $followingIds = $user ? $user->followers()->organizations()->lists('type_id') : [];
         $followingOrgs = Organization::with(['teamplayers', 'photos', 'user'])->whereIn('id', $followingIds)
             ->orderBy('isactive', 'desc')
             ->get();
