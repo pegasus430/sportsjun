@@ -8,7 +8,7 @@ use \App\Model\Sport;
         <div class="row">
             @foreach ($tournament->final_stage_teams_list as $team)
                 <div class="col-md-4 col-sm-6 col-xs-12">
-                    <img src="{{ $team->logoImage }}" class="img img-responsive"/>
+                    <img src="{{ $team->logoImage }}" class="img img-responsive" style="max-width:100px;"/>
                     <span>{{ $team->name }}</span>
                 </div>
             @endforeach

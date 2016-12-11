@@ -8,7 +8,7 @@
                 <h4 class="modal-title">Login</h4>
                 <span class="modal-title-right-msg">Don't have an account?
                                                         <a href="javascript:void(0);" data-toggle="modal"
-                                                           data-target="#home-register-modal">Register here</a>
+                                                           data-target="#registerModal">Register here</a>
                                                 </span>
             </div>
             <div class="modal-body">
@@ -359,7 +359,7 @@
                         </div>
                         <div class="clearfix"></div>
                         <div class="tagline" style="margin:40px auto 20px auto;width:95%;"><span>OR</span></div>
-                        <form id="home-register-modal-form" class="kode-loginform" method="POST" action="/auth/register"
+                        <form class="kode-loginform" method="POST" action="/auth/register"
                               enctype="multipart/form-data"
                               onsubmit="SJ.USER.ajaxSubmitModalRegister(this);return false;">
                             {{csrf_field()}}
@@ -406,7 +406,11 @@
             </div>
         </div>
     </div>
-
-
 </div>
+
+<script>
+    $('div.modal').on('shown.bs.modal', function() {
+        $(".captcha-refresh",this).click();
+    })
+</script>
 
