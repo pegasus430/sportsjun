@@ -36,7 +36,11 @@
                             </td>
                             <td>
                                 <a class="btn btn-info" href="{{route('admin.home.infolists.edit',['id'=>$item->id])}}">edit</a>
-                                <button class="btn btn-danger" onclick="return removeConfirm(this);">X</button>
+                                <button class="btn btn-danger"
+                                        data-url="{{route('admin.home.infolists.delete',[$item->id])}}"
+                                        data-title="Banner"
+                                        data-confirm="Delete {title}"
+                                        onclick="return removeConfirm(this);">X</button>
                             </td>
                         </tr>
                     @endforeach
@@ -79,5 +83,7 @@
                 dataType: "JSON",
             });
         }
+
+
     </script>
 @endsection

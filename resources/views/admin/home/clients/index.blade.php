@@ -25,8 +25,11 @@
                             <td><input type="number" value="{{$item->weight }}"/></td>
                             <td>
                                 <a class="btn btn-info" href="{{route('admin.home.infolists.edit',['id'=>$item->id])}}">edit</a>
-                                <button class="btn btn-danger" onclick="return removeConfirm(this);">delete</button>
-                            </td>
+                                <button class="btn btn-danger"
+                                        data-url="{{route('admin.home.infolists.delete',[$item->id])}}"
+                                        data-title="Client"
+                                        data-confirm="Delete {title}"
+                                        onclick="return removeConfirm(this);">X</button>     </td>
                         </tr>
 
                     @endforeach

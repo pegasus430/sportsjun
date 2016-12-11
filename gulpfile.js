@@ -80,7 +80,8 @@ elixir(function (mix) {
         '/themes/sportsjun/css/all.css',
         'public/home/css/home_mix.css',
         'public/home/js/lib_mix.js',
-        'public/home/js/home_mix.js'
+        'public/home/js/home_mix.js',
+        'public/js/admin.scripts.js'
     ], 'public/build');
     mix.copy('public/themes/', 'public/build/themes');
     mix.copy('public/home/', 'public/build/home');

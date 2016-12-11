@@ -61,6 +61,9 @@ class HomepageInfolistsController extends Controller {
         $type= $infolist->type;
         $infolist->delete();
         \Session::flash('message','Successfully deleted');
+        if (\Request::ajax()){
+            return ['message'=>'ok'];
+        }
         return redirect()->route('admin.home.infolists',$type);
 
     }
