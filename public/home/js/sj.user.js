@@ -254,12 +254,12 @@ if (typeof SJ.USER === 'undefined') {
 
                         success: function (data) {
                             var email = jForm.find('[name=email]');
+                            $('#verify-email-id').html(email.val());
                             jForm.find('span.error').remove();
                             jForm.find('.error').removeClass('error');
                             jForm.find('input').val('');
                             jForm.find('select').prop('selectedIndex', 0);
                             jForm.parents('.modal').hide();
-                            $('#verify-email-id').html(email.val());
                             $('#home-email-verify-modal').modal('show');
                         },
                         error: function (data) {
