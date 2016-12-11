@@ -7,6 +7,7 @@ use App\Helpers\Helper;
 use App\Http\Requests\Auth\OrganizationRegisterRequest;
 use App\Model\Organization;
 use App\Repository\CityRepository;
+use App\Repository\StateRepository;
 use App\User;
 use Validator;
 use JsValidator;
