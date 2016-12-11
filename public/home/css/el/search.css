@@ -23,7 +23,7 @@
     border: 3px solid #65c178;
     margin:5px 0;
     background: white;
-    padding: 15px 15px;
+    padding: 10px 15px;
     width: 100%;
     display: table;
     overflow: hidden;
@@ -155,5 +155,5 @@
     background: #65c178 !important;
     color: #FFF;
     font: 15px SFUIDisplay-Bold;
-    padding: 15px 5px;
+    padding: 10px 5px;
 }
