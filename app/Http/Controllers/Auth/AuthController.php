@@ -143,7 +143,7 @@ class AuthController extends Controller
                     'country_id' => $data['country_id'],
                     'country' => object_get(CityRepository::getModel($data['country_id']), 'country_title'),
                     'logo' => $logo,
-                    'about' => $data['about'],
+                    'about' => array_get($data,'org_about'),
                     'user_id' => $user->id,
                     'subdomain'=>array_get($data,'subdomain')
                 ]
