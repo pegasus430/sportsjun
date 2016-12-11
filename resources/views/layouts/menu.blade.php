@@ -25,7 +25,7 @@
                 <li><a href="{{ url('/tournaments') }}"><span class="fa"><img src="{{ url('/images/Tournaments.png') }}" height="18" width="19"/></span>My Tournaments</a></li>
             <!--<li><a href="{{ url('/facility') }}"><span class="fa"><img src="{{ url('/images/Facility.png') }}" height="18" width="26"/></span>Facility</a></li>-->
                 <li><a href="{{ url('/marketplace/myitems') }}" ><span class="fa"><img src="{{ url('/images/Market-Place.png') }}" height="18" width="24"/></span>My Store</a></li>
-                <li><a href="{{ url('/mytransactions',[(isset(Auth::user()->id)?Auth::user()->id:0)]) }}" ><span class="fa"><img src="{{ url('/images/Market-Place.png') }}" height="18" width="24"/></span>My Transactions</a></li>
+                <li><a href="{{ url('/mytransactions',[(isset(Auth::user()->id)?Auth::user()->id:0)]) }}" ><span class="fa"><img src="{{ url('/images/Market-Place.png') }}" height="18" width="24"/></span>My Reports</a></li>
                 <li class="more hidden" data-width="80">
                     <a href="#"><span class="fa fa-ellipsis-h"></span>More</a>
                     <ul></ul>
