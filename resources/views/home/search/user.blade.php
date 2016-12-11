@@ -33,8 +33,8 @@
             <div class="SportPlayerWrap">
                 <div class="leftBG col-lg-2 col-md-2 col-sm-12 cricketbg">
                     <div class="hedcric">
-                        <img src="images/ico_cric.png">
-                        <h3>{{$sport->sport_name}}</h3>
+                        <img src="/images/sports/{{strtolower($sport->sports_name)}}_active.png">
+                        <h3>{{$sport->sports_name}}</h3>
                     </div>
                 </div>
                 <?php

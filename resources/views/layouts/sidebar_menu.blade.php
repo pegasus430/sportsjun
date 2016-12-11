@@ -62,6 +62,7 @@
         <li><a href="{{ url('/tournaments') }}"><i class="fa"><img src="{{ url('/images/Tournaments.png') }}" height="18" width="19"/></i>My Tournaments</a></li>
     <!--<li><a href="{{ url('/facility') }}"><i class="fa"><img src="{{ url('/images/Facility.png') }}" height="18" width="26"/></i>Facility</a></li>-->
         <li><a href="{{ url('/marketplace') }}" ><i class="fa"><img src="{{ url('/images/Market-Place.png') }}" height="18" width="24"/></i>My Store</a></li>
+        <li><a href="{{ url('/mytransactions',[(isset(Auth::user()->id)?Auth::user()->id:0)]) }}" ><span class="fa"><img src="{{ url('/images/Market-Place.png') }}" height="18" width="24"/></span>My Reports</a></li>
     </ul>
     <!-- Sidebar divider -->
     <!-- <div class="sidebar-divider"></div>
