@@ -94,8 +94,8 @@ class Tournaments extends Model
     public function scopeJoinParent($query)
     {
         return $query->join('tournament_parent', function ($join) {
-                $join->on('tournaments.tournament_parent_id', '=', 'tournament_parent.id');
-            })
+            $join->on('tournaments.tournament_parent_id', '=', 'tournament_parent.id');
+        })
             ->select([
                 'tournaments.*',
                 'tournament_parent.logo as tournament_parent_logo'
@@ -121,6 +121,19 @@ class Tournaments extends Model
         return $this->hasOne('App\Model\Photo', 'imageable_id', 'tournament_parent_id')->where('imageable_type',
             'tournaments')->where('is_album_cover', 1)->select('imageable_id', 'url');
     }
+
+    public function albums()
+    {
+        return $this->hasMany(Album::class, 'imageable_id', 'id')
+            ->where('imageable_type', config('constants.PHOTO.GALLERY_TOURNAMENTS'));
+    }
+
+    public function profile_album_photos()
+    {
+        return $this->hasMany(Photo::class, 'imageable_id', 'id')
+            ->where('imageable_type', 'form_gallery_tournaments');
+    }
+
 
     public function photos()
     {
@@ -158,8 +171,9 @@ class Tournaments extends Model
 
     public function bankAccount()
     {
-        return $this->belongsTo(VendorBankAccounts::class, 'vendor_bank_account_id','id');
+        return $this->belongsTo(VendorBankAccounts::class, 'vendor_bank_account_id', 'id');
     }
+
     public function searchResults($req_params)
     {
         $offset = !empty($req_params['offset']) ? $req_params['offset'] : 0;
@@ -225,8 +239,8 @@ class Tournaments extends Model
 
     function finalMatches()
     {
-        return $this->hasMany(MatchSchedule::class,'tournament_id')
-                        ->whereNotNull ('tournament_round_number');
+        return $this->hasMany(MatchSchedule::class, 'tournament_id')
+            ->whereNotNull('tournament_round_number');
     }
 
     function settings()
@@ -239,34 +253,36 @@ class Tournaments extends Model
         return $this->hasMany('App\Model\MatchSchedule', 'tournament_id');
     }
 
-    function followers(){
-            return $this->hasMany('App\Model\Followers','type_id')->whereType('tournament');
+    function followers()
+    {
+        return $this->hasMany('App\Model\Followers', 'type_id')->whereType('tournament');
     }
 
     public function getLogoImageAttribute()
     {
         $logo = $this->logo ? $this->logo :
-            (array_key_exists('tournament_parent_logo',$this->attributes) ?  $this->tournament_parent_logo : object_get($this->tournamentParent,'logo')) ;
+            (array_key_exists('tournament_parent_logo', $this->attributes) ? $this->tournament_parent_logo : object_get($this->tournamentParent, 'logo'));
         return Helper::getImagePath($logo, 'tournaments');
     }
 
     public function getLogoImageRealAttribute()
     {
         $logo = $this->logo ? $this->logo :
-            (array_key_exists('tournament_parent_logo',$this->attributes) ?  $this->tournament_parent_logo : object_get($this->tournamentParent,'logo')) ;
-        return Helper::getImagePath($logo, 'tournaments','',false,false);
+            (array_key_exists('tournament_parent_logo', $this->attributes) ? $this->tournament_parent_logo : object_get($this->tournamentParent, 'logo'));
+        return Helper::getImagePath($logo, 'tournaments', '', false, false);
     }
 
-    public function getFinalStageTeamsListAttribute(){
+    public function getFinalStageTeamsListAttribute()
+    {
         if (!$this->_finalStageTeams) {
             $schedule_type = $this->schedule_type ? $this->schedule_type : 'team';
             $teamIDs = explode(',', trim($this->final_stage_teams_ids, ','));
-            switch($schedule_type){
+            switch ($schedule_type) {
                 case 'team':
-                    $this->_finalStageTeams = Team::whereIn('id', $teamIDs)->orderBy('name')->select(['id','name','logo'])->get();
+                    $this->_finalStageTeams = Team::whereIn('id', $teamIDs)->orderBy('name')->select(['id', 'name', 'logo'])->get();
                     break;
                 case 'individual':
-                    $this->_finalStageTeams = User::whereIn('id', $teamIDs)->orderBy('name')->select(['id','name','logo'])->get();
+                    $this->_finalStageTeams = User::whereIn('id', $teamIDs)->orderBy('name')->select(['id', 'name', 'logo'])->get();
                     break;
                 default:
                     $this->_finalStageTeams = new Collection();
@@ -276,14 +292,14 @@ class Tournaments extends Model
 
         return $this->_finalStageTeams;
     }
-    // 
+
+    //
 
 
-
-    public function getDateStringAttribute(){
-        return Helper::displayDate($this->start_date).' to '.Helper::displayDate($this->end_date);
+    public function getDateStringAttribute()
+    {
+        return Helper::displayDate($this->start_date) . ' to ' . Helper::displayDate($this->end_date);
     }
-
 
 
     public function cartDetails()
@@ -292,18 +308,39 @@ class Tournaments extends Model
         return $this->hasMany('App\Model\CartDetails', 'event_id', 'id');
     }
 
-    public function getCityAttribute(){
+    public function getCityAttribute()
+    {
         // return $this->attributes['city'];
-        return object_get(CityRepository::getModel($this->city_id),'city_name');
+        return object_get(CityRepository::getModel($this->city_id), 'city_name');
     }
 
-    public function getStateAttribute(){
+    public function getStateAttribute()
+    {
         // return $this->attributes['state'];
-        return object_get(StateRepository::getModel($this->state_id),'state_name');
+        return object_get(StateRepository::getModel($this->state_id), 'state_name');
     }
 
-    public function getCountryAttribute(){
+    public function getCountryAttribute()
+    {
         // return $this->attributes['country'];
-        return object_get(CountryRepository::getModel($this->country_id),'country_name');
+        return object_get(CountryRepository::getModel($this->country_id), 'country_name');
     }
+
+    public function getRoundStageString($round_number)
+    {
+        $count = $this->final_stage_teams;
+        $total_rounds = ceil(log($count, 2));
+
+        $round_names = [
+            -2 => '',
+            -1 => 'WINNER',
+            0 => 'FINAL',
+            1 => 'SEMI FINAL',
+            2 => 'QUARTER FINAL'
+        ];
+
+        return array_get($round_names,$total_rounds - $round_number,"ROUND " . $round_number);
+    }
+
+
 }

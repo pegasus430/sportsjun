@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\User\TournamentsController;
 use App\Model\MatchSchedule;
 use App\Model\Organization;
 use App\Model\Team;
@@ -66,8 +67,17 @@ class SearchController extends Controller
         switch ($type) {
             case 'tournaments':
                 $tournament = Tournaments::find($id);
+                $matchScheduleData = MatchSchedule::where('tournament_id', $id)->whereNull('tournament_group_id')
+                    ->orderBy('tournament_round_number')
+                    ->get();
+
+                $maxRoundNumber = $matchScheduleData->max('tournament_round_number');
+                $schedule_type = !empty($tournament->schedule_type) ? $tournament->schedule_type : 'team';
+                $bracket = TournamentsController::getBracketTeams($id, $maxRoundNumber, $schedule_type, false);
                 if ($tournament)
-                    return view('home.search.tournament', compact('tournament'));
+                    return view('home.search.tournament', compact('tournament',
+                        'maxRoundNumber',
+                        'bracket'));
                 break;
             case 'users':
                 $user = User::regular()

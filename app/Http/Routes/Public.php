@@ -13,7 +13,6 @@ Route::get('data/cities',[
     'uses'=>'DataController@cities'
 ]);
 
-
 Route::get('data/states',[
     'as'=>'data.states',
     'uses'=>'DataController@states'
@@ -22,6 +21,11 @@ Route::get('data/states',[
 Route::get('data/countries',[
     'as'=>'data.countries',
     'uses'=>'DataController@countries'
+]);
+
+Route::get('data/token',[
+    'as'=>'data.token',
+    'uses'=>'DataController@token'
 ]);
 
 
