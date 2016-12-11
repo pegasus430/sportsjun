@@ -32,20 +32,25 @@
 
     <?php
     $details = [
-            'Tournament name' => $tournament->name,
-            'Sports name' => $tournament->parent_name,
-            'Sports' => $tournament->sport->sports_name,
-            'Tournament Type' => $tournament->type,
-            'Player Type' => $tournament->player_type,
-            'Start-End Dates' => $start_date->format('d/m/Y') . ' to ' . $end_date->format('d/m/Y'),
-            'Number of groups' => $tournament->groups_number,
-            'Number of Teams in a Group' => $tournament->groups_teams
+        'Tournament name' => $tournament->name,
+        'Sports name' => $tournament->sport->sports_name,
+        'Tournament Type' => $tournament->type,
+        'Player Type' => $tournament->player_type,
+        'Start-End Dates' => $start_date->format('d/m/Y') . ' to ' . $end_date->format('d/m/Y'),
+        'Number of groups' => $tournament->groups_number,
+        'Number of Teams in a Group' => $tournament->groups_teams
     ]
     ?>
     <ul class="nav nav-tabs search-tournament-tabs">
         <li class="active"><a data-toggle="tab" href="#tournament_info">Details</a></li>
-        <li><a data-toggle="tab" href="#tournament_group_stage">Group Stage</a></li>
+        @if($tournament->type=='league' || $tournament->type=='multistage')
+            <li><a data-toggle="tab" href="#tournament_group_stage">Group Stage</a></li>
+        @endif
+        @if($tournament->type=='knockout' || $tournament->type=='multistage')
+            <li><a data-toggle="tab" href="#tournament_final_stage">Final Stage</a></li>
+        @endif
         <li><a data-toggle="tab" href="#tournament_group_matches">Matches</a></li>
+        <li><a data-toggle="tab" href="#tournament_gallery">Gallery</a></li>
     </ul>
     <div class="tab-content">
         <div id="tournament_info" class="tab-pane fade in active">
@@ -54,8 +59,15 @@
         <div id="tournament_group_stage" class="tab-pane fade">
             @include('home.search.tournament.group_stage')
         </div>
+
+        <div id="tournament_final_stage" class="tab-pane fade">
+            @include('home.search.tournament.final_stage')
+        </div>
         <div id="tournament_group_matches" class="tab-pane fade">
             @include('home.search.tournament.matches')
+        </div>
+        <div id="tournament_gallery" class="tab-pane fade">
+            @include('home.search.tournament.gallery')
         </div>
     </div>
 
