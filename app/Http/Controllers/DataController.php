@@ -25,7 +25,8 @@ class DataController extends Controller
             ->lists('city_name','id');
     }
 
-
-
+    public function token(){
+        return csrf_token();
+    }
 
 }

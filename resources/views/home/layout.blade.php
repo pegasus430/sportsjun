@@ -124,21 +124,10 @@ $css_version    = config('constants.CSS_VERSION');
 @include('home.partials.modals')
 
 <!-- jQuery (necessary for JavaScript plugins) -->
-<script src="{{ asset('/home/js/sj.global.js') }}?v=<?php echo $js_version;?>"></script>
-<script src="{{ asset('/home/js/sj.user.js') }}?v=<?php echo $js_version;?>"></script>
+
 <script src="{{ asset('/home/js/bootstrap.min.js') }}?v=<?php echo $js_version;?>"></script>
-<script src="{{ asset('/home/js/jquery.flexslider.js') }}?v=<?php echo $js_version;?>"></script>
-<script src="{{ asset('/home/js/owl.carousel.min.js') }}?v=<?php echo $js_version;?>"></script>
-<script src="{{ asset('/home/js/jquery.countdown.js') }}?v=<?php echo $js_version;?>"></script>
-<script src="{{ asset('/home/js/waypoints-min.js') }}?v=<?php echo $js_version;?>"></script>
-<script src="{{ asset('/home/js/jquery.bxslider.min.js') }}?v=<?php echo $js_version;?>"></script>
-<script src="{{ asset('/home/js/bootstrap-progressbar.js') }}?v=<?php echo $js_version;?>"></script>
-<script src="{{ asset('/home/js/jquery.accordion.js') }}?v=<?php echo $js_version;?>"></script>
-<script src="{{ asset('/home/js/jquery.circlechart.js') }}?v=<?php echo $js_version;?>"></script>
-<script src="{{ asset('/home/js/jquery.prettyphoto.js') }}?v=<?php echo $js_version;?>"></script>
-<script src="{{ asset('/home/js/kode_pp.js') }}?v=<?php echo $js_version;?>"></script>
-<script src="{{ asset('/home/js/functions.js') }}?v=<?php echo $js_version;?>"></script>
-<script src="{{ elixir('home/js/sportsjun.js') }}"></script>
+<script src="{{ elixir('home/js/lib_mix.js') }}"></script>
+<script src="{{ elixir('home/js/home_mix.js') }}"></script>
 
 </body>
 </html>

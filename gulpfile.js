@@ -52,13 +52,35 @@ elixir(function (mix) {
         ], 'public/home/css/home_mix.css', 'public'
     );
 
+    mix.scripts([
+        '/home/js/jquery.flexslider.js',
+        '/home/js/owl.carousel.min.js',
+        '/home/js/jquery.countdown.js',
+        '/home/js/waypoints-min.js',
+        '/home/js/jquery.bxslider.min.js',
+        '/home/js/bootstrap-progressbar.js',
+        '/home/js/jquery.accordion.js',
+        '/home/js/jquery.circlechart.js',
+        '/home/js/jquery.prettyphoto.js',
+    ], 'public/home/js/lib_mix.js','public');
+
+    mix.scripts([
+        '/home/js/sj.global.js',
+        '/home/js/sj.user.js',
+        '/home/js/kode_pp.js',
+        '/home/js/functions.js',
+        'home/js/sportsjun.js'
+    ],'public/home/js/home_mix.js','public');
+
+
 
     mix.version([
         '/themes/sportsjun/css/bootstrap.css',
         '/themes/sportsjun/css/base.css',
         '/themes/sportsjun/css/all.css',
         'public/home/css/home_mix.css',
-        'public/home/js/sportsjun.js'
+        'public/home/js/lib_mix.js',
+        'public/home/js/home_mix.js'
     ], 'public/build');
     mix.copy('public/themes/', 'public/build/themes');
     mix.copy('public/home/', 'public/build/home');

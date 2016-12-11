@@ -649,3 +649,9 @@
 .test > tr.matchList:nth-of-type(odd) {
     background: #000 !important;
 }
+
+
+.group-flex-content ul li {
+    background-color:#fafafa !important;
+    color:#333;
+}

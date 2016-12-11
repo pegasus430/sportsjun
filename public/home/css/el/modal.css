@@ -109,3 +109,10 @@
     width:400px;
 }
 
+.kode-loginform span.error{
+    font-weight: normal;
+    font-size: 11px;
+    margin: 4px 0 0 0;
+    display: block;
+    color: #F44336;
+}
