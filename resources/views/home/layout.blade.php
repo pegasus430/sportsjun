@@ -23,7 +23,7 @@ $css_version    = config('constants.CSS_VERSION');
 
 
         <link href="{{ asset('/home/css/bootstrap.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
-        <link href="{{ elixir('home/css/home_mix.css') }}?>" rel="stylesheet">
+        <link href="{{ elixir('gen/home/css/home_mix.css') }}?>" rel="stylesheet">
 
 
         <link rel="stylesheet" href="{{ asset('/css/sidebar-menu.css') }}?v=<?php echo $css_version;?>" />
@@ -126,8 +126,8 @@ $css_version    = config('constants.CSS_VERSION');
 <!-- jQuery (necessary for JavaScript plugins) -->
 
 <script src="{{ asset('/home/js/bootstrap.min.js') }}?v=<?php echo $js_version;?>"></script>
-<script src="{{ elixir('home/js/lib_mix.js') }}"></script>
-<script src="{{ elixir('home/js/home_mix.js') }}"></script>
+<script src="{{ elixir('gen/home/js/lib_mix.js') }}"></script>
+<script src="{{ elixir('gen/home/js/home_mix.js') }}"></script>
 
 </body>
 </html>

@@ -2,6 +2,8 @@
 nbproject/
 public/uploads/
 public/mailoutput/
+public/build/
+public/gen/
 vendor/*
 storage/*
 config/database.php
