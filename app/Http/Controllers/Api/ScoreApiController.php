@@ -96,7 +96,7 @@ class ScoreApiController extends BaseApiController
                 if (isset($data['Bowler_Name']) && $data['Bowler_Name']) {
                     $stats->overs_bowled = array_get($data,'Bowler_Overs_Bowled');
                     $stats->overs_maiden = array_get($data,'Bowler_Overs_Maiden');
-                    $stats->wickets = $data ['Bowler_Wickets');
+                    $stats->wickets = array_get($data,'Bowler_Wickets');
                     $stats->fours = array_get($data,'Bowler_Fours');
                     $stats->sixes = array_get($data,'Bowler_Sixes');
 
