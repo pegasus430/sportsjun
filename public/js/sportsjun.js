@@ -1464,5 +1464,9 @@ function filterDiv(that, index){
         $(this).hide();             
     })
 
+    $('.end_match_btn_submit').click(function(){
+        $(this).hide();
+    })
+
 
 

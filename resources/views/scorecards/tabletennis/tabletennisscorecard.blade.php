@@ -782,7 +782,7 @@
                      <div class="col-sm-12"><center><h3>Update Preferences</h3> </center></div>
                     <div class='col-sm-4'>
                         <label>Number of Sets</label>
-                        <select class='form-control select-picker' name='number_of_sets' readonly {{$disabled}}>
+                        <select class='form-control select-picker' name='number_of_sets' >
                             <option value=1  {{$preferences->number_of_sets==1?'selected':''}}>1</option>
                             <option value=2  {{$preferences->number_of_sets==2?'selected':''}}>2</option>
                             <option value=3 {{$preferences->number_of_sets==3?'selected':''}}>3</option>
@@ -791,25 +791,30 @@
                         </select>
                       {!!csrf_field()!!}
                       <input type='hidden' name='match_id' value="{{$match_data[0]['id']}}">
+                        <input type='hidden' name='game_type' value="{{$match_data[0]['game_type']}}
+                      ">
+                      @if($match_data[0]['game_type']=='rubber' && isset($score_a_array['rubber_id']))
+                        <input type='hidden' name='rubber_id' value="{{$score_a_array['rubber_id']}}">
+                      @endif   
                                            
                     </div>
 
                     <div class='col-sm-4'>
                         <label>Score to Win</label>
-                        <input type='text' name='score_to_win' class="form-control gui-input allownumericwithdecimal" required="" value="{{$preferences->score_to_win}}" readonly="" {{$disabled}}>
+                        <input type='text' name='score_to_win' class="form-control gui-input allownumericwithdecimal" required="" value="{{$preferences->score_to_win}}" >
 
                     </div>
 
                     <div class='col-sm-4'>
                         <label>Set End Point</label>
-                        <input type='text' name='set_end_point' class="form-control gui-input allownumewithdecimal" required="" value="{{$preferences->end_point}}" readonly="" {{$disabled}}>
+                        <input type='text' name='set_end_point' class="form-control gui-input allownumewithdecimal" required="" value="{{$preferences->end_point}}" >
 
                     </div>
 
                                                     
                     <div class='col-sm-12'>
                       <br><br>
-                      <input type='checkbox' name='enable_two_points' readonly="readonly" {{$preferences->enable_two_points=='on'?'checked':''}} id='enable_two_points' {{$disabled}}> 
+                      <input type='checkbox' name='enable_two_points'  {{$preferences->enable_two_points=='on'?'checked':''}} id='enable_two_points' > 
                         <label for='enable_two_points'>Enable Two points clear pattern</label>
                       </div>
                       
