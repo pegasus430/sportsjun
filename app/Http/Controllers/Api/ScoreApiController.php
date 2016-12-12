@@ -26,7 +26,7 @@ class ScoreApiController extends BaseApiController
         );
 
         $ball_no = $data['Ball_No'];
-        $score->over = $data['Over'];
+        $score->over = $data['Current_Over'];
         $score->total_overs = $data['Total_Overs'];
 
         $ball_by_ball = $score->ball_by_ball ? $score->ball_by_ball : [];
@@ -59,25 +59,25 @@ class ScoreApiController extends BaseApiController
                 );
                 $stats->bowled_id = $data['Bowler_Id'];
 
-                if (isset($data['Bowled']))
+                if (isset($data['Bowled']) && $data['Bowled'])
                     $stats->out_as = 'bowled';
-                if (isset($data['Caught']))
+                if (isset($data['Caught']) && $data['Caught'])
                     $stats->out_as = 'caught';
-                if (isset($data['Handled_The_Ball']))
+                if (isset($data['Handled_The_Ball']) && $data['Handled_The_Ball'])
                     $stats->out_as = 'handled_ball';
-                if (isset($data['Hit_The_Ball_Twice']))
+                if (isset($data['Hit_The_Ball_Twice']) && $data['Hit_The_Ball_Twice'])
                     $stats->out_as = 'hit_ball_twice';
-                if (isset($data['Hit_Wicket']))
+                if (isset($data['Hit_Wicket']) && $data['Hit_Wicket'])
                     $stats->out_as = 'hit_wicket';
-                if (isset($data['LBW']))
+                if (isset($data['LBW']) && $data['LBW'])
                     $stats->out_as = 'lbw';
-                if (isset($data['Stumped']))
+                if (isset($data['Stumped']) && $data['Stumped'])
                     $stats->out_as = 'stumped';
-                if (isset($data['RunOut']))
+                if (isset($data['RunOut']) && $data['RunOut'])
                     $stats->out_as = 'run_out';
-                if (isset($data['Retired']))
+                if (isset($data['Retired']) && $data['Retired'])
                     $stats->out_as = 'retired';
-                if (isset($data['Obstructing_The_Filed']))
+                if (isset($data['Obstructing_The_Filed']) && $data['Obstructing_The_Filed'])
                     $stats->out_as = 'obstructing_the_field';
 
                 if (isset($data['Bat_PlayerName']) && $data['Bat_PlayerName']) {
