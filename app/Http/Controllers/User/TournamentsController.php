@@ -3047,7 +3047,23 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
           	 $roletype='guest';
            }
 
-          
+       //dd($all_events);   
+     foreach($all_events as $key => $events) {
+
+     	$all_id[]=$events->id;
+        $alreday_registered=DB::table('request')->where('to_id',$events->id)->get();
+        $reg_count=count($alreday_registered);
+        if($reg_count >= $events->total_enrollment) {
+             unset($all_events[$key]);
+        }
+
+     //return redirect('tournaments/registerstep3/'. $_REQUEST['cart_id']);
+
+      }
+
+
+
+
          return view('tournaments.eventregistration',compact('all_events','parent_tournamet_details','tournament_data'))->with([
          	'roletype'=>$roletype,
          	]);
@@ -3301,9 +3317,6 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
 
 
 
-
-
-
  	$sports_id = Tournaments::where('id',$_REQUEST['event_id'])->value('sports_id');
    	$sports_type = Tournaments::where('id',$_REQUEST['event_id'])->value('sports_id');
 
@@ -3350,7 +3363,11 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
              }
         $request['team_ids'][0]=$_REQUEST['event_id'];
         AllRequests::saverequest($request);
-        
+
+
+        $req_table =DB::table('request')->where('to_id',$request['team_ids'][0])->where('from_id',$request['player_tournament_id'])->update(['cart_id' => $_REQUEST['cart_id']]);
+
+     
 
      }
 
@@ -3383,6 +3400,10 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
         $request['team_ids'][0]= $t_id;
         //dd($request);
         $mn=AllRequests::saverequest($request);
+
+        $req_table =DB::table('request')->where('to_id',$request['player_tournament_id'])->where('from_id',$request['team_ids'][0])->update(['cart_id' => $_REQUEST['cart_id']]);
+
+
         $result=$mn->getData();
         if($result->status=='exist'){
         	return back()->withErrors(['This Registration already exist']);
@@ -3492,6 +3513,12 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
         $request['team_ids'][0]= $t_id;
         //dd($request);
         $mn=AllRequests::saverequest($request);
+
+          $req_table =DB::table('request')->where('to_id',$request['player_tournament_id'])->where('from_id',$request['team_ids'][0])->update(['cart_id' => $_REQUEST['cart_id']]);
+
+
+
+
         $result=$mn->getData();
         if($result->status=='exist'){
         	return back()->withErrors(['This Registration already exist']);
@@ -3567,9 +3594,9 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
 
         $cart_data = Carts::where('id',$id)->first();
         $tournamentdata=CartDetails::where('cart_id',$id)->first();
-       // dd($tournamentdata->event_id);
+      
         $tournament=Tournaments::where('id',$tournamentdata->event_id)->first();
-        //dd($tournament);
+       
         if($cart_data->payment_token!=''){
         	 return redirect('tournaments')->withErrors(['Payment already completed for  cart id '.$id]);
         }
@@ -3669,7 +3696,9 @@ public function postPaymentsuccess() {
 	$dt=$_POST;
 
 
-
+    //$date=date('Y-m-d h:i:s');
+    $date=date('Y-m-d');
+	PaymentDetails::where('id', $_POST['udf1'])->update(['status' => $dt['status'],'mihpayid' => $dt['mihpayid'],'amount' => $dt['amount'],'date' => $date]);
 
 
     $user_id = Auth::user()->id;
@@ -3684,6 +3713,11 @@ public function postPaymentsuccess() {
     $data[$i]['phone']=PaymentDetails::where('cart_id',$reg->id)->value('payment_phone');
     $data[$i]['tournament']=$carts->tournaments->name;
     $data[$i]['price']=($carts->enrollment_fee)*($carts->participant_count);
+    $data[$i]['date']=PaymentDetails::where('cart_id',$reg->id)->value('date');
+
+    $data[$i]['organiser']=User::where('id',$carts->tournaments->created_by)->value('name');
+    $data[$i]['organiser_phone']=User::where('id',$carts->tournaments->created_by)->value('contact_number');
+    $data[$i]['organiser_location']=User::where('id',$carts->tournaments->created_by)->value('location');
 
     $i++;
      }
@@ -3732,7 +3766,7 @@ public function postPaymentsuccess() {
       	
       	<div class='col-sm-3'>
         	<div class='section'>
-          	<label class='field prepend-icon head_tr'>
+          	<label class='field prepend-icon head_tr' style='font-size:16px;color:red'>
               Tournament Events
            	</label>
           	</div>
@@ -3740,14 +3774,14 @@ public function postPaymentsuccess() {
 
 	    <div class='col-sm-2'>
        	 <div class='section'>
-    	  <label class='field prepend-icon head_tr'>Payment name</label>
+    	  <label class='field prepend-icon head_tr' style='font-size:16px;color:red'>Payment name</label>
          </div>
          </div>
 
 
         <div class='col-sm-3'>
           <div class='section'>
-            <label class='field prepend-icon head_tr'>
+            <label class='field prepend-icon head_tr' style='font-size:16px;color:red'>
              Payment email
             </label>
            </div>
@@ -3756,7 +3790,7 @@ public function postPaymentsuccess() {
 
          <div class='col-sm-2'>
            <div class='section'>
-            <label class='field prepend-icon head_tr'>
+            <label class='field prepend-icon head_tr' style='font-size:16px;color:red'>
              Payment phone
             </label>
    	       </div>
@@ -3765,8 +3799,43 @@ public function postPaymentsuccess() {
 
         <div class='col-sm-2'>
           <div class='section'>
-           <label class='field prepend-icon head_tr'>
+           <label class='field prepend-icon head_tr' style='font-size:16px;color:red'>
             Amount
+            </label>
+          </div>
+        </div>
+
+
+        <div class='col-sm-2'>
+          <div class='section'>
+           <label class='field prepend-icon head_tr' style='font-size:16px;color:red'>
+            Date
+            </label>
+          </div>
+        </div>
+
+
+
+        <div class='col-sm-2'>
+          <div class='section'>
+           <label class='field prepend-icon head_tr' style='font-size:16px;color:red'>
+            Organiser Name
+            </label>
+          </div>
+        </div>
+
+         <div class='col-sm-2'>
+          <div class='section'>
+           <label class='field prepend-icon head_tr' style='font-size:16px;color:red'>
+            Organiser Contact Number
+            </label>
+          </div>
+        </div>
+
+         <div class='col-sm-2'>
+          <div class='section'>
+           <label class='field prepend-icon head_tr' style='font-size:16px;color:red'>
+            Organiser Location
             </label>
           </div>
         </div>
@@ -3785,42 +3854,67 @@ foreach($data as $dat) {
 
 
 
-$content.="<div class='row inner_events successpage'>
+$content.="<div class='col-lg-8 col-md-10 col-sm-14 col-md-offset-1 col-lg-offset-2' style='padding-top: 3px !important;'>
+
+
+
+<div class='row inner_events successpage'>
 
 
 
 
       <div class='col-sm-3'>
        <div class='section'>
-           <label class='form_label'>".$dat['tournament']."</label>  
+           <label class='form_label' style='font-size:16px;color:#4285f4'>".$dat['tournament']."</label>  
          </div>
         </div>
 
 
      <div class='col-sm-2'>
       <div class='section'>
-       <label class='form_label'><i class='fa fa-user'></i>".$dat['name']."</label>
+       <label class='form_label' style='font-size:16px;color:#4285f4'><i class='fa fa-user'></i>".$dat['name']."</label>
       </div>
       </div>
  
 
      <div class='col-sm-3'>
       <div class='section'>
-        <label class='form_label'><i class='fa fa-envelope'></i>".$dat['email']."</label>
+        <label class='form_label' style='font-size:16px;color:#4285f4'>".$dat['email']."</label>
        </div>
        </div>
 
     <div class='col-sm-2'>
       <div class='section'>
-      <label class='form_label'><i class='fa fa-phone'></i> ".$dat['phone']."</label>
+      <label class='form_label' style='font-size:16px;color:#4285f4'><i class='fa fa-phone'></i> ".$dat['phone']."</label>
        </div>
       </div>
 
      <div class='col-sm-2'>
       <div class='section'>
-       <label class='form_label'><i class='fa fa-inr'></i>".$dat['phone']."</label>
+       <label class='form_label' style='font-size:16px;color:#4285f4'><i class='fa fa-inr' ></i>".floatval($dat['price'])."</label>
       </div>
       </div>
+
+
+      <div class='col-sm-2'>
+      <div class='section'>
+       <label class='form_label' style='font-size:16px;color:#4285f4'><i class='fa fa-inr' ></i>".$dat['date']."</label>
+      </div>
+      </div>
+
+
+      <div class='col-sm-2'>
+      <div class='section'>
+       <label class='form_label' style='font-size:16px;color:#4285f4'><i class='fa fa-inr' ></i>".$dat['organiser_phone']."</label>
+      </div>
+      </div>
+
+       <div class='col-sm-2'>
+      <div class='section'>
+       <label class='form_label' style='font-size:16px;color:#4285f4'><i class='fa fa-inr' ></i>".$dat['organiser_location']."</label>
+      </div>
+      </div>
+
 
      </div>
     <br>
@@ -3828,7 +3922,7 @@ $content.="<div class='row inner_events successpage'>
 
 }
 
-$content.="</div>";
+$content.="</div> </div>";
 
 //dd($dt);
 //echo $header.$content.$footer; exit;
@@ -3851,8 +3945,7 @@ Mail::send(['html' => $view], ['view_data'=>$view_data], function($message) use 
 					$message->to($to_email_id)->subject($subject);    
 				});
  
-    $date=date('Y-m-d');
-	PaymentDetails::where('id', $_POST['udf1'])->update(['status' => $dt['status'],'mihpayid' => $dt['mihpayid'],'amount' => $dt['amount'],'date' => $date]);
+    
 	return view('tournaments.paymentsuccess')->with(array('data' => $dt,'details' => $data));
     
 }
@@ -3860,6 +3953,11 @@ Mail::send(['html' => $view], ['view_data'=>$view_data], function($message) use 
 
 
 public function postPaymentfailure() {
+
+     $dt=$_POST;
+     //dd($dt);
+  $req_table =DB::table('request')->where('cart_id',$_POST['udf2'])->delete();
+
    return view('tournaments.paymentfailure');
    //->with(array('data' => $dt))
 }

@@ -754,7 +754,7 @@ class TabletennisScoreCardController extends parentScoreCardController
             $match_model->match_details=json_encode($match_details);
             $match_model->save();
 
-            
+                   $this->deny_match_edit_by_admin();
 
         return 'match saved';
     }
@@ -1028,9 +1028,12 @@ class TabletennisScoreCardController extends parentScoreCardController
 
 
     public function updatePreferences(ObjectRequest $request){
-            $match_id=$request->match_id;
+              $match_id=$request->match_id;
+            $rubber_id = $request->rubber_id;       
 
-            $match_model=MatchSchedule::find($match_id);
+             $match_model = MatchSchedule::find($match_id);
+            if($match_model->game_type=="rubber") $match_model = MatchScheduleRubber::find($rubber_id);
+
             $match_details=json_decode($match_model->match_details);
 
             $preferences=$match_details->preferences;

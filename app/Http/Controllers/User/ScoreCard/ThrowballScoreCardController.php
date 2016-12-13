@@ -380,7 +380,7 @@ class ThrowballscoreCardController extends parentScoreCardController
             $match_model->match_details=json_encode($match_details);
             $match_model->save();
 
-            
+                       $this->deny_match_edit_by_admin();
 
         return 'match saved';
     }

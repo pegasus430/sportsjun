@@ -74,7 +74,7 @@
 							<div class="sb_join_tournament_main" id="{{$lis['id']}}" spid="{{$lis['sports_id']}}" val="{{!empty($lis['schedule_type'])?(($lis['schedule_type']=='individual')?'PLAYER_TO_TOURNAMENT':'TEAM_TO_TOURNAMENT'):''}}">
 
 
-
+                       
 
 						@if($lis['enrollment_type'] == 'online' && $lis_object->bankaccount !== null && $lis_object->bankaccount->varified == 1)
 
@@ -84,8 +84,19 @@
 						    @if($lis_object->is_sold_out==1)
                                 <a href="#" class="sj_add_but"><span><i class="fa fa-check"></i>Sold Out / Registrations closed</span></a>
 						    @else
+
+                           
+                             @if($lis_object->total_enrollment==0)
+                                <a href="#" class="sj_add_but"><span><i class="fa fa-check"></i>Registrations closed</span></a>
+						     @else
+
+                           
+
+
+
+
                             
-                            @if($open_dt_tm < $current_dt_tm && $close_dt_tm > $current_dt_tm) 
+                             @if($open_dt_tm < $current_dt_tm && $close_dt_tm > $current_dt_tm) 
                 	           <a href="{{ url('/tournaments/eventregistration').'/'.$lis['id'] }}" class="sj_add_but"><span><i class="fa fa-check"></i>Event Registration (Online Payment)</span></a>
                 	           @elseif($open_dt_tm > $current_dt_tm)
                                 <a href="#" class="sj_add_but"><span><i class="fa fa-check"></i>Registration Not Started</span></a>
@@ -96,6 +107,9 @@
                               @endif
 
                               
+                              @endif
+                              
+
                               @endif
 
                              
@@ -108,6 +122,9 @@
 							
 							
 							<?php }?>
+
+                              
+
 							<div class="follow_unfollow_tournament" id="follow_unfollow_tournament_{{$lis['id']}}" uid="{{$lis['id']}}" val="TOURNAMENT" flag="{{ in_array($lis['id'],$follow_array)?0:1 }}"><a href="#" id="follow_unfollow_tournament_a_{{$lis['id']}}" class="{{ in_array($lis['id'],$follow_array)?'sj_unfollow':'sj_follow' }}"><span id="follow_unfollow_tournament_span_{{$lis['id']}}"><i class="{{ in_array($lis['id'],$follow_array)?'fa fa-remove':'fa fa-check' }}"></i>{{ in_array($lis['id'],$follow_array)?'Unfollow':'Follow' }}</span></a></div> 
 						</div>				
 					</div>

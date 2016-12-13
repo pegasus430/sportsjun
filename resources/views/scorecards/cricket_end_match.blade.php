@@ -70,7 +70,7 @@
                                         </div>
                                 </div>
                                 <div class="modal-footer">
-                                        <button type="button" class="button btn-primary" onclick="SJ.SCORECARD.endMatch();">Done</button>
+                                        <button type="button" class="button btn-primary end_match_btn_submit" onclick="SJ.SCORECARD.endMatch();">Done</button>
                                         <button type="button" class="button btn-secondary" data-dismiss="modal">Cancel</button>
                                 </div>
                         </div>
