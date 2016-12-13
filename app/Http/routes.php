@@ -15,7 +15,8 @@ $router->group(
     [
         'domain' => '{subdomain}.'.config('app.domain'),
         'middleware' => 'subdomain'
-], function () {
+], function ($router) {
+    $router->pattern('subdomain', '(?!www)([a-z0-9]+)');
     require(__DIR__ . "/Routes/Subdomain.php");
 });
 

@@ -19,7 +19,7 @@ elixir(function (mix) {
             '/themes/sportsjun/css/style.css',
             '/themes/sportsjun/css/font-awesome.css',
             '/themes/sportsjun/css/stylesheet.css',
-        ], 'public/themes/sportsjun/css/base.css', 'public');
+        ], 'public/gen/themes/sportsjun/css/base.css', 'public');
 
     mix.styles(
         [
@@ -28,7 +28,7 @@ elixir(function (mix) {
             '/themes/sportsjun/css/backslider.css',
             '/themes/sportsjun/css/old.css',
             '/themes/sportsjun/css/style_add.css'
-        ], 'public/themes/sportsjun/css/all.css', 'public'
+        ], 'public/gen/themes/sportsjun/css/all.css', 'public'
     );
 
 
@@ -49,7 +49,7 @@ elixir(function (mix) {
             'home/css/el/*.css',
             'home/css/search/*.css'
 
-        ], 'public/home/css/home_mix.css', 'public'
+        ], 'public/gen/home/css/home_mix.css', 'public'
     );
 
     mix.scripts([
@@ -62,7 +62,7 @@ elixir(function (mix) {
         '/home/js/jquery.accordion.js',
         '/home/js/jquery.circlechart.js',
         '/home/js/jquery.prettyphoto.js',
-    ], 'public/home/js/lib_mix.js','public');
+    ], 'public/gen/home/js/lib_mix.js','public');
 
     mix.scripts([
         '/home/js/sj.global.js',
@@ -70,20 +70,20 @@ elixir(function (mix) {
         '/home/js/kode_pp.js',
         '/home/js/functions.js',
         'home/js/sportsjun.js'
-    ],'public/home/js/home_mix.js','public');
+    ],'public/gen/home/js/home_mix.js','public');
 
 
 
     mix.version([
         '/themes/sportsjun/css/bootstrap.css',
-        '/themes/sportsjun/css/base.css',
-        '/themes/sportsjun/css/all.css',
-        'public/home/css/home_mix.css',
-        'public/home/js/lib_mix.js',
-        'public/home/js/home_mix.js',
-        'public/js/admin.scripts.js'
+        'gen/themes/sportsjun/css/base.css',
+        'gen/themes/sportsjun/css/all.css',
+        'gen/home/css/home_mix.css',
+        'gen/home/js/lib_mix.js',
+        'gen/home/js/home_mix.js',
+        'js/admin.scripts.js'
     ], 'public/build');
-    mix.copy('public/themes/', 'public/build/themes');
-    mix.copy('public/home/', 'public/build/home');
+    mix.copy('public/themes/', 'public/build/gen/themes');
+    mix.copy('public/home/', 'public/build/gen/home');
 
 });

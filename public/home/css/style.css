@@ -98,7 +98,7 @@ Sidebar heading:	'Oswald', sans-serif;
 
 @charset "utf-8";
 /* Default Css Starts */
-@import url(shortcode.css);
+@import url('/home/css/shortcode.css');
 * {
 	padding: 0px;
 	margin: 0px;
