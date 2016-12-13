@@ -56,6 +56,7 @@ Route::group(['prefix'=>'match'], function(){
     Route::post('/saveMatchRecordVolleyball', 'User\ScoreCard\BasketballScoreCardController@volleyballSaveRecord');
     Route::post('manualScoringvolleyball', ['as'=>'match/manualScoringVolleyball', 'uses'=>'User\ScoreCard\VolleyballScoreCardController@manualScoring']);
       Route::post('volleyballAddScore', ['as'=>'match/volleyballAddScore', 'uses'=>'User\ScoreCard\VolleyballScoreCardController@addScore']);
+      Route::post('volleyBallupdatePreferences', ['as'=>'match/volleyballAddScore', 'uses'=>'User\ScoreCard\VolleyballScoreCardController@updatePreferences']);
 
 
 

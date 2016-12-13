@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateTennisSetTableUpdateTiebreaker extends Migration
+class AlterTtPlayerMatchScoreAddTeamName extends Migration
 {
     /**
      * Run the migrations.
@@ -12,10 +12,9 @@ class UpdateTennisSetTableUpdateTiebreaker extends Migration
      */
     public function up()
     {
-        Schema::table('tennis_sets', function (Blueprint $table) {
+        Schema::table('tt_player_match_score', function (Blueprint $table) {
             //
-            $table->integer('team_a_tie_breaker');
-            $table->integer('team_b_tie_breaker');
+            $table->string('team_name');
         });
     }
 
@@ -26,8 +25,9 @@ class UpdateTennisSetTableUpdateTiebreaker extends Migration
      */
     public function down()
     {
-        Schema::table('tennis_sets', function (Blueprint $table) {
+        Schema::table('tt_player_match_score', function (Blueprint $table) {
             //
+            $table->dropColumn('team_name');
         });
     }
 }

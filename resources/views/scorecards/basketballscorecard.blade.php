@@ -854,7 +854,7 @@ input:read-only {
 
 
 									<div class="modal-footer">
-									 <button class='btn btn-primary ' onclick="" type='submit'> Save</button>
+									 <button class='btn btn-primary end_match_btn_submit' onclick="" type='submit'> Save</button>
 										<button type="button" class="button btn-secondary" data-dismiss="modal">Cancel</button>
 									</div>
 								</div>
