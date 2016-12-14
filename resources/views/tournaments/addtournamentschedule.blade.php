@@ -12,6 +12,12 @@
         position: relative
     }
 
+<?php
+
+    $schedule_type_enum = config('constants.ENUM.TOURNAMENTS.SCHEDULE_TYPE'); 
+
+ ?>
+
     /*.alert{display: none;}*/
 </style>
 <script src="http://malsup.github.com/jquery.form.js"></script>
@@ -66,7 +72,37 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+
+                        <!-- Archery Module -->
+                    <div class="archery-module" style="display:none">
+                        <div class="row" >
+                            <div class="col-sm-6">
+                                <div class="section " id="" >
+                                <label class="form_label">{{  trans('message.tournament.fields.schedule_type') }} <span  class='required'>*</span></label>
+                                    <label class="field select">
+                                     {!! Form::select('schedule_type', $schedule_type_enum, null,array('id'=>'schedule_type','class'=>'gui-input')) !!}
+                                    
+                                     <i class="arrow double"></i>      
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="section " id="" style="display:none">
+                                <label class="form_label">{{  trans('message.tournament.fields.schedule_type') }} <span  class='required'>*</span></label>
+                                    <label class="field select">
+                                     {!! Form::number('number_of_players',1, null,array('id'=>'number_of_players','class'=>'gui-input')) !!}
+                                    
+                                     <i class="arrow double"></i>      
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <!-- End of Archery Module -->
+
+                        <div class="row non-archery-module">
                             <div class="col-sm-6">
                                 <div class="section">
                                     <label class="form_label">{{   trans('message.schedule.fields.myteam') }} <span
@@ -538,3 +574,13 @@
 
 </script>
 
+
+
+<!-- Archery Module -->
+
+<script type="text/javascript">
+    @if(isset($sports_id) && ($sports_id ==18))
+        $('.archery-module').show();
+        $('.non-archery-module').hide();
+    @endif
+</script>

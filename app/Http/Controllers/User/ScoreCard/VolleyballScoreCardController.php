@@ -324,7 +324,7 @@ class VolleyballscoreCardController extends parentScoreCardController
             $match_model=Matchschedule::find($match_id);
             $match_details=json_decode($match_model->match_details);
 
-            $match_details->preferences->end_point = $request->end_point;
+            $match_details->preferences->end_point = $request->set_end_point;
             $match_details->preferences->number_of_sets = $request->number_of_sets;
 
             $match_model->match_details = json_encode($match_details);
