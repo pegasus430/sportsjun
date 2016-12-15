@@ -350,18 +350,19 @@ class TournamentsController extends Controller
 /*----------------------------------custom code for joined tournaments-----------------------------------*/
 
     $user_id = Auth::user()->id;
-    $register_data = Carts::with('cartDetails.tournaments')->where('user_id',$user_id)->where('payment_token','!=','')->get();
+    $register_data = Carts::with('cartDetails.tournaments')->where('user_id',$user_id)->where('payment_token','!=','')->orderBy('id', 'DESC')->get();
     $join_data=array();
     $i=0;
     foreach($register_data as $reg){
     foreach($reg->cartDetails as $carts){
       $join_data[$i]['url']=TournamentParent::where('id',$carts->tournaments->id)->value('logo');
+      //$join_data[$i]['url']=TournamentParent::where('id',$carts->event_id)->value('logo');
       $join_data[$i]['name']=$carts->tournaments->name;
       $join_data[$i]['user_name']=User::where('id',$carts->tournaments->created_by)->value('name');
       $join_data[$i]['sports_name']=Sport::where('id',$carts->tournaments->sports_id)->value('sports_name');
       $join_data[$i]['team_count']='';
       $join_data[$i]['description']=$carts->tournaments->description;
-      $join_data[$i]['id']=$carts->id;
+      $join_data[$i]['id']=$carts->tournaments->id;
       $i++;
      }
     }
@@ -3021,7 +3022,7 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
 	}
 
 
-/*----------------------------------------------------event registration with payment-------------------------------------*/
+/*----------------------------------------event registration with payment-------------------------------------*/
     
     public function eventregistration($id){
           $tournment_enrollment_type=Tournaments::where('id',$id)->value('enrollment_type');
@@ -3058,6 +3059,7 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
         }
 
      //return redirect('tournaments/registerstep3/'. $_REQUEST['cart_id']);
+
 
       }
 
@@ -3099,6 +3101,23 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
             $cart_data[$i]['enrollment_fee']=Tournaments::where('id',$cart_data[$i]['event_id'])->value('enrollment_fee');
             $cart_data[$i]['match_type']=Tournaments::where('id',$cart_data[$i]['event_id'])->value('match_type');
             $cart_data[$i]['participant_count']=$value['count'];
+
+            
+
+        $tot_enrollment_count = Tournaments::where('id',$key)->value('total_enrollment');
+       	$trn_name = Tournaments::where('id',$key)->value('name');
+       	$alreday_singles_registered=DB::table('request')->where('to_id',$key)->get();
+       	$alreday_singles_registered_count=count($alreday_singles_registered);
+
+       //dd(count($alreday_singles_registered));
+       $avail_registrations= $tot_enrollment_count-$alreday_singles_registered_count;
+          if($value['count'] > $avail_registrations) {
+            return redirect('tournaments')->withErrors(['Number of registration  for  event '.$trn_name.' exceeds the limit.Only '.$avail_registrations.' available']);
+             }
+
+
+
+
             $pay=$cart_data[$i]['participant_count'] * $cart_data[$i]['enrollment_fee'];
             $total_pay+=$pay;
              }
@@ -3154,6 +3173,9 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
           	  $roletype='guest';
           }
         $register_data = Carts::with('cartDetails.tournaments')->where('id',$id)->first();
+        if(count($register_data->cartDetails)==0){
+        	return redirect('tournaments')->withErrors(['Number of registrations exceeds the limit for the event']);
+        }
         if($register_data->payment_token!=''){
         	 return redirect('tournaments')->withErrors(['Payment already completed for  cart id '.$id]);
         }
@@ -3215,7 +3237,7 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
      if($cart_data->payment_token!=''){
         	 return redirect('tournaments')->withErrors(['Payment already completed for  cart id '.$id]);
         }
-   $register_data = CartDetails::where('cart_id','=',$id)->where('registerd','=',0)->with('tournaments')->first();
+  $register_data = CartDetails::where('cart_id','=',$id)->where('registerd','=',0)->with('tournaments')->first();
 
           if(isset($register_data) && $register_data!=null){
           $event_id=$register_data->event_id;
@@ -3335,6 +3357,10 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
 
 
   if($_REQUEST['match_type']=='singles'){
+   
+      
+
+      
 
 
      foreach($_REQUEST['single'] as $single_array){
@@ -3696,8 +3722,8 @@ public function postPaymentsuccess() {
 	$dt=$_POST;
 
 
-    //$date=date('Y-m-d h:i:s');
-    $date=date('Y-m-d');
+    $date=date('Y-m-d h:i:s');
+    //$date=date('Y-m-d');
 	PaymentDetails::where('id', $_POST['udf1'])->update(['status' => $dt['status'],'mihpayid' => $dt['mihpayid'],'amount' => $dt['amount'],'date' => $date]);
 
 
@@ -3981,6 +4007,19 @@ public function postPaymentfailure() {
     foreach($reg->cartDetails as $carts){
     $data[$i]['id']=$reg->id;
     $data[$i]['name']=PaymentDetails::where('cart_id',$reg->id)->value('payment_firstname');
+
+
+    $team_id =DB::table('request')->where('to_id',$carts->event_id)->where('cart_id',$reg->id)->where('type',4)->pluck('from_id');
+
+    // dd($team_data->type);
+    // if($team_data->type == 4) {
+    //     $data[$i]['team']=Team::where('id',$team_data->from_id)->value('name');
+    // } else if($team_data->type == 2) {
+    // 	$data[$i]['team']=User::where('id',$team_data->from_id)->value('name');
+    // }
+
+    $data[$i]['team']=Team::where('id',$team_id)->value('name');
+
     $data[$i]['email']=User::where('id',$user_id)->value('email');
     $data[$i]['date']=PaymentDetails::where('cart_id',$reg->id)->value('date');
     $data[$i]['phone']=PaymentDetails::where('cart_id',$reg->id)->value('payment_phone');
@@ -4021,23 +4060,90 @@ return view('tournaments.transactions')->with(array('details' => $data,'u_id'=> 
     $register_data = Carts::with('cartDetails.tournaments')->whereIn('id',$cart_ids)->where('payment_token','!=','')->orderBy('id', 'DESC')->get();
     $data=array();
     $i=0;
+
+/*----------------------------------------------------old code---------------------------------------------*/    
+    // foreach($register_data as $reg){
+    // foreach($reg->cartDetails as $carts){
+    // $data[$i]['id']=$reg->id;
+    // $data[$i]['name']=PaymentDetails::where('cart_id',$reg->id)->value('payment_firstname');
+    // $data[$i]['email']=User::where('id',$reg->user_id)->value('email');
+    // $data[$i]['date']=PaymentDetails::where('cart_id',$reg->id)->value('date');
+    // $data[$i]['phone']=PaymentDetails::where('cart_id',$reg->id)->value('payment_phone');
+    // $data[$i]['tournament']=$carts->tournaments->name;
+    // $data[$i]['price']=($carts->enrollment_fee)*($carts->participant_count);
+    // $i++;
+    //  }
+
+
+
+
+    //  }
+
+/*----------------------------------------------------old code---------------------------------------------*/
+
+
+   foreach($register_data as $reg){
+    foreach($reg->cartDetails as $carts){
+       $mn[$carts->event_id]=array();
+    }
+    }	
+
+
+
+
+
+
+
+    $i=0;
     foreach($register_data as $reg){
     foreach($reg->cartDetails as $carts){
-    $data[$i]['id']=$reg->id;
-    $data[$i]['name']=PaymentDetails::where('cart_id',$reg->id)->value('payment_firstname');
-    $data[$i]['email']=User::where('id',$reg->user_id)->value('email');
-    $data[$i]['date']=PaymentDetails::where('cart_id',$reg->id)->value('date');
-    $data[$i]['phone']=PaymentDetails::where('cart_id',$reg->id)->value('payment_phone');
-    $data[$i]['tournament']=$carts->tournaments->name;
-    $data[$i]['price']=($carts->enrollment_fee)*($carts->participant_count);
-    $i++;
-     }
+
+      
+    $data['t_name']=$carts->tournaments->name;
+    $data['tot_enrollmet']=$carts->tournaments->tot_enrollment;
+    $alreday_registered=DB::table('request')->where('to_id',$carts->event_id)->get();
+    $data['current_enrollmet']=count($alreday_registered);
+    $data['remaining_enrollmet']=$carts->tournaments->tot_enrollment-count($alreday_registered);
+    $data['data']['id']=$reg->id;
+    $team_id =DB::table('request')->where('to_id',$carts->event_id)->where('cart_id',$carts->cart_id)->where('type',4)->pluck('from_id');
+
+    $data['data']['team']=Team::where('id',$team_id)->value('name');
+    $data['data']['name']=PaymentDetails::where('cart_id',$reg->id)->value('payment_firstname');
+    $data['data']['email']=User::where('id',$reg->user_id)->value('email');
+    $data['data']['date']=PaymentDetails::where('cart_id',$reg->id)->value('date');
+    $data['data']['phone']=PaymentDetails::where('cart_id',$reg->id)->value('payment_phone');
+    $data['data']['tournament']=$carts->tournaments->name;
+    $data['data']['price']=($carts->enrollment_fee)*($carts->participant_count);
+
+
+     $mn[$carts->event_id][]=$data;
+
+     $i++;
+
+
+    
+    $data[$carts->event_id]=$carts;
+
+
+
+
 
 
      }
+
+
+
+
+     }
+
+     //dd($mn);       
      
 
-return view('tournaments.myregisteredtournaments')->with(array('details' => $data,'u_id'=> $user_id));
+//return view('tournaments.myregisteredtournaments')->with(array('details' => $data,'u_id'=> $user_id));
+
+
+
+return view('tournaments.myregisteredtournaments')->with(array('details' => $mn,'u_id'=> $user_id));     
 
 
  

@@ -292,7 +292,7 @@ $count=$register_data->participant_count;
 </div><!--end row -->
 
 
-<div class="row">
+
 
 
 
