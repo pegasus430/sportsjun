@@ -16,7 +16,22 @@ Route::group(array('middleware' => 'role'), function() {
         $router->post('infolists/{type}/create',['uses'=>"HomepageInfolistsController@store"]);
 
        });
+    //
+    Route::group(['as'=>'admin.pages.',"prefix"=>"admin","namespace"=>"admin"],function($router){
+        $router->model('page',\App\Model\Page::class);
 
+        $router->get('pages',['as'=>'index','uses'=>'PagesController@index']);
+        $router->get('pages/blocks',['as'=>'blocks','uses'=>'PagesController@blocks']);
+        $router->get('pages/create',['as'=>'add','uses'=>'PagesController@create']);
+        $router->post('pages/create',['as'=>'create','uses'=>'PagesController@store']);
+
+        $router->get('pages/{page}',['as'=>'edit','uses'=>'PagesController@edit']);
+        $router->put('pages/{page}','PagesController@update');
+        $router->delete('pages/{page}',['as'=>'delete','uses'=>'PagesController@delete']);
+
+
+
+    });
 
     //Sports
     Route::get('admin/createsport', [
