@@ -101,7 +101,8 @@ Route::get('auth-check', ['uses' => 'User\UserController@authCheck', 'as' => 'au
 
 //admin tournaments controller
 
+
 Route::any( '{catchall}', function ( $page ) {
     $page = \App\Model\Page::where('linkname',$page)->first();
     return view('pages.view',compact('page'));
-} )->where('catchall', '(?!captcha)(.*)');
+} )->where('catchall', '(?!captcha)(?!_debugbar)(.*)');
