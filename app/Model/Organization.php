@@ -23,7 +23,9 @@ class Organization extends Model
                 'social_linkedin', 'social_googleplus', 'website_url', 'about', 'location',
                 'longitude',
                 'latitude', 'address', 'city_id', 'city', 'state_id', 'state', 'country_id',
-                'country', 'zip', 'alternate_contact_number', 'contact_name', 'logo');
+                'country', 'zip', 'alternate_contact_number', 'contact_name', 'logo',
+                'subdomain'
+        );
         protected $morphClass        = 'organization';
 
 

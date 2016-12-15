@@ -117,6 +117,7 @@ class AuthController extends Controller
     public function postRegisterOrganization(OrganizationRegisterRequest $request)
     {
         $data = $request->all();
+
         $logo = Helper::uploadImageSimple($data['org_logo'], 'organization');
         $user = User::create([
             'firstname' => $data['firstname'],
@@ -137,11 +138,11 @@ class AuthController extends Controller
                     'email' => $data['email'],
                     'address' => $data['address'],
                     'city_id' => $data['city_id'],
-                    'city' => object_get(CityRepository::getModel($data['city_id']), 'city_title'),
+                    'city' => object_get(CityRepository::getModel($data['city_id']),'city_name'),
                     'state_id' => $data['state_id'],
-                    'state' => object_get(StateRepository::getModel($data['state_id']), 'state_title'),
+                    'state' => object_get(StateRepository::getModel($data['state_id']), 'state_name'),
                     'country_id' => $data['country_id'],
-                    'country' => object_get(CityRepository::getModel($data['country_id']), 'country_title'),
+                    'country' => object_get(CityRepository::getModel($data['country_id']), 'country_name'),
                     'logo' => $logo,
                     'about' => array_get($data,'org_about'),
                     'user_id' => $user->id,
