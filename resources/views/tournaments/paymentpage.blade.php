@@ -21,6 +21,7 @@
 <div class="col-sm-5">
       <div class="section">
           <label class="field prepend-icon">
+          <label class="field-icon"><span  class='required validation'>*</span></label>
             {!! Form::text("firstname", $user_data->firstname, array('required','class'=>'gui-input','placeholder' => 'Name' )) !!}
             
             </label>
@@ -30,6 +31,7 @@
 <div class="col-sm-6">
   <div class="section">
     <label class="field prepend-icon">
+    <label class="field-icon"><span  class='required validation'>*</span></label>
         {!! Form::text("address", $user_data->address, array('required','class'=>'gui-input','placeholder' => 'Address' )) !!}
             
             
@@ -64,6 +66,7 @@
 <div class="col-sm-5">
       <div class="section">
           <label class="field prepend-icon">
+          <label class="field-icon"><span  class='required validation'>*</span></label>
           {!! Form::text("phone", $user_data->contact_number, array('required','class'=>'gui-input','placeholder' => 'Country' )) !!}
             
             </label>
@@ -76,6 +79,7 @@
 <div class="col-sm-6">
   <div class="section">
     <label class="field prepend-icon">
+    <label class="field-icon"><span  class='required validation'>*</span></label>
               {!! Form::text("zipcode", '', array('required','class'=>'gui-input','placeholder' => 'Zipcode' )) !!}
             
            
