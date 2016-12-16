@@ -107,7 +107,7 @@ $options=array();?>
           <label class="field prepend-icon">
            <label class="field-icon"><i class="fa fa-trophy"></i></label>
             {!! Form::text("data[$events->id][name]", $events->name, array('required','class'=>'gui-input form_rows','readonly' => 'true' )) !!}
-            <label  class="form_label last_date_span">Last Date : {{date("d-M-Y", strtotime($events->end_date))   }}</label>  
+            <label  class="form_label last_date_span">Last Date : {{date("d-M-Y", strtotime($events->reg_closing_date))   }}</label>  
             </label>
           
 
