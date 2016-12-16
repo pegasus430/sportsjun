@@ -7,7 +7,10 @@
     }
     
   </style>
+
+
 <?php 
+
     $team_a_name = $user_a_name;
     $team_b_name = $user_b_name;
 
@@ -210,10 +213,9 @@ td,th{
     @if($match_data[0]['hasSetupSquad'] && $match_data[0]['match_status']!='completed' )
           <br>
        <div id='end_match_button'>
-        @if($match_data[0]['game_type']=='rubber' && !$active_rubber)
-           <button type="button" class="btn btn-danger" onclick="endMatchCompletely({{$match_data[0]['id']}})"> End Match</button>
-        @else
-          <button class="btn btn-danger soccer_buttons_disabled" onclick="return SJ.SCORECARD.soccerSetTimes(this)">End {{$match_data[0]['game_type']=='normal'?'Match':'Rubber'}}</button>  @endif
+    
+           <button type="button" class="btn btn-danger" onclick="end_match_archery()"> End Match</button>
+     
         </div>
     @endif
  @if($isValidUser && $isForApprovalExist && ($match_data[0]['winner_id']>0 || $match_data[0]['is_tied']>0 || $match_data[0]['has_result'] == 0))    
@@ -515,11 +517,17 @@ td,th{
 
 
 <!-- End Scoring -->
+
+
+<!-- End Match -->
+
+   
    @endif
 
 
   <script type="text/javascript">
 
+    var match_id     = $('#match_id').val();
 
       function add_round(){
         var distance = $('#distance').val();
@@ -692,8 +700,7 @@ td,th{
             var user_id      = $('#selected_user_id').val();
             var round_id     = $('#selected_round_id').val();
             var player_id    = $('#selected_player_id').val();
-            var arrow_number = $('#selected_arrow_number').val();
-            var match_id     = $('#match_id').val();
+            var arrow_number = $('#selected_arrow_number').val();            
             var value        = $(that).attr('value');
 
             var attr = $(that);
@@ -732,6 +739,27 @@ td,th{
               }
           })
           
+      }
+
+
+      function end_match_archery(){
+
+        $.confirm({
+            title:"Alert!",
+            content:"Are you sure you want to end this match?",
+            confirm:function(){
+                $.ajax({
+                  url:'/match/archery/end_match',
+                  type:'post',
+                  data:{match_id:match_id},
+                  success:function(){
+                      window.location = window.location;
+                  }
+              })
+            }
+        })
+
+            
       }
   </script>
 

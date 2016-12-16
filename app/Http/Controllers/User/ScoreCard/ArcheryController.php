@@ -49,7 +49,9 @@ class ArcheryController extends Controller
 
     public function archeryScorecard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=0){
           
-        
+            
+
+
         $score_a_array=array();
         $score_b_array=array();
 
@@ -116,16 +118,22 @@ class ArcheryController extends Controller
         }
         if($match_data[0]['schedule_type'] == 'player')//&& $match_data[0]['schedule_type'] == 'player'
         {
-            $user_a_name = User::where('id',$match_data[0]['a_id'])->pluck('name');
-            $user_b_name = User::where('id',$match_data[0]['b_id'])->pluck('name');
-            $user_a_logo = Photo::select()->where('imageable_id', $match_data[0]['a_id'])->where('imageable_type',config('constants.PHOTO.USER_PHOTO'))->orderBy('id', 'desc')->first();//get user logo
-            $user_b_logo = Photo::select()->where('imageable_id', $match_data[0]['b_id'])->where('imageable_type',config('constants.PHOTO.USER_PHOTO'))->orderBy('id', 'desc')->first();//get user logo
+
+
+           $user_a_name = User::where('id',$match_data[0]['a_id'])->pluck('name');
+          $user_b_name = User::where('id',$match_data[0]['b_id'])->pluck('name');
+           $user_a_logo = Photo::select()->where('imageable_id', $match_data[0]['a_id'])->where('imageable_type',config('constants.PHOTO.USER_PHOTO'))->orderBy('id', 'desc')->first();//get user logo
+           $user_b_logo = Photo::select()->where('imageable_id', $match_data[0]['b_id'])->where('imageable_type',config('constants.PHOTO.USER_PHOTO'))->orderBy('id', 'desc')->first();//get user logo
             $upload_folder = 'user_profile';
             $is_singles = 'yes';
 
 
-            $team_a_city = Helper::getUserCity($match_data[0]['a_id']);
-            $team_b_city = Helper::getUserCity($match_data[0]['b_id']);
+
+           // $team_a_city = Helper::getUserCity($match_data[0]['a_id']); 
+           // $team_b_city = Helper::getUserCity($match_data[0]['b_id']);
+
+            $team_a_city ='';
+            $team_b_city ='';
         }else
         {
             $user_a_name = Team::where('id',$match_data[0]['a_id'])->pluck('name');//team details
@@ -140,8 +148,9 @@ class ArcheryController extends Controller
             $team_b_city = Helper::getTeamCity($match_data[0]['b_id']);
         }
 
+
         //bye match
-        if(($match_data[0]['b_id']=='' || $match_data[0]['a_id']=='') && $match_data[0]['match_status']=='completed')
+        if(($match_data[0]['b_id']=='' || $match_data[0]['a_id']=='') && ($match_data[0]['match_status']=='completed' && $match_data[0]['sports_id']!=18))
         {
             $sport_class = 'archery_scorcard';
             return view('scorecards.byematchview',array('team_a_name'=>$user_a_name,'team_a_logo'=>$user_a_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'sport_class'=>$sport_class));
@@ -196,11 +205,13 @@ class ArcheryController extends Controller
             $players_b = $match_obj->archery_players($match_obj->b_id);
         }
 
+        $players_ordered = $match_obj->archery_players(null,'total');
+
 
         if(($is_from_view==1 || (!empty($score_status_array['added_by']) && $score_status_array['added_by']!=$loginUserId && $match_data[0]['scoring_status']!='rejected') || $match_data[0]['match_status']=='completed' || $match_data[0]['scoring_status']=='approval_pending' || $match_data[0]['scoring_status']=='approved' || !$isValidUser) && !$isAdminEdit)
         {
             
-                return view('scorecards.archery.archeryscorecardview',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'user_a_name'=>$user_a_name,'user_b_name'=>$user_b_name,'user_a_logo'=>$user_a_logo,'user_b_logo'=>$user_b_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'is_singles'=>$is_singles,'score_a_array'=>$score_a_array,'score_b_array'=>$score_b_array,'b_players'=>$b_players,'a_players'=>$a_players,'team_a_player_images'=>$team_a_player_images,'team_b_player_images'=>$team_b_player_images,'decoded_match_details'=>$decoded_match_details,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'match_obj'=>$match_obj,'players'=>$players,'players_a'=>$players_a,'players_b'=>$players_b,'is_from_view'=>$is_from_view));
+                return view('scorecards.archery.archeryscorecardview',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'user_a_name'=>$user_a_name,'user_b_name'=>$user_b_name,'user_a_logo'=>$user_a_logo,'user_b_logo'=>$user_b_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'is_singles'=>$is_singles,'score_a_array'=>$score_a_array,'score_b_array'=>$score_b_array,'b_players'=>$b_players,'a_players'=>$a_players,'team_a_player_images'=>$team_a_player_images,'team_b_player_images'=>$team_b_player_images,'decoded_match_details'=>$decoded_match_details,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'match_obj'=>$match_obj,'players'=>$players,'players_a'=>$players_a,'players_b'=>$players_b,'is_from_view'=>$is_from_view,'players_ordered'=>$players_ordered));
             
 
         }
@@ -209,7 +220,7 @@ class ArcheryController extends Controller
           
                 //for form submit pass id from controller
                 $form_id = 'archery';
-                return view('scorecards.archery.archeryscorecard',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'user_a_name'=>$user_a_name,'user_b_name'=>$user_b_name,'user_a_logo'=>$user_a_logo,'user_b_logo'=>$user_b_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'is_singles'=>$is_singles,'score_a_array'=>$score_a_array,'score_b_array'=>$score_b_array,'b_players'=>$b_players,'a_players'=>$a_players,'team_a_player_images'=>$team_a_player_images,'team_b_player_images'=>$team_b_player_images,'decoded_match_details'=>$decoded_match_details,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'form_id'=>$form_id,'match_obj'=>$match_obj,'players'=>$players,'players_a'=>$players_a,'players_b'=>$players_b,'is_from_view'=>$is_from_view));
+                return view('scorecards.archery.archeryscorecard',array('tournamentDetails' => $tournamentDetails, 'sportsDetails'=> $sportsDetails, 'user_a_name'=>$user_a_name,'user_b_name'=>$user_b_name,'user_a_logo'=>$user_a_logo,'user_b_logo'=>$user_b_logo,'match_data'=>$match_data,'upload_folder'=>$upload_folder,'is_singles'=>$is_singles,'score_a_array'=>$score_a_array,'score_b_array'=>$score_b_array,'b_players'=>$b_players,'a_players'=>$a_players,'team_a_player_images'=>$team_a_player_images,'team_b_player_images'=>$team_b_player_images,'decoded_match_details'=>$decoded_match_details,'score_status_array'=>$score_status_array,'loginUserId'=>$loginUserId,'rej_note_str'=>$rej_note_str,'loginUserRole'=>$loginUserRole,'isValidUser'=>$isValidUser,'isApproveRejectExist'=>$isApproveRejectExist,'isForApprovalExist'=>$isForApprovalExist,'action_id'=>$match_data[0]['id'],'team_a_city'=>$team_a_city,'team_b_city'=>$team_b_city,'form_id'=>$form_id,'match_obj'=>$match_obj,'players'=>$players,'players_a'=>$players_a,'players_b'=>$players_b,'is_from_view'=>$is_from_view,'players_ordered'=>$players_ordered));
            
         }
     }
@@ -338,5 +349,50 @@ class ArcheryController extends Controller
 
         $isValidUser=0;   
         return view('scorecards.archery.round_scoring', compact('match_obj','player','round','isValidUser'));
+    }
+
+    public function end_match(Request $request){
+          $loginUserId = Auth::user()->id;
+        
+        $tournament_id = !empty($request->tournament_id)?$request->tournament_id:NULL;
+        $match_id = !empty($request->match_id)?$request->match_id:NULL;
+        $match_data=MatchSchedule::find($match_id);
+        $match_result=!empty($request->match_result)?$request->match_result:NULL;
+        $match_type = !empty($request->match_type)?$request->match_type:NULL;
+        $player_ids_a = !empty($request->player_ids_a)?$request->player_ids_a:NULL;
+        $player_ids_b= !empty($request->player_ids_b)?$request->player_ids_b:NULL;
+        $is_singles = !empty($request->is_singles)?$request->is_singles:NULL;
+        $is_winner_inserted = !empty($request->is_winner_inserted)?$request->is_winner_inserted:NULL;
+        $winner_team_id = !empty($request->winner_team_id)?$request->winner_team_id:$is_winner_inserted;//winner_id
+
+        $team_a_players = !empty($request->a_player_ids)?$request->a_player_ids:array();//player id if match type is singles
+        $team_b_players = !empty($request->b_player_ids)?$request->b_player_ids:array();//player id if match type is singles
+
+        $schedule_type = !empty($request->schedule_type)?$request->schedule_type:NULL;
+
+       
+        $match_model = MatchSchedule::find($request->match_id);
+
+        $decode_scorecard_data = json_decode($match_model,true);
+
+        $modified_users = !empty($decode_scorecard_data['modified_users'])?$decode_scorecard_data['modified_users']:'';
+
+        $modified_users = $modified_users.','.$loginUserId;//scorecard changed users
+
+        $added_by = !empty($decode_scorecard_data['added_by'])?$decode_scorecard_data['added_by']:$loginUserId;
+
+        //score card approval process
+        $score_status = array('added_by'=>$added_by,'active_user'=>$loginUserId,'modified_users'=>$modified_users,'rejected_note'=>'');
+
+        $json_score_status = json_encode($score_status);
+
+        $match_model = MatchSchedule::find($request->match_id);
+        $match_model->match_status='completed';
+        $match_model->score_added_by=$json_score_status;
+        $match_model->save();
+
+        return 'ok';     
+
+       
     }
 }

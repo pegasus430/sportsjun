@@ -595,7 +595,7 @@
 
                 html += "<div class='col-sm-6'> <div class='section'>";
                   html += "<label class='form_label'>Player " + i +"<span  class='required'>*</span> </label>  <label class='field'><input type='text' class='gui-input select_player' type_id='"+i+"' id='player_"+i+"' name='player_"+i+"' >";                   
-                  html +="</label></div><input type='hidden' name='player_id_"+i+"'>   </div>";
+                  html +="</label></div><input type='hidden' name='player_id_"+i+"' id='player_id_"+i+"'>   </div>";
            
           }
              $('#list_number_of_players').html(html);

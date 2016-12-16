@@ -229,7 +229,7 @@ td,th{
   @endif
     <p class="match-status mg"><a href="{{ url('user/album/show').'/match'.'/0'.'/'.$action_id }}"><span class="fa" style="float: left; margin-left: 8px;"><img src=" {{ asset('/images/sc-gallery.png') }}" height="18" width="22"></span> <b>Media Gallery</b></a></p>
         @include('scorecards.share')
-        <p class="match-status">@include('scorecards.scorecardstatus')</p>
+        <p class="match-status">@include('scorecards.scorecardstatusview')</p>
     </div>
 
 
@@ -280,22 +280,8 @@ td,th{
             <tbody>
             <?php $p_index=1;?>
               <!-- If Team -->
-              @if($match_obj->schedule_type=='team')
-
-                  @foreach($players_a as $player)
-                    <tr>
-                        <td>{{$player->player_name}}  </td>
-                      @foreach($match_obj->archery_rounds as $round)
-                        <td class="a_s player_{{$p_index}}_round_{{$round->round_number}} player_{{$player->id}}_round_{{$round->round_number}}" player_id='{{$player->id}}' user_id='{{$player->user_id}}' round_number="{{$round->round_number}}" round_id="{{$round->id}}"> {{$player->{'round_'.$round->round_number} }} </td>
-
-
-                        <?php $p_index++;?>
-                      @endforeach
-                        <td class='player_{{$player->id}}_total text-primary' style="font-size:20px">{{$player->total}} </td>
-                    </tr>
-                  @endforeach
-
-                  @foreach($players_b as $player)
+            
+                  @foreach($players_ordered as $player)
                      <tr>
                           <td>{{$player->player_name}}  </td>
                       @foreach($match_obj->archery_rounds as $round)
@@ -306,21 +292,7 @@ td,th{
                         <td class='player_{{$player->id}}_total text-primary' style="font-size:20px">{{$player->total}}</td>
                     </tr>
                   @endforeach
-
-
-              @else
-                  @foreach($players as $player)
-                     <tr>
-                          <td>{{$player->player_name}}  </td>
-                      @foreach($match_obj->archery_rounds as $round)
-                        <td class="a_s player_{{$p_index}}_round_{{$round->round_number}} player_{{$player->id}}_round_{{$round->round_number}}" player_id='{{$player->id}}' user_id='{{$player->user_id}}' round_number="{{$round->round_number}}" round_id="{{$round->id}}"> {{$player->{'round_'.$round->round_number} }} </td>
-
-                        <?php $p_index++;?>
-                      @endforeach
-                        <td class='player_{{$player->id}}_total text-primary' style="font-size:20px">{{$player->total}}</td>
-                    </tr>
-                  @endforeach
-              @endif
+            
             </tbody>
           </table>
 
@@ -451,7 +423,7 @@ td,th{
 
 
               $.ajax({
-                  url:'/match/archery/load_arrow',
+                  url:'/viewpublic/match/archery/load_arrow',
                   type:'post',
                   data:{round_id:$('#selected_round_id').val(),player_id:$('#selected_player_id').val(),match_id:$('#match_id').val()},
                   success:function(response){

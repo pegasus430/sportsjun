@@ -16,6 +16,7 @@ use App\Model\Country;
 use App\Model\TournamentGroupTeams;
 use App\Model\Tournaments;
 use App\Model\MatchScheduleRubber;
+use App\Http\Controllers\User\ScoreCard\ArcheryController;
 use App\User;
 use DB;
 use Request;
@@ -1362,6 +1363,25 @@ class ScheduleController extends Controller {
                   //insert into request and notifications table
                   $request_array = array('flag'=>$request_type,'player_tournament_id'=>$a_id,'team_ids'=>array($b_id),'match_schedule_id'=>$match_schedule_id,'sports_id'=>$sports_id);
                   AllRequests::saverequest($request_array);
+
+                  // If match is archery, save players;
+
+                  if($sports_id==18 && $schedule_type=='player'){
+
+                    $match_model = matchSchedule::find($match_schedule_id);
+                    $match_model->match_invite_status = 'accepted';
+                    $match_model->save();
+
+                        $number_of_players = $request['number_of_players'];
+                        $archery_model = new ArcheryController;
+
+                        for($z=1; $z<=$number_of_players; $z++){
+                            $archery_model->insert_players_in_db($tournament_id,$match_schedule_id,null,$request['player_id_'.$z],User::find($request['player_id_'.$z])->name);
+                        }
+
+                  }
+
+
                 $results['success'] = 'Match scheduled successfully.';
             } else {
                 $results['failure'] = 'Failed to schedule the match.';
