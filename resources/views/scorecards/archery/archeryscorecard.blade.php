@@ -121,7 +121,7 @@ td,th{
 						@endif
 					  
 						  <div class="team_city">{!! $team_a_city !!}</div>
-              <div class="team_score" id="team_{{$team_a_id}}_score">{{${'team_'.$team_a_id.'_score'} }} <span><i class="fa fa-info-circle soccer_info" data-toggle="tooltip" title="<?php echo $team_a_info;?>"></i></span></div>
+              <div class="team_score" id="team_{{$team_a_id}}_score"><span><i class="fa fa-info-circle soccer_info" data-toggle="tooltip" title="<?php echo $team_a_info;?>"></i></span></div>
 						  
                           </div>
                         </div>
@@ -140,7 +140,7 @@ td,th{
 							<div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['b_id'] }}">{{ $user_b_name }}</a></div>
 						@endif
 							<div class="team_city">{!! $team_b_city !!}</div>
-              <div class="team_score" id="team_{{$team_b_id}}_score">{{${'team_'.$team_b_id.'_score'} }} <span><i class="fa fa-info-circle soccer_info" data-toggle="tooltip" title="<?php echo $team_b_info;?>"></i></span></div>
+              <div class="team_score" id="team_{{$team_b_id}}_score"> <span><i class="fa fa-info-circle soccer_info" data-toggle="tooltip" title="<?php echo $team_b_info;?>"></i></span></div>
                             </div>
                         </div>
                               <div class="col-md-4 col-sm-12">
@@ -165,7 +165,7 @@ td,th{
 							<div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['b_id'] }}">{{ $user_b_name }}</a></div>
 						@endif
 							<div class="team_city">{!! $team_b_city !!}</div>
-              <div class="team_score" id="team_{{$team_b_id}}_score">{{${'team_'.$team_b_id.'_score'} }} <span><i class="fa fa-info-circle soccer_info" data-toggle="tooltip" title="<?php echo $team_b_info;?>"></i></span></div>
+              <div class="team_score" id="team_{{$team_b_id}}_score"><span><i class="fa fa-info-circle soccer_info" data-toggle="tooltip" title="<?php echo $team_b_info;?>"></i></span></div>
                             </div>
                         </div>
                     </div>
@@ -192,9 +192,11 @@ td,th{
                     </div>
                 </div>
             </div>
-			<h5 class="scoreboard_title">Squash Scorecard @if($match_data[0]['match_type']!='other')
+			<h5 class="scoreboard_title">Archery Scorecard @if($match_data[0]['match_type']!='other')
 											<span class='match_type_text'>({{ $match_data[0]['match_type']=='odi'?strtoupper($match_data[0]['match_type']):ucfirst($match_data[0]['match_type'])}} , {{ucfirst($match_data[0]['match_category'] )}})</span>
 									@endif</h5>
+
+            <h5 class="scoreboard_title"> No of Athlets : {{$match_obj->archery_players()->count()}} </h5>
         </div>
           @if (session('status'))
           <div class="alert alert-success">{{ session('status') }}</div>
@@ -642,6 +644,36 @@ td,th{
       
 
       //$('.player_1_round_1').css({background:'#ff8888'}).addClass('selected');
+
+      //initialization
+
+      function init(){
+
+        var that= $('.player_1_round_1');
+              $('.a_s').removeClass('selected').css({background:'inherit'});
+              $(that).css({background:'#ff8888'}).addClass('selected');
+              $('#selected_arrow_number').val('');
+
+              $('#selected_round_number').val($(that).attr('round_number'))
+              $('#selected_user_id').val($(that).attr('user_id'))
+              $('#selected_round_id').val($(that).attr('round_id'))
+              $('#selected_player_id').val($(that).attr('player_id')) 
+
+              $.ajax({
+                  url:'/match/archery/load_arrow',
+                  type:'post',
+                  data:{round_id:$('#selected_round_id').val(),player_id:$('#selected_player_id').val(),match_id:$('#match_id').val()},
+                  success:function(response){
+                      $('#load_round_details').html(response);
+                      $('#load_round_details').show();
+                  }
+              }) 
+        }
+
+      $(document).ready(function(){
+          setTimeout(init,1000)
+        //init();
+      })
 
 
       function clear_selected(){
