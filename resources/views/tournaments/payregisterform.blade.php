@@ -15,7 +15,7 @@ $lis = $tournament_data->toArray();
 <br>
 <div class="form-header header-primary register_form_head">
 
-<h4 class='register_form_title'>{{$parent_tournament_details->name}}</h4><br><br>
+<h4 class='register_form_title'>{{$parent_tournament_details->name}} - {{$tournament_data->name}}</h4><br><br>
 <?php
 // $open_timestamp = strtotime($tournament_data->reg_opening_date);
 // $open_day = date('D', $open_timestamp);
