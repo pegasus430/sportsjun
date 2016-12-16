@@ -271,5 +271,16 @@ class MatchSchedule extends Model
         return $this->hasMany('App\Model\RefereeSchedule', 'match_id');    
     }
 
+   public function archery_rounds(){
+        return $this->hasMany('App\Model\ArcheryRound', 'match_id');
+   }
+
+   public function archery_players($team_id=null){
+        $players = $this->hasMany('App\Model\ArcheryPlayerStats','match_id');
+        if($team_id) $players = $players->where('team_id',$team_id);
+
+        return $players->get();
+   }
+
 
 }

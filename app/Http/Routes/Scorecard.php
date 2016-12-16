@@ -168,8 +168,18 @@ Route::group(['prefix'=>'match'], function(){
      Route::get('end_match_completely_squash/{match_id?}', 'User\ScoreCard\SquashScoreCardController@endMatchCompletely');
      Route::get('end_match_completely_tennis/{match_id?}', 'User\ScoreCard\TennisScoreCardController@endMatchCompletely');
 
+    Route::get('allow_match_edit_by_admin', 'User\ScoreCardController@allow_match_edit_by_admin');
 
-     Route::get('allow_match_edit_by_admin', 'User\ScoreCardController@allow_match_edit_by_admin');
+
+
+     //Archery Scoring
+    Route::post('archery/add_round', 'User\ScoreCard\ArcheryController@add_round');
+    Route::post('archery/insert_players', 'User\ScoreCard\ArcheryController@insert_players');
+    Route::post('archery/start_scoring',  'User\ScoreCard\ArcheryController@start_scoring');
+    Route::post('archery/arrow_scoring', 'User\ScoreCard\ArcheryController@arrow_scoring');
+    Route::post('archery/load_arrow',    'User\ScoreCard\ArcheryController@load_arrow');
+
+
 });
 
 //End Matches

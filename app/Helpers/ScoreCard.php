@@ -47,6 +47,7 @@ use App\Model\TtPlayerMatchScore;
 use App\Model\TtPlayerRubberScore;
 use App\Model\TtStatistic;
 use App\Model\TennisSet;
+use App\Model\ArcheryArrowStats;
 
 
 class ScoreCard {
@@ -237,6 +238,22 @@ class ScoreCard {
 	public static function get_referees($match_id){
 		return MatchSchedule::find($match_id)->referees;
 	}
+
+	public static function get_arrow_stats($match_id,$user_id,$round_id,$round_number){
+
+    $check = ArcheryArrowStats::where(['match_id'=>$match_id,'user_id'=>$user_id,'round_id'=>$round_id])->first();
+    if($check) return $check;
+
+        $ars = new ArcheryArrowStats;
+        $ars->user_id = $user_id;
+        $ars->match_id = $match_id;
+        $ars->round_id = $round_id;
+        $ars->round_number = $round_number;
+
+        $ars->save();
+
+        return $ars;
+    }
 
 
 

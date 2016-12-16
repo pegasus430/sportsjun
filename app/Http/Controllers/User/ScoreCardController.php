@@ -230,6 +230,12 @@ class ScoreCardController extends Controller {
 					$basketball = new ScoreCard\BasketballScoreCardController;
 					return $basketball->basketballScoreCard($match_data,$sportsDetails,$tournamentDetails);
 				}
+
+				else if(strtolower($sport_name)==strtolower('archery'))
+				{
+					$archery = new ScoreCard\ArcheryController;
+					return $archery->archeryScoreCard($match_data,$sportsDetails,$tournamentDetails);
+				}
 			}
 		}
 	}
@@ -3608,6 +3614,12 @@ class ScoreCardController extends Controller {
 						$hockey= new ScoreCard\WaterPoloScorecardController;
 				  return $hockey->waterpoloScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
+
+				else if(strtolower($sport_name)==strtolower('archery'))
+				{
+					$archery = new ScoreCard\ArcheryController;
+					return $archery->archeryScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
 				
 			}
 		}
@@ -3699,6 +3711,12 @@ class ScoreCardController extends Controller {
 				{
 						$hockey= new ScoreCard\WaterPoloScorecardController;
 				  return $hockey->waterpoloScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
+
+				else if(strtolower($sport_name)==strtolower('archery'))
+				{
+					$archery = new ScoreCard\ArcheryController;
+					return $archery->archeryScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
 			}
 		}

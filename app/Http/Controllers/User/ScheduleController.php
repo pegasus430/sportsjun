@@ -1051,7 +1051,10 @@ class ScheduleController extends Controller {
                         ->join('user_statistics', 'users.id', '=', 'user_statistics.user_id')
                         ->distinct()
                         ->select('users.id', 'users.name')
-                        ->where('user_statistics.allowed_player_matches', 'LIKE', '%' . ','.$sport_id.',' . '%')
+                        ->where(function($query) use ($sport_id) {
+                            $query->where('user_statistics.allowed_player_matches', 'LIKE', '%' . ','.$sport_id.',' . '%')
+                                  ->orWhere('teams.sports_id','=',$sport_id);
+                            })
                         ->where('users.name', 'LIKE', '%' . $search_team . '%')
                         ->whereNotIn('users.id', [$team_id])
                         ->whereNull('teams.deleted_at')
