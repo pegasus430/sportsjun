@@ -18,16 +18,16 @@ Route::group(array('middleware' => 'role'), function() {
        });
     //
     Route::group(['as'=>'admin.pages.',"prefix"=>"admin","namespace"=>"admin"],function($router){
-        $router->model('page',\App\Model\Page::class);
+        $router->model('dbpage',\App\Model\Page::class);
 
         $router->get('pages',['as'=>'index','uses'=>'PagesController@index']);
         $router->get('pages/blocks',['as'=>'blocks','uses'=>'PagesController@blocks']);
         $router->get('pages/create',['as'=>'add','uses'=>'PagesController@create']);
         $router->post('pages/create',['as'=>'create','uses'=>'PagesController@store']);
 
-        $router->get('pages/{page}',['as'=>'edit','uses'=>'PagesController@edit']);
-        $router->put('pages/{page}','PagesController@update');
-        $router->delete('pages/{page}',['as'=>'delete','uses'=>'PagesController@delete']);
+        $router->get('pages/{dbpage}',['as'=>'edit','uses'=>'PagesController@edit']);
+        $router->put('pages/{dbpage}','PagesController@update');
+        $router->delete('pages/{dbpage}',['as'=>'delete','uses'=>'PagesController@delete']);
 
 
 
