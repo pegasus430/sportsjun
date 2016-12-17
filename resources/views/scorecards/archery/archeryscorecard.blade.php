@@ -78,8 +78,8 @@ td,th{
     color: white;
 }
 .btn-arrow{
-    background: #ff8888;
-    color: white;
+    background: #fd9242;
+    color: black;
     height:65px;
     border-radius: 50%;
     margin-left: 10px;
@@ -97,83 +97,10 @@ td,th{
 
 
 </style>
-<div class="col_standard table_tennis_scorcard">
-    <div id="team_vs" class="tt_bg">
+<div class="col_standard archery_scorecard ">
+    <div id="team_vs" class="ac_bg">
       <div class="container">
-          <div class="row">
-                <div class="team team_one col-xs-5">
-                    <div class="row">
-                        <div class="col-md-4 col-sm-12">
-                        	<div class="team_logo">
-                       
-						 @if($user_a_logo['url']!='')
-							<!--<img class="img-responsive img-circle" width="110" height="110" src="{{ url('/uploads/'.$upload_folder.'/'.$user_a_logo['url']) }}" onerror="this.onerror=null;this.src='{{ asset('/images/default-profile-pic.jpg') }}';">-->
-							{!! Helper::Images($user_a_logo['url'],$upload_folder,array('class'=>'img-responsive img-circle','height'=>110,'width'=>110) )!!}	
-							@else
-							<!--<img  class="img-responsive img-circle" width="110" height="110" src="{{ asset('/images/default-profile-pic.jpg') }}">-->
-							{!! Helper::Images('default-profile-pic.jpg','images',array('class'=>'img-responsive img-circle','height'=>110,'width'=>110) )!!}	
-						@endif
-                        </div>
-                        </div>
-                       <div class="col-md-8 col-sm-12">
-                        	<div class="team_detail">
-						@if($match_data[0]['schedule_type']=='player')
-                          <div class="team_name"><a href="{{ url('/editsportprofile/'.$match_data[0]['a_id'])}}">{{ $user_a_name }}</a></div>
-						@else
-							<div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['a_id'] }}">{{ $user_a_name }}</a></div>
-						@endif
-					  
-						  <div class="team_city">{!! $team_a_city !!}</div>
-              <div class="team_score" id="team_{{$team_a_id}}_score"><span><i class="fa fa-info-circle soccer_info" data-toggle="tooltip" title="<?php echo $team_a_info;?>"></i></span></div>
-						  
-                          </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xs-2">
-                    <span class="vs"></span>
-                </div>
-                <div class="team team_two col-xs-5">
-                  <div class="row">
-                        <div class="col-md-8 col-sm-12 visible-md visible-lg">
-                        <div class="team_detail">
-						@if($match_data[0]['schedule_type']=='player')
-                          <div class="team_name"><a href="{{ url('/editsportprofile/'.$match_data[0]['b_id'])}}">{{ $user_b_name }}</a></div>
-						@else
-							<div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['b_id'] }}">{{ $user_b_name }}</a></div>
-						@endif
-							<div class="team_city">{!! $team_b_city !!}</div>
-              <div class="team_score" id="team_{{$team_b_id}}_score"> <span><i class="fa fa-info-circle soccer_info" data-toggle="tooltip" title="<?php echo $team_b_info;?>"></i></span></div>
-                            </div>
-                        </div>
-                              <div class="col-md-4 col-sm-12">
-                              	<div class="team_logo">
-                                
-                                
-								
-								 @if($user_b_logo['url']!='')
-              <!--  <img class="img-responsive img-circle" width="110" height="110" src="{{ url('/uploads/'.$upload_folder.'/'.$user_b_logo['url']) }}" onerror="this.onerror=null;this.src='{{ asset('/images/default-profile-pic.jpg') }}';">-->
-		  	{!! Helper::Images($user_b_logo['url'],$upload_folder,array('class'=>'img-responsive img-circle','height'=>110,'width'=>110) )!!}	
-                @else
-              <!--  <img  class="img-responsive img-circle"width="110" height="110" src="{{ asset('/images/default-profile-pic.jpg') }}">-->
-		  {!! Helper::Images('default-profile-pic.jpg','images',array('class'=>'img-responsive img-circle','height'=>110,'width'=>110) )!!}	
-              @endif
-              </div>
-                              </div>
-                              <div class="col-md-8 col-sm-12 visible-xs visible-sm">
-                         <div class="team_detail">
-						@if($match_data[0]['schedule_type']=='player')
-                          <div class="team_name"><a href="{{ url('/editsportprofile/'.$match_data[0]['b_id'])}}">{{ $user_b_name }}</a></div>
-						@else
-							<div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['b_id'] }}">{{ $user_b_name }}</a></div>
-						@endif
-							<div class="team_city">{!! $team_b_city !!}</div>
-              <div class="team_score" id="team_{{$team_b_id}}_score"><span><i class="fa fa-info-circle soccer_info" data-toggle="tooltip" title="<?php echo $team_b_info;?>"></i></span></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+         
 
                 @if(!is_null($match_data[0]['tournament_id']))
                 <div class='row'>
@@ -247,20 +174,6 @@ td,th{
 
       @if(!$match_data[0]['hasSetupSquad'] )     
 
-            <div class="row">
-              <div class="col-sm-12">
-
-               <div> <span color='red'>Note :</span> Please add round to this match to score further</div>
-
-              <div class="pull-right">
-                <a href='javascript:void(0)' class="text-primary" data-toggle='modal' data-target='#new_round_modal'>
-                  <button type="button" class="btn btn-large btn-circle btn-danger"><i class="fa fa-plus"></i></button>
-                  Add new round
-                  </a>
-              </div>
-
-              </div>
-            </div>
 
             <div class="clearfix">
             <div class="row">
@@ -378,6 +291,27 @@ td,th{
                 </div>
 
                 @endif
+
+
+
+            <div class="row">
+            
+              <div class="col-sm-12">
+                <br>
+                  <hr>
+                  <div class="pull-right">
+                <a href='javascript:void(0)' class="btn btn-danger" data-toggle='modal' data-target='#new_round_modal'>
+                  <i class="fa fa-plus"></i>
+                  Add new round
+                  </a>
+              </div>
+
+               <div> <span color='red'>Note :</span> Please add round to this match to score further</div>
+
+            
+
+              </div>
+            </div>
 
           <!-- New round Modal -->
 
@@ -644,9 +578,10 @@ td,th{
 
 
       function btn_arrow_click(that){
-           $('.btn-arrow').css({background:'#ff8888'});
+           $('.btn-arrow').css({background:'#fd9242',color:'black'});
            $('#selected_arrow_number').val($(that).attr('arrow_number'));
-           $(that).css({background:'green'})
+           $(that).css({background:'green',color:'white'})
+           $('.btn-pink').css({background:'#9050ff'});
       }
 
       
@@ -733,6 +668,8 @@ td,th{
                   }
 
                   $('.player_'+player_id+'_total').html(response.total);
+
+                  $('#arrow_'+arrow_number).html(value);
               },
               error:function(){
                   //attr.css({background:'green'});

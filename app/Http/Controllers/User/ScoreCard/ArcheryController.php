@@ -319,14 +319,32 @@ class ArcheryController extends Controller
         $arrow_stats->save();
 
         $player_stats = ArcheryPlayerStats::find($request->player_id);
-        $player_stats->{'round_'.$request->round_number} += $value;
+        $player_stats->{'round_'.$request->round_number} = $this->arrow_sum($arrow_stats);
 
-        $player_stats->total += $value;
+        $player_stats->total = $this->round_sum($player_stats);
 
         $player_stats->save();
 
         return $player_stats;
 
+    }
+
+    public function round_sum($player_stats){
+        $total=0;
+        for($i=1;$i<=10;$i++){
+            $total+=$player_stats->{'round_'.$i};
+        }   
+
+        return $total;
+    }
+
+    public function arrow_sum($arrow_stats){
+        $total=0;
+        for($i=1;$i<=10;$i++){
+            $total+=$arrow_stats->{'arrow_'.$i};
+        }   
+
+        return $total;
     }
 
     public function load_arrow(Request $request){
