@@ -642,7 +642,7 @@
 
               console.log($(this));
 
-                $('#player_'+type_id).val(ui.item.id);
+                $('#player_id_'+type_id).val(ui.item.id);
                 //('#team_name').val(ui.item.value);
             }
         });
