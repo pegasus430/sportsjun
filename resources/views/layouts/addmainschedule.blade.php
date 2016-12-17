@@ -55,11 +55,33 @@
                 <i class="arrow double"></i>
               </label>
             </div>
-            </div>
-            
+      </div>            
 		</div>
 
-		<div class="row">
+      <!-- Start Archery Module -->
+
+      <div id='archery' style="display:none">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="section">
+                     <label class="form_label">{{   trans('message.schedule.fields.number_of_players') }}<span  class='required'>*</span> </label>             
+                    <label class="field">
+                    <input id="number_of_players" name="number_of_players" class="gui-input" type="number" onchange="load_number_of_players_html(this)">
+                    </label>                             
+            
+                </div>
+            </div> 
+        </div>
+
+        <div class="row" id='list_number_of_players'>
+            
+        </div>
+
+        </div>
+
+      <!-- Stop Archery Module -->
+
+		<div class="row non-archery">
         	<div class="col-sm-6">
                 <div class="section">
                   <label class="form_label">{{   trans('message.schedule.fields.myteam') }} <span  class='required'>*</span> </label>              
@@ -244,6 +266,16 @@
           $("#main_player_type option[value='mixed']").remove();
           $("#main_match_type option[value='doubles']").remove();
           $("#main_match_type option[value='mixed']").remove();
+
+          //archery 
+            var selected_sport_id = $('#main_sports_id').val();
+
+            if(selected_sport_id==18){
+                $('#archery').show();
+                $('.non-archery').hide();
+            }
+
+          //stop archery
       }
       else
       {
@@ -254,6 +286,9 @@
         var selected_sport = $("#main_sports_id option:selected").text();
         selected_sport = selected_sport.toUpperCase();
         buildmatchtypediv(selected_sport);
+
+              $('#archery').hide();
+              $('.non-archery').show();
       }
     });
     if($('#main_scheduletype').val()==='team')
@@ -417,6 +452,12 @@
             buildmyteamdiv('');
             buildmatchtypediv(selected_sport);
        }
+
+       // Archery Module
+
+
+
+       // stop Archery Module
       
     });
     function buildmyteamdiv(flag)
@@ -541,4 +582,69 @@
     return o;
   }
 
+</script>
+
+
+<!-- Archery Module -->
+
+<script type="text/javascript">
+      function load_number_of_players_html(that){
+          var number_of_players = $(that).val();
+          var html ='';
+          for(i=1; i<=number_of_players; i++){
+
+                html += "<div class='col-sm-6'> <div class='section'>";
+                  html += "<label class='form_label'>Player " + i +"<span  class='required'>*</span> </label>  <label class='field'><input type='text' class='gui-input select_player' type_id='"+i+"' id='player_"+i+"' name='player_"+i+"' >";                   
+                  html +="</label></div><input type='hidden' name='player_id_"+i+"' id='player_id_"+i+"'>   </div>";
+           
+          }
+             $('#list_number_of_players').html(html);
+             init_players();
+
+             //populate the first player
+            var user_id = '{{isset(Auth::user()->id)?Auth::user()->id:0}}';
+            var user_name = '{{isset(Auth::user()->name)?Auth::user()->name:''}}';      
+            $('#player_1').val(user_name);
+            $('#player_id_1').val(user_id);
+      }
+
+
+    function init_players(){
+       $(".select_player").autocomplete({
+            source:  function(request, response) {
+                    var main_scheduletype = '';
+                    if ($('#main_scheduletype').val() != null)
+                    {
+                            main_scheduletype = $('#main_scheduletype').val();
+                    }
+                    else if (typeof SJ.TEAM.scheduleType !== 'undefined')
+                    {
+                            main_scheduletype = SJ.TEAM.scheduleType;
+                    }
+                  $.ajax({
+                      url: base_url+"/oppositeteamdetails",
+                      dataType:'json',
+                      data: {
+                          team_id:$("#main_my_team_id").val(),
+                          sport_id:$("#main_sports_id").val(),
+                          scheduled_type:main_scheduletype,
+                          term: request.term
+                      },
+                    success: function (data){
+                        response(data);
+                     }
+                  });
+              },
+            minLength: 3,
+            select: function(event, ui) {
+
+              var type_id = $(this).attr('type_id');
+
+              console.log($(this));
+
+                $('#player_'+type_id).val(ui.item.id);
+                //('#team_name').val(ui.item.value);
+            }
+        });
+      }
 </script>

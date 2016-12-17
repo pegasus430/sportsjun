@@ -524,12 +524,12 @@
                        <button style="position:absolute; margin-left:25%;" class="btn" id='end_set'> End Set </button>
                        </center>
                     <center>
-                    <button class='btn btn-danger btn-circle' type='team_a' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_model->user_id_a}}" score_id="{{$score_a_array['id']}}">15</button>
-                    <button class='btn btn-danger btn-circle' type='team_a' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_model->user_id_a}}" score_id="{{$score_a_array['id']}}">30</button>
-                    <button class='btn btn-danger btn-circle' type='team_a' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_model->user_id_a}}" score_id="{{$score_a_array['id']}}">40</button>
-                    <button class='btn btn-danger btn-circle btn-ace' type='team_a' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_model->user_id_a}}" score_id="{{$score_a_array['id']}}">Ace</button>
-                    <button class='btn btn-danger btn-circle btn-ace' type='team_a' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_model->user_id_a}}" score_id="{{$score_a_array['id']}}">DB</button>
-                    <button class='btn btn-danger btn-circle ' type='team_a' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_model->user_id_a}}" score_id="{{$score_a_array['id']}}">Win</button>
+                    <button class='btn btn-danger btn-circle' type='team_a' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_array['user_id_a']}}" score_id="{{$score_a_array['id']}}">15</button>
+                    <button class='btn btn-danger btn-circle' type='team_a' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_array['user_id_a']}}" score_id="{{$score_a_array['id']}}">30</button>
+                    <button class='btn btn-danger btn-circle' type='team_a' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_array['user_id_a']}}" score_id="{{$score_a_array['id']}}">40</button>
+                    <button class='btn btn-danger btn-circle btn-ace' type='team_a' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_array['user_id_a']}}" score_id="{{$score_a_array['id']}}">Ace</button>
+                    <button class='btn btn-danger btn-circle btn-ace' type='team_a' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_array['user_id_a']}}" score_id="{{$score_a_array['id']}}">DB</button>
+                    <button class='btn btn-danger btn-circle ' type='team_a' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_array['user_id_a']}}" score_id="{{$score_a_array['id']}}">Win</button>
                     </center>
                 </div>
                 <div class="col-sm-6 pull-left">
@@ -538,12 +538,12 @@
                          <a style="font-size:30px; text-align:center" id='team_b_game_score'> {{$game->team_b_score}} </a> 
                     </center>
                     <center>
-                    <button class='btn btn-danger btn-circle' type='team_b' value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_model->user_id_a}}" score_id="{{$score_b_array['id']}}">15</button>
-                    <button class='btn btn-danger btn-circle' type='team_b'  value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_model->user_id_a}}" score_id="{{$score_b_array['id']}}">30</button>
-                    <button class='btn btn-danger btn-circle' type='team_b' value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_model->user_id_a}}" score_id="{{$score_b_array['id']}}">40</button>
-                    <button class='btn btn-danger btn-circle btn-ace' type='team_b' value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_model->user_id_a}}" score_id="{{$score_b_array['id']}}">Ace</button>
-                    <button class='btn btn-danger btn-circle btn-ace' type='team_b' value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_model->user_id_a}}" score_id="{{$score_b_array['id']}}">DB</button>
-                    <button class='btn btn-danger btn-circle ' type='team_b' value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_model->user_id_a}}" score_id="{{$score_b_array['id']}}">Win</button>
+                    <button class='btn btn-danger btn-circle' type='team_b' value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_array['user_id_a']}}" score_id="{{$score_b_array['id']}}">15</button>
+                    <button class='btn btn-danger btn-circle' type='team_b'  value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_array['user_id_a']}}" score_id="{{$score_b_array['id']}}">30</button>
+                    <button class='btn btn-danger btn-circle' type='team_b' value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_array['user_id_a']}}" score_id="{{$score_b_array['id']}}">40</button>
+                    <button class='btn btn-danger btn-circle btn-ace' type='team_b' value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_array['user_id_a']}}" score_id="{{$score_b_array['id']}}">Ace</button>
+                    <button class='btn btn-danger btn-circle btn-ace' type='team_b' value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_array['user_id_a']}}" score_id="{{$score_b_array['id']}}">DB</button>
+                    <button class='btn btn-danger btn-circle ' type='team_b' value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_array['user_id_a']}}" score_id="{{$score_b_array['id']}}">Win</button>
                     </center>
                 </div>
 
@@ -564,7 +564,7 @@
                 <div  class="col-sm-6 col-xs-6" style="">
                     @if(!is_null($score_a_array['team_id']))<b>{{$score_a_array['team_name']}}</b><br>@endif 
                       <div class="col-xs-4">
-                          <a href="javascript:void(0)" class="tb_scoring"  style="color:red; font-size:30px" type="team_a" action='remove' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_model->user_id_a}}">
+                          <a href="javascript:void(0)" class="tb_scoring"  style="color:red; font-size:30px" type="team_a" action='remove' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_array['user_id_a']}}">
                               <i class="fa fa-caret-left"> </i>
                           </a>
                       </div>
@@ -572,7 +572,7 @@
                             {{$score_a_array['set'.$current_set.'_tie_breaker']}}
                       </div>
                       <div class="col-xs-4">
-                           <a href="javascript:void(0)" class="tb_scoring"  style="color:green; font-size:30px" type="team_a" action='add' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_model->user_id_a}}">
+                           <a href="javascript:void(0)" class="tb_scoring"  style="color:green; font-size:30px" type="team_a" action='add' value="{{!empty($score_a_array['team_id'])?$score_a_array['team_id']:$score_a_array['user_id_a']}}">
                               <i class="fa fa-caret-right"> </i>
                           </a>
                       </div>
@@ -582,7 +582,7 @@
                     @if(!is_null($score_b_array['team_id']))<b>{{$score_b_array['team_name']}}</b><br>@endif 
 
                     <div class="col-sm-4 col-xs-4">
-                          <a href="javascript:void(0)" class="tb_scoring"  style="color:red; font-size:30px" type="team_b" action='remove' value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_model->user_id_a}}" >
+                          <a href="javascript:void(0)" class="tb_scoring"  style="color:red; font-size:30px" type="team_b" action='remove' value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_array['user_id_a']}}" >
                               <i class="fa fa-caret-left"> </i>
                           </a>
                       </div>
@@ -590,7 +590,7 @@
                          {{$score_b_array['set'.$current_set.'_tie_breaker']}}
                       </div>
                       <div class="col-sm-4 col-xs-4">
-                           <a href="javascript:void(0)" class="tb_scoring" style="color:green; font-size:30px" type="team_b" action='add' value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_model->user_id_a}}">
+                           <a href="javascript:void(0)" class="tb_scoring" style="color:green; font-size:30px" type="team_b" action='add' value="{{!empty($score_b_array['team_id'])?$score_b_array['team_id']:$score_b_array['user_id_a']}}">
                               <i class="fa fa-caret-right"> </i>
                           </a>
                       </div>
@@ -886,7 +886,7 @@
 
 
                   <div class="modal-footer">
-                    <button class='btn btn-primary  ' onclick="" type='submit'> Save</button>
+                    <button class='btn btn-primary end_match_btn_submit  ' onclick="" type='submit'> Save</button>
                     <button type="button" class="button btn-secondary" data-dismiss="modal">Cancel</button>
                   </div>
                 </div>

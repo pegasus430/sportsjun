@@ -1461,7 +1461,7 @@ function filterDiv(that, index){
 
     
     $("button[type=submit]").click(function(){      
-        $(this).hide();             
+       // $(this).hide();             
     })
 
     $('.end_match_btn_submit').click(function(){

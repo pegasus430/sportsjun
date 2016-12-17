@@ -2928,3 +2928,16 @@ h4.right_head a {
     padding: 5px;
     border-radius: 3px;
 }
+
+
+.row.inner_events.inner_reg {
+    padding: 10px 3px;
+    background-color: #EEB;
+}
+
+
+.row.head_reg {
+    background-color: #eee;
+    padding: 10px 3px;
+    border: 1px solid #000;
+}

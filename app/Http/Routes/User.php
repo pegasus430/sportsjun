@@ -554,6 +554,10 @@ Route::post('schedule/getmymanagingteams', [
     'as'   => 'schedule/getmymanagingteams',
     'uses' => 'User\ScheduleController@getmymanagingteams',
 ]);
+Route::get('schedule/getmymanagingteams', [
+    'as'   => 'schedule/getmymanagingteams',
+    'uses' => 'User\ScheduleController@getmymanagingteams',
+]);
 //End Schedules
 
 //My Schedules

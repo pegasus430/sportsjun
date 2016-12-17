@@ -685,7 +685,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 
 
 									<div class="modal-footer">
-									 <button class='btn btn-primary f' onclick="" type='submit' > Save</button>
+									 <button class='btn btn-primary f end_match_btn_submit' onclick="" type='submit' > Save</button>
 										<button type="button" class="button btn-secondary" data-dismiss="modal">Cancel</button>
 									</div>
 								</div>

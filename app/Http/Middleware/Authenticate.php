@@ -84,8 +84,6 @@ class Authenticate
                                 {
                                         return redirect(url('/showsportprofile', [$this->auth->user()->id]));
                                 }
-                        } else {
-                            return redirect(route('user.edit', [$this->auth->user()->id]));
                         }
                 }
                 return $next($request);

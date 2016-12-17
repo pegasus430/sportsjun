@@ -729,7 +729,7 @@
 
 
                   <div class="modal-footer">
-                    <button class='btn btn-primary  ' onclick="" type='submit' id='disable_on_click'> Save</button>
+                    <button class='btn btn-primary end_match_btn_submit ' onclick="" type='submit' id='disable_on_click'> Save</button>
                     <button type="button" class="button btn-secondary" data-dismiss="modal">Cancel</button>
                   </div>
                 </div>

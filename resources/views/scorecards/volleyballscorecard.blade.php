@@ -671,7 +671,9 @@ input:read-only {
 					     
 
 					        <a href='javascript:void(0)' onclick="enableManualEditing(this)" style="color:#123456;">edit <i class='fa fa-pencil'></i></a> 
-					        <span> &nbsp; &nbsp; </span>					       
+					        <span> &nbsp; &nbsp; </span>						   
+       						<a href='javascript:void(0)' onclick="updatePreferences(this)" style='color:#123456;'> settings <i class='fa fa-gear fa-danger'></i></a>
+        <span> &nbsp; &nbsp; </span>				       
 					    </span>
 					    </div>
   					</div>
@@ -924,7 +926,7 @@ input:read-only {
 									
 
 									<div class="modal-footer">
-										<button class='btn btn-primary ' onclick="" type='submit'> Save</button>
+										<button class='btn btn-primary end_match_btn_submit' onclick="" type='submit'> Save</button>
 										<button type="button" class="button btn-secondary" data-dismiss="modal">Cancel</button>
 									</div>
 								</div>
@@ -1170,11 +1172,58 @@ input:read-only {
 	</div>
 	</div>
 
+ @if($match_data[0]['hasSetupSquad'] ) 
+  <div id="updatePreferencesModal" class="modal fade">
+            <div class="modal-dialog sj_modal sportsjun-forms">
+              <div class="modal-content">
+                <div class="alert alert-danger" id="div_failure1"></div>
+                <div class="alert alert-success" id="div_success1" style="display:none;"></div>
+                <div class="modal-body">
 
->
+                <form onsubmit="" id='updatePreferencesForm'>
+                  <div class='row'>
+                     <div class="col-sm-12"><center><h3>Update Preferences</h3> </center></div>
+                    <div class='col-sm-4'>
+                        <label>Number of Sets</label>
+                        <select class='form-control select-picker' name='number_of_sets' >
+                            <option value=1  {{$preferences->number_of_sets==1?'selected':''}}>1</option>
+                            <option value=2  {{$preferences->number_of_sets==2?'selected':''}}>2</option>
+                            <option value=3 {{$preferences->number_of_sets==3?'selected':''}}>3</option>
+                            <option value=4 {{$preferences->number_of_sets==4?'selected':''}}>4</option>
+                            <option value=5 {{$preferences->number_of_sets==5?'selected':''}}>5</option>
+                        </select>
+                      {!!csrf_field()!!}
+                      <input type='hidden' name='match_id' value="{{$match_data[0]['id']}}">
+                        <input type='hidden' name='game_type' value="{{$match_data[0]['game_type']}}
+                      ">
+                      @if($match_data[0]['game_type']=='rubber' && isset($score_a_array['rubber_id']))
+                        <input type='hidden' name='rubber_id' value="{{$score_a_array['rubber_id']}}">
+                      @endif   
+                                           
+                    </div>
 
+                    <div class='col-sm-4'>
+                        <label>Set End Point</label>
+                        <input type='text' name='set_end_point' class="form-control gui-input allownumewithdecimal" required="" value="{{$preferences->end_point}}" >
 
+                    </div>
 
+                                                    
+                                  
+                    </div>    
+                  </form>
+                  </div>            
+
+                    <div class="modal-footer">
+                    <button class='button btn btn-primary ' onclick="return updatePreferencesSave(this)" type='submit'> Save</button></center>
+                    <button type="button" class="button btn-secondary" data-dismiss="modal">Cancel</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+@endif
 
 
 
@@ -1879,6 +1928,36 @@ var manual=false;
                        });
                   return false;
               } 
+       </script>
+
+
+       <script type="text/javascript">
+       		
+     function updatePreferences(that){
+          $('#updatePreferencesModal').modal('show');
+     }
+
+     function updatePreferencesSave(){
+          var data=$('#updatePreferencesForm').serialize();
+
+          $.confirm({
+            title:"Alert",
+            content: "Update Preferences?",
+            confirm: function(){
+                                  $.ajax({
+                                  url:base_url+"/match/volleyBallupdatePreferences",
+                                  type:'post', 
+                                  data:data,
+                                  success:function(){
+                                      window.location=window.location
+                                  }         
+
+                                 })
+                             }
+            })
+            
+          return false;
+     }
        </script>
 
 @endsection

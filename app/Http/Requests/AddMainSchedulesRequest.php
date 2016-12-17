@@ -30,7 +30,7 @@ class AddMainSchedulesRequest extends Request {
       'main_sports_id' => 'required',
       'main_scheduletype' => 'required',
       'main_myteam' => 'required',
-      'main_oppteam' => 'required',
+      //'main_oppteam' => 'required',
       'main_match_start_date' => 'required|date_format:'.config('constants.DATE_FORMAT.VALIDATION_DATE_FORMAT'),
       'main_match_start_time' => 'date_format:'.config('constants.DATE_FORMAT.VALIDATION_TIME_FORMAT'),
       // 'start_time' => 'required|',
