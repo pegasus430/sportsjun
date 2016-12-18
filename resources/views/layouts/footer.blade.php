@@ -50,6 +50,7 @@ function setNavigation() {
     });
 }
 $(document).ready(function(){
+    $('.selectpicker').selectpicker();
   jQuery("img.lazy").lazyload({
         effect: "fadeIn",
         effectTime: 1000,
@@ -132,9 +133,7 @@ $('#page-wrapper').css('margin','0px 0px 0px 0px');
         $('#timedOutSession').timer();
     }, 1000000);
 @endif
-window.onload = function() {
-    $('.selectpicker').selectpicker();
-};
+
 </script>
 <!-- Session Expired or not checking -->
 <!-- http://stackoverflow.com/questions/29089191/laravel-5-checking-if-the-user-session-has-expired -->

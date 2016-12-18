@@ -22,6 +22,7 @@ function hideMessg() {
 }
 
 $(document).ready(function() {
+    $('.selectpicker').selectpicker();
     function setHeight() {
         windowHeight = $(window).innerHeight();
         $('.rightsidebar').css('min-height', windowHeight);
@@ -51,8 +52,5 @@ $('.topmenu_{{ $top or 0 }}').addClass('active');
 $('.sidemenu_{{ $left or 0}}').addClass('active_tab');
 
 
-window.onload = function() {
-    $('.selectpicker').selectpicker();
-};
 
 </script>
