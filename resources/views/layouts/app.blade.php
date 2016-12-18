@@ -194,7 +194,7 @@
 
    
 
-
+//TODO: avoid using onload, only 1 function can set on time overiding previous values
 onload=function(){
 
 
