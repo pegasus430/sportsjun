@@ -9,7 +9,7 @@
 
 		?>
 
-		<button class="btn-large btn btn-arrow" arrow_number='{{$i}}' type='button' onclick='btn_arrow_click(this)' > {{$arrow_stats->{'arrow_'.$i}? $arrow_stats->{'arrow_'.$i} : "Arrow $i"}}</button>
+		<button class="btn-large btn btn-arrow" arrow_number='{{$i}}' type='button' onclick='btn_arrow_click(this)' id='arrow_{{$i}}'> {{$arrow_stats->{'arrow_'.$i}? $arrow_stats->{'arrow_'.$i} : "Arrow $i"}}</button>
 	@endfor
 	</center>
 

@@ -1236,6 +1236,14 @@ class TournamentsController extends Controller
 					}
 					unset($match_stats,$team_stats);
 				}
+
+				if($tournaments[0]['sports_id']==1){
+					$team_details[$group_id] = $this->list_cricket($team_details[$group_id],$net_run_rate);
+
+				}
+
+
+				
 			}
 		}
 
@@ -2853,6 +2861,29 @@ class TournamentsController extends Controller
 
 			return $group_teams;
 	}
+
+	public function list_cricket($group_teams, $team_stats){
+			$lenght=count($group_teams);
+
+			foreach($group_teams as  $key_team=>$team){
+					$team['gf']=0;
+					$team['ga']=0;
+
+					//dd($team);
+
+					$team_id = $team['team_id'];
+
+					if(isset($team_stats[$team_id])){
+						$team['gf'] = $team_stats[$team_id];
+					}
+
+					$group_teams[$key_team] = $team;
+			}
+
+		
+			return $group_teams = $this->sortGroupTeams($group_teams);
+	}
+
 
 	
 
