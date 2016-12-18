@@ -604,11 +604,13 @@
 
 
 
-
+  @include('scorecards.common.referees')
     </div>
 
     </div>
     <!-- Team B Goals End-->
+
+    
 
 
     </div>

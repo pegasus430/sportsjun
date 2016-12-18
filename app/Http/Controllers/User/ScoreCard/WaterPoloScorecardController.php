@@ -464,6 +464,8 @@ class WaterPoloScorecardController extends parentScoreCardController
         $match_model->match_details=$match_details;
         $match_model->save();
 
+                   $this->deny_match_edit_by_admin();
+
         return $match_details;
     
     }

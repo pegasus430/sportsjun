@@ -318,6 +318,21 @@ class VolleyballscoreCardController extends parentScoreCardController
     }
 
 
+    public function updatePreferences(ObjectRequest $request){
+            $match_id=$request->match_id;          
+
+            $match_model=Matchschedule::find($match_id);
+            $match_details=json_decode($match_model->match_details);
+
+            $match_details->preferences->end_point = $request->set_end_point;
+            $match_details->preferences->number_of_sets = $request->number_of_sets;
+
+            $match_model->match_details = json_encode($match_details);
+            $match_model->save();
+
+            return 'saved';
+    }
+
       public function insertvolleyballscore($user_id,$tournament_id,$match_id,$team_id,$player_name,$team_name,$playing_status='S')
     {
         $volleyball_model = new volleyballPlayerMatchwiseStats();
@@ -379,7 +394,7 @@ class VolleyballscoreCardController extends parentScoreCardController
             $match_model->match_details=json_encode($match_details);
             $match_model->save();
 
-            
+                   $this->deny_match_edit_by_admin();
 
         return 'match saved';
     }

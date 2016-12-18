@@ -139,6 +139,9 @@ class ScoreCardController extends Controller {
 				$matchScheduleDetails = MatchSchedule::where('id',$match_id)->first();
 				$tournamentDetails = Tournaments::where('id', '=', $matchScheduleDetails['tournament_id'])->first();
 				if(Helper::isTournamentOwner($tournamentDetails['manager_id'],$tournamentDetails['tournament_parent_id'])) {
+
+					// If not Archery, end match 
+				if($match_data[0]['sports_category']!='athletics')
 					MatchSchedule::where('id',$match_id)->update(['match_status'=>'completed',
 						'winner_id'=>$match_data[0]['a_id'] ]);
 
@@ -229,6 +232,12 @@ class ScoreCardController extends Controller {
 				{
 					$basketball = new ScoreCard\BasketballScoreCardController;
 					return $basketball->basketballScoreCard($match_data,$sportsDetails,$tournamentDetails);
+				}
+
+				else if(strtolower($sport_name)==strtolower('archery'))
+				{
+					$archery = new ScoreCard\ArcheryController;
+					return $archery->archeryScoreCard($match_data,$sportsDetails,$tournamentDetails);
 				}
 			}
 		}
@@ -3608,6 +3617,12 @@ class ScoreCardController extends Controller {
 						$hockey= new ScoreCard\WaterPoloScorecardController;
 				  return $hockey->waterpoloScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
+
+				else if(strtolower($sport_name)==strtolower('archery'))
+				{
+					$archery = new ScoreCard\ArcheryController;
+					return $archery->archeryScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
 				
 			}
 		}
@@ -3699,6 +3714,12 @@ class ScoreCardController extends Controller {
 				{
 						$hockey= new ScoreCard\WaterPoloScorecardController;
 				  return $hockey->waterpoloScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
+				}
+
+				else if(strtolower($sport_name)==strtolower('archery'))
+				{
+					$archery = new ScoreCard\ArcheryController;
+					return $archery->archeryScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
 			}
 		}

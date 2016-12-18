@@ -863,7 +863,7 @@ input:read-only {
 
 
 									<div class="modal-footer">
-									 <button class='btn btn-primary ' onclick="" type='submit'> Save</button>
+									 <button class='btn btn-primary end_match_btn_submit ' onclick="" type='submit' id='disable_on_click'> Save</button>
 										<button type="button" class="button btn-secondary" data-dismiss="modal">Cancel</button>
 									</div>
 								</div>
@@ -1577,6 +1577,7 @@ input:read-only {
 
 		function saveMatchDetails(){
 			var data=$('#kabaddi').serialize();
+
 			$.ajax({
 				url:base_url+'/match/insertAndUpdatekabaddiCard',
 				data:data,
@@ -1585,7 +1586,7 @@ input:read-only {
 					window.location=window.location.pathname;
 				},
 				error:function(x,y,z){
-
+					$('#disable_on_click').attr('disabled',false);
 				}
 
 			})

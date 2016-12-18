@@ -240,6 +240,18 @@ $( ".btn-tournamentedit" ).click(function() {
 
 
 var tot_enrollment= $('#tot_enrollment').val();
+
+if(tot_enrollment==0){
+$('#tot-enrollment-val').show();
+    return false;
+} else {
+  $('#tot-enrollment-val').hide();
+}
+
+
+
+
+
 if(tot_enrollment!=''){
  if(/^\+?\d+$/.test(tot_enrollment)==false){
     $('#tot-enrollment-val').show();
@@ -251,18 +263,44 @@ if(tot_enrollment!=''){
 }
 
 var min_enrollment= $('#min_enrollment').val();
+
+
+var min_enrollment= $('#min_enrollment').val();
+
+if(min_enrollment==0){
+$('#min-enrollment-val').show();
+    return false;
+} else {
+  $('#min-enrollment-val').hide();
+}
+
+
+
+
 if(min_enrollment!=''){
  if(/^\+?\d+$/.test(min_enrollment)==false){
     $('#min-enrollment-val').show();
     return false;
  } else {
   $('#min-enrollment-val').hide();
-  
  }
 }
 
 
 var max_enrollment= $('#max_enrollment').val();
+
+var max_enrollment= $('#max_enrollment').val();
+
+if(max_enrollment==0){
+$('#max-enrollment-val').show();
+    return false;
+} else {
+  $('#max-enrollment-val').hide();
+}
+
+
+
+
 if(max_enrollment!=''){
  if(/^\+?\d+$/.test(max_enrollment)==false){
     $('#max-enrollment-val').show();

@@ -8,4 +8,8 @@ class Referee extends Model
 {
     //
     protected $table = 'referee';
+
+    function user(){
+    	return $this->belongsTo('App\User');
+    }
 }

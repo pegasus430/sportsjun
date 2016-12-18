@@ -370,6 +370,8 @@
                     </div>
                 </div>
 
+            @include('scorecards.common.referees')
+
 
 @if(!empty($match_data[0]['match_report']))
 

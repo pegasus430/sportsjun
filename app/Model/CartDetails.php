@@ -19,7 +19,7 @@ class CartDetails extends Model
 
    public function cart()
     {
-        return $this->belongsTo('App\Model\Cart', 'cart_id',
+        return $this->belongsTo('App\Model\Carts', 'cart_id',
             'id');
     }
 

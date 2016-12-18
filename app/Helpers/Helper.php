@@ -2517,7 +2517,13 @@ class Helper
 
         //dd($semi_final_schedule);
 
-        $matchScheduleDetails = $semi_final_schedule[0];
+       
+    if(!(isset($semi_final_schedule[0]) && isset($semi_final_schedule[1]))){
+        return 0;
+    }
+
+     $matchScheduleDetails = $semi_final_schedule[0];
+
 
         if ($matchScheduleDetails['schedule_type'] == 'team') {
             $player_a_ids = TeamPlayers::select(DB::raw('GROUP_CONCAT(DISTINCT user_id) AS player_a_ids'))->where('team_id',
@@ -2529,6 +2535,10 @@ class Helper
             $player_b_ids = $semi_final_schedule[1]->looser_id;
 
         }
+    
+
+
+
 
         if (!$check_schedule) {
 

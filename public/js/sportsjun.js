@@ -759,6 +759,12 @@ function DataTableLoadMore(el){
 function editMatchSchedule(a, b, c, modal_id) {
      $(".modal-body #schedule_id").val(a);
      $(".modal-body #main_schedule_id").val(a);
+
+
+    $(".modal-body #my_team_id").addClass('bracket_2');
+    $(".modal-body #opp_team_id").addClass('bracket_2');
+
+
     if ($(".qtip").length) $(".qtip").qtip("hide");
     var roundNumber = c;
     $.get(base_url + "/editteamschedule", {
@@ -1452,5 +1458,15 @@ function filterDiv(that, index){
             $("#subfield_"+parent_id).slideToggle("1500");
         });
     });
+
+    
+    $("button[type=submit]").click(function(){      
+       // $(this).hide();             
+    })
+
+    $('.end_match_btn_submit').click(function(){
+        $(this).hide();
+    })
+
 
 

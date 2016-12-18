@@ -16,6 +16,7 @@ use App\Model\Country;
 use App\Model\TournamentGroupTeams;
 use App\Model\Tournaments;
 use App\Model\MatchScheduleRubber;
+use App\Http\Controllers\User\ScoreCard\ArcheryController;
 use App\User;
 use DB;
 use Request;
@@ -1051,7 +1052,10 @@ class ScheduleController extends Controller {
                         ->join('user_statistics', 'users.id', '=', 'user_statistics.user_id')
                         ->distinct()
                         ->select('users.id', 'users.name')
-                        ->where('user_statistics.allowed_player_matches', 'LIKE', '%' . ','.$sport_id.',' . '%')
+                        ->where(function($query) use ($sport_id) {
+                            $query->where('user_statistics.allowed_player_matches', 'LIKE', '%' . ','.$sport_id.',' . '%')
+                                  ->orWhere('teams.sports_id','=',$sport_id);
+                            })
                         ->where('users.name', 'LIKE', '%' . $search_team . '%')
                         ->whereNotIn('users.id', [$team_id])
                         ->whereNull('teams.deleted_at')
@@ -1148,12 +1152,13 @@ class ScheduleController extends Controller {
                 $game_type = $tournamentDetails->game_type;
                 $number_of_rubber =  $tournamentDetails->number_of_rubber;
              }
-			$match_invite_status = 'accepted';
-
-   
+			$match_invite_status = 'accepted';  
 
 			 
          }
+
+
+         $sports_category = Sport::find($sports_id)->sports_category;
         //prepare an array to insert
         $schedule_data = array(
             'tournament_id' => $tournament_id,
@@ -1187,7 +1192,8 @@ class ScheduleController extends Controller {
             'player_b_ids' => $player_b_ids,
 			'match_invite_status'=>$match_invite_status,
             'game_type'     => $game_type,
-            'number_of_rubber' => $number_of_rubber
+            'number_of_rubber' => $number_of_rubber,
+            'sports_category'  => $sports_category
 
         );
         if(!empty($bye) && $bye==2) {
@@ -1219,7 +1225,7 @@ class ScheduleController extends Controller {
             if(!empty($bye) && $bye==2) {
                 $this->insertByeTeamDetails($match_schedule_id);
             }    
-            if (isset($match_schedule_id) && $match_schedule_id > 0 && !empty($b_id)) {
+            if (isset($match_schedule_id) && $match_schedule_id > 0 && (!empty($b_id) || $sports_category=='athletics')) {
                 /*                $scheduleDetails = MatchSchedule::create($schedule_data);
                   $matchId = !empty($scheduleDetails['id'])?$scheduleDetails['id']:NULL;
                   //if request is from tournaments, update match id in tournament_group_teams table
@@ -1231,11 +1237,36 @@ class ScheduleController extends Controller {
                 
                   //insert into request and notifications table
                   if(!empty($tournament_id)) {
+
+                    if($b_id)
                       AllRequests::sendMatchNotifications($tournament_id,$schedule_type,$a_id,$b_id,$match_start_date);
 
                       if($game_type=='rubber' && (is_numeric($number_of_rubber) && $number_of_rubber>0)){
                             //$this->insertGroupRubber($match_schedule_id);
                       }
+
+                        if( $sports_category=='athletics'){         //if is archery add in the db
+
+                    $match_model = matchSchedule::find($match_schedule_id);
+                    $match_model->match_invite_status = 'accepted';
+                    $match_model->save();
+
+                        $number_of_players = $request['number_of_players'];
+                        $archery_model = new ArcheryController;
+
+                        $players_array='';
+
+                        for($z=1; $z<=$number_of_players; $z++){
+
+                            if($schedule_type=='player')
+                                $archery_model->insert_players_in_db($tournament_id,$match_schedule_id,null,$request['player_id_'.$z],User::find($request['player_id_'.$z])->name);
+
+                             $players_array.= $request['player_id_'.$z] . ',';
+                        }
+
+                    matchSchedule::find($match_schedule_id)->update(['player_or_team_ids'=>$players_array]);
+
+                  }
 
 
                   }else {
@@ -1260,6 +1291,12 @@ class ScheduleController extends Controller {
         $schedule_type = Request::get('main_scheduletype');
         $a_id = Request::get('main_my_team_id');
         $b_id = Request::get('main_opp_team_id');
+
+        if(empty($a_id)){
+            if(!empty(Request::get('player_id_1'))){
+               // $a_id = Request::get('player_id_1');
+            }
+        }
         // $match_start_date = $this->getdatetime(date(config("constants.DATE_FORMAT.PHP_DATE_FORMAT"), strtotime(Request::get('main_match_start_date'))), 'd');
         $match_start_date = Helper::storeDate(Request::get('main_match_start_date'),'date');
         $match_start_time = !empty(Request::get('main_match_start_time'))?$this->getdatetime(date(config("constants.DATE_FORMAT.PHP_TIME_FORMAT"), strtotime(Request::get('main_match_start_time'))), 't'):'00:00:00';
@@ -1310,6 +1347,9 @@ class ScheduleController extends Controller {
                     $number_of_rubber = $tournamentDetails->number_of_rubber;
                 }
          }
+
+
+         $sports_category = Sport::find($sports_id)->sports_category;
         //prepare an array to insert
         $schedule_data = array(
             'tournament_id' => $tournament_id,
@@ -1342,7 +1382,8 @@ class ScheduleController extends Controller {
             'player_a_ids' => $player_a_ids,
             'player_b_ids' => $player_b_ids,
             'game_type'     => $game_type,
-            'number_of_rubber' => $number_of_rubber
+            'number_of_rubber' => $number_of_rubber,
+            'sports_category'  => $sports_category
         );
 
         $results = array();
@@ -1359,6 +1400,34 @@ class ScheduleController extends Controller {
                   //insert into request and notifications table
                   $request_array = array('flag'=>$request_type,'player_tournament_id'=>$a_id,'team_ids'=>array($b_id),'match_schedule_id'=>$match_schedule_id,'sports_id'=>$sports_id);
                   AllRequests::saverequest($request_array);
+
+                  // If match is archery, save players;
+
+                 
+                        if($sports_category=='athletics'){         //if is archery add in the db
+
+                    $match_model = matchSchedule::find($match_schedule_id);
+                    $match_model->match_invite_status = 'accepted';
+                    $match_model->save();
+
+                        $number_of_players = $request['number_of_players'];
+                        $archery_model = new ArcheryController;
+
+                        $players_array='';
+
+                        for($z=1; $z<=$number_of_players; $z++){
+
+                             if($schedule_type=='player')
+                                $archery_model->insert_players_in_db($tournament_id,$match_schedule_id,null,$request['player_id_'.$z],User::find($request['player_id_'.$z])->name);
+
+                             $players_array.= $request['player_id_'.$z] . ',';
+                        }
+
+                    matchSchedule::find($match_schedule_id)->update(['player_or_team_ids'=>$players_array]);
+
+                  }
+
+
                 $results['success'] = 'Match scheduled successfully.';
             } else {
                 $results['failure'] = 'Failed to schedule the match.';

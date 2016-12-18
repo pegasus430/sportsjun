@@ -554,6 +554,10 @@ Route::post('schedule/getmymanagingteams', [
     'as'   => 'schedule/getmymanagingteams',
     'uses' => 'User\ScheduleController@getmymanagingteams',
 ]);
+Route::get('schedule/getmymanagingteams', [
+    'as'   => 'schedule/getmymanagingteams',
+    'uses' => 'User\ScheduleController@getmymanagingteams',
+]);
 //End Schedules
 
 //My Schedules
@@ -730,6 +734,7 @@ Route::resource('user', 'User\UserController');
 
 Route::post('/add_referee', 'User\InvitePlayerController@add_referee');
 Route::post('/invite_referee', 'User\InvitePlayerController@invite_referee');
+Route::post('/remove_referee', 'User\InvitePlayerController@remove_referee');
 
 
 
@@ -838,13 +843,13 @@ Route::post('tournaments/payment_details', [
 ]);
 
 
-// Route::get('tournaments/transactions/{id}', [
-//     'as'   => 'transactions',
-//     'uses' => 'User\TournamentsController@Transactions',
-// ]);
-
 
 Route::get('mytransactions/{userId}', [
     'as'   => 'mytransactions',
     'uses' => 'User\TournamentsController@Transactions',
+]);
+
+Route::get('mytournamentregistrations/{userId}', [
+    'as'   => 'mytournamentregistrations',
+    'uses' => 'User\TournamentsController@myTournamentRegistrations',
 ]);

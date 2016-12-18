@@ -12,6 +12,12 @@
         position: relative
     }
 
+<?php
+
+    $schedule_type_enum = config('constants.ENUM.TOURNAMENTS.SCHEDULE_TYPE'); 
+
+ ?>
+
     /*.alert{display: none;}*/
 </style>
 <script src="http://malsup.github.com/jquery.form.js"></script>
@@ -66,7 +72,34 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+
+                        <!-- Archery Module -->
+                     <!-- Start Archery Module -->
+
+      <div id='archery' >
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="section">
+                     <label class="form_label"> Number of {{$tournament[0]['schedule_type']}}s <span  class='required'>*</span> </label>             
+                    <label class="field">
+                    <input id="number_of_players" name="number_of_players" class="gui-input" type="number" onchange="load_number_of_players_html(this)">
+                    </label>                             
+            
+                </div>
+            </div> 
+        </div>
+
+        <div class="row list_number_of_players">
+            
+        </div>
+
+        </div>
+
+      <!-- Stop Archery Module -->
+
+                        <!-- End of Archery Module -->
+
+                        <div class="row non-archery-module">
                             <div class="col-sm-6">
                                 <div class="section">
                                     <label class="form_label">{{   trans('message.schedule.fields.myteam') }} <span
@@ -285,8 +318,8 @@
         ).change(function (e) {
             var selected = this.value;
             $("#opp_team_id option").prop('disabled', false)
-            if (selected)
-                $("#opp_team_id option[value=" + selected + "]").prop('disabled', true);
+            //if (selected)
+            //    $("#opp_team_id option[value=" + selected + "]").prop('disabled', true);
             $("#opp_team_id").select2({width: "100%"});
         });
         $("#opp_team_id").select2(
@@ -294,12 +327,14 @@
         ).change(function (e) {
             var selected = this.value;
             $("#my_team_id option").prop('disabled', false)
-            if (selected)
-                $("#my_team_id option[value=" + selected + "]").prop('disabled', true);
+            // if (selected)
+            //    $("#my_team_id option[value=" + selected + "]").prop('disabled', true);
             $("#my_team_id").select2({width: "100%"});
         });
 
         $("#myModal").on('shown.bs.modal', function () {
+
+            setTimeout(function(){
             $.getJSON(base_url + "/getteamdetails", {
                 team_id: 0,
                 tournament_id: '{{ $tournament_id }}',
@@ -311,17 +346,32 @@
                 for (var i = 0; i < data.length; i++) {
                     data[i].text = data[i].value;
                 }
-                $("#opp_team_id").select2({
-                    width: "100%",
-                    data: data
-                }).val('').trigger('change');
-                $("#my_team_id").select2({
-                    width: "100%",
-                    data: data
-                }).val('').trigger('change');
+
+                window.player_list = data;
+
+                if(!$('.modal-body #opp_team_id').hasClass('bracket_2')){
+                         $("#opp_team_id").select2({
+                            width: "100%",
+                            data: data
+                        }).val('').trigger('change');
+                }
+
+                if(!$('.modal-body #my_team_id').hasClass('bracket_2')){       
+                    $("#my_team_id").select2({
+                        width: "100%",
+                        data: data
+                    }).val('').trigger('change');
+                }
+
+                $('.modal-body #opp_team_id').removeClass('bracket_2')
+                $('.modal-body #my_team_id').removeClass('bracket_2')
 
             });
+
+            },1500);
         });
+
+
 
 
         /*
@@ -468,6 +518,7 @@
     }
 
     function editschedulegroupmatches(schedule_id, is_owner, disableflag) {
+
         $.get(base_url + '/editteamschedule', {
             'scheduleId': schedule_id,
             'isOwner': is_owner
@@ -528,3 +579,64 @@
 
 </script>
 
+
+
+<!-- Archery Module -->
+
+<script type="text/javascript">
+    @if(isset($sports_id) && ($sports_id ==18))
+        $('.archery-module').show();
+       $('.non-archery-module').hide();
+       $('#my_team_id').val(1);
+       $('#archery').show();
+    @endif
+
+
+
+      function load_number_of_players_html(that){
+          var number_of_players = $(that).val();
+          var total_number_of_players = "{{$tournament[0]['group_teams']}}"
+          var html ='';
+
+            if(number_of_players>total_number_of_players){
+              //  number_of_players = total_number_of_players;
+            }
+
+          var data = window.player_list;
+          var player_or_team = "{{$tournament[0]['schedule_type']}}"
+
+          for(i=1; i<=number_of_players; i++){
+
+                html += "<div class='col-sm-6'> <div class='section'>";
+                  html += "<label class='form_label'>"+player_or_team + " " + i +"<span  class='required'>*</span> </label>  <label class='field'><select type='text' class='gui-input select_player' type_id='"+i+"' id='player_id_"+i+"' name='player_id_"+i+"' ></select>";                   
+                  html +="</label></div> </div>";
+
+                 
+          }         
+              $('.list_number_of_players').html(html);       
+
+              $('.select_player').select2({
+                        width: "100%",
+                        data: data
+            }).val('').trigger('change');
+
+      }
+
+      function get_players(){
+               $.getJSON(base_url + "/getteamdetails", {
+                team_id: 0,
+                tournament_id: '{{ $tournament_id }}',
+                tournament_group_id: $('#tournament_group_id').val(),
+                scheduletype: $('#scheduletype').val(),
+                search_team_ids: $('#search_team_ids').val(),
+                tournament_round_number: $('#tournament_round_number').val()
+            }, function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    data[i].text = data[i].value;
+                }
+
+                return data;
+
+            })
+        }
+</script>

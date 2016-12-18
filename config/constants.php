@@ -145,7 +145,8 @@ return [
                 14=> 'KabaddiStatistic',
                 15=> 'UltimatefrisbeeStatistic',
                 16=> 'WaterpoloStatistic',
-                17=> 'ThrowballStatistic'
+                17=> 'ThrowballStatistic',
+                18=> 'ArcheryStatistic' 
 
         ],
         'SPORT_NAME'               => [
@@ -161,7 +162,8 @@ return [
                 14 => 'Kabaddi',
                 15 => 'Ultimate Frisbee',
                 16 => 'Water Polo',
-                17 => 'Throw Ball'
+                17 => 'Throw Ball',
+                18 => 'Archery'
 
         ],
         'SPORT_ID'                 => [
@@ -177,7 +179,8 @@ return [
                 'Kabaddi'      => 14,
                 'Ultimate Frisbee'      => 15,
                 'Water Polo'   => 16,
-                'Throw Ball'   => 17
+                'Throw Ball'   => 17,
+                'Archery'      => 19
 
         ],
         'SERVICES'                 => [
@@ -336,17 +339,7 @@ return [
                     'active_players' => 6,
                     'substitute'     => 6,
 
-                ],
-                13 => [
-                    'number_of_sets'=>3,
-                    'score_to_win'  =>21,
-                    'end_point'     =>29,
-                    'enable_two_points'     => 'on',
-                    'active_players' => 6,
-                    'substitute'     => 6,
-
-                ], 
-               
+                ],               
                 6 => [
                     'number_of_sets' => 5,
                     'active_players' => 6,
@@ -363,14 +356,16 @@ return [
                     'maximum_points' => 25,
                     'maximum_substitutes' => 3,
 
-                ],
-                17 => [
-                    'number_of_sets' => 3,
-                    'active_players' => 7,
-                    'substitute'     => 3,
-                    'maximum_points' => 15,
-                    'maximum_substitutes' => 3,
-                ],
+                ],               
+                13 => [
+                    'number_of_sets'=>3,
+                    'score_to_win'  =>21,
+                    'end_point'     =>29,
+                    'enable_two_points'     => 'on',
+                    'active_players' => 6,
+                    'substitute'     => 6,
+
+                ], 
                 14 => [
                     'number_of_sets' => 5,
                     'active_players' => 6,
@@ -383,6 +378,17 @@ return [
                     'number_of_halves' =>2,
                     'walk_over_points' =>13,
                     'max_fouls'        =>5,
+                ],
+                17 => [
+                    'number_of_sets' => 3,
+                    'active_players' => 7,
+                    'substitute'     => 3,
+                    'maximum_points' => 15,
+                    'maximum_substitutes' => 3,
+                ],
+                18 => [
+                    'number_of_players'   => 5
+
                 ]
 
         ]

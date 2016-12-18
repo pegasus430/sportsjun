@@ -15,7 +15,7 @@ $lis = $tournament_data->toArray();
 <br>
 <div class="form-header header-primary register_form_head">
 
-<h4 class='register_form_title'>{{$parent_tournament_details->name}}</h4><br><br>
+<h4 class='register_form_title'>{{$parent_tournament_details->name}} - {{$tournament_data->name}}</h4><br><br>
 <?php
 // $open_timestamp = strtotime($tournament_data->reg_opening_date);
 // $open_day = date('D', $open_timestamp);
@@ -36,7 +36,7 @@ $lis = $tournament_data->toArray();
   $newclose = date("d-m-Y", strtotime($tournament_data->end_date));
 ?>
 <h4><i class="fa fa-calendar-o"></i>{{$open_day}} {{$newopen}} - {{$open_day}} {{$newclose}}</h4><br>
-<h4><i class="fa fa-map-marker"></i>{{$tournament_data->location}}</h4>
+<h4><i class="fa fa-map-marker"></i>{{preg_replace('/(?<!\d),|,(?!\d{3})/', ', ',$tournament_data->location)}}</h4>
 </div>
 
 @if($errors->any())
@@ -49,6 +49,9 @@ $lis = $tournament_data->toArray();
 {!! Form::hidden("match_type", $register_data->match_type) !!}
 {!! Form::hidden("event_id", $register_data->event_id) !!}
 {!! Form::hidden("cart_id", $register_data->cart_id) !!}
+
+
+{!! Form::hidden("refresh", 'no',array('id'=>'refreshed')) !!}
 
 @if ($register_data->match_type === 'singles')
 
@@ -289,7 +292,7 @@ $count=$register_data->participant_count;
 </div><!--end row -->
 
 
-<div class="row">
+
 
 
 

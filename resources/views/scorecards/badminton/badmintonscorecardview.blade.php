@@ -236,9 +236,15 @@ if($match_data[0]['game_type']=='rubber'){
         </tr>
 
         </tbody>
-        </tbody>
+       
       </table>
     </div>
+
+
+    @include('scorecards.common.referees')
+
+
+
   <!-- End of normal match -->
 
 @else 

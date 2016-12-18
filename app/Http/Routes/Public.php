@@ -46,8 +46,7 @@ Route::group([],function($route){
     ]);
 });
 
-
-
+Route::post('/viewpublic/match/archery/load_arrow',    'User\ScoreCard\ArcheryController@load_arrow_public');
 
 
 Route::group(['prefix' => 'viewpublic'], function () {
@@ -115,6 +114,8 @@ Route::group(['prefix' => 'viewpublic'], function () {
             'as'   => 'match.scorecard.view',
             'uses' => 'ScoreCardController@createScorecardView',
         ]);
+
+
     });
 
 

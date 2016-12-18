@@ -412,6 +412,12 @@ $(function () {
             $('.show_hide_div').hide();
             $('.show_hide_rubber').hide();
 		}
+
+        if(sport_name.toLowerCase()=='archery'){
+                $('#show_hide_div').show();
+                $("#schedule_type").val('team');
+        }
+
 		var selected_sport = $("#sports_id option:selected").text();
 		selected_sport = selected_sport.toUpperCase();
 		buildmatchtypedivs(selected_sport);
