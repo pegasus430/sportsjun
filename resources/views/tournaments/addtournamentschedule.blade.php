@@ -333,6 +333,8 @@
         });
 
         $("#myModal").on('shown.bs.modal', function () {
+
+            setTimeout(function(){
             $.getJSON(base_url + "/getteamdetails", {
                 team_id: 0,
                 tournament_id: '{{ $tournament_id }}',
@@ -365,7 +367,11 @@
                 $('.modal-body #my_team_id').removeClass('bracket_2')
 
             });
+
+            },1500);
         });
+
+
 
 
         /*
