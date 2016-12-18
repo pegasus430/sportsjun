@@ -1237,8 +1237,13 @@ class TournamentsController extends Controller
 					unset($match_stats,$team_stats);
 				}
 
-				if($tournaments[0]['sport_id']==1)
-				$team_details[$group_id] = $this->list_cricket($team_details[$group_id],$net_run_rate);
+				if($tournaments[0]['sports_id']==1){
+					$team_details[$group_id] = $this->list_cricket($team_details[$group_id],$net_run_rate);
+
+				}
+
+
+				
 			}
 		}
 
