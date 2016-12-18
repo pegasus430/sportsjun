@@ -74,31 +74,28 @@
                         </div>
 
                         <!-- Archery Module -->
-                    <div class="archery-module" style="display:none">
-                        <div class="row" >
-                            <div class="col-sm-6">
-                                <div class="section " id="" >
-                                <label class="form_label">{{  trans('message.tournament.fields.schedule_type') }} <span  class='required'>*</span></label>
-                                    <label class="field select">
-                                     {!! Form::select('schedule_type', $schedule_type_enum, null,array('id'=>'schedule_type','class'=>'gui-input')) !!}
-                                    
-                                     <i class="arrow double"></i>      
-                                    </label>
-                                </div>
-                            </div>
+                     <!-- Start Archery Module -->
 
-                            <div class="col-sm-6">
-                                <div class="section " id="" style="display:none">
-                                <label class="form_label">{{  trans('message.tournament.fields.schedule_type') }} <span  class='required'>*</span></label>
-                                    <label class="field select">
-                                     {!! Form::number('number_of_players',1, null,array('id'=>'number_of_players','class'=>'gui-input')) !!}
-                                    
-                                     <i class="arrow double"></i>      
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+      <div id='archery' >
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="section">
+                     <label class="form_label"> Number of {{$tournament[0]['schedule_type']}}s <span  class='required'>*</span> </label>             
+                    <label class="field">
+                    <input id="number_of_players" name="number_of_players" class="gui-input" type="number" onchange="load_number_of_players_html(this)">
+                    </label>                             
+            
+                </div>
+            </div> 
+        </div>
+
+        <div class="row list_number_of_players">
+            
+        </div>
+
+        </div>
+
+      <!-- Stop Archery Module -->
 
                         <!-- End of Archery Module -->
 
@@ -348,6 +345,8 @@
                     data[i].text = data[i].value;
                 }
 
+                window.player_list = data;
+
                 if(!$('.modal-body #opp_team_id').hasClass('bracket_2')){
                          $("#opp_team_id").select2({
                             width: "100%",
@@ -581,6 +580,57 @@
 <script type="text/javascript">
     @if(isset($sports_id) && ($sports_id ==18))
         $('.archery-module').show();
-        $('.non-archery-module').hide();
+       $('.non-archery-module').hide();
+       $('#my_team_id').val(1);
+       $('#archery').show();
     @endif
+
+
+
+      function load_number_of_players_html(that){
+          var number_of_players = $(that).val();
+          var total_number_of_players = "{{$tournament[0]['group_teams']}}"
+          var html ='';
+
+            if(number_of_players>total_number_of_players){
+              //  number_of_players = total_number_of_players;
+            }
+
+          var data = window.player_list;
+          var player_or_team = "{{$tournament[0]['schedule_type']}}"
+
+          for(i=1; i<=number_of_players; i++){
+
+                html += "<div class='col-sm-6'> <div class='section'>";
+                  html += "<label class='form_label'>"+player_or_team + " " + i +"<span  class='required'>*</span> </label>  <label class='field'><select type='text' class='gui-input select_player' type_id='"+i+"' id='player_id_"+i+"' name='player_id_"+i+"' ></select>";                   
+                  html +="</label></div> </div>";
+
+                 
+          }         
+              $('.list_number_of_players').html(html);       
+
+              $('.select_player').select2({
+                        width: "100%",
+                        data: data
+            }).val('').trigger('change');
+
+      }
+
+      function get_players(){
+               $.getJSON(base_url + "/getteamdetails", {
+                team_id: 0,
+                tournament_id: '{{ $tournament_id }}',
+                tournament_group_id: $('#tournament_group_id').val(),
+                scheduletype: $('#scheduletype').val(),
+                search_team_ids: $('#search_team_ids').val(),
+                tournament_round_number: $('#tournament_round_number').val()
+            }, function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    data[i].text = data[i].value;
+                }
+
+                return data;
+
+            })
+        }
 </script>

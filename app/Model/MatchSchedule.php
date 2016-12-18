@@ -58,7 +58,9 @@ class MatchSchedule extends Model
         'match_details',
         'number_of_rubber',
         'game_type',
-        'is_third_position'
+        'is_third_position',
+        'sports_category',
+        'player_or_team_ids'
     );
 
     public function scheduleteamone()
