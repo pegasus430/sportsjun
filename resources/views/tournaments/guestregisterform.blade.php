@@ -28,6 +28,7 @@
 <div class="col-sm-5">
       <div class="section">
           <label class="field prepend-icon">
+          <label class="field-icon"><span  class='required validation'>*</span></label>
             {!! Form::text("guest[name]", '', array('required','class'=>'gui-input','placeholder' => 'Full Name' )) !!}
             
             </label>
@@ -37,6 +38,7 @@
 <div class="col-sm-6">
   <div class="section">
     <label class="field prepend-icon">
+    <label class="field-icon"><span  class='required validation'>*</span></label>
             {!! Form::email("guest[email]", '', array('required','class'=>'gui-input','placeholder' => 'Email' )) !!}
            
             </label>
@@ -57,6 +59,7 @@
 <div class="col-sm-5">
       <div class="section">
           <label class="field prepend-icon">
+          <label class="field-icon"><span  class='required validation'>*</span></label>
             {!! Form::text("guest[club]", '', array('required','class'=>'gui-input','placeholder' => 'Club' )) !!}
             
             </label>
@@ -66,6 +69,7 @@
 <div class="col-sm-6">
   <div class="section">
     <label class="field prepend-icon">
+    <label class="field-icon"><span  class='required validation'>*</span></label>
             {!! Form::text("guest[number]", '', array('required','class'=>'gui-input','placeholder' => 'Contact Number' )) !!}
            
             </label>
@@ -87,6 +91,7 @@
 <div class="col-sm-11">
       <div class="section">
           <label class="field prepend-icon">
+          <label class="field-icon"><span  class='required validation'>*</span></label>
             {!! Form::textarea("guest[location]", '', array('required','class'=>'gui-input','placeholder' => 'Location' ,'rows' => 2, 'cols' => 40)) !!}
             
             </label>

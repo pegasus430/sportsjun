@@ -95,7 +95,7 @@ $options=array();?>
       <label class="field prepend-icon">
        <label class="field-icon"><i class="fa fa-trophy"></i></label>
         <input  class="gui-input form_rows" readonly="true"  type="text" value="{{$value->tournaments->name}}">
-            <label  class="form_label last_date_span">Last Date : {{$value->tournaments->end_date}}</label>
+            <label  class="form_label last_date_span">Last Date : {{date("d-M-Y", strtotime($value->tournaments->reg_closing_date))}}</label>
        </label>
            </div>
   </div>

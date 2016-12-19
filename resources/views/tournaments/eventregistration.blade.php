@@ -36,6 +36,16 @@ $lis = $tournament_data->toArray();
 <h4 class="error_validation">{{$errors->first()}}</h4>
 @endif
 <div class="form-body">
+@if(count($all_events)==0)
+<div class="row inner_events">
+<h4>No events avilable for registration</h4>
+</div>
+@else
+
+
+
+
+
 @if(Auth::user()) 
 {!! Form::open(array('url' => '/tournaments/registrationdata', 'method' => 'post')) !!}
 @else
@@ -154,6 +164,8 @@ $options=array();?>
 
 
 {!! Form::close() !!}
+
+@endif
  
 </div>
 
