@@ -2941,3 +2941,11 @@ h4.right_head a {
     padding: 10px 3px;
     border: 1px solid #000;
 }
+
+select.form-control.valid.test {
+    padding-left: 50px;
+}
+
+.row.inner_events.inner_reg.inner_head {
+    background-color: #EF4;
+}

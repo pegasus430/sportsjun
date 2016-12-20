@@ -47,6 +47,7 @@ use View;
 use Input;
 use Hash;
 use Mail;
+use Validator;
 
 
 use App\Model\SoccerPlayerMatchwiseStats;
@@ -3575,7 +3576,7 @@ public function getPaymentform($id) {
     $cart_data = Carts::where('id',$id)->first();
     $tournamentdata=CartDetails::where('cart_id',$id)->first();
     $tournament=Tournaments::where('id',$tournamentdata->event_id)->first();
-    if($cart_data->payment_token!=''){
+    if($cart_data->payment_status==1){
       return redirect('tournaments')->withErrors(['Payment already completed for  cart id '.$id]);
     }
     $countries = Country::orderBy('country_name')->lists('country_name', 'id')->all();
@@ -3588,6 +3589,33 @@ public function getPaymentform($id) {
 }
 
 public function postPaymentform() {
+
+  //dd($_REQUEST);
+
+  
+  $validator = Validator::make($_REQUEST, [
+            'zipcode' => 'required|numeric',
+            'country' => 'required',
+            'state' => 'required',
+            'city' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+          //dd($validator);
+          return back()->withErrors($validator);               
+        }
+
+
+
+
+
+
+
+
+
+
+
+
   $data=Input::except('_token');
   $data['country'] = Country::where('id',$data['country'])->value('country_name');
   $data['state'] = State::where('id',$data['state'])->value('state_name');
@@ -3692,6 +3720,13 @@ public function postPaymentsuccess() {
     $data[$i]['name']=PaymentDetails::where('cart_id',$reg->id)->value('payment_firstname');
     $data[$i]['email']=User::where('id',$user_id)->value('email');
     $data[$i]['phone']=PaymentDetails::where('cart_id',$reg->id)->value('payment_phone');
+
+    $team_id =DB::table('request')->where('to_id',$carts->tournaments->id)->where('cart_id',$_POST['udf2'])->where('type',4)->pluck('from_id');
+
+    $data[$i]['team']=Team::where('id',$team_id)->value('name');
+
+
+
     $data[$i]['tournament']=$carts->tournaments->name;
     $data[$i]['price']=($carts->enrollment_fee)*($carts->participant_count);
     $data[$i]['date']=PaymentDetails::where('cart_id',$reg->id)->value('date');
@@ -3865,10 +3900,10 @@ public function Transactions($id) {
 
       
     	$data['t_name']=$carts->tournaments->name;
-    	$data['tot_enrollmet']=$carts->tournaments->tot_enrollment;
+    	$data['tot_enrollmet']=$carts->tournaments->total_enrollment;
     	$alreday_registered=DB::table('request')->where('to_id',$carts->event_id)->get();
     	$data['current_enrollmet']=count($alreday_registered);
-    	$data['remaining_enrollmet']=$carts->tournaments->tot_enrollment-count($alreday_registered);
+    	$data['remaining_enrollmet']=$carts->tournaments->total_enrollment-count($alreday_registered);
     	$data['data']['id']=$reg->id;
     	$team_id =DB::table('request')->where('to_id',$carts->event_id)->where('cart_id',$carts->cart_id)->where('type',4)->pluck('from_id');
 

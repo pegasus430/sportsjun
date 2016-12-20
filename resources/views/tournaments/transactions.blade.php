@@ -5,11 +5,19 @@
  <div class="col-lg-12 col-md-10 col-sm-16  tournament_profile teamslist-pg" style="padding-top: 3px !important;">
 	<div class="panel panel-default">
 		<div class="panel-body">
+
+         
 			<div class="transcations_head">    
 	        	<h4 class="left_head">Your Payments</h4>
 	   	    	<h4 class="right_head"><a href="/mytournamentregistrations/{{$u_id}}">Registrations of Your Tournaments</a></h4>
 		    	<div class="clear"></div><br>
 			</div>
+
+			 @if(count($details)==0)
+               <div class="transcations_head">
+               <h4>No Transactions</h4>
+               </div> 
+          @else
 	     
             <div class="form-body">
             	<div class="row">
@@ -89,7 +97,7 @@
 	          		</div>
 
 	          		 <div class="col-sm-3">
-						{{$details['date']}}
+						{{date("d-M-Y h:i:s", strtotime($details['date']))}}  
 	          		</div>
 
 	          		<div class="col-sm-1">
@@ -105,6 +113,9 @@
 
 	 
 	        </div>
+
+          @endif
+
 
 
 	    </div>

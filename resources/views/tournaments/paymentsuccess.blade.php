@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 
-<div class="col-lg-8 col-md-10 col-sm-12 col-md-offset-1 col-lg-offset-2 tournament_profile teamslist-pg" style="padding-top: 3px !important;">
+<div class="col-lg-12 col-md-10 col-sm-12  tournament_profile teamslist-pg" style="padding-top: 3px !important;">
  <div class="panel panel-default">
    <div class="panel-body">
 
@@ -23,10 +23,10 @@
 
 
 
-<div class="col-sm-3">
+<div class="col-sm-2">
       <div class="section">
         <label class="field prepend-icon head_tr">
-            Tournament Events
+            Tournament
             </label>
           
 
@@ -42,7 +42,20 @@
  </div>
 <!-- end section -->  
 
-<div class="col-sm-3">
+
+<div class="col-sm-2">
+<label class="field prepend-icon">
+  <div class="section">
+    <label class="field prepend-icon head_tr">Team</label>
+     
+    </div>
+ </div>
+
+
+
+
+
+<div class="col-sm-2">
     <div class="section">
     
     
@@ -58,7 +71,7 @@
 </div>
 
 
-<div class="col-sm-2">
+<div class="col-sm-1">
     <div class="section">
     
     
@@ -78,7 +91,7 @@
 
 
 
-<div class="col-sm-2">
+<div class="col-sm-1">
       <div class="section">
         <label class="field prepend-icon head_tr">
             Amount
@@ -108,7 +121,7 @@ $options=array();?>
 
 
 
-<div class="col-sm-3">
+<div class="col-sm-2">
       <div class="section">
            <label class="form_label">{{$details['tournament']}}</label>  
            
@@ -125,7 +138,18 @@ $options=array();?>
  </div>
 <!-- end section -->  
 
-<div class="col-sm-3">
+
+<div class="col-sm-2">
+  <div class="section">
+    <label class="form_label"><i class="fa fa-user"></i> {{$details['team']}}</label>
+     
+    </div>
+ </div>
+
+
+
+
+<div class="col-sm-2">
     <div class="section">
     
     
@@ -140,14 +164,14 @@ $options=array();?>
     
     </div>
 </div>
-<div class="col-sm-2">
+<div class="col-sm-1">
   <div class="section">
     <label class="form_label"><i class="fa fa-phone"></i> {{$details['phone']}}</label>
      
     </div>
  </div>
 
- <div class="col-sm-2">
+ <div class="col-sm-1">
   <div class="section">
     <label class="form_label"><i class="fa fa-inr"></i> {{$details['price']}}</label>
      
