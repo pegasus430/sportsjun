@@ -11,6 +11,14 @@
 <div class="clear"></div>
 <br>
 </div>
+
+
+
+ @if(count($details)==0)
+    <div class="transcations_head">
+        <h4>No Registrations</h4>
+   </div> 
+@else
      
   <div class="form-body">
 
@@ -61,6 +69,65 @@ $options=array();?>
 
   </div><!--end row -->
  <br>
+
+
+
+
+<div class="row inner_events inner_reg inner_head">
+
+
+
+
+     <div class="col-sm-2">
+       <div class="section">
+         <label class="form_label">Paid By</label>  
+        </div>
+     </div>
+     <div class="col-sm-2">
+       <div class="section">
+      
+         <label class="form_label">Team Name</label>  
+          
+        </div>
+     </div>
+     <div class="col-sm-3">
+       <div class="section">
+       
+         <label class="form_label">Email</label>  
+       
+        </div>
+     </div>
+     <div class="col-sm-3">
+       <div class="section">
+         <label class="form_label">Date</label>  
+        </div>
+     </div>
+     <div class="col-sm-2">
+       <div class="section">
+         <label class="form_label">Amount</label>  
+        </div>
+     </div>
+
+
+
+</div><!--end row -->
+<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @foreach ($det as $de)
 <div class="row inner_events inner_reg">
 
@@ -88,7 +155,7 @@ $options=array();?>
      </div>
      <div class="col-sm-3">
        <div class="section">
-         <label class="form_label">{{$de['data']['date']}}</label>  
+         <label class="form_label">{{date("d-M-Y h:i:s", strtotime($de['data']['date']))}}</label>  
         </div>
      </div>
      <div class="col-sm-2">
@@ -109,6 +176,11 @@ $options=array();?>
 
  
 </div>
+
+
+@endif
+
+
 
 
    </div>

@@ -43,7 +43,7 @@ class AuthApiController extends BaseApiController
         $validator = \Validator::make($data, [
             'firstname' => 'required|max:255',
             'lastname' => 'required|max:255',
-            'mobile' => 'max:20|numeric',
+            'mobile' => 'numeric|digits_between:3,20',
             'email' => 'required|unique:users,email|email|max:255',
             'password' => 'required|min:6',
         ]);
