@@ -231,11 +231,9 @@ Route::group(['prefix' => 'guest'], function () {
    Route::post('tournaments/guestregisterstep3', 'User\TournamentsController@postGuestRegister');
 });
 
-Route::get('getcities', [
-    'as'   => 'getcities',
-    'uses' => 'User\UserController@getCities',
-]);
-//http://sportsjun.com/getcities?id=1
+
+
+
 
 
 

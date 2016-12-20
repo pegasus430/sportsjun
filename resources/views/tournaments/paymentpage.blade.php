@@ -8,7 +8,7 @@
 
 <div class="form-header header-primary register_form_head"><h4 class='register_form_title'>Payment Form</h4></div>
 @if($errors->any())
-<h4 class="error_validation">{{$errors->first()}}</h4>
+<!-- <h4 class="error_validation">{{$errors->first()}}</h4> -->
 @endif
 <div class="form-body">
 {!! Form::open(array('url' => 'tournaments/paymentform', 'method' => 'post')) !!}
@@ -83,6 +83,12 @@
               {!! Form::text("zipcode", '', array('required','class'=>'gui-input','placeholder' => 'Zipcode' )) !!}
             
            
+           @if($errors->first('zipcode'))
+           
+           <p class="help-block" id="agree_conditions-val" style="display: block;">{{$errors->first('zipcode')}}</p>
+           @endif
+
+
             </label>
      
     </div>
@@ -103,6 +109,9 @@
             {!! Form::select('country',$countries, 101, array('required','id'=>'country_id','class'=>'form-control','onchange'=>'displayCountries(this.value)','autocomplete'=>'off','placeholder'=>trans('message.common.fields.country'))) !!}
             @if ($errors->has('country_id')) <p class="help-block">{{ $errors->first('country_id') }}</p> @endif
             <i class="arrow double"></i>
+            @if($errors->first('country'))
+            <p class="help-block" id="agree_conditions-val" style="display: block;">{{$errors->first('country')}}</p>
+           @endif
         </label>
     </div>
 </div>
@@ -115,7 +124,10 @@
     
             {!! Form::select('state',$states, null, array('required','id'=>'state_id','class'=>'form-control states','onchange'=>'displayStates(this.value)','autocomplete'=>'off','placeholder'=>trans('message.common.fields.state'))) !!}
                @if ($errors->has('state_id')) <p class="help-block">{{ $errors->first('state_id') }}</p> @endif
-            <i class="arrow double"></i>                    
+            <i class="arrow double"></i>    
+            @if($errors->first('state'))
+            <p class="help-block" id="agree_conditions-val" style="display: block;">{{$errors->first('state')}}</p>
+           @endif                
         </label>  
 
     </div>
@@ -134,7 +146,10 @@
         <label class="field select">
              {!! Form::select('city',$cities, null, array('required','id'=>'city_id','class'=>'form-control cities','id'=>'city_id','placeholder'=>trans('message.common.fields.city'))) !!}		 	
             @if ($errors->has('city')) <p class="help-block">{{ $errors->first('city_id') }}</p> @endif
-            <i class="arrow double"></i>                    
+            <i class="arrow double"></i>
+            @if($errors->first('city'))
+            <p class="help-block" id="agree_conditions-val" style="display: block;">{{$errors->first('city')}}</p>
+           @endif                    
         </label>  
     
     </div>

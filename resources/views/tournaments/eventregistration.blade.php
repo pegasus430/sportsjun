@@ -145,7 +145,7 @@ $options=array();?>
                    } else {
                          $options=array(0=>0,1=>1);
                    } ?>
-             {!! Form::select("data[$events->id][count]",$options, null,array('class'=>'form-control valid')) !!}             
+             {!! Form::select("data[$events->id][count]",$options, null,array('class'=>'form-control valid test')) !!}             
              <label for="Pointstolosingteam" class="field-icon"><i class="fa fa-group"></i></label>
             </label>
 
