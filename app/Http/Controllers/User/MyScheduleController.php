@@ -259,7 +259,7 @@ class MyScheduleController extends Controller {
         $matchScheduleData = Helper::buildMyMatchScheduleData($searchArray);
 
         $scheduleDataTotalCount = MatchSchedule::where(function($query) use ($userId) {
-                    $query->where('player_a_ids', 'LIKE', '%' . $userId . '%')->orWhere('player_b_ids', 'LIKE', '%' . $userId . '%');
+                    $query->where('player_a_ids', 'LIKE', '%' . $userId . '%')->orWhere('player_b_ids', 'LIKE', '%' . $userId . '%')->orWhere('player_or_team_ids', 'like','%' . $userId . '%' );
                 })->whereNotNull('match_start_date');
         if (!empty($sportsId)) {
             $scheduleDataTotalCount->where('sports_id', $sportsId);

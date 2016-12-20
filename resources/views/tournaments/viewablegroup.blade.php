@@ -127,7 +127,56 @@
 								}
 
 								$match=Helper::getMatchDetails($match['id']);
-							?>	
+							?>
+		<!-- Archery  -->
+	@if($sports_id==18)
+
+	<div class="row <?php echo $class;?> row_to_filter_{{$group->id}}">
+
+		<div class="col-md-3">
+			<?php $pd_ids = ScoreCard::get_archery_teams($match['id']); ?>
+
+			@foreach($pd_ids as $pd)
+				<p>{{$pd->name}}</p>
+			@endforeach
+
+		</div>
+
+		<div class="col-xs-6 col-xs-6 col-md-3 col-md-3">     
+
+                    <p class="vs_date">
+                        <span><b>{{ $match['match_start_date'] }}</b></span>
+                        <br>
+
+                         <span class='sports_text'>{{ isset($match['sport']['sports_name'])?$match['sport']['sports_name']:'' }}</span>
+                         @if($match['match_type']!='other')
+                             <span class='match_type_text'>({{ $match['match_type']=='odi'?strtoupper($match['match_type']):ucfirst($match['match_type']) }})</span>
+                         @endif
+                         <br>                    
+
+                         <span class=''>{{Helper::getMatchDetails($match['id'])->address}}</span>
+                      </p>
+		</div>
+		<div class="col-xs-6 col-sm-6 col-md-3">     
+
+                    <p class="vs_date">
+                        Status: <span class='sports_text'>{{ ucfirst($match['match_status']) }}</span> <br>
+                    Scores: <span class='blue'>{{Helper::getMatchDetails($match['id'])->scores}} </span> <br>
+                    @if(!is_null(Helper::getMatchDetails($match['id'])->winner_id))
+                        <span class='red'>Winner: {{Helper::getMatchDetails($match['id'])->winner}} </span>
+
+                    @endif
+                      </p>
+		</div>
+
+		<div class="col-md-3">
+			<span class="tournament_score pull-right"><a href="{{ url('match/scorecard/edit/'.$match['id']) }}" class="btn-primary " style="padding: .3em 1em;">{{$add_score_link[$match['id']]}}</a></span>
+		</div>
+		
+	</div>
+
+	@else
+				
 										@if($match['a_id']!='' && $match['b_id'])
 											@if($match['schedule_type']=='team')
 												<div class="row {{$class}} row_to_filter_{{$group->id}}">
@@ -355,6 +404,7 @@
 										@else
 											No Scheduled Matches.
 										@endif
+		@endif
 									@endforeach
 									
 							@else
