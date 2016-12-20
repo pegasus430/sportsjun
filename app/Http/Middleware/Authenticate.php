@@ -73,7 +73,9 @@ class Authenticate
                                 'tournaments/payment_success',
                                 'tournaments/payment_failure',
                                 'tournaments/registerstep3/{id}',
-                                'tournaments/registerstep3/{id}/{event_id}'
+                                'tournaments/registerstep3/{id}/{event_id}',
+                                'getcities',
+                                'getstates'
                                 ];
 
                         $followingSports = Helper::getFollowingSportIds($this->auth->user()->id);
