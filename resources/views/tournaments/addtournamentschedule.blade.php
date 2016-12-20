@@ -76,7 +76,7 @@
                         <!-- Archery Module -->
                      <!-- Start Archery Module -->
 
-      <div id='archery' >
+      <div id='archery' style="display:none" class="archery-module" >
         <div class="row">
             <div class="col-sm-12">
                 <div class="section">
@@ -584,12 +584,7 @@
 <!-- Archery Module -->
 
 <script type="text/javascript">
-    @if(isset($sports_id) && ($sports_id ==18))
-        $('.archery-module').show();
-       $('.non-archery-module').hide();
-       $('#my_team_id').val(1);
-       $('#archery').show();
-    @endif
+
 
 
 
@@ -639,4 +634,16 @@
 
             })
         }
+
+
+    @if(isset($sports_id) && ($sports_id ==18))
+   
+       $('.non-archery-module').hide();
+       $('#my_team_id').val(1);
+       $('.archery-module').show();
+     
+    @endif
+
+
+
 </script>

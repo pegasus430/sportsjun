@@ -255,6 +255,29 @@ class ScoreCard {
         return $ars;
     }
 
+    public static function get_archery_teams($team_id){
+    	$players = [];
+
+    	$match_model = MatchSchedule::find($team_id);
+
+    	$pd_ids = explode(',',$match_model->player_or_team_ids);
+
+    	foreach ($pd_ids as $key => $pd_id) {
+    		if($pd_id){
+
+    			if($match_model->schedule_type=='player'){
+    				$players[$pd_id] = User::find($pd_id);
+    			}
+    			else{
+    				$players[$pd_id] = Team::find($pd_id);
+    			}
+    		}
+    	}
+
+
+    	return $players;
+    }
+
 
 
 }
