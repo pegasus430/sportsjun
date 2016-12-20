@@ -31,6 +31,9 @@
                     {
                         $schedule['match_start_date'] = DateTime::createFromFormat('d/m/Y g:i A', $schedule['match_start_date'])->format('jS F, Y g:i A');
                     }
+
+                    $match_number = ScoreCard::get_match_number_athletics($schedule['id']);
+
                     ?>
 
                     <p class="vs_date">
@@ -53,8 +56,13 @@
         <div class="col-xs-6 col-sm-6 col-md-3">     
 
                     <p class="vs_date">
+                        <b>{{$match_number['tournament_name']}} </b>
+                        <br>
+                        @if(!empty($match_number['match_number']))
+                            <b>{{$match_number['day']}}, {{$match_number['match_number']}} </b><br>
+                        @endif
                         Status: <span class='sports_text'>{{ ucfirst($schedule['match_status']) }}</span> <br>
-                    Scores: <span class='blue'>{{Helper::getMatchDetails($schedule['id'])->scores}} </span> <br>
+              
                     @if(!is_null(Helper::getMatchDetails($schedule['id'])->winner_id))
                         <span class='red'>Winner: {{Helper::getMatchDetails($schedule['id'])->winner}} </span>
 

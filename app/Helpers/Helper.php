@@ -1264,14 +1264,18 @@ class Helper
             'sport' => function ($q3) {
                 $q3->select('id', 'sports_name', 'sports_type');
             }
-        ))->join('archery_player_stats', 'archery_player_stats.match_id','=','match_schedules.id')
-        ->where(function ($query) use ($userId, $team_lists) {
-            $query
-                  ->where('player_a_ids', 'LIKE', '%' . $userId . '%')->orWhere('player_b_ids', 'LIKE',
+        ))->where(function ($query) use ($userId, $team_lists) {
+            $query->where('player_a_ids', 'LIKE', '%' . $userId . '%')->orWhere('player_b_ids', 'LIKE',
                 '%' . $userId . '%')
                   ->orWhere('player_or_team_ids', 'like',
-                '%' . $userId . '%')
-                  ->orWhere('archery_player_stats.user_id','=',$userId);
+                '%' . $userId . '%');
+
+            if($userId){
+                foreach($team_lists as $team_list){
+                  $query->orWhere('player_or_team_ids', 'like',
+                '%' . $team_list->team_id . '%');
+                }
+            }
  
         })->whereNotNull('match_start_date');
         if (!empty($searchArray['fromDate']) && !empty($searchArray['toDate'])) {

@@ -28,6 +28,7 @@ use View;
 use Carbon\Carbon;
 use Route;
 use PDO;
+use DateTime;
 use App\Helpers\SendMail;
 use App\Model\TournamentGroupTeams;
 use App\Model\OrganizationGroupTeamPoint;
@@ -276,6 +277,40 @@ class ScoreCard {
 
 
     	return $players;
+    }
+
+    public static function get_match_number_athletics($match_id){
+    	$match_model = MatchSchedule::find($match_id);
+
+    	$t_id = $match_model->tournament_id;
+    	$t_model = Tournaments::find($t_id);
+
+    	$days = '';
+    	$match_number = '';
+
+    	$result=[
+    		'match_number'=>'',
+    		'tournament_name'=>'',
+    		'day'=>''
+    	];
+
+    	if($t_model){
+    		$t_start = new DateTime($t_model->start_date);
+    		$today   = new DateTime(date('Y-m-d'));
+
+    		$diff = $t_start->diff($today);
+    		$days = ($diff->m * 31) + ($diff->d);
+    		$matches = DB::table('match_schedules')->whereTournamentId($t_id)->lists('id');
+
+
+    		$number = array_search($match_id, $matches) + 1;
+
+    		$result['match_number'] = "Match $number";
+    		$result['tournament_name']= $t_model->name;
+    		$result['day'] 			 = 'Day ' . $days; 		
+    	}
+
+    	return $result;
     }
 
 

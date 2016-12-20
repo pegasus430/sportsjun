@@ -2781,11 +2781,12 @@ class TournamentsController extends Controller
 							->selectRaw('sum(hundreds) as hundreds')
 							->selectRaw('sum(fours) as fours')
 							->selectRaw('sum(sixes) as sixes')
-							->selectRaw('sum(IF(bat_status="notout", 1, 0)) as notouts')
+							->selectRaw('sum(IF(bat_status="notout", 1, 0) + IF(out_as="not_out",1,0)) as notouts')
+							->selectRaw('((sum(totalruns) / sum(balls_played) ) * 100) as strikerates')
 							->selectRaw('max(totalruns) as highscore')
 							->orderBy('totalruns', 'desc')
 							->groupBy('user_id')						
-							->get();
+							->get(); 
 							
 						
 					$player['bowling']=CricketPlayerMatchwiseStats::join('match_schedules', 'match_schedules.id', '=', 'cricket_player_matchwise_stats.match_id')

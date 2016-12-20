@@ -127,6 +127,7 @@
 								}
 
 								$match=Helper::getMatchDetails($match['id']);
+
 							?>
 		<!-- Archery  -->
 	@if($sports_id==18)
@@ -134,7 +135,8 @@
 	<div class="row <?php echo $class;?> row_to_filter_{{$group->id}}">
 
 		<div class="col-md-3">
-			<?php $pd_ids = ScoreCard::get_archery_teams($match['id']); ?>
+			<?php $pd_ids = ScoreCard::get_archery_teams($match['id']); 
+				  	$match_number = ScoreCard::get_match_number_athletics($match['id']); ?>
 
 			@foreach($pd_ids as $pd)
 				<p>{{$pd->name}}</p>
@@ -160,8 +162,11 @@
 		<div class="col-xs-6 col-sm-6 col-md-3">     
 
                     <p class="vs_date">
+                    	<b>{{$match_number['tournament_name']}}</b>
+                    	<br>
+                    	<b>{{$match_number['day']}}, {{$match_number['match_number']}} </b><br>
                         Status: <span class='sports_text'>{{ ucfirst($match['match_status']) }}</span> <br>
-                    Scores: <span class='blue'>{{Helper::getMatchDetails($match['id'])->scores}} </span> <br>
+                 
                     @if(!is_null(Helper::getMatchDetails($match['id'])->winner_id))
                         <span class='red'>Winner: {{Helper::getMatchDetails($match['id'])->winner}} </span>
 
