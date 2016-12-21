@@ -7,7 +7,7 @@
          <ul class="nav nav-tabs nav-justified">
                                 <li class="active"><a href="#batting" data-toggle="tab" aria-expanded="true"> <b>{{ config('constants.CRICKET_STATS.BATTING_STATS.BATTING_STATISTICS')}}</b></a></li>
                                 <li class=""><a href="#bowling" data-toggle="tab" aria-expanded="false">   <b>{{ config('constants.CRICKET_STATS.BOWLLING_STATS.BOWLLING_STATISTICS')}}</b></a></li>
-                               
+
         </ul>
 
     <div class="tab-content">
@@ -18,10 +18,8 @@
     <table class="table table-hover">
          <thead>
             <tr>
-
                 <th>PLAYER</th>
                 <th>TEAM</th>
-       
                 <th>MAT</th>
                 <th>INN</th>
                 <th>NO</th>
@@ -36,12 +34,15 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($player_standing['batting'] as $statistic)  
+            @foreach($player_standing['batting'] as $statistic)
 
         @if(!empty($statistic->totalruns))
             <tr>
-                <td><a href='/editsportprofile/{{$statistic->user_id}}' class="text-primary">
-            <span class='hidden-xs hidden-sm'> 
+                <td>
+                    @if (!Auth::guest())
+                    <a href='/editsportprofile/{{$statistic->user_id}}' class="text-primary">
+                    @endif
+            <span class='hidden-xs hidden-sm'>
                    
                          
  {!! Helper::Images($statistic->logo,'user_profile',array('class'=>'img-circle img-border ','height'=>52,'width'=>52) )!!}
@@ -49,9 +50,18 @@
                                 
                              
                 </span>
-                    {{$statistic->player_name}}</a></td>                
-                <td><a href='/team/members/{{$statistic->team_id}}' class="text-primary">{{$statistic->team_name}}</a></td>
-    
+                    {{$statistic->player_name}}
+                        @if (!Auth::guest())
+                    </a>
+                        @endif
+                </td>
+                <td>
+                    @if (Auth::guest())
+                        <a href="{{route('public.search.view',['teams',$statistic->team_id])}}" class="text-primary">{{$statistic->team_name}}</a>
+                    @else
+                    <a href='/team/members/{{$statistic->team_id}}' class="text-primary">{{$statistic->team_name}}</a>
+                      @endif
+                      </td>
                 <td>{{$statistic->matches}}</td>
                 <td>{{$statistic->innings_bat}}</td>
                 <td>{{$statistic->notouts}}</td>
@@ -80,7 +90,7 @@
 
                 <th>PLAYER</th>
                 <th>TEAM</th>
-               
+
                 <th>MAT</th>
                 <th>INN</th>
                 <th>W</th>
@@ -90,12 +100,14 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($player_standing['bowling'] as $statistic)  
+            @foreach($player_standing['bowling'] as $statistic)
 
        @if(!empty($statistic->ecomony))
             <tr>
-                <td><a href='/editsportprofile/{{$statistic->user_id}}' class="text-primary">
- 
+                <td>
+                    @if (!Auth::guest())
+                        <a href='/editsportprofile/{{$statistic->user_id}}' class="text-primary">
+                    @endif
 
                      <span class='hidden-xs hidden-sm'> 
                    
@@ -106,9 +118,21 @@
                              
                     </span>
 
-                    {{$statistic->player_name}}</a></td>                
-                <td><a href='/team/members/{{$statistic->team_id}}' class="text-primary">{{$statistic->team_name}}</a></td>
-                
+                    {{$statistic->player_name}}
+                            @if (!Auth::guest())
+                        </a>
+                            @endif
+
+                </td>
+                <td>
+                    @if (!Auth::guest())
+                    <a href='/team/members/{{$statistic->team_id}}' class="text-primary">{{$statistic->team_name}}</a>
+                    @else
+                        {{$statistic->team_name}}
+                    @endif
+
+                </td>
+
                  <td>{{$statistic->matches}}</td>
                 <td>{{$statistic->innings_bowl}}</td>
                 <td>{{$statistic->wickets}}</td>
@@ -122,7 +146,7 @@
     </table>
     </div>
     @else
-    
+
     <div class="sj-alert sj-alert-info">
                        {{ trans('message.sports.nostats')}}
 </div>

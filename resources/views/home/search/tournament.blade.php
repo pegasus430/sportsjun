@@ -51,6 +51,7 @@
         @endif
         <li><a data-toggle="tab" href="#tournament_group_matches">Matches</a></li>
         <li><a data-toggle="tab" href="#tournament_gallery">Gallery</a></li>
+        <li><a data-toggle="tab" href="#player_standing">Player Standing</a></li>
     </ul>
     <div class="nav nav-tabs search-tournament-tabs hidden-sm hidden-md hidden-lg">
         <li class="active">
@@ -65,6 +66,12 @@
                 @endif
                 <option value="#tournament_group_matches">Matches</option>
                 <option value="#tournament_gallery">Gallery</option>
+                <?php
+                    $player_standing = $tournament->playerStanding();
+                ?>
+                @if ($player_standing && count($player_standing)):
+                <option value="#player_standing">Player Standing</option>
+                @endif
             </select>
         </li>
     </div>
@@ -84,6 +91,9 @@
         </div>
         <div id="tournament_gallery" class="tab-pane fade">
             @include('home.search.tournament.gallery')
+        </div>
+        <div id="player_standing" class="tab-pane fade">
+            @include('home.search.tournament.player_standing')
         </div>
     </div>
 
