@@ -94,11 +94,11 @@ class TournamentApiController extends BaseApiController
                         $tournaments->where(DB::raw('false'));
                         break;
                     default:
-                        return $this->ApiResponse(['error' => 'Unknown type requested', 404]);
+                        return self::ApiResponse(['error' => 'Unknown type requested', 404]);
                         break;
                 }
             } else {
-                return $this->ApiResponse(['error' => 'Auth required', 404]);
+                return self::ApiResponse(['error' => 'Auth required', 404]);
             }
         }
 
@@ -231,7 +231,7 @@ class TournamentApiController extends BaseApiController
         $tournament = Tournaments::find($id);
         $parent_tournament = $tournament->tournamentParent;
 
-        return $this->ApiResponse($parent_tournament);
+        return self::ApiResponse($parent_tournament);
     }
 
     public function follow_tournament($id)
@@ -383,7 +383,7 @@ class TournamentApiController extends BaseApiController
 
             return $this->CollectionMapResponse($groups, $map);
         } else {
-            return $this->ApiResponse(['error' => 'Tournament not found'], 404);
+            return self::ApiResponse(['error' => 'Tournament not found'], 404);
         }
     }
 
@@ -393,7 +393,7 @@ class TournamentApiController extends BaseApiController
         $tournament = Tournaments::find($id);
 
         if (!$tournament) {
-            return $this->ApiResponse(['error' => "Tournament not exists"], 500);
+            return self::ApiResponse(['error' => "Tournament not exists"], 500);
         }
         if ($tournament->final_stage_teams) {
             $matchScheduleData = MatchSchedule::where('tournament_id', $id)->whereNull('tournament_group_id')
@@ -403,10 +403,10 @@ class TournamentApiController extends BaseApiController
             $maxRoundNumber = $matchScheduleData->max('tournament_round_number');
             $schedule_type = !empty($tournament->schedule_type) ? $tournament->schedule_type : 'team';
             $bracket = TournamentsController::getBracketTeams($id, $maxRoundNumber, $schedule_type, $isOwner);
-            return $this->ApiResponse($bracket);
+            return self::ApiResponse($bracket);
 
         }
-        return $this->ApiResponse([]);
+        return self::ApiResponse([]);
     }
 
     public function final_stage_matches($id)
@@ -438,7 +438,7 @@ class TournamentApiController extends BaseApiController
         if ($tournament) {
             return $this->CollectionMapResponse($tournament->finalMatches, $map);
         } else {
-            return $this->ApiResponse(['error' => 'Tournament not found'], 404);
+            return self::ApiResponse(['error' => 'Tournament not found'], 404);
         }
 
 
@@ -448,7 +448,7 @@ class TournamentApiController extends BaseApiController
     public function player_standing($id)
     {
         $players = $this->tournamentsApi->playerStanding($id, true);
-        return $this->ApiResponse($players);
+        return self::ApiResponse($players);
     }
 
 

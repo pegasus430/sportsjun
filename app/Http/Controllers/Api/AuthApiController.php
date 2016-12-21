@@ -27,13 +27,13 @@ class AuthApiController extends BaseApiController
         try {
             // attempt to verify the credentials and create a token for the user
             if (!$token = JWTAuth::attempt($credentials)) {
-                return $this->ApiResponse(['error' => 'Invalid credentials'], 401);
+                return self::ApiResponse(['error' => 'Invalid credentials'], 401);
             }
         } catch (JWTException $e) {
             // something went wrong whilst attempting to encode the token
-            return $this->ApiResponse(['error' => 'Internal server error'], 500);
+            return self::ApiResponse(['error' => 'Internal server error'], 500);
         }
-        return $this->ApiResponse(compact('token'));
+        return self::ApiResponse(compact('token'));
     }
 
     public function register(Request $request)
@@ -62,15 +62,15 @@ class AuthApiController extends BaseApiController
             if ($user) {
                 \Event::fire(new UserRegistered($user));
                 $token = JWTAuth::fromUser($user);
-                return $this->ApiResponse(compact('token'));
+                return self::ApiResponse(compact('token'));
             } else {
                 $error = 'Failed to create user';
             }
         } else {
-            $error = $validator->errors()->first();
+            $error = $validator->errors()->getMessages();
         }
 
-        return $this->ApiResponse(['error' => $error], 500);
+        return self::ApiResponse(['error' => $error], 500);
     }
 
 
@@ -89,9 +89,9 @@ class AuthApiController extends BaseApiController
         ]);
         if (!$validator->fails()) {
             JWTAuth::invalidate($request->input('token'));
-            return $this->ApiResponse(['message' => 'Logout'], 200);
+            return self::ApiResponse(['message' => 'Logout'], 200);
         } else {
-            return $this->ApiResponse(['error' => $validator->errors()->first()], 500);
+            return self::ApiResponse(['error' => $validator->errors()->first()], 500);
         }
     }
 
@@ -108,13 +108,13 @@ class AuthApiController extends BaseApiController
             $resp = [];
             if (!$result || $result['success'] == false) {
                 $resp['error'] = array_get($result, 'response.code');
-                return $this->ApiResponse($resp, 500);
+                return self::ApiResponse($resp, 500);
             } else {
                 $resp['message'] = "OTP SENT SUCCESSFULLY";
-                return $this->ApiResponse($resp);
+                return self::ApiResponse($resp);
             }
         } else {
-            return $this->ApiResponse(['error' => $validator->errors()->first()], 500);
+            return self::ApiResponse(['error' => $validator->errors()->first()], 500);
         }
 
 
@@ -136,13 +136,13 @@ class AuthApiController extends BaseApiController
             $resp = [];
             if ($result) {
                 $resp['message'] = "NUMBER VERIFIED SUCCESSFULLY";
-                return $this->ApiResponse($resp);
+                return self::ApiResponse($resp);
             } else {
                 $resp['message'] = "OTP INVALID";
-                return $this->ApiResponse($resp, 500);
+                return self::ApiResponse($resp, 500);
             }
         } else {
-            return $this->ApiResponse(['error' => $validator->errors()->first()], 500);
+            return self::ApiResponse(['error' => $validator->errors()->first()], 500);
         }
     }
 
@@ -157,11 +157,11 @@ class AuthApiController extends BaseApiController
         if (!$validator->fails()) {
             $mobileNumber = preg_replace('/\D/', '', $data['mobileNumber']);
             if (MSG91::isOtpSent($mobileNumber, $data['timeToken'])) {
-                return $this->ApiResponse(['message' => 'OTP is sent']);
+                return self::ApiResponse(['message' => 'OTP is sent']);
             }
-            return $this->ApiResponse(['message' => 'OTP is not sent'], 500);
+            return self::ApiResponse(['message' => 'OTP is not sent'], 500);
         } else {
-            return $this->ApiResponse(['error' => $validator->errors()->first()], 500);
+            return self::ApiResponse(['error' => $validator->errors()->first()], 500);
         }
     }
 

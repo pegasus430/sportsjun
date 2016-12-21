@@ -16,7 +16,7 @@ class UserApiController extends BaseApiController
 {
     public function index(){
         $users = User::select(['id','name'])->paginate(20);
-        return $this->ApiResponse($users);
+        return self::ApiResponse($users);
     }
 
     public function show($id){
@@ -26,7 +26,7 @@ class UserApiController extends BaseApiController
                 'country_id','country','zip','contact_number','about','newsletter','logoImage']);
         } else
             $user = User::where('id', $id)->select(['id', 'name', 'firstname', 'lastname'])->first();
-        return $this->ApiResponse($user);
+        return self::ApiResponse($user);
     }
 
 
@@ -94,12 +94,12 @@ class UserApiController extends BaseApiController
                 }
 
                 $user->save();
-                return $this->ApiResponse(['message' => 'User updated Successfully'], 200);
+                return self::ApiResponse(['message' => 'User updated Successfully'], 200);
             }
         } else {
             $error = $validator->errors()->first();
         }
-        return $this->ApiResponse(['error' => $error], 500);
+        return self::ApiResponse(['error' => $error], 500);
     }
 
     public function sports($id = 'self'){
@@ -134,7 +134,7 @@ class UserApiController extends BaseApiController
                 }
             }
         }
-        return $this->ApiResponse($sports);
+        return self::ApiResponse($sports);
     }
 
     public function updateSports($id = 'self'){
@@ -169,7 +169,7 @@ class UserApiController extends BaseApiController
             $userStatistic->save();
         }
 
-        return $this->ApiResponse('fail',404);
+        return self::ApiResponse('fail',404);
     }
 
 }
