@@ -16,7 +16,7 @@ class  SportCricketApiController extends BaseApiController
             ->applyFilter(CricketStatistic::select(), [])
             ->paginate(50);
 
-        return $this->ApiResponse($statistic);
+        return self::ApiResponse($statistic);
     }
 
     public function cricketPlayerMatchScore()
@@ -24,7 +24,7 @@ class  SportCricketApiController extends BaseApiController
         $stats = $this
             ->applyFilter(CricketPlayerMatchwiseStats::select(), [])
             ->paginate(50);
-        return $this->ApiResponse($stats);
+        return self::ApiResponse($stats);
     }
 
     public function cricketOverwiseScore()
@@ -32,7 +32,7 @@ class  SportCricketApiController extends BaseApiController
         $score = $this
             ->applyFilter(CricketOverwiseScore::select(), [])
             ->paginate(50);
-        return $this->ApiResponse($score);
+        return self::ApiResponse($score);
     }
 
     public function setCricketOverwiseScore($id = false)
@@ -62,13 +62,13 @@ class  SportCricketApiController extends BaseApiController
 
             }
             $score->save();
-            return $this->ApiResponse(['message'=>'ok']);
+            return self::ApiResponse(['message'=>'ok']);
 
         } else {
             $error = $validator->errors()->first();
         }
 
-        return $this->ApiResponse(['error' => $error], 500);
+        return self::ApiResponse(['error' => $error], 500);
     }
 
 }

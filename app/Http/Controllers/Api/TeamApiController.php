@@ -33,7 +33,7 @@ class TeamApiController extends BaseApiController
             'team_available',
             'player_available'
         ])->paginate(50);
-        return $this->ApiResponse($teams);
+        return self::ApiResponse($teams);
     }
 
     public function show($id)
@@ -60,7 +60,7 @@ class TeamApiController extends BaseApiController
                 'team_available',
                 'player_available'
             ])->first();
-        return $this->ApiResponse($team);
+        return self::ApiResponse($team);
     }
 
 }

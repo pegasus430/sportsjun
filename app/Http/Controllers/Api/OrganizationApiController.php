@@ -16,7 +16,7 @@ class OrganizationApiController extends BaseApiController
                         'website_url', 'about', 'logo','location',
                         'address','city_id','city','state_id','state','country_id','country','zip'
                     ])->paginate(20);
-        return $this->ApiResponse($organizations);
+        return self::ApiResponse($organizations);
     }
 
     public function show($id){
@@ -36,7 +36,7 @@ class OrganizationApiController extends BaseApiController
                 }
             ])
             ->first();
-        return $this->ApiResponse($organization);
+        return self::ApiResponse($organization);
     }
 
 
