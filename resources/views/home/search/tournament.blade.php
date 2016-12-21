@@ -41,7 +41,7 @@
         'Number of Teams in a Group' => $tournament->groups_teams
     ]
     ?>
-    <ul class="nav nav-tabs search-tournament-tabs">
+    <ul class="nav nav-tabs search-tournament-tabs hidden-xs">
         <li class="active"><a data-toggle="tab" href="#tournament_info">Details</a></li>
         @if($tournament->type=='league' || $tournament->type=='multistage')
             <li><a data-toggle="tab" href="#tournament_group_stage">Group Stage</a></li>
@@ -52,6 +52,22 @@
         <li><a data-toggle="tab" href="#tournament_group_matches">Matches</a></li>
         <li><a data-toggle="tab" href="#tournament_gallery">Gallery</a></li>
     </ul>
+    <div class="nav nav-tabs search-tournament-tabs hidden-sm hidden-md hidden-lg">
+        <li class="active">
+            <select id="select_tournament_tabs"
+                    onchange="return tournamentTabSelect(this)">
+                <option value="#tournament_info" selected>Details</option>
+                @if($tournament->type=='league' || $tournament->type=='multistage')
+                    <option value="#tournament_group_stage">Group Stage</option>
+                @endif
+                @if($tournament->type=='knockout' || $tournament->type=='multistage')
+                    <option value="#tournament_final_stage">Final Stage</option>
+                @endif
+                <option value="#tournament_group_matches">Matches</option>
+                <option value="#tournament_gallery">Gallery</option>
+            </select>
+        </li>
+    </div>
     <div class="tab-content">
         <div id="tournament_info" class="tab-pane fade in active">
             @include('home.search.tournament.info')
@@ -70,5 +86,13 @@
             @include('home.search.tournament.gallery')
         </div>
     </div>
+
+    <script>
+        function tournamentTabSelect(el) {
+            $('ul.search-tournament-tabs a[href="' + $(':selected', el).val() + '"]').click();
+        }
+
+    </script>
+
 
 @endsection
