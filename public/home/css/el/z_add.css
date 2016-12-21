@@ -136,3 +136,12 @@ body {
     font-size:1.5em;
     background:#eee;
 }
+
+.searchWrapp label{
+    overflow: hidden;
+    height:20px;
+}
+
+#select_tournament_tabs{
+    border-radius: 3px;
+}
