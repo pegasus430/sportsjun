@@ -3248,8 +3248,17 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
    	}else {
       $user_id = '';
     }
+
+
+    $reg_teams_query=DB::table('request')->where('to_id',$event_id)->where('type',4)->get();
+    $reg_team_ids=array();
+    foreach($reg_teams_query as $reg_teams){
+    	$reg_team_ids[]=$reg_teams->from_id;
+    }
+
+    //dd($reg_team_ids);
     
-   	$teams=Team::where('team_owner_id',$user_id)->where('sports_id',$sports_id)->where('isactive',1)->get();
+   	$teams=Team::where('team_owner_id',$user_id)->where('sports_id',$sports_id)->where('isactive',1)->whereNotIn('id', $reg_team_ids)->get();
    	$teams_array=array();
     if($teams!=''){
        foreach($teams as $tm){
@@ -3497,10 +3506,10 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
         $request['player_tournament_id'] =$_REQUEST['event_id'];	 
         $request['team_ids'][0]= $t_id;
 
-        
+        //dd($t_id);
 /*---------------------------------new--------------------------------------------*/
         $mn=AllRequests::saverequestdup($request);
-        //dd($mn);
+        
         if($mn=='exist'){
         	return back()->withErrors(['This Registration already exist']);
         } else if($mn=='fail'){
@@ -3564,7 +3573,7 @@ public function getPaymentform($id) {
 
   if (Auth::check()) {
 
-    //dd("hhb");
+    
 
      $roletype='user';
      $user_id = Auth::user()->id;
@@ -3689,9 +3698,9 @@ public function postPaymentsuccess() {
      foreach($cart_data as $crt){
      	$mn=AllRequests::saverequest($crt);
         if($crt['flag']=='PLAYER_TO_TOURNAMENT'){
-              $req_table =DB::table('request')->where('to_id',$crt['team_ids'][0])->where('from_id',$crt['player_tournament_id'])->update(['cart_id' => $_POST['udf2']]);
+              $req_table =DB::table('request')->where('to_id',$crt['team_ids'][0])->where('from_id',$crt['player_tournament_id'])->update(['cart_id' => $_POST['udf2'],'action_status' => 1]);
      	} else if($crt['flag']=='TEAM_TO_TOURNAMENT'){
-     		$req_table =DB::table('request')->where('to_id',$crt['player_tournament_id'])->where('from_id',$crt['team_ids'][0])->update(['cart_id' => $_POST['udf2']]);
+     		$req_table =DB::table('request')->where('to_id',$crt['player_tournament_id'])->where('from_id',$crt['team_ids'][0])->update(['cart_id' => $_POST['udf2'],'action_status' => 1]);
      	}
 
      	
