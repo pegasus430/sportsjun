@@ -1252,15 +1252,31 @@ class Helper
         $playerLogoArray = [];
         $teamNameArray = [];
         $playerNameArray = [];
+
+
 //        $userId = isset(Auth::user()->id)?Auth::user()->id:0;      //user or guest
         $userId = $searchArray['userId'];
+
+        if($userId){
+            $team_lists = User::find($userId)->userdetails;
+        }
         $matchSchedules = MatchSchedule::with(array(
             'sport' => function ($q3) {
                 $q3->select('id', 'sports_name', 'sports_type');
             }
-        ))->where(function ($query) use ($userId) {
+        ))->where(function ($query) use ($userId, $team_lists) {
             $query->where('player_a_ids', 'LIKE', '%' . $userId . '%')->orWhere('player_b_ids', 'LIKE',
+                '%' . $userId . '%')
+                  ->orWhere('player_or_team_ids', 'like',
                 '%' . $userId . '%');
+
+            if($userId){
+                foreach($team_lists as $team_list){
+                  $query->orWhere('player_or_team_ids', 'like',
+                '%' . $team_list->team_id . '%');
+                }
+            }
+ 
         })->whereNotNull('match_start_date');
         if (!empty($searchArray['fromDate']) && !empty($searchArray['toDate'])) {
             $matchSchedules->whereBetween('match_start_date', [$searchArray['fromDate'], $searchArray['toDate']]);
@@ -1276,8 +1292,10 @@ class Helper
             $matchSchedules->orderby('match_start_time', 'desc');
             $matchSchedules->limit($searchArray['limit'])->offset($searchArray['offset']);
         }
+
+
         $matchScheduleData = $matchSchedules->get([
-            'id',
+            'match_schedules.id',
             'match_start_date',
             'match_start_time',
             'match_end_date',

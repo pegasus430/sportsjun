@@ -221,13 +221,72 @@
 									$class='schedule_new_req_nor';	
 								}
 								$match=Helper::getMatchDetails($match['id']);
-							?>
+			
+						?>
+
+<!-- Archery  -->
+	@if($sports_id==18)
+
+	<div class="row <?php echo $class;?> row_to_filter_{{$group->id}}">
+
+		<div class="col-md-3">
+			<?php $pd_ids = ScoreCard::get_archery_teams($match['id']); 
+				$match_number = ScoreCard::get_match_number_athletics($match['id']);
+			?>
+
+			@foreach($pd_ids as $pd)
+				<p>{{$pd->name}}</p>
+			@endforeach
+
+		</div>
+
+		<div class="col-xs-6 col-xs-6 col-md-3 col-md-3">     
+
+                    <p class="vs_date">
+                        <span><b>@if ($match['match_start_date'])
+											{{ Helper::displayDateTime($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""), 1) }}
+										@else
+											TBD
+										@endif</b></span>
+                        <br>
+
+                         <span class='sports_text'>{{ isset($match['sport']['sports_name'])?$match['sport']['sports_name']:'' }}</span>
+                         @if($match['match_type']!='other')
+                             <span class='match_type_text'>({{ $match['match_type']=='odi'?strtoupper($match['match_type']):ucfirst($match['match_type']) }})</span>
+                         @endif
+                         <br>                    
+
+                         <span class=''>{{Helper::getMatchDetails($match['id'])->address}}</span>
+                      </p>
+		</div>
+		<div class="col-xs-6 col-sm-6 col-md-3">     
+
+                    <p class="vs_date">
+                    	<b>{{$match_number['tournament_name']}}</b>
+                    	<br>
+                    	<b>{{$match_number['day']}}, {{$match_number['match_number']}} </b><br>
+                        Status: <span class='sports_text'>{{ ucfirst($match['match_status']) }}</span> <br>
+                  	
+                    @if(!is_null(Helper::getMatchDetails($match['id'])->winner_id))
+                        <span class='red'>Winner: {{Helper::getMatchDetails($match['id'])->winner}} </span>
+
+                    @endif
+                      </p>
+		</div>
+
+		<div class="col-md-3">
+			<span class="tournament_score pull-right"><a href="{{ url('match/scorecard/edit/'.$match['id']) }}" class="btn-primary " style="padding: .3em 1em;">{{$add_score_link[$match['id']]}}</a></span>
+		</div>
+		
+	</div>
+
+	@else
 							@if($match['a_id']!='' && $match['b_id'])
 								@if($match['schedule_type']=='team')
 							<div class="row <?php echo $class;?> row_to_filter_{{$group->id}}">
 						
 								<div class="col-md-3 schedule_new_team_img">
-								@if(!empty($team_logo[$match['a_id']]))
+								@if(!empty($team_logo[$match['a_id']]) )
 									@if($team_logo[$match['a_id']]['url']!='')
 									<!--<img class="fa fa-user fa-fw fa-2x" height="42" width="42" src="{{ url('/uploads/teams/'.$team_logo[$match['a_id']]['url']) }}" onerror="this.onerror=null;this.src='{{ asset('/images/default-profile-pic.jpg') }}';">-->
 									<div class="team_player_sj_img">
@@ -350,15 +409,15 @@
 								<center><br><a href='/editsportprofile/{{$player_of_the_match->id}}'>{{$player_of_the_match->name}}</a>
 											
 							    </center>
-						@else
-							<div class="edit-link pull-right" onclick="editMatchSchedule({{$match['id']}},1,'','myModal')"><i class="fa fa-pencil"></i>			
-							 {{ trans('message.tournament.fields.edit_schedule') }}
-							 </div>	
-					 	@endif							
+							@else
+								<div class="edit-link pull-right" onclick="editMatchSchedule({{$match['id']}},1,'','myModal')"><i class="fa fa-pencil"></i>			
+								 {{ trans('message.tournament.fields.edit_schedule') }}
+								 </div>	
+						 	@endif							
 								
 								</div>
 							</div>
-							@else
+						@else
 							<div class="row <?php echo $class;?>">
 								<div class="col-md-3 schedule_new_team_img">
 								
@@ -375,10 +434,10 @@
                                 	{!! Helper::Images('default-profile-pic.jpg','images',array('class'=>'img-circle img-border ','height'=>52,'width'=>52) )!!}
                                 </div>	
 					
-					@endif
+								@endif
 					{{'VS'}}
 					
-					@if($user_profile[$match['b_id']]['url']!='')
+								@if($user_profile[$match['b_id']]['url']!='')
 								<!--<img class="fa fa-user fa-fw fa-2x" height="42" width="42" src="{{ url('/uploads/user_profile/'.$user_profile[$match['b_id']]['url']) }}" onerror="this.onerror=null;this.src='{{ asset('/images/default-profile-pic.jpg') }}';">-->
 								<div class="team_player_sj_img">
                                 	{!! Helper::Images($user_profile[$match['b_id']]['url'],'user_profile',array('class'=>'img-circle img-border ','height'=>52,'width'=>52) )!!}
@@ -422,12 +481,12 @@
 
 											<br/>
 
-									<span class=''>{{$match['address']}}</span><br>
-									Status: <span class='event_date'>{{ ucfirst($match['match_status']) }}</span> <br>
-									Scores: <span class='blue'>{{Helper::getMatchDetails($match['id'])->scores}} </span> <br>
-				@if(!is_null($match['winner_id']))
-						<span class='red'>Winner: {{Helper::getMatchDetails($match['id'])->winner}} </span>								
-				@endif
+										<span class=''>{{$match['address']}}</span><br>
+										Status: <span class='event_date'>{{ ucfirst($match['match_status']) }}</span> <br>
+										Scores: <span class='blue'>{{Helper::getMatchDetails($match['id'])->scores}} </span> <br>
+									@if(!is_null($match['winner_id']))
+											<span class='red'>Winner: {{Helper::getMatchDetails($match['id'])->winner}} </span>								
+									@endif
 					<br>
 
 									@if(!empty($add_score_link[$match['id']]))
@@ -440,11 +499,11 @@
 										
 									@endif	
 
-						@if($match['game_type']=='rubber')
-                 				<span class="pull-right">
-                 			  <a href="#" class="show_sub_field show_sub_tournament " parent_field_id = "{{$match['id']}}">View Rubber</a>
-                 			  	</span>
-                 		@endif
+									@if($match['game_type']=='rubber')
+			                 				<span class="pull-right">
+			                 			  <a href="#" class="show_sub_field show_sub_tournament " parent_field_id = "{{$match['id']}}">View Rubber</a>
+			                 			  	</span>
+			                 		@endif
 								
 								</div>
 								
@@ -456,29 +515,30 @@
 							</div>
 
 						
-							@endif
+						@endif
 							<!-- Show Rubbers -->
 
-				@if($match['game_type']=='rubber')
-					<div id="subfield_{{$match['id']}}" class="row" style="display:none;">
-							@include('tournaments.sub_match_schedules_rubber')
-					</div>
+								@if($match['game_type']=='rubber')
+									<div id="subfield_{{$match['id']}}" class="row" style="display:none;">
+											@include('tournaments.sub_match_schedules_rubber')
+									</div>
 
-				@endif
+								@endif
 
 					<!-- End of Rubber -->
 
-							@else
-							{{trans('message.tournament.empty_schedule') }}
-							@endif
+					@else
+						{{trans('message.tournament.empty_schedule') }}
+					@endif
 							<?php $i++; ?>
-							@endforeach	
+		@endif
+				@endforeach	
 							</div>
 						</div>
-						@else
-                        	<div class="clearfix"></div>
-							<center>{{trans('message.tournament.empty_schedule') }}</center>
-						@endif
+		@else
+        	<div class="clearfix"></div>
+			<center>{{trans('message.tournament.empty_schedule') }}</center>
+		@endif
 						</div>
 					</div>
 					

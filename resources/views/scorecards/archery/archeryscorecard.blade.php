@@ -23,6 +23,8 @@
     $player_a_ids=$match_data[0]['player_a_ids'];
     $player_b_ids=$match_data[0]['player_b_ids'];
 
+    $pp_ids = [];
+
 
 
     $match_details=json_decode($match_data[0]['match_details']);
@@ -192,7 +194,8 @@ td,th{
                                @foreach($players as $player)
                                     <tr>
                                       <td style="height:25px;">
-                                          {{$player->player_name}}
+                                          {{$player->player_name}} <br>
+
                                       </td>
                                     </tr>
                                   @endforeach
@@ -213,10 +216,24 @@ td,th{
               <div class="row">
 
                    <div class="col-sm-12">
+
+                <?php $pp_ids = [];?>
+                    @foreach($player_or_team_ids as $pt_id)
+                      @if(!empty($pt_id))
+                      <?php $pp_ids[] = $pt_id;?>
+                  <div style="display:none">
+                      <div id='{{$pt_id}}_players_list'>
+                            @foreach($player_or_team_list[$pt_id]->TeamPlayers as $pr)
+                              <option value="{{$pr->user->id}}">{{$pr->user->name}}</option>
+                            @endforeach
+                      </div>                   
+
+                  </div>
+
                         <div class="col-sm-6">
-                        <center>    <h4 class="team_fall table_head"> {{$team_a_name}} Players</h4> </center>
+                        <center>    <h4 class="team_fall table_head"> {{$player_or_team_list[$pt_id]->name}} Players</h4> </center>
                              <table class="table table-striped table-bordered">
-                               @foreach($players_a as $player)
+                               @foreach($players_list[$pt_id] as $player)
                                     <tr>
                                       <td style="height:25px;">
                                           {{$player->player_name}}
@@ -224,28 +241,17 @@ td,th{
                                     </tr>
                                   @endforeach
                               </table>
-                          <div id='select_a_players'>
+                          <div id='select_{{$pt_id}}_players'>
                           </div>                          
                         </div>
-                        <div class="col-sm-6">
-                         <center> <h4 class="team_extra table_head"> {{$team_b_name}} Players</h4> </center>
-                              <table class="table table-striped table-bordered">
-                                  @foreach($players_b as $player)
-                                    <tr>
-                                      <td style="height:25px;">
-                                          {{$player->player_name}}
-                                      </td>
-                                    </tr>
-                                  @endforeach
-                              </table>
-                          <div id='select_b_players'>
+                      @endif
 
-                          </div>
-                        </div>
+                    @endforeach
+                       
                   </div>
               </div>
              
-
+              <p>
               <div class="row">
                 <div class="col-sm-12">
                   <div class="row"> 
@@ -270,19 +276,7 @@ td,th{
                
 
 
-                  <div style="display:none">
-                      <div id='a_players_list'>
-                            @foreach($a_players as $player)
-                              <option value="{{$player->id}}">{{$player->name}}</option>
-                            @endforeach
-                      </div>
-                      <div id='b_players_list'>
-                             @foreach($b_players as $player)
-                                <option value="{{$player->id}}">{{$player->name}}</option>
-                            @endforeach
-                      </div>
-
-                  </div>
+                
 
                   <input type="hidden" name="match_id" value="{{$match_obj->id}}">
 
@@ -387,47 +381,21 @@ td,th{
             <tbody>
             <?php $p_index=1;?>
               <!-- If Team -->
-              @if($match_obj->schedule_type=='team')
-
-                  @foreach($players_a as $player)
-                    <tr>
-                        <td>{{$player->player_name}}  </td>
-                      @foreach($match_obj->archery_rounds as $round)
-                        <td class="a_s player_{{$p_index}}_round_{{$round->round_number}} player_{{$player->id}}_round_{{$round->round_number}}" player_id='{{$player->id}}' user_id='{{$player->user_id}}' round_number="{{$round->round_number}}" round_id="{{$round->id}}"> {{$player->{'round_'.$round->round_number} }} </td>
-
-
-                        <?php $p_index++;?>
-                      @endforeach
-                        <td class='player_{{$player->id}}_total text-primary' style="font-size:20px">{{$player->total}} </td>
-                    </tr>
-                  @endforeach
-
-                  @foreach($players_b as $player)
-                     <tr>
-                          <td>{{$player->player_name}}  </td>
-                      @foreach($match_obj->archery_rounds as $round)
-                        <td class="a_s player_{{$p_index}}_round_{{$round->round_number}} player_{{$player->id}}_round_{{$round->round_number}}" player_id='{{$player->id}}' user_id='{{$player->user_id}}' round_number="{{$round->round_number}}" round_id="{{$round->id}}"> {{$player->{'round_'.$round->round_number} }} </td>
-
-                        <?php $p_index++;?>
-                      @endforeach
-                        <td class='player_{{$player->id}}_total text-primary' style="font-size:20px">{{$player->total}}</td>
-                    </tr>
-                  @endforeach
-
-
-              @else
+        
                   @foreach($players as $player)
                      <tr>
-                          <td>{{$player->player_name}}  </td>
+                          <td>{{$player->player_name}} <br>
+                            <b>{{$player->team_name}}</b> </td>
                       @foreach($match_obj->archery_rounds as $round)
                         <td class="a_s player_{{$p_index}}_round_{{$round->round_number}} player_{{$player->id}}_round_{{$round->round_number}}" player_id='{{$player->id}}' user_id='{{$player->user_id}}' round_number="{{$round->round_number}}" round_id="{{$round->id}}"> {{$player->{'round_'.$round->round_number} }} </td>
 
                         <?php $p_index++;?>
                       @endforeach
-                        <td class='player_{{$player->id}}_total text-primary' style="font-size:20px">{{$player->total}}</td>
+                        <td class='player_{{$player->id}}_total text-primary' style="font-size:20px">{{$player->total}}
+                        </td>
                     </tr>
                   @endforeach
-              @endif
+           
             </tbody>
           </table>
 
@@ -505,23 +473,29 @@ td,th{
       }
 
         function load_players(){
-            var number_of_players = $('#number_of_player').val();       
+            var number_of_players = $('#number_of_player').val(); 
+            var player_or_team_ids =  {!!json_encode($pp_ids)!!};   
 
-            var html_a = ''; 
-            var html_b = '';
+
+            html =[];
+
             for(i=1; i<=number_of_players; i++){
-                html_a += "<select name='a_player_"+i+"' class='select_players_a form-control' ></select> <br>";
-                html_b += "<select name='b_player_"+i+"' class='select_players_b form-control' ></select> <br>";
+
+                $.each(player_or_team_ids, function(key,pt_id){
+                  html[pt_id] += "<select name='"+pt_id+"_player_"+i+"' class='select_players_"+pt_id+" form-control' ></select> <br>";
+               
+                })
+              
             }
 
-            $('#select_a_players').html(html_a);
-            $('#select_b_players').html(html_b);
+             $.each(player_or_team_ids, function(key,pt_id){   
+                      
 
-            var options_a = $('#a_players_list').html();
-            var options_b = $('#b_players_list').html();
+            $('#select_'+pt_id+'_players').html(html[pt_id]);
+            $('.select_players_'+pt_id).html($('#'+pt_id+'_players_list').html());
+               
+              })
 
-            $('.select_players_a').html(options_a);
-            $('.select_players_b').html(options_b);
 
             $('#save_players').show();           
         }

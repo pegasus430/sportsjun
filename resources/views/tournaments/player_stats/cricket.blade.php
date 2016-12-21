@@ -62,7 +62,7 @@
                 <td>{{$statistic->sixes}}</td>
                 <td>{{$statistic->average_bat}}</td>
                 <td>{{$statistic->highscore}}</td>
-                <td>{{$statistic->strikerate}}</td>
+                <td>{{$statistic->strikerates}}</td>
             </tr>
         @endif
             @endforeach

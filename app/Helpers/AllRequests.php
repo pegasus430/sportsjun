@@ -700,4 +700,150 @@ class AllRequests {
 			AllRequests::sendemail($mail,$from_id,$from_name, HTML::decode($message));
 		}		
 	}
+
+
+   
+    public static function saverequestdup($request)
+	{
+		$request_type = !empty($request['flag'])?config('constants.REQUEST_TYPE.'.$request['flag']):null;
+		$player_tournament_id = !empty($request['player_tournament_id'])?$request['player_tournament_id']:null;
+		$match_schedule_id = !empty($request['match_schedule_id'])?$request['match_schedule_id']:0;
+		$team_ids = count($request['team_ids'])?$request['team_ids']:array();
+		$sports_id = !empty($request['sports_id'])?$request['sports_id']:0;
+		$team_ids_final = array();
+		foreach ($team_ids as $team_id)
+		{
+			if(is_numeric($team_id))
+			{
+				array_push($team_ids_final, $team_id);
+			}
+		}
+		$team_ids_count = count($team_ids_final);
+		$details = array();
+		$tournament_player_name = null;
+		$response = 'fail';
+		if(!empty($request_type) && !empty($player_tournament_id) && count($team_ids_final))
+		{
+			$requests_array = array();
+			$userId = Auth::user()->id;
+			$managing_teams_string = Helper::getManagingTeamIds($userId);
+			$managing_team_ids = array();
+	        if(!empty($managing_teams_string))
+	        {
+	        	$managing_team_ids = explode(',', trim($managing_teams_string,',')); 	
+	        }
+	        $exist_count = 0;
+	        //checking the duplicate requests
+	        foreach ($team_ids_final as $key => $value)
+			{
+				if(($request_type  == config('constants.REQUEST_TYPE.TEAM_TO_TOURNAMENT')) || ($request_type  == config('constants.REQUEST_TYPE.TEAM_TO_PLAYER')))
+				{
+					$from_id = $value;
+					$to_id = $player_tournament_id;
+				}
+				else
+				{
+					$from_id = $player_tournament_id;
+					$to_id = $value;
+				}
+				if(AllRequests::check_duplicate_requests($request_type,$from_id,$to_id) > 0)
+				{
+					unset($team_ids_final[$key]);
+					$exist_count++;
+				}
+			}
+			//if all the requests are duplicate, return the status as existing
+			if($exist_count == $team_ids_count)
+			{
+				return 'exist';
+			}
+			//foreach request
+	        foreach ($team_ids_final as $value)
+			{
+				$owner_id = null;
+				$manager_id = null;
+				$sports_id = null;
+				$sports_name = null;
+				$from_id = null;
+				$to_id = null;
+				$email_id_1 = null;
+				$email_id_2 = null;
+				$email_id_3 = null;
+				$emails = array();
+				$message = null;
+				if(in_array($value, $managing_team_ids) || ($request_type  == config('constants.REQUEST_TYPE.PLAYER_TO_TEAM')) || ($request_type  == config('constants.REQUEST_TYPE.PLAYER_TO_TOURNAMENT')) || ($request_type  == config('constants.REQUEST_TYPE.PLAYER_TO_PLAYER')) || ($request_type  == config('constants.REQUEST_TYPE.TEAM_TO_TEAM')))
+				{
+					//based on request type assigning the from id and to id
+					if(($request_type  == config('constants.REQUEST_TYPE.TEAM_TO_TOURNAMENT')) || ($request_type  == config('constants.REQUEST_TYPE.TEAM_TO_PLAYER')))
+					{
+						$from_id = $value;
+						$to_id = $player_tournament_id;
+					}
+					else
+					{
+						$from_id = $player_tournament_id;
+						$to_id = $value;
+					}
+					$message = '';
+					$message_sent = '';
+					$temp_msg_from = "";
+					$temp_msg_to = "";
+					$emailTemplate = "";
+					//chechking for duplicates
+					if(AllRequests::check_duplicate_requests($request_type,$from_id,$to_id) == 0)
+					{
+						if($request_type  == config('constants.REQUEST_TYPE.TEAM_TO_TOURNAMENT'))//player to tournament
+						{
+							$details = AllRequests::gettournamentdetails($player_tournament_id);
+							$tournament_player_name = !empty($details['name'])?$details['name']:null;
+							$owner_id = !empty($details['created_by'])?$details['created_by']:null;
+							$manager_id = !empty($details['manager_id'])?$details['manager_id']:null;
+							$team_details = Team::where('id',$value)->first(array('name','sports_id'));
+							$team_player_name = !empty($team_details['name'])?$team_details['name']:null;
+							
+						}
+					
+						
+						
+						elseif ($request_type  == config('constants.REQUEST_TYPE.PLAYER_TO_TOURNAMENT'))//player to tournament
+						{
+							$team_player_name = AllRequests::getusername($from_id);
+							$tournament_details = AllRequests::gettournamentdetails($to_id);
+							$tournament_player_name = !empty($tournament_details['name'])?$tournament_details['name']:null;
+							
+							
+						}
+											
+						
+						if(!empty($tournament_player_name) && !empty($team_player_name))
+						{
+							
+							$response = 'success';
+						}
+					}
+					else
+					{
+						$response = 'exist';
+					}
+				}
+			}
+		}
+		//return Response::json(['status'=>$response]);
+
+		return $response;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

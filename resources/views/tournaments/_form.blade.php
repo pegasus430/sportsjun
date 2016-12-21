@@ -126,6 +126,8 @@ if(!empty($matchScheduleCount) && $matchScheduleCount>0)
     </div>	
     					 
     <div class="row">
+        
+
         <div class="col-sm-6">
             <div class="section">
                 <label class="form_label">{{  trans('message.tournament.fields.startdate') }} <span  class='required'>*</span></label>         
@@ -412,6 +414,12 @@ $(function () {
             $('.show_hide_div').hide();
             $('.show_hide_rubber').hide();
 		}
+
+        if(sport_name.toLowerCase()=='archery'){
+                $('#show_hide_div').show();
+                $("#schedule_type").val('team');
+        }
+
 		var selected_sport = $("#sports_id option:selected").text();
 		selected_sport = selected_sport.toUpperCase();
 		buildmatchtypedivs(selected_sport);

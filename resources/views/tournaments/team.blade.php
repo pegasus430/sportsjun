@@ -123,6 +123,10 @@
 							});
                         </script>
                     </div>
+                  
+
+
+
                     <div class="tab-pane fade" id="joinedtournaments">
                         <table class="table">
                             <tbody>
@@ -167,6 +171,10 @@
                             </tbody>
                         </table>
                     </div>
+
+
+
+
                     <div class="tab-pane fade" id="followingtournaments">
                         <table class="table">
                             <tbody>

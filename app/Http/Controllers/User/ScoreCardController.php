@@ -139,6 +139,9 @@ class ScoreCardController extends Controller {
 				$matchScheduleDetails = MatchSchedule::where('id',$match_id)->first();
 				$tournamentDetails = Tournaments::where('id', '=', $matchScheduleDetails['tournament_id'])->first();
 				if(Helper::isTournamentOwner($tournamentDetails['manager_id'],$tournamentDetails['tournament_parent_id'])) {
+
+					// If not Archery, end match 
+				if($match_data[0]['sports_category']!='athletics')
 					MatchSchedule::where('id',$match_id)->update(['match_status'=>'completed',
 						'winner_id'=>$match_data[0]['a_id'] ]);
 

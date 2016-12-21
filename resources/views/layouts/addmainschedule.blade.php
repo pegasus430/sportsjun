@@ -64,7 +64,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="section">
-                     <label class="form_label">{{   trans('message.schedule.fields.number_of_players') }}<span  class='required'>*</span> </label>             
+                     <label class="form_label">Number of Teams/Players<span  class='required'>*</span> </label>             
                     <label class="field">
                     <input id="number_of_players" name="number_of_players" class="gui-input" type="number" onchange="load_number_of_players_html(this)">
                     </label>                             
@@ -252,6 +252,9 @@
       $('#main_my_team_id').val('');
       $("#main_oppteam").val('');
       $("#main_opp_team_id").val('');
+
+      
+
       if($(this).val()==='player')
       {
           //for autocomplete my team or player   
@@ -265,15 +268,9 @@
           // $('#main_myteam').attr('readonly', true);
           $("#main_player_type option[value='mixed']").remove();
           $("#main_match_type option[value='doubles']").remove();
-          $("#main_match_type option[value='mixed']").remove();
+          $("#main_match_type option[value='mixed']").remove();    
 
-          //archery 
-            var selected_sport_id = $('#main_sports_id').val();
-
-            if(selected_sport_id==18){
-                $('#archery').show();
-                $('.non-archery').hide();
-            }
+          
 
           //stop archery
       }
@@ -454,6 +451,15 @@
        }
 
        // Archery Module
+           //archery 
+            var selected_sport_id = $('#main_sports_id').val();
+        if(selected_sport_id==18){
+                $('#archery').show();
+                $('.non-archery').hide();
+        }else{
+                 $('#archery').hide();
+                $('.non-archery').show();
+        }
 
 
 
@@ -588,13 +594,20 @@
 <!-- Archery Module -->
 
 <script type="text/javascript">
+    $('#archery').hide();
+    //$('.non-archery').hide();
+</script>
+
+<script type="text/javascript">
       function load_number_of_players_html(that){
           var number_of_players = $(that).val();
           var html ='';
+          var scheduled_type = $('#main_scheduletype').val();
+
           for(i=1; i<=number_of_players; i++){
 
                 html += "<div class='col-sm-6'> <div class='section'>";
-                  html += "<label class='form_label'>Player " + i +"<span  class='required'>*</span> </label>  <label class='field'><input type='text' class='gui-input select_player' type_id='"+i+"' id='player_"+i+"' name='player_"+i+"' >";                   
+                  html += "<label class='form_label'>"+scheduled_type+" " + i +"<span  class='required'>*</span> </label>  <label class='field'><input type='text' class='gui-input select_player' type_id='"+i+"' id='player_"+i+"' name='player_"+i+"' >";                   
                   html +="</label></div><input type='hidden' name='player_id_"+i+"' id='player_id_"+i+"'>   </div>";
            
           }
@@ -602,10 +615,13 @@
              init_players();
 
              //populate the first player
+
+        if($('#main_scheduletype').val() === 'player'){
             var user_id = '{{isset(Auth::user()->id)?Auth::user()->id:0}}';
             var user_name = '{{isset(Auth::user()->name)?Auth::user()->name:''}}';      
             $('#player_1').val(user_name);
             $('#player_id_1').val(user_id);
+          }
       }
 
 

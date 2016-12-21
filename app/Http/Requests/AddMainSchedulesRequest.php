@@ -29,7 +29,7 @@ class AddMainSchedulesRequest extends Request {
 		return [
       'main_sports_id' => 'required',
       'main_scheduletype' => 'required',
-      'main_myteam' => 'required',
+      //'main_myteam' => 'required',
       //'main_oppteam' => 'required',
       'main_match_start_date' => 'required|date_format:'.config('constants.DATE_FORMAT.VALIDATION_DATE_FORMAT'),
       'main_match_start_time' => 'date_format:'.config('constants.DATE_FORMAT.VALIDATION_TIME_FORMAT'),
@@ -50,9 +50,9 @@ class AddMainSchedulesRequest extends Request {
         return [
           'main_sports_id.required' => trans('validation.required'),
           'main_scheduletype.required' => trans('validation.required'),
-          'main_myteam.required' => trans('validation.required'),
+          //'main_myteam.required' => trans('validation.required'),
           // 'myteam.max' => trans('validation.required'),
-          'main_oppteam.required' => trans('validation.required'),
+          //'main_oppteam.required' => trans('validation.required'),
           // 'oppteam.max' => trans('validation.required'),
           'main_start_time.required' => trans('validation.required'),
           'main_start_time.date' => trans('validation.date'),

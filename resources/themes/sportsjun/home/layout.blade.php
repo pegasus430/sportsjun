@@ -10,9 +10,9 @@
     <title>{{ $page_title or 'Sportsjun - Connecting Sports Community' }}</title>
     <!-- ********** CSS ********** -->
     <link href="{{ elixir('themes/sportsjun/css/bootstrap.css') }}" rel="stylesheet"/>
-    <link href="{{ elixir('themes/sportsjun/css/base.css') }}" rel="stylesheet"/>
+    <link href="{{ elixir('gen/themes/sportsjun/css/base.css') }}" rel="stylesheet"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="{{ elixir('themes/sportsjun/css/all.css') }}" rel="stylesheet"/>
+    <link href="{{ elixir('gen/themes/sportsjun/css/all.css') }}" rel="stylesheet"/>
 
     @yield('head')
 
