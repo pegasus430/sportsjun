@@ -140,7 +140,7 @@ class ScoreApiController extends BaseApiController
 
         $score->ball_by_ball = $ball_by_ball;
         $score->save();
-        return $this->ApiResponse(['Ok']);
+        return self::ApiResponse(['Ok']);
     }
 
 }

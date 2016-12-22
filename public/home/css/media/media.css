@@ -1,0 +1,36 @@
+@media only screen and (max-width : 992px) {
+    .searchWrapp .group{
+        margin-bottom:10px;
+    }
+
+    .followingBox{
+        width:90%;
+        clear:both;
+        margin:0 auto;
+        padding:5px 10px;
+        height:90px;
+    }
+
+    .profile_flex{
+        display:block;
+    }
+
+    .playlist{
+        width:100%;
+    }
+
+    .playBox{
+        max-width:30%;
+    }
+
+    .leftBG{
+        height:120px !important;
+        width:100% !important;
+    }
+}
+
+@media only screen and (max-width: 767px){
+    .search-tournament-tabs{
+        padding:10px;
+    }
+}

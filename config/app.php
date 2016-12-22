@@ -232,9 +232,6 @@ return [
         //'WhatsapiTool'  => 'Xaamin\Whatsapi\Facades\Laravel\Registration',
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'Image' => Intervention\Image\Facades\Image::class,
-        'HTML'=> 'Illuminate\Html\HtmlFacade'
-
-
     ],
 
 ];

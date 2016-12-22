@@ -9,7 +9,8 @@
                 >
                 <span class="highlight"></span>
                 <span class="bar"></span>
-                <label>Enter your keyword <span>( Tournaments, Matches, Player, Location, Organization )</span></label>
+                <label class="hidden-xs">Enter your keyword <span>( Tournaments, Matches, Player, Location, Organization )</span></label>
+                <label class="hidden-sm hidden-sm hidden-lg">Enter keyword</label>
             </div>
         </div>
         <div class="col-sm-3 col-xs-12">

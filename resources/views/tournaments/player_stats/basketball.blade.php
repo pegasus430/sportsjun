@@ -19,19 +19,29 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($player_standing as $statistic)  
+            @foreach($player_standing as $statistic)
             <tr>
-                <td><a href='/editsportprofile/{{$statistic->user_id}}' class="text-primary">
-                <span class='hidden-xs hidden-sm'> 
-                   
-                         
+                <td>
+                    @if (!Auth::guest())
+                    <a href='/editsportprofile/{{$statistic->user_id}}' class="text-primary">
+                    @endif
+                        <span class='hidden-xs hidden-sm'>
  {!! Helper::Images($statistic->logo,'user_profile',array('class'=>'img-circle img-border ','height'=>52,'width'=>52) )!!}
-                             
-                                
-                             
+
                 </span>
-                    {{$statistic->player_name}}</a></td>                
-                <td><a href='/team/members/{{$statistic->team_id}}' class="text-primary">{{$statistic->team_name}}</a></td>
+                    {{$statistic->player_name}}
+                        @if (!Auth::guest())
+                    </a>
+                        @endif
+                </td>
+                <td>
+                    @if (Auth::guest())
+                        {{$statistic->team_name}}
+                    @else
+                    <a href='/team/members/{{$statistic->team_id}}' class="text-primary">{{$statistic->team_name}}</a>
+                    @endif
+
+                </td>
                 <td>{{$statistic->matches}}</td>
                 <td>{{Helper::displayEmptyDash($statistic->points_1)}}</td>
                 <td>{{Helper::displayEmptyDash($statistic->points_2)}}</td>
@@ -47,7 +57,7 @@
     </table>
     </div>
     @else
-    
+
     <div class="sj-alert sj-alert-info">
                        {{ trans('message.sports.nostats')}}
 </div>
