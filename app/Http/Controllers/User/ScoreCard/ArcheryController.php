@@ -37,6 +37,7 @@ use Session;
 use App\Model\ArcheryRound;
 use App\Model\ArcheryPlayerStats;
 use App\Model\ArcheryArrowStats;
+use App\Model\ArcheryTeamStats;
 
 class ArcheryController extends Controller
 {
@@ -296,6 +297,20 @@ class ArcheryController extends Controller
         }
     }
 
+      public function insert_teams_in_db($tournament_id,$match_id,$team_id,$team_name=''){
+      
+        $check = ArcheryTeamStats::where(['match_id'=>$match_id,'team_id'=>$team_id])->first();
+
+        if(!$check){
+            $aps    = new ArcheryTeamStats;
+            $aps->tournament_id = $tournament_id;
+            $aps->match_id      = $match_id;
+            $aps->team_id       = $team_id;        
+            $aps->team_name     = $team_name;
+            $aps->save();
+        }
+    }
+
     public function start_scoring(Request $request){
         $match_model = MatchSchedule::find($request->match_id);
 
@@ -318,16 +333,20 @@ class ArcheryController extends Controller
         return 'ok';
     }
 
-    public function get_arrow_stats($match_id,$user_id,$round_id,$round_number){
+    public function get_arrow_stats($match_id,$user_id,$round_id,$round_number,$team_id=null){
 
     $check = ArcheryArrowStats::where(['match_id'=>$match_id,'user_id'=>$user_id,'round_id'=>$round_id])->first();
     if($check) return $check;
+
+    $match_model = MatchSchedule::find($match_id);
 
         $ars = new ArcheryArrowStats;
         $ars->user_id = $user_id;
         $ars->match_id = $match_id;
         $ars->round_id = $round_id;
         $ars->round_number = $round_number;
+        $ars->tournament_id = $match_model->tournament_id;
+        $ars->team_id = $team_id;
 
         $ars->save();
 
@@ -338,11 +357,12 @@ class ArcheryController extends Controller
         $match_model = MatchSchedule::find($request->match_id);
         $value = $request->value;
 
-        $arrow_stats = $this->get_arrow_stats($request->match_id,$request->user_id,$request->round_id,$request->round_number);
+        $player_stats = ArcheryPlayerStats::find($request->player_id);
+
+        $arrow_stats = $this->get_arrow_stats($request->match_id,$request->user_id,$request->round_id,$request->round_number, $player_stats->team_id);
         $arrow_stats->{'arrow_'.$request->arrow_number} = $request->value;
         $arrow_stats->save();
 
-        $player_stats = ArcheryPlayerStats::find($request->player_id);
         $player_stats->{'round_'.$request->round_number} = $this->arrow_sum($arrow_stats);
 
         $player_stats->total = $this->round_sum($player_stats);

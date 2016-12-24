@@ -49,6 +49,8 @@ use App\Model\TtPlayerRubberScore;
 use App\Model\TtStatistic;
 use App\Model\TennisSet;
 use App\Model\ArcheryArrowStats;
+use App\Model\ArcheryTeamStats;
+use App\Model\ArcheryPlayerStats;
 
 
 class ScoreCard {
@@ -311,6 +313,53 @@ class ScoreCard {
     	}
 
     	return $result;
+    }
+
+
+    public static function get_archery_tournament_points($tournamentDetails=[], $team_id, $i){
+    		$schedule_type = $tournamentDetails['schedule_type'];
+    		$tournament_id = $tournamentDetails['id'];
+
+    		$pts = 0;
+
+    	if($schedule_type=='individual'){
+    		foreach(ArcheryArrowStats::whereUserId($team_id)->whereTournamentId($tournament_id)->get() as $st){
+    			for($j=1; $j<=10; $j++){
+    				if($st->{'arrow_'.$j}==$i){
+    					$pts++;
+    				}
+    			}
+    			
+    		}
+    	}
+    	else{
+    		foreach(ArcheryArrowStats::whereTeamId($team_id)->whereTournamentId($tournament_id)->get() as $st){
+    			for($j=1; $j<=10; $j++){
+    				if($st->{'arrow_'.$j}==$i){
+    					$pts++;
+    				}
+    			}
+    		}
+    	}
+
+    	return $pts;
+    }
+
+    public static function get_archery_total_points($tournamentDetails, $team_id){
+    	$pts = 0; 
+    		$schedule_type = $tournamentDetails['schedule_type'];
+    		$tournament_id = $tournamentDetails['id'];
+
+    	if($schedule_type=='individual'){
+    		$p_ts = ArcheryPlayerStats::whereUserId($team_id)->whereTournamentId($tournament_id)->first();
+    		if($p_ts) $pts = $p_ts->total;
+    			
+    	}
+    	else{
+    		$p_ts = ArcheryTeamStats::whereUserId($team_id)->whereTournamentId($tournament_id)->first();
+    		if($p_ts) $pts = $p_ts->total;    			
+    	}
+    	return $pts;
     }
 
 

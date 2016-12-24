@@ -48,6 +48,7 @@ use Input;
 use Hash;
 use Mail;
 use Validator;
+use ScoreCard;
 
 
 use App\Model\SoccerPlayerMatchwiseStats;
@@ -1137,13 +1138,25 @@ class TournamentsController extends Controller
 									$scheduled_teams['gf']=$match_count_details['gf'];
 							 }
 
+							// Archery
+
+							 if(in_array($tournaments[0]['sports_id'], [18])){
+							 		for($i=1; $i<=10; $i++){
+							 			$scheduled_teams['pts_'.$i] = ScoreCard::get_archery_tournament_points($tournaments[0], $teamId, $i);
+							 		}
+							 		$scheduled_teams['ga']=0;
+							 		$scheduled_teams['gf']=0;
+							 		$scheduled_teams['points']=ScoreCard::get_archery_total_points($tournaments[0], $teamId);
+							 }
+
+
 
 
 				 	$team_details[$group_id][$key]=$scheduled_teams;
 
 				 		}
 
-				 	if(in_array($tournaments[0]['sports_id'], [3,4,5,6,2,3,7,13,14,15,16,17,11])){
+				 	if(in_array($tournaments[0]['sports_id'], [3,4,5,6,2,3,7,13,14,15,16,17,11,18])){
 				 		$team_details[$group_id]=$this->sortGroupTeams($team_details[$group_id]);
 				 	}
 
@@ -2855,6 +2868,13 @@ class TournamentsController extends Controller
 				 							$group_teams[$j]=$temp_team;
 				 						}
 				 					}
+				 			}else{
+
+				 				if($next_points<$points){
+				 					$temp_team=$group_teams[$i];
+				 							$group_teams[$i]=$group_teams[$j];
+				 							$group_teams[$j]=$temp_team;
+				 				}
 				 			}
 
 					}

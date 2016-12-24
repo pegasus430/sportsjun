@@ -185,16 +185,17 @@ td,th{
             </div>
 
               <!-- Schedule Type is single -->
-                @if($match_data[0]['schedule_type']=='player')
+           
                   <div class="row">
                     <div class="col-sm-12">
                        <div class="col-sm-6">
-                        <center>    <h4 class="team_fall table_head">  Players</h4> </center>
+                        <center>    <h4 class="team_fall table_head">  {{$match_data[0]['schedule_type']=='player'?'Players':'Teams'}}</h4> </center>
                              <table class="table table-striped table-bordered">
                                @foreach($players as $player)
                                     <tr>
                                       <td style="height:25px;">
-                                          {{$player->player_name}} <br>
+
+                                       {{$match_data[0]['schedule_type']=='player'?$player->player_name:$player->team_name}} <br>
 
                                       </td>
                                     </tr>
@@ -208,83 +209,9 @@ td,th{
 
               <!-- Schedule Type is Team -->
 
-                @else
+            
                   <!-- If schedule type is player, then we need to select the players. -->
 
-              <hr>
-            <form id='insert_players'>
-              <div class="row">
-
-                   <div class="col-sm-12">
-
-                <?php $pp_ids = [];?>
-                    @foreach($player_or_team_ids as $pt_id)
-                      @if(!empty($pt_id))
-                      <?php $pp_ids[] = $pt_id;?>
-                  <div style="display:none">
-                      <div id='{{$pt_id}}_players_list'>
-                            @foreach($player_or_team_list[$pt_id]->TeamPlayers as $pr)
-                              <option value="{{$pr->user->id}}">{{$pr->user->name}}</option>
-                            @endforeach
-                      </div>                   
-
-                  </div>
-
-                        <div class="col-sm-6">
-                        <center>    <h4 class="team_fall table_head"> {{$player_or_team_list[$pt_id]->name}} Players</h4> </center>
-                             <table class="table table-striped table-bordered">
-                               @foreach($players_list[$pt_id] as $player)
-                                    <tr>
-                                      <td style="height:25px;">
-                                          {{$player->player_name}}
-                                      </td>
-                                    </tr>
-                                  @endforeach
-                              </table>
-                          <div id='select_{{$pt_id}}_players'>
-                          </div>                          
-                        </div>
-                      @endif
-
-                    @endforeach
-                       
-                  </div>
-              </div>
-             
-              <p>
-              <div class="row">
-                <div class="col-sm-12">
-                  <div class="row"> 
-                    <center>
-                      <div class="col-sm-4">
-                          Number of Players
-                      </div>
-                    
-                      <div class="col-sm-4">
-                          <input type="number" id="number_of_player" name="number_of_players" class="gui-input"  value="1">
-                      </div>
-                      <div class="col-sm-4">
-                          <button type='button' class="btn btn-primary" onclick="load_players()">Load Players</button> &nbsp;
-                          <button type='button' class="btn btn-warning" onclick='insert_players()' id='save_players' style="display:none">Save </button>
-                      </div>
-                 
-                    </center>
-                    </div>
-                  </div>
-
-
-               
-
-
-                
-
-                  <input type="hidden" name="match_id" value="{{$match_obj->id}}">
-
-
-                   </form>
-                </div>
-
-                @endif
 
 
 
@@ -417,6 +344,22 @@ td,th{
     <input type="hidden" id='selected_player_id' value="">
     <input type="hidden" id='selected_arrow_number' value="">
 
+
+
+       <?php $pp_ids = [];?>
+                    @foreach($player_or_team_ids as $pt_id)
+                      @if(!empty($pt_id))
+                      <?php $pp_ids[] = $pt_id;?>
+                  <div style="display:none">
+                      <div id='{{$pt_id}}_players_list'>
+                            @foreach($player_or_team_list[$pt_id]->TeamPlayers as $pr)
+                              <option value="{{$pr->user->id}}">{{$pr->user->name}}</option>
+                            @endforeach
+                      </div>                   
+
+                  </div>
+                     @endif
+    @endforeach
 
 <!-- End Scoring -->
 

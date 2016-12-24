@@ -112,6 +112,7 @@
                                     <th>Rank </th>
                                     <th>Name</th>
                                     <th>Mat</th>
+                            @if(!in_array($sports_id, [18]))  <!-- Non Archery -->
                                     <th>Won</th>
                                     <th>Lost</th>
                                     <th>Draw</th>
@@ -135,6 +136,13 @@
                                 @if($match_is_completed)
                                 	<th> Final Points </th> 
                                 @endif
+                            @else
+                                @for($i=10; $i>=5; $i--)
+                                    <th>Pts {{$i}} </th>
+
+                                @endfor
+                                    <th> Total </th>
+                            @endif
                                     <th></th>
                                     </tr>
                                     </thead>
@@ -151,6 +159,7 @@
                                     	<a href="/team/members/{{$team['team_id']}}" class="primary">{{ $team['name'] }}</a>
                                     </td>
                                     <td>{{ !empty($match_count[$group->id][$team['team_id']])?$match_count[$group->id][$team['team_id']]:0 }}</td>
+                @if(!in_array($sports_id, [18]))  <!-- Non Archery -->
                                     <td>{{ !empty($team['won'])?$team['won']:0 }}</td>
                                     <td>{{ !empty($team['lost'])?$team['lost']:0 }}</td>
 
@@ -170,6 +179,14 @@
                                 	 <td>{{ !empty($team['final_points'])?$team['final_points']:'-' }}</td>   
                                 	
                                 @endif
+                 @else
+                 <!-- Archery Start -->
+                                @for($i=10; $i>=5; $i--)
+                                    <td> {!!Helper::displayEmptyDash($team['pts_'.$i],'-')!!} </td>
+
+                                @endfor
+                                    <td> {!!$team['points']!!} </td>
+                @endif
                                     <td><a href="#" class="btn btn-danger btn-circle btn-sm" onclick="deleteTeam({{$tournament_id}},{{$team['tournament_group_id']}},{{$team['id']}},{{$team['team_id']}});"><i class="fa fa-remove"></i></a></td>
                                     </tr>	
                                     @endforeach
