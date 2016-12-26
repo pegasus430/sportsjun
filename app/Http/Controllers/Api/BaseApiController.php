@@ -216,4 +216,9 @@ class BaseApiController extends Controller
     }
 
 
+    function routeNotFound($catchall){
+        return self::ApiResponse(['error'=>'route not found'],404);
+    }
+
+
 }

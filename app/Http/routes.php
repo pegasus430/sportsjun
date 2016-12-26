@@ -11,6 +11,8 @@
 |
 */
 
+require(__DIR__ . "/Routes/Api.php");
+
 $router->group(
     [
         'domain' => '{subdomain}.'.config('app.domain'),
@@ -19,9 +21,7 @@ $router->group(
     $router->pattern('subdomain', '(?!www)([a-z0-9]+)');
     require(__DIR__ . "/Routes/Subdomain.php");
 });
-
 require(__DIR__ . "/Routes/Public.php");
-require(__DIR__ . "/Routes/Api.php");
 $router->group(['middleware' => 'auth'], function ()
 {
   require(__DIR__ . "/Routes/User.php");
