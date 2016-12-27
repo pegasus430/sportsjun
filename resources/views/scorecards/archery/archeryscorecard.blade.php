@@ -271,7 +271,7 @@ td,th{
 
 
                   <div class="modal-footer">
-                    <button type='button' class='btn btn-primary' onclick="add_round()" > Add Round</button>
+                    <button type='button' class='btn btn-primary' onclick="add_round()" >Add Round</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                   </div>
                 </div>
@@ -308,7 +308,8 @@ td,th{
             <tbody>
             <?php $p_index=1;?>
               <!-- If Team -->
-        
+            
+            @if($match_data[0]['schedule_type']=='player')
                   @foreach($players as $player)
                      <tr>
                           <td>{{$player->player_name}} <br>
@@ -322,6 +323,28 @@ td,th{
                         </td>
                     </tr>
                   @endforeach
+            @else
+                  @foreach($players as $player)
+                     <tr>
+                          <td><b>{{$player->team_name}}</b> <br>
+                         </td>
+                      @foreach($match_obj->archery_rounds as $round)
+
+                    <?php  $team_player = ScoreCard::get_archery_team_player($player->id, $round);?>
+                        <td class="a_s player_{{$p_index}}_round_{{$round->round_number}} a_s team_{{$player->team_id}}_round_{{$round->round_number}}  player_{{$player->id}}_round_{{$round->round_number}}" player_id="{{$team_player['id']}}" user_id="{{$team_player['user_id']}}" round_number="{{$round->round_number}}" round_id="{{$round->id}}" team_id='{{$player->team_id}}' team_player_id='{{$player->id}}'>
+                                <span  class="team_{{$player->team_id}}_round_{{$round->round_number}}_score"> {{$player->{'round_'.$round->round_number} }} </span>
+                            <br> <span style="font-size: 14px" class="team_{{$player->team_id}}_round_{{$round->round_number}}_player_name">{{$team_player['player_name']}}</span>
+                        </td>
+
+                        <?php $p_index++;?>
+                      @endforeach
+                        <td class='player_{{$player->id}}_total text-primary team_{{$player->team_id}}_total' style="font-size:20px">{{$player->total}}
+                        </td>
+                    </tr>
+                  @endforeach
+
+
+            @endif
            
             </tbody>
           </table>
@@ -330,7 +353,7 @@ td,th{
 
 
         <div id='load_round_details' style="display:none">
-            @include('scorecards.archery.round_scoring')
+              
         </div>
 
       </div>
@@ -338,11 +361,13 @@ td,th{
 
 
     <input type="hidden" id='match_id' value="{{$match_obj->id}}">
+    <input type="hidden" id='tournament_id' value="{{$match_obj->tournament_id}}">
     <input type="hidden" id='selected_user_id'  value=''>
     <input type="hidden" id='selected_round_number' value="">
     <input type="hidden" id='selected_round_id' value="">
     <input type="hidden" id='selected_player_id' value="">
     <input type="hidden" id='selected_arrow_number' value="">
+    <input type="hidden" id='team_player_id' name="">
 
 
     @if($match_data[0]['schedule_type']=='team')
@@ -351,14 +376,38 @@ td,th{
                     @foreach($player_or_team_ids as $pt_id)
                       @if(!empty($pt_id))
                       <?php $pp_ids[] = $pt_id;?>
-                  <div style="display:none">
+
+             <div id='modal_player_team_{{$pt_id}}' class="fade modal modal-tiny tossDetail" tabindex="-1" >
+               <div class="modal-dialog sj_modal sportsjun-forms">
+                 <div class="modal-content">
+                    <div class="modal-header text-center">
+                                            <button type="button" class="close" data-dismiss="modal">×</button>
+                                            <h4>Select Player - {{$player_or_team_list[$pt_id]['name']}}</h4>
+                                  </div>
+                      <div class="alert alert-danger" id="div_failure1"></div>
+                      <div class="alert alert-success" id="div_success1" style="display:none;"></div>
+                    <div class="modal-body">
+
+                  <div style="">
                       <div id='{{$pt_id}}_players_list'>
+                        <select class="form-control" id='select_team_player_{{$pt_id}}'>
                             @foreach($player_or_team_list[$pt_id]->TeamPlayers as $pr)
                               <option value="{{$pr->user->id}}">{{$pr->user->name}}</option>
                             @endforeach
+                        </select>
                       </div>                   
 
                   </div>
+                </div>
+                  <div class="modal-footer">
+                    <button type='button' class='btn btn-primary' onclick="choose_player_to_score({{$pt_id}})" >Select Player </button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="clear_selected()">Cancel</button>
+                  </div>
+
+                </div>
+                </div>
+              </div>
+
                      @endif
              @endforeach
     @endif
@@ -479,8 +528,11 @@ td,th{
               $('#selected_user_id').val($(this).attr('user_id'))
               $('#selected_round_id').val($(this).attr('round_id'))
               $('#selected_player_id').val($(this).attr('player_id')) 
+              $('#team_player_id').val($(this).attr('team_player_id'))
 
-
+              if($(this).attr('user_id')==''){
+                  $('#modal_player_team_'+$(this).attr('team_id') ).modal();
+              }else{
 
               $.ajax({
                   url:'/match/archery/load_arrow',
@@ -491,6 +543,8 @@ td,th{
                       $('#load_round_details').show();
                   }
               }) 
+
+            }
           }
 
       })
@@ -509,9 +563,9 @@ td,th{
 
       //initialization
 
-      function init(){
+      function init(player_round_details){
 
-        var that= $('.player_1_round_1');
+        var that= $('.'+player_round_details);
               $('.a_s').removeClass('selected').css({background:'inherit'});
               $(that).css({background:'#ff8888'}).addClass('selected');
               $('#selected_arrow_number').val('');
@@ -519,24 +573,54 @@ td,th{
               $('#selected_round_number').val($(that).attr('round_number'))
               $('#selected_user_id').val($(that).attr('user_id'))
               $('#selected_round_id').val($(that).attr('round_id'))
-              $('#selected_player_id').val($(that).attr('player_id')) 
+              $('#selected_player_id').val($(that).attr('player_id'))
+              $('#team_player_id').val($(that).attr('team_player_id'))
 
-              $.ajax({
-                  url:'/match/archery/load_arrow',
-                  type:'post',
-                  data:{round_id:$('#selected_round_id').val(),player_id:$('#selected_player_id').val(),match_id:$('#match_id').val()},
-                  success:function(response){
-                      $('#load_round_details').html(response);
-                      $('#load_round_details').show();
-                  }
-              }) 
+              if($(that).attr('user_id')==''){
+                    $('#modal_player_team_'+$(that).attr('team_id') ).modal();
+              }else{
+
+                $.ajax({
+                    url:'/match/archery/load_arrow',
+                    type:'post',
+                    data:{round_id:$('#selected_round_id').val(),player_id:$('#selected_player_id').val(),match_id:$('#match_id').val()},
+                    success:function(response){
+                        $('#load_round_details').html(response);
+                        $('#load_round_details').show();
+                    }
+                }) 
+            }
         }
 
       $(document).ready(function(){
-          setTimeout(init,1000)
+          setTimeout(init('player_1_round_1'),1000)
         //init();
       })
 
+      function choose_player_to_score(team_id){
+          var round_number = $('#selected_round_number').val();
+          var round_id     = $('#selected_round_id').val()
+          var player_id    = $('.team_'+team_id+'_round_'+round_number).attr('team_player_id');
+          var select_user  = $('#select_team_player_'+team_id).val();
+          var match_id     = $('#match_id').val();
+          var tournament_id = $('#tournament_id').val();
+        
+          $.ajax({
+              url:'/match/archery/select_team_player',
+              data:{round_number:round_number,round_id:round_id,team_id:team_id,player_id:player_id,user_id:select_user,tournament_id:tournament_id,match_id:match_id},
+              type:'post',
+              success:function(response){
+                  $('#modal_player_team_'+team_id ).modal('hide');
+                  var that = $('.team_'+team_id+'_round_'+round_number);
+
+                  $(that).attr('player_id',response.id);
+                  $(that).attr('user_id',response.user_id);
+                  $('.team_'+team_id+'_round_'+round_number+'_player_name').html(response.player_name);
+
+                  init("team_"+team_id+"_round_"+round_number+"");
+              }
+          })
+      }
 
       function clear_selected(){
           $('#selected_round_number').val('');
@@ -544,6 +628,7 @@ td,th{
           $('#selected_round_id').val('');
           $('#selected_player_id').val('');
           $('#selected_arrow_number').val('');
+          $('#team_player_id').val('')
       }
 
 
@@ -554,8 +639,10 @@ td,th{
             var user_id      = $('#selected_user_id').val();
             var round_id     = $('#selected_round_id').val();
             var player_id    = $('#selected_player_id').val();
-            var arrow_number = $('#selected_arrow_number').val();            
+            var arrow_number = $('#selected_arrow_number').val();     
+            var team_player_id = $('#team_player_id').val();       
             var value        = $(that).attr('value');
+            var schedule_type ="{{$match_obj->schedule_type}}";
 
             var attr = $(that);
 
@@ -578,15 +665,21 @@ td,th{
           $.ajax({
               url:'/match/archery/arrow_scoring',
               type:'post',
-              data:{match_id:match_id,user_id:user_id,arrow_number:arrow_number,round_number:round_number,round_id:round_id,player_id:player_id,value:value},
+              data:{match_id:match_id,user_id:user_id,arrow_number:arrow_number,round_number:round_number,round_id:round_id,player_id:player_id,value:value,schedule_type:schedule_type, team_player_id:team_player_id},
               success:function(response){
                   attr.css({background:'green'});
 
+                  if(schedule_type=='team'){
+                      team_id = response.team_id;
+                  }
+
                   for(i=1;i<=10;i++){
                       $('.player_'+player_id+'_round_'+i).html(response['round_'+i]);
+                      $('.team_'+team_id+'_round_'+i+'_score').html(response['round_'+i]);
                   }
 
                   $('.player_'+player_id+'_total').html(response.total);
+                  $('.team_'+team_id+'_total').html(response.total);
 
                   $('#arrow_'+arrow_number).html(value);
               },

@@ -4,7 +4,7 @@
 
 	<center>
 			@for($i=1; $i<=$round->number_of_arrows;$i++)
-		<?php $arrow_stats = ScoreCard::get_arrow_stats($match_obj->id,$player->user_id,$round->id,$round->round_number);
+		<?php $arrow_stats = ScoreCard::get_arrow_stats($match_obj->id,$player->user_id,$round->id,$round->round_number,$player->team_id);
 
 
 		?>

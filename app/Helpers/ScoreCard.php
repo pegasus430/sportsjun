@@ -362,6 +362,21 @@ class ScoreCard {
     	return $pts;
     }
 
+    public static function get_archery_team_player($team_id, $round){
+    	$responce=[
+    	'id'=>'',
+    	'user_id'=>'',
+    	'player_name'=>''];
+
+    	$check = ArcheryPlayerStats::where(['team_table_id'=>$team_id,'round_id'=>$round->id])->first();
+
+    	if($check){
+    		$responce = $check->toArray();
+    	}
+
+    	return $responce;
+    }
+
 
 
 }

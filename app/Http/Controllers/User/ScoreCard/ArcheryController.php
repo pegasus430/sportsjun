@@ -295,6 +295,8 @@ class ArcheryController extends Controller
             $aps->team_name     = $team_name;
             $aps->save();
         }
+
+        return $check;
     }
 
       public function insert_teams_in_db($tournament_id,$match_id,$team_id,$team_name=''){
@@ -335,7 +337,11 @@ class ArcheryController extends Controller
 
     public function get_arrow_stats($match_id,$user_id,$round_id,$round_number,$team_id=null){
 
-    $check = ArcheryArrowStats::where(['match_id'=>$match_id,'user_id'=>$user_id,'round_id'=>$round_id])->first();
+    $check = ArcheryArrowStats::where(['match_id'=>$match_id,'user_id'=>$user_id,'round_id'=>$round_id]);
+        if($team_id){
+            $check = $check->where('team_id',$team_id);
+        }
+    $check = $check->first();
     if($check) return $check;
 
     $match_model = MatchSchedule::find($match_id);
@@ -369,6 +375,17 @@ class ArcheryController extends Controller
 
         $player_stats->save();
 
+
+        if($match_model->schedule_type=='team'){
+            $team_stats = ArcheryTeamStats::find($request->team_player_id);
+
+            $team_stats->{'round_'.$request->round_number} = ArcheryPlayerStats::where(['team_table_id'=>$team_stats->id,'round_number'=>$request->round_number])->sum('total');
+            $team_stats->total = ArcheryPlayerStats::where(['team_table_id'=>$team_stats->id])->sum('total');
+            $team_stats->save();
+
+            return $team_stats;
+        }
+
         return $player_stats;
 
     }
@@ -381,6 +398,8 @@ class ArcheryController extends Controller
 
         return $total;
     }
+
+   
 
     public function arrow_sum($arrow_stats){
         $total=0;
@@ -453,8 +472,27 @@ class ArcheryController extends Controller
         $match_model->score_added_by=$json_score_status;
         $match_model->save();
 
-        return 'ok';     
+        return 'ok'; 
 
        
+    }
+
+    public function select_team_player(Request $request){
+
+      //  return $request->all();
+
+        $p = new ArcheryPlayerStats;
+        $p->user_id      = $request->user_id;
+        $p->round_number = $request->round_number;
+        $p->round_id     = $request->round_id;
+        $p->team_id      = $request->team_id;
+        $p->team_table_id = $request->player_id;
+        $p->player_name     = User::find($p->user_id)->name;
+        $p->match_id      = $request->match_id;
+        $p->tournament_id = $request->tournament_id;
+        $p->save();
+
+
+        return $p;
     }
 }
