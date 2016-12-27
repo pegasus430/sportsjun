@@ -7,17 +7,17 @@
             <th>{{trans('message.team.stats.third_position')}}</th>
             <th>{{trans('message.team.stats.second_position')}}</th>
             <th>{{trans('message.team.stats.first_position')}}</th>        
-            <th>% {{trans('message.team.stats.won')}}</th>
+      
             </tr>
             </thead>
         <tbody>
-            @if(count($statsArray['othersStatsArray'])) 
+            @if(count($statsArray)) 
             <tr>
-            <td>{{ $statsArray['othersStatsArray']['events'] }}</td>
-            <td>{{ $statsArray['othersStatsArray']['third'] }}</td>
-            <td>{{ $statsArray['othersStatsArray']['second'] }}</td>
-            <td>{{ $statsArray['othersStatsArray']['first'] }}</td>           
-            <td>{{ $statsArray['othersStatsArray']['wonPercentage'] }}</td>
+            <td><center>{{ $statsArray['events'] }}</center></td>
+            <td>{{ $statsArray['third'] }}</td>
+            <td>{{ $statsArray['second'] }}</td>
+            <td>{{ $statsArray['first'] }}</td>           
+  
             </tr>
             @endif
         </tbody>

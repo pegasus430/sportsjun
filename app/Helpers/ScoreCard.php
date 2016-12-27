@@ -356,7 +356,7 @@ class ScoreCard {
     			
     	}
     	else{
-    		$p_ts = ArcheryTeamStats::whereUserId($team_id)->whereTournamentId($tournament_id)->first();
+    		$p_ts = ArcheryTeamStats::whereTeamId($team_id)->whereTournamentId($tournament_id)->first();
     		if($p_ts) $pts = $p_ts->total;    			
     	}
     	return $pts;

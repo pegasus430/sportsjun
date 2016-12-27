@@ -716,7 +716,8 @@ class ScheduleController extends Controller {
                 },    
                         'scheduleteamone.photos', 'scheduleteamtwo.photos'))
                 ->where(function($query) use ($teamId) {
-                    $query->where('a_id', $teamId)->orWhere('b_id', $teamId);
+                    $query->where('a_id', $teamId)->orWhere('b_id', $teamId)->orWhere('player_or_team_ids', 'like','%'.$teamId.'%');
+
                 })
                 ->where('schedule_type', 'team')
                 ->where('sports_id', $sportsId)
@@ -834,7 +835,7 @@ class ScheduleController extends Controller {
                     $statsArray = Helper::getHockeyStats($teamStats,$teamId);
             }  
 
-        }
+        } 
 
         if(count($rubberStats)) {      
    
@@ -843,10 +844,14 @@ class ScheduleController extends Controller {
         }
 
         if(in_array($sportsId, [18])){
-               $statsArray = Helper::getArcheryStats($teamId);                        
+               $statsArray = Helper::getArcheryStats($teamId);    
+               $matchScheduleData = MatchSchedule::where('player_or_team_ids', 'like', "%$teamId%")->whereNotNull('tournament_id') ->orderby('match_start_date', 'desc')
+                ->orderby('match_start_time', 'desc')->get();                 
         }
 
         $statsview = 'schedules.'.preg_replace('/\s+/', '',strtolower(config('constants.SPORT_NAME.'.$sportsId))).'statsview';
+
+       // dd($matchScheduleData);
 
         Helper::leftMenuVariables($teamId);
         return view('schedules.statsview', ['matchScheduleData' => $matchScheduleData, 'matchScheduleDataTotalCount' => $matchScheduleDataTotalCount,
@@ -943,6 +948,9 @@ class ScheduleController extends Controller {
 				$matchScheduleData[$key]['match_start_date'] = Helper::getFormattedTimeStamp($schedule);
             }
         }
+
+
+
         return view('schedules.statsmoreview', ['matchScheduleData' => $matchScheduleData, 'sportsId' => $sportsId,
             'teamId' => $teamId, 'limit' => $limit, 'offset' => $limit + $offset,
         ]);

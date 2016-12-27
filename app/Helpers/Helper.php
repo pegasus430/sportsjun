@@ -38,6 +38,7 @@ use App\Helpers\SendMail;
 use App\Model\TournamentGroupTeams;
 use App\Model\TournamentFinalTeams;
 use App\Model\OrganizationGroupTeamPoint;
+use App\Model\ArcheryStatistic;
 
 class Helper
 {
