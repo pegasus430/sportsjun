@@ -251,7 +251,7 @@ class SportController extends Controller {
             $appPrefix = 'App\\Model\\';
             $modelName = $appPrefix . $model;
             if (class_exists($modelName)) {
-                $stats = $modelName::where('user_id', $userId);
+                 $stats = $modelName::where('user_id', $userId);
                 if($sportsId == config('constants.SPORT_ID.Cricket')) {
                     $stats
                         ->groupBy( 'match_type' )

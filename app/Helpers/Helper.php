@@ -1141,6 +1141,11 @@ class Helper
         return $finalArray;
     }
 
+    public static function getArcheryStats($team_id){
+        $teamStats = ArcheryStatistic::whereTeamId($team_id)->first();
+        return $teamStats;
+    }
+
 
     //function to get sport name
     public static function getSportName($sports_id)

@@ -802,7 +802,7 @@ class ScheduleController extends Controller {
 
         //Archery Stats 
 
-        $tourStats = 
+        $tourStats = '';
 
         if(count($teamStats)) {    
             switch ($sportsId) {
@@ -828,11 +828,9 @@ class ScheduleController extends Controller {
                  case config('constants.SPORT_ID.Squash'):
                     $statsArray = Helper::getTennisTableTennisStats($teamStats,$teamId);
                     break;
-                case config('constants.SPORT_ID.Archery'):
-                    $statsArray = Helper::getTennisTableTennisStats($teamStats,$teamId);
-                    break;
-                 
+              
                 default:
+                
                     $statsArray = Helper::getHockeyStats($teamStats,$teamId);
             }  
 
@@ -842,6 +840,10 @@ class ScheduleController extends Controller {
    
             $rubberStats = Helper::getTennisTableTennisStats($rubberStats,$teamId);
         
+        }
+
+        if(in_array($sportsId, [18])){
+               $statsArray = Helper::getArcheryStats($teamId);                        
         }
 
         $statsview = 'schedules.'.preg_replace('/\s+/', '',strtolower(config('constants.SPORT_NAME.'.$sportsId))).'statsview';

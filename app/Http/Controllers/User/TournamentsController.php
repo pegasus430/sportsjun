@@ -57,6 +57,9 @@ use App\Model\BasketballPlayerMatchwiseStats;
 use App\Model\CricketPlayerMatchwiseStats;
 use App\Model\WaterpoloPlayerMatchwiseStats;
 use App\Model\KabaddiPlayerMatchwiseStats;
+use App\Model\ArcheryStatistic;
+use App\Model\ArcheryPlayerStats;
+use App\Model\ArcheryTeamStats;
 
 
 class TournamentsController extends Controller
@@ -3050,6 +3053,54 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
 		$tournament = Tournaments::find($id);
 		$tournament->group_is_ended = 1; 
 		$tournament->save();
+
+
+		if(in_array($tournament->sports_id, [18])){
+			 
+			 if($tournament->schedule_type=='individual'){
+			 	$team_stats = ArcheryPlayerStats::whereTournamentId($tournament->id)->groupBy('user_id')->select('*')->selectRaw('sum(total) as total')->orderBy('total', 'desc')->take(3)->get(['*']);			 	
+			 }
+			 else{
+			 	$team_stats = ArcheryTeamStats::whereTournamentId($tournament->id)->select('*')->selectRaw('sum(total) as total')->orderBy('total','desc')->groupBy('team_id')->take(3)->get(['*']);
+			 }
+
+			// return $team_stats;
+
+			 foreach ($team_stats as $key => $value) {
+
+			 		if($tournament->schedule_type=='individual'){
+			 			$team_statistics = ArcheryStatistic::where('user_id', $value->user_id)->first();
+				 			if(!$team_statistics){
+				 				$team_statistics = new ArcheryStatistic;
+				 				$team_statistics->user_id = $value->user_id;
+				 				$team_statistics->save();
+				 			}
+			 		}
+			 		else{
+			 			$team_statistics = ArcheryStatistic::where('team_id', $value->team_id)->first();
+			 			if(!$team_statistics){
+			 				$team_statistics = new ArcheryStatistic;
+			 				$team_statistics->team_id = $value->team_id;
+			 				$team_statistics->save();
+			 			}
+			 		}
+
+			 				$team_statistics->events++;
+
+			 			if($key==0){
+			 				$team_statistics->first++;
+			 			}
+			 			if($key==1){
+			 				$team_statistics->second++;
+			 			}
+			 			if($key==2){
+			 				$team_statistics->third++;
+			 			}
+
+			 		$team_statistics->save();
+			 	}
+			 }
+		
 		return redirect()->back()->with('message', 'Group Closed');
 	}
 	// tournament new updates

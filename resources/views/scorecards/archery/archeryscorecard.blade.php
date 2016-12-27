@@ -345,6 +345,7 @@ td,th{
     <input type="hidden" id='selected_arrow_number' value="">
 
 
+    @if($match_data[0]['schedule_type']=='team')
 
        <?php $pp_ids = [];?>
                     @foreach($player_or_team_ids as $pt_id)
@@ -359,7 +360,8 @@ td,th{
 
                   </div>
                      @endif
-    @endforeach
+             @endforeach
+    @endif
 
 <!-- End Scoring -->
 

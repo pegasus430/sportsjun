@@ -16,7 +16,7 @@
             <td>{{ $statsArray['othersStatsArray']['events'] }}</td>
             <td>{{ $statsArray['othersStatsArray']['third'] }}</td>
             <td>{{ $statsArray['othersStatsArray']['second'] }}</td>
-            <td>{{ $statsArray['othersStatsArray']['win'] }}</td>           
+            <td>{{ $statsArray['othersStatsArray']['first'] }}</td>           
             <td>{{ $statsArray['othersStatsArray']['wonPercentage'] }}</td>
             </tr>
             @endif
