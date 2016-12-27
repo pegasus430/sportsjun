@@ -24,7 +24,7 @@ class BaseApiController extends Controller
     }
 
 
-    function ApiResponse($response, $code = 200)
+    public static function ApiResponse($response, $code = 200)
     {
         if (!$response && !is_array($response)) {
             $code = 404;
@@ -40,7 +40,6 @@ class BaseApiController extends Controller
         if ($response instanceof LengthAwarePaginator) {
             $response = $response->toArray();
         }
-
 
         return [
             'status' => $status,
@@ -73,7 +72,7 @@ class BaseApiController extends Controller
         $result = new LengthAwarePaginator($data, $paginator->total(), $paginator->perPage(),
             $paginator->currentPage(), ['path' => \Request::url(), 'query' => \Request::query()]);
 
-        return $this->ApiResponse($result);
+        return self::ApiResponse($result);
     }
 
     function mappedExtract($mapped, $item, $base)
@@ -87,7 +86,7 @@ class BaseApiController extends Controller
                 case 'list':
                     $fields = $mapped['fields'];
                     if (is_callable($fields))
-                        $fields = $fields($item,$base);
+                        $fields = $fields($item, $base);
                     $result = [];
                     $counter = 1;
                     foreach ($data as $sub) {
@@ -117,7 +116,7 @@ class BaseApiController extends Controller
                 case 'model':
                     $fields = $mapped['fields'];
                     if (is_callable($fields))
-                        $fields = $fields($item,$base);
+                        $fields = $fields($item, $base);
                     $item_data = [];
                     foreach ($fields as $key => $mapped) {
                         if (is_string($mapped)) {
@@ -144,7 +143,7 @@ class BaseApiController extends Controller
                 case 'array':
                     $fields = $mapped['fields'];
                     if (is_callable($fields))
-                        $fields = $fields($item,$base);
+                        $fields = $fields($item, $base);
                     $item_data = [];
                     foreach ($fields as $key => $mapped) {
                         if (is_string($mapped)) {
@@ -193,7 +192,7 @@ class BaseApiController extends Controller
             $data[] = $item_data;
         }
 
-        return $this->ApiResponse($data);
+        return self::ApiResponse($data);
     }
 
     function ModelMapResponse(Model $model, $map)
@@ -213,7 +212,12 @@ class BaseApiController extends Controller
             }
         }
 
-        return $this->ApiResponse($data);
+        return self::ApiResponse($data);
+    }
+
+
+    function routeNotFound($catchall){
+        return self::ApiResponse(['error'=>'route not found'],404);
     }
 
 

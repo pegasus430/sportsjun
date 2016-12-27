@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Http\Controllers\Api\BaseApiController;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -42,6 +43,14 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+        if($request->is('api/*')){
+            if ($e instanceof ModelNotFoundException) {
+                return response()->json(BaseApiController::ApiResponse("Record not found",404));
+
+            }
+            return response()->json(BaseApiController::ApiResponse($e->getMessage(),$e->getCode()));
+        }
+
         if ($e instanceof ModelNotFoundException) {
             $e = new NotFoundHttpException($e->getMessage(), $e);
         }

@@ -47,7 +47,9 @@ elixir(function (mix) {
 
             '/themes/sportsjun/css/owl.carousel.css',
             'home/css/el/*.css',
-            'home/css/search/*.css'
+            'home/css/search/*.css',
+            'home/css/media/*.css',
+
 
         ], 'public/gen/home/css/home_mix.css', 'public'
     );
