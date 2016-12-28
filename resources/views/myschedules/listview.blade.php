@@ -32,13 +32,15 @@
                         $schedule['match_start_date'] = DateTime::createFromFormat('d/m/Y g:i A', $schedule['match_start_date'])->format('jS F, Y g:i A');
                     }
 
+                     $schedule['match_start_date'] = $schedule['match_start_date'] . ' '. $schedule['match_start_time'];
+
                     $match_number = ScoreCard::get_match_number_athletics($schedule['id']);
 
                     ?>
 
                     <p class="vs_date">
                         <span><b>@if ($schedule['match_start_date'])
-                                            {{  Helper::displayDateTime((isset( $schedule['match_start_time'] ) ? " " . $schedule['match_start_time'] : ""), 1) }}
+                                        {{ date('Y M d , h:i A ', strtotime($schedule['match_start_date'] )) }}
                                         @else
                                             TBD
                                         @endif</b></span>

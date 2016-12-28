@@ -35,32 +35,37 @@
 											<th class="text-center">Rank</th>
 											<th class="text-center">Name</th>
 											<th class="text-center">Matches</th>
-											<th class="text-center">Won</th>
-											<th class="text-center">Lost</th>
-								    <th class="text-center">Draw</th>
+										   @if(!in_array($sports_id, [18]))  <!-- Non Archery -->
+                                    <th>Won</th>
+                                    <th>Lost</th>
+                                    <th>Draw</th>
                                 @if(in_array($sports_id, [4,11]))                               		
-                                    <th class="text-center">GF</th>
-                                    <th class="text-center">GA</th>
+                                    <th>GF</th>
+                                    <th>GA</th>
                                 @endif
 
-                                 @if(in_array($sports_id, [6,14,15,16]))                               		
-                                    <th class="text-center">PS</th>
-                                    <th class="text-center">PA</th>
+                                @if(in_array($sports_id, [6,15,16,14]))                               		
+                                    <th>PS</th>
+                                    <th>PA</th>
                                 @endif
-                                @if(in_array($sports_id, [3,5,13, 17, 7]))                               		
-                                    <th class="text-center">SW</th>
-                                    <th class="text-center"> SL</th>
+                                 @if(in_array($sports_id, [3,5,13, 17, 7]))                               		
+                                    <th>SW</th>
+                                    <th>SL</th>
                                 @endif
-
-
-											<th class="text-center">Points</th>
-
-											@if ( $tour['sports_id'] == 1 )
-												<th class="text-center">Net Run Rate</th>
-											@endif
-								@if($match_is_completed || $tournamentDetails[0]['group_is_ended'])
-                                	<th class="text-center"> Final Points </th>
+                                    <th>Points</th>
+                                    @if ( $tour['sports_id'] == 1 )
+                                    <th>Net Run Rate</th>
+                                    @endif
+                                @if($match_is_completed)
+                                	<th> Final Points </th> 
                                 @endif
+                            @else
+                                @for($i=10; $i>=5; $i--)
+                                    <th>Pts {{$i}} </th>
+
+                                @endfor
+                                    <th> Total </th>
+                            @endif
 										</tr>
 										</thead>
 										<tbody>
@@ -71,22 +76,35 @@
 											<tr>
 												<td>{{ ($key_point + 1) }}</td>
 												<td><a href="/team/members/{{$team['team_id']}}" class="primary">{{ $team['name'] }}</a></td>
-										<center>		<td>{{ !empty($match_count[$group->id][$team['team_id']])?$match_count[$group->id][$team['team_id']]:0 }}</td>
-												<td>{{ !empty($team['won'])?$team['won']:0 }}</td>
-												<td>{{ !empty($team['lost'])?$team['lost']:0 }}</td>
-									<td>{{ !empty($team['tie'])?$team['tie']:0 }}</td>
+										<center>	                      <td>{{ !empty($match_count[$group->id][$team['team_id']])?$match_count[$group->id][$team['team_id']]:0 }}</td>
+                @if(!in_array($sports_id, [18]))  <!-- Non Archery -->
+                                    <td>{{ !empty($team['won'])?$team['won']:0 }}</td>
+                                    <td>{{ !empty($team['lost'])?$team['lost']:0 }}</td>
+
+                           		    <td>{{ !empty($team['tie'])?$team['tie']:0 }}</td>
                                 @if(in_array($sports_id, [3,4,11,6,15,16, 5, 13, 17, 14, 7]))                               		
-                                   <td>{{ !empty($team['gf'])?$team['gf']:0 }}</td>
-                                   <td>{{ !empty($team['ga'])?$team['ga']:0 }}</td>
-                                @endif
-												<td>{{ !empty($team['points'])?$team['points']:0 }}</td>
-												@if ( $tour['sports_id'] == 1 )
-													<td>{{ !empty($net_run_rate[$team['team_id']])?$net_run_rate[$team['team_id']]:"--" }}</td>
-												@endif
-								@if($match_is_completed || $tournamentDetails[0]['group_is_ended'])
-                                	 <td>{{ !empty($team['final_points'])?$team['final_points']:'-' }}</td>
+                                    <td>{{ !empty($team['gf'])?$team['gf']:0 }}</td>
+                                   <td>{{ !empty($team['ga'])?$team['ga']:0 }}</td>                                
                                 @endif
 
+                                    <td>{{ !empty($team['points'])?$team['points']:0 }}</td>
+                                    @if ( $tour['sports_id'] == 1 )
+                                    <td>{{ !empty($net_run_rate[$team['team_id']])?$net_run_rate[$team['team_id']]:"--" }}</td>
+                                    @endif
+
+                                @if($match_is_completed)
+                                	
+                                	 <td>{{ !empty($team['final_points'])?$team['final_points']:'-' }}</td>   
+                                	
+                                @endif
+                 @else
+                 <!-- Archery Start -->
+                                @for($i=10; $i>=5; $i--)
+                                    <td> {!!Helper::displayEmptyDash($team['pts_'.$i],'-')!!} </td>
+
+                                @endfor
+                                    <td> {!!$team['points']!!} </td>
+                @endif
 											</tr>
 										@endforeach
 										</tbody>
@@ -95,7 +113,7 @@
 									No Teams.
 								@endif
 							</div>
-							<
+							
 						</div>
 						<div class="tab-pane fade " id="matches_{{ $group->id }}">
 						<div class="action-panel">

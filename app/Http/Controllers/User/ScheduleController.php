@@ -716,7 +716,8 @@ class ScheduleController extends Controller {
                 },    
                         'scheduleteamone.photos', 'scheduleteamtwo.photos'))
                 ->where(function($query) use ($teamId) {
-                    $query->where('a_id', $teamId)->orWhere('b_id', $teamId);
+                    $query->where('a_id', $teamId)->orWhere('b_id', $teamId)->orWhere('player_or_team_ids', 'like','%'.$teamId.'%');
+
                 })
                 ->where('schedule_type', 'team')
                 ->where('sports_id', $sportsId)
@@ -729,7 +730,9 @@ class ScheduleController extends Controller {
                 ->get(['id', 'match_start_date', 'match_start_time','winner_id', 'a_id', 'b_id','match_type','sports_id', 'match_status']);
 
         $matchScheduleDataTotalCount = MatchSchedule::where(function($query) use ($teamId) {
-                    $query->where('a_id', $teamId)->orWhere('b_id', $teamId);
+                    $query->where('a_id', $teamId)
+                          ->orWhere('b_id', $teamId)
+                          ->orWhere('player_or_team_ids', $teamId);
                 })
                 ->where('schedule_type', 'team')
                 ->where('sports_id', $sportsId)
@@ -797,6 +800,11 @@ class ScheduleController extends Controller {
                         })                       
                         ->where('match_status', 'completed')
                         ->get(['id','winner_id', 'looser_id', 'is_tied','match_type']);
+
+        //Archery Stats 
+
+        $tourStats = '';
+
         if(count($teamStats)) {    
             switch ($sportsId) {
 
@@ -821,12 +829,13 @@ class ScheduleController extends Controller {
                  case config('constants.SPORT_ID.Squash'):
                     $statsArray = Helper::getTennisTableTennisStats($teamStats,$teamId);
                     break;
-                 
+              
                 default:
+                
                     $statsArray = Helper::getHockeyStats($teamStats,$teamId);
             }  
 
-        }
+        } 
 
         if(count($rubberStats)) {      
    
@@ -834,7 +843,15 @@ class ScheduleController extends Controller {
         
         }
 
+        if(in_array($sportsId, [18])){
+               $statsArray = Helper::getArcheryStats($teamId);    
+               $matchScheduleData = MatchSchedule::where('player_or_team_ids', 'like', "%$teamId%")->whereNotNull('tournament_id') ->orderby('match_start_date', 'desc')
+                ->orderby('match_start_time', 'desc')->get();                 
+        }
+
         $statsview = 'schedules.'.preg_replace('/\s+/', '',strtolower(config('constants.SPORT_NAME.'.$sportsId))).'statsview';
+
+       // dd($matchScheduleData);
 
         Helper::leftMenuVariables($teamId);
         return view('schedules.statsview', ['matchScheduleData' => $matchScheduleData, 'matchScheduleDataTotalCount' => $matchScheduleDataTotalCount,
@@ -931,6 +948,9 @@ class ScheduleController extends Controller {
 				$matchScheduleData[$key]['match_start_date'] = Helper::getFormattedTimeStamp($schedule);
             }
         }
+
+
+
         return view('schedules.statsmoreview', ['matchScheduleData' => $matchScheduleData, 'sportsId' => $sportsId,
             'teamId' => $teamId, 'limit' => $limit, 'offset' => $limit + $offset,
         ]);
@@ -1255,16 +1275,28 @@ class ScheduleController extends Controller {
                         $archery_model = new ArcheryController;
 
                         $players_array='';
+                        $players_a_list ='';
 
                         for($z=1; $z<=$number_of_players; $z++){
 
                             if($schedule_type=='player')
                                 $archery_model->insert_players_in_db($tournament_id,$match_schedule_id,null,$request['player_id_'.$z],User::find($request['player_id_'.$z])->name);
+                            else{
+                               $archery_model->insert_teams_in_db($tournament_id,$match_schedule_id,$request['player_id_'.$z],Team::find($request['player_id_'.$z])->name); 
+
+                                $team_details = team::find($request['player_id_'.$z]);
+                                if($team_details){
+                                     foreach($team_details->teamplayers as $td){
+                                            $players_a_list.=$td->user_id.',';
+                                        }
+                                }
+                               
+                            }
 
                              $players_array.= $request['player_id_'.$z] . ',';
                         }
 
-                    matchSchedule::find($match_schedule_id)->update(['player_or_team_ids'=>$players_array]);
+                    matchSchedule::find($match_schedule_id)->update(['player_or_team_ids'=>$players_array, 'player_a_ids'=>$players_a_list, 'player_b_ids'=>$players_array]);
 
                   }
 
@@ -1414,17 +1446,32 @@ class ScheduleController extends Controller {
                         $archery_model = new ArcheryController;
 
                         $players_array='';
+                        $players_a_list ='';
 
                         for($z=1; $z<=$number_of_players; $z++){
 
                              if($schedule_type=='player')
                                 $archery_model->insert_players_in_db($tournament_id,$match_schedule_id,null,$request['player_id_'.$z],User::find($request['player_id_'.$z])->name);
 
+                             else{
+                               $archery_model->insert_teams_in_db($tournament_id,$match_schedule_id,$request['player_id_'.$z],Team::find($request['player_id_'.$z])->name); 
+
+                                $team_details = team::find($request['player_id_'.$z]);
+                                if($team_details){
+                                     foreach($team_details->teamplayers as $td){
+                                            $players_a_list.=$td->user_id.',';
+                                        }
+                                }
+                               
+                            }
+
                              $players_array.= $request['player_id_'.$z] . ',';
                         }
 
-                    matchSchedule::find($match_schedule_id)->update(['player_or_team_ids'=>$players_array]);
+                    matchSchedule::find($match_schedule_id)->update(['player_or_team_ids'=>$players_array, 'player_a_ids'=>$players_a_list, 'player_b_ids'=>$players_array]);
 
+
+                    
                   }
 
 

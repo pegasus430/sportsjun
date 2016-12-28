@@ -207,17 +207,42 @@ td,th{
             <?php $p_index=1;?>
               <!-- If Team -->
             
-                  @foreach($players_ordered as $player)
+               @if($match_data[0]['schedule_type']=='player')
+                  @foreach($players as $player)
                      <tr>
-                          <td>{{$player->player_name}}  </td>
+                          <td>{{$player->player_name}} <br>
+                            <b>{{$player->team_name}}</b> </td>
                       @foreach($match_obj->archery_rounds as $round)
                         <td class="a_s player_{{$p_index}}_round_{{$round->round_number}} player_{{$player->id}}_round_{{$round->round_number}}" player_id='{{$player->id}}' user_id='{{$player->user_id}}' round_number="{{$round->round_number}}" round_id="{{$round->id}}"> {{$player->{'round_'.$round->round_number} }} </td>
 
                         <?php $p_index++;?>
                       @endforeach
-                        <td class='player_{{$player->id}}_total text-primary' style="font-size:20px">{{$player->total}}</td>
+                        <td class='player_{{$player->id}}_total text-primary' style="font-size:20px">{{$player->total}}
+                        </td>
                     </tr>
                   @endforeach
+            @else
+                  @foreach($players as $player)
+                     <tr>
+                          <td><b>{{$player->team_name}}</b> <br>
+                         </td>
+                      @foreach($match_obj->archery_rounds as $round)
+
+                    <?php  $team_player = ScoreCard::get_archery_team_player($player->id, $round);?>
+                        <td class="a_s player_{{$p_index}}_round_{{$round->round_number}} a_s team_{{$player->team_id}}_round_{{$round->round_number}}  player_{{$player->id}}_round_{{$round->round_number}}" player_id="{{$team_player['id']}}" user_id="{{$team_player['user_id']}}" round_number="{{$round->round_number}}" round_id="{{$round->id}}" team_id='{{$player->team_id}}' team_player_id='{{$player->id}}'>
+                                <span  class="team_{{$player->team_id}}_round_{{$round->round_number}}_score"> {{$player->{'round_'.$round->round_number} }} </span>
+                            <br> <span style="font-size: 14px" class="team_{{$player->team_id}}_round_{{$round->round_number}}_player_name">{{$team_player['player_name']}}</span>
+                        </td>
+
+                        <?php $p_index++;?>
+                      @endforeach
+                        <td class='player_{{$player->id}}_total text-primary team_{{$player->team_id}}_total' style="font-size:20px">{{$player->total}}
+                        </td>
+                    </tr>
+                  @endforeach
+
+
+            @endif
             
             </tbody>
           </table>
@@ -226,7 +251,7 @@ td,th{
 
 
         <div id='load_round_details' style="display:none">
-            @include('scorecards.archery.round_scoring')
+           
         </div>
 
       </div>
@@ -347,6 +372,13 @@ td,th{
               $('#selected_player_id').val($(this).attr('player_id')) 
 
 
+             if($(this).attr('user_id')==''){
+                    $.alert({
+                        title:'Alert!',
+                        content:"Match not started!"
+                    })
+              }
+              else{
 
               $.ajax({
                   url:'/viewpublic/match/archery/load_arrow',
@@ -357,6 +389,8 @@ td,th{
                       $('#load_round_details').show();
                   }
               }) 
+
+            }
           }
 
       })
@@ -380,6 +414,14 @@ td,th{
               $('#selected_round_id').val($(that).attr('round_id'))
               $('#selected_player_id').val($(that).attr('player_id')) 
 
+              if($(that).attr('user_id')==''){
+                    $.alert({
+                        title:'Alert!',
+                        content:"Match not started!"
+                    })
+              }
+              else{
+
               $.ajax({
                   url:'/viewpublic/match/archery/load_arrow',
                   type:'post',
@@ -389,6 +431,7 @@ td,th{
                       $('#load_round_details').show();
                   }
               }) 
+            }
         }
 
       $(document).ready(function(){

@@ -375,7 +375,11 @@ return [
 		'lost' => 'LOST',
 		'tied' => 'TIED',
 		'matches' => 'MATCHES',
-		'washout' => 'WASHOUT'
+		'washout' => 'WASHOUT',
+		'events'  => 'Events Count',
+		'third_position'=>'Third',
+		'second_position'=>'Second',
+		'first_position'=>'Winner'
 		],
          'scores' => 'Scores' ,
 		'new_owner_notification'=>'Admin has added you as the Team Owner',

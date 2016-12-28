@@ -38,6 +38,7 @@ use App\Helpers\SendMail;
 use App\Model\TournamentGroupTeams;
 use App\Model\TournamentFinalTeams;
 use App\Model\OrganizationGroupTeamPoint;
+use App\Model\ArcheryStatistic;
 
 class Helper
 {
@@ -1139,6 +1140,11 @@ class Helper
         $finalArray = ['othersStatsArray' => $othersStatsArray];
 
         return $finalArray;
+    }
+
+    public static function getArcheryStats($team_id){
+        $teamStats = ArcheryStatistic::whereTeamId($team_id)->first();
+        return $teamStats;
     }
 
 

@@ -278,7 +278,13 @@ class MatchSchedule extends Model
    }
 
    public function archery_players($team_id=null,$order=null){
+
+    if($this->schedule_type=='player')
         $players = $this->hasMany('App\Model\ArcheryPlayerStats','match_id');
+    else
+        $players = $this->hasMany('App\Model\ArcheryTeamStats', 'match_id');
+
+
         if($team_id) $players = $players->where('team_id',$team_id);
 
         if($order)   $players = $players->orderBy($order,'desc');
