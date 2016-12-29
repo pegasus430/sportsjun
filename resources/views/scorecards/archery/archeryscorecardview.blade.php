@@ -136,7 +136,7 @@ td,th{
     @if($match_data[0]['winner_id']>0)
   <div class="form-group">
         <label class="win_head">Winner</label>
-        <h3 class="win_team">{{ ($match_data[0]['a_id']==$match_data[0]['winner_id'])?$user_a_name:$user_b_name }}</h3>
+        <h3 class="win_team">{{ ($match_data[0]['a_id']==$match_data[0]['winner_id'])?$user_a_name:$user_b_name }} {{isset($winner_namee)?$winner_namee:''}}</h3>
     </div>
 
       @elseif($match_data[0]['match_result'] == "washout")

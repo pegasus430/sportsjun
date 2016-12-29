@@ -20,7 +20,7 @@
 	@if($isValidUser)
 
 	<center>
-		@for($i=1; $i<=10;$i++)
+		@for($i=0; $i<=10; $i++)
 			<button class="btn-small btn btn-circle btn-pink" value='{{$i}}' onclick="btn_pink_click(this)"> {{$i}} </button> 
 		@endfor
 	</center>

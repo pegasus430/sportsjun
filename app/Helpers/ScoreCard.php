@@ -242,9 +242,9 @@ class ScoreCard {
 		return MatchSchedule::find($match_id)->referees;
 	}
 
-	public static function get_arrow_stats($match_id,$user_id,$round_id,$round_number){
+	public static function get_arrow_stats($match_id,$user_id,$round_id,$round_number, $team_id=null){
 
-    $check = ArcheryArrowStats::where(['match_id'=>$match_id,'user_id'=>$user_id,'round_id'=>$round_id])->first();
+    $check = ArcheryArrowStats::where(['match_id'=>$match_id,'user_id'=>$user_id,'round_id'=>$round_id,'team_id'=>$team_id])->first();
     if($check) return $check;
 
         $ars = new ArcheryArrowStats;

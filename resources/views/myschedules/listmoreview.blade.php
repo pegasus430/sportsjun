@@ -4,7 +4,8 @@
 <div class="row">
     <div id="schedule_{{$schedule['id']}}" class="schedule_list clearfix">
 
-        @if($schedule['sports_id']==18)
+     
+    @if($schedule['sports_id']==18)
 
              <div class="col-md-3">
             <?php $pd_ids = ScoreCard::get_archery_teams($schedule['id']); ?>
@@ -15,8 +16,10 @@
 
         </div>
         <div class="col-xs-6 col-xs-6 col-md-3 col-md-3">     
-            
+
                     <?php
+                
+
                     $schedule['match_start_date'] = trim($schedule['match_start_date']);
                     if (strpos($schedule['match_start_date'], ':') == false)
                     {
@@ -26,11 +29,16 @@
                     {
                         $schedule['match_start_date'] = DateTime::createFromFormat('d/m/Y g:i A', $schedule['match_start_date'])->format('jS F, Y g:i A');
                     }
+                 
+                  //   $schedule['match_start_date'] = $schedule['match_start_date'] . ' '. $schedule['match_start_time'];
+
+                    $match_number = ScoreCard::get_match_number_athletics($schedule['id']);
+
                     ?>
 
                     <p class="vs_date">
                         <span><b>@if ($schedule['match_start_date'])
-                                            {{ Helper::displayDateTime($schedule['match_start_date'] . (isset( $schedule['match_start_time'] ) ? " " . $schedule['match_start_time'] : ""), 1) }}
+                                      {{ $schedule['match_start_date']}}
                                         @else
                                             TBD
                                         @endif</b></span>
@@ -48,8 +56,13 @@
         <div class="col-xs-6 col-sm-6 col-md-3">     
 
                     <p class="vs_date">
+                        <b>{{$match_number['tournament_name']}} </b>
+                        <br>
+                        @if(!empty($match_number['match_number']))
+                            <b>{{$match_number['day']}}, {{$match_number['match_number']}} </b><br>
+                        @endif
                         Status: <span class='sports_text'>{{ ucfirst($schedule['match_status']) }}</span> <br>
-                    Scores: <span class='blue'>{{Helper::getMatchDetails($schedule['id'])->scores}} </span> <br>
+              
                     @if(!is_null(Helper::getMatchDetails($schedule['id'])->winner_id))
                         <span class='red'>Winner: {{Helper::getMatchDetails($schedule['id'])->winner}} </span>
 
@@ -78,6 +91,7 @@
         
    
     @else
+
     	<div class="deskview hidden-xs">
             <div id="teamone" class="col-sm-3 score_view_img">
                 <p>

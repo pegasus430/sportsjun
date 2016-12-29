@@ -592,8 +592,12 @@ td,th{
             }
         }
 
+        function init_player(){
+          init('player_1_round_1')
+        }
+
       $(document).ready(function(){
-          setTimeout(init('player_1_round_1'),1000)
+          setTimeout(init_player,1000)
         //init();
       })
 
