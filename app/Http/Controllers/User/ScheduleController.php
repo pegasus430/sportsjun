@@ -761,7 +761,7 @@ class ScheduleController extends Controller {
                     $teamTwoUrl['url'] = '';
                 }
 
-                if (!empty($schedule['winner_id'])) {
+                if (!empty($schedule['winner_id']) && $sportsId !=18) {
                     if ($schedule['scheduleteamone']['id'] == $schedule['winner_id']) {
                         $matchScheduleData[$key]['scheduleteamone']['result'] = trans('message.team.stats.won');
                         if (count($schedule['scheduleteamtwo']['photos'])) {
