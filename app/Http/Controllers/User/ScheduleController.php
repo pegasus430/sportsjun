@@ -761,7 +761,9 @@ class ScheduleController extends Controller {
                     $teamTwoUrl['url'] = '';
                 }
 
-                if (!empty($schedule['winner_id']) && $sportsId !=18) {
+        if($sportsId!=18){
+
+                if (!empty($schedule['winner_id'])) {
                     if ($schedule['scheduleteamone']['id'] == $schedule['winner_id']) {
                         $matchScheduleData[$key]['scheduleteamone']['result'] = trans('message.team.stats.won');
                         if (count($schedule['scheduleteamtwo']['photos'])) {
@@ -779,6 +781,7 @@ class ScheduleController extends Controller {
                         $matchScheduleData[$key]['scheduleteamtwo']['result'] = trans('message.team.stats.tied');
                     }
                 }
+        }
 
                 $matchStartDate = Carbon::createFromFormat('Y-m-d', $schedule['match_start_date']);
                 $matchScheduleData[$key]['winner_text'] = trans('message.schedule.scorecard');
