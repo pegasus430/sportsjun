@@ -301,7 +301,7 @@ class ScoreCard {
     		$today   = new DateTime(date('Y-m-d'));
 
     		$diff = $t_start->diff($today);
-    		$days = ($diff->m * 31) + ($diff->d);
+    		$days = ($diff->m * 31) + ($diff->d) +1;
     		$matches = DB::table('match_schedules')->whereTournamentId($t_id)->lists('id');
 
 
@@ -316,11 +316,16 @@ class ScoreCard {
     }
 
 
-    public static function get_archery_tournament_points($tournamentDetails=[], $team_id, $i){
+    public static function get_archery_tournament_points($tournamentDetails=[], $team_id, $i, $player_standing=false){
     		$schedule_type = $tournamentDetails['schedule_type'];
     		$tournament_id = $tournamentDetails['id'];
 
     		$pts = 0;
+
+            if($player_standing){
+                $schedule_type = 'individual';
+                $tournament_id = $tournamentDetails['tournament_id'];
+            }
 
     	if($schedule_type=='individual'){
     		foreach(ArcheryArrowStats::whereUserId($team_id)->whereTournamentId($tournament_id)->get() as $st){

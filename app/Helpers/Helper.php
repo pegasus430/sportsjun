@@ -39,7 +39,8 @@ use App\Model\TournamentGroupTeams;
 use App\Model\TournamentFinalTeams;
 use App\Model\OrganizationGroupTeamPoint;
 use App\Model\ArcheryStatistic;
-
+use App\Model\ArcheryTeamStats;
+use App\Model\ArcheryArrowStats;
 class Helper
 {
 
@@ -1144,6 +1145,29 @@ class Helper
 
     public static function getArcheryStats($team_id){
         $teamStats = ArcheryStatistic::whereTeamId($team_id)->first();
+        $teamStats['event_level']=$teamStats;
+        $teamStats['match_level']=ArcheryTeamStats::whereTeamId($team_id)->whereNotNull('tournament_id')->get();
+
+       // dd($teamStats['match_level']->count());
+
+        for($i=10; $i>=5; $i--){
+            $pts = 0; 
+
+            foreach(ArcheryArrowStats::whereTeamId($team_id)->whereNotNull('tournament_id')->get() as $st){
+
+           if($st) {
+                for($j=1; $j<=10; $j++){
+                    if($st->{'arrow_'.$j}==$i){
+                        $pts++;
+                    }
+                }             
+            }
+            }
+
+            $teamStats['pt_'.$i]= $pts;
+
+        }
+
         return $teamStats;
     }
 

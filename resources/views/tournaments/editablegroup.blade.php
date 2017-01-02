@@ -158,8 +158,9 @@
                                     <td>
                                     	<a href="/team/members/{{$team['team_id']}}" class="primary">{{ $team['name'] }}</a>
                                     </td>
+                      @if(!in_array($sports_id, [18]))  <!-- Non Archery -->
                                     <td>{{ !empty($match_count[$group->id][$team['team_id']])?$match_count[$group->id][$team['team_id']]:0 }}</td>
-                @if(!in_array($sports_id, [18]))  <!-- Non Archery -->
+              
                                     <td>{{ !empty($team['won'])?$team['won']:0 }}</td>
                                     <td>{{ !empty($team['lost'])?$team['lost']:0 }}</td>
 
@@ -181,6 +182,7 @@
                                 @endif
                  @else
                  <!-- Archery Start -->
+                     <td>{{ !empty($match_count[$group->id][$team['team_id']])?$match_count[$group->id][$team['team_id']]:0 }}</td>
                                 @for($i=10; $i>=5; $i--)
                                     <td> {!!Helper::displayEmptyDash($team['pts_'.$i],'-')!!} </td>
 

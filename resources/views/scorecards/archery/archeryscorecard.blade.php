@@ -221,14 +221,16 @@ td,th{
               <div class="col-sm-12">
                 <br>
                   <hr>
-                  <div class="pull-right">
+                  <div class="pull-left">
+
+               <span color='red'><b>Note :</b></span> Please add round to this match to score further &nbsp;&nbsp;&nbsp;
+
                 <a href='javascript:void(0)' class="btn btn-danger" data-toggle='modal' data-target='#new_round_modal'>
                   <i class="fa fa-plus"></i>
                   Add new round
                   </a>
               </div>
 
-               <div> <span color='red'>Note :</span> Please add round to this match to score further</div>
 
             
 

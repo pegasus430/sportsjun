@@ -377,7 +377,7 @@ td,th{
              if($(this).attr('user_id')==''){
                     $.alert({
                         title:'Alert!',
-                        content:"Match not started!"
+                        content:"Round not started!"
                     })
               }
               else{

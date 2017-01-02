@@ -235,6 +235,8 @@ class ArcheryController extends Controller
                 $winner_namee = Team::find($players_ordered[0]['team_id'])->name;
             }
             $match_obj->save();
+
+            $players = $players_ordered;
         }
 
 
