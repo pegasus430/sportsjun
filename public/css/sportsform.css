@@ -332,6 +332,10 @@
     zoom: 1;
 }
 
+.sportsjun-forms .select>select{
+     height: 35px;
+}
+
 .sportsjun-forms .gui-input,
 .sportsjun-forms .gui-textarea {
     padding: 3px 5px;

@@ -1127,7 +1127,7 @@ class TournamentsController extends Controller
 						$teamId                          = $scheduled_teams['team_id'];
 						$match_count[$group_id][$teamId] = MatchSchedule::where('tournament_id', $tournament_id)->where('tournament_group_id', $group_id)
 							->where('match_status', 'completed')->where(function($query) use ($teamId) {
-								$query->where('a_id', $teamId)->orWhere('b_id', $teamId);
+								$query->where('a_id', $teamId)->orWhere('b_id', $teamId)->orWhere('player_or_team_ids', 'like', "%$teamId%");
 							})->count();
 
 				
@@ -1141,7 +1141,7 @@ class TournamentsController extends Controller
 									$scheduled_teams['gf']=$match_count_details['gf'];
 							 }
 
-							// Archery
+							// Archery 
 
 							 if(in_array($tournaments[0]['sports_id'], [18])){
 							 		for($i=1; $i<=10; $i++){
@@ -2777,6 +2777,23 @@ class TournamentsController extends Controller
 							->selectRaw('count(match_schedules.id) as matches')							
 							->selectRaw('sum(total_points) as total_points')
 							->selectRaw('sum(fouls) as fouls')
+							->orderBy('total_points', 'desc')
+							->groupBy('user_id')
+							->get();
+
+
+				break;
+
+				case 18:	//water polo
+						$player=ArcheryPlayerStats::join('match_schedules', 'match_schedules.id', '=', 'archery_player_stats.match_id')
+							->join('teams', 'teams.id','=', 'archery_player_stats.team_id')
+							->join('users', 'users.id', '=', 'archery_player_stats.user_id')
+							->where('match_schedules.tournament_id', $tournament_id)
+							->select('archery_player_stats.*','users.*', 'teams.*')						
+							
+							->selectRaw('count(match_schedules.id) as matches')							
+							->selectRaw('sum(total) as total_points')
+					
 							->orderBy('total_points', 'desc')
 							->groupBy('user_id')
 							->get();

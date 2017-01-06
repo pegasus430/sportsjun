@@ -288,7 +288,7 @@ return [
 		'reg_opening_time' => 'Open Time',
 		'reg_closing_date' => 'Close Date',
 		'reg_closing_time' => 'Close Time',
-		'total_enrollment' => 'Total no of enrolments',
+		'total_enrollment' => 'Total Online Enrolments',
 		'min_enrollment' => 'Min enrolments per user',
 		'max_enrollment' => 'Max enrolments per user',
 		'terms_conditions' => 'Terms & conditions',

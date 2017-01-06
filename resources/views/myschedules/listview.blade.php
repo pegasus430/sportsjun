@@ -22,6 +22,8 @@
         <div class="col-xs-6 col-xs-6 col-md-3 col-md-3">     
 
                     <?php
+                
+
                     $schedule['match_start_date'] = trim($schedule['match_start_date']);
                     if (strpos($schedule['match_start_date'], ':') == false)
                     {
@@ -31,8 +33,8 @@
                     {
                         $schedule['match_start_date'] = DateTime::createFromFormat('d/m/Y g:i A', $schedule['match_start_date'])->format('jS F, Y g:i A');
                     }
-
-                     $schedule['match_start_date'] = $schedule['match_start_date'] . ' '. $schedule['match_start_time'];
+                 
+                  //   $schedule['match_start_date'] = $schedule['match_start_date'] . ' '. $schedule['match_start_time'];
 
                     $match_number = ScoreCard::get_match_number_athletics($schedule['id']);
 
@@ -40,7 +42,7 @@
 
                     <p class="vs_date">
                         <span><b>@if ($schedule['match_start_date'])
-                                        {{ date('Y M d , h:i A ', strtotime($schedule['match_start_date'] )) }}
+                                      {{ $schedule['match_start_date']}}
                                         @else
                                             TBD
                                         @endif</b></span>

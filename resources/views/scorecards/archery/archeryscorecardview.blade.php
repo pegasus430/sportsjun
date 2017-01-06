@@ -136,7 +136,7 @@ td,th{
     @if($match_data[0]['winner_id']>0)
   <div class="form-group">
         <label class="win_head">Winner</label>
-        <h3 class="win_team">{{ ($match_data[0]['a_id']==$match_data[0]['winner_id'])?$user_a_name:$user_b_name }}</h3>
+        <h3 class="win_team">{{ ($match_data[0]['a_id']==$match_data[0]['winner_id'])?$user_a_name:$user_b_name }} {{isset($winner_namee)?$winner_namee:''}}</h3>
     </div>
 
       @elseif($match_data[0]['match_result'] == "washout")
@@ -154,6 +154,8 @@ td,th{
 
   @endif
     <p class="match-status mg"><a href="{{ url('user/album/show').'/match'.'/0'.'/'.$action_id }}"><span class="fa" style="float: left; margin-left: 8px;"><img src=" {{ asset('/images/sc-gallery.png') }}" height="18" width="22"></span> <b>Media Gallery</b></a></p>
+
+    <BR><BR><BR>
         @include('scorecards.share')
         <p class="match-status">@include('scorecards.scorecardstatusview')</p>
     </div>
@@ -375,7 +377,7 @@ td,th{
              if($(this).attr('user_id')==''){
                     $.alert({
                         title:'Alert!',
-                        content:"Match not started!"
+                        content:"Round not started!"
                     })
               }
               else{
