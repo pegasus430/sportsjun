@@ -82,7 +82,7 @@
                 <div class="section">
                      <label class="form_label"> Number of {{$tournament[0]['schedule_type']}}s <span  class='required'>*</span> </label>             
                     <label class="field">
-                    <input id="number_of_players" name="number_of_players" class="gui-input" type="number" onchange="load_number_of_players_html(this)">
+                    <input id="number_of_players" name="number_of_players" class="gui-input" type="number" onchange="load_number_of_players_html(this)" min="0">
                     </label>                             
             
                 </div>

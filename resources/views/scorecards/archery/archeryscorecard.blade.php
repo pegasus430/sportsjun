@@ -254,7 +254,7 @@ td,th{
                             <div class="col-sm-12">
                                 <div class='section'>
                                     <label class="field label">Distance</label><br>
-                                    <input type="number" name="distance" id='distance' class="gui-input">
+                                    <input type="number" name="distance" id='distance' class="gui-input" step="5" min="0">
                                 </div>
                             </div>
                         </div>
@@ -432,6 +432,16 @@ td,th{
         var distance = $('#distance').val();
         var number_of_arrows = $('#number_of_arrows').val();
         var match_id         = {{$match_data[0]['id']}}
+
+        if(distance<0 || number_of_arrows<0){
+            $.confirm({
+                title:'Alert',
+                content:'Please enter a valid number!'
+            });
+
+            return
+        }
+        
           $.ajax({
               type:'post',
               url:'/match/archery/add_round',
@@ -678,7 +688,7 @@ td,th{
 
                   if(schedule_type=='team'){
                       team_id = response.team_id;
-                  }
+                  }else team_id = '';
 
                   for(i=1;i<=10;i++){
                       $('.player_'+player_id+'_round_'+i).html(response['round_'+i]);
