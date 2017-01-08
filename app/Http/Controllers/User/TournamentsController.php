@@ -3945,6 +3945,31 @@ $content.="<table style='border:1px solid #555;'>
  $view_data['footer'] = $footer;
  $view='emails.welcome';
 
+    $i=0;
+
+    foreach($register_data as $reg){
+    foreach($reg->cartDetails as $carts){
+  
+    $team_id =DB::table('request')->where('to_id',$carts->tournaments->id)->where('cart_id',$_POST['udf2'])->where('type',4)->pluck('from_id');
+
+   
+
+    	if($team_model = Team::find($team_id)){
+    			foreach(Team::find($team_id)->teamplayers as $sp){
+    				 
+	    				 Mail::send(['html' => $view], ['view_data'=>$view_data], function($message) use ($sp,$subject)
+							{    
+								$message->to($sp->user->email)->subject($subject);    
+							});
+    			}
+    	}
+
+	    $i++;
+	     }
+    }
+
+
+
 Mail::send(['html' => $view], ['view_data'=>$view_data], function($message) use ($to_email_id,$subject)
 				{    
 					$message->to($to_email_id)->subject($subject);    

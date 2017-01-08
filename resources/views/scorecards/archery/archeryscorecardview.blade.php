@@ -199,7 +199,9 @@ td,th{
               <tr class="thead">
                 <th>  </th>
                 @foreach($match_obj->archery_rounds as $round)
-                <th> {{$round->distance}} Mts </th>
+                <th> {{$round->distance}} Mts 
+                    <br> <span  style="color: #af3345; text-transform: uppercase;">{{ScoreCard::round_status($round)}}</span>
+                </th>
                 @endforeach
                 <th> Total</th>
               </tr>

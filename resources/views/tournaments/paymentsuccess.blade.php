@@ -21,176 +21,48 @@
 <div class="row">
 
 
+      <div class="table-responsive">
+        <div class="col-sm-12" d="teamStatsDiv">
+          <table class="table table-hover table-stripped">
+          <thead>
+              <tr>
+                <th>Tournament</th>
+                <th>Payment Name</th>
+                <th>Team</th>
+                <th>Payment Email</th>
+                <th>Payment Phone</th>
+                <th>Amount </th>
+              </tr>
+          </thead>
 
-
-<div class="col-sm-2">
-      <div class="section">
-        <label class="field prepend-icon head_tr">
-            Tournament
-            </label>
-          
-
-           </div>
-        </div>
-
-<div class="col-sm-2">
-<label class="field prepend-icon">
-  <div class="section">
-    <label class="field prepend-icon head_tr">Payment name</label>
-     
-    </div>
- </div>
-<!-- end section -->  
-
-
-<div class="col-sm-2">
-<label class="field prepend-icon">
-  <div class="section">
-    <label class="field prepend-icon head_tr">Team</label>
-     
-    </div>
- </div>
-
-
-
-
-
-<div class="col-sm-2">
-    <div class="section">
-    
-    
-
-
-    <label class="field prepend-icon head_tr">
-             Payment email
-            </label>
-
-         
-    
-    </div>
-</div>
-
-
-<div class="col-sm-1">
-    <div class="section">
-    
-    
-
-
-    <label class="field prepend-icon head_tr">
-             Payment phone
-            </label>
-
-         
-    
-    </div>
-</div>
-
-
-
-
-
-
-<div class="col-sm-1">
-      <div class="section">
-        <label class="field prepend-icon head_tr">
-            Amount
-            </label>
-          
-
-           </div>
-        </div>
-
-</div><!--end row -->
-
-
-<br><br>
-
-
-
-
-
-
-
-
+          <tbody>
+              
 <?php $i=0;
 $options=array();?>
 @foreach ($details as $details)
-<div class="row inner_events successpage">
-
-
-
-
-<div class="col-sm-2">
-      <div class="section">
-           <label class="form_label">{{$details['tournament']}}</label>  
-           
+        <tr>
+          <td>{{$details['tournament']}}</td>
           
-
-           </div>
-        </div>
-
-<div class="col-sm-2">
-  <div class="section">
-    <label class="form_label"><i class="fa fa-user"></i> {{$details['name']}}</label>
+          <td>{{$details['name']}}</td>
      
-    </div>
- </div>
-<!-- end section -->  
-
-
-<div class="col-sm-2">
-  <div class="section">
-    <label class="form_label"><i class="fa fa-user"></i> {{$details['team']}}</label>
+          <td>{{$details['team']}}</td>
      
-    </div>
- </div>
-
-
-
-
-<div class="col-sm-2">
-    <div class="section">
-    
-    
-
-
    
-                        
-              <label class="form_label"><i class="fa fa-envelope"></i> {{$details['email']}}</label>
+          <td>{{$details['email']}}</td>
             
-
-         
-    
-    </div>
-</div>
-<div class="col-sm-1">
-  <div class="section">
-    <label class="form_label"><i class="fa fa-phone"></i> {{$details['phone']}}</label>
+         <td> {{$details['phone']}}</td>
      
-    </div>
- </div>
-
- <div class="col-sm-1">
-  <div class="section">
-    <label class="form_label"><i class="fa fa-inr"></i> {{$details['price']}}</label>
+          <td>{{$details['price']}}</td>
      
-    </div>
- </div>
-
-</div><!--end row -->
-<br>
-<br>
+          </tr>
 <?php $i++;?>
 @endforeach
+          </tbody>
 
+          </table>
+      </div>
 
- 
-</div>
-
-
-
-
+  </div>
 
 
 

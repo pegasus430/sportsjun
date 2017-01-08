@@ -116,7 +116,7 @@ $(function() {
             }      
       else
     return (sub_to >= to);
-  }, "Total Number of Enrolments cannot be greater than " + window.sub);
+  }, "Total Number of Enrolments cannot be greater than the total group teams");
   $('[name="total_enrollment"]').rules("add", "total_enrollment");
   
 									

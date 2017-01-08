@@ -30,6 +30,7 @@
 $options=array();?>
 @foreach ($details as $det)
 
+
 <div class="row head_reg">
 
         <div class="col-sm-3">
@@ -42,7 +43,7 @@ $options=array();?>
 
         <div class="col-sm-2">
            <div class="section">
-           <label class="field prepend-icon head_tr">Total enrollment : {{$det[0]['tot_enrollmet']}}</label>
+           <label class="field prepend-icon head_tr">Total enrollments : {{$det[0]['tot_enrollmet']}}</label>
      
           </div>
         </div>
@@ -51,7 +52,7 @@ $options=array();?>
       <div class="col-sm-3">
           <div class="section">
             <label class="field prepend-icon head_tr">
-             Currently Registerd : {{$det[0]['current_enrollmet']}}
+             Currently Registered : {{$det[0]['current_enrollmet']}}
             </label>
          </div>
       </div>
@@ -62,7 +63,7 @@ $options=array();?>
       <div class="col-sm-3">
          <div class="section">
             <label class="field prepend-icon head_tr">
-            Remaining Enrollment: {{$det[0]['remaining_enrollmet']}}
+            Remaining Enrollments: {{$det[0]['remaining_enrollmet']}}
             </label>
          </div>
       </div>

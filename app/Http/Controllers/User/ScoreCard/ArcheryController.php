@@ -493,6 +493,21 @@ class ArcheryController extends Controller
 
       //  return $request->all();
 
+        $check = ArcheryPlayerStats::where(['round_number'=>$request->round_number,
+                                            'round_id'    =>$request->round_id,
+                                            'team_id'     =>$request->team_id,
+                                            'team_table_id'=>$request->player_id,
+                                            'match_id'    => $request->match_id,
+                                            'tournament_id' => $request->tournament_id])->first();
+
+        if($check){
+             $p = $check;
+             $p->user_id      = $request->user_id;
+             $p->player_name     = User::find($p->user_id)->name;
+             $p->save();
+             return $p;
+        }
+
         $p = new ArcheryPlayerStats;
         $p->user_id      = $request->user_id;
         $p->round_number = $request->round_number;
@@ -506,5 +521,20 @@ class ArcheryController extends Controller
 
 
         return $p;
+    }
+
+    public function update_settings(Request $request){
+        $match_id = $request->match_id;
+
+        $match_model = MatchSchedule::find($match_id);
+
+        foreach($match_model->archery_rounds as $round){
+                $round->distance = $request->{'round_'.$round->id.'_distance'};
+                $round->number_of_arrows = $request->{'round_'.$round->id.'_number_of_arrows'};
+                $round->total = $round->distance * $round->number_of_arrows;
+                $round->save();
+        }
+
+        return 'ok';
     }
 }

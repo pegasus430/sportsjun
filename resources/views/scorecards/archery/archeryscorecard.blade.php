@@ -290,6 +290,16 @@ td,th{
   @else 
 
 <!-- Start Scoring -->
+<div class="row">
+    <div class='col-sm-12'>
+     <span class='pull-right'>   
+        <a href='javascript:void(0)' onclick="enableManualEditing(this)" style="color:#123456;">edit <i class='fa fa-pencil'></i></a> 
+        <span> &nbsp; &nbsp; </span>
+        <a href='javascript:void(0)' data-toggle='modal' data-target='#updatePreferencesModal' style='color:#123456;'> settings <i class='fa fa-gear fa-danger'></i></a>
+        <span> &nbsp; &nbsp; </span>
+    </span>
+    </div>
+  </div>
   
     <div class="row">
 
@@ -371,6 +381,7 @@ td,th{
     <input type="hidden" id='selected_player_id' value="">
     <input type="hidden" id='selected_arrow_number' value="">
     <input type="hidden" id='team_player_id' name="">
+    <input type="hidden" id='edit_is_allowed' value="0">
 
 
     @if($match_data[0]['schedule_type']=='team')
@@ -417,6 +428,68 @@ td,th{
 
 <!-- End Scoring -->
 
+
+  <div id="updatePreferencesModal" class="modal fade">
+            <div class="modal-dialog sj_modal sportsjun-forms">
+              <div class="modal-content">
+                   <div class="modal-header text-center">
+                                            <button type="button" class="close" data-dismiss="modal">×</button>
+                                            <h4 style="color:white">Update Preferences</h4>
+                                  </div>
+                <div class="alert alert-danger" id="div_failure1"></div>
+                <div class="alert alert-success" id="div_success1" style="display:none;"></div>
+                <div class="modal-body">
+
+                <form onsubmit="" id='updatePreferencesForm'>
+                  <div class='row'>
+               
+                      <div class="col-sm-12">
+                        <div class="form-group">
+                          <div class="col-sm-4">
+                              Round 
+                          </div>
+                          <div class="col-sm-4">
+                              Distance 
+                          </div>
+                          <div class="col-sm-4">
+                              Number of Arrows
+                          </div>
+                          </div>
+
+                          @foreach($match_obj->archery_rounds as $round)
+                            <br>
+                            <div class="row">
+                              <div class="form-group">
+                              <div class="col-sm-12">
+                            <div class="col-sm-4">
+                              Round {{$round->round_number}}
+                            </div>
+                            <div class="col-sm-4">
+                              <input type='text' class="form-control gui-input" name='round_{{$round->id}}_distance' placeholder="distance" value="{{$round->distance}}" {{ScoreCard::round_has_started($round->id,$match_obj->id, $match_obj->tournament_id)?'readonly':''}}>
+                            </div>
+                            <div class="col-sm-4">
+                                <input type='text' class="form-control gui-input" name='round_{{$round->id}}_number_of_arrows' placeholder="number of arrows" value="{{$round->number_of_arrows}}" {{ScoreCard::round_has_started($round->id,$match_obj->id, $match_obj->tournament_id)?'readonly':''}}>
+                            </div>
+                            </div>
+                            </div>
+                            </div>
+
+                          @endforeach
+                        <input type="hidden" name="match_id" value="{{$match_obj->id}}">
+                      </div>
+                      </div>
+                    </div>    
+                  </form>
+                  </div>            
+
+                    <div class="modal-footer">
+                    <button class='button btn btn-primary ' onclick="return updatePreferencesSave(this)" type='submit'> Save</button></center>
+                    <button type="button" class="button btn-secondary" data-dismiss="modal">Cancel</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
 <!-- End Match -->
 
@@ -533,6 +606,8 @@ td,th{
               $('#load_round_details').hide();
           }
           else{
+
+         var schedule_type = "{{$match_obj->schedule_type}}";
               $('.a_s').removeClass('selected').css({background:'inherit'});
               $(this).css({background:'#ff8888'}).addClass('selected');
               $('#selected_arrow_number').val('');
@@ -545,7 +620,13 @@ td,th{
 
               if($(this).attr('user_id')==''){
                   $('#modal_player_team_'+$(this).attr('team_id') ).modal();
-              }else{
+              }
+
+              else if( $('#edit_is_allowed').val()=='1' && (schedule_type=='team') ) {               
+                   $('#modal_player_team_'+$(this).attr('team_id') ).modal();
+              }
+
+              else{
 
               $.ajax({
                   url:'/match/archery/load_arrow',
@@ -579,6 +660,8 @@ td,th{
       function init(player_round_details){
 
         var that= $('.'+player_round_details);
+        var schedule_type = "{{$match_obj->schedule_type}}";
+
               $('.a_s').removeClass('selected').css({background:'inherit'});
               $(that).css({background:'#ff8888'}).addClass('selected');
               $('#selected_arrow_number').val('');
@@ -591,7 +674,12 @@ td,th{
 
               if($(that).attr('user_id')==''){
                     $('#modal_player_team_'+$(that).attr('team_id') ).modal();
-              }else{
+              }
+              else if( $('#edit_is_allowed').val()==1 && schedule_type=='team' ) {
+                   $('#modal_player_team_'+$(that).attr('team_id') ).modal();
+              }
+
+              else{
 
                 $.ajax({
                     url:'/match/archery/load_arrow',
@@ -635,8 +723,11 @@ td,th{
                   $('.team_'+team_id+'_round_'+round_number+'_player_name').html(response.player_name);
 
                   init("team_"+team_id+"_round_"+round_number+"");
+                  $('#edit_is_allowed').val(0);
               }
           })
+
+
       }
 
       function clear_selected(){
@@ -646,6 +737,7 @@ td,th{
           $('#selected_player_id').val('');
           $('#selected_arrow_number').val('');
           $('#team_player_id').val('')
+        //  $('#edit_is_allowed').val(0);
       }
 
 
@@ -727,6 +819,41 @@ td,th{
 
             
       }
+  </script>
+
+
+  <script type="text/javascript">
+       function updatePreferencesSave(){
+          var data=$('#updatePreferencesForm').serialize();
+
+          $.confirm({
+            title:"Alert",
+            content: "Update Preferences?",
+            confirm: function(){
+                                  $.ajax({
+                                  url:base_url+"/match/archery/update_settings",
+                                  type:'post', 
+                                  data:data,
+                                  success:function(){
+                                      window.location=window.location
+                                  }         
+
+                                 })
+                             }
+            })
+            
+          return false;
+     }
+
+     function enableManualEditing(){
+         $.confirm({
+            title:"Alert",
+            content: "Click on a square to change the player",
+            confirm: function(){
+                      $('#edit_is_allowed').val(1);    
+                             }
+            })
+     }
   </script>
 
 

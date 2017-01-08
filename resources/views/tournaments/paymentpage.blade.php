@@ -122,7 +122,7 @@
     <label class="form_label">{{ trans('message.common.fields.state') }}	<span  class='required'>*</span></label>
         <label class="field select">
     
-            {!! Form::select('state',$states, null, array('required','id'=>'state_i','class'=>'form-control states','onchange'=>'displayStates(this.value)','autocomplete'=>'off','placeholder'=>trans('message.common.fields.state'))) !!}
+            {!! Form::select('state',$states, null, array('required','id'=>'state_i','class'=>'form-control states','onchange'=>'displayStates(this.value)','autocomplete'=>'off')) !!}
                @if ($errors->has('state_id')) <p class="help-block">{{ $errors->first('state_id') }}</p> @endif
             <i class="arrow double"></i>    
             @if($errors->first('state'))
@@ -144,7 +144,7 @@
     <div class="section">
     <label class="form_label">{{ trans('message.common.fields.city') }}	<span  class='required'>*</span> </label>
         <label class="field select">
-             {!! Form::select('city',$cities, null, array('required','id'=>'city_i','class'=>'form-control cities','id'=>'city_id','placeholder'=>trans('message.common.fields.city'))) !!}		 	
+             {!! Form::select('city',$cities, null, array('required','id'=>'city_i','class'=>'form-control cities','id'=>'city_id')) !!}		 	
             @if ($errors->has('city')) <p class="help-block">{{ $errors->first('city_id') }}</p> @endif
             <i class="arrow double"></i>
             @if($errors->first('city'))

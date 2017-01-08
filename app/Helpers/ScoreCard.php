@@ -51,6 +51,7 @@ use App\Model\TennisSet;
 use App\Model\ArcheryArrowStats;
 use App\Model\ArcheryTeamStats;
 use App\Model\ArcheryPlayerStats;
+use App\Model\ArcheryRound;
 
 
 class ScoreCard {
@@ -380,6 +381,57 @@ class ScoreCard {
     	}
 
     	return $responce;
+    }
+
+    public static function round_has_started($round_id, $match_id, $tournament_id){
+        $total = ArcheryPlayerStats::where(['round_id'=>$round_id,'match_id'=>$match_id,'tournament_id'=>$tournament_id])->sum('total');
+
+        if($total>0){
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function round_status($round){
+
+        $match_model = MatchSchedule::find($round->match_id);
+        $match_id = $round->match_id;
+        $tournament_id = $match_model->tournament_id;
+
+        if($match_model->match_status=='completed'){
+            return 'Completed';
+        }
+
+
+    $next_round = archeryRound::where(['match_id'=>$match_id, 'round_number'=>($round->round_number+1)])->first();
+    $previous_round = archeryRound::where(['match_id'=>$match_id, 'round_number'=>($round->round_number-1)])->first();
+
+    
+    $next_round_has_started = false;
+    $previous_round_has_started = false;
+
+    if(!$previous_round) $previous_round_has_started = true;
+    else $previous_round_has_started = ArcheryPlayerStats::where(['round_id'=>$previous_round->id,'match_id'=>$match_id,'tournament_id'=>$tournament_id])->sum('total');    
+
+    if(!$next_round)     $next_round_has_started = false;
+    else   $total = ArcheryPlayerStats::where(['round_id'=>$next_round->id,'match_id'=>$match_id,'tournament_id'=>$tournament_id])->sum('total');
+
+    $current_status =   $total = ArcheryPlayerStats::where(['round_id'=>$round->id,'match_id'=>$match_id,'tournament_id'=>$tournament_id])->sum('total');
+
+
+
+    if($next_round_has_started){
+        return 'Completed';
+    }
+
+    if($previous_round_has_started && !$current_status){
+        return 'Not Started';
+    }
+
+    return 'Playing';
+
+
     }
 
 
