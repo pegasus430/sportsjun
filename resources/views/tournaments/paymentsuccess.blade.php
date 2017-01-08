@@ -22,7 +22,7 @@
 
 
       <div class="table-responsive">
-        <div class="col-sm-12" d="teamStatsDiv">
+        <div class="col-sm-12" id="teamStatsDiv">
           <table class="table table-hover table-stripped">
           <thead>
               <tr>
@@ -43,16 +43,16 @@ $options=array();?>
         <tr>
           <td>{{$details['tournament']}}</td>
           
-          <td>{{$details['name']}}</td>
+          <td> <i class="fa fa-user"></i> {{$details['name']}}</td>
      
-          <td>{{$details['team']}}</td>
+          <td> <i class="fa fa-user"></i> {{$details['team']}}</td>
      
    
-          <td>{{$details['email']}}</td>
+          <td><i class="fa fa-envelope"></i> {{$details['email']}}</td>
             
-         <td> {{$details['phone']}}</td>
+         <td><i class="fa fa-phone"></i> {{$details['phone']}}</td>
      
-          <td>{{$details['price']}}</td>
+          <td><i class="fa fa-inr"></i> {{$details['price']}}</td>
      
           </tr>
 <?php $i++;?>

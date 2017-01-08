@@ -3957,10 +3957,12 @@ $content.="<table style='border:1px solid #555;'>
     	if($team_model = Team::find($team_id)){
     			foreach(Team::find($team_id)->teamplayers as $sp){
     				 
+    				 if($sp->user->email){
 	    				 Mail::send(['html' => $view], ['view_data'=>$view_data], function($message) use ($sp,$subject)
 							{    
 								$message->to($sp->user->email)->subject($subject);    
 							});
+	    			}
     			}
     	}
 
