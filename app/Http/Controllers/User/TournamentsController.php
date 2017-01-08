@@ -3417,7 +3417,7 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
 		}
 		$left_menu_data = array();
 		$left_menu_data = Helper::getLeftMenuData($tournamentInfo[0]['tournament_parent_id'],$tournamentInfo[0]['manager_id'],$tournamentInfo);
-		
+		 
 	
 		return view('tournaments.payregisterform')->with(array( 'tournamentInfo'=>$tournamentInfo,'action_id'=>$event_id,'left_menu_data'=>$left_menu_data, 'tournament_id' => $event_id, 'lef_menu_condition'=> $lef_menu_condition, 'tournament_type' => $tournamentInfo[0]['type'],'sport_name'=>$sport_name,'manager_name'=> $manager_name,'register_data'=>$register_data,'teams_array'=>$teams_array,'user_data'=>$user_data,'tournament_data'=>$tournament_data,'parent_tournament_details'=>$parent_tournament_details));
 

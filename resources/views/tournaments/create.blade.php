@@ -56,6 +56,8 @@
   </div>
 </div>
 <script type="text/javascript">
+
+  var sub_to =0;
 function resetData()
 {
 	$('#sub-tournaments').resetForm(true);
@@ -96,6 +98,27 @@ $(function() {
 	}, " tie match points must be less than Winning team points");
 	$('[name="points_tie"]').rules("add", "win_tie_points");
 	
+
+
+    $.validator.addMethod("total_enrollment", function(value, element) {
+     var gn= parseInt($('[name="groups_number"]').val());
+      var gt = parseInt($('[name="groups_teams"]').val());
+
+      var to = parseInt($('[name="total_enrollment"]').val());
+
+  
+      
+       var enroltype = $('#enrollment_type').val();
+         sub_to = gn * gt;
+         window.sub = sub_to;
+            if(enroltype != 'online'){
+              return true
+            }      
+      else
+    return (sub_to >= to);
+  }, "Total Number of Enrolments cannot be greater than " + window.sub);
+  $('[name="total_enrollment"]').rules("add", "total_enrollment");
+  
 									
 });
 </script>
