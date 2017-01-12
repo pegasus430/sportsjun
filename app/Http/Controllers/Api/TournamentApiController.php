@@ -347,6 +347,7 @@ class TournamentApiController extends BaseApiController
                 'type' => 'list',
                 'source' => 'match_schedules',
                 'fields' => [
+                    'id',
                     'Image1' => 'sideALogo',
                     'Name1' => 'sideA.name',
                     'Score1' => 'sideAScore',
@@ -417,6 +418,7 @@ class TournamentApiController extends BaseApiController
             }]
         )->find($id);
         $map = [
+            'id',
             'Image1' => 'sideALogo',
             'Name1' => 'sideA.name',
             'Score1' => 'sideAScore',
