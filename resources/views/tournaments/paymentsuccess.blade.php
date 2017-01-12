@@ -23,7 +23,7 @@
 
       <div class="table-responsive">
         <div class="col-sm-12" id="teamStatsDiv">
-          <table class="table table-hover table-stripped">
+          <table class="table table-hover table-striped">
           <thead>
               <tr>
                 <th>Tournament</th>

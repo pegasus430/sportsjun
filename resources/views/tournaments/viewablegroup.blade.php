@@ -75,7 +75,11 @@
 		<?php Helper::updateGroupPoints($tournament_id, $group->id, $team['team_id'], $key_point+1);?>
 											<tr>
 												<td>{{ ($key_point + 1) }}</td>
-												<td><a href="/team/members/{{$team['team_id']}}" class="primary">{{ $team['name'] }}</a></td>
+												<td>   @if($tournamentDetails[0]['schedule_type']=='team')
+                    <a href="/team/members/{{$team['team_id']}}" class="primary">{{ $team['name'] }}</a>
+                    @else
+                    <a href="/editsportprofile/{{$team['team_id']}}" class="primary">{{ $team['name'] }}</a>
+                    @endif</td>
 										<center>	                      <td>{{ !empty($match_count[$group->id][$team['team_id']])?$match_count[$group->id][$team['team_id']]:0 }}</td>
                 @if(!in_array($sports_id, [18]))  <!-- Non Archery -->
                                     <td>{{ !empty($team['won'])?$team['won']:0 }}</td>
