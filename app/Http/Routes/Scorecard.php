@@ -179,6 +179,8 @@ Route::group(['prefix'=>'match'], function(){
     Route::post('archery/arrow_scoring', 'User\ScoreCard\ArcheryController@arrow_scoring');
     Route::post('archery/load_arrow',    'User\ScoreCard\ArcheryController@load_arrow');
     Route::post('archery/end_match',     'User\ScoreCard\ArcheryController@end_match');
+    Route::post('archery/select_team_player', 'User\ScoreCard\ArcheryController@select_team_player');
+    Route::post('archery/update_settings', 'User\ScoreCard\ArcheryController@update_settings');
 
 
 });

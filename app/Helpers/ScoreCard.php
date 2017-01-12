@@ -28,6 +28,7 @@ use View;
 use Carbon\Carbon;
 use Route;
 use PDO;
+use DateTime;
 use App\Helpers\SendMail;
 use App\Model\TournamentGroupTeams;
 use App\Model\OrganizationGroupTeamPoint;
@@ -48,6 +49,9 @@ use App\Model\TtPlayerRubberScore;
 use App\Model\TtStatistic;
 use App\Model\TennisSet;
 use App\Model\ArcheryArrowStats;
+use App\Model\ArcheryTeamStats;
+use App\Model\ArcheryPlayerStats;
+use App\Model\ArcheryRound;
 
 
 class ScoreCard {
@@ -239,9 +243,9 @@ class ScoreCard {
 		return MatchSchedule::find($match_id)->referees;
 	}
 
-	public static function get_arrow_stats($match_id,$user_id,$round_id,$round_number){
+	public static function get_arrow_stats($match_id,$user_id,$round_id,$round_number, $team_id=null){
 
-    $check = ArcheryArrowStats::where(['match_id'=>$match_id,'user_id'=>$user_id,'round_id'=>$round_id])->first();
+    $check = ArcheryArrowStats::where(['match_id'=>$match_id,'user_id'=>$user_id,'round_id'=>$round_id,'team_id'=>$team_id])->first();
     if($check) return $check;
 
         $ars = new ArcheryArrowStats;
@@ -253,6 +257,181 @@ class ScoreCard {
         $ars->save();
 
         return $ars;
+    }
+
+    public static function get_archery_teams($team_id){
+    	$players = [];
+
+    	$match_model = MatchSchedule::find($team_id);
+
+    	$pd_ids = explode(',',$match_model->player_or_team_ids);
+
+    	foreach ($pd_ids as $key => $pd_id) {
+    		if($pd_id){
+
+    			if($match_model->schedule_type=='player'){
+    				$players[$pd_id] = User::find($pd_id);
+    			}
+    			else{
+    				$players[$pd_id] = Team::find($pd_id);
+    			}
+    		}
+    	}
+
+
+    	return $players;
+    }
+
+    public static function get_match_number_athletics($match_id){
+    	$match_model = MatchSchedule::find($match_id);
+
+    	$t_id = $match_model->tournament_id;
+    	$t_model = Tournaments::find($t_id);
+
+    	$days = '';
+    	$match_number = '';
+
+    	$result=[
+    		'match_number'=>'',
+    		'tournament_name'=>'',
+    		'day'=>''
+    	];
+
+    	if($t_model){
+    		$t_start = new DateTime($t_model->start_date);
+    		$today   = new DateTime(date('Y-m-d'));
+
+    		$diff = $t_start->diff($today);
+    		$days = ($diff->m * 31) + ($diff->d) +1;
+    		$matches = DB::table('match_schedules')->whereTournamentId($t_id)->lists('id');
+
+
+    		$number = array_search($match_id, $matches) + 1;
+
+    		$result['match_number'] = "Match $number";
+    		$result['tournament_name']= $t_model->name;
+    		$result['day'] 			 = 'Day ' . $days; 		
+    	}
+
+    	return $result;
+    }
+
+
+    public static function get_archery_tournament_points($tournamentDetails=[], $team_id, $i, $player_standing=false){
+    		$schedule_type = $tournamentDetails['schedule_type'];
+    		$tournament_id = $tournamentDetails['id'];
+
+    		$pts = 0;
+
+            if($player_standing){
+                $schedule_type = 'individual';
+                $tournament_id = $tournamentDetails['tournament_id'];
+            }
+
+    	if($schedule_type=='individual'){
+    		foreach(ArcheryArrowStats::whereUserId($team_id)->whereTournamentId($tournament_id)->get() as $st){
+    			for($j=1; $j<=10; $j++){
+    				if($st->{'arrow_'.$j}==$i){
+    					$pts++;
+    				}
+    			}
+    			
+    		}
+    	}
+    	else{
+    		foreach(ArcheryArrowStats::whereTeamId($team_id)->whereTournamentId($tournament_id)->get() as $st){
+    			for($j=1; $j<=10; $j++){
+    				if($st->{'arrow_'.$j}==$i){
+    					$pts++;
+    				}
+    			}
+    		}
+    	}
+
+    	return $pts;
+    }
+
+    public static function get_archery_total_points($tournamentDetails, $team_id){
+    	$pts = 0; 
+    		$schedule_type = $tournamentDetails['schedule_type'];
+    		$tournament_id = $tournamentDetails['id'];
+
+    	if($schedule_type=='individual'){
+    		$p_ts = ArcheryPlayerStats::whereUserId($team_id)->whereTournamentId($tournament_id)->first();
+    		if($p_ts) $pts = $p_ts->total;
+    			
+    	}
+    	else{
+    		$p_ts = ArcheryTeamStats::whereTeamId($team_id)->whereTournamentId($tournament_id)->first();
+    		if($p_ts) $pts = $p_ts->total;    			
+    	}
+    	return $pts;
+    }
+
+    public static function get_archery_team_player($team_id, $round){
+    	$responce=[
+    	'id'=>'',
+    	'user_id'=>'',
+    	'player_name'=>''];
+
+    	$check = ArcheryPlayerStats::where(['team_table_id'=>$team_id,'round_id'=>$round->id])->first();
+
+    	if($check){
+    		$responce = $check->toArray();
+    	}
+
+    	return $responce;
+    }
+
+    public static function round_has_started($round_id, $match_id, $tournament_id){
+        $total = ArcheryPlayerStats::where(['round_id'=>$round_id,'match_id'=>$match_id,'tournament_id'=>$tournament_id])->sum('total');
+
+        if($total>0){
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function round_status($round){
+
+        $match_model = MatchSchedule::find($round->match_id);
+        $match_id = $round->match_id;
+        $tournament_id = $match_model->tournament_id;
+
+        if($match_model->match_status=='completed'){
+            return 'Completed';
+        }
+
+
+    $next_round = archeryRound::where(['match_id'=>$match_id, 'round_number'=>($round->round_number+1)])->first();
+    $previous_round = archeryRound::where(['match_id'=>$match_id, 'round_number'=>($round->round_number-1)])->first();
+
+    
+    $next_round_has_started = false;
+    $previous_round_has_started = false;
+
+    if(!$previous_round) $previous_round_has_started = true;
+    else $previous_round_has_started = ArcheryPlayerStats::where(['round_id'=>$previous_round->id,'match_id'=>$match_id,'tournament_id'=>$tournament_id])->sum('total');    
+
+    if(!$next_round)     $next_round_has_started = false;
+    else   $total = ArcheryPlayerStats::where(['round_id'=>$next_round->id,'match_id'=>$match_id,'tournament_id'=>$tournament_id])->sum('total');
+
+    $current_status =   $total = ArcheryPlayerStats::where(['round_id'=>$round->id,'match_id'=>$match_id,'tournament_id'=>$tournament_id])->sum('total');
+
+
+
+    if($next_round_has_started){
+        return 'Completed';
+    }
+
+    if($previous_round_has_started && !$current_status){
+        return 'Not Started';
+    }
+
+    return 'Playing';
+
+
     }
 
 

@@ -180,7 +180,7 @@ return [
                 'Ultimate Frisbee'      => 15,
                 'Water Polo'   => 16,
                 'Throw Ball'   => 17,
-                'Archery'      => 19
+                'Archery'      => 18
 
         ],
         'SERVICES'                 => [

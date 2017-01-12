@@ -332,6 +332,10 @@
     zoom: 1;
 }
 
+.sportsjun-forms .select>select{
+     height: 35px;
+}
+
 .sportsjun-forms .gui-input,
 .sportsjun-forms .gui-textarea {
     padding: 3px 5px;
@@ -2940,4 +2944,12 @@ h4.right_head a {
     background-color: #eee;
     padding: 10px 3px;
     border: 1px solid #000;
+}
+
+select.form-control.valid.test {
+    padding-left: 50px;
+}
+
+.row.inner_events.inner_reg.inner_head {
+    background-color: #EF4;
 }

@@ -35,32 +35,37 @@
 											<th class="text-center">Rank</th>
 											<th class="text-center">Name</th>
 											<th class="text-center">Matches</th>
-											<th class="text-center">Won</th>
-											<th class="text-center">Lost</th>
-								    <th class="text-center">Draw</th>
+										   @if(!in_array($sports_id, [18]))  <!-- Non Archery -->
+                                    <th>Won</th>
+                                    <th>Lost</th>
+                                    <th>Draw</th>
                                 @if(in_array($sports_id, [4,11]))                               		
-                                    <th class="text-center">GF</th>
-                                    <th class="text-center">GA</th>
+                                    <th>GF</th>
+                                    <th>GA</th>
                                 @endif
 
-                                 @if(in_array($sports_id, [6,14,15,16]))                               		
-                                    <th class="text-center">PS</th>
-                                    <th class="text-center">PA</th>
+                                @if(in_array($sports_id, [6,15,16,14]))                               		
+                                    <th>PS</th>
+                                    <th>PA</th>
                                 @endif
-                                @if(in_array($sports_id, [3,5,13, 17, 7]))                               		
-                                    <th class="text-center">SW</th>
-                                    <th class="text-center"> SL</th>
+                                 @if(in_array($sports_id, [3,5,13, 17, 7]))                               		
+                                    <th>SW</th>
+                                    <th>SL</th>
                                 @endif
-
-
-											<th class="text-center">Points</th>
-
-											@if ( $tour['sports_id'] == 1 )
-												<th class="text-center">Net Run Rate</th>
-											@endif
-								@if($match_is_completed || $tournamentDetails[0]['group_is_ended'])
-                                	<th class="text-center"> Final Points </th>
+                                    <th>Points</th>
+                                    @if ( $tour['sports_id'] == 1 )
+                                    <th>Net Run Rate</th>
+                                    @endif
+                                @if($match_is_completed)
+                                	<th> Final Points </th> 
                                 @endif
+                            @else
+                                @for($i=10; $i>=5; $i--)
+                                    <th>Pts {{$i}} </th>
+
+                                @endfor
+                                    <th> Total </th>
+                            @endif
 										</tr>
 										</thead>
 										<tbody>
@@ -70,23 +75,40 @@
 		<?php Helper::updateGroupPoints($tournament_id, $group->id, $team['team_id'], $key_point+1);?>
 											<tr>
 												<td>{{ ($key_point + 1) }}</td>
-												<td><a href="/team/members/{{$team['team_id']}}" class="primary">{{ $team['name'] }}</a></td>
-										<center>		<td>{{ !empty($match_count[$group->id][$team['team_id']])?$match_count[$group->id][$team['team_id']]:0 }}</td>
-												<td>{{ !empty($team['won'])?$team['won']:0 }}</td>
-												<td>{{ !empty($team['lost'])?$team['lost']:0 }}</td>
-									<td>{{ !empty($team['tie'])?$team['tie']:0 }}</td>
+												<td>   @if($tournamentDetails[0]['schedule_type']=='team')
+                    <a href="/team/members/{{$team['team_id']}}" class="primary">{{ $team['name'] }}</a>
+                    @else
+                    <a href="/editsportprofile/{{$team['team_id']}}" class="primary">{{ $team['name'] }}</a>
+                    @endif</td>
+										<center>	                      <td>{{ !empty($match_count[$group->id][$team['team_id']])?$match_count[$group->id][$team['team_id']]:0 }}</td>
+                @if(!in_array($sports_id, [18]))  <!-- Non Archery -->
+                                    <td>{{ !empty($team['won'])?$team['won']:0 }}</td>
+                                    <td>{{ !empty($team['lost'])?$team['lost']:0 }}</td>
+
+                           		    <td>{{ !empty($team['tie'])?$team['tie']:0 }}</td>
                                 @if(in_array($sports_id, [3,4,11,6,15,16, 5, 13, 17, 14, 7]))                               		
-                                   <td>{{ !empty($team['gf'])?$team['gf']:0 }}</td>
-                                   <td>{{ !empty($team['ga'])?$team['ga']:0 }}</td>
-                                @endif
-												<td>{{ !empty($team['points'])?$team['points']:0 }}</td>
-												@if ( $tour['sports_id'] == 1 )
-													<td>{{ !empty($net_run_rate[$team['team_id']])?$net_run_rate[$team['team_id']]:"--" }}</td>
-												@endif
-								@if($match_is_completed || $tournamentDetails[0]['group_is_ended'])
-                                	 <td>{{ !empty($team['final_points'])?$team['final_points']:'-' }}</td>
+                                    <td>{{ !empty($team['gf'])?$team['gf']:0 }}</td>
+                                   <td>{{ !empty($team['ga'])?$team['ga']:0 }}</td>                                
                                 @endif
 
+                                    <td>{{ !empty($team['points'])?$team['points']:0 }}</td>
+                                    @if ( $tour['sports_id'] == 1 )
+                                    <td>{{ !empty($net_run_rate[$team['team_id']])?$net_run_rate[$team['team_id']]:"--" }}</td>
+                                    @endif
+
+                                @if($match_is_completed)
+                                	
+                                	 <td>{{ !empty($team['final_points'])?$team['final_points']:'-' }}</td>   
+                                	
+                                @endif
+                 @else
+                 <!-- Archery Start -->
+                                @for($i=10; $i>=5; $i--)
+                                    <td> {!!Helper::displayEmptyDash($team['pts_'.$i],'-')!!} </td>
+
+                                @endfor
+                                    <td> {!!$team['points']!!} </td>
+                @endif
 											</tr>
 										@endforeach
 										</tbody>
@@ -95,7 +117,7 @@
 									No Teams.
 								@endif
 							</div>
-							<
+							
 						</div>
 						<div class="tab-pane fade " id="matches_{{ $group->id }}">
 						<div class="action-panel">
@@ -127,7 +149,61 @@
 								}
 
 								$match=Helper::getMatchDetails($match['id']);
-							?>	
+
+							?>
+		<!-- Archery  -->
+	@if($sports_id==18)
+
+	<div class="row <?php echo $class;?> row_to_filter_{{$group->id}}">
+
+		<div class="col-md-3">
+			<?php $pd_ids = ScoreCard::get_archery_teams($match['id']); 
+				  	$match_number = ScoreCard::get_match_number_athletics($match['id']); ?>
+
+			@foreach($pd_ids as $pd)
+				<p>{{$pd->name}}</p>
+			@endforeach
+
+		</div>
+
+		<div class="col-xs-6 col-xs-6 col-md-3 col-md-3">     
+
+                    <p class="vs_date">
+                        <span><b>{{ $match['match_start_date'] }}</b></span>
+                        <br>
+
+                         <span class='sports_text'>{{ isset($match['sport']['sports_name'])?$match['sport']['sports_name']:'' }}</span>
+                         @if($match['match_type']!='other')
+                             <span class='match_type_text'>({{ $match['match_type']=='odi'?strtoupper($match['match_type']):ucfirst($match['match_type']) }})</span>
+                         @endif
+                         <br>                    
+
+                         <span class=''>{{Helper::getMatchDetails($match['id'])->address}}</span>
+                      </p>
+		</div>
+		<div class="col-xs-6 col-sm-6 col-md-3">     
+
+                    <p class="vs_date">
+                    	<b>{{$match_number['tournament_name']}}</b>
+                    	<br>
+                    	<b>{{$match_number['day']}}, {{$match_number['match_number']}} </b><br>
+                        Status: <span class='sports_text'>{{ ucfirst($match['match_status']) }}</span> <br>
+                 
+                    @if(!is_null(Helper::getMatchDetails($match['id'])->winner_id))
+                        <span class='red'>Winner: {{Helper::getMatchDetails($match['id'])->winner}} </span>
+
+                    @endif
+                      </p>
+		</div>
+
+		<div class="col-md-3">
+			<span class="tournament_score pull-right"><a href="{{ url('match/scorecard/edit/'.$match['id']) }}" class="btn-primary " style="padding: .3em 1em;">{{$add_score_link[$match['id']]}}</a></span>
+		</div>
+		
+	</div>
+
+	@else
+				
 										@if($match['a_id']!='' && $match['b_id'])
 											@if($match['schedule_type']=='team')
 												<div class="row {{$class}} row_to_filter_{{$group->id}}">
@@ -355,6 +431,7 @@
 										@else
 											No Scheduled Matches.
 										@endif
+		@endif
 									@endforeach
 									
 							@else

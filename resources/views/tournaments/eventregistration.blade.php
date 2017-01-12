@@ -36,6 +36,16 @@ $lis = $tournament_data->toArray();
 <h4 class="error_validation">{{$errors->first()}}</h4>
 @endif
 <div class="form-body">
+@if(count($all_events)==0)
+<div class="row inner_events">
+<h4>No events avilable for registration</h4>
+</div>
+@else
+
+
+
+
+
 @if(Auth::user()) 
 {!! Form::open(array('url' => '/tournaments/registrationdata', 'method' => 'post')) !!}
 @else
@@ -135,7 +145,7 @@ $options=array();?>
                    } else {
                          $options=array(0=>0,1=>1);
                    } ?>
-             {!! Form::select("data[$events->id][count]",$options, null,array('class'=>'form-control valid')) !!}             
+             {!! Form::select("data[$events->id][count]",$options, null,array('class'=>'form-control valid test')) !!}             
              <label for="Pointstolosingteam" class="field-icon"><i class="fa fa-group"></i></label>
             </label>
 
@@ -154,6 +164,8 @@ $options=array();?>
 
 
 {!! Form::close() !!}
+
+@endif
  
 </div>
 

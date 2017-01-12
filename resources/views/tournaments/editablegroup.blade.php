@@ -112,6 +112,7 @@
                                     <th>Rank </th>
                                     <th>Name</th>
                                     <th>Mat</th>
+                            @if(!in_array($sports_id, [18]))  <!-- Non Archery -->
                                     <th>Won</th>
                                     <th>Lost</th>
                                     <th>Draw</th>
@@ -135,6 +136,13 @@
                                 @if($match_is_completed)
                                 	<th> Final Points </th> 
                                 @endif
+                            @else
+                                @for($i=10; $i>=5; $i--)
+                                    <th>Pts {{$i}} </th>
+
+                                @endfor
+                                    <th> Total </th>
+                            @endif
                                     <th></th>
                                     </tr>
                                     </thead>
@@ -148,9 +156,16 @@
                                     <tr id="row_{{$team['id']}}" class="group_row_{{$group->id}}">
                                     <td>{{ ($key_team + 1) }}</td>
                                     <td>
-                                    	<a href="/team/members/{{$team['team_id']}}" class="primary">{{ $team['name'] }}</a>
+
+                    @if($tournamentDetails[0]['schedule_type']=='team')
+                    <a href="/team/members/{{$team['team_id']}}" class="primary">{{ $team['name'] }}</a>
+                    @else
+                    <a href="/editsportprofile/{{$team['team_id']}}" class="primary">{{ $team['name'] }}</a>
+                    @endif
                                     </td>
+                      @if(!in_array($sports_id, [18]))  <!-- Non Archery -->
                                     <td>{{ !empty($match_count[$group->id][$team['team_id']])?$match_count[$group->id][$team['team_id']]:0 }}</td>
+              
                                     <td>{{ !empty($team['won'])?$team['won']:0 }}</td>
                                     <td>{{ !empty($team['lost'])?$team['lost']:0 }}</td>
 
@@ -170,6 +185,15 @@
                                 	 <td>{{ !empty($team['final_points'])?$team['final_points']:'-' }}</td>   
                                 	
                                 @endif
+                 @else
+                 <!-- Archery Start -->
+                     <td>{{ !empty($match_count[$group->id][$team['team_id']])?$match_count[$group->id][$team['team_id']]:0 }}</td>
+                                @for($i=10; $i>=5; $i--)
+                                    <td> {!!Helper::displayEmptyDash($team['pts_'.$i],'-')!!} </td>
+
+                                @endfor
+                                    <td> {!!$team['points']!!} </td>
+                @endif
                                     <td><a href="#" class="btn btn-danger btn-circle btn-sm" onclick="deleteTeam({{$tournament_id}},{{$team['tournament_group_id']}},{{$team['id']}},{{$team['team_id']}});"><i class="fa fa-remove"></i></a></td>
                                     </tr>	
                                     @endforeach
@@ -228,7 +252,56 @@
 	@if($sports_id==18)
 
 	<div class="row <?php echo $class;?> row_to_filter_{{$group->id}}">
-		<span class="tournament_score pull-left"><a href="{{ url('match/scorecard/edit/'.$match['id']) }}" class="btn-primary " style="padding: .3em 1em;">{{$add_score_link[$match['id']]}}</a></span>
+
+		<div class="col-md-3">
+			<?php $pd_ids = ScoreCard::get_archery_teams($match['id']); 
+				$match_number = ScoreCard::get_match_number_athletics($match['id']);
+			?>
+
+			@foreach($pd_ids as $pd)
+				<p>{{$pd->name}}</p>
+			@endforeach
+
+		</div>
+
+		<div class="col-xs-6 col-xs-6 col-md-3 col-md-3">     
+
+                    <p class="vs_date">
+                        <span><b>@if ($match['match_start_date'])
+											{{ Helper::displayDateTime($match['match_start_date'] . (isset( $match['match_start_time'] ) ? " " . $match['match_start_time'] : ""), 1) }}
+										@else
+											TBD
+										@endif</b></span>
+                        <br>
+
+                         <span class='sports_text'>{{ isset($match['sport']['sports_name'])?$match['sport']['sports_name']:'' }}</span>
+                         @if($match['match_type']!='other')
+                             <span class='match_type_text'>({{ $match['match_type']=='odi'?strtoupper($match['match_type']):ucfirst($match['match_type']) }})</span>
+                         @endif
+                         <br>                    
+
+                         <span class=''>{{Helper::getMatchDetails($match['id'])->address}}</span>
+                      </p>
+		</div>
+		<div class="col-xs-6 col-sm-6 col-md-3">     
+
+                    <p class="vs_date">
+                    	<b>{{$match_number['tournament_name']}}</b>
+                    	<br>
+                    	<b>{{$match_number['day']}}, {{$match_number['match_number']}} </b><br>
+                        Status: <span class='sports_text'>{{ ucfirst($match['match_status']) }}</span> <br>
+                  	
+                    @if(!is_null(Helper::getMatchDetails($match['id'])->winner_id))
+                        <span class='red'>Winner: {{Helper::getMatchDetails($match['id'])->winner}} </span>
+
+                    @endif
+                      </p>
+		</div>
+
+		<div class="col-md-3">
+			<span class="tournament_score pull-right"><a href="{{ url('match/scorecard/edit/'.$match['id']) }}" class="btn-primary " style="padding: .3em 1em;">{{$add_score_link[$match['id']]}}</a></span>
+		</div>
+		
 	</div>
 
 	@else

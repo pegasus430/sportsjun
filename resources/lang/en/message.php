@@ -288,7 +288,7 @@ return [
 		'reg_opening_time' => 'Open Time',
 		'reg_closing_date' => 'Close Date',
 		'reg_closing_time' => 'Close Time',
-		'total_enrollment' => 'Total no of enrolments',
+		'total_enrollment' => 'Total Online Enrolments',
 		'min_enrollment' => 'Min enrolments per user',
 		'max_enrollment' => 'Max enrolments per user',
 		'terms_conditions' => 'Terms & conditions',
@@ -375,7 +375,11 @@ return [
 		'lost' => 'LOST',
 		'tied' => 'TIED',
 		'matches' => 'MATCHES',
-		'washout' => 'WASHOUT'
+		'washout' => 'WASHOUT',
+		'events'  => 'Events Count',
+		'third_position'=>'Third',
+		'second_position'=>'Second',
+		'first_position'=>'Winner'
 		],
          'scores' => 'Scores' ,
 		'new_owner_notification'=>'Admin has added you as the Team Owner',

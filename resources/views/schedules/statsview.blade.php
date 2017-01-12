@@ -53,6 +53,82 @@
             @if(count($matchScheduleData))
             @foreach($matchScheduleData as $schedule)
             <div id="schedule_{{$schedule['id']}}" class="schedule_list clearfix">
+
+   @if($schedule['sports_id']==18)
+
+             <div class="col-md-3">
+            <?php $pd_ids = ScoreCard::get_archery_teams($schedule['id']); ?>
+
+            @foreach($pd_ids as $pd)
+                <p>{{$pd->name}}</p>
+            @endforeach
+
+        </div>
+        <div class="col-xs-6 col-xs-6 col-md-3 col-md-3">     
+
+                    <?php
+                    $schedule['match_start_date'] = $schedule['match_start_date'] . ' '. $schedule['match_start_time'];
+                
+
+                    $match_number = ScoreCard::get_match_number_athletics($schedule['id']);
+
+                    ?>
+
+                    <p class="vs_date">
+                        <span><b>@if ($schedule['match_start_date'])
+                                            {{ date('Y M d , h:i A ', strtotime($schedule['match_start_date'] )) }}
+                                        @else
+                                            TBD
+                                        @endif</b></span>
+                        <br>
+
+                         <span class='sports_text'>{{ isset($schedule['sport']['sports_name'])?$schedule['sport']['sports_name']:'' }}</span>
+                         @if($schedule['match_type']!='other')
+                             <span class='match_type_text'>({{ $schedule['match_type']=='odi'?strtoupper($schedule['match_type']):ucfirst($schedule['match_type']) }})</span>
+                         @endif
+                         <br>                    
+
+                         <span class=''>{{Helper::getMatchDetails($schedule['id'])->address}}</span>
+                      </p>
+        </div>
+        <div class="col-xs-6 col-sm-6 col-md-3">     
+
+                    <p class="vs_date">
+                        <b>{{$match_number['tournament_name']}} </b>
+                        <br>
+                        @if(!empty($match_number['match_number']))
+                            <b>{{$match_number['day']}}, {{$match_number['match_number']}} </b><br>
+                        @endif
+                        Status: <span class='sports_text'>{{ ucfirst($schedule['match_status']) }}</span> <br>
+              
+                    @if(!is_null(Helper::getMatchDetails($schedule['id'])->winner_id))
+                        <span class='red'>Winner: {{Helper::getMatchDetails($schedule['id'])->winner}} </span>
+
+                    @endif
+                      </p>
+        </div>
+
+        <div class="col-md-3">         
+                
+                      @if(isset($schedule['winner_text']))
+                        @if($schedule['winner_text']=='Edit') 
+                            <p><span><a href="#" id="scheduleEdit_{{$schedule['id']}}" onclick="editMatchSchedule({{$schedule['id']}}, 1, '', 'mainmatchschedule')" class="add_score_but">Edit</a></span></p>
+                        @elseif($schedule['winner_text']==trans('message.schedule.pending'))
+                            <p><span style="color:rgba(0,0,0,0.5)">{{ trans('message.schedule.invitationpending') }}</span></p>
+                        @elseif($schedule['winner_text']==trans('message.schedule.rejected'))
+                            <p><span style="color:rgba(0,0,0,0.5)">{{ trans('message.schedule.invitationrejected') }}</span></p>
+                        @else    
+                            <p><span><a href="{{ url('match/scorecard/edit/'.$schedule['id']) }}" class="add_score_but">{{$schedule['winner_text']}}</a></span></p>
+                        @endif
+                    @elseif(strtotime($schedule['match_start_date']) < time())
+                        <p><span><a href="{{ url('match/scorecard/view/'.$schedule['id']) }}" class="add_score_but">{{trans('message.schedule.viewscore')}}</a></span></p>
+                    @endif
+          
+        </div>
+
+        
+   
+    @else
             	<div class="deskview hidden-xs">
                     <div id="teamone_{{$schedule['scheduleteamone']['id']}}" class="col-sm-3 score_view_img">
                         <p><!--<img src="{{ asset('/uploads/'.config('constants.PHOTO_PATH.TEAMS_FOLDER_PATH').'/'.$schedule['scheduleteamone']['url']) }}" onerror="this.onerror=null;this.src='{{ asset('/images/default-profile-pic.jpg') }}';" height="30" width="30">-->
@@ -173,6 +249,7 @@
                     <a href="{{ url('match/scorecard/edit/'.$schedule['id']) }}" class="add_score_but">{{$schedule['winner_text']}}</a>
                 </div>
              </div>
+        @endif
             </div>
             @endforeach
             @else

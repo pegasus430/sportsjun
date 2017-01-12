@@ -11,6 +11,14 @@
 <div class="clear"></div>
 <br>
 </div>
+
+
+
+ @if(count($details)==0)
+    <div class="transcations_head">
+        <h4>No Registrations</h4>
+   </div> 
+@else
      
   <div class="form-body">
 
@@ -21,6 +29,7 @@
 <?php $i=0;
 $options=array();?>
 @foreach ($details as $det)
+
 
 <div class="row head_reg">
 
@@ -34,7 +43,7 @@ $options=array();?>
 
         <div class="col-sm-2">
            <div class="section">
-           <label class="field prepend-icon head_tr">Total enrollment : {{$det[0]['tot_enrollmet']}}</label>
+           <label class="field prepend-icon head_tr">Total enrollments : {{$det[0]['tot_enrollmet']}}</label>
      
           </div>
         </div>
@@ -43,7 +52,7 @@ $options=array();?>
       <div class="col-sm-3">
           <div class="section">
             <label class="field prepend-icon head_tr">
-             Currently Registerd : {{$det[0]['current_enrollmet']}}
+             Currently Registered : {{$det[0]['current_enrollmet']}}
             </label>
          </div>
       </div>
@@ -54,13 +63,72 @@ $options=array();?>
       <div class="col-sm-3">
          <div class="section">
             <label class="field prepend-icon head_tr">
-            Remaining Enrollment: {{$det[0]['remaining_enrollmet']}}
+            Remaining Enrollments: {{$det[0]['remaining_enrollmet']}}
             </label>
          </div>
       </div>
 
   </div><!--end row -->
  <br>
+
+
+
+
+<div class="row inner_events inner_reg inner_head">
+
+
+
+
+     <div class="col-sm-2">
+       <div class="section">
+         <label class="form_label">Paid By</label>  
+        </div>
+     </div>
+     <div class="col-sm-2">
+       <div class="section">
+      
+         <label class="form_label">Team Name</label>  
+          
+        </div>
+     </div>
+     <div class="col-sm-3">
+       <div class="section">
+       
+         <label class="form_label">Email</label>  
+       
+        </div>
+     </div>
+     <div class="col-sm-3">
+       <div class="section">
+         <label class="form_label">Date</label>  
+        </div>
+     </div>
+     <div class="col-sm-2">
+       <div class="section">
+         <label class="form_label">Amount</label>  
+        </div>
+     </div>
+
+
+
+</div><!--end row -->
+<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @foreach ($det as $de)
 <div class="row inner_events inner_reg">
 
@@ -88,7 +156,7 @@ $options=array();?>
      </div>
      <div class="col-sm-3">
        <div class="section">
-         <label class="form_label">{{$de['data']['date']}}</label>  
+         <label class="form_label">{{date("d-M-Y h:i:s", strtotime($de['data']['date']))}}</label>  
         </div>
      </div>
      <div class="col-sm-2">
@@ -109,6 +177,11 @@ $options=array();?>
 
  
 </div>
+
+
+@endif
+
+
 
 
    </div>

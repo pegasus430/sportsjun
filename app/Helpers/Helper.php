@@ -38,7 +38,9 @@ use App\Helpers\SendMail;
 use App\Model\TournamentGroupTeams;
 use App\Model\TournamentFinalTeams;
 use App\Model\OrganizationGroupTeamPoint;
-
+use App\Model\ArcheryStatistic;
+use App\Model\ArcheryTeamStats;
+use App\Model\ArcheryArrowStats;
 class Helper
 {
 
@@ -1141,6 +1143,34 @@ class Helper
         return $finalArray;
     }
 
+    public static function getArcheryStats($team_id){
+        $teamStats = ArcheryStatistic::whereTeamId($team_id)->first();
+        $teamStats['event_level']=$teamStats;
+        $teamStats['match_level']=ArcheryTeamStats::whereTeamId($team_id)->whereNotNull('tournament_id')->get();
+
+       // dd($teamStats['match_level']->count());
+
+        for($i=10; $i>=5; $i--){
+            $pts = 0; 
+
+            foreach(ArcheryArrowStats::whereTeamId($team_id)->whereNotNull('tournament_id')->get() as $st){
+
+           if($st) {
+                for($j=1; $j<=10; $j++){
+                    if($st->{'arrow_'.$j}==$i){
+                        $pts++;
+                    }
+                }             
+            }
+            }
+
+            $teamStats['pt_'.$i]= $pts;
+
+        }
+
+        return $teamStats;
+    }
+
 
     //function to get sport name
     public static function getSportName($sports_id)
@@ -1252,15 +1282,31 @@ class Helper
         $playerLogoArray = [];
         $teamNameArray = [];
         $playerNameArray = [];
+
+
 //        $userId = isset(Auth::user()->id)?Auth::user()->id:0;      //user or guest
         $userId = $searchArray['userId'];
+
+        if($userId){
+            $team_lists = User::find($userId)->userdetails;
+        }
         $matchSchedules = MatchSchedule::with(array(
             'sport' => function ($q3) {
                 $q3->select('id', 'sports_name', 'sports_type');
             }
-        ))->where(function ($query) use ($userId) {
+        ))->where(function ($query) use ($userId, $team_lists) {
             $query->where('player_a_ids', 'LIKE', '%' . $userId . '%')->orWhere('player_b_ids', 'LIKE',
+                '%' . $userId . '%')
+                  ->orWhere('player_or_team_ids', 'like',
                 '%' . $userId . '%');
+
+            if($userId){
+                foreach($team_lists as $team_list){
+                  $query->orWhere('player_or_team_ids', 'like',
+                '%' . $team_list->team_id . '%');
+                }
+            }
+ 
         })->whereNotNull('match_start_date');
         if (!empty($searchArray['fromDate']) && !empty($searchArray['toDate'])) {
             $matchSchedules->whereBetween('match_start_date', [$searchArray['fromDate'], $searchArray['toDate']]);
@@ -1276,8 +1322,10 @@ class Helper
             $matchSchedules->orderby('match_start_time', 'desc');
             $matchSchedules->limit($searchArray['limit'])->offset($searchArray['offset']);
         }
+
+
         $matchScheduleData = $matchSchedules->get([
-            'id',
+            'match_schedules.id',
             'match_start_date',
             'match_start_time',
             'match_end_date',

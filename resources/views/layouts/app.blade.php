@@ -195,22 +195,22 @@
    
 
 //TODO: avoid using onload, only 1 function can set on time overiding previous values
-onload=function(){
+// onload=function(){
 
 
-var existed=$('#refreshed').length;
+// var existed=$('#refreshed').length;
 
-//alert(existed);
+// //alert(existed);
 
-if(existed==1) {
+// if(existed==1) {
 
-var e=document.getElementById("refreshed");
-if(e.value=="no")e.value="yes";
-else{e.value="no";location.reload();}
+// var e=document.getElementById("refreshed");
+// if(e.value=="no")e.value="yes";
+// else{e.value="no";location.reload();}
 
-}
+// }
 
-}
+// }
 
 </script>
 

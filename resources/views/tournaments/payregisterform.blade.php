@@ -79,7 +79,7 @@ $count=$register_data->participant_count;
             	$nm='';
             } ?>
 
-            {!! Form::text("single[$i][name]",$nm, array('required','class'=>'gui-input','placeholder' => 'Full Name' )) !!}
+            {!! Form::text("single[$i][name]",'sdfs', array('required','class'=>'gui-input','placeholder' => 'Full Name' )) !!}
             
             </label>
 
@@ -360,7 +360,7 @@ $count=$register_data->participant_count;
           <label class="field-icon"><span  class='required validation'>*</span><i class="fa fa-user"></i></label>
            <?php
             if(isset($user_data->name)) {
-            	$nm=$user_data->contact_number;
+            	$nm=$user_data->name;
             } else {
             	$nm='';
             } ?>

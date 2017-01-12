@@ -126,6 +126,8 @@ if(!empty($matchScheduleCount) && $matchScheduleCount>0)
     </div>	
     					 
     <div class="row">
+        
+
         <div class="col-sm-6">
             <div class="section">
                 <label class="form_label">{{  trans('message.tournament.fields.startdate') }} <span  class='required'>*</span></label>         

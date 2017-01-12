@@ -56,6 +56,8 @@
   </div>
 </div>
 <script type="text/javascript">
+
+  var sub_to =0;
 function resetData()
 {
 	$('#sub-tournaments').resetForm(true);
@@ -96,6 +98,27 @@ $(function() {
 	}, " tie match points must be less than Winning team points");
 	$('[name="points_tie"]').rules("add", "win_tie_points");
 	
+
+
+    $.validator.addMethod("total_enrollment", function(value, element) {
+     var gn= parseInt($('[name="groups_number"]').val());
+      var gt = parseInt($('[name="groups_teams"]').val());
+
+      var to = parseInt($('[name="total_enrollment"]').val());
+
+  
+      
+       var enroltype = $('#enrollment_type').val();
+         sub_to = gn * gt;
+         window.sub = sub_to;
+            if(enroltype != 'online'){
+              return true
+            }      
+      else
+    return (sub_to >= to);
+  }, "Total Number of Enrolments cannot be greater than the total group teams");
+  $('[name="total_enrollment"]').rules("add", "total_enrollment");
+  
 									
 });
 </script>
@@ -234,109 +257,7 @@ $('.create-only #country_id').change(function(){
 
 $( ".btn-tournament" ).click(function() {
 
-
-var tot_enrollment= $('#tot_enrollment').val();
-
-// var tot_existed=('#tot_enrollment').length();
-
-
-
-
-
-
-
-if(tot_enrollment!=''){
- if(/^\+?\d+$/.test(tot_enrollment)==false){
-    $('#tot-enrollment-val').show();
-    return false;
- } else {
-      if(tot_enrollment==0){
-        $('#tot-enrollment-val').show();
-        return false;
-      } else {
-      $('#tot-enrollment-val').hide();
-      }
-
-   //$('#tot-enrollment-val').hide();
-  }
-}
-
-var min_enrollment= $('#min_enrollment').val();
-
-
-
-// if(min_enrollment==0){
-// $('#min-enrollment-val').show();
-//     return false;
-// } else {
-//   $('#min-enrollment-val').hide();
-// }
-
-
-
-
-
-if(min_enrollment!=''){
- if(/^\+?\d+$/.test(min_enrollment)==false){
-    $('#min-enrollment-val').show();
-    return false;
- } else {
-    
-    if(min_enrollment==0){
-        $('#min-enrollment-val').show();
-        return false;
-      } else {
-      $('#min-enrollment-val').hide();
-      }
-
-
-
-
-  //$('#min-enrollment-val').hide();
- }
-}
-
-
-var max_enrollment= $('#max_enrollment').val();
-
-
-// if(max_enrollment==0){
-// $('#max-enrollment-val').show();
-//     return false;
-// } else {
-//   $('#max-enrollment-val').hide();
-// }
-
-
-
-if(max_enrollment!=''){
- if(/^\+?\d+$/.test(max_enrollment)==false){
-    $('#max-enrollment-val').show();
-    return false;
- } else {
-  if(max_enrollment==0){
-        $('#max-enrollment-val').show();
-        return false;
-      } else {
-      $('#max-enrollment-val').hide();
-      }
-
-
-  //$('#max-enrollment-val').hide();
-  
- }
-}
-
-
-
-
-
-
-
-
-
-
-  var isChecked = $("#disclaimer_agree").is(":checked");
+ var isChecked = $("#disclaimer_agree").is(":checked");
          if($('#disclaimer_agree:visible').length == 0){
                  
           } else {
