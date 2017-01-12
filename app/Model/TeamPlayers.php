@@ -31,7 +31,7 @@ class TeamPlayers extends Model
     // a user belongs to a team
     public function user()
     {
-        return $this->belongsTo('App\User', 'user_id')->select('id', 'name');
+        return $this->belongsTo('App\User', 'user_id')->select('id', 'name','logo');
     }
 
     public static function setUserRole($team_id, $user_id, $role, $replace_exists = true)

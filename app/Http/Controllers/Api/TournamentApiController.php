@@ -9,6 +9,7 @@ use App\Model\Followers;
 use App\Model\MatchSchedule;
 use App\Model\Photo;
 use App\Model\Sport;
+use App\Model\Team;
 use App\Model\TournamentGroups;
 use App\Model\TournamentGroupTeams;
 use DB;
@@ -293,7 +294,6 @@ class TournamentApiController extends BaseApiController
             }, 'tournament'])
             ->get();
 
-
         $map = [
             'id',
             'name',
@@ -315,7 +315,16 @@ class TournamentApiController extends BaseApiController
                         'matches',
                         'points',
                         'final_points',
-
+                        'players' => [
+                            'type' => 'list',
+                            'source' => 'team.teamplayers',
+                            'fields' => [
+                                'id' => 'user.id',
+                                'name' => 'user.name',
+                                'role',
+                                'logo' => 'user.logoImage'
+                            ]
+                        ]
                     ];
 
                     $sports_id = object_get($obj, 'tournament.sports_id');
@@ -340,6 +349,36 @@ class TournamentApiController extends BaseApiController
                 $with->orderby('match_start_date', 'desc')->orderby('match_start_time', 'desc');
             }])
             ->where('tournament_id', $id)->get();
+
+        function prepareSideField($side = 'sideA')
+        {
+            return [
+                'type' => 'model',
+                'source' => $side,
+                'fields' => function ($obj) {
+                    $schedule_type = object_get($obj, 'schedule_type');
+                    $result = [
+                        'id',
+                        'name',
+                        'image' => 'logoImage'
+                    ];
+                    if ($schedule_type == 'team') {
+                        $result['players'] = [
+                            'type' => 'list',
+                            'source' => 'teamplayers',
+                            'fields' => [
+                                'id' => 'user.id',
+                                'name' => 'user.name',
+                                'image' => 'user.logoImage',
+                                'role'
+                            ]
+                        ];
+                    }
+                    return $result;
+                }
+            ];
+        }
+
         $map = [
             'id',
             'name',
@@ -364,6 +403,8 @@ class TournamentApiController extends BaseApiController
                     "match_category",
                     "schedule_type",
                     "match_type",
+                    'sideA' => prepareSideField('sideA'),
+                    'sideB' => prepareSideField('sideB')
                 ]
             ]
         ];
@@ -376,11 +417,25 @@ class TournamentApiController extends BaseApiController
         if ($tournament) {
             $groups = $tournament->finalStageTeamsList;
 
+            $obj = $groups->first();
+
             $map = [
                 'id',
                 'name',
-                'logoImage'
+                'logoImage',
             ];
+            if ($obj instanceof Team) {
+                $map['players'] = [
+                    'type' => 'list',
+                    'source' => 'teamplayers',
+                    'fields' => [
+                        'id' => 'user.id',
+                        'name' => 'user.name',
+                        'role',
+                        'logo' => 'user.logoImage'
+                    ]
+                ];
+            }
 
             return $this->CollectionMapResponse($groups, $map);
         } else {
@@ -417,6 +472,36 @@ class TournamentApiController extends BaseApiController
                 $with->orderby('match_start_date', 'desc')->orderby('match_start_time', 'desc');
             }]
         )->find($id);
+
+        function prepareSideField($side = 'sideA')
+        {
+            return [
+                'type' => 'model',
+                'source' => $side,
+                'fields' => function ($obj) {
+                    $schedule_type = object_get($obj, 'schedule_type');
+                    $result = [
+                        'id',
+                        'name',
+                        'image' => 'logoImage'
+                    ];
+                    if ($schedule_type == 'team') {
+                        $result['players'] = [
+                            'type' => 'list',
+                            'source' => 'teamplayers',
+                            'fields' => [
+                                'id' => 'user.id',
+                                'name' => 'user.name',
+                                'image' => 'user.logoImage',
+                                'role'
+                            ]
+                        ];
+                    }
+                    return $result;
+                }
+            ];
+        }
+
         $map = [
             'id',
             'Image1' => 'sideALogo',
@@ -435,7 +520,8 @@ class TournamentApiController extends BaseApiController
             "match_category",
             "schedule_type",
             "match_type",
-
+            'sideA' => prepareSideField('sideA'),
+            'sideB' => prepareSideField('sideB')
         ];
         if ($tournament) {
             return $this->CollectionMapResponse($tournament->finalMatches, $map);
