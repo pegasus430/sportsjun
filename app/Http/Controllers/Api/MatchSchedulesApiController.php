@@ -80,6 +80,46 @@ class  MatchSchedulesApiController extends BaseApiController
     public function getInfo($id)
     {
         $schedule = MatchSchedule::whereId($id)->firstOrFail();
+
+
+        function getSideField($side){
+            return [
+                'type' => 'model',
+                'source' => $side,
+                'fields' => function ($obj, $base) use ($side) {
+                    $fields = ['id','name','logoImage'];
+
+                    if ($base->schedule_type == 'team') {
+                        $fields['players'] = [
+                            'type' => 'value',
+                            'value' => function ($obj, $base) use ($side){
+                                $result = [];
+                                $ids =  ($side == 'sideA') ? explode(',', trim($base->player_a_ids, ',')) : explode(',', trim($base->player_b_ids, ',')) ;
+                                $team_id  =  ($side == 'sideA') ? $base->a_id : $base->b_id;
+                                $users = User::whereIn('id', $ids)->with(['userdetails'=>function($query) use($team_id){
+                                    return $query->where(['team_id'=>$team_id]);
+                                }])
+                                    ->get()->keyBy('id');
+                                foreach ($ids as $id) {
+                                    if (isset($users[$id]))
+                                        $result[] = [
+                                            'id'=>$id,
+                                            'name' => $users[$id]['name'],
+                                            'logoImage'=>$users[$id]->logoImage,
+                                            'role'=>object_get($users[$id]->userdetails->first(),'role')
+                                        ];
+                                }
+                                return $result;
+                            }
+                        ];
+                    }
+                    return $fields;
+                }
+            ];
+        }
+
+
+
         $map = [
             'tournament_id',
             'match_id' => 'id',
@@ -87,63 +127,8 @@ class  MatchSchedulesApiController extends BaseApiController
             'Sides' => [
                 'type' => 'model',
                 'fields' => [
-                    [
-                        'type' => 'model',
-                        'source' => 'SideA',
-                        'fields' => function ($obj, $base) {
-                            $fields = ['id','name','logoImage'];
-
-                            if ($base->schedule_type == 'team') {
-                                $fields['players'] = [
-                                    'type' => 'value',
-                                    'value' => function ($obj, $base) {
-                                        $result = [];
-                                        $ids = explode(',', trim($base->player_a_ids, ','));
-                                        $users = User::whereIn('id', $ids)
-                                            ->get()->keyBy('id');
-                                        foreach ($ids as $id) {
-                                            if (isset($users[$id]))
-                                                $result[] = [
-                                                    'id'=>$id,
-                                                    'name' => $users[$id]['name'],
-                                                    'logoImage'=>$users[$id]->logoImage,
-                                                ];
-                                        }
-                                        return $result;
-                                    }
-                                ];
-                            }
-                            return $fields;
-                        }
-                    ],
-                    [
-                        'type' => 'model',
-                        'source' => 'SideB',
-                        'fields' => function ($obj, $base) {
-                            $fields = ['id'];
-
-                            if ($base->schedule_type == 'team') {
-                                $fields['players'] = [
-                                    'type' => 'value',
-                                    'value' => function ($obj, $base) {
-                                        $result = [];
-                                        $ids = explode(',', trim($base->player_b_ids, ','));
-                                        $users = User::whereIn('id', $ids)
-                                            ->get()->keyBy('id');
-                                        foreach ($ids as $id) {
-                                            if (isset($users[$id]))
-                                                $result[] = [
-                                                    'id'=>$id,
-                                                    'name' => $users[$id]['name']
-                                                ];
-                                        }
-                                        return $result;
-                                    }
-                                ];
-                            }
-                            return $fields;
-                        }
-                    ]
+                    getSideField('sideA'),
+                    getSideField('sideB')
                 ],
             ]
         ];
