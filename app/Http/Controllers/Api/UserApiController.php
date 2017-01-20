@@ -19,11 +19,12 @@ class UserApiController extends BaseApiController
         return self::ApiResponse($users);
     }
 
-    public function show($id){
+    public function show($id)
+    {
         $user = \Auth::user();
-        if ($id == $user->id) {
-            $user = array_only($user->toArray(),['id','name','firstname','lastname','email','dob','gender','location','address','city_id','city','state_id','state',
-                'country_id','country','zip','contact_number','about','newsletter','logoImage']);
+        if ($id === $user->id || $id === 'self') {
+            $user = array_only($user->toArray(), ['id', 'name', 'firstname', 'lastname', 'email', 'dob', 'gender', 'location', 'address', 'city_id', 'city', 'state_id', 'state',
+                'country_id', 'country', 'zip', 'contact_number', 'about', 'newsletter', 'logoImage']);
         } else
             $user = User::where('id', $id)->select(['id', 'name', 'firstname', 'lastname'])->first();
         return self::ApiResponse($user);
