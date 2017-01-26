@@ -1,5 +1,41 @@
 var textAreaLength = 250;
 var tabPressed = false;
+
+function InitRatings(){
+    $('input.b-rating').not('.rate-init').addClass('rate-init').rating().on('change', function () {
+        var target_id = $(this).data('target_id');
+        var type = $(this).data('type');
+        var value = $(this).val();
+        $.ajax({
+            url: base_url+'/rating/set',
+            type: "POST",
+            dataType: 'JSON',
+            data: {'_token': data_token,
+                'to_id':target_id,
+                'type': type,
+                'rate': value
+            },
+            success: function(data){
+                if ("error" in data){
+                    $.alert({
+                        title: "Error",
+                        content: data["error"]
+                    });
+                }
+                if ("message" in data){
+                    $.alert({
+                        title: "Success!",
+                        content: data["message"]
+                    });
+                }
+                //alert(data.success);
+
+            }
+        });
+    });
+}
+
+
 $(function() {
 /*document.addEventListener('keydown', function (e) {
     if(e.keyCode == 9 || e.keyCode == 16) {
@@ -66,39 +102,7 @@ $('.glyphicon-calendar').parent().siblings('input:text').attr('readonly','readon
         return $("<li>").data("item.autocomplete", item).append("<a>" + item.label + "<br><strong>" + item.desc + "</strong></a>").appendTo(ul);
     };
     }
-
-    $('input.b-rating').rating().on('change', function () {
-        var target_id = $(this).data('target_id');
-        var type = $(this).data('type');
-        var value = $(this).val();
-        $.ajax({
-            url: base_url+'/rating/set',
-            type: "POST",
-            dataType: 'JSON',
-            data: {'_token': data_token,
-                'to_id':target_id,
-                'type': type,
-                'rate': value
-            },
-            success: function(data){
-                if ("error" in data){
-                    $.alert({
-                        title: "Error",
-                        content: data["error"]
-                    });
-                }
-                if ("message" in data){
-                    $.alert({
-                        title: "Success!",
-                        content: data["message"]
-                    });
-                }
-                //alert(data.success);
-
-            }
-        });
-    });
-
+    InitRatings();
 });
 //TeaxtArea length
 $("textarea").on('keyup', function (event) {
@@ -731,7 +735,7 @@ function viewMore(a, b) {
     });
 }
 
-function DataTableLoadMore(el){
+function DataTableLoadMore(el,postLoadScript){
     var load_more_div = $(el).closest($(el).data('replace'));
     var url = $(el).data('url');
     if (url)
@@ -751,6 +755,10 @@ function DataTableLoadMore(el){
             },
             success: function(result) {
                 $(load_more_div).replaceWith(result);
+
+                if (postLoadScript !== undefined){
+                    postLoadScript();
+                }
             }
         });
     return false;
