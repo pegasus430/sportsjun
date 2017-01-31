@@ -1,7 +1,7 @@
 <?php
 
 return [
-        'JS_VERSION'               => 9,
+        'JS_VERSION'               => 10,
         'CSS_VERSION'              => 9,
         'COUNTRY_INDIA'            => 101,
         'LIMIT'                    => 8,

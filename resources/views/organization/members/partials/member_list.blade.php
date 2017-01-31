@@ -41,8 +41,7 @@
         </td>
         <td>
             @if (\Auth::user())
-                <?php $user_rating = \App\Model\Rating::activeUserRate($member->id,\App\Model\Rating::$RATE_USER); ?>
-                    <input type="hidden" class="rating b-rating" value="{{$user_rating}}" data-filled="fa fa-star s-rating" data-empty="fa fa-star-o s-rating"
+                    <input type="hidden" class="rating b-rating" value="{{$member->rate}}" data-filled="fa fa-star s-rating" data-empty="fa fa-star-o s-rating"
                            data-target_id="{{$member->id}}" data-type="user"
                     />
             @endif
@@ -61,7 +60,7 @@
                         data-url="{{route('widget.organization.members',['id'=>$id,'page'=>$members->currentPage()+1,'filter-team'=>$filter_team])}}"
                    @endif
 
-                   onclick="return DataTableLoadMore(this);"
+                   onclick="return DataTableLoadMore(this,function() {InitRatings();})"
                 >
                     <span class="market_place"><i
                                 class="fa fa-arrow-down"></i> <label>{{ trans('message.view_more') }}</label></span>
