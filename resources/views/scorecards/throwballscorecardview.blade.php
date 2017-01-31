@@ -124,7 +124,7 @@
                     <div class='col-xs-12'>
                         <center>
                           <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
-                                    <h4>    {{$tournamentDetails['name']}} Tournament </h4>
+                                    <h4 class="team_name">    {{$tournamentDetails['name']}} Tournament </h4>
                                   </a>
                                 
                        </center>

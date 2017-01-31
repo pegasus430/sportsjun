@@ -146,7 +146,7 @@
                     <div class='col-xs-12'>
                         <center>
                           <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
-                                    <h4>    {{$tournamentDetails['name']}} Tournament </h4>
+                                    <h4 class="team_name">    {{$tournamentDetails['name']}} Tournament </h4>
                                   </a>
                                 
                        </center>
@@ -210,8 +210,10 @@
 
                                 <div class="form-group">
                                     <label>Winner is Not Updated</label>
-                                     HALF {{$match_data[0]['selected_half_or_quarter']}}
-
+                                   
+                                @if( $match_data[0]['selected_half_or_quarter'])
+                                    HALF {{$match_data[0]['selected_half_or_quarter']}}
+                                @endif
                                 </div>
                             @endif
                         @endif

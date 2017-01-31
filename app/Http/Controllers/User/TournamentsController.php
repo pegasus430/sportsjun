@@ -591,8 +591,10 @@ class TournamentsController extends Controller
 		$request['description'] = !empty($request['description'])?$request['description']:'';
 		$request['manager_id'] = !empty($request['managerId'])?$request['managerId']:'';
 		$TournamentParent = TournamentParent::create($request->all());
-		if (Request::has('organization_group_id')) {
-			$TournamentParent->orgGroups()
+
+
+		if (is_numeric($request['organization_group_id'])) {
+				$TournamentParent->orgGroups()
 				->attach(Request::input('organization_group_id'));
 		}
 
@@ -4043,11 +4045,11 @@ public function Transactions($id) {
     $i=0;
     $mn=array();
 
-   foreach($register_data as $reg){
-     foreach($reg->cartDetails as $carts){
-       $mn[$carts->event_id]=array();
-      }
-    }	
+   // foreach($register_data as $reg){
+   //   foreach($reg->cartDetails as $carts){
+   //     $mn[$carts->event_id]=array();
+   //    }
+   //  }	
 
 
     $i=0;
@@ -4057,7 +4059,7 @@ public function Transactions($id) {
       
     	$data['t_name']=$carts->tournaments->name;
     	$data['tot_enrollmet']=$carts->tournaments->total_enrollment;
-    	$alreday_registered=DB::table('request')->where('to_id',$carts->event_id)->get();
+    	$alreday_registered=DB::table('request')->where('to_id',$carts->event_id)->where('cart_id','!=','0')->get();
     	$data['current_enrollmet']=count($alreday_registered);
     	$data['remaining_enrollmet']=$carts->tournaments->total_enrollment-count($alreday_registered);
     	$data['data']['id']=$reg->id;
@@ -4080,6 +4082,9 @@ public function Transactions($id) {
      }
   
     }
+
+
+
 
  return view('tournaments.myregisteredtournaments')->with(array('details' => $mn,'u_id'=> $user_id));     
 }
