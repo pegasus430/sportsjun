@@ -3270,6 +3270,7 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
         }
 
         $terms_and_conditions = BasicSettings::where('id',2)->value('description');
+        if(empty($terms_and_conditions)) $terms_and_conditions = 'I agree Terms & Conditions';
         
         $parent_tournament_details='';
         foreach ($register_data->cartDetails as $value) {

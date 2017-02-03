@@ -192,7 +192,7 @@ $options=array();?>
  </div>
 </div>
 
-
+ 
 <div class="row">
         <div class="col-sm-12">
             <div class="section">
@@ -221,9 +221,9 @@ $options=array();?>
  <div class="col-sm-3">
   <div class="section">
   @if (Auth::check()) 
-   <a href="/tournaments/registerstep3/{{$register_data->id}}"><input class="button btn-primary" id="payment_sub" type="submit" value="Pay Now"></a>
+   <a href="/tournaments/registerstep3/{{$register_data->id}}" disabled='' class="allow_pay"><input class="button btn-primary allow_pay" id="payment_sub" disabled="" type="submit" value="Pay Now"></a>
   @else
-   <a href="/guest/tournaments/guestregisterstep3/{{$register_data->id}}"><input class="button btn-primary" id="guest_payment_sub" type="submit" value="Register Now"></a>
+   <a href="/guest/tournaments/guestregisterstep3/{{$register_data->id}}" disabled='' class='allow_pay'><input class="button btn-primary allow_pay" disabled="" id="guest_payment_sub" type="submit" value="Register Now"></a>
 @endif 
    </div>
  </div>
@@ -239,6 +239,20 @@ $options=array();?>
 </div>
 </div>
 </div>
+
+
+<script>
+$('#terms_agree_label').click(function(){
+    if($(this).attr('clicked')){
+            $('.allow_pay').attr('disabled',true);
+           $(this).removeAttr('clicked');
+    }else{
+          $('.allow_pay').removeAttr('disabled');
+         $(this).attr('clicked',true);
+    }
+
+})
+</script>
 @endsection
 
 

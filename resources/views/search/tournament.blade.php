@@ -183,7 +183,7 @@ $(document).ready(function() {
     }
 
 });
-	$(document.body).on('click', '.sb_join_tournament_main' ,function(){ 		
+	$(document.body).on('click', '.sb_join_tournament_main .sj_add_but' ,function(){ 		
 		var sport_id = $(this).attr('spid');
 		var val = $(this).attr('val');
 		var id = $(this).attr('id');
