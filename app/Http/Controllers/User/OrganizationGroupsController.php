@@ -98,13 +98,15 @@ class OrganizationGroupsController extends Controller
         $orgGroup->manager_id=$request->manager_id;
         $orgGroup->name = $request->name;
 
-        if($request->has('logo')){
+
+        if($request->hasFile('logo')){
              $file = $request->file('logo');
         
             $orgGroup->logo = $this->generateUniqueName();
            
             $request->file('logo')
-                    ->move(public_path($this->uploadPath), $group->logo);
+                    ->move(public_path($this->uploadPath), $orgGroup->logo);
+
         }
         $orgGroup->save();
 
