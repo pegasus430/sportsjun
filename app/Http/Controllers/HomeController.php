@@ -22,6 +22,9 @@ class HomeController extends Controller {
             return redirect(url('/myschedule',[\Auth::user()->id]));
         }
         if (\Auth::user() && Auth::user()->type=='1'){
+            $org = Auth::user()->organizations;
+            if(count($org)) return redirect()->to('/getorgteamdetails/'.$org[0]['id']);
+
             return redirect(url('/organization/organizations',[\Auth::user()->id]));
         }
 
