@@ -18,8 +18,11 @@ class HomeController extends Controller {
 
     public function index(){
         self::shareResource();
-        if (\Auth::user()){
+        if (\Auth::user() && Auth::user()->type!='1'){
             return redirect(url('/myschedule',[\Auth::user()->id]));
+        }
+        if (\Auth::user() && Auth::user()->type=='1'){
+            return redirect(url('/organization/organizations',[\Auth::user()->id]));
         }
 
         $banners = Infolist::banners()->active()->orderBy('weight','desc')->get();

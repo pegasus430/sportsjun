@@ -113,7 +113,7 @@ class AuthController extends Controller
         return $user;
     }
 
-
+ 
     public function postRegisterOrganization(OrganizationRegisterRequest $request)
     {
         $data = $request->all();
@@ -127,6 +127,7 @@ class AuthController extends Controller
             'contact_number' => array_get($data, 'mobile'),
             'password' => bcrypt($data['password']),
             'newsletter' => !empty($data['newsletter']) ? 1 : 0,
+            'type'       => 1,
             'verification_key' => md5($data['email']) //TODO:: these thing should be changed across all site
         ]);
         if ($user) {

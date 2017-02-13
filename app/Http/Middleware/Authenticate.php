@@ -80,7 +80,7 @@ class Authenticate
 
                         $followingSports = Helper::getFollowingSportIds($this->auth->user()->id);
                         
-                        if ($this->auth->user()->profile_updated == 1)
+                        if ($this->auth->user()->profile_updated == 1 && $this->auth->user()->type!=1)
                         {
                                 if (empty($followingSports) && !in_array(Route::getCurrentRoute()->getPath(), $allowedRoutesBeforeSportsProfileUpdate))
                                 {
