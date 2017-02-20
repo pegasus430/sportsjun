@@ -195,9 +195,9 @@ $options=array();?>
  
 <div class="row">
         <div class="col-sm-12">
-            <div class="section">
+            <div class="section" id='terms_agree_label'>
                 
-                <label for="comment" class="field prepend-icon" id='terms_agree_label'>
+                <label for="comment" class="field prepend-icon" id=''>
                     <input type="checkbox" class="gui-checkbox" name="agree" id="terms_agree" value="yes">{{$terms_and_conditions}}<br>
                    <p class="help-block" id="agree_conditions-val">Please agree our Terms and Conditions</p> 
                     
@@ -242,16 +242,33 @@ $options=array();?>
 
 
 <script>
-$('#terms_agree_label').click(function(){
+$('#terms_agree').click(function(){
+  console.log('me');
     if($(this).attr('clicked')){
-            $('.allow_pay').attr('disabled',true);
+          
            $(this).removeAttr('clicked');
     }else{
-          $('.allow_pay').removeAttr('disabled');
+          
          $(this).attr('clicked',true);
     }
 
 })
+
+$(window).load(function(){
+    $('#terms_agree').on('ifChanged', function(e) {
+        // Get the field name
+          console.log('me');
+        var isChecked = e.currentTarget.checked;
+
+        if (isChecked != true) {
+            $('.allow_pay').attr('disabled',true);
+          }
+        else{
+          $('.allow_pay').removeAttr('disabled');
+        }
+      });
+})
+
 </script>
 @endsection
 
