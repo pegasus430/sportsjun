@@ -198,7 +198,7 @@ $options=array();?>
             <div class="section" id='terms_agree_label'>
                 
                 <label for="comment" class="field prepend-icon" id=''>
-                    <input type="checkbox" class="gui-checkbox" name="agree" id="terms_agree" value="yes">{{$terms_and_conditions}}<br>
+                    <input type="checkbox" class="gui-checkbox" name="agree" id="terms_agree" value="yes" checked="">{{$terms_and_conditions}}<br>
                    <p class="help-block" id="agree_conditions-val">Please agree our Terms and Conditions</p> 
                     
                 </label>
@@ -221,9 +221,9 @@ $options=array();?>
  <div class="col-sm-3">
   <div class="section">
   @if (Auth::check()) 
-   <a href="/tournaments/registerstep3/{{$register_data->id}}" disabled='' class="allow_pay"><input class="button btn-primary allow_pay" id="payment_sub" disabled="" type="submit" value="Pay Now"></a>
+   <a href="/tournaments/registerstep3/{{$register_data->id}}"  class="allow_pay"><input class="button btn-primary allow_pay" id="payment_sub"  type="submit" value="Pay Now"></a>
   @else
-   <a href="/guest/tournaments/guestregisterstep3/{{$register_data->id}}" disabled='' class='allow_pay'><input class="button btn-primary allow_pay" disabled="" id="guest_payment_sub" type="submit" value="Register Now"></a>
+   <a href="/guest/tournaments/guestregisterstep3/{{$register_data->id}}"  class='allow_pay'><input class="button btn-primary allow_pay"  id="guest_payment_sub" type="submit" value="Register Now"></a>
 @endif 
    </div>
  </div>
