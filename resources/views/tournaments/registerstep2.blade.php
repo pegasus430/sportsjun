@@ -242,17 +242,17 @@ $options=array();?>
 
 
 <script>
-$('#terms_agree').click(function(){
-  console.log('me');
-    if($(this).attr('clicked')){
+// $('#terms_agree').click(function(){
+//   console.log('me');
+//     if($(this).attr('clicked')){
           
-           $(this).removeAttr('clicked');
-    }else{
+//            $(this).removeAttr('clicked');
+//     }else{
           
-         $(this).attr('clicked',true);
-    }
+//          $(this).attr('clicked',true);
+//     }
 
-})
+// })
 
 $(window).load(function(){
     $('#terms_agree').on('ifChanged', function(e) {
