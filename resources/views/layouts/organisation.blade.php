@@ -26,7 +26,7 @@
             <!--<img src="http://placehold.it/110x110/6a737b/ffffff" class="img-circle"> --></div>
         <div class="col-md-7">
             <h1>{{$organisation->name}}</h1>
-            <div class="pull-left"> <span><i class="fa fa-map-marker"></i> {{$organisation->address}}</span> <a href="#" class="follow"><i class="fa fa-star-o"></i> Follow Us</a> </div>
+            <div class="pull-left"> <span><i class="fa fa-map-marker"></i> {{$organisation->location}}</span> <a href="#" class="follow"><i class="fa fa-star-o"></i> Follow Us</a> </div>
         </div>
         <div class="col-md-3">
             <ul class="nav navbar-nav navbar-right">
@@ -57,14 +57,14 @@
           <nav class='container'>
         <div class="scroll row nav-icons">
             <ul class="col-md-12" id="nav">
-                <li class='nav-item'>
-                    <a href="info.php"><img src="/org/images/icons/icon-info.png" alt="" width="16" height="16"> Info</a>
+                <li class='nav-item li_info'>
+                    <a href="/getorgteamdetails/{{$organisation->id}}"><img src="/org/images/icons/icon-info.png" alt="" width="16" height="16"> Info</a>
                 </li>
-                <li class='nav-item'>
-                    <a href="staff.php"><img src="/org/images/icons/icon-staff.png" alt="" width="16" height="16"> Staff</a>
+                <li class='nav-item li_staff'>
+                    <a href="/organization/{{$organisation->id}}/staff"><img src="/org/images/icons/icon-staff.png" alt="" width="16" height="16"> Staff</a>
                 </li>
-                <li class='nav-item'>
-                    <a href="team.php"><img src="/org/images/icons/icon-group.png" alt="" width="16" height="16"> Team</a>
+                <li class='nav-item li_team' >
+                    <a href="/organization/{{$organisation->id}}/groups"><img src="/org/images/icons/icon-group.png" alt="" width="16" height="16"> Team</a>
                 </li>
                 <li class='nav-item'>
                     <a href="players.php"><img src="/org/images/icons/icon-players.png" alt="" width="16" height="16"> Players</a>
@@ -89,9 +89,19 @@
     </nav>
 </header>
     </div>
+
+    <div class="container">
+            <div class="alert alert-danger" style="display: none;">
+
+            </div>
+
+            <div class="alert alert-success" style="display: none;">
+
+            </div>
+    </div>
     <!-- Page Head -->
     
-    @yield('section')
+    @yield('content')
 
 
     <!-- Footer -->
@@ -107,6 +117,7 @@
     <script src="/org/js/bootstrap.min.js"></script>
     <script src="/org/js/w3data.js"></script>
     <script src="/org/js/bootstrap-select.js"></script>
+    @yield('end_scripts')
     <script>
         // HTML Include
         w3IncludeHTML();
@@ -115,6 +126,47 @@
             var page = location.pathname.split('/').pop();
             $('#nav li a[href="' + page + '"]').addClass('active')
         });
+    </script>
+
+    <script type="text/javascript">
+    var contenteditable_val =''
+
+         $('[contenteditable="true"]').focus(function(){
+                contenteditable_val = $(this).html();
+                console.log(contenteditable_val);
+         })
+
+        $('[contenteditable="true"]').blur(function(){
+
+        if(contenteditable_val!=$(this).html()){
+            data={
+                value:$(this).html(),
+                model:$(this).attr('model'),
+                field:$(this).attr('field')
+            }
+           that= $(this);
+                $.ajax({
+                    url:'/organization/{{$organisation->id}}/update_fields',
+                    data:data,
+                    success:function(){
+                        show_alert('success', 'Updated')
+                    },
+                    error:function(){
+                        show_alert('danger', 'Failed to Update');
+                        $(that).html(contenteditable_val);
+                        console.log(contenteditable_val)
+                    }
+                })
+            }
+              
+        })
+
+        function show_alert(type, message){
+            $('.alert-'+type).show().html(message)
+            window.setTimeout(function() {
+                $('.alert-'+type).hide().html('');
+            }, 3000);
+        }
     </script>
 </body>
 
