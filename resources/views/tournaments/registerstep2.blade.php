@@ -195,10 +195,10 @@ $options=array();?>
  
 <div class="row">
         <div class="col-sm-12">
-            <div class="section">
+            <div class="section" id='terms_agree_label'>
                 
-                <label for="comment" class="field prepend-icon" id='terms_agree_label'>
-                    <input type="checkbox" class="gui-checkbox" name="agree" id="terms_agree" value="yes">{{$terms_and_conditions}}<br>
+                <label for="comment" class="field prepend-icon" id=''>
+                    <input type="checkbox" class="gui-checkbox" name="agree" id="terms_agree" value="yes" checked="">{{$terms_and_conditions}}<br>
                    <p class="help-block" id="agree_conditions-val">Please agree our Terms and Conditions</p> 
                     
                 </label>
@@ -221,9 +221,9 @@ $options=array();?>
  <div class="col-sm-3">
   <div class="section">
   @if (Auth::check()) 
-   <a href="/tournaments/registerstep3/{{$register_data->id}}" disabled='' class="allow_pay"><input class="button btn-primary allow_pay" id="payment_sub" disabled="" type="submit" value="Pay Now"></a>
+   <a href="/tournaments/registerstep3/{{$register_data->id}}"  class="allow_pay"><input class="button btn-primary allow_pay" id="payment_sub"  type="submit" value="Pay Now"></a>
   @else
-   <a href="/guest/tournaments/guestregisterstep3/{{$register_data->id}}" disabled='' class='allow_pay'><input class="button btn-primary allow_pay" disabled="" id="guest_payment_sub" type="submit" value="Register Now"></a>
+   <a href="/guest/tournaments/guestregisterstep3/{{$register_data->id}}"  class='allow_pay'><input class="button btn-primary allow_pay"  id="guest_payment_sub" type="submit" value="Register Now"></a>
 @endif 
    </div>
  </div>
@@ -242,16 +242,33 @@ $options=array();?>
 
 
 <script>
-$('#terms_agree_label').click(function(){
-    if($(this).attr('clicked')){
-            $('.allow_pay').attr('disabled',true);
-           $(this).removeAttr('clicked');
-    }else{
-          $('.allow_pay').removeAttr('disabled');
-         $(this).attr('clicked',true);
-    }
+// $('#terms_agree').click(function(){
+//   console.log('me');
+//     if($(this).attr('clicked')){
+          
+//            $(this).removeAttr('clicked');
+//     }else{
+          
+//          $(this).attr('clicked',true);
+//     }
 
+// })
+
+$(window).load(function(){
+    $('#terms_agree').on('ifChanged', function(e) {
+        // Get the field name
+          console.log('me');
+        var isChecked = e.currentTarget.checked;
+
+        if (isChecked != true) {
+            $('.allow_pay').attr('disabled',true);
+          }
+        else{
+          $('.allow_pay').removeAttr('disabled');
+        }
+      });
 })
+
 </script>
 @endsection
 

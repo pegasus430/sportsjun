@@ -8,7 +8,10 @@ use App\Http\Services\OrganizationStaffService;
 use App\Model\Organization;
 use App\Model\OrganizationRole;
 use App\User;
-use Illuminate\Http\Request;
+use Auth;
+use Illuminate\Http\Request; 
+use App\Model\BasicSettings;
+use Illuminate\Http\Request as ObjRequest;
 
 class OrganizationStaffController extends Controller
 {
@@ -19,6 +22,30 @@ class OrganizationStaffController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+     public function __construct(ObjRequest $request){
+          $id = $request->route()->parameter('id');
+          $this->is_owner = false;
+          $this->new_template = false;
+
+          $allow_newtemplate_setting  = BasicSettings::where('name', 'organization_new_template')->first();
+
+
+          if($allow_newtemplate_setting && $allow_newtemplate_setting->description=='1'){
+             $this->new_template=true;
+          }
+
+        if($id && (Auth::user()->type==1 && count(Auth::user()->organizations))){
+
+            if(Auth::user()->organizations[0]->id == $id && $this->new_template){
+                 $this->is_owner = true;
+                 $organization = Organization::find($id);
+                 view()->share('organisation', $organization);
+            }
+            
+        }    
+    }
+
     public function index($id)
     {
         $organization = Organization::findOrFail($id);
@@ -27,6 +54,11 @@ class OrganizationStaffController extends Controller
 
         $staffRoles = OrganizationRole::lists('name', 'id')->all();
         $orgInfoObj = $organization;
+
+        if($this->is_owner){        
+            return view('organization_2.staff.list',compact('id', 'staffList', 'staffRoles', 'orgInfoObj'));
+        }
+
         return view('organization.staff.list',
             compact('id', 'staffList', 'staffRoles', 'orgInfoObj'));
     }

@@ -22,11 +22,36 @@ use App\Model\TournamentGroupTeams;
 use App\Model\OrganizationGroupTeamPoint;
 
 use Illuminate\Http\Request as ObjRequest;
+use App\Model\BasicSettings;
 
 //use Helper;
 
 class OrganizationController extends Controller
 {
+
+
+    public function __construct(ObjRequest $request){
+          $id = $request->route()->parameter('id');
+          $this->is_owner = false;
+          $this->new_template = false;
+
+          $allow_newtemplate_setting  = BasicSettings::where('name', 'organization_new_template')->first();
+
+
+          if($allow_newtemplate_setting && $allow_newtemplate_setting->description=='1'){
+             $this->new_template=true;
+          }
+
+        if($id && (Auth::user()->type==1 && count(Auth::user()->organizations))){
+
+            if(Auth::user()->organizations[0]->id == $id && $this->new_template){
+                 $this->is_owner = true;
+                 $organization = Organization::find($id);
+                 view()->share('organisation', $organization);
+            }
+            
+        }    
+    }
 
     /**
      * Display a listing of the resource.
@@ -36,6 +61,30 @@ class OrganizationController extends Controller
     public function index()
     {
         //
+
+        return view('organization_2.index');
+    }
+
+    public function getorgDetails($id)
+    {
+        $user_id = (isset(Auth::user()->id) ? Auth::user()->id : 0);
+        $teams = Team::select('id', 'name')->where('organization_id', $id)->get()->toArray();
+        $photo = Photo::select('url')->where('imageable_id', '=', $id)->where('imageable_type', '=',
+            config('constants.PHOTO.TEAM_PHOTO'))->where('user_id',
+            (isset(Auth::user()->id) ? Auth::user()->id : 0))->get()->toArray();
+        $orgInfoObj = Organization::find($id);
+
+        if($this->is_owner){        
+         return view('organization_2.info', compact('teams','photo','orgInfoObj','id','userId'));
+        }
+
+        return view('teams.teams')->with(array(
+            'teams' => $teams,
+            'photo' => $photo,
+            'orgInfoObj' => $orgInfoObj,
+            'id' => $id,
+            'userId' => $user_id
+        ));
     }
 
     /**

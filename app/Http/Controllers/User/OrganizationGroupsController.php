@@ -11,7 +11,9 @@ use App\Model\Team;
 use Illuminate\Http\Request;
 use App\Model\OrganizationGroup;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\DB; 
+use Illuminate\Http\Request as ObjRequest;
+use App\Model\BasicSettings;
 
 class OrganizationGroupsController extends Controller
 {
@@ -23,6 +25,29 @@ class OrganizationGroupsController extends Controller
      * @return \Illuminate\Http\Response
      */
     private $uploadPath = 'uploads/org/groups/logo';
+
+    public function __construct(ObjRequest $request){
+          $id = $request->route()->parameter('id');
+          $this->is_owner = false;
+          $this->new_template = false;
+
+          $allow_newtemplate_setting  = BasicSettings::where('name', 'organization_new_template')->first();
+
+
+          if($allow_newtemplate_setting && $allow_newtemplate_setting->description=='1'){
+             $this->new_template=true;
+          }
+
+        if($id && (Auth::user()->type==1 && count(Auth::user()->organizations))){
+
+            if(Auth::user()->organizations[0]->id == $id && $this->new_template){
+                 $this->is_owner = true;
+                 $organization = Organization::find($id);
+                 view()->share('organisation', $organization);
+            }
+            
+        }    
+    }
 
     public function index($id)
     {
@@ -41,6 +66,12 @@ class OrganizationGroupsController extends Controller
                     ->where('teams.organization_id',$id)
                     ->select('teams.id','teams.name as teamname','teams.team_owner_id','teams.logo','teams.description','users.name','teams.isactive', 'teams.sports_id')
                     ->orderBy('isactive','desc')->get();
+
+        if($this->is_owner){        
+             return view('organization_2.groups.list',
+            compact('id', 'staffList', 'groups', 'organization', 'orgInfoObj','teams'),['userId'=>$user_id]);
+
+        }
 
         return view('organization.groups.list',
             compact('id', 'staffList', 'groups', 'organization', 'orgInfoObj','teams'),['userId'=>$user_id]);

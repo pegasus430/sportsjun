@@ -83,6 +83,7 @@ class User extends Model implements AuthenticatableContract,
         'verification_key',
         'is_verified',
         'isactive',
+        'type'
     ];
 
     /**

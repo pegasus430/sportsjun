@@ -100,6 +100,7 @@ class  MatchSchedulesApiController extends BaseApiController
                                     return $query->where(['team_id'=>$team_id]);
                                 }])
                                     ->get()->keyBy('id');
+                                $ids = array_unique($ids);
                                 foreach ($ids as $id) {
                                     if (isset($users[$id]))
                                         $result[] = [

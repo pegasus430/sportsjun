@@ -3119,6 +3119,8 @@ return view('tournaments.edit_rubber', compact('rubber', 'team_a', 'team_b', 'ma
 			 		$team_statistics->save();
 			 	}
 			 }
+
+		Helper::updateOrganizationTeamsPoints($id);
 		
 		return redirect()->back()->with('message', 'Group Closed');
 	}

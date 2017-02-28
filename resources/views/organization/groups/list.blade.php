@@ -79,5 +79,5 @@
             </div>
         </div> {{-- /.col-md-12 --}}
     </div> {{-- /.col-lg-10 --}}
-    @include('organization.groups.partials.create_group_modal')
+    @include('organization_2.groups.partials.create_group_modal')
 @endsection

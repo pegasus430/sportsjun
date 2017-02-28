@@ -14,7 +14,7 @@ Route::get('team/teams/{user_id?}', [
 ]);
 Route::get('getorgteamdetails/{id}', [
     'as'   => 'getorgteamdetails',
-    'uses' => 'User\TeamController@getorgDetails',
+    'uses' => 'User\OrganizationController@getorgDetails',
 ]);
 Route::get('gettournamentdetails/{id}', [
     'as'   => 'gettournamentdetails',
