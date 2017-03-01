@@ -244,9 +244,9 @@
 
 </div>
 
-
 <script type="text/javascript" src="{{ asset('/js/html2canvas.js') }}"></script>
-<script type="text/javascript" src="{{ asset('/js/file-saver/FileSaver.js') }}"></script>
+<script type="text/javascript" src="{{ asset('/js/spin.js') }}"></script>
+<script type="text/javascript" src="{{ asset('/js/ladda.js') }}"></script>
 <script>
 var teamId = $('#team option:selected').data('status');
 var bating_team = $( "#team option:selected" ).text();
@@ -258,14 +258,15 @@ $("#team_a_bowling").text(bating_team+' Bowling');
 $("#team_a_extras").text(bating_team+' Extras');
 $("#team_b_extras").text(bowling_team+' Extras');
 
-//Share facebook
+var caption = '<?php echo $tournamentDetails['name'] ?>';
+var shareFacebookLadda = Ladda.create( document.querySelector( '.sj-social-ancr-fb' ) );
+
 function postImageToFacebook(token, filename, mimeType, imageData, message) {
     var fd = new FormData();
     fd.append("access_token", token);
     fd.append("source", imageData);
     fd.append("no_story", true);
 
-    // Upload image to facebook without story(post to feed)
     $.ajax({
         url: "https://graph.facebook.com/me/photos?access_token=" + token,
         type: "POST",
@@ -274,58 +275,36 @@ function postImageToFacebook(token, filename, mimeType, imageData, message) {
         contentType: false,
         cache: false,
         success: function (data) {
-            console.log("success: ", data);
-
-            // Get image source url
             FB.api(
                 "/" + data.id + "?fields=images",
                 function (response) {
+                    shareFacebookLadda.stop();
+
                     if (response && !response.error) {
 
-                        // Create facebook post using image
-                        FB.api(
-                            "/me/feed",
-                            "POST",
-                            {
-                                "message": "",
-                                "picture": response.images[0].source,
-                                "link": window.location.href,
-                                "name": 'Look at the cute panda!',
-                                "description": message,
-                                "privacy": {
-                                    value: 'SELF'
-                                }
-                            },
-                            function (response) {
-                              console.log("response:", response);
-                                if (response && !response.error) {
-                                    /* handle the result */
-                                    console.log("Posted story to facebook");
-                                    console.log(response);
-                                }
-                            }
-                        );
+                        FB.ui({
+                          method: 'feed',
+                          link: "http://sportsjun.com/"+ window.location.href.substring(window.location.href.indexOf("matchpublic")),
+                          picture: response.images[0].source,
+                          caption: caption,
+                        }, function(response){});
                     }
                 }
             );
         },
         error: function (shr, status, data) {
-            console.log("error " + data + " Status " + shr.status);
+            shareFacebookLadda.stop();
         },
         complete: function (data) {
-            console.log('Post to facebook Complete');
         }
     });
 }
 
 function shareTeamVSOnFacebook() {
+  shareFacebookLadda.start();
   html2canvas($("#team_vs"), {
     onrendered: function(canvas) {
-        theCanvas = canvas;
-        document.body.appendChild(canvas);
-
         canvas.toBlob(function(blob) {
-          // saveAs(blob, "Dashboard.png");
           FB.getLoginStatus(function (response) {
               console.log(response);
               if (response.status === "connected") {
@@ -340,6 +319,43 @@ function shareTeamVSOnFacebook() {
                   }, {scope: "publish_actions"});
               }
           });
+        });
+    }
+  });
+}
+
+function shareTeamVSOnTweeter() {
+  html2canvas($("#team_vs"), {
+    onrendered: function(canvas) {
+        canvas.toBlob(function(blob) {
+
+          $.ajax({
+              url: "/share/twitter",
+              type: "POST",
+              data: blob,
+              success: function (data) {
+                  console.log("success: ", data);
+              },
+              error: function (shr, status, data) {
+                  console.log("error " + data + " Status " + shr.status);
+              }
+          });
+
+          // saveAs(blob, "Dashboard.png");
+          // FB.getLoginStatus(function (response) {
+          //     console.log(response);
+          //     if (response.status === "connected") {
+          //         postImageToFacebook(response.authResponse.accessToken, "Canvas to Facebook/Twitter", "image/png", blob, window.location.href);
+          //     } else if (response.status === "not_authorized") {
+          //         FB.login(function (response) {
+          //             postImageToFacebook(response.authResponse.accessToken, "Canvas to Facebook/Twitter", "image/png", blob, window.location.href);
+          //         }, {scope: "publish_actions"});
+          //     } else {
+          //         FB.login(function (response) {
+          //             postImageToFacebook(response.authResponse.accessToken, "Canvas to Facebook/Twitter", "image/png", blob, window.location.href);
+          //         }, {scope: "publish_actions"});
+          //     }
+          // });
         });
     }
   });
@@ -373,67 +389,6 @@ function scoreCardStatus(status)
 		}
 	});
 
-  // Twitter oauth handler
-  $.oauthpopup = function (options) {
-      if (!options || !options.path) {
-          throw new Error("options.path must not be empty");
-      }
-      options = $.extend({
-          windowName: 'ConnectWithOAuth' // should not include space for IE
-          , windowOptions: 'location=0,status=0,width=800,height=400'
-          , callback: function () {
-              debugger;
-              //window.location.reload();
-          }
-      }, options);
-
-      var oauthWindow = window.open(options.path, options.windowName, options.windowOptions);
-      var oauthInterval = window.setInterval(function () {
-          if (oauthWindow.closed) {
-              window.clearInterval(oauthInterval);
-              options.callback();
-          }
-      }, 1000);
-  };
-  // END Twitter oauth handler
-
-  //bind to element and pop oauth when clicked
-  $.fn.oauthpopup = function (options) {
-      $this = $(this);
-      $this.click($.oauthpopup.bind(this, options));
-  };
-
-  $('#shareTW').click(function () {
-      var dataURL = $('#canvas')[0].toDataURL("image/png");
-      $.oauthpopup({
-          path: '/auth/twitter.php',
-          callback: function () {
-              console.log(window.twit);
-              var data = new FormData();
-              // Tweet text
-              data.append('status', "Look at the cute panda! " + window.location.href + " @jerezb31");
-              // Binary image
-              data.append('image', dataURL);
-              // oAuth Data
-              data.append('oauth_token', window.twit.oauth_token);
-              data.append('oauth_token_secret', window.twit.oauth_token_secret);
-              // Post to Twitter as an update with
-
-              return $.ajax({
-                  url: '/auth/share-on-twitter.php',
-                  type: 'POST',
-                  data: data,
-                  cache: false,
-                  processData: false,
-                  contentType: false,
-                  success: function (data) {
-                      console.log('Posted to Twitter.');
-                      console.log(data);
-                  }
-              });
-          }
-      });
-  });
 }
 </script>
 @endsection

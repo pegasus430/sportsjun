@@ -3,7 +3,7 @@
 /* Route::get('public/completedmatches', [
 	'as' => 'public/completedmatches', 'uses' =>  'Auth\ScoreCardController@completedMatches'
 	]);
-	
+
 Route::get('public/scorecard/view/{match_id}', [
 			'as' => 'public/scorecard/view', 'uses' => 'Auth\ScoreCardController@createScorecardView'
 	]); */
@@ -133,7 +133,7 @@ Route::group(['prefix' => 'viewpublic'], function () {
 Route::get('/', function () {
     return view('welcome');
 });
- * 
+ *
  */
 Route::get('js_close', function () {
     return "<script type=\"text/javascript\">window.close();</script>";
@@ -189,6 +189,19 @@ Route::get('/mailscron', function () {
 });
 //END CRONS
 
+//Share tweeter
+Route::get('share/twitter', function(){
+  try
+  {
+      $uploaded_media = Twitter::uploadMedia(['media' => File::get(public_path('images\sc-gallery.png'))]);
+      return Twitter::postTweet(['status' => 'Laravel is beautiful', 'media_ids' => $uploaded_media->media_id_string]);
+  }
+  catch (\Exception $e)
+  {
+      dd(Twitter::logs());
+  }
+});
+
 //Login/Signup
 Route::get('social/redirect/{provider}', ['uses' => 'User\UserController@redirectToProvider', 'as' => 'social.login']);
 Route::get('social/callback/{provider}', 'User\UserController@handleProviderCallback');
@@ -230,20 +243,3 @@ Route::group(['prefix' => 'guest'], function () {
    Route::get('tournaments/guestregisterstep3/{id}/{event_id}', 'User\TournamentsController@getGuestRegister');
    Route::post('tournaments/guestregisterstep3', 'User\TournamentsController@postGuestRegister');
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

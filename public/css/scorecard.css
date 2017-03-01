@@ -1222,7 +1222,7 @@ div.share-scorecard {
 }
 .sj-social-ancr {
     border-radius: 2px;
-    max-width: 65px;
+    width: 65px;
     max-height: 27px;
     font-size: 12px;
     color: #FFF;
