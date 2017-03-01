@@ -260,6 +260,7 @@ $("#team_b_extras").text(bowling_team+' Extras');
 
 var caption = '<?php echo $tournamentDetails['name'] ?>';
 var shareFacebookLadda = Ladda.create( document.querySelector( '.sj-social-ancr-fb' ) );
+var shareTwitterLadda = Ladda.create( document.querySelector( '.sj-social-ancr-twt' ) );
 
 function postImageToFacebook(token, filename, mimeType, imageData, message) {
     var fd = new FormData();
@@ -324,38 +325,33 @@ function shareTeamVSOnFacebook() {
   });
 }
 
+function blobToFile(theBlob, fileName){
+    //A Blob() is almost a File() - it's just missing the two properties below which we will add
+    theBlob.lastModifiedDate = new Date();
+    theBlob.name = fileName;
+    return theBlob;
+}
+
 function shareTeamVSOnTweeter() {
+  shareTwitterLadda.start();
   html2canvas($("#team_vs"), {
     onrendered: function(canvas) {
         canvas.toBlob(function(blob) {
-
+          var fd = new FormData();
+          fd.append('file', blobToFile(blob, "image.png"));
           $.ajax({
               url: "/share/twitter",
-              type: "POST",
-              data: blob,
+              data: fd,
+              type: 'POST',
+              processData: false,
+              contentType: false,
               success: function (data) {
-                  console.log("success: ", data);
+                shareTwitterLadda.stop();
               },
               error: function (shr, status, data) {
-                  console.log("error " + data + " Status " + shr.status);
+                shareTwitterLadda.stop();
               }
           });
-
-          // saveAs(blob, "Dashboard.png");
-          // FB.getLoginStatus(function (response) {
-          //     console.log(response);
-          //     if (response.status === "connected") {
-          //         postImageToFacebook(response.authResponse.accessToken, "Canvas to Facebook/Twitter", "image/png", blob, window.location.href);
-          //     } else if (response.status === "not_authorized") {
-          //         FB.login(function (response) {
-          //             postImageToFacebook(response.authResponse.accessToken, "Canvas to Facebook/Twitter", "image/png", blob, window.location.href);
-          //         }, {scope: "publish_actions"});
-          //     } else {
-          //         FB.login(function (response) {
-          //             postImageToFacebook(response.authResponse.accessToken, "Canvas to Facebook/Twitter", "image/png", blob, window.location.href);
-          //         }, {scope: "publish_actions"});
-          //     }
-          // });
         });
     }
   });

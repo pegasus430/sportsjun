@@ -15,6 +15,7 @@ class VerifyCsrfToken extends BaseVerifier
         //
     	'/api/*',
     	'tournaments/payment_failure',
-    	'tournaments/payment_success'
+    	'tournaments/payment_success',
+      'share/twitter'
     ];
 }

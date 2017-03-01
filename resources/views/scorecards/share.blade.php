@@ -33,10 +33,12 @@ $gp_url = 'https://plus.google.com/share?url=' . url('matchpublic/scorecard/view
                                         </button>
                                 </td>
                                 <td class="sj-social-td">
-                                        <a href="javascript:void(0);" onclick="shareTeamVSOnTweeter();', 'sjtw');" class="sj-social-ancr sj-social-ancr-twt" rel="noreferrer">
-                                                <span class="sj-ico sj-twt-share"></span>
-                                                <span class="sj-font-12">Tweet</span>
-                                        </a>
+                                        <button onclick="shareTeamVSOnTweeter();" class="sj-social-ancr sj-social-ancr-twt ladda-button" data-style="slide-left" rel="noreferrer" style="margin: 0; padding: 0;">
+                                          <span>
+                                            <span class="sj-ico sj-twt-share" style="float: left;"></span>
+                                            <span class="sj-font-12" style="top: 0;">Tweet</span>
+                                          </span>
+                                        </button>
                                 </td>
                                 <td class="sj-social-td">
                                         <a href="javascript:void(0);" onclick="SJ.GLOBAL.share('{{$gp_url}}', 'sjgp');" class="sj-social-ancr sj-social-ancr-gplus" rel="noreferrer">
