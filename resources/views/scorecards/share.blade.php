@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 // $user_a_name is used in tennis scorecard view
 $team_a_name = isset($user_a_name) ? $user_a_name : $team_a_name;
@@ -25,13 +25,15 @@ $gp_url = 'https://plus.google.com/share?url=' . url('matchpublic/scorecard/view
                 <tbody>
                         <tr>
                                 <td class="sj-social-td">
-                                        <a href="javascript:void(0);" onclick="SJ.GLOBAL.share('{{$fb_url}}', 'sjfb');" class="sj-social-ancr sj-social-ancr-fb" rel="noreferrer">
-                                                <span class="sj-ico sj-fb-share "></span>
-                                                <span class="sj-font-12">Share</span>
-                                        </a>
+                                        <button onclick="shareTeamVSOnFacebook();" class="sj-social-ancr sj-social-ancr-fb ladda-button" data-style="slide-left" rel="noreferrer" style="margin: 0; padding: 0;">
+                                          <span>
+                                            <span class="sj-ico sj-fb-share" style="float: left;"></span>
+                                            <span class="sj-font-12" style="top: 0;">Share</span>
+                                          </span>
+                                        </button>
                                 </td>
                                 <td class="sj-social-td">
-                                        <a href="javascript:void(0);" onclick="SJ.GLOBAL.share('{{$tw_url}}', 'sjtw');" class="sj-social-ancr sj-social-ancr-twt" rel="noreferrer">
+                                        <a href="javascript:void(0);" onclick="shareTeamVSOnTweeter();', 'sjtw');" class="sj-social-ancr sj-social-ancr-twt" rel="noreferrer">
                                                 <span class="sj-ico sj-twt-share"></span>
                                                 <span class="sj-font-12">Tweet</span>
                                         </a>

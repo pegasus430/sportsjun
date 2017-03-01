@@ -13,7 +13,7 @@
 	height: 100%;
     background: #fc0;
     max-height: 100%;
-	text-align: center;	
+	text-align: center;
 	position: fixed;
 }
 @media (max-width: 991px) {
@@ -139,7 +139,7 @@
 }
 @media (max-width: 768px) {
 	#team_vs .team .team_logo,
-	#team_vs .vs {display: block;}	
+	#team_vs .vs {display: block;}
 }
 #team_vs .team .team_logo img {max-width: 100%;max-height: 100%;width: 100px;height: 100px;display: table-cell;margin: 0 auto;vertical-align: middle;object-fit: scale-down;}
 .team_logo {}
@@ -273,7 +273,7 @@
 .col_standard .form-inline .win_head {color: #f27676;position: relative;font-size: 16px;text-transform: uppercase;width: 260px;margin: 15px auto 0 !important;}
 .col_standard .form-inline .win_head:before {content: "";position: absolute;left: 60px;top: 5px;background: url(../images/win_star.png) left center no-repeat;width: 11px;height: 10px;}
 .col_standard .form-inline .win_head:after {content: "";position: absolute;right: 60px;top: 5px;background: url(../images/win_star.png) left center no-repeat;width: 11px;height: 10px;}
-.col_standard .form-inline .win_team {margin: 0;text-transform: uppercase;font-weight: 600;}
+.col_standard .form-inline .win_team {margin: 0;text-transform: uppercase;font-weight: 600;margin-top: 32px;}
 .col_standard .form-inline .form-control.show_teams,
 .col_standard .form-inline label.show_teams {display: none ;}
 .col_standard .form-inline label {display: block;}
@@ -426,7 +426,8 @@
 /* Cricket Board */
 .cs_bg {
 	position: relative;
-  padding: 20px 0 195px;
+  padding: 20px 0;
+  margin-bottom: 175px;
 }
 .cs_bg:before {
 	content: '';
@@ -894,7 +895,7 @@
 	font-size: 16px;
 	}
 
-@media  (max-width: 520px) {	
+@media  (max-width: 520px) {
 	.col_standard .table {margin-bottom: 8px;}
 	.scorecards-buttons li {display: block; margin-bottom: 8px;}
 	.scorecards-buttons li:last-child {margin-bottom: 0px;}
@@ -905,7 +906,7 @@
 .scorecards-buttons .green {
 	background: #65C178;
 	color: #FFFFFF;}
-	
+
 .sportsjun-forms .green:hover {
     color: #FFFFFF;
     background: #57A968;
@@ -919,8 +920,8 @@
 .scorecards-buttons .black {
 	background: #455469;
 	color: #FFFFFF;}
-	
-		
+
+
 .sportsjun-forms .black:hover {
     color: #FFFFFF;
     background: #445060;
@@ -950,14 +951,14 @@
 
 .status-modal {
 	color: #212121;}
-	
+
 @media (max-width: 991px) {
 	#team_vs .vs:before {margin-left: inherit;}
 	#team_vs .vs:after {margin-left: 20px;}
 	.team_detail{text-align: center;}
 	}
-        
-        
+
+
 /* Cricket scorecard - Toss modal - added by anoop.n */
 div.tossDetail .modal-dialog {
     max-width: 400px;
@@ -1221,7 +1222,7 @@ div.share-scorecard {
 }
 .sj-social-ancr {
     border-radius: 2px;
-    max-width: 65px;
+    width: 65px;
     max-height: 27px;
     font-size: 12px;
     color: #FFF;
@@ -1345,7 +1346,7 @@ div#playerOfTheMatchNote {
 
 
 .total_head{
-	
+
     border-bottom: 1px solid #1B926C;
     background: #266393;
     color: white;
