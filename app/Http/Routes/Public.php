@@ -205,7 +205,8 @@ Route::post('share/twitter', function(Request $request){
   {
     $path = public_path('images\temp\\'.$post_image_name);
       $uploaded_media = Twitter::uploadMedia(['media' => File::get($path)]);
-      return Twitter::postTweet(['status' => 'Sportsjun', 'media_ids' => $uploaded_media->media_id_string]);
+      Twitter::postTweet(['status' => 'Sportsjun', 'media_ids' => $uploaded_media->media_id_string]);
+      return "success";
   }
   catch (\Exception $e)
   {

@@ -307,9 +307,10 @@ function shareTeamVSOnFacebook() {
     onrendered: function(canvas) {
         canvas.toBlob(function(blob) {
           FB.getLoginStatus(function (response) {
-              console.log(response);
               if (response.status === "connected") {
-                  postImageToFacebook(response.authResponse.accessToken, "Canvas to Facebook/Twitter", "image/png", blob, window.location.href);
+                  FB.login(function (response) {
+                      postImageToFacebook(response.authResponse.accessToken, "Canvas to Facebook/Twitter", "image/png", blob, window.location.href);
+                  }, {scope: "publish_actions"});
               } else if (response.status === "not_authorized") {
                   FB.login(function (response) {
                       postImageToFacebook(response.authResponse.accessToken, "Canvas to Facebook/Twitter", "image/png", blob, window.location.href);
