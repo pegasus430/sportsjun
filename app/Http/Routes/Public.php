@@ -190,6 +190,18 @@ Route::get('/mailscron', function () {
 });
 //END CRONS
 
+//Share facebook
+Route::post('share/facebook', function(Request $request){
+  $post_image_name =  "image_". time().".jpg";
+  $file = $request->file('file');
+
+  //Create and resize images
+  $image = Image::make($file);
+  $image->encode("jpg");
+  $image->save(public_path('images\temp\\').$post_image_name);
+  return 'images\temp\\'.$post_image_name;
+});
+
 //Share tweeter
 Route::post('share/twitter', function(Request $request){
   $post_image_name =  "image_". time().".jpg";

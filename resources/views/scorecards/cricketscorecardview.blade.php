@@ -263,42 +263,67 @@ var shareFacebookLadda = Ladda.create( document.querySelector( '.sj-social-ancr-
 var shareTwitterLadda = Ladda.create( document.querySelector( '.sj-social-ancr-twt' ) );
 
 function postImageToFacebook(token, filename, mimeType, imageData, message) {
-    var fd = new FormData();
-    fd.append("access_token", token);
-    fd.append("source", imageData);
-    fd.append("no_story", true);
+  var fd = new FormData();
+  fd.append('file', blobToFile(imageData, filename));
+  $.ajax({
+      url: "/share/facebook",
+      data: fd,
+      type: 'POST',
+      processData: false,
+      contentType: false,
+      success: function (response) {
+        console.log(window.location.href.substring(0, window.location.href.indexOf("matchpublic"))+response);
+        FB.ui({
+          method: 'feed',
+          link: "http://sportsjun.com/"+ window.location.href.substring(window.location.href.indexOf("matchpublic")),
+          picture: window.location.href.substring(0, window.location.href.indexOf("matchpublic"))+response,
+          caption: caption,
+        }, function(response){});
+        shareFacebookLadda.stop();
+      },
+      error: function (shr, status, data) {
+        console.log(shr);
+        shareFacebookLadda.stop();
+      }
+  });
 
-    $.ajax({
-        url: "https://graph.facebook.com/me/photos?access_token=" + token,
-        type: "POST",
-        data: fd,
-        processData: false,
-        contentType: false,
-        cache: false,
-        success: function (data) {
-            FB.api(
-                "/" + data.id + "?fields=images",
-                function (response) {
-                    shareFacebookLadda.stop();
 
-                    if (response && !response.error) {
-
-                        FB.ui({
-                          method: 'feed',
-                          link: "http://sportsjun.com/"+ window.location.href.substring(window.location.href.indexOf("matchpublic")),
-                          picture: response.images[0].source,
-                          caption: caption,
-                        }, function(response){});
-                    }
-                }
-            );
-        },
-        error: function (shr, status, data) {
-            shareFacebookLadda.stop();
-        },
-        complete: function (data) {
-        }
-    });
+    // var fd = new FormData();
+    // fd.append("access_token", token);
+    // fd.append("source", imageData);
+    // fd.append("no_story", true);
+    //
+    // $.ajax({
+    //     url: "https://graph.facebook.com/me/photos?access_token=" + token,
+    //     type: "POST",
+    //     data: fd,
+    //     processData: false,
+    //     contentType: false,
+    //     cache: false,
+    //     success: function (data) {
+    //         FB.api(
+    //             "/" + data.id + "?fields=images",
+    //             function (response) {
+    //                 shareFacebookLadda.stop();
+    //
+    //                 if (response && !response.error) {
+    //
+    //                     FB.ui({
+    //                       method: 'feed',
+    //                       link: "http://sportsjun.com/"+ window.location.href.substring(window.location.href.indexOf("matchpublic")),
+    //                       picture: response.images[0].source,
+    //                       caption: caption,
+    //                     }, function(response){});
+    //                 }
+    //             }
+    //         );
+    //     },
+    //     error: function (shr, status, data) {
+    //         shareFacebookLadda.stop();
+    //     },
+    //     complete: function (data) {
+    //     }
+    // });
 }
 
 function shareTeamVSOnFacebook() {
@@ -309,16 +334,22 @@ function shareTeamVSOnFacebook() {
           FB.getLoginStatus(function (response) {
               if (response.status === "connected") {
                   FB.login(function (response) {
+                    if (response.authResponse) {
                       postImageToFacebook(response.authResponse.accessToken, "Canvas to Facebook/Twitter", "image/png", blob, window.location.href);
-                  }, {scope: "publish_actions"});
+                    }
+                  });
               } else if (response.status === "not_authorized") {
                   FB.login(function (response) {
+                    if (response.authResponse) {
                       postImageToFacebook(response.authResponse.accessToken, "Canvas to Facebook/Twitter", "image/png", blob, window.location.href);
-                  }, {scope: "publish_actions"});
+                    }
+                  });
               } else {
                   FB.login(function (response) {
+                    if (response.authResponse) {
                       postImageToFacebook(response.authResponse.accessToken, "Canvas to Facebook/Twitter", "image/png", blob, window.location.href);
-                  }, {scope: "publish_actions"});
+                    }
+                  });
               }
           });
         });
