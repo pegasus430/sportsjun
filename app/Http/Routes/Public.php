@@ -198,8 +198,8 @@ Route::post('share/facebook', function(Request $request){
   //Create and resize images
   $image = Image::make($file);
   $image->encode("jpg");
-  $image->save(public_path('images/').$post_image_name);
-  return 'images/'.$post_image_name;
+  $image->save(public_path('uploads/').$post_image_name);
+  return 'uploads/'.$post_image_name;
 });
 
 //Share tweeter
@@ -212,10 +212,10 @@ Route::post('share/twitter', function(Request $request){
       $constraint->aspectRatio();
   });
   $image->encode("jpg", 10);
-  $image->save(public_path('images/').$post_image_name);
+  $image->save(public_path('uploads/').$post_image_name);
   try
   {
-    $path = public_path('images/'.$post_image_name);
+    $path = public_path('uploads/'.$post_image_name);
       $uploaded_media = Twitter::uploadMedia(['media' => File::get($path)]);
       Twitter::postTweet(['status' => 'Sportsjun', 'media_ids' => $uploaded_media->media_id_string]);
       return "success";

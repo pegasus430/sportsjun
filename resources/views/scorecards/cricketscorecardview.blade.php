@@ -272,12 +272,12 @@ function postImageToFacebook(token, filename, mimeType, imageData, message) {
       processData: false,
       contentType: false,
       success: function (data) {
-        console.log(window.location.href.substring(0, window.location.href.indexOf("matchpublic")) + data);
+        console.log(window.location.href.substring(0, window.location.href.indexOf("match")) + data);
         // Create facebook post using image
         FB.ui({
           method: 'feed',
-          picture: window.location.href.substring(0, window.location.href.indexOf("matchpublic")) + data,
-          link: "http://sportsjun.com"+window.location.href.substring(window.location.href.indexOf("matchpublic")),
+          picture: window.location.href.substring(0, window.location.href.indexOf("match")) + data,
+          link: "http://sportsjun.com"+window.location.href.substring(window.location.href.indexOf("match")),
           caption: 'Score'
         }, function(response){console.log(response)});
         shareFacebookLadda.stop();
