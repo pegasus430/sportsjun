@@ -461,7 +461,7 @@
 
 /* Soccer Board */
 .ss_bg {
-  padding: 20px 0 142px;
+  padding: 20px 0;
 }
 .soccer_scorecard .ss_bg {position: relative;}
 .soccer_scorecard .ss_bg:before {
@@ -493,7 +493,6 @@
 	position: relative;
 	z-index: 1;
 }
-.soccer_scorecard .scoreboard_title {margin-top: -112px;}
 
 .soccer_scorecard .table_head  {
     background: #1B926C;

@@ -22,12 +22,6 @@ function postImageToFacebook(token, filename, mimeType, imageData, message) {
                 link: linkUrl,
                 caption: 'Score'
             }, function(response){
-                $.ajax({
-                    url: "/share/delete",
-                    data: "path=" + encodeURI(data),
-                    type: 'POST',
-                    success: function(response){}
-                });
             });
             shareFacebookLadda.stop();
         },
