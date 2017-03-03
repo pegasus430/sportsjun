@@ -133,7 +133,7 @@
                              @if($match_data[0]['winner_id']>0)
 
     							  <div class="form-group">
-    								<label class="win_head" style="position: absolute;left: 35%;top: 30px;color: #f27676;">Winner</label>
+    								<label class="win_head" style="position: absolute;right: 0;top: 30px;color: #f27676;">Winner</label>
                                     <h3 class="win_team">{{ ($match_data[0]['a_id']==$match_data[0]['winner_id'])?$team_a_name:$team_b_name }}</h3>
 
     							  </div>
@@ -244,9 +244,6 @@
 
 </div>
 
-<script type="text/javascript" src="{{ asset('/js/html2canvas.js') }}"></script>
-<script type="text/javascript" src="{{ asset('/js/spin.js') }}"></script>
-<script type="text/javascript" src="{{ asset('/js/ladda.js') }}"></script>
 <script>
 var teamId = $('#team option:selected').data('status');
 var bating_team = $( "#team option:selected" ).text();
@@ -257,109 +254,6 @@ $("#team_b_batting").text(bowling_team+' Innings');
 $("#team_a_bowling").text(bating_team+' Bowling');
 $("#team_a_extras").text(bating_team+' Extras');
 $("#team_b_extras").text(bowling_team+' Extras');
-
-var caption = '<?php echo $tournamentDetails['name'] ?>';
-var shareFacebookLadda = Ladda.create( document.querySelector( '.sj-social-ancr-fb' ) );
-
-function postImageToFacebook(token, filename, mimeType, imageData, message) {
-    var fd = new FormData();
-    fd.append("access_token", token);
-    fd.append("source", imageData);
-    fd.append("no_story", true);
-
-    $.ajax({
-        url: "https://graph.facebook.com/me/photos?access_token=" + token,
-        type: "POST",
-        data: fd,
-        processData: false,
-        contentType: false,
-        cache: false,
-        success: function (data) {
-            FB.api(
-                "/" + data.id + "?fields=images",
-                function (response) {
-                    shareFacebookLadda.stop();
-
-                    if (response && !response.error) {
-
-                        FB.ui({
-                          method: 'feed',
-                          link: "http://sportsjun.com/"+ window.location.href.substring(window.location.href.indexOf("matchpublic")),
-                          picture: response.images[0].source,
-                          caption: caption,
-                        }, function(response){});
-                    }
-                }
-            );
-        },
-        error: function (shr, status, data) {
-            shareFacebookLadda.stop();
-        },
-        complete: function (data) {
-        }
-    });
-}
-
-function shareTeamVSOnFacebook() {
-  shareFacebookLadda.start();
-  html2canvas($("#team_vs"), {
-    onrendered: function(canvas) {
-        canvas.toBlob(function(blob) {
-          FB.getLoginStatus(function (response) {
-              console.log(response);
-              if (response.status === "connected") {
-                  postImageToFacebook(response.authResponse.accessToken, "Canvas to Facebook/Twitter", "image/png", blob, window.location.href);
-              } else if (response.status === "not_authorized") {
-                  FB.login(function (response) {
-                      postImageToFacebook(response.authResponse.accessToken, "Canvas to Facebook/Twitter", "image/png", blob, window.location.href);
-                  }, {scope: "publish_actions"});
-              } else {
-                  FB.login(function (response) {
-                      postImageToFacebook(response.authResponse.accessToken, "Canvas to Facebook/Twitter", "image/png", blob, window.location.href);
-                  }, {scope: "publish_actions"});
-              }
-          });
-        });
-    }
-  });
-}
-
-function shareTeamVSOnTweeter() {
-  html2canvas($("#team_vs"), {
-    onrendered: function(canvas) {
-        canvas.toBlob(function(blob) {
-
-          $.ajax({
-              url: "/share/twitter",
-              type: "POST",
-              data: blob,
-              success: function (data) {
-                  console.log("success: ", data);
-              },
-              error: function (shr, status, data) {
-                  console.log("error " + data + " Status " + shr.status);
-              }
-          });
-
-          // saveAs(blob, "Dashboard.png");
-          // FB.getLoginStatus(function (response) {
-          //     console.log(response);
-          //     if (response.status === "connected") {
-          //         postImageToFacebook(response.authResponse.accessToken, "Canvas to Facebook/Twitter", "image/png", blob, window.location.href);
-          //     } else if (response.status === "not_authorized") {
-          //         FB.login(function (response) {
-          //             postImageToFacebook(response.authResponse.accessToken, "Canvas to Facebook/Twitter", "image/png", blob, window.location.href);
-          //         }, {scope: "publish_actions"});
-          //     } else {
-          //         FB.login(function (response) {
-          //             postImageToFacebook(response.authResponse.accessToken, "Canvas to Facebook/Twitter", "image/png", blob, window.location.href);
-          //         }, {scope: "publish_actions"});
-          //     }
-          // });
-        });
-    }
-  });
-}
 
 //Send Approve
 function scoreCardStatus(status)
