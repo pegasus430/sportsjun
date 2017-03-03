@@ -133,7 +133,7 @@
                              @if($match_data[0]['winner_id']>0)
 
     							  <div class="form-group">
-    								<label class="win_head" style="position: absolute;left: 35%;top: 30px;color: #f27676;">Winner</label>
+    								<label class="win_head" style="position: absolute;right: 0;top: 30px;color: #f27676;">Winner</label>
                                     <h3 class="win_team">{{ ($match_data[0]['a_id']==$match_data[0]['winner_id'])?$team_a_name:$team_b_name }}</h3>
 
     							  </div>
@@ -244,9 +244,6 @@
 
 </div>
 
-<script type="text/javascript" src="{{ asset('/js/html2canvas.js') }}"></script>
-<script type="text/javascript" src="{{ asset('/js/spin.js') }}"></script>
-<script type="text/javascript" src="{{ asset('/js/ladda.js') }}"></script>
 <script>
 var teamId = $('#team option:selected').data('status');
 var bating_team = $( "#team option:selected" ).text();
@@ -257,91 +254,6 @@ $("#team_b_batting").text(bowling_team+' Innings');
 $("#team_a_bowling").text(bating_team+' Bowling');
 $("#team_a_extras").text(bating_team+' Extras');
 $("#team_b_extras").text(bowling_team+' Extras');
-
-var caption = '<?php echo $tournamentDetails['name'] ?>';
-var shareFacebookLadda = Ladda.create( document.querySelector( '.sj-social-ancr-fb' ) );
-var shareTwitterLadda = Ladda.create( document.querySelector( '.sj-social-ancr-twt' ) );
-
-function postImageToFacebook(token, filename, mimeType, imageData, message) {
-  var fd = new FormData();
-  fd.append('file', blobToFile(imageData, "image.png"));
-  $.ajax({
-      url: "/share/facebook",
-      data: fd,
-      type: 'POST',
-      processData: false,
-      contentType: false,
-      success: function (data) {
-        console.log(window.location.href.substring(0, window.location.href.indexOf("match")) + data);
-        // Create facebook post using image
-        FB.ui({
-          method: 'feed',
-          picture: window.location.href.substring(0, window.location.href.indexOf("match")) + data,
-          link: "http://sportsjun.com"+window.location.href.substring(window.location.href.indexOf("match")),
-          caption: 'Score'
-        }, function(response){console.log(response)});
-        shareFacebookLadda.stop();
-      },
-      error: function (shr, status, data) {
-        shareFacebookLadda.stop();
-      }
-  });
-}
-
-function shareTeamVSOnFacebook() {
-  shareFacebookLadda.start();
-  html2canvas($("#team_vs"), {
-    onrendered: function(canvas) {
-        canvas.toBlob(function(blob) {
-          FB.getLoginStatus(function (response) {
-              if (response.status === "connected") {
-                  postImageToFacebook(response.authResponse.accessToken, "Canvas to Facebook/Twitter", "image/png", blob, window.location.href);
-              } else if (response.status === "not_authorized") {
-                  FB.login(function (response) {
-                      postImageToFacebook(response.authResponse.accessToken, "Canvas to Facebook/Twitter", "image/png", blob, window.location.href);
-                  });
-              } else {
-                  FB.login(function (response) {
-                      postImageToFacebook(response.authResponse.accessToken, "Canvas to Facebook/Twitter", "image/png", blob, window.location.href);
-                  });
-              }
-          });
-        });
-    }
-  });
-}
-
-function blobToFile(theBlob, fileName){
-    //A Blob() is almost a File() - it's just missing the two properties below which we will add
-    theBlob.lastModifiedDate = new Date();
-    theBlob.name = fileName;
-    return theBlob;
-}
-
-function shareTeamVSOnTweeter() {
-  shareTwitterLadda.start();
-  html2canvas($("#team_vs"), {
-    onrendered: function(canvas) {
-        canvas.toBlob(function(blob) {
-          var fd = new FormData();
-          fd.append('file', blobToFile(blob, "image.png"));
-          $.ajax({
-              url: "/share/twitter",
-              data: fd,
-              type: 'POST',
-              processData: false,
-              contentType: false,
-              success: function (data) {
-                shareTwitterLadda.stop();
-              },
-              error: function (shr, status, data) {
-                shareTwitterLadda.stop();
-              }
-          });
-        });
-    }
-  });
-}
 
 //Send Approve
 function scoreCardStatus(status)

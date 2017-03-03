@@ -696,10 +696,6 @@
 
 
 /* Table Tennis Scorecard */
-.tt_bg {
-  padding: 20px 0 105px;
-}
-.table_tennis_scorcard .form-inline {margin-top: -84px;}
 #team_vs.table_tennis_scorcard {
   margin-top: -165px;
   padding: 0;
@@ -790,7 +786,7 @@
 
 /* Squash Scorecard */
 .tt_bg {
-  padding: 20px 0 105px;
+  padding: 20px 0;
 }
 .squash_scorcard .form-inline {margin-top: -84px;}
 #team_vs.squash_scorcard {
@@ -1229,7 +1225,7 @@ div.share-scorecard {
     display: block;
 }
 .sj-fb-share {
-    background-position: 4px 1px;
+    background-position: 4px -1px;
     height: 20px;
     width: 22px;
 }
@@ -1242,7 +1238,7 @@ div.share-scorecard {
     background: #00ACED;
 }
 .sj-twt-share {
-    background-position: -135px 2px;
+    background-position: -135px 0px;
     height: 20px;
     width: 22px;
 }

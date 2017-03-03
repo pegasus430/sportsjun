@@ -25,18 +25,18 @@ $gp_url = 'https://plus.google.com/share?url=' . url('matchpublic/scorecard/view
                 <tbody>
                         <tr>
                                 <td class="sj-social-td">
-                                        <button onclick="shareTeamVSOnFacebook();" class="sj-social-ancr sj-social-ancr-fb ladda-button" data-style="slide-left" rel="noreferrer" style="margin: 0; padding: 0;">
+                                        <button onclick="shareTeamVSOnFacebook();" class="ladda-button sj-social-ancr sj-social-ancr-fb" data-style="slide-left" rel="noreferrer" style="margin: 0; padding: 2px;">
                                           <span>
                                             <span class="sj-ico sj-fb-share" style="float: left;"></span>
-                                            <span class="sj-font-12" style="top: 0;">Share</span>
+                                            <span class="sj-font-12" style="top: 2px;">Share</span>
                                           </span>
                                         </button>
                                 </td>
                                 <td class="sj-social-td">
-                                        <button onclick="shareTeamVSOnTweeter();" class="sj-social-ancr sj-social-ancr-twt ladda-button" data-style="slide-left" rel="noreferrer" style="margin: 0; padding: 0;">
+                                        <button onclick="shareTeamVSOnTweeter();" class="ladda-button sj-social-ancr sj-social-ancr-twt" data-style="slide-left" rel="noreferrer" style="margin: 0; padding: 2px;">
                                           <span>
                                             <span class="sj-ico sj-twt-share" style="float: left;"></span>
-                                            <span class="sj-font-12" style="top: 0;">Tweet</span>
+                                            <span class="sj-font-12" style="top: 2px;">Tweet</span>
                                           </span>
                                         </button>
                                 </td>
