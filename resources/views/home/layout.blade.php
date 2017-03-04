@@ -13,6 +13,7 @@ $css_version    = config('constants.CSS_VERSION');
 ?>
 <!-- Css Files -->
         <link href="{{ asset('/css/jquery-ui.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
+        <link href="{{ asset('/css/ladda.min.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
         <link href="{{ asset('/css/sportsjun.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
         <link href="{{ asset('/css/album-popup.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
         <link href="{{ asset('/css/marketplace-showdetails.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
@@ -29,7 +30,6 @@ $css_version    = config('constants.CSS_VERSION');
         <link rel="stylesheet" href="{{ asset('/css/sidebar-menu.css') }}?v=<?php echo $css_version;?>" />
         <link rel="stylesheet" href="{{ asset('/css/select-multiple.css') }}?v=<?php echo $css_version;?>" />
         <link rel="stylesheet" href="{{ asset('/css/select-multiple.css') }}?v=<?php echo $css_version;?>" />
-        <link rel="stylesheet" href="{{ asset('/css/ladda.min.css') }}?v=<?php echo $css_version;?>" />
 
 
         <script src="{{ asset('/home/js/jquery.js') }}?v=<?php echo $js_version;?>"></script>
