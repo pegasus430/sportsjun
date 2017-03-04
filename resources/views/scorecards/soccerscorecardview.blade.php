@@ -148,7 +148,7 @@
                           <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
                                     <h4 class="team_name">    {{$tournamentDetails['name']}} Tournament </h4>
                                   </a>
-
+                                
                        </center>
                     </div>
                 </div>
@@ -160,14 +160,19 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                  <div class="col-xs-12">
-                    <h5 class="scoreboard_title">Soccer Scorecard
+            </div>
+        </div>
+
+        <div class="container pull-up">
+
+            <div class="panel panel-default">
+                <div class="col-md-12">
+                    <h5 class="scoreboard_title">Soccer Scorecard 
                             @if(!empty($match_data[0]['match_category']))
                              <span class='match_type_text'>
                              ({{ucfirst($match_data[0]['match_category']) }})
                              </span>
-                                @endif
+                                @endif  
                     </h5>
 
                     <div class="clearfix"></div>
@@ -175,13 +180,13 @@
                         @if($match_data[0]['winner_id']>0)
 
                             <div class="form-group">
-                                <label class="win_head" style="position: absolute;right: 0;top: 0;color: #f27676;">Winner</label>
-                                <h3 class="win_team" style="margin-top: 47px;">{{ ($match_data[0]['a_id']==$match_data[0]['winner_id'])?$team_a_name:$team_b_name }}</h3>
+                                <label class="win_head">Winner</label>
+                                <h3 class="win_team">{{ ($match_data[0]['a_id']==$match_data[0]['winner_id'])?$team_a_name:$team_b_name }}</h3>
                             </div>
                             <BR>
                         @if(!empty($match_data[0]['player_of_the_match']))
                             <div class="form-group">
-                                <label style="color:red;position: absolute;right: 0;top: 62px;">PLAYER OF THE MATCH</label>
+                                <label class="" style="color:red">PLAYER OF THE MATCH</label>
                                 <h4 class="win_team">{{ Helper::getUserDetails($match_data[0]['player_of_the_match'])->name }}</h4>
 
                             </div>
@@ -205,7 +210,7 @@
 
                                 <div class="form-group">
                                     <label>Winner is Not Updated</label>
-
+                                   
                                 @if( $match_data[0]['selected_half_or_quarter'])
                                     HALF {{$match_data[0]['selected_half_or_quarter']}}
                                 @endif
@@ -216,13 +221,8 @@
                         @include('scorecards.share')
                         <p class="match-status">@include('scorecards.scorecardstatusview')</p>
                     </div>
-
-                  </div>
                 </div>
             </div>
-        </div>
-
-        <div class="container pull-up">
 
             <!-- Lineup and substitutes -->
             <div class="row">
@@ -355,7 +355,7 @@
                                 <th colspan="5"></th>
                             </tr>
                             </thead>
-
+                            
                                 <tbody>
 
                             @if(count($first_half)>0)
@@ -387,7 +387,7 @@
                                     <td colspan="2">{{$ball_percentage_b }} %</td>
                                 <tr>
                             @endif
-                                </tbody>
+                                </tbody>                           
                         </table>
                     </div>
 
@@ -490,7 +490,7 @@
                                     </tr>
                                 @endforeach
                             @endif
-
+                           
                             </tbody>
                         </table>
                     </div>
@@ -511,11 +511,11 @@
                                         @foreach($penalties['team_a']['players'] as $i=>$penalty_player)
                                             <tr>
                                                 <td colspan=2>{{$penalty_player['name']}}</td>
-                                                <td>
+                                                <td> 
 
                         0 <button class="btn-red-card btn-card btn-circle btn-penalty btn_team_a_{{$i}} {{$penalty_player['goal']=='0'?'btn-penalty-chosen':''}} " disabled > </button>
 
-                        1 <button class="btn-green-card btn-card btn-circle btn-penalty btn_team_a_{{$i}} {{$penalty_player['goal']=='1'?'btn-penalty-chosen':''}} "  disabled=""   > </button>
+                        1 <button class="btn-green-card btn-card btn-circle btn-penalty btn_team_a_{{$i}} {{$penalty_player['goal']=='1'?'btn-penalty-chosen':''}} "  disabled=""   > </button> 
 
                         </td>
                                             </tr>
@@ -535,13 +535,13 @@
                                         @foreach($penalties['team_b']['players'] as $i=>$penalty_player)
                                             <tr>
                                                 <td colspan=2>{{$penalty_player['name']}}</td>
-                                                <td>
+                                                <td> 
 
                         0 <button class="btn-red-card btn-card btn-circle btn-penalty btn_team_b_{{$i}} {{$penalty_player['goal']=='0'?'btn-penalty-chosen':''}} " disabled=""  > </button>
 
-                        1 <button class="btn-green-card btn-card btn-circle btn-penalty btn_team_b_{{$i}} {{$penalty_player['goal']=='1'?'btn-penalty-chosen':''}}" disabled=""  > </button>
+                        1 <button class="btn-green-card btn-card btn-circle btn-penalty btn_team_b_{{$i}} {{$penalty_player['goal']=='1'?'btn-penalty-chosen':''}}" disabled=""  > </button> 
 
-
+                                                    
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -561,7 +561,7 @@
     </thead>
     </table>
 
-
+    
           @include('scorecards.common.referees')
     </div>
 
@@ -600,8 +600,8 @@
 
             <button class="btn btn-event" type="button" onclick="return  SJ.SCORECARD.allow_match_edit_by_admin({{$match_data[0]['id']}})">
                 Edit Match
-            </button>
-
+            </button>              
+           
         </div>
      @endif
 
@@ -639,7 +639,7 @@
             });
         }
 
-
+    
     </script>
 
 <script type="text/javascript">
