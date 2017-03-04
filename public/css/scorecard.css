@@ -461,7 +461,7 @@
 
 /* Soccer Board */
 .ss_bg {
-  padding: 20px 0;
+  padding: 20px 0 142px;
 }
 .soccer_scorecard .ss_bg {position: relative;}
 .soccer_scorecard .ss_bg:before {
@@ -493,6 +493,7 @@
 	position: relative;
 	z-index: 1;
 }
+.soccer_scorecard .scoreboard_title {margin-top: -112px;}
 
 .soccer_scorecard .table_head  {
     background: #1B926C;
@@ -695,6 +696,10 @@
 
 
 /* Table Tennis Scorecard */
+.tt_bg {
+  padding: 20px 0 105px;
+}
+.table_tennis_scorcard .form-inline {margin-top: -84px;}
 #team_vs.table_tennis_scorcard {
   margin-top: -165px;
   padding: 0;
@@ -785,7 +790,7 @@
 
 /* Squash Scorecard */
 .tt_bg {
-  padding: 20px 0;
+  padding: 20px 0 105px;
 }
 .squash_scorcard .form-inline {margin-top: -84px;}
 #team_vs.squash_scorcard {
@@ -1224,7 +1229,7 @@ div.share-scorecard {
     display: block;
 }
 .sj-fb-share {
-    background-position: 4px -1px;
+    background-position: 4px 1px;
     height: 20px;
     width: 22px;
 }
@@ -1237,7 +1242,7 @@ div.share-scorecard {
     background: #00ACED;
 }
 .sj-twt-share {
-    background-position: -135px 0px;
+    background-position: -135px 2px;
     height: 20px;
     width: 22px;
 }

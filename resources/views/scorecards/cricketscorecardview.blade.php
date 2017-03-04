@@ -133,7 +133,7 @@
                              @if($match_data[0]['winner_id']>0)
 
     							  <div class="form-group">
-    								<label class="win_head" style="position: absolute;right: 0;top: 30px;color: #f27676;">Winner</label>
+    								<label class="win_head" style="position: absolute;left: 35%;top: 30px;color: #f27676;">Winner</label>
                                     <h3 class="win_team">{{ ($match_data[0]['a_id']==$match_data[0]['winner_id'])?$team_a_name:$team_b_name }}</h3>
 
     							  </div>
@@ -244,6 +244,9 @@
 
 </div>
 
+<script type="text/javascript" src="{{ asset('/js/html2canvas.js') }}"></script>
+<script type="text/javascript" src="{{ asset('/js/spin.js') }}"></script>
+<script type="text/javascript" src="{{ asset('/js/ladda.js') }}"></script>
 <script>
 var teamId = $('#team option:selected').data('status');
 var bating_team = $( "#team option:selected" ).text();
@@ -262,7 +265,6 @@ var shareTwitterLadda = Ladda.create( document.querySelector( '.sj-social-ancr-t
 function postImageToFacebook(token, filename, mimeType, imageData, message) {
   var fd = new FormData();
   fd.append('file', blobToFile(imageData, "image.png"));
-  var linkUrl = window.location.href.substring(window.location.href.indexOf("match"))
   $.ajax({
       url: "/share/facebook",
       data: fd,
@@ -270,13 +272,14 @@ function postImageToFacebook(token, filename, mimeType, imageData, message) {
       processData: false,
       contentType: false,
       success: function (data) {
-        var linkUrl = window.location.href.replace("match", "matchpublic").replace("http://localhost:8000", "http://sportsjun.com");
+        console.log(window.location.href.substring(0, window.location.href.indexOf("match")) + data);
+        // Create facebook post using image
         FB.ui({
           method: 'feed',
           picture: window.location.href.substring(0, window.location.href.indexOf("match")) + data,
-          link: linkUrl,
+          link: "http://sportsjun.com"+window.location.href.substring(window.location.href.indexOf("match")),
           caption: 'Score'
-        }, function(response){});
+        }, function(response){console.log(response)});
         shareFacebookLadda.stop();
       },
       error: function (shr, status, data) {

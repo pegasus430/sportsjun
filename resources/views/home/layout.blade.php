@@ -128,10 +128,6 @@ $css_version    = config('constants.CSS_VERSION');
 <script src="{{ asset('/home/js/bootstrap.min.js') }}?v=<?php echo $js_version;?>"></script>
 <script src="{{ elixir('gen/home/js/lib_mix.js') }}"></script>
 <script src="{{ elixir('gen/home/js/home_mix.js') }}"></script>
-<script type="text/javascript" src="{{ asset('/js/html2canvas.js') }}"></script>
-<script type="text/javascript" src="{{ asset('/js/spin.js') }}"></script>
-<script type="text/javascript" src="{{ asset('/js/ladda.js') }}"></script>
-<script type="text/javascript" src="{{ asset('/js/scorecard-share.js') }}"></script>
 
 </body>
 </html>

@@ -72,10 +72,6 @@
     <script src="{{ asset('/js/sidebar-menu.js') }}?v=<?php echo $js_version;?>"></script>
     <script src="{{ asset('/js/select2/select2.full.min.js') }}?v=<?php echo $js_version;?>"></script>
     <script type="text/javascript" src="/js/jspdf.js">  </script>
-    <script type="text/javascript" src="{{ asset('/js/html2canvas.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('/js/spin.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('/js/ladda.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('/js/scorecard-share.js') }}"></script>
 
 
     <script type="text/javascript">
@@ -87,6 +83,9 @@
             $(".page-load").fadeOut("slow");;
         });
     </script>
+
+
+
 </head>
 
 <div id="fb-root"></div>
