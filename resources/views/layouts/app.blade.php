@@ -16,6 +16,7 @@
     <link href="{{ asset('/css/bootstrap-datetimepicker.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
     <link href="{{ asset('/css/jquery-confirm.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
     <link href="{{ asset('/css/jquery-ui.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
+    <link href="{{ asset('/css/ladda.min.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
     <link href="{{ asset('/css/sportsform.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
     <link href="{{ asset('/css/bootstrap-switch.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
     <link href="{{ asset('/css/album-popup.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
@@ -32,7 +33,6 @@
     <link rel="stylesheet" href="{{ asset('/css/sidebar-menu.css') }}?v=<?php echo $css_version;?>" />
     <link rel="stylesheet" href="{{ asset('/css/select-multiple.css') }}?v=<?php echo $css_version;?>" />
     <link rel="stylesheet" href="{{ asset('/css/select2.min.css') }}?v=<?php echo $css_version;?>" />
-    <link rel="stylesheet" href="{{ asset('/css/ladda.min.css') }}?v=<?php echo $css_version;?>" />
 
     <!-- Fonts -->
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,900' rel='stylesheet' type='text/css'>

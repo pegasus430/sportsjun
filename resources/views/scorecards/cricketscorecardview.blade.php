@@ -265,6 +265,7 @@ var shareTwitterLadda = Ladda.create( document.querySelector( '.sj-social-ancr-t
 function postImageToFacebook(token, filename, mimeType, imageData, message) {
   var fd = new FormData();
   fd.append('file', blobToFile(imageData, "image.png"));
+  var linkUrl = window.location.href.substring(window.location.href.indexOf("match"))
   $.ajax({
       url: "/share/facebook",
       data: fd,
@@ -272,14 +273,13 @@ function postImageToFacebook(token, filename, mimeType, imageData, message) {
       processData: false,
       contentType: false,
       success: function (data) {
-        console.log(window.location.href.substring(0, window.location.href.indexOf("match")) + data);
-        // Create facebook post using image
+        var linkUrl = window.location.href.replace("match", "matchpublic").replace("http://localhost:8000", "http://sportsjun.com");
         FB.ui({
           method: 'feed',
           picture: window.location.href.substring(0, window.location.href.indexOf("match")) + data,
-          link: "http://sportsjun.com"+window.location.href.substring(window.location.href.indexOf("match")),
+          link: linkUrl,
           caption: 'Score'
-        }, function(response){console.log(response)});
+        }, function(response){});
         shareFacebookLadda.stop();
       },
       error: function (shr, status, data) {
