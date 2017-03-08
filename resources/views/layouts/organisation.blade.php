@@ -29,9 +29,9 @@
             <div class="pull-left"> <span><i class="fa fa-map-marker"></i> {{$organisation->location}}</span> <a href="#" class="follow"><i class="fa fa-star-o"></i> Follow Us</a> </div>
         </div>
         <div class="col-md-3">
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="index.php"><span class="fa fa-home fa-2x"></span></a></li>
-                <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-user fa-2x"></span></a>
+        <ul class="nav navbar-nav navbar-right">
+                <li><a href="index.php"><span class="fa fa-home"></span></a></li>
+                <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-user"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="#"><span class="fa fa-user-circle-o"></span> User Profile</a></li>
                         <li><a href="#"><span class="fa fa-trophy"></span> Sports Profile</a></li>
@@ -39,6 +39,7 @@
                         <li><a href="#"><span class="fa fa-power-off"></span> Logout</a></li>
                     </ul>
                 </li>
+                <li><a href="index.php"><span class="fa fa-shopping-cart"></span><span class="cart-bubble">0</span></a></li>
                 <!--
                 <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-plus"></span> Create New</a>
     <ul class="dropdown-menu">
@@ -50,7 +51,7 @@
             </ul>
         </div>
     </div>
-</div>
+</div> 
         <!-- Header -->
       <header>
 
@@ -105,10 +106,12 @@
 
 
     <!-- Footer -->
-    <footer class="container">
+   <footer class="container">
     <hr>
     <div class="col-md-12">
-        <div class="text-center">Powered by Sportsjun.com </div>
+        <div class="social-icons-wrapper text-center"> <a href="#" target="_self" class="google-plus"><i class="fa fa-google-plus"></i></a> <a href="#" target="_self" class="twitter"><i class="fa fa-twitter"></i></a> <a href="#" target="_self" class="facebook"><i class="fa fa-facebook"></i></a> <a href="#" target="_self" class="linkedin"><i class="fa fa-linkedin"></i></a> </div>
+        <div class="text-center copyright"> Powered by
+            <br> <img src="/org/images/sportsjun-logo.png" height=40 alt="" /></div>
     </div>
     <div class="clearfix"></div>
     <hr> </footer>
