@@ -272,7 +272,7 @@ function postImageToFacebook(token, filename, mimeType, imageData, message) {
       processData: false,
       contentType: false,
       success: function (data) {
-        var linkUrl = window.location.href.replace("match", "matchpublic").replace("http://localhost:8000", "http://sportsjun.com");
+        var linkUrl = window.location.href.replace("match", "matchpublic").replace('edit','view').replace("http://localhost:8000", "http://sportsjun.com");
         console.log("picture:", window.location.href.substring(0, window.location.href.indexOf("match")) + data);
         console.log("link:", linkUrl);
         // Create facebook post using image
