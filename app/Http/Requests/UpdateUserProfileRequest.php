@@ -46,7 +46,7 @@ class UpdateUserProfileRequest extends Request {
             'dob' => 'date_format:'.config('constants.DATE_FORMAT.VALIDATION_DATE_FORMAT'),
             'image' => 'mimes:png,gif,jpeg,jpg',
 			// 'email' => 'email|unique:users,email,'.Request::get('id')
-			'email' =>'required|email|unique:users,email,'.$user_id,
+			//'email' =>'required|email|unique:users,email,'.$user_id,
             'contact_number' => 'required|'.config('constants.VALIDATION.PHONE')			
 			];
     }
