@@ -7,6 +7,7 @@ use App\Helpers\Helper;
 use App\Http\Requests\Auth\OrganizationRegisterRequest;
 use App\Model\Organization;
 use App\Repository\CityRepository;
+use App\Repository\CountryRepository;
 use App\Repository\StateRepository;
 use App\User;
 use Validator;
@@ -142,7 +143,7 @@ class AuthController extends Controller
                     'state_id' => $data['state_id'],
                     'state' => object_get(StateRepository::getModel($data['state_id']), 'state_name'),
                     'country_id' => $data['country_id'],
-                    'country' => object_get(CityRepository::getModel($data['country_id']), 'country_name'),
+                    'country' => object_get(CountryRepository::getModel($data['country_id']), 'country_name'),
                     'logo' => $logo,
                     'about' => array_get($data,'org_about'),
                     'user_id' => $user->id,
