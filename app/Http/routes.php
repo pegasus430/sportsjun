@@ -97,7 +97,7 @@ Route::get('auth-check', ['uses' => 'User\UserController@authCheck', 'as' => 'au
 
 //to get facilities for match schedules
 
-
+Route::get('route', 'User\OrganizationController@index');
 
 //admin tournaments controller
 
@@ -106,3 +106,4 @@ Route::any( '{catchall}', function ( $page ) {
     $page = \App\Model\Page::where('linkname',$page)->first();
     return view('pages.view',compact('page'));
 } )->where('catchall', '(?!captcha)(?!_debugbar)(.*)');
+

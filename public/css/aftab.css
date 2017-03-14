@@ -12,7 +12,7 @@ button:focus,
 .btn:active.focus,
 .btn.active.focus {
     outline: none;
-  	outline-offset: 0;
+  	outline-offset: 0; 
 }
 .table .btn-danger {line-height: 8px;width: 25px;height: 25px;color: #f27676;background-color: #FFFFFF;border-color: #999;}
 .table .btn-danger:hover {color: #fff; background-color: #f27676; border-color: #f27676;}
@@ -1157,7 +1157,7 @@ nav > div > div > aside > li a {
   color: rgba(255,255,255,0.8);
   text-align: center;
   text-decoration: none;
-  padding: 5px 15px;
+  padding: 5px 8px;
   /* background: #1B926C; */
   font-family:'Roboto', Arial, Helvetica, sans-serif;
   font-size:14px;

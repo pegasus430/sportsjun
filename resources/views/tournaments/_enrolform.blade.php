@@ -120,7 +120,7 @@
             <div class="section">
                 <label class="form_label"><br/></label> 
                 <label class = "option block">
-                    {!! Form::checkbox('is_sold_out', 1, 0, ['id' => 'is_sold_out', 'class'=>'gui-input']) !!}
+                    {!! Form::checkbox('is_sold_out', 1, $tournament->is_sold_out, ['id' => 'is_sold_out', 'class'=>'gui-input']) !!}
                     <span class = "checkbox"></span>{{ trans('message.tournament.fields.is_sold_out') }}
                     @if ($errors->has('is_sold_out'))
                         <p class = "help-block">{{ $errors->first('is_sold_out') }}</p> @endif

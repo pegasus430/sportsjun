@@ -490,11 +490,12 @@ $(function () {
 	var ttype = $('#type').val();
 	if(ttype=='knockout')
 	{
-		$('#hide_groups').hide();
-		$('[name=groups_number]').val(1);
-		$('[name=groups_teams]').val(2);
+		//$('#hide_groups').hide();
+		$('[name=groups_number]').val(1).attr('readonly',true);
+		$('[name=groups_teams]').val(32);
 	}else
 	{
+        $('[name=groups_number]').removeAttr('readonly');
 		$('#hide_groups').show();
 	}
 	function getGroups()
@@ -502,11 +503,12 @@ $(function () {
 		var type = $('#type').val();
 		if(type=='knockout')
 		{
-			$('#hide_groups').hide();
-			$('[name=groups_number]').val(1);
-			$('[name=groups_teams]').val(2);
+			     //$('#hide_groups').hide();
+        		$('[name=groups_number]').val(1).attr('readonly',true);
+                $('[name=groups_teams]').val(32);
 		}else
 		{
+            $('[name=groups_number]').removeAttr('readonly');
 			$('#hide_groups').show();
 		}
 	}

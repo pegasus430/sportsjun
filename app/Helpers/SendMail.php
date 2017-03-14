@@ -53,9 +53,17 @@ class SendMail {
 				});
 				//check for failure
 				if(count(Mail::failures()) > 0)
-				{
+				{ 
 					//insert into emails table
-					SendMail::insert_emails(Auth::user()->id,$to_user_id,$type,$subject,$view,$to_email_id,$cc_address,$bcc_address,$status,$flag,$view_data);					
+
+					if(isset(Auth::user()->id)) {
+				//return redirect('/home');
+							$from_user_id = Auth::user()->id;
+						}else{
+							$from_user_id = $to_user_id;
+						}
+
+					SendMail::insert_emails($from_user_id,$to_user_id,$type,$subject,$view,$to_email_id,$cc_address,$bcc_address,$status,$flag,$view_data);					
 					return false;
 				}
 				else

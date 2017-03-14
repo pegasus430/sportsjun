@@ -2690,7 +2690,7 @@ fieldset[disabled] .btn-sj-secondary.active {
 .modal-body .form-body { padding:10px 10px 0px !important;}
 .modal-body .form-body .input-group-addon{ background:#f2f4fa; color:#b5c1c7;}
 .modal-footer{ background:#f3f5fa;}
-.sj_add_but{background:#8e9bd0;color:#FFFFFF !important;padding: 2px 8px;margin: 2px 0 5px 0;border-radius:40px;font-size: 12px;display:inline-block;text-decoration:none !important;}
+.sj_add_but, .sj_add_but_closed{background:#8e9bd0;color:#FFFFFF !important;padding: 2px 8px;margin: 2px 0 5px 0;border-radius:40px;font-size: 12px;display:inline-block;text-decoration:none !important;}
 .sj_add_but:hover{ text-decoration:none; color:#FFFFFF !important;}
 .sj_add_but i{padding: 0 4px 0 0;font-size: 11px;}
 .view_tageline {border-top: 1px solid #d9dde5;height: 0;text-align: center;display:block;margin:15px 0;width:100%;font-size: 12px;}

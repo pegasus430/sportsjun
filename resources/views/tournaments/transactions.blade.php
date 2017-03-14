@@ -44,7 +44,7 @@
 	           			<td><i class="fa fa-user"></i> {{$detail['name']}}</td>
 	           			<td>	{{$detail['team']}}</td>
 	           			<td><i class="fa fa-envelope"></i> {{$detail['email']}}</td>
-	           			<td>{{date("j M Y, h:m A", strtotime($detail['date']))}} </td>
+	           			<td>{{date("jS M, Y", strtotime($detail['date']))}} </td>
 	           			<td><i class="fa fa-inr"></i> {{$detail['price']}}</td>
 	           		</tr>
 	          		

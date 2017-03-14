@@ -16,6 +16,7 @@
     <link href="{{ asset('/css/bootstrap-datetimepicker.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
     <link href="{{ asset('/css/jquery-confirm.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
     <link href="{{ asset('/css/jquery-ui.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
+    <link href="{{ asset('/css/ladda.min.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
     <link href="{{ asset('/css/sportsform.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
     <link href="{{ asset('/css/bootstrap-switch.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
     <link href="{{ asset('/css/album-popup.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
@@ -71,7 +72,7 @@
     <script src="{{ asset('/js/sidebar-menu.js') }}?v=<?php echo $js_version;?>"></script>
     <script src="{{ asset('/js/select2/select2.full.min.js') }}?v=<?php echo $js_version;?>"></script>
     <script type="text/javascript" src="/js/jspdf.js">  </script>
-    
+
 
     <script type="text/javascript">
         var base_url = "{{URL::to('/')}}";
@@ -92,7 +93,7 @@
   window.fbAsyncInit = function() {
     // init the FB JS SDK
     FB.init({
-      appId      : "{{env('FACEBOOK_APP_ID')}}",   // App ID from the app dashboard     
+      appId      : "{{env('FACEBOOK_APP_ID')}}",   // App ID from the app dashboard
       status     : true,                                 // Check Facebook Login status
       xfbml      : true                                  // Look for social plugins on the page
     });
@@ -136,63 +137,63 @@
      // $(document).ready(function() {
      //   // $('#payment_sub').prop('disabled', true);
      //    //$('#guest_payment_sub').prop('disabled', true);
-        
+
      //    var isChecked = $("#terms_agree").is(":checked");
      //        if (isChecked) {
      //             //$('#payment_sub').prop('disabled', false);
      //             //$('#guest_payment_sub').prop('disabled', false);
      //        } else {
-                
+
      //        }
 
 
      // //        $("#terms_agree_label").click(function() { alert('asdasd');
      // //           var agreeChecked = $("#terms_agree").is(":checked");
-              
+
      // //                if (agreeChecked) {
      // //                     $('#payment_sub').prop('disabled', true);
      // //                     $('#agree_conditions-val').show();
      // //                     $('#guest_payment_sub').prop('disabled', true);
-                         
+
      // //                  }else{
      // //                     $('#payment_sub').prop('disabled', false);
      // //                      $('#agree_conditions-val').hide();
      // //                      $('#guest_payment_sub').prop('disabled', false);
      // //                  }
-             
+
      // //         });
      // });
 
-    
+
      $('#payment_sub').click(function() {
-        
+
         var agreeChecked = $("#terms_agree").is(":checked");
-              
+
                     if (agreeChecked) {
                          $('#agree_conditions-val').hide();
                     }else{
                       $('#agree_conditions-val').show();
-                      return false  
+                      return false
                     }
         });
 
 
      $('#guest_payment_sub').click(function() {
              var agreeChecked = $("#terms_agree").is(":checked");
-              
+
                     if (agreeChecked) {
                          $('#agree_conditions-val').hide();
                     }else{
                       $('#agree_conditions-val').show();
-                      return false  
+                      return false
                     }
             });
 
 
 
-     
 
-   
+
+
 
 //TODO: avoid using onload, only 1 function can set on time overiding previous values
 // onload=function(){

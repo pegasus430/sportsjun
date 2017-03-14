@@ -1,7 +1,7 @@
 @extends(Auth::user() ? 'layouts.app' : 'home.layout')
 @section('content')
 
-<?php 
+<?php
     $team_a_name = $user_a_name;
     $team_b_name = $user_b_name;
 
@@ -15,14 +15,14 @@
     $match_settings   =   Helper::getMatchSettings($match_data[0]['tournament_id'],$match_data[0]['sports_id']);
 
     isset($match_details->preferences)?$preferences=$match_details->preferences:[];
-    
+
     if(isset($preferences->number_of_sets))$set=$preferences->number_of_sets ;
     else $set=$match_settings->number_of_sets;
 
     // $set=$match_settings->number_of_sets;
 
     ${'team_'.$match_data[0]['a_id'].'_score'}='0 sets';
-    ${'team_'.$match_data[0]['b_id'].'_score'}='0 sets'; 
+    ${'team_'.$match_data[0]['b_id'].'_score'}='0 sets';
 
     $team_a_info='';
     $team_b_info='';
@@ -40,7 +40,7 @@ if($match_data[0]['game_type']=='rubber'){
   ${'team_'.$team_a_id.'_score'}=$match_data[0]['a_score'];
   ${'team_'.$team_b_id.'_score'}=$match_data[0]['b_score'];
   }
-  
+
 ?>
 
 
@@ -48,7 +48,7 @@ if($match_data[0]['game_type']=='rubber'){
     .tie_breaker{
         color: red;
         padding-top: 3px !important;
-        padding-left: 7px;    
+        padding-left: 7px;
         position: absolute;
     }
 
@@ -63,13 +63,13 @@ if($match_data[0]['game_type']=='rubber'){
                     <div class="row">
                         <div class="col-md-4 col-sm-12">
                         	<div class="team_logo">
-                       
+
 						 @if($user_a_logo['url']!='')
 							<!--<img class="img-responsive img-circle" width="270" height="204" src="{{ url('/uploads/'.$upload_folder.'/'.$user_a_logo['url']) }}" onerror="this.onerror=null;this.src='{{ asset('/images/default-profile-pic.jpg') }}';">-->
-						  {!! Helper::Images($user_a_logo['url'],$upload_folder,array('class'=>'img-responsive img-circle','height'=>110,'width'=>110) )!!}	
+						  {!! Helper::Images($user_a_logo['url'],$upload_folder,array('class'=>'img-responsive img-circle','height'=>110,'width'=>110) )!!}
 							@else
 							<!--<img  class="img-responsive img-circle" width="270" height="204" src="{{ asset('/images/default-profile-pic.jpg') }}">-->
-							 {!! Helper::Images('default-profile-pic.jpg','images',array('class'=>'img-responsive img-circle','height'=>110,'width'=>110) )!!}	
+							 {!! Helper::Images('default-profile-pic.jpg','images',array('class'=>'img-responsive img-circle','height'=>110,'width'=>110) )!!}
 						@endif
                         	</div>
                         </div>
@@ -104,14 +104,14 @@ if($match_data[0]['game_type']=='rubber'){
                         </div>
                               <div class="col-md-4 col-sm-12">
                               	<div class="team_logo">
-                                
-								
+
+
 								 @if($user_b_logo['url']!='')
                 <!--<img class="img-responsive img-circle" width="270" height="204" src="{{ url('/uploads/'.$upload_folder.'/'.$user_b_logo['url']) }}" onerror="this.onerror=null;this.src='{{ asset('/images/default-profile-pic.jpg') }}';">-->
-			 {!! Helper::Images($user_b_logo['url'],$upload_folder,array('class'=>'img-responsive img-circle','height'=>110,'width'=>110) )!!}	
+			 {!! Helper::Images($user_b_logo['url'],$upload_folder,array('class'=>'img-responsive img-circle','height'=>110,'width'=>110) )!!}
                 @else
                <!-- <img  class="img-responsive img-circle"width="270" height="204" src="{{ asset('/images/default-profile-pic.jpg') }}">-->
-		   	 {!! Helper::Images('default-profile-pic.jpg','images',array('class'=>'img-responsive img-circle','height'=>110,'width'=>110) )!!}	
+		   	 {!! Helper::Images('default-profile-pic.jpg','images',array('class'=>'img-responsive img-circle','height'=>110,'width'=>110) )!!}
               @endif
               </div>
                               </div>
@@ -135,14 +135,14 @@ if($match_data[0]['game_type']=='rubber'){
                     <div class='col-xs-12'>
                         <center>
                           <a href="/tournaments/groups/{{$tournamentDetails['id']}}">
-                                    <h4>    {{$tournamentDetails['name']}} Tournament </h4>
+                                    <h4 class="team_name">    {{$tournamentDetails['name']}} Tournament </h4>
                                   </a>
-                                
+
                        </center>
                     </div>
                 </div>
             @endif
-            
+
             <div class="row">
               <div class="col-xs-12">
                   <div class="match_loc">
@@ -153,6 +153,32 @@ if($match_data[0]['game_type']=='rubber'){
 			<h5 class="scoreboard_title">Tennis Scorecard @if($match_data[0]['match_type']!='other')
 											<span class='match_type_text'>({{ $match_data[0]['match_type']=='odi'?strtoupper($match_data[0]['match_type']):ucfirst($match_data[0]['match_type'])}}, {{ucfirst($match_data[0]['match_category']) }})</span>
 									@endif</h5>
+
+                <div class="form-inline">
+            	@if($match_data[0]['winner_id']>0)
+            	<div class="form-group">
+                    <label class="win_head" style="position: absolute;right: 0;top: 5px;color: #f27676;">Winner</label>
+                    <h3 class="win_team" style="margin-top: 69px;">{{ ($match_data[0]['a_id']==$match_data[0]['winner_id'])?$user_a_name:$user_b_name }}</h3>
+                </div>
+
+                  @elseif($match_data[0]['match_result'] == "washout")
+                                                                 <div class="form-group">
+                                                                     <label>MATCH ENDED DUE TO</label>
+                                                                     <h3 class="win_team">Washout</h3>
+                                                                 </div>
+
+            	@else
+
+                  <div class="form-group">
+                    <label>Winner is not updated</label>
+
+                  </div>
+
+            	@endif
+                <p class="match-status mg"><a href="{{ url('user/album/show').'/match'.'/0'.'/'.$action_id }}"><span class="fa" style="float: left; margin-left: 8px;"><img src="{{ asset('/images/sc-gallery.png') }}" height="18" width="22"></span> <b>Media Gallery</b></a></p>
+            	@include('scorecards.share')
+                    <p class="match-status">@include('scorecards.scorecardstatusview')</p>
+                </div>
         </div>
           @if (session('status'))
           <div class="alert alert-success">{{ session('status') }}</div>
@@ -162,31 +188,6 @@ if($match_data[0]['game_type']=='rubber'){
   <div class="container">
     <div class="row">
       <div class="col-md-12">
-    <div class="form-inline">    
-	@if($match_data[0]['winner_id']>0)
-	<div class="form-group">
-        <label class="win_head">Winner</label>
-        <h3 class="win_team">{{ ($match_data[0]['a_id']==$match_data[0]['winner_id'])?$user_a_name:$user_b_name }}</h3>
-    </div>
-
-      @elseif($match_data[0]['match_result'] == "washout")
-                                                     <div class="form-group">
-                                                         <label>MATCH ENDED DUE TO</label>
-                                                         <h3 class="win_team">Washout</h3>
-                                                     </div>
-
-	@else
-
-      <div class="form-group">
-        <label>Winner is not updated</label>
-
-      </div>
-
-	@endif
-    <p class="match-status mg"><a href="{{ url('user/album/show').'/match'.'/0'.'/'.$action_id }}"><span class="fa" style="float: left; margin-left: 8px;"><img src="{{ asset('/images/sc-gallery.png') }}" height="18" width="22"></span> <b>Media Gallery</b></a></p>
-	@include('scorecards.share')
-        <p class="match-status">@include('scorecards.scorecardstatusview')</p>
-    </div>
 
        <!-- Match has no results -->
 
@@ -200,7 +201,7 @@ if($match_data[0]['game_type']=='rubber'){
         <thead>
           <tr class='team_fall team_title_head'>
 
-             <th>PLAYERS</th> 
+             <th>PLAYERS</th>
 
              @for($set_index=1; $set_index<=$set; $set_index++)
               <th>SET {{$set_index}}</th>
@@ -211,38 +212,38 @@ if($match_data[0]['game_type']=='rubber'){
         <tbody>
                          <!-- Show teams if schedule type is team -->
            <tr @if(!empty($score_a_array['team_id']) && ($score_a_array['team_id']==$match_data[0]['winner_id'])) class='winner_set' @endif>
-           
 
-            <td>  
+
+            <td>
              @if(!is_null($score_a_array['team_id']))<b>{{$score_a_array['team_name']}}</b><br>@endif {{$score_a_array['player_name_a']}} / {{$score_a_array['player_name_b']}}</td>
 
           @for($set_index=1; $set_index<=$set; $set_index++)
-                 
+
                <td class='a_set{{$set_index}} ' >
                    @if($score_a_array['set'.$set_index] || $score_b_array['set'.$set_index]  )
                     <span class="score_data_bold">
                      {{Helper::displayEmptyDash($score_a_array['set'.$set_index],'0')}}
-                    
+
                     </span>
 
                     <sup>
                     {{Helper::displayEmptyDash($score_a_array['set'.$set_index.'_tie_breaker'],'0')}}
                     </sup>
                   @endif
-                
+
                </td>
           @endfor
-          
+
           </tr>
 
                   <!-- Show teams if schedule type is team -->
-            <tr @if(!empty($score_b_array['team_id']) && ($score_b_array['team_id']==$match_data[0]['winner_id'])) class='winner_set' @endif>          
+            <tr @if(!empty($score_b_array['team_id']) && ($score_b_array['team_id']==$match_data[0]['winner_id'])) class='winner_set' @endif>
 
-            <td>  
+            <td>
              @if(!is_null($score_b_array['team_id']))<b>{{$score_b_array['team_name']}}</b><br>@endif {{$score_b_array['player_name_a']}} / {{$score_b_array['player_name_b']}}</td>
 
             @for($set_index=1; $set_index<=$set; $set_index++)
-                  
+
                <td class='b_set{{$set_index}}  '>
                    @if($score_a_array['set'.$set_index] || $score_b_array['set'.$set_index]  )
 
@@ -251,8 +252,8 @@ if($match_data[0]['game_type']=='rubber'){
                                 </span>
                                 <sup>
                         {{Helper::displayEmptyDash($score_b_array['set'.$set_index.'_tie_breaker'],'0')}}
-                                </sup>  
-                    @endif       
+                                </sup>
+                    @endif
                 </td>
           @endfor
         </tr>
@@ -263,7 +264,7 @@ if($match_data[0]['game_type']=='rubber'){
     </div>
   <!-- End of normal match -->
 
-@else 
+@else
   <!-- Start of Rubber -->
 
  @foreach($rubbers as $rubber)
@@ -274,7 +275,7 @@ if($match_data[0]['game_type']=='rubber'){
     ?>
          @include('scorecards.tennis.tennisscorecardrubberview')
  @endforeach
- 
+
  @endif
 
  <!-- End of Rubber -->
@@ -288,42 +289,42 @@ if($match_data[0]['game_type']=='rubber'){
 
   <div class="col-sm-6 col-xs-12 table-striped ">
         <h3 class='team_bat team_title_head'>{{$score_a_array['team_name']}}</h3>
-            
+
             <div class='col-xs-12'>&nbsp;</div>
             <div class='col-xs-12'> <a href="/editsportprofile/{{$score_a_array['user_id_a']}}" class="text-primary"> {{$score_a_array['player_name_a']}}</a></div>
             <div class='col-xs-12'>&nbsp;</div>
             <div class='col-xs-12'><a href="/editsportprofile/{{$score_a_array['user_id_b']}}" class="text-primary"> {{$score_a_array['player_name_b']}}</a></div>
             <div class='col-xs-12'>&nbsp;</div>
-        
+
       </div>
-  
+
 
   <div class='col-sm-6 col-xs-12 table-striped'>
      <h3 class='team_fall team_title_head'>{{$score_a_array['team_name']}}</h3>
-         
+
             <div class='col-xs-12'>&nbsp;</div>
             <div class='col-xs-12'><a href="/editsportprofile/{{$score_b_array['user_id_a']}}" class="text-primary"> {{$score_b_array['player_name_a']}}</a></div>
             <div class='col-xs-12'>&nbsp;</div>
             <div class='col-xs-12'><a href="/editsportprofile/{{$score_b_array['user_id_b']}}" class="text-primary"> {{$score_b_array['player_name_b']}}</a></div>
             <div class='col-xs-12'>&nbsp;</div>
       </div>
-      
-</div> 
+
+</div>
 
  @else
 <div class="row" id='real_time_scoring'>
   <div class="col-sm-6 col-xs-12">
-    <h3 class='team_bat team_title_head'>&nbsp;</h3> 
+    <h3 class='team_bat team_title_head'>&nbsp;</h3>
             <div class='col-xs-12'>&nbsp;</div>
             <div class='col-xs-12'><a href="/editsportprofile/{{$score_a_array['user_id_a']}}" class="text-primary"> {{$score_a_array['player_name_a']}}</a></div>
-            <div class='col-xs-12'>&nbsp;</div>    
+            <div class='col-xs-12'>&nbsp;</div>
   </div>
 
   <div class='col-xs-12 col-sm-6'>
-    <h3 class='team_fall team_title_head'>&nbsp;</h3>      
+    <h3 class='team_fall team_title_head'>&nbsp;</h3>
                 <div class='col-xs-12'>&nbsp;</div>
-                <div class='col-xs-12'><a href="/editsportprofile/{{$score_b_array['user_id_a']}}" class="text-primary"> {{$score_b_array['player_name_a']}}</a></div>    
-    
+                <div class='col-xs-12'><a href="/editsportprofile/{{$score_b_array['user_id_a']}}" class="text-primary"> {{$score_b_array['player_name_a']}}</a></div>
+
   </div>
 </div>
 
@@ -331,18 +332,18 @@ if($match_data[0]['game_type']=='rubber'){
     @endif
 @endif
 
-	
+
 	<!-- if match schedule type is team -->
 
 	<!-- end -->
-	
+
     <div class="sportsjun-forms text-center scorecards-buttons">
 	<input type="hidden" name="match_id" id="match_id" value="{{$match_data[0]['id']}}">
 	@if($isValidUser && $isApproveRejectExist)
-		
+
 	<button style="text-align:center;" type="button" onclick="scoreCardStatus('approved');" class="button green">Approve</button>
-	<button style="text-align:center;" type="button" onclick="scoreCardStatus('rejected');" class="button black">Reject</button><br />	
-	
+	<button style="text-align:center;" type="button" onclick="scoreCardStatus('rejected');" class="button black">Reject</button><br />
+
 	<textarea name="rej_note" id="rej_note" rows="4" cols="50" placeholder="Reject Note" style="margin:20px 0 10px 0;"></textarea>
     @endif
     </div>
@@ -354,8 +355,8 @@ if($match_data[0]['game_type']=='rubber'){
 
             <button class="btn btn-event" type="button" onclick="return  SJ.SCORECARD.allow_match_edit_by_admin({{$match_data[0]['id']}})">
                 Edit Match
-            </button>              
-           
+            </button>
+
         </div>
      @endif
    </div>
@@ -365,7 +366,6 @@ if($match_data[0]['game_type']=='rubber'){
 </div>
 </div>
 </div>
-
 <script>
 //Send Approve
 function scoreCardStatus(status)
@@ -405,8 +405,8 @@ function getMatchDetails(){
 
   var base_url=base_url || secure_url;
         $.ajax({
-            url:  base_url+'/viewpublic/match/gettennisDetails', 
-            type:'get', 
+            url:  base_url+'/viewpublic/match/gettennisDetails',
+            type:'get',
             dataType:'json',
             data:data,
             success:function(response){

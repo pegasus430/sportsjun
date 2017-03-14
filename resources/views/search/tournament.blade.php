@@ -87,7 +87,7 @@
 
                            
                              @if($lis_object->total_enrollment==0)
-                                <a href="#" class="sj_add_but"><span><i class="fa fa-check"></i>Registrations closed</span></a>
+                                <a  class="sj_add_but_closed"><span><i class="fa fa-check"></i>Registrations closed</span></a>
 						     @else
 
                            
@@ -97,13 +97,13 @@
 
                             
                              @if($open_dt_tm < $current_dt_tm && $close_dt_tm > $current_dt_tm) 
-                	           <a href="{{ url('/tournaments/eventregistration').'/'.$lis['id'] }}" class="sj_add_but"><span><i class="fa fa-check"></i>Event Registration (Online Payment)</span></a>
+                	           <a href="{{ url('/tournaments/eventregistration').'/'.$lis['id'] }}" class="sj_add_but_closed"><span><i class="fa fa-check"></i>Event Registration (Online Payment)</span></a>
                 	           @elseif($open_dt_tm > $current_dt_tm)
-                                <a href="#" class="sj_add_but"><span><i class="fa fa-check"></i>Registration Not Started</span></a>
+                                <a  class="sj_add_but_closed"><span><i class="fa fa-check"></i>Registration Not Started</span></a>
                               @elseif($close_dt_tm < $current_dt_tm)
-                              <a href="#" class="sj_add_but"><span><i class="fa fa-check"></i>Registration Closed</span></a>
+                              <a  class="sj_add_but_closed"><span><i class="fa fa-check"></i>Registration Closed</span></a>
                               @else
-                              <a href="#" class="sj_add_but"><span><i class="fa fa-check"></i>Registration Not Available</span></a>
+                              <a  class="sj_add_but_closed"><span><i class="fa fa-check"></i>Registration Not Available</span></a>
                               @endif
 
                               
@@ -183,7 +183,7 @@ $(document).ready(function() {
     }
 
 });
-	$(document.body).on('click', '.sb_join_tournament_main' ,function(){ 		
+	$(document.body).on('click', '.sb_join_tournament_main .sj_add_but' ,function(){ 		
 		var sport_id = $(this).attr('spid');
 		var val = $(this).attr('val');
 		var id = $(this).attr('id');

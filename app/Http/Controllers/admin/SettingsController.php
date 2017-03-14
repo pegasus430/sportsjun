@@ -14,6 +14,8 @@ use App\Model\BasicSettings;
 use Carbon\Carbon;
 use Input;
 
+use Illuminate\Http\Request as ObjRequest;
+
 
 class SettingsController extends Controller
 {
@@ -35,11 +37,23 @@ class SettingsController extends Controller
 
       
       $data=Input::except('_token');
-      //dd($data);
+    
       foreach($data as $key => $value) {
-        BasicSettings::where('name', str_replace('_', ' ',$key))->update(['description' => $value]);
+        BasicSettings::where('name', str_replace('_', ' ',$key))->orwhere('name', $key)->update(['description' => $value]);
+
+        //BasicSettings::where('name', $key)->update(['description' => $value]);
       }
       return redirect('admin/settings');
 
-      }
+    }
+
+    public function add(ObjRequest $request){
+        $setting = new BasicSettings;
+        $setting->name = $request->name;
+        $setting->type = $request->type;
+        $setting->description = $request->description;
+        $setting->save();
+
+        return redirect()->back()->with('message', 'Successful');
+    }
 }

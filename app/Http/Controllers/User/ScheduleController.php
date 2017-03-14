@@ -1151,9 +1151,9 @@ class ScheduleController extends Controller {
         $scheduleId = Request::get('schedule_id');
         //if schedule type is team then get the team players comma seperated
         if ($schedule_type == 'team') {
-            $player_a_ids = TeamPlayers::select(DB::raw('GROUP_CONCAT(DISTINCT user_id) AS player_a_ids'))->where('team_id', $a_id)->pluck('player_a_ids');
+            $player_a_ids = TeamPlayers::select(DB::raw('GROUP_CONCAT(DISTINCT user_id) AS player_a_ids'))->where('deleted_at',null)->where('team_id', $a_id)->pluck('player_a_ids');
             if(!empty($b_id)) {
-                $player_b_ids = TeamPlayers::select(DB::raw('GROUP_CONCAT(DISTINCT user_id) AS player_b_ids'))->where('team_id', $b_id)->pluck('player_b_ids');
+                $player_b_ids = TeamPlayers::select(DB::raw('GROUP_CONCAT(DISTINCT user_id) AS player_b_ids'))->where('deleted_at',null)->where('team_id', $b_id)->pluck('player_b_ids');
             }    
             
         }
@@ -1366,9 +1366,9 @@ class ScheduleController extends Controller {
         $scheduleId = Request::get('main_schedule_id');
         //if schedule type is team then get the team players comma seperated
         if ($schedule_type == 'team') {
-            $player_a_ids = TeamPlayers::select(DB::raw('GROUP_CONCAT(DISTINCT user_id) AS player_a_ids'))->where('team_id', $a_id)->pluck('player_a_ids');
+            $player_a_ids = TeamPlayers::select(DB::raw('GROUP_CONCAT(DISTINCT user_id) AS player_a_ids'))->where('deleted_at',null)->where('team_id', $a_id)->pluck('player_a_ids');
            
-            $player_b_ids = TeamPlayers::select(DB::raw('GROUP_CONCAT(DISTINCT user_id) AS player_b_ids'))->where('team_id', $b_id)->pluck('player_b_ids');
+            $player_b_ids = TeamPlayers::select(DB::raw('GROUP_CONCAT(DISTINCT user_id) AS player_b_ids'))->where('deleted_at',null)->where('team_id', $b_id)->pluck('player_b_ids');
             
         }
         $request_type = ($schedule_type == 'team')?'TEAM_TO_TEAM':'PLAYER_TO_PLAYER';
@@ -1681,7 +1681,7 @@ $matchScheduleData = MatchSchedule::where('tournament_id',$matchScheduleDetails[
 
                        
             if ($matchScheduleDetails['schedule_type'] == 'team') {
-                $player_a_ids = TeamPlayers::select(DB::raw('GROUP_CONCAT(DISTINCT user_id) AS player_a_ids'))->where('team_id', $matchScheduleDetails['winner_id'])->pluck('player_a_ids');
+                $player_a_ids = TeamPlayers::select(DB::raw('GROUP_CONCAT(DISTINCT user_id) AS player_a_ids'))->where('deleted_at',null)->where('team_id', $matchScheduleDetails['winner_id'])->pluck('player_a_ids');
             }else {
                 $player_a_ids = $matchScheduleDetails['winner_id'];
             }

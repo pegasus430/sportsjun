@@ -6,7 +6,7 @@ public/build/
 public/gen/
 vendor/*
 storage/*
-config/database.php
+
 .env
 .idea/
 *.sublime-*

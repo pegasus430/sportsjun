@@ -156,7 +156,7 @@ $options=array();?>
      </div>
      <div class="col-sm-3">
        <div class="section">
-         <label class="form_label">{{date("d-M-Y h:i:s", strtotime($de['data']['date']))}}</label>  
+         <label class="form_label">{{date("jS M, Y", strtotime($de['data']['date']))}}</label>  
         </div>
      </div>
      <div class="col-sm-2">

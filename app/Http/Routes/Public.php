@@ -3,10 +3,11 @@
 /* Route::get('public/completedmatches', [
 	'as' => 'public/completedmatches', 'uses' =>  'Auth\ScoreCardController@completedMatches'
 	]);
-	
+
 Route::get('public/scorecard/view/{match_id}', [
 			'as' => 'public/scorecard/view', 'uses' => 'Auth\ScoreCardController@createScorecardView'
 	]); */
+use Illuminate\Http\Request;
 
 Route::get('data/cities',[
     'as'=>'data.cities',
@@ -133,7 +134,7 @@ Route::group(['prefix' => 'viewpublic'], function () {
 Route::get('/', function () {
     return view('welcome');
 });
- * 
+ *
  */
 Route::get('js_close', function () {
     return "<script type=\"text/javascript\">window.close();</script>";
@@ -190,6 +191,47 @@ Route::get('/mailscron', function () {
 });
 //END CRONS
 
+//Share facebook
+Route::post('share/facebook', function(Request $request){
+  $post_image_name =  "uploads/image_". time().".jpg";
+  $file = $request->file('file');
+
+  //Create and resize images
+  $image = Image::make($file);
+  $image->encode("jpg");
+  $image->save(public_path($post_image_name));
+  return $post_image_name;
+});
+
+Route::post('share/delete', function(Request $request){
+  File::delete(public_path($request->path));
+  return "success";
+});
+
+//Share tweeter
+Route::post('share/twitter', function(Request $request){
+  $post_image_name =  "uploads/image_". time().".jpg";
+  $file = $request->file('file');
+
+  //Create and resize images
+  $image = Image::make($file)->resize(null, 250, function ($constraint) {
+      $constraint->aspectRatio();
+  });
+  $image->encode("jpg", 10);
+  $image->save(public_path($post_image_name));
+  try
+  {
+    $path = public_path($post_image_name);
+      $uploaded_media = Twitter::uploadMedia(['media' => File::get($path)]);
+      Twitter::postTweet(['status' => 'Sportsjun', 'media_ids' => $uploaded_media->media_id_string]);
+      return "success";
+  }
+  catch (\Exception $e)
+  {
+      dd(Twitter::logs());
+  }
+});
+
 //Login/Signup
 Route::get('social/redirect/{provider}', ['uses' => 'User\UserController@redirectToProvider', 'as' => 'social.login']);
 Route::get('social/callback/{provider}', 'User\UserController@handleProviderCallback');
@@ -231,20 +273,3 @@ Route::group(['prefix' => 'guest'], function () {
    Route::get('tournaments/guestregisterstep3/{id}/{event_id}', 'User\TournamentsController@getGuestRegister');
    Route::post('tournaments/guestregisterstep3', 'User\TournamentsController@postGuestRegister');
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

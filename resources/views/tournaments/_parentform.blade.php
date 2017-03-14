@@ -38,7 +38,7 @@
         <div class = "section">
             <label class = "form_label">{{   trans('message.team.fields.organization') }} </label>
             <label class = "field select">
-                {!! Form::select('organization_id',$organization,null, array('class'=>'gui-input','id'=>'organization_id','placeholder'=>'Select Organization', 'onchange' => 'displayOrgGroups(this.value)')) !!}
+                {!! Form::select('organization_id',$organization,null, array('class'=>'gui-input','id'=>'organization_id', 'onchange' => 'displayOrgGroups(this.value)')) !!}
                 @if ($errors->has('organization_id'))
                     <p class = "help-block">{{ $errors->first('organization_id') }}</p>
                 @endif
