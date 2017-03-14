@@ -427,6 +427,7 @@
 
 .groupstageWrapp {
     background: #FFF;
+    overflow-x:auto;
 }
 
 .groupstageWrapp h1 {
