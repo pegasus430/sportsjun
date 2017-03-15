@@ -182,5 +182,76 @@ class  MatchSchedulesApiController extends BaseApiController
         return $this->ModelMapResponse($schedule, $map);
     }
 
+    public function getScores($id)
+    {
+        $schedule = MatchSchedule::whereId($id)->firstOrFail();
+
+        $user_ids = array_unique(array_merge(explode(',', $schedule->player_a_ids), explode(',', $schedule->player_b_ids)));
+
+
+        $sports_name = strtolower($schedule->sport->sports_name);
+        $stats = [];
+        $statistics = [];
+        if ($sports_name) {
+            $tableName = $sports_name . '_player_matchwise_stats';
+            if (\Schema::hasTable($tableName))
+                $stats = \DB::table($tableName)
+                    ->whereMatchId($schedule->id)
+                    ->whereNull('deleted_at')
+                    ->get();
+
+        }
+
+
+        $map = [
+            'Sport' => [
+                'type' => 'model',
+                'source' => 'sport',
+                'fields' => [
+                    'id',
+                    'sports_name'
+                ]
+            ],
+            "schedule_type",
+            "match_category",
+            "facility_name",
+            "address",
+            'match_type',
+            'match_status',
+            "match_start_date",
+            "match_start_time",
+            "match_end_date",
+            "match_end_time",
+            'winner',
+            'match_details'=>[
+                'type'=> 'value',
+                'value'=> json_decode($schedule->match_details)
+            ],
+            'Sides' => [
+                'type' => 'array',
+                'fields' => [
+                    'sideA.name',
+                    'sideB.name',
+                ]
+            ],
+
+            'player_of_the_match' => [
+                'type' => 'value',
+                'value' => function ($schedule) {
+                    $id = $schedule->player_of_the_match;;
+                    $player = User::whereId($id)->first();
+                    if ($player)
+                        return array_only($player->toArray(), ['id', 'name']);
+                }
+            ],
+            'stats' => [
+                'type' => 'value',
+                'value' => $stats
+            ]
+        ];
+
+
+        return $this->ModelMapResponse($schedule, $map);
+    }
 
 }
