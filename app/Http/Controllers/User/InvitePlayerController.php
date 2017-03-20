@@ -167,7 +167,11 @@ class InvitePlayerController extends Controller
                        // );
 
 		            // return \Response::json($response);
-					 return $this->getTeamPlayersDiv($teamid);
+
+		if(!$request->ajax()){
+			return redirect()->back();
+		}
+		   return $this->getTeamPlayersDiv($teamid);
 	  
 		    
 		}

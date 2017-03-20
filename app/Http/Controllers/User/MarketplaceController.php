@@ -25,6 +25,10 @@ use App\Model\Country;
 use App\User;
 use App\Model\Photo;
 use App\Model\Otp;
+use App\Model\Organization;
+
+use Illuminate\Http\Request as ObjRequest;
+use App\Model\BasicSettings;
 
 class MarketplaceController extends Controller
 {
@@ -33,7 +37,7 @@ class MarketplaceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request )
     {
 	 $max = MarketPlace::select()->max('base_price');			
 	 $states = State::where('country_id', config('constants.COUNTRY_INDIA'))->orderBy('state_name')->lists('state_name', 'id')->all();
@@ -42,6 +46,45 @@ class MarketplaceController extends Controller
      Helper::setMenuToSelect(7,0,$marketPlaceCategories);	
 	// Session::flash('message', 'My message');
 	 return view('marketplace.list')->with(array('states' => ['' => 'Select State'] + $states,'cities' => ['' => 'Select City'] + $cities,'max'=>$max,'page'=>'marketplace','search_by'=>$request['search_by']));	
+    }
+
+    public function organization_marketplace($id, request $request){
+             $id = $request->route()->parameter('id');
+          $this->is_owner = false;
+          $this->new_template = false;
+          $this->view ='organization';        
+
+          $allow_newtemplate_setting  = BasicSettings::where('name', 'organization_new_template')->first();
+
+
+          if($allow_newtemplate_setting && $allow_newtemplate_setting->description=='1'){
+             $this->new_template=true;
+          }
+
+        if($id && (Auth::user()->type==1 && count(Auth::user()->organizations))){
+
+            if(Auth::user()->organizations[0]->id == $id && $this->new_template){
+                 $this->is_owner = true;
+                 $this->view = 'organization_2';
+                 $organization = Organization::find($id);
+                 view()->share('organisation', $organization);
+            }
+            
+        }    
+
+
+        if($this->is_owner){
+            $max = MarketPlace::select()->max('base_price');           
+            $states = State::where('country_id', config('constants.COUNTRY_INDIA'))->orderBy('state_name')->lists('state_name', 'id')->all();
+            $cities=[];
+            $marketPlaceCategories = MarketPlaceCategories::where('isactive','=',1)->get();
+            $marketplace = Marketplace::all();            
+            $categories = Helper::setMenuToSelect(7,0,$marketPlaceCategories);   
+            $categories = $marketPlaceCategories;
+                return view($this->view.'.marketplace', compact('categories','states','cities','max','marketplace','search_by'));
+        }
+
+
     }
    
    //view more based on search items

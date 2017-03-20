@@ -70,6 +70,8 @@ Route::group(['prefix' => 'organization/{id}'], function () {
         'uses' => 'User\OrganizationSchedulesController@index',
     ]);
 
+    Route::get('marketplace','User\MarketplaceController@organization_marketplace');
+
 
 
     Route::get('widget',[
@@ -429,7 +431,7 @@ Route::post('/marketplace/verifyOTP', [
 Route::post('marketplace/isOtpSent', [
     'uses' => 'User\MarketplaceController@isOtpSent',
 ]);
-Route::resource('marketplace', 'User\MarketplaceController');
+Route::resource('marketplace', 'User\MarketplaceController'); 
 //End Marketplace 	
 
 //Search

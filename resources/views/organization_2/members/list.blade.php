@@ -181,21 +181,32 @@
     <div class="modal fade" id="invite_player" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <form method="POST" action="http://dev.sportsjun.com/organization/33/staff" accept-charset="UTF-8" class="form form-horizontal">
-                    <input name="_token" type="hidden" value="bTCpsu1Uw3wX62asuYCTi28kBaPMCTWTaFyD4fRa">
+                <form method="POST" action="/getplayers" accept-charset="UTF-8" class="form form-horizontal">
+                    {!!csrf_field()!!}
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                         <h3>Invite Player</h3> </div>
                     <div class="modal-body">
                         <div class="content row">
                             <div class="input-container">
-                                <input type="text" id="staff_name" required="required" />
+                                <input type="text" id="staff_name" required="required"  name="name" />
                                 <label for="Username">Enter Player Name</label>
                                 <div class="bar"></div>
                             </div>
                             <div class="input-container">
-                                <input type="text" id="staff_email" required="" />
+                                <input type="text" id="staff_email" required=""  name="email" />
                                 <label for="Username">Enter Player Email</label>
+                                <div class="bar"></div>
+                            </div>
+
+                               <div class="input-container select">
+                               <label for="Username">Team</label>
+                                <select  name="teamid" required="" >
+                                    @foreach($organisation->teamplayers as $team)
+                                        <option value="{{$team->id}}">{{$team->name}}</option>
+                                    @endforeach
+                                </select>
+                                
                                 <div class="bar"></div>
                             </div>
                         </div>

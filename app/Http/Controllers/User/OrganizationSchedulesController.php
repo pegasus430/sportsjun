@@ -96,6 +96,17 @@ class OrganizationSchedulesController extends Controller
         $current_tournaments = $tquery->where('start_date','<',date('Y-m-d'))->where('end_date','>',date('Y-m-d'))->paginate(15);
 
 
+        $mquery = Tournaments::whereHas('tournamentParent', function ($query) use ($id) {
+            $query->where('organization_id', $id);
+        })->join('match_schedules','match_schedules.tournament_id','=','tournaments.id')
+          ->orderBy('match_start_date', 'match_start_time','desc');
+
+        $old_schedules = $mquery->where('match_status','completed')->paginate(15);
+        $next_schedules = $mquery->where('match_start_date','=',date('Y-m-d'))->where('match_status','!=','completed')->paginate(15);
+        $current_schedules = $mquery->where('match_start_date','>',date('Y-m-d'))->paginate(15);
+
+    
+
         /*
         $schedules = MatchSchedule::whereHas('tournament', function ($query) use ($id, $tournament_parent_ids) {
             $query->whereIn('tournament_parent_id', $tournament_parent_ids);
@@ -117,7 +128,7 @@ class OrganizationSchedulesController extends Controller
             }
         }
 
-      
+
 
         return view($this->view.'.schedules.list',
             compact('id', 'organization','next_tournaments','current_tournaments','old_tournaments', 'staffList', 'tournaments', 'filter_event','teamNames','userNames'),

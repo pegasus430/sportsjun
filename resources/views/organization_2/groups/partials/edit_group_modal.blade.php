@@ -6,6 +6,7 @@
                 {!! Form::open([
                     'route' => ['organization.groups.update', $group->id],
                     'method'=>'put',
+                    'class'=>'form form-horizontal',
                     'files' => true
                 ]) !!}
                 <div class = "modal-header text-center">
@@ -14,51 +15,33 @@
                 </div> {{-- /.modal-header --}}
                 <div class = "modal-body">
                     <div class = "content">
-                         <div id = "group_name_input" class = "form-group @if ($errors->has('name')) has-error @endif">
-                            <div>
-                                <span class = "head">GROUP NAME</span>
-                                {!! Form::text('name',$group->name, [
+                                 <div class="input-container">
+                                                    {!! Form::text('name', $group->name, [
                                     'class' => '',
                                     'id' => 'group_name',
-                                    'placeholder' => 'Wnter your group name',
+                                    'placeholder' => '',
                                 ]) !!}
-                                @if ($errors->has('name'))
-                                    @foreach($errors->get('name') as $message)
-                                        <p class = "help-block text-danger">{{ $message }}</p>
-                                    @endforeach
-                                @endif
+                           
+                                   <label for="Username">Enter Your Group Name</label>
+                
+                                      <div class="bar"></div>
                             </div>
-                        </div>
-                        
-                        <div id = "group_manager_select" class = "form-group @if ($errors->has('manager_id')) has-error @endif">
-                            <div>
-                                <span class = "head">GROUP MANAGER</span>
+                            <input type="hidden" name="group_id" value="{{$group->id}}">
+                     
+                            <div class="input-container select">
+                                <label>Group Manager</label>
                                 {!! Form::select('manager_id', $staffList, [$group->manager_id=>$group->manager->email], [
                                     'class' => '',
                                     'id' => 'group_manager'
                                 ]) !!}
-                                @if ($errors->has('manager_id'))
-                                    @foreach($errors->get('manager_id') as $message)
-                                        <p class = "help-block">{{ $message }}</p>
-                                    @endforeach
-                                @endif
+                               
                             </div>
-                        </div>
-                        <input type="hidden" name="group_id" value="{{$group->id}}">
-                        <div id = "group_logo_input" class = "form-group @if ($errors->has('logo')) has-error @endif">
+                      
                             <div>
-                                <span class = "head">GROUP LOGO</span>
-                                {!! Form::file('logo', [
-                                    'class' => '',
-                                    'id' => 'group_logo',
-                                    'accept' => 'image/*'
-                                ]) !!}
-                                @if ($errors->has('logo'))
-                                    @foreach($errors->get('logo') as $message)
-                                        <p class = "help-block">{{ $message }}</p>
-                                    @endforeach
-                                @endif
-                      </div>
+                                    <div class="input-container file">
+                                    <label>Group Logo</label>
+                                    <input type="file" id="staff_email"  name="logo" /> </div>
+                             
                     </div> {{-- /.content --}}
                 </div> {{-- /.modal-body --}}
                 <div class = "modal-footer">
