@@ -109,6 +109,11 @@ class OrganizationController extends Controller
 
     }
 
+    public function new_tournament(){
+
+        return view('organization_2.tournament.new_tournament');
+    }
+
     public function getorgDetails($id)
     {
         $user_id = (isset(Auth::user()->id) ? Auth::user()->id : 0);

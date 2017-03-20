@@ -71,6 +71,7 @@ Route::group(['prefix' => 'organization/{id}'], function () {
     ]);
 
     Route::get('marketplace','User\MarketplaceController@organization_marketplace');
+    Route::get('new_tournament', 'User\OrganizationController@new_tournament');
 
 
 
