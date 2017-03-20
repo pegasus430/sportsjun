@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\User\TournamentsController;
+use App\Model\Album;
 use App\Model\MatchSchedule;
 use App\Model\Organization;
 use App\Model\Team;
@@ -109,4 +110,25 @@ class SearchController extends Controller
 
         return \App::abort(404);
     }
+
+    public function viewGallery($type, $id, $album_id = false)
+    {
+        HomeController::shareResource();
+        switch ($type) {
+            case 'tournaments':
+                $tournament = Tournaments::find($id);
+                $photos = $tournament->profile_album_photos()->paginate(15);
+                return view('home.search.gallery_album', compact('photos'));
+                break;
+            default:
+                if ($album_id) {
+                    $album = Album::find($album_id);
+                    $photos = $album->photos()->paginate(15);
+                    return view('home.search.gallery_album', compact('album', 'photos'));
+                }
+        }
+
+        return \App::abort(404);
+    }
+
 }

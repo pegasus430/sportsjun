@@ -51,6 +51,7 @@ class OrganizationMembersController extends Controller
 
     public function index($id)
     {
+        $authUserId = \Auth::guest() ? false : \Auth::user()->id;
         $organization = Organization::with('staff')->findOrFail($id);
 
         $staffList = $organization->staff->pluck('name', 'id');
@@ -79,13 +80,18 @@ class OrganizationMembersController extends Controller
                 $query->whereNotIn('role', ['owner', 'manager']);
             },
             'userdetails.team.sports'
-        ])->leftJoin('ratings' ,function ($join) use ($id) {
-            return $join->on('ratings.to_id', '=', 'users.id')
-                ->where('ratings.user_id','=', \Auth::user()->id)
-                ->where('ratings.type','=', \App\Model\Rating::$RATE_USER);
-        })
-            ->select('users.*','ratings.rate')
-            ->orderBy('rate','desc')
+        ]);
+        if ($authUserId) {
+            $members->leftJoin('ratings', function ($join) use ($id) {
+                return $join->on('ratings.to_id', '=', 'users.id')
+                    ->where('ratings.user_id', '=', \Auth::user()->id)
+                    ->where('ratings.type', '=', \App\Model\Rating::$RATE_USER);
+            })->select('users.*', 'ratings.rate');
+        } else {
+            $members ->select('users.*',\DB::raw('0 as `rate`'));
+        }
+        $members = $members
+            ->orderBy('rate', 'desc')
             ->paginate(15);
 
         if (\Request::ajax()) {

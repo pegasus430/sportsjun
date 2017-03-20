@@ -152,6 +152,7 @@ Route::get('/skip', 'HomeController@skip');
 Route::get('/home/search/guess',['as'=>'public.search.guess','uses'=>'SearchController@searchGuess']);
 Route::get('/home/search',['as'=>'public.search.list','uses'=>'SearchController@search']);
 Route::get('/home/{type}/{id}',['as'=>'public.search.view','uses'=>'SearchController@view'])->where('id', '[0-9]+');
+Route::get('/home/{type}/{id}/gallery/{gallery_id?}',['as'=>'public.search.view_gallery','uses'=>'SearchController@viewGallery'])->where('id', '[0-9]+');
 
 
 // Default Laravel Routes for login,registration and reset password
