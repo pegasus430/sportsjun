@@ -1,7 +1,7 @@
-<div class = "modal fade in tossDetail" id = "edit_group_{{$group->id}}">
-    <div class = "vertical-alignment-helper">
-        <div class = "modal-dialog modal-lg vertical-align-center">
-            <div class = "modal-content create-team-model create-album-popup model-align">
+<div class = "modal fade in " id = "edit_group_{{$group->id}}">
+  <div class="modal-dialog" role="document">
+            <div class="modal-content">
+     
                 {{-- Create Group Form --}}
                 {!! Form::open([
                     'route' => ['organization.groups.update', $group->id],
@@ -14,14 +14,13 @@
                 </div> {{-- /.modal-header --}}
                 <div class = "modal-body">
                     <div class = "content">
-                        <div id = "group_name_input" class = "form-group @if ($errors->has('name')) has-error @endif">
+                         <div id = "group_name_input" class = "form-group @if ($errors->has('name')) has-error @endif">
                             <div>
                                 <span class = "head">GROUP NAME</span>
-                                {!! Form::text('name', $group->name, [
-                                    'class' => 'form-control',
+                                {!! Form::text('name',$group->name, [
+                                    'class' => '',
                                     'id' => 'group_name',
                                     'placeholder' => 'Wnter your group name',
-                                    
                                 ]) !!}
                                 @if ($errors->has('name'))
                                     @foreach($errors->get('name') as $message)
@@ -34,10 +33,9 @@
                         <div id = "group_manager_select" class = "form-group @if ($errors->has('manager_id')) has-error @endif">
                             <div>
                                 <span class = "head">GROUP MANAGER</span>
-                                {!! Form::select('manager_id', $staffList,[$group->manager_id=>$group->manager->email] , [
-                                    'class' => 'form-control',
+                                {!! Form::select('manager_id', $staffList, [$group->manager_id=>$group->manager->email], [
+                                    'class' => '',
                                     'id' => 'group_manager'
-                                   
                                 ]) !!}
                                 @if ($errors->has('manager_id'))
                                     @foreach($errors->get('manager_id') as $message)
@@ -46,28 +44,25 @@
                                 @endif
                             </div>
                         </div>
-                        
+                        <input type="hidden" name="group_id" value="{{$group->id}}">
                         <div id = "group_logo_input" class = "form-group @if ($errors->has('logo')) has-error @endif">
-                        <input type="hidden" name='group_id' value="{{$group->id}}">
                             <div>
                                 <span class = "head">GROUP LOGO</span>
                                 {!! Form::file('logo', [
-                                    'class' => 'form-control',
+                                    'class' => '',
                                     'id' => 'group_logo',
-                                    'accept' => 'image/*',
-                                    'placeholder'=>'Leave blank '
+                                    'accept' => 'image/*'
                                 ]) !!}
                                 @if ($errors->has('logo'))
                                     @foreach($errors->get('logo') as $message)
                                         <p class = "help-block">{{ $message }}</p>
                                     @endforeach
                                 @endif
-                            </div>
-                        </div>
+                      </div>
                     </div> {{-- /.content --}}
                 </div> {{-- /.modal-body --}}
                 <div class = "modal-footer">
-                    <button type = "submit" class = "button btn-primary" onclick = "">Update</button>
+                    <button type = "submit" class = "btn btn-primary" onclick = "">Update</button>
                 </div> {{-- /.modal-footer --}}
                 {!! Form::close() !!}
             </div> {{-- /.modal-content --}}

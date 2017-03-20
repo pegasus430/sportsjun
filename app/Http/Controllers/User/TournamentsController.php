@@ -628,8 +628,8 @@ class TournamentsController extends Controller
         $user_name = Request::get('term');
         $users = User::where('users.name','LIKE','%'.$user_name.'%')->select(['users.id','users.name'])->limit(50);
         if ($organization_id){
-            $users->join('organization','organization.user_id','=','users.id');
-            $users->where('organization.id',$organization_id);
+           // $users->leftJoin('organization','organization.user_id','=','users.id');
+            // $users->where('organization.id',$organization_id);
 
             $users->join('organization_staffs',function($join){
                 $join->on('organization_staffs.user_id','=','users.id');

@@ -47,6 +47,8 @@ class OrganizationController extends Controller
             if(Auth::user()->organizations[0]->id == $id && $this->new_template){
                  $this->is_owner = true;
                  $organization = Organization::find($id);
+                 $this->organization = $organization;
+
                  view()->share('organisation', $organization);
             }
             
@@ -61,8 +63,15 @@ class OrganizationController extends Controller
     public function index()
     {
         //
+          if($this->is_owner){       
+          $tournaments = $this->organization->tournaments; 
+          $teams = $this->organization->teamplayers;
+          $parent_tournaments = $this->organization->parent_tournaments;
+   
+         return view('organization_2.index', compact('tournaments','teams','parent_tournaments'));
+        }
+      
 
-        return view('organization_2.index');
     }
 
     public function getorgDetails($id)
@@ -173,6 +182,9 @@ class OrganizationController extends Controller
     public function show($id)
     {
         //
+        if($this->is_owner){        
+         return view('organization_2.index', compact('teams','photo','orgInfoObj','id','userId'));
+        }
     }
 
     /**

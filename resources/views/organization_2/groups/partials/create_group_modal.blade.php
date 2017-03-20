@@ -1,7 +1,7 @@
-<div class = "modal fade in tossDetail" id = "create_group">
-    <div class = "vertical-alignment-helper">
-        <div class = "modal-dialog modal-lg vertical-align-center">
-            <div class = "modal-content create-team-model create-album-popup model-align">
+<div class = "modal fade in " id = "create_group">
+      <div class="modal-dialog" role="document">
+            <div class="modal-content">
+          
                 {{-- Create Group Form --}}
                 {!! Form::open([
                     'route' => ['organization.groups.store', $id],
@@ -12,12 +12,12 @@
                     <h4>TEAM GROUP DETAILS</h4>
                 </div> {{-- /.modal-header --}}
                 <div class = "modal-body">
-                    <div class = "content">
-                        <div id = "group_name_input" class = "form-group @if ($errors->has('name')) has-error @endif">
-                            <div>
-                                <span class = "head">GROUP NAME</span>
+                    <div class = "content">                       
+                        
+                                 <div class="input-container">
+                                   <label for="Username">Enter Your Group Name</label>
                                 {!! Form::text('name', null, [
-                                    'class' => 'form-control',
+                                    'class' => '',
                                     'id' => 'group_name',
                                     'placeholder' => 'Wnter your group name',
                                 ]) !!}
@@ -26,6 +26,7 @@
                                         <p class = "help-block text-danger">{{ $message }}</p>
                                     @endforeach
                                 @endif
+                                      <div class="bar"></div>
                             </div>
                         </div>
                         
@@ -33,7 +34,7 @@
                             <div>
                                 <span class = "head">GROUP MANAGER</span>
                                 {!! Form::select('manager_id', $staffList, null, [
-                                    'class' => 'form-control',
+                                    'class' => '',
                                     'id' => 'group_manager'
                                 ]) !!}
                                 @if ($errors->has('manager_id'))
@@ -48,7 +49,7 @@
                             <div>
                                 <span class = "head">GROUP LOGO</span>
                                 {!! Form::file('logo', [
-                                    'class' => 'form-control',
+                                    'class' => '',
                                     'id' => 'group_logo',
                                     'accept' => 'image/*'
                                 ]) !!}
@@ -57,12 +58,11 @@
                                         <p class = "help-block">{{ $message }}</p>
                                     @endforeach
                                 @endif
-                            </div>
-                        </div>
+                  
                     </div> {{-- /.content --}}
                 </div> {{-- /.modal-body --}}
                 <div class = "modal-footer">
-                    <button type = "submit" class = "button btn-primary" onclick = "">Create</button>
+                    <button type = "submit" class = "btn btn-primary" onclick = "">Create</button>
                 </div> {{-- /.modal-footer --}}
                 {!! Form::close() !!}
             </div> {{-- /.modal-content --}}

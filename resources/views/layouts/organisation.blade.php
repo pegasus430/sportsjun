@@ -30,7 +30,7 @@
         </div>
         <div class="col-md-3">
         <ul class="nav navbar-nav navbar-right">
-                <li><a href="index.php"><span class="fa fa-home"></span></a></li>
+                <li><a href="/organization/{{$organisation->id}}"><span class="fa fa-home"></span></a></li>
                 <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-user"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="#"><span class="fa fa-user-circle-o"></span> User Profile</a></li>
@@ -68,13 +68,13 @@
                     <a href="/organization/{{$organisation->id}}/groups"><img src="/org/images/icons/icon-group.png" alt="" width="16" height="16"> Team</a>
                 </li>
                 <li class='nav-item'>
-                    <a href="players.php"><img src="/org/images/icons/icon-players.png" alt="" width="16" height="16"> Players</a>
+                    <a href="/organization/{{$organisation->id}}/players"><img src="/org/images/icons/icon-players.png" alt="" width="16" height="16"> Players</a>
                 </li>
                 <li class='nav-item'>
-                    <a href="tournaments.php"><img src="/org/images/icons/icon-tournament.png" alt="" width="16" height="16"> Tournaments</a>
+                    <a href="/organization/{{$organisation->id}}/tournaments"><img src="/org/images/icons/icon-tournament.png" alt="" width="16" height="16"> Tournaments</a>
                 </li>
                 <li class='nav-item'>
-                    <a href="schedule.php"><img src="/org/images/icons/icon-schedule.png" alt="" width="16" height="16"> Schedule</a>
+                    <a href="/organization/{{$organisation->id}}/schedules"><img src="/org/images/icons/icon-schedule.png" alt="" width="16" height="16"> Schedule</a>
                 </li>
                 <li class='nav-item'>
                     <a href="coaching.php"><img src="/org/images/icons/icon-coach.png" alt="" width="16" height="16"> Coaching</a>

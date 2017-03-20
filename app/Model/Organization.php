@@ -126,4 +126,12 @@ class Organization extends Model
             return Helper::getImagePath($this->logo,'organization');
         }
 
+        public function tournaments(){
+            return $this->hasManyThrough('App\Model\Tournaments','App\Model\TournamentParent');
+        }
+
+        public function parent_tournaments(){
+            return $this->hasMany('App\Model\TournamentParent', 'organization_id');
+        }
+
 }

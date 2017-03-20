@@ -61,6 +61,7 @@ Route::group(['prefix' => 'organization/{id}'], function () {
         'uses' => 'User\OrganizationMembersController@index',
     ]);
 
+    Route::get('/', 'User\OrganizationController@index');
 
 
 

@@ -11,7 +11,7 @@
                 <div class="wg wg-white">
                     <div class="wg-wrap">
                         <div class="wg-hd">
-                            <h4>Tournaments</h4> <a href="" class="wg-cnlink">Create Tournament</a> </div>
+                            <h4>Tournaments</h4> <a href="/" class="wg-cnlink">Create Tournament</a> </div>
                         <select class="selectpicker">
                             <optgroup label="Swimming">
                                 <option>Hyderabad Corporate Olymipics - 2016</option>
