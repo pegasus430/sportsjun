@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-
+ 
 
 <html lang="en">
 
@@ -11,8 +11,10 @@
     <!-- CSS -->
         <link href="/org/css/bootstrap.css" rel="stylesheet">
         <link href="/org/css/main.css" rel="stylesheet">
+            <link href="/org/css/marketplace.css" rel="stylesheet"> 
         <link href="/org/css/font-awesome.min.css" rel="stylesheet">
-        <link href="/org/css/bootstrap-select.css" rel="stylesheet">
+        <link href="/org/css/bootstrap-select.css" rel="stylesheet">        
+     <link href="/org/css/bootstrap.slider.css" rel="stylesheet">
 </head>
 
 <body>
@@ -30,7 +32,7 @@
         </div>
         <div class="col-md-3">
         <ul class="nav navbar-nav navbar-right">
-                <li><a href="index.php"><span class="fa fa-home"></span></a></li>
+                <li><a href="/organization/{{$organisation->id}}"><span class="fa fa-home"></span></a></li>
                 <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-user"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="#"><span class="fa fa-user-circle-o"></span> User Profile</a></li>
@@ -68,22 +70,22 @@
                     <a href="/organization/{{$organisation->id}}/groups"><img src="/org/images/icons/icon-group.png" alt="" width="16" height="16"> Team</a>
                 </li>
                 <li class='nav-item'>
-                    <a href="players.php"><img src="/org/images/icons/icon-players.png" alt="" width="16" height="16"> Players</a>
+                    <a href="/organization/{{$organisation->id}}/players"><img src="/org/images/icons/icon-players.png" alt="" width="16" height="16"> Players</a>
                 </li>
                 <li class='nav-item'>
-                    <a href="tournaments.php"><img src="/org/images/icons/icon-tournament.png" alt="" width="16" height="16"> Tournaments</a>
+                    <a href="/organizationTournaments/{{$organisation->id}}"><img src="/org/images/icons/icon-tournament.png" alt="" width="16" height="16"> Tournaments</a>
                 </li>
                 <li class='nav-item'>
-                    <a href="schedule.php"><img src="/org/images/icons/icon-schedule.png" alt="" width="16" height="16"> Schedule</a>
+                    <a href="/organization/{{$organisation->id}}/schedules"><img src="/org/images/icons/icon-schedule.png" alt="" width="16" height="16"> Schedule</a>
                 </li>
                 <li class='nav-item'>
                     <a href="coaching.php"><img src="/org/images/icons/icon-coach.png" alt="" width="16" height="16"> Coaching</a>
                 </li>
                 <li class='nav-item'>
-                    <a href="/org/marketplace.php"><img src="/org/images/icons/icon-marketplace.png" alt="" width="16" height="16"> marketplace</a>
+                    <a href="/organization/{{$organisation->id}}/marketplace"><img src="/org/images/icons/icon-marketplace.png" alt="" width="16" height="16"> marketplace</a>
                 </li>
                 <li class='nav-item'>
-                    <a href="gallery.php"><img src="/org/images/icons/icon-gallery.png" alt="" width="16" height="16"> Gallery</a>
+                    <a href="user/album/organization?id=0&team_id={{$organisation->id}}"><img src="/org/images/icons/icon-gallery.png" alt="" width="16" height="16"> Gallery</a>
                 </li>
             </ul>
         </div>
@@ -115,12 +117,14 @@
     </div>
     <div class="clearfix"></div>
     <hr> </footer>
-    <!-- jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- jQuery --> 
+    <script src="/org/js/jquery.min.js"></script>
     <script src="/org/js/bootstrap.min.js"></script>
     <script src="/org/js/w3data.js"></script>
     <script src="/org/js/bootstrap-select.js"></script>
+
     @yield('end_scripts')
+        <script type="text/javascript" src='/org/js/scripts.js'></script>
     <script>
         // HTML Include
         w3IncludeHTML();

@@ -124,7 +124,7 @@ class OrganizationGroupsController extends Controller
     public function edit(Request $request)
     {
         //
-
+        
         $orgGroup=OrganizationGroup::findOrFail($request->group_id);
         $orgGroup->manager_id=$request->manager_id;
         $orgGroup->name = $request->name;

@@ -5,7 +5,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <h2 class="page-header"><div class="ph-mark"><div class="glyphicon glyphicon-menu-right"></div></div> Team (Groups)</h2>
-                    <div class="create-btn-link"><a href="" class="wg-cnlink" data-toggle="modal" data-target="#create_group" style="margin-right: 150px;">Create New Team Group</a> <a href="" class="wg-cnlink">List All Teams</a></div>
+                    <div class="create-btn-link"><a href="" class="wg-cnlink" data-toggle="modal" data-target="#create_group" style="margin-right: 150px;">Create New Team Group</a> <a href="/organizationTeamlist/{{$organisation->id}}" class="wg-cnlink">List All Teams</a></div>
                 </div>
             </div>
           
