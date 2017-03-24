@@ -7,10 +7,13 @@
          <ul class="nav nav-tabs nav-justified">
                                 <li class="active"><a href="#batting" data-toggle="tab" aria-expanded="true"> <b>{{ config('constants.CRICKET_STATS.BATTING_STATS.BATTING_STATISTICS')}}</b></a></li>
                                 <li class=""><a href="#bowling" data-toggle="tab" aria-expanded="false">   <b>{{ config('constants.CRICKET_STATS.BOWLLING_STATS.BOWLLING_STATISTICS')}}</b></a></li>
+                                <li class=""><a href="#fielding" data-toggle='tab' aria-expanded='false'><b>FIELDING</b></a></li>
 
         </ul>
 
     <div class="tab-content">
+
+
 
     <div class="tab-pane fade active in" id="batting">
 
@@ -145,6 +148,76 @@
         </tbody>
     </table>
     </div>
+</div>
+      <div class="tab-pane fade active in" id="fielding">
+
+    <div class="table-responsive stats-table teamStatsDiv" >
+     <table class="table table-hover">
+         <thead>
+            <tr>
+
+                <th>PLAYER</th>
+                <th>TEAM</th>
+
+                <th>MAT</th>
+                <th>INN</th>
+                <th>CT</th>
+                <th>RO</th>
+                <th>ST</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+                  @foreach($player_standing['fielding'] as $statistic)
+
+       @if(!empty($statistic->ecomony))
+            <tr>
+                <td>
+                    @if (!Auth::guest())
+                        <a href='/editsportprofile/{{$statistic->user_id}}' class="text-primary">
+                    @endif
+
+                     <span class='hidden-xs hidden-sm'> 
+                   
+                         
+ {!! Helper::Images($statistic->logo,'user_profile',array('class'=>'img-circle img-border ','height'=>52,'width'=>52) )!!}
+                             
+                                
+                             
+                    </span>
+
+                    {{$statistic->player_name}}
+                            @if (!Auth::guest())
+                        </a>
+                            @endif
+
+                </td>
+                <td>
+                    @if (!Auth::guest())
+                    <a href='/team/members/{{$statistic->team_id}}' class="text-primary">{{$statistic->team_name}}</a>
+                    @else
+                        {{$statistic->team_name}}
+                    @endif
+
+                </td>
+
+                 <td>{{$statistic->matches}}</td>
+                <td>{{$statistic->innings_bowled}}</td>
+                <td>{{$statistic->caught}}</td>
+                <td>{{$statistic->run_out}}</td>
+                <td>{{$statistic->stumped}}</td>
+            
+            </tr>
+         @endif
+            @endforeach
+        </tbody>
+
+        </table>
+
+    </div>
+    </div>
+    </div>
+
     @else
 
     <div class="sj-alert sj-alert-info">
