@@ -2849,7 +2849,7 @@ class TournamentsController extends Controller
 
 					$player['fielding'] = CricketPlayerMatchwiseStats::join('match_schedules', 'match_schedules.id', '=', 'cricket_player_matchwise_stats.match_id')
 							->join('teams', 'teams.id','=', 'cricket_player_matchwise_stats.team_id')
-							->join('users', 'users.id', '=', 'cricket_player_matchwise_stats.user_id')
+							->join('users', 'users.id', '=', 'cricket_player_matchwise_stats.fielder_id')
 							->where('match_schedules.tournament_id', $tournament_id)
 							->select('cricket_player_matchwise_stats.*','users.*')
 							->selectRaw('count(DISTINCT(match_id)) as matches')		
@@ -2857,8 +2857,9 @@ class TournamentsController extends Controller
 								->selectRaw('sum(innings) as innings_bowled')
 							->selectRaw('sum(IF(out_as="stumped", 1, 0)) as stumped')
 							->selectRaw('sum(IF(out_as="run_out", 1, 0)) as run_out')
-							->orderBy('innings_bowled','desc')
-							->groupBy('user_id')						
+							->selectRaw('sum(IF(out_as="run_out", 1, 0) + IF(out_as="stumped", 1, 0) + IF(out_as="caught", 1, 0)) as total')
+							->orderBy('total','desc')
+							->groupBy('fielder_id')						
 							->get(); 
 							
 
