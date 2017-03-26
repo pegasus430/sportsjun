@@ -509,6 +509,7 @@ function appendTabElement(a, b, c, d) {
 function selectSport(el){
     var sport_id = $(el).data('id');
     var sport = $('#sports_'+sport_id);
+
     sport.prop("checked", !sport.prop("checked"));
     $(el).toggleClass('active');
     var selectedCount = $('.sports-checkbox:checked').length;
@@ -516,6 +517,11 @@ function selectSport(el){
         $('#select_sports').removeClass('disabled').addClass('btn-primary').prop('disabled', false);
     else
         $('#select_sports').removeClass('btn-primary').addClass('disabled').prop('disabled', true);
+
+    if($(el).text().toLowerCase() == 'smite') {
+        $("#smiteModal").modal('show');
+        sport.prop("checked", !sport.prop("checked"));
+    }
 
 }
 
@@ -1180,7 +1186,25 @@ function rubberEdit(id)
             }
         });
     }
-            
+
+    $('#save_smite_nickname').on('click', function()
+    {
+        var username = $('#smite-username').val();
+        //var CSRF_TOKEN = $('meta[name="_token"]').attr('content');
+        console.log(name);
+
+        $.ajax({
+            url:base_url+'/smite/save_nickname',
+            type:'post',
+            data: {
+                _token: CSRF_TOKEN,
+                username: username
+            },
+            success: function(response){
+                console.log(response);
+            }
+        });
+    });
 
 $(window).load(function(){
     //$('form').dontJustLeaveMe();
@@ -1453,12 +1477,6 @@ function filterDiv(that, index){
         });
 
 }
-
-
-
-
-
-
 
     $(document).ready(function(){
         $(".show_sub_field").click(function(){

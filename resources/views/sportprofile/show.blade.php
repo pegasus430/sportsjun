@@ -30,7 +30,7 @@
                 <div class="card hovercard">
                     @if($userExists=='false')
                         <div class="cardheader">
-                            User doesnot exist
+                            User does not exist
                         </div>
                     @else
                         <div class="displaymessage sports_profile_msg_arrow_down">
@@ -77,7 +77,7 @@
                                             @foreach($sports as $sport)
                                                 <li>
                                                     <input id="sports_{{$sport->id}}" type="checkbox" class="hidden switch-class sports-checkbox"  name="sports[]" value="{{$sport->id}}" />
-                                                    <a id="sport_name_{{$sport->id}}" class="btn btn-primary" data-id="{{$sport->id}}"
+                                                    <a id="sport_name_{{$sport->id}}" class="btn btn-primary" data-id="{{$sport->id}}" data-name="{{ $sport->name }}"
                                                        href="javascript:void(0)"
                                                        onclick="return selectSport(this);">{{$sport->sports_name}}</a>
                                                 </li>
@@ -110,6 +110,43 @@
                             @endif
                         </div>
                     @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade"  id="smiteModal" role="dialog" style="display:none;">
+        <div class="modal-dialog sj_modal sportsjun-forms">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Please enter your Smite nickname</h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="sportsjun-forms sportsjun-container wrap-2 sportsjun-forms-modal">
+                        <div class="form-body">
+
+                            <div class="section">
+                                <label class="form_label">
+                                    Smite Nickname
+                                    <span  class='required'>*</span>
+                                </label>
+                            </div>
+
+                            <label for="venue" class="field">
+                                <input class="smite-nickname gui-input" placeholder="Your Smite Username" id="smite-username"/>
+                            </label>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" name="save_smite_nickname" id="save_smite_nickname" class="button btn-primary">Save</button>
+                    <button type="button" class="button btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>

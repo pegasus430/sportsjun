@@ -419,4 +419,9 @@ class User extends Model implements AuthenticatableContract,
         return collect();
     }
 
+    public function gameUsernames()
+    {
+        return $this->hasMany('App\Model\GameUsername');
+    }
+
 }
