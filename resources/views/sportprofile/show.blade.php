@@ -76,8 +76,8 @@
                                         <ul class="list-inline">
                                             @foreach($sports as $sport)
                                                 <li>
-                                                    <input id="sports_{{$sport->id}}" type="checkbox" class="hidden switch-class sports-checkbox"  name="sports[]" value="{{$sport->id}}" />
-                                                    <a id="sport_name_{{$sport->id}}" class="btn btn-primary" data-id="{{$sport->id}}" data-name="{{ $sport->name }}"
+                                                    <input id="sports_{{$sport->id}}" type="checkbox" class="hidden switch-class sports-checkbox"  name="sports[]" value="{{$sport->id}}" data-name="{{ $sport->sports_name }}"/>
+                                                    <a id="sport_name_{{$sport->id}}" class="btn btn-primary" data-id="{{$sport->id}}" data-name="{{ $sport->sports_name }}"
                                                        href="javascript:void(0)"
                                                        onclick="return selectSport(this);">{{$sport->sports_name}}</a>
                                                 </li>
@@ -116,7 +116,7 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade"  id="smiteModal" role="dialog" style="display:none;">
+    <div class="modal fade"  id="smiteModal" role="dialog" style="display:none;" data-entered="false">
         <div class="modal-dialog sj_modal sportsjun-forms">
             <!-- Modal content-->
             <div class="modal-content">
@@ -146,7 +146,7 @@
 
                 <div class="modal-footer">
                     <button type="button" name="save_smite_nickname" id="save_smite_nickname" class="button btn-primary">Save</button>
-                    <button type="button" class="button btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="button btn-secondary" id="close_smite_modal" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
