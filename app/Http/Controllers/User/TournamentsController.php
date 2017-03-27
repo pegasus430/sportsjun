@@ -2857,9 +2857,10 @@ class TournamentsController extends Controller
 								->selectRaw('sum(innings) as innings_bowled')
 							->selectRaw('sum(IF(out_as="stumped", 1, 0)) as stumped')
 							->selectRaw('sum(IF(out_as="run_out", 1, 0)) as run_out')
-							->selectRaw('sum(IF(out_as="run_out", 1, 0) + IF(out_as="stumped", 1, 0) + IF(out_as="caught", 1, 0)) as total')
+							->selectRaw('sum(IF(out_as="run_out", 1, 0) + IF(out_as="stumped", 1, 0) +IF(out_as="caught", 1, 0) ) as total')
 							->orderBy('total','desc')
-							->groupBy('fielder_id')						
+							->groupBy('fielder_id')	
+							//->groupBy('out_as')					
 							->get(); 
 							
 
