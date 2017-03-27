@@ -14,4 +14,9 @@ class GameUsername extends Model
     {
         return $this->belongsTo('App\User');
     }
+
+    public function game()
+    {
+        return $this->hasOne('App\Sports');
+    }
 }

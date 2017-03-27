@@ -6,6 +6,7 @@ use App\Model\Sport;
 use App\Model\SportQuestion;
 use App\Model\SportQuestionAnswer;
 use App\Model\UserStatistic;
+use App\Model\GameUsername;
 use Request;
 use Auth;
 use Carbon\Carbon;
@@ -177,6 +178,13 @@ class SportController extends Controller {
         $userId = Request::get('userId');
         $flag = Request::get('flag');
         $viewFlag = Request::get('viewflag');
+
+        // Check if it's an eSport
+        $sportsName = Sport::where('id', $sportsId)->first();
+        $game_username = '';
+        if(strtolower($sportsName->sports_name) == 'smite')
+            $game_username = GameUsername::where('user_id', $userId)->find(1);
+
         if (empty($sportsId) || empty($userId))
             return view('sportprofile.question', ['sportsQuestions' => [], 'exception' => []]);
         $questions = array();
@@ -294,12 +302,12 @@ class SportController extends Controller {
                 'userId'=>$userId,'existingAllowedSportsArray' => !empty($existingAllowedSportsArray)?$existingAllowedSportsArray:[],'existingAllowedMatchesArray' => !empty($existingAllowedMatchesArray)?$existingAllowedMatchesArray:[],
                 'statsview'=>!empty($statsview)?$statsview:'', 'matchScheduleData'=>!empty($matchScheduleData)?$matchScheduleData:[],
                 'sportDetails'=>$sportDetails,'sportsCount' => $sportsCount,'exception' => $e->getMessage(),
-                'viewFlag'=>$viewFlag, 'flag'=>$flag]);
+                'viewFlag'=>$viewFlag, 'flag'=>$flag, 'gameUsername' => $game_username]);
         }
         return view('sportprofile.'.$dispView, ['sportsQuestions' => $questions, 'sportsPlayerStatistics' => $sportsPlayerStatistics, 'sportsId' => $sportsId,
             'userId'=>$userId,'existingAllowedSportsArray' => $existingAllowedSportsArray,'existingAllowedMatchesArray' => $existingAllowedMatchesArray, 'matchScheduleData'=>$matchScheduleData,
             'statsview'=>$statsview,'sportDetails'=>$sportDetails,'sportsCount' => $sportsCount,
-            'exception' => [], 'viewFlag'=>$viewFlag, 'flag'=>$flag]);
+            'exception' => [], 'viewFlag'=>$viewFlag, 'flag'=>$flag, 'gameUsername' => $game_username]);
     }
 
     /*
