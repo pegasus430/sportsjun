@@ -2844,6 +2844,7 @@ class TournamentsController extends Controller
 							->selectRaw('CAST(AVG(average_bowl) AS DECIMAL(10,2))  average_bowl')
 							->selectRaw('CAST(AVG(ecomony) AS DECIMAL(10,2)) ecomony')							
 							->orderBy('wickets', 'desc')
+							->orderBy('ecomony','asc')
 							->groupBy('user_id')							
 							->get();
 
@@ -2860,7 +2861,7 @@ class TournamentsController extends Controller
 							->select('cricket_player_matchwise_stats.*','users.*')
 							->selectRaw('count(DISTINCT(cricket_player_matchwise_stats.match_id)) as matches')		
 							->selectRaw('sum(IF(out_as="caught", 1, 0)) as caught')
-								->selectRaw('sum(innings) as innings_bowled')
+								->selectRaw('count(innings) as innings_bowled')
 							->selectRaw('sum(IF(out_as="stumped", 1, 0)) as stumped')
 							->selectRaw('sum(IF(out_as="run_out", 1, 0)) as run_out')
 							->selectRaw('sum(IF(out_as="run_out", 1, 0) + IF(out_as="stumped", 1, 0) +IF(out_as="caught", 1, 0) ) as total')
