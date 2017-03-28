@@ -2844,6 +2844,7 @@ class TournamentsController extends Controller
 							->selectRaw('CAST(AVG(average_bowl) AS DECIMAL(10,2))  average_bowl')
 							->selectRaw('CAST(AVG(ecomony) AS DECIMAL(10,2)) ecomony')							
 							->orderBy('wickets', 'desc')
+							->orderBy('ecomony','asc')
 							->groupBy('user_id')							
 							->get();
 
