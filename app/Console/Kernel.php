@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
         'App\Console\Commands\NotifySchedules',
         'App\Console\Commands\NotifyNotVerifiedUsers',
         'App\Console\Commands\SendMails',
+        'App\Console\Commands\SendEsportsMatchData',
     ];
 
     /**
@@ -35,5 +36,7 @@ class Kernel extends ConsoleKernel
                  ->daily();
         $schedule->command('cron:sendmails')
                  ->cron('*/10 * * * *');
+        $schedule->command('esports:match-data')
+            ->everyMinute();
     }
 }
