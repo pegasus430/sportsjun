@@ -192,9 +192,9 @@
                 </td>
                 <td>
                     @if (!Auth::guest())
-                    <a href='/team/members/{{$statistic->fielding_team_id}}' class="text-primary">{{$statistic->fielding_team_name}}</a>
+                    <a href='/team/members/{{$statistic->fielder_team_id}}' class="text-primary">{{$statistic->fielder_team_name}}</a>
                     @else
-                        {{$statistic->fielding_team_name}}
+                        {{$statistic->fielder_team_name}}
                     @endif
 
                 </td>
