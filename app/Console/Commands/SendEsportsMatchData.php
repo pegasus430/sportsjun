@@ -3,6 +3,10 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Carbon\Carbon;
+use App\Model\MatchSchedule;
+use App\Model\Sport;
+use App\Helpers\AllRequests;
 
 class SendEsportsMatchData extends Command
 {
@@ -38,13 +42,31 @@ class SendEsportsMatchData extends Command
     public function handle()
     {
         //Query to notify users about the match info (lobby creator, lobby name, lobby password)
-        $now = Carbon::now()->day;
-        $target_date = now->toDateString(); //Date and time to date format Y-m-d
-        $matchScheduleData = MatchSchedule::where('match_start_date', $target_date)->get();
+        $time1_day = Carbon::now()->subMonths(1)->format('Y-m-d');
+        $time1_time = Carbon::now()->subMonths(1)->format('h:m:s');
+
+        $time2_day = Carbon::now()->addHours(10)->format('Y-m-d');
+        $time2_time = Carbon::now()->addHours(10)->format('h:m:s');
+
+        $this->info($time1_day);
+        $this->info($time2_day);
+        $this->info($time1_time);
+        $this->info($time2_time);
+
+        $sport = Sport::where('sports_name', strtolower('smite'))->first();
+
+        $this->info($sport->id);
+
+        $matchScheduleData = MatchSchedule::whereBetween('match_start_date', array($time1_day,$time2_day))
+            ->whereBetween('match_start_time', array($time1_time, $time2_time))
+            ->where('sports_id', $sport->id)
+            ->get();
+
         if (count($matchScheduleData) > 0)
         {
             foreach ($matchScheduleData as $key => $schedule){
-                AllRequests::sendMatchNotifications($schedule->tournament_id,$schedule->schedule_type,$schedule->a_id,$schedule->b_id,$schedule->match_start_date);
+                $this->info($schedule);
+                AllRequests::sendMatchInfo($schedule->tournament_id,$schedule->schedule_type,$schedule->a_id,$schedule->b_id,$schedule->match_start_date,"Smite");
             }
             echo "Success";exit;
         }

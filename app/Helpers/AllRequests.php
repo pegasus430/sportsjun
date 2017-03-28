@@ -488,6 +488,138 @@ class AllRequests {
                     }
                 }
         }
+
+    // Sends match info for the played game to manager, owner and player
+    public static function sendMatchInfo($tournament_id,$schedule_type,$a_id,$b_id,$match_start_date,$sport_name) {
+        if(!empty($tournament_id)) {
+            $tournamentDetails = AllRequests::gettournamentdetails($tournament_id);
+            $tournamentName = $tournamentDetails->tournament_parent_name.' '.$tournamentDetails->name;
+        }
+        $matchStartDate = Carbon::createFromFormat('Y-m-d', $match_start_date);
+
+        $password = str_random(6);
+        $lobbyName = $sport_name.str_random(4);
+        echo $sport_name.str_random(4);
+
+        $matchStartDate = $matchStartDate->toFormattedDateString();
+
+        if($schedule_type=='team') {
+            $teamOneName = AllRequests::getteamname($a_id);
+            $teamOneOwnerId = AllRequests::getempidonroles($a_id,'owner');
+
+            $teamOneManagerId = AllRequests::getempidonroles($a_id,'manager');
+            if(!empty($b_id)) {
+                $teamTwoName = AllRequests::getteamname($b_id);
+                $teamTwoOwnerId = AllRequests::getempidonroles($b_id,'owner');
+                $teamTwoManagerId = AllRequests::getempidonroles($b_id,'manager');
+
+                if(!empty($tournament_id)) {
+                    switch($sport_name)
+                    {
+                        case "Smite":
+                            $message = trans("message.tournament.smitetournamentnotification", ['teamonename' => $teamOneName,
+                                'lobbyname' => $lobbyName, 'password' => $password, 'tournamentname'=>$tournamentName]);
+                            break;
+                        default:
+                            break;
+                    }
+
+                }else{
+                    switch($sport_name)
+                    {
+                        case "Smite":
+                            $message = trans("message.tournament.smitematchnotification", ['teamonename' => $teamOneName,
+                                'lobbyname' => $lobbyName, 'password' => $password]);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }else{
+                $message = trans("message.tournament.bye", ['teamonename' => $teamOneName,'tournamentname'=>!empty($tournamentName)?$tournamentName:'']);
+            }
+
+            if(!empty($teamOneOwnerId)) {
+                AllRequests::sendnotifications($teamOneOwnerId,$message,'');
+                $teamOneOwnerDetails = AllRequests::getUserNameAndEmail($teamOneOwnerId);
+                if(count($teamOneOwnerDetails)) {
+                    if(!empty($teamOneOwnerDetails->email)) {
+                        AllRequests::sendMatchEmails($teamOneOwnerDetails,$message);
+                    }
+                }
+            }
+            if(!empty($teamOneManagerId)) {
+                AllRequests::sendnotifications($teamOneManagerId,$message,'');
+                $teamTwoManagerDetails = AllRequests::getUserNameAndEmail($teamOneManagerId);
+                if(count($teamTwoManagerDetails)) {
+                    if(!empty($teamTwoManagerDetails->email)) {
+                        AllRequests::sendMatchEmails($teamTwoManagerDetails,$message);
+                    }
+                }
+            }
+            if(!empty($teamTwoOwnerId)) {
+                AllRequests::sendnotifications($teamTwoOwnerId,$message,'');
+                $teamTwoOwnerDetails = AllRequests::getUserNameAndEmail($teamTwoOwnerId);
+                if(count($teamTwoOwnerDetails)) {
+                    if(!empty($teamTwoOwnerDetails->email)) {
+                        AllRequests::sendMatchEmails($teamTwoOwnerDetails,$message);
+                    }
+                }
+            }
+            if(!empty($teamTwoManagerId)) {
+                AllRequests::sendnotifications($teamTwoManagerId,$message,'');
+                $teamTwoManagerDetails = AllRequests::getUserNameAndEmail($teamTwoManagerId);
+                if(count($teamTwoManagerDetails)) {
+                    if(!empty($teamTwoManagerDetails->email)) {
+                        AllRequests::sendMatchEmails($teamTwoManagerDetails,$message);
+                    }
+                }
+            }
+        } else {
+            $playerOneDetails = AllRequests::getUserNameAndEmail($a_id);
+            if(!empty($b_id)) {
+                $playerTwoDetails = AllRequests::getUserNameAndEmail($b_id);
+                if(!empty($tournament_id)) {
+
+                    switch($sport_name)
+                    {
+                        case "Smite":
+                            $message = trans("message.tournament.smitetournamentnotification", ['teamonename' => $playerOneDetails->name,
+                                'lobbyname' => $lobbyName, 'password' => $password, 'tournamentname'=>$tournamentName]);
+                            break;
+                        default:
+                            break;
+                    }
+                }else{
+
+                    switch($sport_name)
+                    {
+                        case "Smite":
+                            $message = trans("message.tournament.smitematchnotification", ['teamonename' => $playerOneDetails->name,
+                                'lobbyname' => $lobbyName, 'password' => $password]);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }else{
+                $message = trans("message.tournament.bye", ['teamonename' => $playerOneDetails->name,'tournamentname'=>!empty($tournamentName)?$tournamentName:'']);
+            }
+
+            if(count($playerOneDetails)) {
+                AllRequests::sendnotifications($a_id,$message,'');
+                if(!empty($playerOneDetails->email)) {
+                    AllRequests::sendMatchEmails($playerOneDetails,$message);
+                }
+            }
+            if(count($playerTwoDetails)) {
+                AllRequests::sendnotifications($b_id,$message,'');
+                if(!empty($playerTwoDetails->email)) {
+                    AllRequests::sendMatchEmails($playerTwoDetails,$message);
+                }
+            }
+        }
+    }
         
         // function to send email related to match or tournament
         public static function sendMatchEmails($userDetails,$message) {
