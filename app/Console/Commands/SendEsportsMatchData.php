@@ -45,8 +45,8 @@ class SendEsportsMatchData extends Command
         $time1_day = Carbon::now()->subMonths(1)->format('Y-m-d');
         $time1_time = Carbon::now()->subMonths(1)->format('h:m:s');
 
-        $time2_day = Carbon::now()->addHours(10)->format('Y-m-d');
-        $time2_time = Carbon::now()->addHours(10)->format('h:m:s');
+        $time2_day = Carbon::now()->addHours(2)->format('Y-m-d');
+        $time2_time = Carbon::now()->addHours(2)->format('h:m:s');
 
         $this->info($time1_day);
         $this->info($time2_day);
@@ -54,8 +54,6 @@ class SendEsportsMatchData extends Command
         $this->info($time2_time);
 
         $sport = Sport::where('sports_name', strtolower('smite'))->first();
-
-        $this->info($sport->id);
 
         $matchScheduleData = MatchSchedule::whereBetween('match_start_date', array($time1_day,$time2_day))
             ->whereBetween('match_start_time', array($time1_time, $time2_time))
@@ -66,7 +64,12 @@ class SendEsportsMatchData extends Command
         {
             foreach ($matchScheduleData as $key => $schedule){
                 $this->info($schedule);
-                AllRequests::sendMatchInfo($schedule->tournament_id,$schedule->schedule_type,$schedule->a_id,$schedule->b_id,$schedule->match_start_date,"Smite");
+                // Set lobby name and password for each match
+                $lobbyName = "Smite".str_random(4);
+                $password = str_random(6);
+
+                // Send match info to user/owner/manager
+                AllRequests::sendMatchInfo($schedule->tournament_id,$schedule->schedule_type,$schedule->a_id,$schedule->b_id,$schedule->match_start_date,"Smite", $lobbyName, $password);
             }
             echo "Success";exit;
         }

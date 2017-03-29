@@ -490,16 +490,14 @@ class AllRequests {
         }
 
     // Sends match info for the played game to manager, owner and player
-    public static function sendMatchInfo($tournament_id,$schedule_type,$a_id,$b_id,$match_start_date,$sport_name) {
+    public static function sendMatchInfo($tournament_id,$schedule_type,$a_id,$b_id,$match_start_date,$sport_name,$lobby_name,$password) {
         if(!empty($tournament_id)) {
             $tournamentDetails = AllRequests::gettournamentdetails($tournament_id);
             $tournamentName = $tournamentDetails->tournament_parent_name.' '.$tournamentDetails->name;
         }
         $matchStartDate = Carbon::createFromFormat('Y-m-d', $match_start_date);
 
-        $password = str_random(6);
-        $lobbyName = $sport_name.str_random(4);
-        echo $sport_name.str_random(4);
+        $lobbyName = $lobby_name;
 
         $matchStartDate = $matchStartDate->toFormattedDateString();
 
