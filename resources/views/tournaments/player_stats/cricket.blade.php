@@ -18,7 +18,7 @@
     <div class="tab-pane fade active in" id="batting">
 
     <div class="table-responsive stats-table teamStatsDiv" >
-    <table class="table table-hover">
+    <table class="table table-bordered table-hover">
          <thead>
             <tr>
                 <th>PLAYER</th>
@@ -87,7 +87,7 @@
     <div class="tab-pane fade" id="bowling">
 
     <div class=" table-responsive stats-table teamStatsDiv">
-    <table class="table table-hover">
+    <table class="table table-bordered table-hover">
          <thead>
             <tr>
 
@@ -152,7 +152,7 @@
       <div class="tab-pane fade active in" id="fielding">
 
     <div class="table-responsive stats-table teamStatsDiv" >
-     <table class="table table-hover">
+     <table class="table table-bordered table-hover">
          <thead>
             <tr>
 

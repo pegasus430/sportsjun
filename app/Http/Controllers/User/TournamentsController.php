@@ -2859,7 +2859,7 @@ class TournamentsController extends Controller
 							->join('users', 'users.id', '=', 'cricket_player_matchwise_stats.fielder_id')
 							->where('match_schedules.tournament_id', $tournament_id)
 							->select('cricket_player_matchwise_stats.*','users.*')
-							->selectRaw('count(DISTINCT(cricket_player_matchwise_stats.match_id)) as matches')		
+							->selectRaw('count(cricket_player_matchwise_stats.match_id) as matches')		
 							->selectRaw('sum(IF(out_as="caught", 1, 0)) as caught')
 								->selectRaw('count(innings) as innings_bowled')
 							->selectRaw('sum(IF(out_as="stumped", 1, 0)) as stumped')
