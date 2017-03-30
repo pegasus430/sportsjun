@@ -19,7 +19,7 @@ class CreateSmiteMatchesTable extends Migration
             $table->enum('match_status', ['started', 'finished', 'canceled']);
             $table->text('lobby_name');
             $table->text('lobby_password');
-            $table->text('match_statistic');
+            $table->text('match_statistic')->nullable();
             $table->timestamps();
         });
     }

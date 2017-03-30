@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Model\SmiteMatch;
 use Illuminate\Console\Command;
 use Carbon\Carbon;
 use App\Model\MatchSchedule;
@@ -66,7 +67,14 @@ class SendEsportsMatchData extends Command
                 $this->info($schedule);
                 // Set lobby name and password for each match
                 $lobbyName = "Smite".str_random(4);
-                $password = str_random(6);
+                $password = str_random(5);
+
+                $smiteMatch = SmiteMatch::create([
+                    'match_id' => $schedule->id,
+                    'match_status' => 'started',
+                    'lobby_name' => $lobbyName,
+                    'lobby_password' => $password,
+                ]);
 
                 // Send match info to user/owner/manager
                 AllRequests::sendMatchInfo($schedule->tournament_id,$schedule->schedule_type,$schedule->a_id,$schedule->b_id,$schedule->match_start_date,"Smite", $lobbyName, $password);
