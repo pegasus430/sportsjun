@@ -59,6 +59,9 @@ return [
 	    	'sportsprofile' => 'Sports Profile',
             'sportsrequired' => "Required Step - Please select at least 1 Sport from below list and Click Select Sports",
 		],
+        'esports' => [
+            'matchstarted' => 'Match Started!'
+        ]
 
     ],
     'schedule' => [

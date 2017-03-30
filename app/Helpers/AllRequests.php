@@ -618,6 +618,32 @@ class AllRequests {
             }
         }
     }
+
+    public static function sendMatchInfoEmail($name, $user_id, $user_email, $first_participant, $second_participant, $lobby_name, $lobby_password)
+    {
+        $subject = trans('message.sports.esports.matchstarted');
+        $view_data = [
+            'name' => $name,
+            'first_participant' => $first_participant,
+            'second_participant' => $second_participant,
+            'lobby_name' => $lobby_name,
+            'lobby_password' => $lobby_password,
+        ];
+
+        $view = 'emails.smiteMatchInfo';
+
+        $data = [
+            'view'        => $view,
+            'subject'     => $subject,
+            'to_email_id' => $user_email,
+            'view_data'   => $view_data,
+            'to_user_id'  => $user_id,
+            'flag'        => 'user',
+            'send_flag'   => 1,
+        ];
+
+        SendMail::sendmail($data);
+    }
         
         // function to send email related to match or tournament
         public static function sendMatchEmails($userDetails,$message) {

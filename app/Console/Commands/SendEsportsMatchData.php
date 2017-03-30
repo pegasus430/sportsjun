@@ -63,7 +63,8 @@ class SendEsportsMatchData extends Command
 
         if (count($matchScheduleData) > 0)
         {
-            foreach ($matchScheduleData as $key => $schedule){
+            foreach ($matchScheduleData as $key => $schedule)
+            {
                 $this->info($schedule);
                 // Set lobby name and password for each match
                 $lobbyName = "Smite".str_random(4);
@@ -76,8 +77,32 @@ class SendEsportsMatchData extends Command
                     'lobby_password' => $password,
                 ]);
 
+                // Get players/teams names
+                if($schedule->schedule_type=='team')
+                {
+                    $firstParticipant = AllRequests::getteamname($schedule->a_id);
+                    $secondParticipant = AllRequests::getteamname($schedule->b_id);
+
+                    $teamOneOwnerId = AllRequests::getempidonroles($schedule->a_id,'owner');
+                    $teamTwoOwnerId = AllRequests::getempidonroles($schedule->a_id,'owner');
+
+                    $playerOneDetails = AllRequests::getUserNameAndEmail($teamOneOwnerId);
+                    $playerTwoDetails = AllRequests::getUserNameAndEmail($teamTwoOwnerId);
+                }
+                else
+                {
+                    $playerOneDetails = AllRequests::getUserNameAndEmail($schedule->a_id);
+                    $playerTwoDetails = AllRequests::getUserNameAndEmail($schedule->b_id);
+                    $firstName = $firstParticipant = $playerOneDetails->name;
+                    $firstName = $secondParticipant = $playerTwoDetails->name;
+                }
+
                 // Send match info to user/owner/manager
-                AllRequests::sendMatchInfo($schedule->tournament_id,$schedule->schedule_type,$schedule->a_id,$schedule->b_id,$schedule->match_start_date,"Smite", $lobbyName, $password);
+                //AllRequests::sendMatchInfo($schedule->tournament_id,$schedule->schedule_type,$schedule->a_id,$schedule->b_id,$schedule->match_start_date,"Smite", $lobbyName, $password);
+
+                AllRequests::sendMatchInfoEmail($playerOneDetails->name, $playerTwoDetails->id, $playerOneDetails->email, $firstParticipant, $secondParticipant, $lobbyName, $password);
+                AllRequests::sendMatchInfoEmail($playerTwoDetails->name, $playerTwoDetails->id, $playerOneDetails->email, $firstParticipant, $secondParticipant, $lobbyName, $password);
+
             }
             echo "Success";exit;
         }
