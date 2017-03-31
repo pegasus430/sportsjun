@@ -5,8 +5,10 @@
     <div id="header">
        
         <h2>
-        	{{strtoupper($orgObjInfo->name)}}
+        	{{strtoupper($orgInfoObj->name)}}
         	<br>
+        	</h2>
+        	<h2>
         	{{strtoupper($parent_tournament->name)}}
             <br/>
             <span class="small">
@@ -27,6 +29,10 @@
             width:100%;text-align:center;
         }
 
+        table{
+        	  width:100%;text-align:center;
+        }
+
         
     </style>
 
@@ -41,12 +47,12 @@
 											<th>
 												<p><b><center>&nbsp;</center></b></p>
 												<br/>
-												{!! Helper::makeImageHtml($parent_tournament->logoImage,array('height'=>60,'width'=>60,'class'=>'img-responsive img-rounded center-block'),true )!!}</th>
+									</th>
 											@foreach($orgInfoObj->groups as $og)
 												<td><p><b><center>{{$og->name}}</center></b></p>
 													<br>
 													<?php $og->total_points=0;?>
-													<img src="{{ImageCheck('/uploads/org/groups/logo/'.$og->logo)}}"
+													<img src="{{Helper::ImageCheck('/uploads/org/groups/logo/'.$og->logo)}}"
 														 class='img-responsive img-rounded center-block' height='60px' width='60px'>
 												</td>
 											@endforeach
@@ -82,6 +88,7 @@
 												</th>
 											@endforeach
 										</tr>
+					@endif
 
 
 @stop

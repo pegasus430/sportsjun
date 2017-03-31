@@ -3,13 +3,12 @@
 @section('content')		
 
     <div id="header">
-        @if ($logo)
-            <img src="uploads/tournaments/{{$logo}}" style="float:left;" height="80px"/>
-        @endif
+      
         <h2>
-        {{$strtoupper($orgObjInfo->name)}}<br>
-        	{{strtoupper($tournament->name)}}
-            <br/>
+        {{strtoupper($orgInfoObj->name)}}<br>
+        </h2><h2>
+        	{{strtoupper($lis->name)}}
+            <br/><
             <span class="small">
          	Event Points
             </span>
@@ -35,7 +34,7 @@
 					<div class='col-sm-12'>
 					@if(count($orgInfoObj->groups))
 						<div class='table-responsive' id="teamStatsDiv">
-							<table class='table table-striped table-bordered '>
+							<table class='table table-striped table-bordered print_table '>
 								<thead>
 
 								  </thead>
@@ -44,7 +43,7 @@
 									   <td>
 										   <p><b><center>&nbsp;</center></b></p>
 										   <br/>
-										   {!! Helper::makeImageHtml($lis->logoImage,array('height'=>60,'width'=>60,'class'=>'img-responsive img-rounded center-block') )!!}</td>
+										</td>
 								   		@foreach($orgInfoObj->groups as $og)
 												<td>
 													<p><b><center>{{$og->name}}</center></b></p>
@@ -93,7 +92,7 @@
                             <div class="clearfix"></div>
                             <div class="table-responsive groups-table">
 								<?php $table_count = 0;?>
-                                <table class="table table-striped" id="records_table_{{$group->id}}">
+                                <table class="table table-striped print_table" id="records_table_{{$group->id}}">
                                     <thead class="thead">
                                     <tr>
                                     <th>Team</th>
