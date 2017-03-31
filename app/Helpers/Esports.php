@@ -2,26 +2,12 @@
 
 namespace App\Helpers;
 
-use App\Model\Team;
-use App\Model\Sport;
-use App\Model\UserStatistic;
-use App\Model\Notifications;
-use App\Model\Tournaments;
-use App\Helpers\AllRequests;
-use App\User;
-use Auth;
-use DB;
-use Carbon\Carbon;
-use App\Helpers\SendMail;
-
 class Esports
 {
-    public static function create_smite_session($signature) {
+    public static function createSmiteSession($signature) {
         $s = "/";
-        $utc_timestamp = date('YmdHis',time());
-        $session_url = Constants::SMITE_API_URL.Constants::SMITE_SESSION."json/".Constants::SMITE_DEV_ID.$s.$signature.$s.$utc_timestamp;
-
-        var_dump($session_url);
+        $utc_timestamp = gmdate('YmdHis');
+        $session_url = config('esports.SMITE.SMITE_API').config('esports.SMITE.SMITE_SESSION').config('esports.SMITE.JSON_FORMAT').config('esports.SMITE.SMITE_DEV_ID').$s.$signature.$s.$utc_timestamp;
 
         $ch = curl_init($session_url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
@@ -30,16 +16,29 @@ class Esports
         curl_close($ch);
         $session = json_decode($session);
 
-        var_dump($session);
-
         return $session->session_id;
     }
 
-    public static function create_smite_signature($endpoint) {
-        $utc_timestamp = date('YmdHis',time());
-        $s = "/";
-        $md5_string = Constants::SMITE_DEV_ID.$endpoint.Constants::SMITE_AUTH_KEY.$utc_timestamp;
+    public static function createSmiteSignature($endpoint) {
+        $utc_timestamp = gmdate('YmdHis');
+        $md5_string = config('esports.SMITE.SMITE_DEV_ID').$endpoint.config('esports.SMITE.SMITE_AUTH_KEY').$utc_timestamp;
         $signature = md5($md5_string);
         return $signature;
+    }
+
+    public static function getSmitePlayer($signature, $player, $session_id) {
+        $utc_timestamp = gmdate('YmdHis');
+        $s = "/";
+        $session_url = config('esports.SMITE.SMITE_API').config('esports.SMITE.SMITE_PLAYER').config('esports.SMITE.JSON_FORMAT').config('esports.SMITE.SMITE_DEV_ID').$s.$signature.$s.$session_id.$s.$utc_timestamp.$s."SmiteTestPlayer";
+
+        $ch = curl_init($session_url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $player_object = curl_exec($ch);
+        curl_close($ch);
+        $player_object = json_decode($player_object);
+
+        return $player_object;
+
     }
 }

@@ -44,11 +44,11 @@ class SendEsportsMatchData extends Command
     public function handle()
     {
         //Query to notify users about the match info (lobby creator, lobby name, lobby password)
-        $time1_day = Carbon::now()->format('Y-m-d');
-        $time1_time = Carbon::now()->format('h:m:s');
+        $time1_day = Carbon::now()->subMonth()->addHours(1)->format('Y-m-d');
+        $time1_time = Carbon::now()->subMonth()->format('h:m:s');
 
         $time2_day = Carbon::now()->addMinute()->format('Y-m-d');
-        $time2_time = Carbon::now()->addMinute(2)->format('h:m:s');
+        $time2_time = Carbon::now()->addMinute()->addHours(8)->format('h:m:s');
 
         /*
         $this->info($time1_day);
@@ -56,7 +56,6 @@ class SendEsportsMatchData extends Command
         $this->info($time1_time);
         $this->info($time2_time);
         */
-
         $sport = Sport::where('sports_name', strtolower('smite'))->first();
 
         $matchScheduleData = MatchSchedule::whereBetween('match_start_date', array($time1_day,$time2_day))
@@ -66,9 +65,11 @@ class SendEsportsMatchData extends Command
 
         if (count($matchScheduleData) > 0)
         {
+            $signature = Esports::createSmiteSignature(config('esports.SMITE.SMITE_SESSION'));
+            $session_id = Esports::createSmiteSession($signature);
+
             foreach ($matchScheduleData as $key => $schedule)
             {
-                $this->info($schedule);
                 // Set lobby name and password for each match
                 $lobbyName = "Smite".str_random(4);
                 $password = str_random(5);
@@ -96,15 +97,22 @@ class SendEsportsMatchData extends Command
                 {
                     $playerOneDetails = AllRequests::getUserNameAndEmail($schedule->a_id);
                     $playerTwoDetails = AllRequests::getUserNameAndEmail($schedule->b_id);
-                    $firstName = $firstParticipant = $playerOneDetails->name;
-                    $firstName = $secondParticipant = $playerTwoDetails->name;
+                    $firstParticipant = $playerOneDetails->name;
+                    $secondParticipant = $playerTwoDetails->name;
                 }
 
                 // Send match info to user/owner/manager
-                //AllRequests::sendMatchInfo($schedule->tournament_id,$schedule->schedule_type,$schedule->a_id,$schedule->b_id,$schedule->match_start_date,"Smite", $lobbyName, $password);
+                AllRequests::sendMatchInfo($schedule->tournament_id,$schedule->schedule_type,$schedule->a_id,$schedule->b_id,$schedule->match_start_date,"Smite", $lobbyName, $password);
 
+                // Send email
                 AllRequests::sendMatchInfoEmail($playerOneDetails->name, $playerTwoDetails->id, $playerOneDetails->email, $firstParticipant, $secondParticipant, $lobbyName, $password);
                 AllRequests::sendMatchInfoEmail($playerTwoDetails->name, $playerTwoDetails->id, $playerOneDetails->email, $firstParticipant, $secondParticipant, $lobbyName, $password);
+
+                //var_dump($playerData);
+                $signature = Esports::createSmiteSignature(config('esports.SMITE.SMITE_PLAYER'));
+                var_dump($signature);
+                var_dump($session_id);
+                $player = Esports::getSmitePlayer($signature,"player",$session_id);
 
             }
             echo "Success";exit;
