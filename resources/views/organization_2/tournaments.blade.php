@@ -3,13 +3,16 @@
 @section('content')
 
     <div class="container">
+
             <div class="row">
                 <div class="col-md-12">
-                    <h2 class="page-header"><div class="ph-mark"><div class="glyphicon glyphicon-menu-right"></div></div> Tournaments</h2></div>
+                    <h2 class="page-header"><div class="ph-mark"><div class="glyphicon glyphicon-menu-right"></div></div> Tournaments</h2>
+                          <div class="create-btn-link"><a href="/organization/{{$organisation->id}}/new_tournament" class="wg-cnlink" >Create New Tournament</a></div>
+                    </div>
             </div>
             <div class="row">
 
-            @foreach($parent_tournaments as $parent_tournament)
+    @foreach($parent_tournaments as $parent_tournament)
                 <div class="col-md-8">
                     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                         <div class="panel panel-default">
@@ -77,10 +80,12 @@
                 <div class="col-md-4"></div>
             </div>
         </div>
+
+@if(isset($parent_tournament))
    
    @include('organization_2.overall_standing')
 
-
+@endif
 
            
 @stop

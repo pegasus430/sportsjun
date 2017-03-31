@@ -590,8 +590,14 @@ class TournamentsController extends Controller
 		$request['email'] = !empty($request['email'])?$request['email']:'';
 		$request['description'] = !empty($request['description'])?$request['description']:'';
 		$request['manager_id'] = !empty($request['managerId'])?$request['managerId']:'';
+
 		$TournamentParent = TournamentParent::create($request->all());
 
+
+
+		if(!empty($request['from_organization']) && $request['from_organization']=='yes'){
+			
+		}
 
 		if (is_numeric($request['organization_group_id'])) {
 				$TournamentParent->orgGroups()

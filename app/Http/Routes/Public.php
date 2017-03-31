@@ -257,6 +257,9 @@ Route::get('/whatsapp/', function () {
 
 Route::group(['prefix' => 'download'], function () {
     Route::get('schedules', 'User\PdfController@print_schedules');
+    Route::get('player_standing', 'User\PdfController@player_standing');
+    Route::get('overall_standing', 'User\PdfController@overall_standing');
+    Route::get('event_points', 'User\PdfController@event_points');
 });
 
 

@@ -62,6 +62,7 @@ Route::group(['prefix' => 'organization/{id}'], function () {
     ]);
 
     Route::get('/', 'User\OrganizationController@index');
+    Route::get('/delete_actions','User\OrganizationController@delete_actions');
 
 
 

@@ -24,6 +24,12 @@
         .second {
             background-color: #EFEFEF
         }
+
+        .print_table{
+            width:100%;text-align:center;
+        }
+
+        
     </style>
 
 

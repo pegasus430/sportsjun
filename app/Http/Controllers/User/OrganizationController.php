@@ -20,6 +20,7 @@ use App\Http\Controllers\User\SearchController;
 use DB;
 use App\Model\TournamentGroupTeams;
 use App\Model\OrganizationGroupTeamPoint;
+use App\Model\OrganizationStaff;
 
 use Illuminate\Http\Request as ObjRequest;
 use App\Model\BasicSettings;
@@ -564,6 +565,21 @@ class OrganizationController extends Controller
             'id' => $id,
             'orgInfoObj'=>$organization,
         ));
+    }
+
+    public function delete_actions(objrequest $request){
+        switch ($request->type) {
+            case 'staff':
+                $staff = OrganizationStaff::find($request->id);
+                $staff->delete();
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+
+        return 'ok';
     }
 
 }

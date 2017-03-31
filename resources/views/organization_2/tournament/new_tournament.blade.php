@@ -47,19 +47,20 @@
                                             <input type="text" id="contact_number" required="required" name="contact_number">
                                             <label for="contact_number">Contact Number <span class="req">&#42;</span></label>
                                             <div class="bar"></div>
-                                        </div>
+                                     </div>
                                         <input type="hidden" name="organization_id" value="{{$organisation->id}}">
                                         <input type="hidden" name="isParent" value="yes">
+                                        <input type="hidden" name="from_organization" value="yes">
 
-                                        <div class="input-container two-col">
-                                            <input type="text" id="alternate_number" required="required" name="alternate_contant_number">
+                                         <div class="input-container two-col">
+                                            <input type="text" id="alternate_number" name="alternate_contact_number">
                                             <label for="alternate_number">Alternate Number</label>
                                             <div class="bar"></div>
                                         </div>
                                         <div class="input-container two-col select">
                                            
                                             <label for="manager_name">Manager Name <span class="req">&#42;</span></label>
-                                            <select name="manager_id">
+                                            <select name="managerId">
                                             	@foreach($organisation->staff as $staff)
                                             		<option value="{{$staff->id}}"> {{$staff->name}}</option>
                                             	@endforeach

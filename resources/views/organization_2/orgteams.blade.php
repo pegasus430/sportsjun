@@ -64,5 +64,6 @@
 			</div>
 		</div>
 
+		@include('organization_2.groups.partials.create_team')
 
 @stop
