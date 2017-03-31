@@ -140,6 +140,8 @@
                                 <input class="smite-nickname gui-input" placeholder="Your Smite Username" id="smite-username"/>
                             </label>
 
+                            <div class="clearfix"><a id="smite-url" onclick="smiteRedirect(this)" href="https://www.hirezstudios.com/my-account/"> Dont have an account? Register HERE now!</a></div>
+
                         </div>
                     </div>
                 </div>

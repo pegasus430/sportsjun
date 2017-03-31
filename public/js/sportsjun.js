@@ -1508,6 +1508,11 @@ function filterDiv(that, index){
 
 }
 
+function smiteRedirect(that)
+{
+    window.location.href = that.href;
+}
+
     $(document).ready(function(){
         $(".show_sub_field").click(function(){
             parent_id = $(this).attr('parent_field_id');
