@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use App\Model\MatchSchedule;
 use App\Model\Sport;
 use App\Helpers\AllRequests;
+use App\Helpers\Esports;
 
 class SendEsportsMatchData extends Command
 {
@@ -43,16 +44,18 @@ class SendEsportsMatchData extends Command
     public function handle()
     {
         //Query to notify users about the match info (lobby creator, lobby name, lobby password)
-        $time1_day = Carbon::now()->subMonths(1)->format('Y-m-d');
-        $time1_time = Carbon::now()->subMonths(1)->format('h:m:s');
+        $time1_day = Carbon::now()->format('Y-m-d');
+        $time1_time = Carbon::now()->format('h:m:s');
 
-        $time2_day = Carbon::now()->addHours(2)->format('Y-m-d');
-        $time2_time = Carbon::now()->addHours(2)->format('h:m:s');
+        $time2_day = Carbon::now()->addMinute()->format('Y-m-d');
+        $time2_time = Carbon::now()->addMinute(2)->format('h:m:s');
 
+        /*
         $this->info($time1_day);
         $this->info($time2_day);
         $this->info($time1_time);
         $this->info($time2_time);
+        */
 
         $sport = Sport::where('sports_name', strtolower('smite'))->first();
 
