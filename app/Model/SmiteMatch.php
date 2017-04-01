@@ -11,8 +11,12 @@ class SmiteMatch extends Model
 
     protected $fillable = ['match_id','lobby_name','lobby_password','match_statistic','match_status'];
 
+    /*
+        Foreign keys passed as second parameter references foreign key in this model (match_id)
+        Method name + _id references key constraint
+    */
     public function match()
     {
-        return $this->hasOne('App\MatchSchedule');
+        return $this->belongsTo('App\Model\MatchSchedule');
     }
 }

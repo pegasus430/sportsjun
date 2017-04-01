@@ -2,13 +2,13 @@
 
 namespace App\Console\Commands;
 
-use App\Model\SmiteMatch;
 use Illuminate\Console\Command;
 use Carbon\Carbon;
 use App\Model\MatchSchedule;
 use App\Model\Sport;
 use App\Helpers\AllRequests;
 use App\Helpers\Esports;
+use App\Model\SmiteMatch;
 
 class SendEsportsMatchData extends Command
 {
@@ -44,18 +44,11 @@ class SendEsportsMatchData extends Command
     public function handle()
     {
         //Query to notify users about the match info (lobby creator, lobby name, lobby password)
-        $time1_day = Carbon::now()->subMonth()->addHours(1)->format('Y-m-d');
-        $time1_time = Carbon::now()->subMonth()->format('h:m:s');
+        $time1_day = Carbon::now()->subMonth()->subHours(5)->format('Y-m-d');
+        $time1_time = Carbon::now()->subMonth()->subHours(6)->format('h:m:s');
 
         $time2_day = Carbon::now()->addMinute()->format('Y-m-d');
-        $time2_time = Carbon::now()->addMinute()->addHours(8)->format('h:m:s');
-
-        /*
-        $this->info($time1_day);
-        $this->info($time2_day);
-        $this->info($time1_time);
-        $this->info($time2_time);
-        */
+        $time2_time = Carbon::now()->addMinute()->subHours(3)->format('h:m:s');
         $sport = Sport::where('sports_name', strtolower('smite'))->first();
 
         $matchScheduleData = MatchSchedule::whereBetween('match_start_date', array($time1_day,$time2_day))
@@ -66,7 +59,7 @@ class SendEsportsMatchData extends Command
         if (count($matchScheduleData) > 0)
         {
             $signature = Esports::createSmiteSignature(config('esports.SMITE.SMITE_SESSION'));
-            $session_id = Esports::createSmiteSession($signature);
+            $sessionId = Esports::createSmiteSession($signature);
 
             foreach ($matchScheduleData as $key => $schedule)
             {
@@ -107,12 +100,6 @@ class SendEsportsMatchData extends Command
                 // Send email
                 AllRequests::sendMatchInfoEmail($playerOneDetails->name, $playerTwoDetails->id, $playerOneDetails->email, $firstParticipant, $secondParticipant, $lobbyName, $password);
                 AllRequests::sendMatchInfoEmail($playerTwoDetails->name, $playerTwoDetails->id, $playerOneDetails->email, $firstParticipant, $secondParticipant, $lobbyName, $password);
-
-                //var_dump($playerData);
-                $signature = Esports::createSmiteSignature(config('esports.SMITE.SMITE_PLAYER'));
-                var_dump($signature);
-                var_dump($session_id);
-                $player = Esports::getSmitePlayer($signature,"player",$session_id);
 
             }
             echo "Success";exit;

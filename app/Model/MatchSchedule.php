@@ -291,5 +291,8 @@ class MatchSchedule extends Model
         return $players->get();
    }
 
-
+    public function match()
+    {
+        return $this->hasOne('App\Model\SmiteMatch');
+    }
 }

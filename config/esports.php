@@ -11,6 +11,7 @@ return [
         'SMITE_PLAYER' => 'getplayer',
         'SMITE_MATCHHISTORY' => 'getmatchhistory',
         'SMITE_MATCHDETAILS' => 'getmatchdetails',
+        'SMITE_GETTOPMATCHES' => 'gettopmatches',
         'JSON_FORMAT' => 'json/',
     ],
 

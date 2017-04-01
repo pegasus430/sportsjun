@@ -18,6 +18,7 @@ class Kernel extends ConsoleKernel
         'App\Console\Commands\NotifyNotVerifiedUsers',
         'App\Console\Commands\SendMails',
         'App\Console\Commands\SendEsportsMatchData',
+        'App\Console\Commands\CheckSmiteMatches',
     ];
 
     /**
@@ -38,5 +39,7 @@ class Kernel extends ConsoleKernel
                  ->cron('*/10 * * * *');
         $schedule->command('esports:match-data')
             ->everyMinute();
+        $schedule->command('esports:check-matches')
+            ->everyFiveMinutes();
     }
 }
