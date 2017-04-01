@@ -8,12 +8,11 @@
                 <div class="col-sm-4 bg-white pdtb-30">
                     <h5 class="text-center"><b>Steps to create tournament</b></h5>
                     <ol class="steps-list text-left">
-                        <li>Firstly, fill up the <strong>Tournament Details</strong> section.</li>
-                        <li><strong>Click Update</strong></li>
-                        <li>Navigate to <strong>Tournament Events</strong> tab.</li>
-                        <li><strong>Add</strong> single/multiple tournament events to a single tournament.</li>
-                        <li><strong>Teams / Players</strong> will respond to your request to join.</li>
-                        <li><strong>Accept / Reject</strong> to enroll the Teams / Players into the tournament.</li>
+                                  <span class="steps_to_follow">Steps to create team:</span>
+                                <li><span class="bold">Fill</span> the create team form.</li>
+                                <li>Click <span class="bold">create.</span></li>
+                                <li><span class="bold">Add players</span> using Add Player / Invite Player wizard.</li>
+                                <li>Make a player the <span class="bold">Manager / Captain</span> of the team using <span class="glyphicon glyphicon-option-vertical"></span> button.</li>
                     </ol>
                 </div>
                 <div class="col-sm-8">
@@ -41,7 +40,7 @@
                                         {!! csrf_field() !!}
                                         <div class="input-container one-col file nomgbtm">
                                             <label>Group Logo</label>
-                                            <input type="file" id="staff_email" required="" name="logo"> </div>
+                                            <input type="file" id="staff_email" required="" name="filelist_photos"> </div>
                                         
                                         <div class="input-container two-col">
                                             <input type="text" id="contact_number" required="required" name="contact_number">

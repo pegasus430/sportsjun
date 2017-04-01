@@ -79,7 +79,7 @@
     <div class="modal fade" id="add_player" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <form method="POST" action="/organization/{{$organisation->id}}/staff" accept-charset="UTF-8" class="form form-horizontal">
+                <form method="POST" action="/organization/{{$organisation->id}}/save_player" accept-charset="UTF-8" class="form form-horizontal">
           {!!csrf_field()!!}
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -100,7 +100,9 @@
                                 <input type="text" id="player_dob" required="required" name="dob" />
                                 <label for="Username">DOB</label>
                                 <div class="bar"></div>
+
                             </div> -->
+                            <input type="hidden" name="organization_id" value="{{$organisation->id}}">
                             <div class="clearfix"></div>
                             <div class="input-container two-col">
                                 <input type="text" id="parent_name" required="" name="parent_name" />
@@ -112,54 +114,33 @@
                                 <label for="Username">Parent Email</label>
                                 <div class="bar"></div>
                             </div>
-                            <div class="input-container one-col">
-                                <input type="text" id="area" required="required" />
-                                <label for="Username">Area</label>
-                                <div class="bar"></div>
-                            </div>
+                    
                             <div class="input-container select two-col">
                                 <div>
                                     <label>Country</label>
-                                    <select class="" name="staff_role">
-                                        <option value="1">India</option>
-                                        <option value="12">USA</option>
-                                        <option value="5">UK</option>
-                                        <option value="14">Canada</option>
-                                        <option value="7">Australia</option>
-                                        <option value="2">Japan</option>
-                                    </select>
+                              {!!Form::select('country_id', $countries,$organisation->country_id, ['id'=>'country_id'])!!}
+                                  
                                 </div>
                             </div>
                             <div class="input-container select two-col">
                                 <div>
                                     <label>State</label>
-                                    <select class="" name="staff_role">
-                                        <option value="1">India</option>
-                                        <option value="12">USA</option>
-                                        <option value="5">UK</option>
-                                        <option value="14">Canada</option>
-                                        <option value="7">Australia</option>
-                                        <option value="2">Japan</option>
-                                    </select>
+                                   
+                                {!!Form::select('state_id', $states,null, ['id'=>'state_id'])!!}
+                                  
                                 </div>
                             </div>
                             <div class="input-container select two-col">
                                 <div>
                                     <label>City</label>
-                                    <select class="" name="staff_role">
-                                        <option value="1">India</option>
-                                        <option value="12">USA</option>
-                                        <option value="5">UK</option>
-                                        <option value="14">Canada</option>
-                                        <option value="7">Australia</option>
-                                        <option value="2">Japan</option>
-                                    </select>
+                                {!!Form::select('city_id', $cities,null, ['id'=>'city_id'])!!}
+                                  
                                 </div>
                             </div>
                             <div class="input-container select two-col">
                                 <div>
                                     <label>Team</label>
-                                    <select class="" name="staff_role">
+                                    <select class="" name="team_id" required="">
                                         @foreach($organisation->teamplayers as $team)
                                             <option value="{{$team->id}}">{{$team->name}}</option>
                                         @endforeach

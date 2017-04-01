@@ -628,6 +628,13 @@ class TournamentsController extends Controller
 			}
 
 		}
+
+		if($request->has('logo')){
+			$str = str_random(10).$request->file('logo')->getClientOriginalExtension();
+			$request->file('logo')->move(public_path().'/uploads/organization/', $str);
+			TournamentParent::where('id', $last_inserted_sport_id)->update(['logo' => $str]);
+
+		}
 	}
 		//return redirect()->back()->with('status', trans('message.tournament.create'));
 		return redirect()->route('tournaments.edit', [$last_inserted_sport_id])->with('status', trans('message.tournament.create'));

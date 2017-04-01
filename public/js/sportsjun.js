@@ -121,6 +121,9 @@ $("textarea").on('keyup', function (event) {
 // End TeaxtArea length
 var showLoader = true;
 
+
+if(typeof is_organization !='undefined') showLoader=false;
+
 $(function() {
     $(window).bind("load resize", function() {
         topOffset = 50;

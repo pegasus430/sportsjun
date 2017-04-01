@@ -6,7 +6,7 @@
 			<div class="row">
 				<div class="col-md-12">
 					<h2 class="page-header"><div class="ph-mark"><div class="glyphicon glyphicon-menu-right"></div></div> {{$group?$group->name.' (Teams)': 'All Teams'}}</h2>
-					<div class="create-btn-link"><a href="" class="wg-cnlink" data-toggle="modal" data-target="#create_team">Create New Team</a></div>
+					<div class="create-btn-link"><a href="/organization/{{$organisation->id}}/create_team" class="wg-cnlink" >Create New Team</a></div>
 				</div>
 			</div>
 			<div class="row">

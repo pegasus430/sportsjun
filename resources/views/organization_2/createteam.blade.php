@@ -8,40 +8,32 @@
                 <div class="col-sm-4 bg-white pdtb-30">
                     <h5 class="text-center"><b>Steps to create tournament</b></h5>
                     <ol class="steps-list text-left">
-                        <li>Firstly, fill up the <strong>Tournament Details</strong> section.</li>
-                        <li><strong>Click Update</strong></li>
-                        <li>Navigate to <strong>Tournament Events</strong> tab.</li>
-                        <li><strong>Add</strong> single/multiple tournament events to a single tournament.</li>
-                        <li><strong>Teams / Players</strong> will respond to your request to join.</li>
-                        <li><strong>Accept / Reject</strong> to enroll the Teams / Players into the tournament.</li>
+                                  <span class="steps_to_follow">Steps to create team:</span>
+                                <li><span class="bold">Fill</span> the create team form.</li>
+                                <li>Click <span class="bold">create.</span></li>
+                                <li><span class="bold">Add players</span> using Add Player / Invite Player wizard.</li>
+                                <li>Make a player the <span class="bold">Manager / Captain</span> of the team using <span class="glyphicon glyphicon-option-vertical"></span> button.</li>
                     </ol>
                 </div>
                 <div class="col-sm-8">
                     <div class="wg wg-dk-grey no-shadow no-margin">
                         <div class="wg-wrap clearfix">
-                            <h4 class="no-margin pull-left"><i class="fa fa-pencil-square"></i> Edit Tournament / League Details</h4></div>
+                            <h4 class="no-margin pull-left"><i class="fa fa-pencil-square"></i> Create Team</h4></div>
                     </div>
                     <div class="wg no-margin tabbable-panel create_tab_form">
                         <div class="tabbable-line">
                             <ul class="nav nav-tabs ">
-                                <li class="active"> <a href="#tournament_details" data-toggle="tab">
-								TOURNAMENT DETAILS </a> </li>
-                                <li class=""> <a href="#tournament_events" data-toggle="tab" aria-expanded="false">
-								TOURNAMENT EVENTS </a> </li>
-                            </ul>
-                            <div class="tab-content">
-                                <div class="tab-pane active" id="tournament_details">
-                                    <br>
+                     
                                     <form action="/tournaments" class="form create-form clearfix" method="post" enctype="multipart/form-data">
                                         <div class="input-container one-col">
                                             <input type="text" id="tournament_name" required="required" name="name">
-                                            <label for="tournament_name">Tournament Name <span class="req">&#42;</span></label>
+                                            <label for="tournament_name">Team Name <span class="req">&#42;</span></label>
                                             <div class="bar"></div>
                                         </div>
                                         {!! csrf_field() !!}
                                         <div class="input-container one-col file nomgbtm">
                                             <label>Group Logo</label>
-                                            <input type="file" id="staff_email" required="" name="logo"> </div>
+                                            <input type="file" id="staff_email" required="" name="filelist_photos"> </div>
                                         
                                         <div class="input-container two-col">
                                             <input type="text" id="contact_number" required="required" name="contact_number">

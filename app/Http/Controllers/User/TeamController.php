@@ -86,7 +86,7 @@ class TeamController extends Controller
         $organization = Organization::orderBy('name')->where('user_id',
             (isset(Auth::user()->id) ? Auth::user()->id : 0))->lists('name', 'id')->all();
         $cities = array();
-        return view('teams.createteam')->with(array('sports' => ['' => 'Select Sport'] + $sports))
+        return view($this->view.'.createteam')->with(array('sports' => ['' => 'Select Sport'] + $sports))
             ->with('countries', ['' => 'Select Country'] + $countries)
             ->with('states', ['' => 'Select State'] + $states)
             ->with('cities', ['' => 'Select City'] + $cities)
@@ -594,6 +594,11 @@ class TeamController extends Controller
             'staffList'=>$staffList,
             'group'=>$group
         ));
+    }
+
+
+    public function create_team_org($id){
+        return view('organization_2.groups.create_team', compact('id'));
     }
 
     //function to make team makeasteammanager

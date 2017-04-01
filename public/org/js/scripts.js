@@ -3,7 +3,7 @@ $(function () {
     var includes = $('[data-include]');
     jQuery.each(includes, function () {
         var file = 'inc/' + $(this).data('include') + '.html';
-        $(this).load(file);
+      //  $(this).load(file);
     });
 });
 // Page Active

@@ -122,7 +122,10 @@
     <script src="/org/js/bootstrap.min.js"></script>
     <script src="/org/js/w3data.js"></script>
     <script src="/org/js/bootstrap-select.js"></script>
-
+    <script type="text/javascript">
+            var is_organization=true;
+    </script>
+    @include ('layouts.footer_scripts')
     @yield('end_scripts')
         <script type="text/javascript" src='/org/js/scripts.js'></script>
     <script>

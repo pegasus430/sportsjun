@@ -552,7 +552,7 @@ class OrganizationController extends Controller
             'followingOrgs' => $followingOrgs,
             'joinedOrgs' => $joinedOrgs,
             'user' => $user,
-            'user_id'=>$user_id
+            'user_id'=>$user_id 
         ]);
     }
 
@@ -581,5 +581,6 @@ class OrganizationController extends Controller
 
         return 'ok';
     }
+
 
 }

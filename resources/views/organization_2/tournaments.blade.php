@@ -11,24 +11,26 @@
                     </div>
             </div>
             <div class="row">
-
+        <div class="col-md-8">
     @foreach($parent_tournaments as $parent_tournament)
-                <div class="col-md-8">
-                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                        <div class="panel panel-default">
-                            <div class="panel-heading" role="tab" id="headingOne">
-                                <h4 class="panel-title">
-            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-{{$parent_tournament->id}}" aria-expanded="true" aria-controls="collapseOne">
-                {{$parent_tournament->name}}
-            </a>
-          </h4>
-          
-                  <span class="pull-right">
-                    <br><button class="btn btn-danger" href="javascript:void(0);" data-toggle="modal" data-target="#overall_standing_{{$parent_tournament->id}}">Overall Standing</button></span>
-            
-           </div>
 
-                            <div id="collapse-{{$parent_tournament->id}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="heading-{{$parent_tournament->id}}">
+                        <h4 class="panel-title">
+                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-{{$parent_tournament->id}}" aria-expanded="true" aria-controls="collapseOne">
+                            {{$parent_tournament->name}}
+                        </a>
+                      </h4>             
+                 </div>
+
+        <div id="collapse-{{$parent_tournament->id}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                             <div class="row">
+                <div class="col-md-12">
+                      <span class="pull-right">
+                        <br><button class="btn btn-danger" href="javascript:void(0);" data-toggle="modal" data-target="#overall_standing_{{$parent_tournament->id}}">Overall Standing</button></span>
+                </div>
+               </div>
                  
                             @foreach($parent_tournament->tournaments as $lis)
                                 <div class="panel-body">
@@ -71,7 +73,10 @@
                                 @endforeach
                                
                             </div>
-                        </div>
+                    </div>
+
+                    
+                        
 
                 @endforeach
                     

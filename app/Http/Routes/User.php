@@ -63,6 +63,8 @@ Route::group(['prefix' => 'organization/{id}'], function () {
 
     Route::get('/', 'User\OrganizationController@index');
     Route::get('/delete_actions','User\OrganizationController@delete_actions');
+    Route::post('/save_player', 'User\OrganizationMembersController@save_player');
+    Route::get('/create_team', 'User\TeamController@create');
 
 
 
