@@ -1,13 +1,13 @@
 <?php
 
-namespace App;
+namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
 class SmiteSession extends Model
 {
     //
-    protected $table = 'smite_session';
+    protected $table = 'smite_sessions';
 
-    protected $fillable = ['match_id','lobby_name','lobby_password','match_statistic','match_status'];
+    protected $fillable = ['token'];
 }

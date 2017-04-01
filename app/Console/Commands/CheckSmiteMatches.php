@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Carbon\Carbon;
 use App\Model\SmiteMatch;
+use App\Model\SmiteSession;
 use App\Model\Sport;
 use App\User;
 use App\Helpers\Esports;
@@ -60,13 +61,14 @@ class CheckSmiteMatches extends Command
 
         if (count($matchScheduleData) > 0)
         {
-            /*
-             TO DO:
-            -Store session to db
-            -Check if session expired
-             */
+            $smiteSession = SmiteSession::all()->last();
 
-            $sessionId = Esports::createSmiteSession();
+            $sessionId = $smiteSession->token;
+
+            if(empty($smiteSession) || $smiteSession->created_at >= Carbon::now()->addMinutes(15)) {
+                $sessionId = Esports::createSmiteSession();
+                SmiteSession::create(['token' => $sessionId]);
+            }
 
             foreach ($matchScheduleData as $key => $schedule)
             {
@@ -107,7 +109,7 @@ class CheckSmiteMatches extends Command
                     $playerId = $player[0]->Id;
 
                     $matchHistory = Esports::getMatchHistory($playerId,$sessionId);
-
+                    var_dump($matchHistory);
                     $matchTime = Carbon::createFromFormat('m/d/Y H:i:s A',$matchHistory->Match_Time, new \DateTimeZone('UTC'));
                     $matchTime->addSeconds($matchHistory->Time_In_Match_Seconds);
 
@@ -143,6 +145,8 @@ class CheckSmiteMatches extends Command
                     if(empty($smiteUsername))
                         continue;
 
+                    //$smiteUsername =
+
                     $player = Esports::getSmitePlayer($smiteUsername,$sessionId);
 
                     if(empty($player))
@@ -162,15 +166,11 @@ class CheckSmiteMatches extends Command
                 if(!$matchFound)
                     continue;
 
-                
+
+                var_dump("DOSAO DO OVDJE");
 
 
-/*
-                $signature = Esports::createSmiteSignature(config('esports.SMITE.SMITE_PLAYER'));
-                $player = Esports::getSmitePlayer($signature,"RadeLackovic",$sessionId);
-                var_dump($player);
 
-*/
 
 
             }

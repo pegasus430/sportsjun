@@ -32,6 +32,7 @@ class Esports
         $utc_timestamp = gmdate('YmdHis');
         $s = "/";
         $session_url = config('esports.SMITE.SMITE_API').config('esports.SMITE.SMITE_PLAYER').config('esports.SMITE.JSON_FORMAT').config('esports.SMITE.SMITE_DEV_ID').$s.$signature.$s.$session_id.$s.$utc_timestamp.$s.$player;
+
         $ch = curl_init($session_url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -48,7 +49,23 @@ class Esports
         $utc_timestamp = gmdate('YmdHis');
         $s = "/";
         $session_url = config('esports.SMITE.SMITE_API').config('esports.SMITE.SMITE_MATCHHISTORY').config('esports.SMITE.JSON_FORMAT').config('esports.SMITE.SMITE_DEV_ID').$s.$signature.$s.$session_id.$s.$utc_timestamp.$s.$player;
-        var_dump($session_url);
+
+        $ch = curl_init($session_url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $match_history = curl_exec($ch);
+        curl_close($ch);
+        $match_history = json_decode($match_history);
+        return $match_history[0];
+    }
+
+    public static function getMatchDetails($match_id, $session_id)
+    {
+        $signature = Esports::createSmiteSignature(config('esports.SMITE.SMITE_MATCHHISTORY'));
+        $utc_timestamp = gmdate('YmdHis');
+        $s = "/";
+        $session_url = config('esports.SMITE.SMITE_API').config('esports.SMITE.SMITE_MATCHHISTORY').config('esports.SMITE.JSON_FORMAT').config('esports.SMITE.SMITE_DEV_ID').$s.$signature.$s.$session_id.$s.$utc_timestamp.$s.$player;
+
         $ch = curl_init($session_url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -64,7 +81,7 @@ class Esports
         $utc_timestamp = gmdate('YmdHis');
         $s = "/";
         $session_url = config('esports.SMITE.SMITE_API').config('esports.SMITE.SMITE_GETTOPMATCHES').config('esports.SMITE.JSON_FORMAT').config('esports.SMITE.SMITE_DEV_ID').$s.$signature.$s.$session_id.$s.$utc_timestamp;
-        var_dump($session_url);
+
         $ch = curl_init($session_url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
