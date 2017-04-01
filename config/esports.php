@@ -12,6 +12,7 @@ return [
         'SMITE_MATCHHISTORY' => 'getmatchhistory',
         'SMITE_MATCHDETAILS' => 'getmatchdetails',
         'SMITE_GETTOPMATCHES' => 'gettopmatches',
+        'SMITE_GETMATCHDETAILS' => 'getmatchdetails',
         'JSON_FORMAT' => 'json/',
     ],
 

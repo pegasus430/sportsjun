@@ -80,6 +80,7 @@ class CheckSmiteMatches extends Command
 
                 $matchId = '';
                 $matchFound = false;
+                $playerId1 = ''; $playerId2 = '';
 
                 foreach($teamOne as $participant)
                 {
@@ -106,10 +107,10 @@ class CheckSmiteMatches extends Command
                     if(empty($player))
                         continue;
 
-                    $playerId = $player[0]->Id;
-
+                    $playerId1 = $playerId = $player[0]->Id;
                     $matchHistory = Esports::getMatchHistory($playerId,$sessionId);
-                    var_dump($matchHistory);
+
+                    /* Get starting time and add match duration time to get match ending time */
                     $matchTime = Carbon::createFromFormat('m/d/Y H:i:s A',$matchHistory->Match_Time, new \DateTimeZone('UTC'));
                     $matchTime->addSeconds($matchHistory->Time_In_Match_Seconds);
 
@@ -145,14 +146,12 @@ class CheckSmiteMatches extends Command
                     if(empty($smiteUsername))
                         continue;
 
-                    //$smiteUsername =
-
                     $player = Esports::getSmitePlayer($smiteUsername,$sessionId);
 
                     if(empty($player))
                         continue;
 
-                    $playerId = $player[0]->Id;
+                    $playerId2 = $playerId = $player[0]->Id;
 
                     $matchHistory = Esports::getMatchHistory($playerId,$sessionId);
 
@@ -165,6 +164,30 @@ class CheckSmiteMatches extends Command
 
                 if(!$matchFound)
                     continue;
+
+                $matchDetails = Esports::getMatchDetails($matchId,$sessionId);
+
+                /* Check who won and save statistics */
+                $firstTeamWon = false;
+                foreach($matchDetails as $player)
+                {
+                    if($player->playerId == $playerId1)
+                    {
+                        if($player->Win_Status == "Winner")
+                            $firstTeamWon = true;
+                    }
+
+                    $user = GameUsername::where('sport_id', $sport->id)->where('username', $player->playerName)->first();
+
+                    if(empty($user))
+                        continue;
+
+
+                }
+
+                /* Finish Smite match */
+                /* Finish scheduled match */
+                var_dump($matchDetails->playerId);
 
 
                 var_dump("DOSAO DO OVDJE");

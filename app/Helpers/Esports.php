@@ -61,18 +61,18 @@ class Esports
 
     public static function getMatchDetails($match_id, $session_id)
     {
-        $signature = Esports::createSmiteSignature(config('esports.SMITE.SMITE_MATCHHISTORY'));
+        $signature = Esports::createSmiteSignature(config('esports.SMITE.SMITE_GETMATCHDETAILS'));
         $utc_timestamp = gmdate('YmdHis');
         $s = "/";
-        $session_url = config('esports.SMITE.SMITE_API').config('esports.SMITE.SMITE_MATCHHISTORY').config('esports.SMITE.JSON_FORMAT').config('esports.SMITE.SMITE_DEV_ID').$s.$signature.$s.$session_id.$s.$utc_timestamp.$s.$player;
-
+        $session_url = config('esports.SMITE.SMITE_API').config('esports.SMITE.SMITE_GETMATCHDETAILS').config('esports.SMITE.JSON_FORMAT').config('esports.SMITE.SMITE_DEV_ID').$s.$signature.$s.$session_id.$s.$utc_timestamp.$s.$match_id;
         $ch = curl_init($session_url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $match_history = curl_exec($ch);
+        $match_details = curl_exec($ch);
         curl_close($ch);
-        $match_history = json_decode($match_history);
-        return $match_history[0];
+        $match_details = json_decode($match_details);
+        //var_dump($match_details);
+        return $match_details;
     }
 
     public static function getTopMatches($session_id)
