@@ -9,6 +9,7 @@ class GameUsername extends Model
     //
 
     protected $table = 'game_usernames';
+    protected $fillable = ['user_id'];
 
     public function user()
     {

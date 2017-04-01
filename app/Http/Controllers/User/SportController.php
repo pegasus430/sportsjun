@@ -182,8 +182,9 @@ class SportController extends Controller {
         // Check if it's an eSport
         $sportsName = Sport::where('id', $sportsId)->first();
         $game_username = '';
-        if(strtolower($sportsName->sports_name) == 'smite')
-            $game_username = GameUsername::where('user_id', $userId)->find(1);
+        if(strtolower($sportsName->sports_name) == 'smite') {
+            $game_username = GameUsername::where('user_id', $userId)->where('sport_id', $sportsId)->first();
+        }
 
         if (empty($sportsId) || empty($userId))
             return view('sportprofile.question', ['sportsQuestions' => [], 'exception' => []]);
