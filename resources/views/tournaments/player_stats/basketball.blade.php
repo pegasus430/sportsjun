@@ -2,7 +2,7 @@
 
 <div class="row ">
     <div class="table-responsive stats-table teamStatsDiv" >
-    <table class="table table-striped " >
+    <table class="table table-bordered table-striped " >
         <thead>
             <tr>
                 <th>PLAYER </th>

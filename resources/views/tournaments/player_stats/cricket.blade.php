@@ -18,7 +18,7 @@
     <div class="tab-pane fade active in" id="batting">
 
     <div class="table-responsive stats-table teamStatsDiv" >
-    <table class="table table-hover">
+    <table class="table table-bordered table-hover">
          <thead>
             <tr>
                 <th>PLAYER</th>
@@ -87,7 +87,7 @@
     <div class="tab-pane fade" id="bowling">
 
     <div class=" table-responsive stats-table teamStatsDiv">
-    <table class="table table-hover">
+    <table class="table table-bordered table-hover">
          <thead>
             <tr>
 
@@ -152,7 +152,7 @@
       <div class="tab-pane fade active in" id="fielding">
 
     <div class="table-responsive stats-table teamStatsDiv" >
-     <table class="table table-hover">
+     <table class="table table-bordered table-hover">
          <thead>
             <tr>
 
@@ -169,12 +169,10 @@
         </thead>
         <tbody>
                   @foreach($player_standing['fielding'] as $statistic)
-
-       @if(!empty($statistic->ecomony))
             <tr>
                 <td>
                     @if (!Auth::guest())
-                        <a href='/editsportprofile/{{$statistic->user_id}}' class="text-primary">
+                        <a href='/editsportprofile/{{$statistic->fielder_id}}' class="text-primary">
                     @endif
 
                      <span class='hidden-xs hidden-sm'> 
@@ -186,7 +184,7 @@
                              
                     </span>
 
-                    {{$statistic->player_name}}
+                    {{$statistic->name}}
                             @if (!Auth::guest())
                         </a>
                             @endif
@@ -194,9 +192,9 @@
                 </td>
                 <td>
                     @if (!Auth::guest())
-                    <a href='/team/members/{{$statistic->team_id}}' class="text-primary">{{$statistic->team_name}}</a>
+                    <a href='/team/members/{{$statistic->fielder_team_id}}' class="text-primary">{{$statistic->fielder_team_name}}</a>
                     @else
-                        {{$statistic->team_name}}
+                        {{$statistic->fielder_team_name}}
                     @endif
 
                 </td>
@@ -208,7 +206,7 @@
                 <td>{{$statistic->stumped}}</td>
             
             </tr>
-         @endif
+      
             @endforeach
         </tbody>
 

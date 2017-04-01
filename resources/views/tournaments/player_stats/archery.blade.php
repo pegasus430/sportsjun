@@ -1,7 +1,9 @@
 @if (count($player_standing))
     <h4><b>{{ config('constants.SOCCER_STATS.SOCCER_STATISTICS')}}</b></h4>
+
     <div class="table-responsive stats-table print_table teamStatsDiv" >
-    <table class="table table-hover">
+    <table class="table table-hover table-bordered">
+
         <thead>
             <tr>
                 <th>PLAYER </th>
