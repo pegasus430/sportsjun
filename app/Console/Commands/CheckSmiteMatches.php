@@ -6,6 +6,8 @@ use Illuminate\Console\Command;
 use Carbon\Carbon;
 use App\Model\SmiteMatch;
 use App\Model\SmiteSession;
+use App\Model\SmiteMatchStats;
+use App\Model\GameUsername;
 use App\Model\Sport;
 use App\User;
 use App\Helpers\Esports;
@@ -119,6 +121,7 @@ class CheckSmiteMatches extends Command
                     if($matchTime < $fiveMinutesAgo)
                         continue;
                     $matchId = $matchHistory->Match;
+
                     break;
                 }
 
@@ -140,12 +143,11 @@ class CheckSmiteMatches extends Command
                             break;
                         }
                     }
-
+                    $smiteUsername = 'Bennnoxiss';
                     if(empty($smiteUsername))
                         continue;
 
                     $player = Esports::getSmitePlayer($smiteUsername,$sessionId);
-
                     if(empty($player))
                         continue;
 
@@ -179,12 +181,30 @@ class CheckSmiteMatches extends Command
                     if(empty($user))
                         continue;
 
+                    SmiteMatchStats::create([
+                        'user_id' => $user->user_id,
+                        'match_id' => $schedule->match->id,
+                        'smite_match_id' => $schedule->id,
+                        'final_level' => $player->Final_Match_Level,
+                        'kills' => $player->Kills_Single,
+                        'deaths' => $player->Deaths,
+                        'assists' => $player->Assists,
+                        'gold_earned' => $player->Gold_Earned,
+                        'gpm' => $player->Gold_Per_Minute,
+                        'magical_damage_done' => $player->Damage_Done_Magical,
+                        'physical_damage_done' => $player->Damage_Done_Physical,
+                        'healing' => $player->Healing
+                    ]);
+
 
                 }
 
                 /* Finish Smite match */
+                $schedule->match_status = 'finished';
+                $schedule->save();
+
                 /* Finish scheduled match */
-                var_dump($matchDetails->playerId);
+                //var_dump($matchDetails->playerId);
 
 
                 var_dump("DOSAO DO OVDJE");

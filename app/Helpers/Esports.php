@@ -39,7 +39,7 @@ class Esports
         $player_object = curl_exec($ch);
         curl_close($ch);
         $player_object = json_decode($player_object);
-        //var_dump($player_object);
+
         return $player_object;
     }
 
@@ -65,13 +65,14 @@ class Esports
         $utc_timestamp = gmdate('YmdHis');
         $s = "/";
         $session_url = config('esports.SMITE.SMITE_API').config('esports.SMITE.SMITE_GETMATCHDETAILS').config('esports.SMITE.JSON_FORMAT').config('esports.SMITE.SMITE_DEV_ID').$s.$signature.$s.$session_id.$s.$utc_timestamp.$s.$match_id;
+
         $ch = curl_init($session_url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $match_details = curl_exec($ch);
         curl_close($ch);
         $match_details = json_decode($match_details);
-        //var_dump($match_details);
+
         return $match_details;
     }
 
