@@ -50,8 +50,8 @@ class SmiteController extends Controller
         $sport = Sport::where('sports_name', strtolower('smite'))->first();
         $username = $request->input('username');
 
-        if($game_username = GameUsername::find(1)->where('sport_id', $sport->id)->exists())
-            $game_username = GameUsername::find(1)->where('sport_id', $sport->id)->first();
+        if($game_username = GameUsername::find(1)->where('user_id', $user_id->id)->where('sport_id', $sport->id)->exists())
+            $game_username = GameUsername::find(1)->where('user_id', $user_id->id)->where('sport_id', $sport->id)->first();
         else
             $game_username = new GameUsername;
 
