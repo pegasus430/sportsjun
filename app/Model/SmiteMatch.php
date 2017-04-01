@@ -19,4 +19,9 @@ class SmiteMatch extends Model
     {
         return $this->belongsTo('App\Model\MatchSchedule');
     }
+
+    public function smite_match()
+    {
+        return $this->hasOne('App\Model\SmiteMatch');
+    }
 }

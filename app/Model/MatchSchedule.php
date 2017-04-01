@@ -295,4 +295,9 @@ class MatchSchedule extends Model
     {
         return $this->hasOne('App\Model\SmiteMatch');
     }
+
+    public function smitematchstats()
+    {
+        return $this->hasOne('App\Model\SmiteMatchStats');
+    }
 }
