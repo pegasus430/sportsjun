@@ -65,7 +65,7 @@ class CheckSmiteMatches extends Command
 
             $sessionId = $smiteSession->token;
 
-            if(empty($smiteSession) || $smiteSession->created_at >= Carbon::now()->addMinutes(15)) {
+            if(empty($smiteSession) || $smiteSession->created_at <= Carbon::now()->addMinutes(15)) {
                 $sessionId = Esports::createSmiteSession();
                 SmiteSession::create(['token' => $sessionId]);
             }
@@ -118,14 +118,12 @@ class CheckSmiteMatches extends Command
                     $fiveMinutesAgo = Carbon::now()->subHours(5);
                     if($matchTime < $fiveMinutesAgo)
                         continue;
-
                     $matchId = $matchHistory->Match;
                     break;
                 }
 
                 if(empty($matchId))
                     continue;
-
                 foreach($teamTwo as $participant)
                 {
                     if(empty($participant))
@@ -164,7 +162,6 @@ class CheckSmiteMatches extends Command
 
                 if(!$matchFound)
                     continue;
-
                 $matchDetails = Esports::getMatchDetails($matchId,$sessionId);
 
                 /* Check who won and save statistics */
