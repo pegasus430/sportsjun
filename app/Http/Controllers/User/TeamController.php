@@ -112,6 +112,7 @@ class TeamController extends Controller
         $request['country'] = !empty($request['country_id']) ? Country::where('id',
             $request['country_id'])->first()->country_name : 'null';
         $location = Helper::address($request['address'], $request['city'], $request['state'], $request['country']);
+        $request['team_level'] = ($request['team_level'] == '') ? 'ANY' : $request['team_level'];
         $request['location'] = trim($location, ",");
         //model call to save the data
         $team_details = Team::create($request->all());

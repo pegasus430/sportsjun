@@ -37,9 +37,9 @@
                                     ?>
                                     <li class="<?php echo $activeClass;?>">
                                         <a href="#addplayer_{{$userSport->id}}" data-toggle="tab" aria-expanded="<?php echo $ariaExpanded?>"
-                                           onclick="displaySportQuestions('unfollow',{{$userSport->id}},{{$userId}},'{{$userSport->sports_name}}');">{{$userSport->sports_name}}</a>
+                                           onclick="displaySportQuestions('unfollow',{{$userSport->id}},{{$userId}},'{{$userSport->sports_name}}');" class="sport-tabs" data-id="{{$userSport->id}}" data-uid="{{$userId}}" data-name="{{ strtolower($userSport->sports_name) }}">{{$userSport->sports_name}}</a>
                                         @if($userId==isset(Auth::user()->id)?Auth::user()->id:0)
-                                            <span class="btn-tooltip" data-toggle="tooltip" data-placement="top" title="Remove {{$userSport->sports_name}}" onclick="removeUserStats('false',{{$userSport->id}},{{ isset(Auth::user()->id)?Auth::user()->id:0 }},'follow');"><i class="fa fa-remove"></i></span>
+                                            <span class="btn-tooltip sport-tabs-remove" data-toggle="tooltip" data-placement="top" title="Remove {{$userSport->sports_name}}" data-remove="{{ strtolower($userSport->sports_name) }}" onclick="removeUserStats('false',{{$userSport->id}},{{ isset(Auth::user()->id)?Auth::user()->id:0 }},'follow');"><i class="fa fa-remove"></i></span>
                                         @endif
                                     </li>
                                     <?php $i++;?>

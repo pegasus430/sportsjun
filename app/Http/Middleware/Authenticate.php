@@ -75,7 +75,8 @@ class Authenticate
                                 'tournaments/registerstep3/{id}',
                                 'tournaments/registerstep3/{id}/{event_id}',
                                 'getcities',
-                                'getstates'
+                                'getstates',
+                                'smite/save_nickname'
                                 ];
 
                         $followingSports = Helper::getFollowingSportIds($this->auth->user()->id);
