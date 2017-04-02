@@ -3629,6 +3629,11 @@ class ScoreCardController extends Controller {
 					$archery = new ScoreCard\ArcheryController;
 					return $archery->archeryScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
 				}
+                else if(strtolower($sport_name)==strtolower('smite'))
+                {
+                    $smite = new Esports\SmiteController;
+                    return $smite->smiteScoreCard($match_data,$sportsDetails,$tournamentDetails,$is_from_view=1);
+                }
 				
 			}
 		}

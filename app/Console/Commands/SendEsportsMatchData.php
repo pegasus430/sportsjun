@@ -54,6 +54,8 @@ class SendEsportsMatchData extends Command
         $matchScheduleData = MatchSchedule::whereBetween('match_start_date', array($time1_day,$time2_day))
             ->whereBetween('match_start_time', array($time1_time, $time2_time))
             ->where('sports_id', $sport->id)
+            ->where('match_status', 'scheduled')
+            ->where('match_invite_status', 'accepted')
             ->get();
 
         if (count($matchScheduleData) > 0)

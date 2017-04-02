@@ -67,13 +67,14 @@ class CheckSmiteMatches extends Command
 
             $sessionId = $smiteSession->token;
 
-            if(empty($smiteSession) || $smiteSession->created_at <= Carbon::now()->addMinutes(15)) {
+            if(empty($smiteSession) || $smiteSession->created_at <= Carbon::now()->subMinutes(15)) {
                 $sessionId = Esports::createSmiteSession();
                 SmiteSession::create(['token' => $sessionId]);
             }
 
             foreach ($matchScheduleData as $key => $schedule)
             {
+                $this->info($schedule);
                 $teamOne = $schedule->match->player_a_ids;
                 $teamTwo = $schedule->match->player_b_ids;
 
@@ -117,7 +118,7 @@ class CheckSmiteMatches extends Command
                     $matchTime->addSeconds($matchHistory->Time_In_Match_Seconds);
 
                     /* Check if match finished 5 minutes ago */
-                    $fiveMinutesAgo = Carbon::now()->subHours(5);
+                    $fiveMinutesAgo = Carbon::now()->subDays(5);
                     if($matchTime < $fiveMinutesAgo)
                         continue;
                     $matchId = $matchHistory->Match;
@@ -201,6 +202,7 @@ class CheckSmiteMatches extends Command
 
                 /* Finish Smite match */
                 $schedule->match_status = 'finished';
+                $schedule->match_statistic = json_encode($player);
                 $schedule->save();
 
                 /* Finish scheduled match */

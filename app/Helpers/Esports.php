@@ -92,4 +92,9 @@ class Esports
 
         return $top_matches;
     }
+
+    public static function endSmiteMatch($match_id, $winner, $loser)
+    {
+
+    }
 }
