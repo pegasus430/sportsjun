@@ -58,9 +58,6 @@ class SendEsportsMatchData extends Command
 
         if (count($matchScheduleData) > 0)
         {
-            $signature = Esports::createSmiteSignature(config('esports.SMITE.SMITE_SESSION'));
-            $sessionId = Esports::createSmiteSession($signature);
-
             foreach ($matchScheduleData as $key => $schedule)
             {
                 // Set lobby name and password for each match

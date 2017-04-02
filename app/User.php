@@ -424,4 +424,9 @@ class User extends Model implements AuthenticatableContract,
         return $this->hasMany('App\Model\GameUsername');
     }
 
+    public function smiteMatchStats()
+    {
+        return $this->hasMany('App\Model\SmiteMatchStats');
+    }
+
 }
