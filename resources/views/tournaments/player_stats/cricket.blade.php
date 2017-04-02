@@ -158,9 +158,9 @@
 
                 <th>PLAYER</th>
                 <th>TEAM</th>
-
+<!-- 
                 <th>MAT</th>
-                <th>INN</th>
+                <th>INN</th> -->
                 <th>CT</th>
                 <th>RO</th>
                 <th>ST</th>
@@ -198,9 +198,9 @@
                     @endif
 
                 </td>
-
+<!-- 
                  <td>{{$statistic->matches}}</td>
-                <td>{{$statistic->innings_bowled}}</td>
+                <td>{{$statistic->innings_bowled}}</td> -->
                 <td>{{$statistic->caught}}</td>
                 <td>{{$statistic->run_out}}</td>
                 <td>{{$statistic->stumped}}</td>

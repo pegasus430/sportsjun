@@ -7,8 +7,7 @@
         <h2>
         	{{strtoupper($orgInfoObj->name)}}
         	<br>
-        	</h2>
-        	<h2>
+        	
         	{{strtoupper($parent_tournament->name)}}
             <br/>
             <span class="small">

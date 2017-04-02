@@ -6,9 +6,9 @@
       
         <h2>
         {{strtoupper($orgInfoObj->name)}}<br>
-        </h2><h2>
+    
         	{{strtoupper($lis->name)}}
-            <br/><
+            <br/>
             <span class="small">
          	Event Points
             </span>
