@@ -147,14 +147,14 @@ class SmiteController extends Controller
             {
                 if(empty(trim($id)))
                     continue;
-                array_push($team_b_playerids,$id);
+                array_push($team_a_playerids,$id);
             }
 
             foreach($team_b_id_explodes as $id)
             {
                 if(empty(trim($id)))
                     continue;
-                array_push($team_a_playerids,$id);
+                array_push($team_b_playerids,$id);
             }
 
             $team_a_name = Team::where('id',$team_a_id)->pluck('name');
@@ -178,26 +178,15 @@ class SmiteController extends Controller
         }
 
         // Get match id
-        $match_id=$match_data[0]['id'];
+        $match_id = $match_data[0]['id'];
 
         // Get Smite scores for team a
-        $smite_match_stats = SmiteMatchStats::select()->where('match_id',$match_data[0]['id'])->get();
-
-        /*$team_a_volleyball_scores_array = array();
-        if(count($team_a_volleyball_scores)>0)
-        {
-            $team_a_volleyball_scores_array = $team_a_volleyball_scores->toArray();
-        }*/
+        $smite_match_stats = SmiteMatchStats::select('user_id','final_level as Level','kills as Kills','deaths as Deaths','assists as Assists','gold_earned as GoldEarned','gpm as GoldPerMinute','magical_damage_done as MagicalDamage','physical_damage_done as PhysicalDamage')
+            ->where('match_id',$match_data[0]['id'])->get()->toArray();
 
         // Get player names
         $a_team_players = User::select()->whereIn('id',$team_a_playerids)->get();
         $b_team_players = User::select()->whereIn('id',$team_b_playerids)->get();
-
-        // Get players statistics
-        // NOT NECESSARY FOR VIEW
-        //$team_a_players_stat=volleyballPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_a_id)->get();
-        //$team_b_players_stat=volleyballPlayerMatchwiseStats::whereMatchId($match_id)->whereTeamId($team_b_id)->get();
-
 
         if(!empty($a_team_players))
             $team_a_players = $a_team_players->toArray();
@@ -244,12 +233,6 @@ class SmiteController extends Controller
             }
         }
 
-
-        // Get volleyball team scoring;
-        $volleyball_a_score=volleyballScore::whereMatchId($match_data[0]['id'])->whereTeamId($match_data[0]['a_id'])->first();
-        $volleyball_b_score=volleyballScore::whereMatchId($match_data[0]['id'])->whereTeamId($match_data[0]['b_id'])->first();
-
-
         // Score status
         $score_status_array = json_decode($match_data[0]['score_added_by'],true);
         $rej_note_str='';
@@ -264,10 +247,11 @@ class SmiteController extends Controller
         }
         $rej_note_str = trim($rej_note_str, ",");
 
-        //is valid user for score card enter or edit
+        // Is valid user for score card enter or edit
         $isValidUser = 0;
         $isApproveRejectExist = 0;
         $isForApprovalExist = 0;
+
         if(isset(\Auth::user()->id)){
             $isValidUser = Helper::isValidUserForScoreEnter($match_data);
             // Is approval process exist
@@ -276,9 +260,10 @@ class SmiteController extends Controller
         }
 
         $form_id = 'bascketball';
-
         $isAdminEdit = 0;
-        if(Session::has('is_allowed_to_edit_match')){
+
+        if(Session::has('is_allowed_to_edit_match'))
+        {
             $session_data = Session::get('is_allowed_to_edit_match');
 
             if($isValidUser && ($session_data[0]['id']==$match_data[0]['id'])){
@@ -306,8 +291,8 @@ class SmiteController extends Controller
                 'team_b_name'=>$team_b_name,
                 'team_a_city' => $team_a_city,
                 'team_b_city' => $team_b_city,
-                'team_a_volleyball_scores_array'=>$team_a_players,
-                'team_b_volleyball_scores_array'=>$team_b_players,
+                'team_a_players'=>$team_a_players,
+                'team_b_players'=>$team_b_players,
                 'team_a_count'=>$team_a_count,
                 'team_b_count'=>$team_b_count,
                 'team_a_logo'=>$team_a_logo,
@@ -325,8 +310,8 @@ class SmiteController extends Controller
                 'team_a_players'=>$team_a_players,
                 'team_b_players'=>$team_b_players,
                 'player_of_the_match'=>$player_of_the_match,
-                'volleyball_a_score'=>$volleyball_a_score,
-                'volleyball_b_score'=>$volleyball_b_score));
+                'smite_match_stats' => $smite_match_stats
+            ));
         }
         else //volleyball score view and edit
         {
@@ -340,8 +325,8 @@ class SmiteController extends Controller
                 'team_b_name'=>$team_b_name,
                 'team_a_city' => $team_a_city,
                 'team_b_city' => $team_b_city,
-                'team_a_volleyball_scores_array'=>$team_a_volleyball_scores_array,
-                'team_b_volleyball_scores_array'=>$team_b_volleyball_scores_array,
+                'team_a_players'=>$team_a_players,
+                'team_b_players'=>$team_b_players,
                 'team_a_count'=>$team_a_count,
                 'team_b_count'=>$team_b_count,
                 'team_a_logo'=>$team_a_logo,

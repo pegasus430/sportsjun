@@ -13,11 +13,8 @@
 
     isset($match_details->preferences)?$preferences=$match_details->preferences:[];
 
-    if(isset($preferences->number_of_sets))$set=$preferences->number_of_sets ;
-    else $set=5;
-
-    ${'team_'.$match_data[0]['a_id'].'_score'}='0 sets';
-    ${'team_'.$match_data[0]['b_id'].'_score'}='0 sets';
+    ${'team_'.$match_data[0]['a_id'].'_score'}='0';
+    ${'team_'.$match_data[0]['b_id'].'_score'}='0';
 
     $team_a_info='';
     $team_b_info='';
@@ -25,15 +22,13 @@
     if(isset($preferences)){
         $current_set=$match_details->current_set;
 
-        ${'team_'.$team_a_id.'_score'}=$match_details->scores->{$team_a_id.'_score'} .' sets';
-        ${'team_'.$team_b_id.'_score'}=$match_details->scores->{$team_b_id.'_score'} .' sets';
+        ${'team_'.$team_a_id.'_score'}=$match_details->scores->{$team_a_id.'_score'} .'';
+        ${'team_'.$team_b_id.'_score'}=$match_details->scores->{$team_b_id.'_score'} .'';
     } else {
         $current_set=0;
     }
 
 ?>
-
-
 
 <div class="col_standard soccer_scorecard">
     <div id="team_vs" class="ss_bg">
@@ -140,23 +135,17 @@
 
         <div class="panel panel-default">
             <div class="col-md-12">
-                <h5 class="scoreboard_title">volleyball Scorecard
-                    @if(!empty($match_data[0]['match_category']))
-                        <span class='match_type_text'>
-                         ({{ucfirst($match_data[0]['match_category']) }})
-                         </span>
-                    @endif
+                <h5 class="scoreboard_title">Smite Scorecard
                 </h5>
 
                 <div class="clearfix"></div>
                 <div class="form-inline">
-                    @if($match_data[0]['winner_id']>0)
-
+                    @if($match_data[0]['winner_id'] > 0)
                         <div class="form-group">
                             <label class="win_head">Winner</label>
                             <h3 class="win_team">{{ ($match_data[0]['a_id']==$match_data[0]['winner_id'])?$team_a_name:$team_b_name }}</h3>
                         </div>
-                        <BR>
+                        <br>
                         @if(!empty($match_data[0]['player_of_the_match']))
                             <div class="form-group">
                                 <label class="" style="color:red">PLAYER OF THE MATCH</label>
@@ -182,7 +171,7 @@
                         @else
 
                             <div class="form-group">
-                                <label>Winner is Not Updated</label>
+                                <label>Winner has not been updated</label>
 
                             </div>
                         @endif
@@ -195,72 +184,86 @@
         </div>
 
 
-
-
-
         <div class="row">
             <div class="col-sm-12">
-
                 <div class="row">
-
-
-                @if(count($volleyball_a_score))
-
-                    <!-- Team A Goals Start-->
-                        <div class="col-sm-10 col-lg-10 col-sm-offset-1">
-                            <form id='volleyball' onsubmit='return manualScoring(this)'>
-                                {!!csrf_field()!!}
-
-
-                                <div class='row'>
-                                    <div class='col-sm-12'>
-
-                                        <div class='table-responsive'>
-                                            <table class='table table-striped table-bordered'>
-                                                <thead>
-                                                <tr class='team_fall team_title_head'>
-                                                    <th></th>
-
-                                                    @for($set_index=1; $set_index<=$set; $set_index++)
-                                                        <th>SET {{$set_index}}</th>
-                                                    @endfor
-
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr>
-
-                                                    <td>{{$volleyball_a_score['team_name']}}</td>
-
-                                                    @for($set_index=1; $set_index<=$set; $set_index++)
-                                                        <td>
-
-                                                            {{$volleyball_a_score['set'.$set_index]}}
-                                                        </td>
-                                                    @endfor
-                                                </tr>
-
-                                                <tr>
-                                                    <td>{{$volleyball_b_score['team_name']}} </td>
-
-                                                    @for($set_index=1; $set_index<=$set; $set_index++)
-                                                        <td>
-
-                                                            {{$volleyball_b_score['set'.$set_index]}}
-
-                                                        </td>
-                                                    @endfor
-                                                </tr>
-
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
+                    <form id='smiteForm' onsubmit='return manualScoring(this)'>
+                        {!!csrf_field()!!}
+                        <div class="row">
+                            <div class='col-sm-12'>
+                                <span class='pull-right'>
+                                <a href='javascript:void(0)' onclick="enableManualEditing(this)"
+                                   style="color:#123456;">edit <i class='fa fa-pencil'></i></a>
+                                <span> &nbsp; &nbsp; </span>
+                                <a href='javascript:void(0)' onclick="updatePreferences(this)"
+                                   style='color:#123456;'> settings <i class='fa fa-gear fa-danger'></i></a>
+                                <span> &nbsp; &nbsp; </span>
+                                </span>
+                            </div>
                         </div>
 
-                @endif
+                        <div class='row'>
+                            <div class='col-sm-12'>
+                                <div class='table-responsive'>
+                                    <table class='table table-striped table-bordered'>
+                                        <thead>
+                                            <tr class='team_fall team_title_head'>
+                                                <th bgcolor="#84cd93"></th>
+                                                @foreach($team_a_players as $player);
+                                                    <th bgcolor="#fff" style="color: #84cd93;" >{{$player['name']}}</th>
+                                                @endforeach
+
+                                                @foreach($team_b_players as $player)
+                                                    <th bgcolor="#84cd93">{{$player['name']}}</th>
+                                                @endforeach
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        @foreach($smite_match_stats[0] as $key=>$val)
+                                            @if($key == 'user_id')
+                                                <?php continue; ?>
+                                            @endif
+                                            <tr>
+                                                <td>{{$key}}</td>
+                                                @foreach($team_a_players as $player)
+                                                    @foreach($smite_match_stats as $smite_match)
+                                                        @if($smite_match['user_id'] == $player['id'])
+                                                        <td>
+                                                            <input readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="{{$smite_match[$key]}}" name='a_set-'>
+                                                        </td>
+                                                        @endif
+                                                    @endforeach
+                                                @endforeach
+
+                                                @foreach($team_b_players as $player)
+                                                    @foreach($smite_match_stats as $smite_match)
+                                                        @if($smite_match['user_id'] == $player['id'])
+                                                         <td>
+                                                            <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="{{$smite_match[$key]}}" name='a_set-'>
+                                                         </td>
+                                                        @endif
+                                                    @endforeach
+                                                @endforeach
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+                                <input type='hidden' value="{{$match_data[0]['id']}}" name='match_id'>
+                                <!--
+                                <div class="row" id='saveButton'>
+                                    <div class='col-sm-12'>
+                                        <center> <input type='submit' class="btn btn-primary" value="Save"></center>
+                                    </div>
+                                </div>
+                                -->
+                                <br>
+                            </div>
+                        </div>
+                    </form>
                 <!-- Selecting Squads Start-->
                     <div class="col-sm-10 col-sm-offset-1">
                         <h3 class="team_bat team_title_head">Playing Squad</h3>
@@ -316,13 +319,6 @@
                             </div>
                         </div>
                     @endif
-
-
-                    @include('scorecards.common.referees')
-
-
-
-
                 <!-- if match schedule type is team -->
 
                     <!-- end -->
