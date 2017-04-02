@@ -12,24 +12,20 @@ $(document).ready(function(){
 	@if($match_data[0]['tournament_id']=='')
 		@if($match_data[0]['scoring_status']=='approval_pending')
 			<span>{{'Scorecard is pending for approval'}} </span>
-		@else
-		@if($match_data[0]['scoring_status']=='approved')	
+		@elseif($match_data[0]['scoring_status']=='approved')
 			{{'Scorecard is approved'}}
-		@else
-		@if($match_data[0]['scoring_status']=='rejected')
+		@elseif($match_data[0]['scoring_status']=='rejected')
 			{{'Scorecard is rejected'}}
-		@else
-		@if($score_status_array['added_by']=='')
+		@elseif($score_status_array['added_by']=='')
 			{{ 'Scorecard Data Is Not Entered.' }}
-		@else
-		@if($match_data[0]['scoring_status']=='' )
+		@elseif($match_data[0]['scoring_status']=='' )
 			<span >{{'Need to send for approval'}}</span>
 		@elseif($match_data[0]['match_status']=='completed')
 			<span >{{'Match is completed'}}</span>
-		@endif
-		@endif
-		@endif
-		@endif
+		@elseif($match_data[0]['match_invite_status']=='pending')
+			<span>Match is pending</span>
+		@elseif($match_data[0]['match_status']=='scheduled' && $match_data[0]['match_invite_status']=='accepted')
+			<span>Match is being played</span>
 		@endif
 	@endif
 	 
