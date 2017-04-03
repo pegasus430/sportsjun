@@ -273,14 +273,12 @@ class SmiteController extends Controller
 
         if(($is_from_view==1 || (!empty($score_status_array['added_by']) && $score_status_array['added_by']!=$loginUserId && $match_data[0]['scoring_status']!='rejected') || $match_data[0]['match_status']=='completed' || $match_data[0]['scoring_status']=='approval_pending' || $match_data[0]['scoring_status']=='approved' || !$isValidUser) && !$isAdminEdit)//volleyball score view only
         {
-            $player_name_array = array();
-            $users = User::select('id', 'name')->get()->toArray(); //get player names
-            foreach ($users as $user) {
-                $player_name_array[$user['id']] = $user['name']; //get team names
-            }
+            /* Get player of the match if it exists */
             $player_of_the_match=$match_data[0]['player_of_the_match'];
-            if($player_of_the_match_model=User::find($player_of_the_match))$player_of_the_match=$player_of_the_match_model;
+            if($player_of_the_match_model=User::find($player_of_the_match))
+                $player_of_the_match=$player_of_the_match_model;
             else $player_of_the_match=NULL;
+
             return view('scorecards.smitescorecardview',array(
                 'tournamentDetails' => $tournamentDetails,
                 'sportsDetails'=> $sportsDetails,
@@ -297,7 +295,6 @@ class SmiteController extends Controller
                 'team_b_count'=>$team_b_count,
                 'team_a_logo'=>$team_a_logo,
                 'team_b_logo'=>$team_b_logo,
-                'player_name_array'=> $player_name_array,
                 'score_status_array'=>$score_status_array,
                 'loginUserId'=>$loginUserId,
                 'rej_note_str'=>$rej_note_str,
@@ -342,10 +339,8 @@ class SmiteController extends Controller
                 'form_id'=>$form_id,
                 'team_a_players'=>$team_a_players,
                 'team_b_players'=>$team_b_players,
-                'volleyball_a_score'=>$volleyball_a_score,
-                'volleyball_b_score'=>$volleyball_b_score,
-                'active_players_a'=>$active_players_a,
-                'active_players_b'=>$active_players_b));
+                'smite_match_stats' => $smite_match_stats
+            ));
         }
 
     }

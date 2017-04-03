@@ -1,3 +1,4 @@
+
 @extends(Auth::user() ? 'layouts.app' : 'home.layout')
 @section('content')
 
@@ -140,6 +141,11 @@
 
                 <div class="clearfix"></div>
                 <div class="form-inline">
+                    @if($match_data[0]['hasSetupSquad'])
+                        <div id='end_match_button'>
+                            <button class="btn btn-danger " onclick="return SJ.SCORECARD.soccerSetTimes(this)"></i>End Match</button>
+                        </div>
+                    @endif
                     @if($match_data[0]['winner_id'] > 0)
                         <div class="form-group">
                             <label class="win_head">Winner</label>
@@ -189,27 +195,30 @@
                 <div class="row">
                     <form id='smiteForm' onsubmit='return manualScoring(this)'>
                         {!!csrf_field()!!}
-                        <div class="row">
-                            <div class='col-sm-12'>
-                                <span class='pull-right'>
-                                <a href='javascript:void(0)' onclick="enableManualEditing(this)"
-                                   style="color:#123456;">edit <i class='fa fa-pencil'></i></a>
-                                <span> &nbsp; &nbsp; </span>
-                                <a href='javascript:void(0)' onclick="updatePreferences(this)"
-                                   style='color:#123456;'> settings <i class='fa fa-gear fa-danger'></i></a>
-                                <span> &nbsp; &nbsp; </span>
-                                </span>
+                        @if($isValidUser)
+                            <div class="row">
+                                <div class='col-sm-12'>
+                                    <span class='pull-right'>
+                                    <a href='javascript:void(0)' onclick="enableManualEditing(this)"
+                                       style="color:#123456;">edit <i class='fa fa-pencil'></i></a>
+                                    <span> &nbsp; &nbsp; </span>
+                                    <a href='javascript:void(0)' onclick="updatePreferences(this)"
+                                       style='color:#123456;'> settings <i class='fa fa-gear fa-danger'></i></a>
+                                    <span> &nbsp; &nbsp; </span>
+                                    </span>
+                                </div>
                             </div>
-                        </div>
+                        @endif
 
                         <div class='row'>
                             <div class='col-sm-12'>
                                 <div class='table-responsive'>
+                                    @if(count($smite_match_stats) > 0)
                                     <table class='table table-striped table-bordered'>
                                         <thead>
                                             <tr class='team_fall team_title_head'>
                                                 <th bgcolor="#84cd93"></th>
-                                                @foreach($team_a_players as $player);
+                                                @foreach($team_a_players as $player)
                                                     <th bgcolor="#fff" style="color: #84cd93;" >{{$player['name']}}</th>
                                                 @endforeach
 
@@ -227,28 +236,168 @@
                                             <tr>
                                                 <td>{{$key}}</td>
                                                 @foreach($team_a_players as $player)
+                                                    <?php $found = false; ?>
+                                                    <!-- Connect person with stats -->
                                                     @foreach($smite_match_stats as $smite_match)
                                                         @if($smite_match['user_id'] == $player['id'])
                                                         <td>
                                                             <input readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="{{$smite_match[$key]}}" name='a_set-'>
                                                         </td>
+                                                        <?php $found = true; ?>
                                                         @endif
                                                     @endforeach
+                                                    <!-- If stats were not saved -->
+                                                    @if(!$found)
+                                                        <td>
+                                                            <input readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                        </td>
+                                                    @endif
                                                 @endforeach
 
                                                 @foreach($team_b_players as $player)
+                                                    <?php $found = false; ?>
                                                     @foreach($smite_match_stats as $smite_match)
+                                                        <!-- Connect person with stats -->
                                                         @if($smite_match['user_id'] == $player['id'])
                                                          <td>
                                                             <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="{{$smite_match[$key]}}" name='a_set-'>
                                                          </td>
+                                                                <?php $found = true; ?>
                                                         @endif
                                                     @endforeach
+                                                    <!-- If stats were not saved -->
+                                                    @if(!$found)
+                                                        <td>
+                                                            <input readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                        </td>
+                                                    @endif
                                                 @endforeach
                                             </tr>
-                                            @endforeach
+                                        @endforeach
                                         </tbody>
                                     </table>
+                                    @else
+                                    <table class='table table-striped table-bordered'>
+                                        <thead>
+                                        <tr class='team_fall team_title_head'>
+                                            <th bgcolor="#84cd93"></th>
+                                            @foreach($team_a_players as $player)
+                                                <th bgcolor="#fff" style="color: #84cd93;" >{{$player['name']}}</th>
+                                            @endforeach
+
+                                            @foreach($team_b_players as $player)
+                                                <th bgcolor="#84cd93">{{$player['name']}}</th>
+                                            @endforeach
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Level</td>
+                                                @foreach($team_b_players as $player)
+                                                    <td>
+                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                    </td>
+                                                @endforeach
+                                                @foreach($team_b_players as $player)
+                                                <td>
+                                                    <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                </td>
+                                                @endforeach
+                                            </tr>
+                                            <tr>
+                                                <td>Kills</td>
+                                                @foreach($team_b_players as $player)
+                                                    <td>
+                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                    </td>
+                                                @endforeach
+                                                @foreach($team_b_players as $player)
+                                                    <td>
+                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                    </td>
+                                                @endforeach
+                                            </tr>
+                                            <tr>
+                                                <td>Deaths</td>
+                                                @foreach($team_b_players as $player)
+                                                    <td>
+                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                    </td>
+                                                @endforeach
+                                                @foreach($team_b_players as $player)
+                                                    <td>
+                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                    </td>
+                                                @endforeach
+                                            </tr>
+                                            <tr>
+                                                <td>Assists</td>
+                                                @foreach($team_b_players as $player)
+                                                    <td>
+                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                    </td>
+                                                @endforeach
+                                                @foreach($team_b_players as $player)
+                                                    <td>
+                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                    </td>
+                                                @endforeach
+                                            </tr>
+                                            <tr>
+                                                <td>Gold Earned</td>
+                                                @foreach($team_b_players as $player)
+                                                    <td>
+                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                    </td>
+                                                @endforeach
+                                                @foreach($team_b_players as $player)
+                                                    <td>
+                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                    </td>
+                                                @endforeach
+                                            </tr>
+                                            <tr>
+                                                <td>Gold Per Minute</td>
+                                                @foreach($team_b_players as $player)
+                                                    <td>
+                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                    </td>
+                                                @endforeach
+                                                @foreach($team_b_players as $player)
+                                                    <td>
+                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                    </td>
+                                                @endforeach
+                                            </tr>
+                                            <tr>
+                                                <td>Magical Damage</td>
+                                                @foreach($team_b_players as $player)
+                                                    <td>
+                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                    </td>
+                                                @endforeach
+                                                @foreach($team_b_players as $player)
+                                                    <td>
+                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                    </td>
+                                                @endforeach
+                                            </tr>
+                                            <tr>
+                                                <td>Physical Damage</td>
+                                                @foreach($team_b_players as $player)
+                                                    <td>
+                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                    </td>
+                                                @endforeach
+                                                @foreach($team_b_players as $player)
+                                                    <td>
+                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                    </td>
+                                                @endforeach
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                     @endif
                                 </div>
 
 
@@ -334,7 +483,6 @@
                         @endif
                     </div>
 
-
                     @if($isValidUser && $match_data[0]['match_status']=='completed')
                         <div class="sportsjun-forms text-center scorecards-buttons">
                             <input type="hidden" name="match_id" id="match_id" value="{{$match_data[0]['id']}}">
@@ -355,6 +503,47 @@
 
 <script>
     //Send Approve
+    var manual = false;
+
+    function enableManualEditing(that)
+    {
+        if(!manual){
+            $.confirm({
+                title: "Alert",
+                content: "Do you want to enter points manually?",
+                confirm: function(){
+                    $('.tennis_input_new').removeAttr('readonly');
+                    $('.tennis_input_new').focus();
+                    $('#real_time_scoring').hide();
+                    $('#end_match_button').hide();
+                    $('#saveButton').show();
+                    manual = true;
+                },
+                cancel: function(){
+
+                }
+            })
+
+        }
+        else
+        {
+            $.confirm({
+                title: "Alert",
+                content: "Do you want to enter points automatically?",
+                confirm:function(){
+                    $('.tennis_input_new').attr('readonly', 'readonly');
+                    $('#real_time_scoring').show();
+                    $('#end_match_button').show();
+                    $('#saveButton').hide();
+                    manual=false;
+                },
+                cancel:function(){
+
+                }
+            })
+        }
+    }
+
     function scoreCardStatus(status)
     {
         var msg = ' Reject ';
@@ -408,10 +597,21 @@
         })
     }
 
-    @if($match_data[0]['match_status']!='completed')
-    //window.setInterval(getMatchDetails, 10000);
-    @endif
+    function manualScoring(that){
+        var data=$('#smiteForm').serialize();
+        console.log(data);
+        $.ajax({
+            url:base_url+"/match/manualScoringvolleyball",
+            type:'post',
+            data:data,
+            success:function(response){
+                window.location=window.location;
+            }
+        })
 
+
+        return false;
+    }
 </script>
 
 
