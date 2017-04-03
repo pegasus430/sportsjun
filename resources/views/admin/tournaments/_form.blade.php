@@ -60,11 +60,11 @@
 
 <div class="row">
 <div class="section col-sm-6" id="show_hide_div" style="display:none;">
-<label class="form_label">{{  trans('message.tournament.fields.schedule_type') }} <span  class='required'>*</span></label>
+	<label class="form_label">{{  trans('message.tournament.fields.schedule_type') }} <span  class='required'>*</span></label>
 	<label class="field select">
-	 {!! Form::select('schedule_type', $schedule_type_enum, null,array('id'=>'schedule_type','class'=>'gui-input')) !!}
-	
-	 <i class="arrow double"></i>      
+		 {!! Form::select('schedule_type', $schedule_type_enum, null,array('id'=>'schedule_type','class'=>'gui-input')) !!}
+
+		 <i class="arrow double"></i>
 	</label>
 </div>
 </div>						 
@@ -261,8 +261,10 @@
 		var sport_name = $( "#sports_id option:selected" ).text();
 		if(sport_name.toLowerCase()=='tennis' || sport_name.toLowerCase()=='table tennis')
 		{
+
 			$('#show_hide_div').show();
-		}else
+		}
+		else
 		{
 			$('#show_hide_div').hide();
 			

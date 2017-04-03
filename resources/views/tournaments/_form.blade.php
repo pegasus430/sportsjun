@@ -408,17 +408,34 @@ $(function () {
 			$('#show_hide_div').show();
             $('.show_hide_div').show();
 			$("#schedule_type").val('team');
-		}else
+		}
+		else
 		{
 			$('#show_hide_div').hide();
             $('.show_hide_div').hide();
             $('.show_hide_rubber').hide();
 		}
 
+        if(sport_name.toLowerCase()=='smite')
+        {
+            $('#show_hide_div').show();
+            $('.show_hide_div').show();
+            $('.show_hide_game_type').hide();
+            $("#schedule_type").val('team');
+        }
+        else
+        {
+            $('#show_hide_div').hide();
+            $('.show_hide_div').hide();
+            $('.show_hide_rubber').hide();
+        }
+
         if(sport_name.toLowerCase()=='archery'){
                 $('#show_hide_div').show();
                 $("#schedule_type").val('team');
         }
+
+
 
 		var selected_sport = $("#sports_id option:selected").text();
 		selected_sport = selected_sport.toUpperCase();
