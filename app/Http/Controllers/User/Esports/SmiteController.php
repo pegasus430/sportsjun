@@ -348,17 +348,49 @@ class SmiteController extends Controller
 
     public function confirmSquad()
     {
-        $request=Request::all();
-        $match_id       =$request['match_id'];
-
-        $tournament_id  =isset($request['tournament_id'])?$request['tournament_id']:null;
-        $team_a_id      =$request['team_a_id'];
-        $team_b_id      =$request['team_b_id'];
+        $request = Request::all();
+        $match_id = $request['match_id'];
 
         $match_model= MatchSchedule::find($match_id);
         $match_model->hasSetupSquad = 1;
+        $match_model->player_a_ids = implode(',', $request['team_a']['playing']);
+        $match_model->player_b_ids = implode(',', $request['team_b']['playing']);
         $match_model->save();
+    }
 
+    public function manualScoring()
+    {
+        $request = Request::all();
+
+        $match = MatchSchedule::find($request['match_id']);
+
+        $team_a = $match->player_a_ids;
+        $team_b = $match->player_b_ids;
+
+        $team_a_array = explode(',', $team_a);
+        $team_b_array = explode(',', $team_b);
+
+        $players = array_merge($team_a_array, $team_b_array);
+
+        foreach($players as $player)
+        {
+            if(!is_numeric($request['Level_'.$player]))
+                continue;
+
+            SmiteMatchStats::updateOrCreate(
+                ['match_id' => $match->id, 'user_id' => $player],
+                [
+                    'smite_match' => $match->smite_match,
+                    'final_level' => $request['Level_'.$player],
+                    'kills' => $request['Kills_'.$player],
+                    'deaths' => $request['Deaths_'.$player],
+                    'assists' => $request['Assists_'.$player],
+                    'gold_earned' => $request['GoldEarned_'.$player],
+                    'gpm' => $request['GoldPerMinute_'.$player],
+                    'magical_damage_done' => $request['MagicalDamage_'.$player],
+                    'physical_damage_done' => $request['PhysicalDamage_'.$player]
+                ]);
+        }
     }
 
 }

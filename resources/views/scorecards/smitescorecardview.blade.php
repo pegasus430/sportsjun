@@ -391,7 +391,7 @@
                                                     @foreach($smite_match_stats as $smite_match)
                                                         @if($smite_match['user_id'] == $player['id'])
                                                         <td>
-                                                            <input readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="{{$smite_match[$key]}}" name='a_set-'>
+                                                            <input readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="{{$smite_match[$key]}}" name='{{$key}}_{{$player['id']}}'>
                                                         </td>
                                                         <?php $found = true; ?>
                                                         @endif
@@ -399,7 +399,7 @@
                                                     <!-- If stats were not saved -->
                                                     @if(!$found)
                                                         <td>
-                                                            <input readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                            <input readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='{{$key}}_{{$player['id']}}'>
                                                         </td>
                                                     @endif
                                                 @endforeach
@@ -410,7 +410,7 @@
                                                         <!-- Connect person with stats -->
                                                         @if($smite_match['user_id'] == $player['id'])
                                                          <td>
-                                                            <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="{{$smite_match[$key]}}" name='a_set-'>
+                                                            <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="{{$smite_match[$key]}}" name='{{$key}}_{{$player['id']}}'>
                                                          </td>
                                                                 <?php $found = true; ?>
                                                         @endif
@@ -418,7 +418,7 @@
                                                     <!-- If stats were not saved -->
                                                     @if(!$found)
                                                         <td>
-                                                            <input readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                            <input readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='{{$key}}_{{$player['id']}}'>
                                                         </td>
                                                     @endif
                                                 @endforeach
@@ -445,12 +445,12 @@
                                                 <td>Level</td>
                                                 @foreach($team_b_players as $player)
                                                     <td>
-                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='Level_{{$player['id']}}'>
                                                     </td>
                                                 @endforeach
                                                 @foreach($team_b_players as $player)
                                                 <td>
-                                                    <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                    <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='Level_{{$player['id']}}'>
                                                 </td>
                                                 @endforeach
                                             </tr>
@@ -458,12 +458,12 @@
                                                 <td>Kills</td>
                                                 @foreach($team_b_players as $player)
                                                     <td>
-                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='Kills_{{$player['id']}}'>
                                                     </td>
                                                 @endforeach
                                                 @foreach($team_b_players as $player)
                                                     <td>
-                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='Kills_{{$player['id']}}'>
                                                     </td>
                                                 @endforeach
                                             </tr>
@@ -471,12 +471,12 @@
                                                 <td>Deaths</td>
                                                 @foreach($team_b_players as $player)
                                                     <td>
-                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='Deaths_{{$player['id']}}'>
                                                     </td>
                                                 @endforeach
                                                 @foreach($team_b_players as $player)
                                                     <td>
-                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='Deaths_{{$player['id']}}'>
                                                     </td>
                                                 @endforeach
                                             </tr>
@@ -484,12 +484,12 @@
                                                 <td>Assists</td>
                                                 @foreach($team_b_players as $player)
                                                     <td>
-                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='Assists_{{$player['id']}}'>
                                                     </td>
                                                 @endforeach
                                                 @foreach($team_b_players as $player)
                                                     <td>
-                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='Assists_{{$player['id']}}'>
                                                     </td>
                                                 @endforeach
                                             </tr>
@@ -497,12 +497,12 @@
                                                 <td>Gold Earned</td>
                                                 @foreach($team_b_players as $player)
                                                     <td>
-                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='Gold Earned_{{$player['id']}}'>
                                                     </td>
                                                 @endforeach
                                                 @foreach($team_b_players as $player)
                                                     <td>
-                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='Gold Earned_{{$player['id']}}'>
                                                     </td>
                                                 @endforeach
                                             </tr>
@@ -510,12 +510,12 @@
                                                 <td>Gold Per Minute</td>
                                                 @foreach($team_b_players as $player)
                                                     <td>
-                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='Gold Per Minute_{{$player['id']}}'>
                                                     </td>
                                                 @endforeach
                                                 @foreach($team_b_players as $player)
                                                     <td>
-                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='Gold Per Minute_{{$player['id']}}'>
                                                     </td>
                                                 @endforeach
                                             </tr>
@@ -523,12 +523,12 @@
                                                 <td>Magical Damage</td>
                                                 @foreach($team_b_players as $player)
                                                     <td>
-                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='Magical Damage_{{$player['id']}}'>
                                                     </td>
                                                 @endforeach
                                                 @foreach($team_b_players as $player)
                                                     <td>
-                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='Magical Damage_{{$player['id']}} '>
                                                     </td>
                                                 @endforeach
                                             </tr>
@@ -536,12 +536,12 @@
                                                 <td>Physical Damage</td>
                                                 @foreach($team_b_players as $player)
                                                     <td>
-                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='Physical Damage_{{$player['id']}}'>
                                                     </td>
                                                 @endforeach
                                                 @foreach($team_b_players as $player)
                                                     <td>
-                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='a_set-'>
+                                                        <input  readonly class="gui-input validation allownumericwithdecimal tennis_input_new a_set" value="-" name='Physical Damage_{{$player['id']}}'>
                                                     </td>
                                                 @endforeach
                                             </tr>
@@ -559,6 +559,12 @@
                                     </div>
                                 </div>
                                 -->
+
+                                <div class="row" id='saveButton'>
+                                    <div class='col-sm-12'>
+                                        <center> <input type='submit' class="btn btn-primary" value="Save"></center>
+                                    </div>
+                                </div>
                                 <br>
                             </div>
                         </div>
@@ -772,11 +778,11 @@
         var data=$('#smiteForm').serialize();
         console.log(data);
         $.ajax({
-            url:base_url+"/match/manualScoringvolleyball",
+            url:base_url+"/match/manualScoringSmite",
             type:'post',
             data:data,
             success:function(response){
-                window.location=window.location;
+               // window.location=window.location;
             }
         })
 
@@ -900,7 +906,7 @@
                     data:tempSquadData,
                     type:'post',
                     success:function(response){
-                        window.location=window.location;
+                       window.location=window.location;
                     },
                     error:function(x,y,z){
                         $(this).attr('disabled', false);
