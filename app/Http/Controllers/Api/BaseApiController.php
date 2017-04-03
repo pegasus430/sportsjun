@@ -23,31 +23,6 @@ class BaseApiController extends Controller
         return $query;
     }
 
-
-    public static function ApiResponse($response, $code = 200)
-    {
-        if (!$response && !is_array($response)) {
-            $code = 404;
-            $response = 'Not found';
-        }
-
-        if ($code >= 200 && $code < 400) {
-            $status = 'Success';
-        } else {
-            $status = 'Failure';
-        }
-
-        if ($response instanceof LengthAwarePaginator) {
-            $response = $response->toArray();
-        }
-
-        return [
-            'status' => $status,
-            'code' => $code,
-            'response' => $response,
-        ];
-    }
-
     function PaginatedMapResponse(LengthAwarePaginator $paginator, $map)
     {
         $data = [];
@@ -169,6 +144,41 @@ class BaseApiController extends Controller
 
     }
 
+    public static function ApiResponse($response, $code = 200)
+    {
+        if (!$response && !is_array($response)) {
+            $code = 404;
+            $response = 'Not found';
+        }
+
+        if ($code >= 200 && $code < 400) {
+            $status = 'Success';
+        } else {
+            $status = 'Failure';
+        }
+
+        if ($response instanceof LengthAwarePaginator) {
+            $response = $response->toArray();
+        }
+
+        if ($response instanceof Collection) {
+            $response = $response->toArray();
+        }
+
+        if (is_array($response)) {
+            array_walk_recursive($response, function (&$value) {
+                if (is_string($value) || is_null($value)) {
+                    $value = $value ? trim($value) : "";
+                }
+            });
+        }
+
+        return [
+            'status'   => $status,
+            'code'     => $code,
+            'response' => $response,
+        ];
+    }
 
     function CollectionMapResponse(Collection $collection, $map)
     {
@@ -216,8 +226,9 @@ class BaseApiController extends Controller
     }
 
 
-    function routeNotFound($catchall){
-        return self::ApiResponse(['error'=>'route not found'],404);
+    function routeNotFound($catchall)
+    {
+        return self::ApiResponse(['error' => 'route not found'], 404);
     }
 
 
