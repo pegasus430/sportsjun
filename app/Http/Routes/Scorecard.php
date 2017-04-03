@@ -47,6 +47,10 @@ Route::group(['prefix'=>'match'], function(){
          ['as'=>'match/confirmSquadVolleyball', 
          'uses'=>'User\ScoreCard\VolleyballScoreCardController@confirmSquad']);
 
+    Route::post('confirmSmitePlayingTeam',
+        ['as' => 'match/confirmSmitePlayingTeam',
+         'uses' => 'User\Esports\SmiteController@confirmSquad']);
+
     Route::post('submitServingPlayersvolleyball',         
         ['as'=>'match/submitServingPlayersVolleyball', 
         'uses'=>'User\ScoreCard\VolleyballScoreCardController@submitServingPlayers']);

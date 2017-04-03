@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\User\Esports;
 
-use Illuminate\Http\Request;
+use Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -17,6 +17,7 @@ use App\Model\Photo;
 use App\Model\Team;
 use App\Model\VolleyballPlayerMatchwiseStats;
 use App\Model\volleyballScore;
+use App\Model\MatchSchedule;
 
 use Session;
 
@@ -342,6 +343,21 @@ class SmiteController extends Controller
                 'smite_match_stats' => $smite_match_stats
             ));
         }
+
+    }
+
+    public function confirmSquad()
+    {
+        $request=Request::all();
+        $match_id       =$request['match_id'];
+
+        $tournament_id  =isset($request['tournament_id'])?$request['tournament_id']:null;
+        $team_a_id      =$request['team_a_id'];
+        $team_b_id      =$request['team_b_id'];
+
+        $match_model= MatchSchedule::find($match_id);
+        $match_model->hasSetupSquad = 1;
+        $match_model->save();
 
     }
 

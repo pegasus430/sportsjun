@@ -1,7 +1,102 @@
 
 @extends(Auth::user() ? 'layouts.app' : 'home.layout')
 @section('content')
+<style type="text/css">
+    input:read-only {
+        background-color: #f4f4f4;
+    }
+    .alert{display: none;}
+    .show_teams{display: none;}
+    .player_selected{
+        background: #111111;
+        background-color: red;
+    }
+    .btn-yellow-card{
+        background: orange;
+        border: none;
+    }
+    .btn-red-card{
+        background: darkred;
+    }
+    .btn-card{
+        border: none;
+    }
+    .btn-red-card-select{
+        color: white;
+        background: #ff4f4f;
+    }
+    .btn-red-card-select:hover{
+        color: white;
+        background: #ff4f5f;
+    }
+    .btn-yellow-card-select{
+        color: white;
+        background: orange;
+    }
+    .btn-yellow-card-select:hover{
+        color: white;
+        background: orange;
+    }
+    .btn-goal-card-select{
+        color: white;
+        background: #aaa;
+    }
+    .btn-goal-card-select:hover{
+        color: white;
+        background: #aaa;
+    }
+    .icon-check{
+        color:green;
+        border: 1px double #999;
+        display: block;
+        height: 18px;
+        width: 16px;
 
+    }
+
+    .selected-player-button-show{
+        background: #ffddee;
+        border: none;
+    }
+    .substituted-player-button-show{
+        background: #ddcccc;
+        border: none;
+    }
+
+    .fa-share{
+        color:green;
+    }
+    .fa-reply{
+        color:red;
+    }
+    .btn-penalty{
+        opacity: .2;
+    }
+    .btn-green-card, .btn-green-card:hover, .btn-green-card:active{
+        background: #6Bc26C;
+    }
+    .btn-penalty-chosen{
+        opacity: 1;
+    }
+
+    .btn-secondary-link{
+        background: #ddd;
+    }
+    .fouls{
+        color:red;
+        font: 23px;
+    }
+
+    .not_playing{
+        background-color: #f9f9f9;
+
+    }
+
+    .btn-link:disabled{
+        background: #f8f8f8;
+        background-color: #f8f8f8;
+    }
+</style>
 <?php
     $team_a_id = $match_data[0]['a_id']; $team_b_id= $match_data[0]['b_id'] ;
     $match_id=$match_data[0]['id'];
@@ -189,8 +284,63 @@
             </div>
         </div>
 
+        @if(!$match_data[0]['hasSetupSquad'])
+            <div class="row">
+                <!-- Selecting Squads Start-->
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h3 class="team_fall table_head">Playing Squad</h3>
+                    <div class='row'>
+                        <div class='col-sm-6 col-xs-12'>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead class="thead">
+                                    <tr class='team_fall team_title_head'>
+                                        <th>{{$team_a_name}}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="team_tr_a" >
+                                    @foreach($team_a_players as $player_a)
+                                        <tr class="team_a_playing_row playing_a_{{$player_a['id']}}" >
+                                            <td class="option block select_player_squad" player_type='playing' team_type="team_a"  player_id="{{$player_a['id']}}" style="cursor: pointer; background: none;">
+                                                {{ $player_a['name']   }}
+                                                {!!ScoreCard::display_role($player_a['id'], $team_a_id)!!}
+                                                <span class='pull-right icon-check'>   </span>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class='col-sm-6 col-xs-12'>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead class="thead">
+                                    <tr class='team_bat'>
+                                        <th>{{$team_b_name}}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="team_tr_b" >
+                                    @foreach($team_b_players as $player_b)
+                                        <tr class="team_b_playing_row playing_b_{{$player_b['id']}} player_details_{{$player_b['id']}}">
+                                            <td class="option block select_player_squad" player_type='playing' team_type="team_b" player_id="{{$player_b['id']}}">
+                                                {{ $player_b['name']   }}
+                                                {!!ScoreCard::display_role($player_b['id'], $team_b_id)!!}
+                                                <span class="pull-right icon-check"> </span>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        <div class="row">
+            @else
+
+            <div class="row">
             <div class="col-sm-12">
                 <div class="row">
                     <form id='smiteForm' onsubmit='return manualScoring(this)'>
@@ -496,6 +646,27 @@
                     @endif
                 </div>
             </div>
+
+             @endif
+
+            <div class="sportsjun-forms text-center scorecards-buttons">
+                <center>
+                    <ul class="list-inline sportsjun-forms">
+                        @if($isValidUser)
+                            <li>
+                                @if(!$match_data[0]['hasSetupSquad'])
+                                    <button type='button' class='btn-danger btn .' onclick="return confirmSquad()"><i class="fa fa-floppy-o"></i> Confirm Squad</button>
+                                @else
+                                @endif
+                            </li>
+                        @else
+                            <li>
+                               Squad is yet to be decided.
+                            </li>
+                        @endif
+                    </ul>
+                </center>
+            </div>
         </div>
     </div>
 </div>
@@ -612,6 +783,195 @@
 
         return false;
     }
+</script>
+
+<script>
+    $(document).ready(function(){
+        $('.select_player_squad').css({cursor:'pointer', background:'none'});
+        $('.not_playing').css({ background:'#f9f9f9', cursor:'text'});
+
+        $('.select_player').css({cursor:'pointer'})
+        window.tempSquadData={
+            team_a:{
+                playing:[],
+                substitute:[]
+            },
+            team_b:{
+                playing:[],
+                substitute:[]
+            },
+            match_id: {{$match_id}},
+            team_a_id: {{$team_a_id}},
+            team_b_id: {{$team_b_id}},
+            team_a_name:'{{$team_a_name}}',
+            team_b_name:'{{$team_b_name}}',
+            preferences:{
+                number_of_quarters:0,
+                quarter_time:0,
+                max_fouls:0
+            },
+            tournament_id:'{{$tournament_id}}'
+        }
+
+
+
+        //console.log(window.tempSquadData);
+
+        Array.prototype.remove = function() {
+            var what, a = arguments, L = a.length, ax;
+            while (L && this.length) {
+                what = a[--L];
+                while ((ax = this.indexOf(what)) !== -1) {
+                    this.splice(ax, 1);
+                }
+            }
+            return this;
+        };
+        $('.select_player_squad').click(function(){
+            var player_id=$(this).attr('player_id');
+            var team_type=$(this).attr('team_type');
+            var player_type=$(this).attr('player_type');
+
+            if($(this).hasClass('player_selected'))$(this).removeClass('player_selected').children('.icon-check').html("");
+            else {
+                $(this).addClass('player_selected').children('.icon-check').html("<i class='fa fa-check'></i>");
+            }
+
+            if(!$(this).hasClass('choosen')){
+                $(this).addClass('choosen')
+                if($(this).parents('tr').hasClass('playing_a_'+player_id))$('.substitute_a_'+player_id).fadeOut();
+                if($(this).parents('tr').hasClass('playing_b_'+player_id))$('.substitute_b_'+player_id).fadeOut();
+                if($(this).parents('tr').hasClass('substitute_a_'+player_id))$('.playing_a_'+player_id).fadeOut();
+                if($(this).parents('tr').hasClass('substitute_b_'+player_id))$('.playing_b_'+player_id).fadeOut();
+                if(player_type=='playing'){
+                    tempSquadData[team_type].playing.push(player_id);
+                }
+                else{
+                    tempSquadData[team_type].playing.remove(player_id);
+                }
+            }
+            else{
+                $(this).removeClass('choosen')
+                if($(this).parents('tr').hasClass('playing_a_'+player_id))$('.substitute_a_'+player_id).fadeIn();
+                if($(this).parents('tr').hasClass('playing_b_'+player_id))$('.substitute_b_'+player_id).fadeIn();
+                if($(this).parents('tr').hasClass('substitute_a_'+player_id))$('.playing_a_'+player_id).fadeIn();
+                if($(this).parents('tr').hasClass('substitute_b_'+player_id))$('.playing_b_'+player_id).fadeIn();
+                if(player_type=='playing'){
+                    tempSquadData[team_type].playing.remove(player_id);
+                }
+                else {
+                }
+            }
+        })
+    })
+
+    function confirmSquad(){
+        //get the total players for each team
+        var total_players_a=$('#total_players_a').val();
+        var total_players_b=$('#total_players_b').val();
+        //get the playing players for each team
+        var playing_players_a=tempSquadData.team_a.playing.length;
+        var playing_players_b=tempSquadData.team_b.playing.length;
+
+        if(playing_players_a != playing_players_b){
+            $.alert({
+                title:"Alert",
+                content:"Size of team should be the same on both sides."
+            })
+            return false;
+        }
+
+        if(!(playing_players_a == "3" || playing_players_a == "5")){
+            $.alert({
+                title:"Alert",
+                content:"Size of team should be 3 or 5."
+            })
+            return false;
+        }
+
+        $.confirm({
+            title:"Alert",
+            content:"Are you sure you want to save squad?",
+            confirm: function() {
+                console.log(base_url+'/match/confirmSmitePlayingTeam');
+                $(this).attr('disabled', true);
+                $.ajax({
+                    url:base_url+'/match/confirmSmitePlayingTeam',
+                    data:tempSquadData,
+                    type:'post',
+                    success:function(response){
+                        window.location=window.location;
+                    },
+                    error:function(x,y,z){
+                        $(this).attr('disabled', false);
+                    }
+                })
+            },
+            cancel:function(){
+
+            }
+        });
+
+        return false;
+    }
+
+    function saveMatchDetails(){
+        var data=$('#volleyball').serialize();
+        $.ajax({
+            url:base_url+'/match/insertAndUpdatevolleyballCard',
+            data:data,
+            method:'post',
+            success:function(response){
+                window.location=window.location.pathname;
+            },
+            error:function(x,y,z){
+
+            }
+
+        })
+        return false;
+    }
+
+
+
+    function getvolleyballDetails(){
+        //load details
+        var data={
+            match_id:$('#match_id').val(),
+            team_a_id:{{$team_a_id}},
+            team_b_id:{{$team_b_id}}
+        }
+
+        $.ajax({
+            url:base_url+'/match/getvolleyballDetails',
+            method:'get',
+            data:data,
+            success:function(response){
+                $('#match_details').html(response);
+            }
+        })
+    }
+
+
+    function volleyballSwapPlayers(ser_id){
+        var data=$('#'+ser_id).serialize();
+        $.ajax({
+            url:base_url+'/match/volleyballSwapPlayers',
+            data:data,
+            method:'post',
+            success:function(response){
+                window.location=window.location;
+            },
+            error:function(x,y,z){
+
+            }
+
+        })
+        return false;
+    }
+
+
+
 </script>
 
 
