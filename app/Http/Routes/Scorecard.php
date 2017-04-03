@@ -193,6 +193,7 @@ Route::group(['prefix'=>'match'], function(){
 // Routes for Smite
 Route::post('smite/save_nickname', 'User\Esports\SmiteController@store')->name('smite.saveNickname');
 Route::post('match/manualScoringSmite', 'User\Esports\SmiteController@manualScoring')->name('smite.manualScoring');
+Route::post('match/endMatchSmite', 'User\Esports\SmiteController@endMatch')->name('smite.endMatch');
 
 
 

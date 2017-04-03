@@ -1,4 +1,3 @@
-
 @extends(Auth::user() ? 'layouts.app' : 'home.layout')
 @section('content')
 <style type="text/css">
@@ -102,6 +101,8 @@
     $match_id=$match_data[0]['id'];
     $tournament_id=$match_data[0]['tournament_id'];
 
+    $a_score = $match_data[0]['a_score']; $b_score = $match_data[0]['b_score'];
+
     $player_a_ids=$match_data[0]['player_a_ids'];
     $player_b_ids=$match_data[0]['player_b_ids'];
 
@@ -154,7 +155,7 @@
                             <div class="team_detail">
                                 <div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['a_id'] }}">{{ $team_a_name }}</a></div>
                                 <div class="team_city">{{ $team_a_city }}</div>
-                                <div class="team_score" id="team_a_score">{{${'team_'.$team_a_id.'_score'} }}</div>
+                                <div class="team_score" id="team_a_score">{{ $a_score }}</div>
 
                             </div>
                         </div>
@@ -169,7 +170,7 @@
                             <div class="team_detail">
                                 <div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['b_id'] }}">{{ $team_b_name }}</a></div>
                                 <div class="team_city">{{ $team_b_city }}</div>
-                                <div class="team_score" id="team_b_score">{{${'team_'.$team_b_id.'_score'} }}</div>
+                                <div class="team_score" id="team_b_score">{{ $b_score }}</div>
 
                             </div>
                         </div>
@@ -196,7 +197,7 @@
                             <div class="team_detail">
                                 <div class="team_name"><a href="{{ url('/team/members').'/'.$match_data[0]['b_id'] }}">{{ $team_b_name }}</a></div>
                                 <div class="team_city">{{ $team_b_city }}</div>
-                                <div class="team_score" id="team_b_score">{{${'team_'.$team_b_id.'_score'} }}</div>
+                                <div class="team_score" id="team_b_score">{{ $b_score }}</div>
 
 
                             </div>
@@ -651,6 +652,74 @@
                         </div>
                     @endif
                 </div>
+
+                <!-- Scoring form -->
+                <div id="end_match" class="modal fade">
+                    {!! Form::open(array('url' => '', 'method' => 'POST','id'=>'endMatchSmite', 'onsubmit'=>'return endMatchSmite(this)')) !!}
+                    <div class="modal-dialog sj_modal sportsjun-forms">
+                        <div class="modal-content">
+                            <div class="alert alert-danger" id="div_failure1"></div>
+                            <div class="alert alert-success" id="div_success1" style="display:none;"></div>
+                            <div class="modal-body">
+                                <div class="clearfix"></div>
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="section">
+                                            <div class="form-group">
+                                                <label for="match_result">End of Match Result:</label>
+                                                <select class="form-control " name="match_result" id="match_result" onchange="getTeam();SJ.SCORECARD.selectMatchType(this)">
+                                                    <option value="" >Select</option>
+                                                    <?php if(empty($match_data[0]['tournament_round_number'])) { ?>
+                                                    <option <?php if($match_data[0]['is_tied']>0) echo " selected";?> value="tie" >Tie</option>
+                                                    <?php } ?>
+                                                    <option value="walkover" {$match_data[0]['match_result']=='walkover'?'selected':''}} >Walkover</option>
+                                                    <option {{$match_data[0]['match_result']=='win'?'selected':''}}  value="win">Win</option>
+                                                    <option value="washout" {{$match_data[0]['match_result']=='washout'?'selected':''}}>No Result</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="section">
+                                            <div class="form-group scorescard_stats" >
+                                                <label class="show_teams">Select Winner:</label>
+                                                <select name="winner_id" id="winner_id" class="show_teams form-control " onchange="selectWinner();">
+                                                    <option <?php if (isset($match_data[0]['winner_id']) && $match_data[0]['winner_id']==$match_data[0]['a_id']) echo ' selected';?> value="{{ $match_data[0]['a_id'] }}" >{{ $team_a_name }}</option>
+                                                    <option <?php if (isset($match_data[0]['winner_id']) && $match_data[0]['winner_id']==$match_data[0]['b_id']) echo ' selected';?> value="{{ $match_data[0]['b_id'] }}">{{ $team_b_name }}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--********* MATCH REPORT Start **************!-->
+                                <div class="summernote_wrapper form-group">
+                                    <h3 class="brown1 table_head">Match Report</h3>
+                                    <textarea id="match_report" class="summernote" name="match_report" title="Match Report"></textarea>
+                                </div>
+                            </div>
+                            <!--********* MATCH REPORT End **************!-->
+
+                            <div class="modal-footer">
+                                <button class='btn btn-primary end_match_btn_submit' onclick="" type='submit'> Save</button>
+                                <button type="button" class="button btn-secondary" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <input type='hidden' id='selected_player_id_value' value='0' player_id='0' player_name=''>
+                    <input type='hidden' id='half_time' value='quarter_1'>
+                    <input type='hidden' id='selected_team_type' value='team_a'>
+                    <input type='hidden' id='last_index' value="0" name='last_index'>
+                    <input type="hidden" id="volleyball_form_data" value="">
+                    <input type="hidden" name="tournament_id" value="{{ $match_data[0]['tournament_id'] }}">
+                    <input type="hidden" name="team_a_id" value="{{ $match_data[0]['a_id'] }}" id="team_a_id">
+                    <input type="hidden" name="team_b_id" value="{{ $match_data[0]['b_id'] }}" id="team_b_id">
+                    <input type="hidden" name="match_id" id='match_id' value="{{ $match_data[0]['id'] }}">
+                    <input type="hidden" name="team_b_name" value="{{ $team_b_name }}" id="team_b_name">
+                    <input type="hidden" name="team_a_name" value="{{ $team_a_name }}" id="team_a_name">
+                    <input type="hidden" name="winner_team_id" value="" id="winner_team_id">
+                    </form>
             </div>
 
              @endif
@@ -958,29 +1027,92 @@
         })
     }
 
+    function getTeam()
+    {
+        var value = $( "#match_result" ).val();
+        if(value=='win' || value=='walkover')
+        {
+            $(".show_teams").show();
+            selectWinner();
+        }else
+        {
+            $(".show_teams").hide();
 
-    function volleyballSwapPlayers(ser_id){
-        var data=$('#'+ser_id).serialize();
-        $.ajax({
-            url:base_url+'/match/volleyballSwapPlayers',
-            data:data,
-            method:'post',
-            success:function(response){
-                window.location=window.location;
-            },
-            error:function(x,y,z){
+            $('#winner_team_id').val('');
+        }
+    }
+    function selectWinner()
+    {
+        $('#winner_team_id').val($('#winner_id').val());
+        //$("#winner_id").hide();
+    }
+    allownumericwithdecimal();
+    checkDuplicatePlayers('select_player_a');
+    checkDuplicatePlayers('select_player_b');
+
+    function allownumericwithdecimal()
+    {
+        $(".allownumericwithdecimal").on("keypress keyup blur",function (event) {
+            //this.value = this.value.replace(/[^0-9\.]/g,'');
+            $(this).val($(this).val().replace(/[^0-9\.]/g,''));
+            if (event.which != 08 && (event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
+                event.preventDefault();
+            }
+        });
+
+    }
+
+    //check duplicate players selected
+    function checkDuplicatePlayers(select_class)
+    {
+        $('.'+select_class).on('change',function(){
+            // Checking Duplicate players
+            var pid=[];
+            $('.'+select_class).each(function(){
+                if(this.value != ''){
+                    pid.push(this.value);
+                }
+
+            });
+            b = {};
+            for (var i = 0; i < pid.length; i++) {
+                b[pid[i]] = pid[i];
+            }
+            c = [];
+            for (var key in b) {
+                c.push(key);
+            }
+            if(pid.length!=c.length){
+
+                //alert("Duplicate Player Selected.");
+                $.alert({
+                    title: 'Alert!',
+                    content: 'Duplicate Player Selected.'
+                });
+                $(this).val('');
 
             }
+        });
+    }
 
-        })
+    function endMatchSmite(that)
+    {
+        var data=$('#endMatchSmite').serialize();
+
+        $.ajax({
+            url:base_url+"/match/endMatchSmite",
+            type:'post',
+            data:data,
+            success:function(response){
+               // window.location=window.location;
+            }
+        });
+
         return false;
     }
 
 
-
 </script>
-
-
 <!-- Put plus and minus buttons on left and rights of sets -->
 
 @endsection

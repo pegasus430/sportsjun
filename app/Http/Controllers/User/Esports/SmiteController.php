@@ -6,20 +6,19 @@ use Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use App\Helpers\Helper;
+
+use Auth;
+use Session;
 
 use App\Model\GameUsername;
 use App\Model\SmiteMatchStats;
 use App\Model\Sport;
-use App\User;
 use App\Model\Photo;
 use App\Model\Team;
-use App\Model\VolleyballPlayerMatchwiseStats;
-use App\Model\volleyballScore;
+use App\Model\Tournaments;
 use App\Model\MatchSchedule;
-
-use Session;
+use App\User;
 
 class SmiteController extends Controller
 {
@@ -236,7 +235,7 @@ class SmiteController extends Controller
 
         // Score status
         $score_status_array = json_decode($match_data[0]['score_added_by'],true);
-        $rej_note_str='';
+        $rej_note_str = '';
         if($score_status_array['rejected_note']!='')
         {
             $rejected_note_array = explode('@',$score_status_array['rejected_note']);
@@ -313,7 +312,7 @@ class SmiteController extends Controller
         }
         else //volleyball score view and edit
         {
-            return view('scorecards.smitescorecard',array(
+            return view('scorecards.smitescorecardview',array(
                 'tournamentDetails' => $tournamentDetails,
                 'sportsDetails'=> $sportsDetails,
                 'team_a'=>[''=>'Select Player']+$team_a,
@@ -393,4 +392,158 @@ class SmiteController extends Controller
         }
     }
 
+    public function endMatch()
+    {
+        $request = Request::all();
+        $match_id = $request['match_id'];;
+        $match_data = MatchSchedule::find($match_id);
+
+        $match_result=$request['match_result'];
+        $match_report=$request['match_report'];
+        $winner_team_id = !empty(Request::get('winner_team_id')) ? Request::get('winner_team_id') : NULL; //winner_id
+        $player_of_the_match = isset($request['player_of_the_match']) ? $request['player_of_the_match'] : NULL;
+
+        $match_data->player_of_the_match = $player_of_the_match;
+
+        $loginUserId = Auth::user()->id;
+        $scorecardDetails = MatchSchedule::where('id',$match_id)->pluck('score_added_by');
+        $decode_scorecard_data = json_decode($scorecardDetails,true);
+
+        $modified_users = !empty($decode_scorecard_data['modified_users'])?$decode_scorecard_data['modified_users']:'';
+        $modified_users = $modified_users.','.$loginUserId;//scorecard changed users
+
+        $added_by = !empty($decode_scorecard_data['added_by'])?$decode_scorecard_data['added_by']:$loginUserId;
+
+        //score card approval process
+        $score_status = array('added_by'=>$added_by,'active_user'=>$loginUserId,'modified_users'=>$modified_users,'rejected_note'=>'');
+
+        $json_score_status = json_encode($score_status);
+
+        $is_tie         = ($match_result == 'tie')      ? 1 : 0;
+        $is_washout     = ($match_result == 'washout')  ? 1 : 0;
+        $has_result     = ($is_washout == 1) ? 0 : 1;
+        $match_result   = ( !in_array( $match_result, ['tie','win','washout'] ) ) ? NULL : $match_result;
+
+        $matchScheduleDetails = MatchSchedule::where('id',$match_id)->first();
+
+        if(count($matchScheduleDetails))
+        {
+            $looser_team_id = NULL;
+            $match_status = 'scheduled';
+            $approved = '';
+
+            /* Set score */
+            if($winner_team_id == $matchScheduleDetails['a_id'])
+            {
+                $score_a = 1;
+                $score_b = 0;
+            }
+            else
+            {
+                $score_a = 0;
+                $score_b = 1;
+            }
+
+            if($is_tie == 0 || $is_washout == 0)
+            {
+                if(isset($winner_team_id)) {
+
+                    if($winner_team_id == $matchScheduleDetails['a_id'])
+                    {
+                        $looser_team_id = $matchScheduleDetails['b_id'];
+                    }
+                    else
+                    {
+                        $looser_team_id = $matchScheduleDetails['a_id'];
+                    }
+
+                    $match_status='completed';
+                    $approved = 'approved';
+                }
+            }
+
+            $this->deny_match_edit_by_admin();
+
+            if(!empty($matchScheduleDetails['tournament_id']))
+            {
+
+                $tournamentDetails = Tournaments::where('id', '=', $matchScheduleDetails['tournament_id'])->first();
+                if (($is_tie == 1 || $match_result == "washout") && !empty($matchScheduleDetails['tournament_group_id']))
+                {
+                    $match_status = 'completed';
+                }
+
+                if(Helper::isTournamentOwner($tournamentDetails['manager_id'],$tournamentDetails['tournament_parent_id']))
+                {
+                    MatchSchedule::where('id',$match_id)->update(['match_status'=>$match_status,
+                        'winner_id' => $winner_team_id ,
+                        'looser_id' => $looser_team_id,
+                        'has_result' => $has_result,
+                        'match_report' => $match_report,
+                        'match_result' => $match_result,
+                        'is_tied' => $is_tie,
+                        'match_report' => $match_report,
+                        'a_score' => $score_a,
+                        'b_score' => $score_b,
+                        'score_added_by' => $json_score_status]);
+
+                    if(!empty($matchScheduleDetails['tournament_round_number']))
+                    {
+                        $this->updateBracketDetails($matchScheduleDetails,$tournamentDetails,$winner_team_id);
+                    }
+
+                    if($match_status=='completed')
+                    {
+                        Helper::sendEmailPlayers($matchScheduleDetails, 'volleyball');
+                    }
+                }
+
+            }
+            else if(Auth::user()->role == 'admin')
+            {
+                if ($is_tie == 1 || $match_result == "washout")
+                {
+                    $match_status = 'completed';
+                    $approved = 'approved';
+                }
+
+                MatchSchedule::where('id',$match_id)->update(['match_status'=>$match_status,
+                    'winner_id' => $winner_team_id,
+                    'looser_id' => $looser_team_id,
+                    'is_tied' => $is_tie,
+                    'match_report' => $match_report,
+                    'has_result' => $has_result,
+                    'match_result' => $match_result,
+                    'a_score' => $score_a,
+                    'b_score' => $score_b,
+                    'score_added_by' => $json_score_status,
+                    'scoring_status' => $approved]);
+
+                if($match_status=='completed')
+                {
+                    //send mail to players
+                    Helper::sendEmailPlayers($matchScheduleDetails, 'volleyball');
+                }
+            }
+            else
+            {
+                MatchSchedule::where('id',$match_id)->update([
+                    'winner_id' => $winner_team_id ,
+                    'looser_id' => $looser_team_id,
+                    'is_tied' => $is_tie,
+                    'match_report' => $match_report,
+                    'has_result' => $has_result,
+                    'match_result' => $match_result,
+                    'a_score' => $score_a,
+                    'b_score' => $score_b,
+                    'score_added_by' => $json_score_status
+                ]);
+            }
+        }
+        return $match_data->match_details;
+    }
+
+    public function deny_match_edit_by_admin(){
+        Session::remove('is_allowed_to_edit_match');
+    }
 }

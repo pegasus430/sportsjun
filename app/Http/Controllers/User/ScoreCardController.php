@@ -242,8 +242,8 @@ class ScoreCardController extends Controller {
 
 				else if(strtolower($sport_name) == strtolower('smite'))
                 {
-                    //$smite = new Esports\SmiteController;
-                    // return $smite->smiteScoreCard($match_data, $sportsDetails, $tournamentDetails);
+                    $smite = new Esports\SmiteController;
+                    return $smite->smiteScoreCard($match_data, $sportsDetails, $tournamentDetails);
                 }
 			}
 		}
