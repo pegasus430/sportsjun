@@ -252,10 +252,8 @@
                             <div class="form-group">
                                 <label class="" style="color:red">PLAYER OF THE MATCH</label>
                                 <h4 class="win_team">{{ Helper::getUserDetails($match_data[0]['player_of_the_match'])->name }}</h4>
-
                             </div>
                         @endif
-
                     @else
                         @if($match_data[0]['is_tied']>0)
 
@@ -1104,7 +1102,7 @@
             type:'post',
             data:data,
             success:function(response){
-               // window.location=window.location;
+               window.location=window.location;
             }
         });
 

@@ -65,9 +65,6 @@
                                 </div>
                             @endif
                             @if($userId==isset(Auth::user()->id)?Auth::user()->id:0)
-                            <!--                            <div class="pull-right" style="margin-bottom: 8px;"><a href="{{ URL::to('/skip') }}" class="skip">Skip</a></div>
-                            <div class="clearfix"></div>-->
-
 
                                 @if (count($sports))
                                     <input type="hidden" id="user_question" value="1">

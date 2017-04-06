@@ -146,7 +146,8 @@ return [
                 15=> 'UltimatefrisbeeStatistic',
                 16=> 'WaterpoloStatistic',
                 17=> 'ThrowballStatistic',
-                18=> 'ArcheryStatistic' 
+                18=> 'ArcheryStatistic',
+                19=> 'Smite'
 
         ],
         'SPORT_NAME'               => [

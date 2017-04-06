@@ -7,6 +7,7 @@ use App\Model\SportQuestion;
 use App\Model\SportQuestionAnswer;
 use App\Model\UserStatistic;
 use App\Model\GameUsername;
+use App\Model\SmiteMatchStats;
 use Request;
 use Auth;
 use Carbon\Carbon;
@@ -72,8 +73,9 @@ class SportController extends Controller {
         }
         $userStatistic = UserStatistic::where('user_id', $userId)->first();
         if (count($userStatistic)) {
-            if(Auth::user())
+            if(Auth::user()) {
                 return redirect()->route('editsportprofile', [$userId]);
+            }
             else return redirect()->to("/viewpublic/editsportprofile/$userId");
         }
         $sports = Sport::all(['id', 'sports_name']);
@@ -118,12 +120,14 @@ class SportController extends Controller {
         }
         $userStatistic = UserStatistic::where('user_id', $userId)->first();
         if (count($userStatistic)) {
-            if(count($userStatistic->following_sports)){
+            if(count($userStatistic->following_sports))
+            {
                 $followingSportsArray = explode(',', trim($userStatistic->following_sports, ','));
                 $userSports = Sport::whereIn('id', $followingSportsArray)->get(['id', 'sports_name']);
                 $sports = Sport::whereNotIn('id', $followingSportsArray)->get(['id', 'sports_name']);
                 return view('sportprofile.edit', ['sports' => $sports, 'userSports' => $userSports, 'followingSports' => !empty($followingSportsArray) ? $followingSportsArray : [],'userId'=>  $userId,'managing_teams'=>$managing_teams,'userExists' => $userExists,'selfProfile'=>$selfProfile]);
-            }else
+            }
+            else
             {
                 $sports = Sport::all(['id', 'sports_name']);
                 return view('sportprofile.show', ['sports' => $sports, 'followingTeams' => !empty($followingSportsArray) ? $followingSportsArray : [],'userId'=>  $userId,'managing_teams'=>$managing_teams,'userExists' => $userExists]);
@@ -271,6 +275,22 @@ class SportController extends Controller {
                             . 'CAST(AVG(average_bowl) AS DECIMAL(10,2)) average_bowl, CAST(AVG(ecomony) AS DECIMAL(10,2)) ecomony' ) );
                 }
                 $sportsPlayerStatistics= $stats->get();
+            }
+            else
+            {
+                $sport = Sport::where('id', $sportsId)->first();
+                $stats = '';
+                switch(strtolower($sport->sports_name))
+                {
+                    case strtolower('smite'):
+                        $stats = SmiteMatchStats::select('final_level as FinalLevel','kills as Kills','deaths as Deaths','assists as Assists','gold_earned as GoldEarned','gpm as GoldPerMinute','magical_damage_done as MagicalDamage','physical_damage_done as PhysicalDamage')->where('user_id', $userId)->get();
+
+                        break;
+                    default:
+                        break;
+
+                }
+                $sportsPlayerStatistics = $stats;
             }
 
             $statsview = 'sportprofile.'.preg_replace('/\s+/', '',strtolower(config('constants.SPORT_NAME.'.$sportsId))).'statsview';
