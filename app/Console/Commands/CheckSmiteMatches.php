@@ -46,17 +46,13 @@ class CheckSmiteMatches extends Command
     public function handle()
     {
         //Query to notify users about the match info (lobby creator, lobby name, lobby password)
+        /* Test time
         $time1_day = Carbon::now()->subMonth()->subHours(5)->format('Y-m-d');
         $time1_time = Carbon::now()->subMonth()->subHours(6)->format('h:m:s');
 
         $time2_day = Carbon::now()->addMinute()->format('Y-m-d');
         $time2_time = Carbon::now()->addMinute()->subHours(3)->format('h:m:s');
-
-        /*
         $this->info($time1_day);
-        $this->info($time2_day);
-        $this->info($time1_time);
-        $this->info($time2_time);
         */
         $sport = Sport::where('sports_name', strtolower('smite'))->first();
         $matchScheduleData = SmiteMatch::where('match_status', 'started')->get();
@@ -74,7 +70,6 @@ class CheckSmiteMatches extends Command
 
             foreach ($matchScheduleData as $key => $schedule)
             {
-                $this->info($schedule);
                 $teamOne = $schedule->match->player_a_ids;
                 $teamTwo = $schedule->match->player_b_ids;
 
@@ -118,7 +113,7 @@ class CheckSmiteMatches extends Command
                     $matchTime->addSeconds($matchHistory->Time_In_Match_Seconds);
 
                     /* Check if match finished 5 minutes ago */
-                    $fiveMinutesAgo = Carbon::now()->subDays(5);
+                    $fiveMinutesAgo = Carbon::now()->subMinutes(5);
                     if($matchTime < $fiveMinutesAgo)
                         continue;
                     $matchId = $matchHistory->Match;
@@ -144,7 +139,7 @@ class CheckSmiteMatches extends Command
                             break;
                         }
                     }
-                    $smiteUsername = 'Bennnoxiss';
+                    // Testing $smiteUsername = 'Bennnoxiss';
                     if(empty($smiteUsername))
                         continue;
 
@@ -182,6 +177,7 @@ class CheckSmiteMatches extends Command
                     if(empty($user))
                         continue;
 
+                    // Create Smite statistic row
                     SmiteMatchStats::create([
                         'user_id' => $user->user_id,
                         'match_id' => $schedule->match->id,
@@ -206,14 +202,15 @@ class CheckSmiteMatches extends Command
                 $schedule->save();
 
                 /* Finish scheduled match */
-                //var_dump($matchDetails->playerId);
-
-
-                var_dump("DOSAO DO OVDJE");
-
-
-
-
+                $match = $schedule->match;
+                $match->match_status = 'completed';
+                $match->winner_id = ($firstTeamWon) ? $match->a_id : $match->b_id;
+                $match->looser_id = ($firstTeamWon) ? $match->b_id : $match->a_id;
+                $match->a_score = ($firstTeamWon) ? 1 : 0;
+                $match->b_score = ($firstTeamWon) ? 0 : 1;
+                $match->has_result = 1;
+                $match->match_result = 'win';
+                $match->save();
 
             }
             echo "Success";exit;

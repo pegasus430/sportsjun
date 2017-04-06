@@ -4,7 +4,6 @@
     <div id="content-team" class="col-sm-10">
         @include('sportprofile.share')
 
-
         <div class="col-sm-9 tournament_profile" id='content_to_share'>
             @if (session('status'))
                 <div class="alert alert-success">
@@ -47,10 +46,13 @@
 
                                 @if(count($sports) && $userId==(isset(Auth::user()->id)?Auth::user()->id:0))
                                     <li class=dropdown id="unfollowedSportsLi">
-                                        <a href=# id=myTabDrop1 class=dropdown-toggle data-toggle=dropdown aria-controls=myTabDrop1-contents><i class="fa fa-plus-circle"></i></a>
+                                        <a href=# id=myTabDrop1 class=dropdown-toggle data-toggle=dropdown aria-controls=myTabDrop1-contents>
+                                            <i class="fa fa-plus-circle"></i>
+                                        </a>
                                         <ul class=dropdown-menu aria-labelledby=myTabDrop1 id=myTabDrop1-contents>
                                             @foreach($sports as $sport)
-                                                <li><a href="javascript:void(0)" onclick="appendTabElement('follow',{{$sport->id}},{{$userId}},'{{$sport->sports_name}}');" role=tab id="sport_name_{{$sport->id}}" data-toggle=tab aria-controls=dropdown1>{{$sport->sports_name}}</a>
+                                                <li>
+                                                    <a href="javascript:void(0)" onclick="appendTabElement('follow',{{$sport->id}},{{$userId}},'{{$sport->sports_name}}');" role=tab id="sport_name_{{$sport->id}}" data-toggle=tab aria-controls=dropdown1>{{$sport->sports_name}}</a>
                                                 </li>
                                                 <div class="tab-pane fade" id="addplayer_{{$sport->id}}" style="display: none;">
                                                     <div class="sportsjun-forms custom_form" id='sportsjun_forms_{{$sport->id}}'>
@@ -67,6 +69,7 @@
                                 @endif
                             </ul>
                         </div>
+
                         <div class="tab-content" id="addPlayerDiv" style="margin-top: 0px;">
                             @foreach($userSports as $userSport)
                                 <?php

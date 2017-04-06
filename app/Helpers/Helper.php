@@ -2709,6 +2709,26 @@ class Helper
         }
     }
 
+    public static function getAverageStats($stats)
+    {
+        $avgStats = [];
+        if(!count($stats) > 0)
+            return array();
+
+        foreach($stats as $stat)
+        {
+            foreach($stat as $attribute=>$val)
+            {
+                $avgStats[$attribute] += $val;
+            }
+        }
+
+        foreach($avgStats as $attribute=>$val)
+        {
+            $avgStats[$attribute] = $avgStats[$attribute] / count($stats);
+        }
+    }
+
 
 }
 

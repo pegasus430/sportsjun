@@ -1,3 +1,6 @@
+@if(strtolower($sportDetails['sports_name']) == 'smite')
+    @include ('esports.smitestats')
+@endif
 
 @if(count($matchScheduleData))
 <div class="players_row clearfix" style="margin-bottom: 8px; padding-left: 12px;"><h5>RECENT MATCHES</h5></div>
