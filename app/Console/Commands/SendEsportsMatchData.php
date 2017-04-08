@@ -104,8 +104,8 @@ class SendEsportsMatchData extends Command
                 AllRequests::sendMatchInfo($schedule->tournament_id,$schedule->schedule_type,$schedule->a_id,$schedule->b_id,$schedule->match_start_date,"Smite", $lobbyName, $password);
 
                 // Send email
-                AllRequests::sendMatchInfoEmail($playerOneDetails->name, $playerTwoDetails->id, $playerOneDetails->email, $firstParticipant, $secondParticipant, $lobbyName, $password);
-                AllRequests::sendMatchInfoEmail($playerTwoDetails->name, $playerTwoDetails->id, $playerOneDetails->email, $firstParticipant, $secondParticipant, $lobbyName, $password);
+                AllRequests::sendMatchInfoEmail($playerOneDetails->name, $playerOneDetails->id, $playerOneDetails->email, $firstParticipant, $secondParticipant, $lobbyName, $password);
+                AllRequests::sendMatchInfoEmail($playerTwoDetails->name, $playerTwoDetails->id, $playerTwoDetails->email, $firstParticipant, $secondParticipant, $lobbyName, $password);
 
             }
             echo "Success";exit;
