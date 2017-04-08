@@ -733,9 +733,11 @@
                                 @endif
                             </li>
                         @else
+                            @if(!$match_data[0]['hasSetupSquad'])
                             <li>
                                Squad is yet to be decided.
                             </li>
+                            @endif
                         @endif
                     </ul>
                 </center>
