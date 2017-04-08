@@ -45,11 +45,18 @@ class SendEsportsMatchData extends Command
     {
         //Query to notify users about the match info (lobby creator, lobby name, lobby password)
         $time1_day = Carbon::now()->subMonth()->subHours(5)->format('Y-m-d');
-        $time1_time = Carbon::now()->subMonth()->subHours(6)->format('h:m:s');
+        $time1_time = Carbon::now()->subMonth()->subHours(6)->format('H:m:s');
 
         $time2_day = Carbon::now()->addMinute()->format('Y-m-d');
-        $time2_time = Carbon::now()->addMinute()->subHours(3)->format('h:m:s');
+        $time2_time = Carbon::now()->addMinute()->subHours(3)->format('H:m:s');
         $sport = Sport::where('sports_name', strtolower('smite'))->first();
+
+        /*
+        $this->info($time1_day);
+        $this->info($time2_day);
+        $this->info($time1_time);
+        $this->info($time2_time);
+        */
 
         $matchScheduleData = MatchSchedule::whereBetween('match_start_date', array($time1_day,$time2_day))
             ->whereBetween('match_start_time', array($time1_time, $time2_time))
