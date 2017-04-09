@@ -28,7 +28,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('esports:match-data')
             ->everyMinute();
-        $schedule->command('esports:check-matches')
+        $schedule->command('esports:check-smite-matches')
             ->everyFiveMinutes();
     }
 }
