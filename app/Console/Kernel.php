@@ -14,11 +14,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \App\Console\Commands\Inspire::class,
-        'App\Console\Commands\NotifySchedules',
-        'App\Console\Commands\NotifyNotVerifiedUsers',
-        'App\Console\Commands\SendMails',
-        'App\Console\Commands\SendEsportsMatchData',
-        'App\Console\Commands\CheckSmiteMatches',
+        \App\Console\Commands\SendEsportsMatchData::class,
+        \App\Console\Commands\CheckSmiteMatches::class,
     ];
 
     /**

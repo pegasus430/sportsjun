@@ -604,13 +604,13 @@ class AllRequests {
                 $message = trans("message.tournament.bye", ['teamonename' => $playerOneDetails->name,'tournamentname'=>!empty($tournamentName)?$tournamentName:'']);
             }
 
-            if(count($playerOneDetails)) {
+            if(count($playerOneDetails) && strtolower($sport_name) != 'smite') {
                 AllRequests::sendnotifications($a_id,$message,'');
                 if(!empty($playerOneDetails->email)) {
                     AllRequests::sendMatchEmails($playerOneDetails,$message);
                 }
             }
-            if(count($playerTwoDetails)) {
+            if(count($playerTwoDetails) && strtolower($sport_name) != 'smite') {
                 AllRequests::sendnotifications($b_id,$message,'');
                 if(!empty($playerTwoDetails->email)) {
                     AllRequests::sendMatchEmails($playerTwoDetails,$message);
