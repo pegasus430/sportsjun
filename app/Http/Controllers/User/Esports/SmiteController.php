@@ -373,6 +373,9 @@ class SmiteController extends Controller
 
         foreach($players as $player)
         {
+            if(trim($player) == '')
+                continue;
+
             if(!is_numeric($request['Level_'.$player]))
                 continue;
 

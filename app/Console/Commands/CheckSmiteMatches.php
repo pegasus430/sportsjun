@@ -113,9 +113,10 @@ class CheckSmiteMatches extends Command
                     $matchTime->addSeconds($matchHistory->Time_In_Match_Seconds);
 
                     /* Check if match finished 5 minutes ago */
-                    $fiveMinutesAgo = Carbon::now()->subMinutes(5);
+                    $fiveMinutesAgo = Carbon::now()->subDays(8)->subMinutes(5);
                     if($matchTime < $fiveMinutesAgo)
                         continue;
+
                     $matchId = $matchHistory->Match;
 
                     break;
@@ -152,7 +153,7 @@ class CheckSmiteMatches extends Command
                     $matchHistory = Esports::getMatchHistory($playerId,$sessionId);
 
                     // If match ids are the same, it is the same match
-                    if($matchId = $matchHistory->Match) {
+                    if($matchId == $matchHistory->Match) {
                         $matchFound = true;
                         break;
                     }
@@ -164,6 +165,7 @@ class CheckSmiteMatches extends Command
 
                 /* Check who won and save statistics */
                 $firstTeamWon = false;
+
                 foreach($matchDetails as $player)
                 {
                     if($player->playerId == $playerId1)
@@ -172,8 +174,12 @@ class CheckSmiteMatches extends Command
                             $firstTeamWon = true;
                     }
 
-                    $user = GameUsername::where('sport_id', $sport->id)->where('username', $player->playerName)->first();
+                    // Regex to remove [ ] brackets (clan tag) from name
+                    $cleanPlayerName = trim(preg_replace('/\[.*\]/', '', $player->playerName));
 
+                    $user = GameUsername::where('sport_id', $sport->id)->where('username', $cleanPlayerName)->first();
+                    //$this->info($user);
+                    //$this->info($player->playerName);
                     if(empty($user))
                         continue;
 

@@ -283,7 +283,7 @@
             </div>
         </div>
 
-        @if(!$match_data[0]['hasSetupSquad'])
+        @if(!$match_data[0]['hasSetupSquad'] && strtolower($match_data[0]['schedule_type']) == 'team')
             <div class="row">
                 <!-- Selecting Squads Start-->
                 <div class="col-sm-8 col-sm-offset-2">
@@ -727,15 +727,17 @@
                     <ul class="list-inline sportsjun-forms">
                         @if($isValidUser)
                             <li>
-                                @if(!$match_data[0]['hasSetupSquad'])
+                                @if(!$match_data[0]['hasSetupSquad'] && strtolower($match_data[0]['schedule_type']) == 'team')
                                     <button type='button' class='btn-danger btn .' onclick="return confirmSquad()"><i class="fa fa-floppy-o"></i> Confirm Squad</button>
                                 @else
                                 @endif
                             </li>
                         @else
+                            @if(!$match_data[0]['hasSetupSquad'])
                             <li>
                                Squad is yet to be decided.
                             </li>
+                            @endif
                         @endif
                     </ul>
                 </center>

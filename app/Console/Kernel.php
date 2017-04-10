@@ -14,11 +14,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \App\Console\Commands\Inspire::class,
-        'App\Console\Commands\NotifySchedules',
-        'App\Console\Commands\NotifyNotVerifiedUsers',
-        'App\Console\Commands\SendMails',
-        'App\Console\Commands\SendEsportsMatchData',
-        'App\Console\Commands\CheckSmiteMatches',
+        \App\Console\Commands\SendEsportsMatchData::class,
+        \App\Console\Commands\CheckSmiteMatches::class,
     ];
 
     /**
@@ -29,17 +26,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        /*$schedule->command('inspire')
-                 ->hourly();*/
-        $schedule->command('cron:notifyschedules')
-                 ->daily();
-        $schedule->command('cron:notifyusers')
-                 ->daily();
-        $schedule->command('cron:sendmails')
-                 ->cron('*/10 * * * *');
         $schedule->command('esports:match-data')
             ->everyMinute();
-        $schedule->command('esports:check-matches')
+        $schedule->command('esports:check-smite-matches')
             ->everyFiveMinutes();
     }
 }
