@@ -2866,11 +2866,14 @@ class TournamentsController extends Controller
 							->join('teams', 'teams.id','=', 'team_players.team_id')
 							->leftjoin('tournament_group_teams','tournament_group_teams.team_id','=','teams.id')
 							->leftjoin('tournament_final_teams','tournament_final_teams.team_id','=','teams.id')	
-							->where('tournament_group_teams.tournament_id',$tournament_id)							
-							->orwhere('tournament_final_teams.tournament_id',$tournament_id)
+							 ->where(function($query) use($tournament_id) {
+					            $query
+					            ->where('tournament_group_teams.tournament_id',$tournament_id)                           
+					            ->orwhere('tournament_final_teams.tournament_id',$tournament_id);
+					        })   
 							//->where('teams.sports_id','=',1)
 							->join('users', 'users.id', '=', 'cricket_player_matchwise_stats.fielder_id')
-							->where('match_schedules.tournament_id', $tournament_id)
+							->where('cricket_player_matchwise_stats.tournament_id', $tournament_id)
 							->select('cricket_player_matchwise_stats.*','users.*')
 							->selectRaw('count(cricket_player_matchwise_stats.match_id) as matches')		
 							->selectRaw('sum(IF(out_as="caught", 1, 0)) as caught')
