@@ -15,6 +15,8 @@
         <link href="/org/css/font-awesome.min.css" rel="stylesheet">
         <link href="/org/css/bootstrap-select.css" rel="stylesheet">        
      <link href="/org/css/bootstrap.slider.css" rel="stylesheet">
+
+     @yield('styles')
 </head>
 
 <body>
@@ -85,7 +87,7 @@
                     <a href="/organization/{{$organisation->id}}/marketplace"><img src="/org/images/icons/icon-marketplace.png" alt="" width="16" height="16"> marketplace</a>
                 </li>
                 <li class='nav-item'>
-                    <a href="user/album/organization?id=0&team_id={{$organisation->id}}"><img src="/org/images/icons/icon-gallery.png" alt="" width="16" height="16"> Gallery</a>
+                    <a href="/organization/{{$organisation->id}}/gallery"><img src="/org/images/icons/icon-gallery.png" alt="" width="16" height="16"> Gallery</a>
                 </li>
             </ul>
         </div>

@@ -25,6 +25,7 @@ use App\Model\OrganizationStaff;
 use Illuminate\Http\Request as ObjRequest;
 use App\Model\BasicSettings;
 use App\Model\Marketplace;
+use App\Model\Album;
 
 //use Helper;
 
@@ -580,6 +581,15 @@ class OrganizationController extends Controller
         }
 
         return 'ok';
+    }
+
+    public function gallery($id, objrequest $request){
+          
+            $orgInfoObj= Organization::find($id);
+            $imageable_type_name = config('constants.PHOTO.GALLERY_ORGANIZATION');
+            $album_array = Album::where('imageable_type',$imageable_type_name)->where('imageable_id',$id)->get();
+            $photos = Photo::where('imageable_type',$imageable_type_name)->where('imageable_id',$id)->get();
+        return view('organization_2.gallery', compact('photos','album_array'));
     }
 
 
