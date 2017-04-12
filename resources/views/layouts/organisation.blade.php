@@ -103,6 +103,15 @@
             <div class="alert alert-success" style="display: none;">
 
             </div>
+
+            @if($errors->has())
+                <div class="alert  alert-danger"> 
+                          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+               @foreach ($errors->all() as $error)
+                  <div>{{ $error }}</div>
+              @endforeach
+                </div>
+            @endif
     </div>
     <!-- Page Head -->
     
@@ -126,6 +135,7 @@
     <script src="/org/js/bootstrap-select.js"></script>
     <script type="text/javascript">
             var is_organization=true;
+            var base_url = '';
     </script>
     @include ('layouts.footer_scripts')
     @yield('end_scripts')

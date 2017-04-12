@@ -32,19 +32,19 @@
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tournament_details">
                                     <br>
-                                    <form action="/tournaments" class="form create-form clearfix" method="post" enctype="multipart/form-data">
+                                    <form action="/tournaments/{{$tournament->id}}/update" class="form create-form clearfix" method="post" enctype="multipart/form-data">
                                         <div class="input-container one-col">
-                                            <input type="text" id="tournament_name" required="required" name="name" value="{{old('name')}}">
+                                            <input type="text" id="tournament_name" required="required" name="name" value="{{$tournament->name}}">
                                             <label for="tournament_name">Tournament Name <span class="req">&#42;</span></label>
                                             <div class="bar"></div>
                                         </div>
                                         {!! csrf_field() !!}
                                         <div class="input-container one-col file nomgbtm">
                                             <label>Group Logo</label>
-                                            <input type="file" id="staff_email" required="" name="logo"> </div>
+                                            <input type="file" id="staff_email"  name="logo"> </div>
                                         
                                         <div class="input-container two-col">
-                                            <input type="text" id="contact_number" required="required" name="contact_number" value="{{old('contact_number')}}">
+                                            <input type="text" id="contact_number" required="required" name="contact_number" value="{{$tournament->contact_number}}">
                                             <label for="contact_number">Contact Number <span class="req">&#42;</span></label>
                                             <div class="bar"></div>
                                      </div>
@@ -53,7 +53,7 @@
                                         <input type="hidden" name="from_organization" value="yes">
 
                                          <div class="input-container two-col">
-                                            <input type="text" id="alternate_number" name="alternate_contact_number" value="{{old('alternate_contact_number')}}">
+                                            <input type="text" id="alternate_number" name="alternate_contact_number" value="{{$tournament->alternate_contact_number}}">
                                             <label for="alternate_number">Alternate Number</label>
                                             <div class="bar"></div>
                                         </div>
@@ -62,30 +62,37 @@
                                             <label for="manager_name">Manager Name <span class="req">&#42;</span></label>
                                             <select name="manager_id">
                                             	@foreach($organisation->staff as $staff)
-                                            		<option value="{{$staff->id}}"> {{$staff->name}}</option>
+                                            		<option value="{{$staff->id}}" {{$staff->id==$tournament->manager_id?'selected':''}}> {{$staff->name}}</option>
                                             	@endforeach
                                             </select>
                                             <div class="bar"></div>
                                         </div>
                                         <div class="input-container two-col">
-                                            <input type="text" id="email" required="required" name="email" value="{{old('email')}}">
+                                            <input type="text" id="email" required="required" name="email" value="{{$tournament->email}}">
                                             <label for="email">Email <span class="req">&#42;</span></label>
                                             <div class="bar"></div>
                                         </div>
                                         <div class="input-container select one-col">
                                             <label>Description</label>
                                             <div>
-                                                <textarea class="textarea" style="resize:none" rows="3" name="description" cols="50" maxlength="250" >{{old('description')}}</textarea>
+                                                <textarea class="textarea" style="resize:none" rows="3" name="description" cols="50" maxlength="250" >{{$tournament->description}}</textarea>
                                                 <div class="characterLeft"></div>
                                             </div>
                                         </div>
                                         <div class="text-center">
-                                            <button type="submit" class="btn btn-primary">Create</button>
+                                            <button type="submit" class="btn btn-primary">Update</button>
                                         </div>
                                     </form>
                                 </div>
                                 <div class="tab-pane" id="tournament_events">
-                                    <div class="text-center">Firsly, add tournament details, and then you'll be able to add tournament events.</div>
+                                 
+                                  <a href="#" data-toggle="modal" data-target="#subtournament" class="add-tour"><i class="fa fa-plus"></i> Add Tournament Event</a>
+
+                                    @if(!empty($subTournamentArray) && count($subTournamentArray)>0)
+                                        @include('organization_2.tournament.viewsubtournaments')
+
+                                   
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -93,4 +100,6 @@
                 </div>
             </div>
         </div>
+
+        @include('tournaments.create')  
 @stop

@@ -36,6 +36,8 @@ class OrganizationController extends Controller
 
     public function __construct(ObjRequest $request){
           $id = $request->route()->parameter('id');
+
+               
           $this->is_owner = false;
           $this->new_template = false;
           $this->view = 'organization';

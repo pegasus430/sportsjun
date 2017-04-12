@@ -391,6 +391,7 @@ Route::get('tournament/getsubtournamentdetails/{tournamentid}', [
 
 
 Route::resource('tournaments', 'User\TournamentsController');
+Route::post('tournaments/{id}/update', 'User\TournamentsController@update');
 //End Tournamets
 
 
