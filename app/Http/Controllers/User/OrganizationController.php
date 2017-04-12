@@ -639,5 +639,13 @@ class OrganizationController extends Controller
 
     }
 
+    public function update_fields($id, objrequest $request){
+        $org = organization::find($id); 
+        $org->{$request->field} = $request->value;
+        $org->save(); 
+
+        return 'ok';
+    }
+
 
 }
