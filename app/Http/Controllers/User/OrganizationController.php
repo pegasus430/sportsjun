@@ -26,6 +26,7 @@ use Illuminate\Http\Request as ObjRequest;
 use App\Model\BasicSettings;
 use App\Model\Marketplace;
 use App\Model\Album;
+use File;
 
 //use Helper;
 
@@ -589,7 +590,53 @@ class OrganizationController extends Controller
             $imageable_type_name = config('constants.PHOTO.GALLERY_ORGANIZATION');
             $album_array = Album::where('imageable_type',$imageable_type_name)->where('imageable_id',$id)->get();
             $photos = Photo::where('imageable_type',$imageable_type_name)->where('imageable_id',$id)->get();
-        return view('organization_2.gallery', compact('photos','album_array'));
+            $album_select = Album::where('imageable_type',$imageable_type_name)->where('imageable_id',$id)->lists('title', 'id');
+        return view('organization_2.gallery.gallery', compact('photos','album_array','album_select'));
+    }
+
+    
+    //Save Organization Album
+    public function album_save($id, ObjRequest $request){
+        $album = new album;
+        $album->imageable_type =  config('constants.PHOTO.GALLERY_ORGANIZATION');
+        $album->imageable_id   =  $id;
+        $album->title          = $request->title; 
+        $album->description    = $request->description;
+        $album->user_id        = Auth::user()->id;
+        $album->save();
+
+        $albums  =  album::where(['imageable_type'=>$album->imageable_type, 'imageable_id'=>$id])->get();
+        $Response = ''; 
+        foreach ($albums as $key => $value) {
+            $Response.="<option value='$value->id'>$value->title</option>";
+        }
+
+        return $Response;
+    }
+
+    public function photo_save($id, ObjRequest $request){
+
+        $photo = new photo;
+        $photo->album_id = $request->album_id;
+        $filename = $request->file('image')->getClientOriginalName();
+        $ext = $request->file('image')->getClientOriginalExtension();
+        $str = str_random(12).'.'.$ext;
+        $photo->title = $filename;
+        $photo->url = $str;
+        $photo->imageable_type =  config('constants.PHOTO.GALLERY_ORGANIZATION');
+        $photo->imageable_id   =  $id;
+        $photo->user_id = Auth::user()->id;        
+
+        $path = public_path().'/uploads/'.config('constants.PHOTO.GALLERY_ORGANIZATION');
+        if(!is_dir($path)) mkdir($path);
+
+        $photo->save();
+
+        $request->file('image')->move($path, $str);
+
+        return redirect()->back()->with('message', 'Successful!'); 
+
+
     }
 
 

@@ -43,7 +43,7 @@
                                             <!--                                    <img data-original="http://www.sportsjun.com/uploads/tournaments/jlXE2OrNeNlDqciAAbAT.png" src="http://www.sportsjun.com/uploads/tournaments/jlXE2OrNeNlDqciAAbAT.png" title="" onerror="this.onerror=null;this.src=&quot;http://www.sportsjun.com/images/default-profile-pic.jpg&quot;" height="90" width="90" class="img-circle img-border img-scale-down img-responsive lazy" style="display: block;"> --></div>
                                         <div class="col-md-10 col-sm-9 col-xs-12">
                                             <div class="t_tltle">
-                                                <h4><a href="http://www.sportsjun.com/gettournamentdetails/95" id="touname_95"><i class="fa fa-link"></i> {{$lis->name}}</a></h4>
+                                                <h4><a href="/gettournamentdetails/{{$lis->id}}" id="touname_{{$lis->id}}"><i class="fa fa-link"></i> {{$lis->name}}</a></h4>
                                                 <p class="label label-default">{{ Helper::displayDate($lis->start_date,1) }} to {{ Helper::displayDate($lis->end_date,1) }}</p>
                                             </div>
                                             <hr>

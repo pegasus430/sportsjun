@@ -66,6 +66,8 @@ Route::group(['prefix' => 'organization/{id}'], function () {
     Route::post('/save_player', 'User\OrganizationMembersController@save_player');
     Route::get('/create_team', 'User\TeamController@create');
     Route::get('/gallery', 'User\OrganizationController@gallery');
+    Route::post('/album/add', 'User\OrganizationController@album_save');
+    Route::post('/photo/add', 'User\OrganizationController@photo_save');
 
     Route::get('schedules', [
         'as'   => 'organization.schedules.list',
