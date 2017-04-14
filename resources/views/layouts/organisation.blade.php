@@ -1,7 +1,7 @@
 <!DOCTYPE html>
  
 <?php 
-    if(!isset($organisation)){ $organisation = Session::get('organization');}
+    if(!isset($organisation)){ $organisation = \App\Model\Organization::find(Session::get('organization_id'));}
     $organization = $organisation;
 ?>
 <html lang="en">
