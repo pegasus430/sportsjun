@@ -201,11 +201,17 @@ class User extends Model implements AuthenticatableContract,
             ->where('is_album_cover', '1');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function followers()
     {
         return $this->hasMany(Followers::class, 'user_id', 'id')->where('deleted_at', null);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function tournaments()
     {
         return $this->hasMany('App\Model\Tournaments', 'created_by', 'id');
@@ -363,6 +369,9 @@ class User extends Model implements AuthenticatableContract,
             ->lists('tournaments.id');
     }
 
+    /**
+     * @return TournamentParent
+     */
     public function getManagedParentTournamentQuery()
     {
         return TournamentParent

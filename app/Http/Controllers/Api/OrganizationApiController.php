@@ -37,6 +37,7 @@ class OrganizationApiController extends BaseApiController
             where('id',$id)
             ->with([
                 'groups' =>function($query){
+                    /** @var \Eloquent $query */
                     $query->select(['id','name','logo']);
                 }
             ])

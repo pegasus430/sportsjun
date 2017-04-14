@@ -3,10 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Model\Team;
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 
 class TeamApiController extends BaseApiController
 {

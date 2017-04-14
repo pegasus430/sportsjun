@@ -13,7 +13,7 @@ use Response;
 class SportApiController extends BaseApiController
 {
     /**
-     * List sports
+     * Sport - list
      * @return \Illuminate\Http\Response
      */
     public function index()
