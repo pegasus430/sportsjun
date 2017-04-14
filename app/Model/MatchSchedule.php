@@ -321,6 +321,98 @@ class MatchSchedule extends Model
 
 
     //function to call sport statistics
+
+    function updateBracketDetails()
+    {
+        $roundNumber = $this->tournament_round_number;
+        $matchNumber = $this->tournament_match_number;
+        $matchNumberToCheck = ceil($matchNumber / 2);
+        $matchScheduleData = MatchSchedule::where('tournament_id', $this->tournament_id)
+                                          ->where('tournament_round_number', $roundNumber + 1)
+                                          ->where('tournament_match_number', $matchNumberToCheck)
+                                          ->first();
+        if ($matchScheduleData) {
+            if ($matchScheduleData['schedule_type'] == 'team') {
+                $player_b_ids = TeamPlayers::select(DB::raw('GROUP_CONCAT(DISTINCT user_id) AS player_a_ids'))
+                                           ->where('team_id', $this->winner_id)->pluck('player_a_ids');
+            } else {
+                $player_b_ids = $this->winner_id;
+            }
+
+            if (!empty($matchScheduleData->a_id)) {
+                MatchSchedule::where('id', $matchScheduleData['id'])
+                             ->update(['b_id'         => $this->winner_id,
+                                       'player_b_ids' => !empty($player_b_ids) ? (',' . trim($player_b_ids) . ',') : NULL]);
+            } else {
+                MatchSchedule::where('id', $matchScheduleData['id'])
+                             ->update(['a_id'         => $this->winner_id,
+                                       'player_a_ids' => !empty($player_b_ids) ? (',' . trim($player_b_ids) . ',') : NULL]);
+            }
+
+        } else {
+            if ($matchScheduleData['schedule_type'] == 'team') {
+                $player_a_ids = TeamPlayers::select(DB::raw('GROUP_CONCAT(DISTINCT user_id) AS player_a_ids'))
+                                           ->where('team_id',  $this->winner_id)->pluck('player_a_ids');
+            } else {
+                $player_a_ids = $this->winner_id;
+            }
+            $scheduleArray = [
+                'tournament_id'           => $this->tournament_id,
+                'tournament_round_number' => $roundNumber + 1,
+                'tournament_match_number' => $matchNumberToCheck,
+                'sports_id'               => $this->sports_id,
+                'facility_id'             => $this->facility_id,
+                'facility_name'           => $this->facility_name,
+                'created_by'              => $this->created_by,
+                'match_category'          => $this->match_category,
+                'schedule_type'           => $this->schedule_type,
+                'match_type'              => $this->match_type,
+                'match_location'          => $this->match_location,
+                'city_id'                 => $this->city_id,
+                'city'                    => $this->city,
+                'state_id'                => $this->state_id,
+                'state'                   => $this->state,
+                'country_id'              => $this->country_id,
+                'country'                 => $this->country,
+                'zip'                     => $this->zip,
+                'match_status'            => 'scheduled',
+                'a_id'                    => $this->winner_id,
+                'game_type'               => $this->game_type,
+                'number_of_rubber'        => $this->number_of_rubber,
+                'player_a_ids'            => !empty($player_a_ids) ? (',' . trim($player_a_ids) . ',') : NULL,
+                'created_at'              => Carbon::now(),
+                'updated_at'              => Carbon::now()
+            ];
+
+            if (!$this->is_third_position) {
+                $matchSchedule = MatchSchedule::create($scheduleArray);
+            }
+
+            // Update the winner Id of the for the winner team.
+            $maxRoundNumber = MatchSchedule::
+            where('tournament_id', $this->tournament_id)->whereNull('tournament_group_id')
+                                           ->orderBy('tournament_round_number')
+                                           ->max('tournament_round_number');
+            $tournamentDetails = Tournaments::where('id', $this->tournament_id)->first(['final_stage_teams']);
+            if (count($tournamentDetails)) {
+                $lastRoundWinner = intval(ceil(log($tournamentDetails['final_stage_teams'], 2)));
+            }
+            if (count($maxRoundNumber) && !empty($lastRoundWinner)) {
+                if ($maxRoundNumber == $lastRoundWinner + 1) {
+                    if (!empty($matchSchedule) && $matchSchedule['id'] > 0) {
+                        MatchSchedule::where('id', $matchSchedule['id'])->update([
+                            'match_status' => 'completed',
+                            'winner_id'    =>  $this->winner_id
+                        ]);
+
+                    }
+                }
+            }
+        }
+
+
+    }
+
     public function insertPlayerStatistics()
     {
         $match_type = $this->match_type; //!empty($match_data[0]['match_type'])?$match_data[0]['match_type']:'';
@@ -455,7 +547,6 @@ class MatchSchedule extends Model
             $tournament_lost_poins = !empty($tournamentDetails[0]['points_loose']) ? $tournamentDetails[0]['points_loose'] : 0;
             $tournament_tie_poins = !empty($tournamentDetails[0]['points_tie']) ? $tournamentDetails[0]['points_tie'] : 0;
 
-
             $team_a_groupdetails = TournamentGroupTeams::where('tournament_id', $this->tournament_id)
                                                        ->where('tournament_group_id', $this->tournament_group_id)
                                                        ->where('team_id', $team_a_id)->get(['won', 'lost', 'points']);
@@ -472,13 +563,13 @@ class MatchSchedule extends Model
             $team_b_lost_count = !empty($team_b_groupdetails[0]['lost']) ? $team_b_groupdetails[0]['lost'] : 0;
             $team_b_points = !empty($team_b_groupdetails[0]['points']) ? $team_b_groupdetails[0]['points'] : 0;
 
-
             $tournamentGroupAquery = TournamentGroupTeams::where('tournament_id', $this->tournament_id)
-                                                    ->where('tournament_group_id', $this->tournament_group_id)
-                                                    ->where('team_id', $team_a_id);
+                                                         ->where('tournament_group_id', $this->tournament_group_id)
+                                                         ->where('team_id', $team_a_id);
+
             $tournamentGroupBquery = TournamentGroupTeams::where('tournament_id', $this->tournament_id)
-                                                    ->where('tournament_group_id', $this->tournament_group_id)
-                                                    ->where('team_id', $team_b_id);
+                                                         ->where('tournament_group_id', $this->tournament_group_id)
+                                                         ->where('team_id', $team_b_id);
             //if winner id exists
             if ($this->winner_id != '') {
                 //if team a wons
@@ -499,10 +590,10 @@ class MatchSchedule extends Model
             } else if ($this->is_tied > 0 || $this->match_result == "washout")//if match is tied/washout
             {
                 $tournamentGroupAquery
-                                    ->update(['points' => $team_a_points + $tournament_tie_poins]);
+                    ->update(['points' => $team_a_points + $tournament_tie_poins]);
 
                 $tournamentGroupBquery
-                                    ->update(['points' => $team_b_points + $tournament_tie_poins]);
+                    ->update(['points' => $team_b_points + $tournament_tie_poins]);
 
             }
 
@@ -514,5 +605,4 @@ class MatchSchedule extends Model
 
         }
     }
-
 }
