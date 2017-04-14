@@ -27,6 +27,8 @@ use App\Helpers\Helper;
 use View;
 use PDO;
 use App\Model\MatchSchedule;
+use Illuminate\Http\Request as ObjRequest;
+use Input;
 
 class AlbumController extends Controller {
 
@@ -172,6 +174,9 @@ class AlbumController extends Controller {
 	//show albums and check delete edit permisssions
 	public function show($action='',$id='',$action_id='',$type='') {
 
+		
+
+
 		if($id=='' || $id==0)
 			$user_id = isset(Auth::user()->id)?Auth::user()->id:0;  //user or guest
 		else
@@ -182,6 +187,12 @@ class AlbumController extends Controller {
 		{
 			$action_id = $user_id;
 		}
+
+		
+		if(!empty( Input::get('team_id')) ){
+			$action_id = Input::get('team_id');
+		}
+		
 
 
 		$imageable_type_album = config('constants.PHOTO.GALLERY_USER');
@@ -253,11 +264,15 @@ class AlbumController extends Controller {
 		else if($action=='organization')
 		{
 
+
+
 			$id= $action_id;
 			$loginUserId= isset(Auth::user()->id)?Auth::user()->id:0;  //user or guest
 			//to create album permissions
-			$orgalbumcreate = DB::select("SELECT * FROM `organization` tp WHERE `user_id` = $loginUserId AND `id`=$action_id AND tp.deleted_at is NULL");
+				
 			$orgInfoObj= Organization::find($action_id);
+			$orgalbumcreate=$orgInfoObj;
+
 			$album_array = Album::select('id','title','user_id')->where('imageable_type',$imageable_type_album)->where('imageable_id',$action_id)->get()->toArray();//albums related to users
 
 
@@ -714,6 +729,7 @@ class AlbumController extends Controller {
 
 		$uploadimage="";
 		$upload="";
+		$orgInfoObj = null;
 		$result='';
 		$loginid=isset(Auth::user()->id)?Auth::user()->id:0;	//return 0 if not logged in
 		$flag="";
@@ -766,6 +782,11 @@ class AlbumController extends Controller {
 			$orgphotocreate = DB::select("SELECT * FROM `organization` tp WHERE `user_id` = $loginUserId AND `id`=$action_id AND tp.deleted_at is NULL");
 
 			$photo_array = Photo::select()->where('album_id',$album_id)->whereIn('imageable_type', $imageable_type)->get()->toArray();
+
+			$orgInfoObj = Organization::find($action_id);
+			$orgphotocreate = $orgInfoObj;
+
+
 
 
 		}
@@ -872,7 +893,7 @@ class AlbumController extends Controller {
 			$photo_array=[];
 		}
 
-		return 	view('album.viewalbumphoto',array('photo_array'=>$photo_array,'create_photo'=>$create_photo,'album_id'=>$album_id,'action'=>$action,'action_id'=>$action_id,'lef_menu_condition'=>$lef_menu_condition,'userId'=> $userid, 'album_array' =>$album_array,'uploadimage'=>$uploadimage,'result'=>	$result,'upload'=>$upload,'loginid'=>$loginid,'user_id'=>$user_id,'flag'=>$flag,'tournament_type'=>$tournament_type,'id'=>$action_id,'left_menu_data'=>$left_menu_data,'tournament_id'=>$action_id,'orgphotocreate'=>$orgphotocreate ));
+		return 	view('album.viewalbumphoto',array('photo_array'=>$photo_array,'create_photo'=>$create_photo,'album_id'=>$album_id,'action'=>$action,'action_id'=>$action_id,'lef_menu_condition'=>$lef_menu_condition,'userId'=> $userid, 'album_array' =>$album_array,'uploadimage'=>$uploadimage,'result'=>	$result,'upload'=>$upload,'loginid'=>$loginid,'user_id'=>$user_id,'flag'=>$flag,'tournament_type'=>$tournament_type,'id'=>$action_id,'left_menu_data'=>$left_menu_data,'tournament_id'=>$action_id,'orgphotocreate'=>$orgphotocreate,'orgInfoObj'=>$orgInfoObj ));
 
 
 
@@ -1728,6 +1749,7 @@ class AlbumController extends Controller {
 		$left_menu_data="";
 		$lef_menu_condition="";
 		$tournament_type="";
+		$orgInfoObj = '';
 		$formaction ="";
 		if($action=="formtournaments")
 		{
@@ -1760,11 +1782,15 @@ class AlbumController extends Controller {
 			$photo_array = Photo::select()->where('imageable_id',$action_id)->where('imageable_type','form_gallery_organization')->get()->toArray();
 			DB::setFetchMode(PDO::FETCH_CLASS);
 			$formaction ="organization";
+			
+			$orgInfoObj= Organization::find($action_id);
+			$orgformcreate = $orgInfoObj;
+
 
 
 		}
 
-		return 	view('album.formgallery',array('photo_array'=>$photo_array,'imageable_id'=>$action_id,'action'=>$formaction ,'left_menu_data' =>$left_menu_data,'action_id'=>$action_id, 'tournament_id' => $action_id,'lef_menu_condition'=>$lef_menu_condition,	'tournament_type'=>	$tournament_type,'id'=>$action_id,'orgformcreate' =>$orgformcreate ,'tournamentformcreate' =>$tournamentformcreate  ));
+		return 	view('album.formgallery',array('photo_array'=>$photo_array,'imageable_id'=>$action_id,'action'=>$formaction ,'left_menu_data' =>$left_menu_data,'action_id'=>$action_id, 'tournament_id' => $action_id,'lef_menu_condition'=>$lef_menu_condition,	'tournament_type'=>	$tournament_type,'id'=>$action_id,'orgformcreate' =>$orgformcreate ,'tournamentformcreate' =>$tournamentformcreate ,'orgInfoObj'=>$orgInfoObj ));
 	}
 
 

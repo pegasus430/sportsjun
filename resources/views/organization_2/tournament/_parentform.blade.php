@@ -67,7 +67,7 @@
     <label class="form_label">{{  trans('message.tournament.fields.manager_name') }} <span  class='required'>*</span></label>		
 		<label for="managername" class="field prepend-icon select">
 
-				{!! Form::select('manager_id', $organisation->staff->lists('name','id'), array('class'=>'gui-input select', 'placeholder'=>trans('message.tournament.fields.manager_name'),'id'=>'manager_name')) !!}
+				{!! Form::select('manager_id', $organisation->staff->lists('name','id'), null, array('class'=>'gui-input select', 'placeholder'=>trans('message.tournament.fields.manager_name'),'id'=>'manager_name')) !!}
 			
 				@if ($errors->has('manager_id')) <p class="help-block">{{ $errors->first('manager_id') }}</p> @endif
 		<label for="firstname" class="field-icon"><i class="fa fa-user"></i></label>  

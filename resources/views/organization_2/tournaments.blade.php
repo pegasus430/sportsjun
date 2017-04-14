@@ -1,13 +1,21 @@
  @extends(Helper::check_if_org_template_enabled()?'layouts.organisation':'layouts.app') 
  @section('content') 
- @include ('teams.orgleftmenu')
-<div id="content" class="col-sm-10" style="height: 986px;">
+  <div class="container">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 class="page-header"><div class="ph-mark"><div class="glyphicon glyphicon-menu-right"></div></div> Tournaments</h2>
+                          <div class="create-btn-link"><a href="/organization/{{$organisation->id}}/new_tournament" class="wg-cnlink" >Create New Tournament</a></div>
+                    </div>
+            </div>
+<div class="col-md-2">
+    <p>
+</div>
+<div id="content"  >
     <div class="col-sm-9 tournament_profile">
        
         @if(count($parent_tournaments)) 
-			<div class="group_no clearfix">
-                <h4 class="stage_head">Tournaments</h4>
-            </div>        
+			     
 			@foreach($parent_tournaments as $parent_tournament)
                 <div class="teams_search_display row main_tour">
                     <div class='col-sm-12'>	
