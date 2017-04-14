@@ -27,6 +27,9 @@ if ($is_widget) {
 ?>
 
 
+
+
+
 <div class="col-sm-2" id="sidebar-left">
     <div class="row">
         <div class="team_view">
