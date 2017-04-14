@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends(Helper::check_if_org_template_enabled()?'layouts.organisation':'layouts.app') 
 @section('content')
 @include ('teams._leftmenu')
 <?php //echo '<pre>'; print_r($result); die();?>

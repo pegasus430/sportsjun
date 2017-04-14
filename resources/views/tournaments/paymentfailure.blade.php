@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends(Helper::check_if_org_template_enabled()?'layouts.organisation':'layouts.app') 
 @section('content')
 
 <div class="">

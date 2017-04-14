@@ -31,8 +31,8 @@
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tournament_details">
-                                    <br>
-                                    <form action="/tournaments" class="form create-form clearfix" method="post" enctype="multipart/form-data">
+                                 
+                                    <form action="/tournaments" class="form create-form clearfix form-horizontal" method="post" enctype="multipart/form-data">
                                         <div class="input-container one-col">
                                             <input type="text" id="tournament_name" required="required" name="name" value="{{old('name')}}">
                                             <label for="tournament_name">Tournament Name <span class="req">&#42;</span></label>

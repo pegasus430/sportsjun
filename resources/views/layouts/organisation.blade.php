@@ -1,6 +1,8 @@
 <!DOCTYPE html>
  
-
+<?php 
+    if(!isset($organisation)){ $organisation = \App\Model\Organization::find(35);}
+?>
 <html lang="en">
 
 <head>
@@ -9,6 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{$organisation->name}}: Sportsjun</title>
     <!-- CSS -->
+
         <link href="/org/css/bootstrap.css" rel="stylesheet">
         <link href="/org/css/main.css" rel="stylesheet">
             <link href="/org/css/marketplace.css" rel="stylesheet"> 
@@ -16,7 +19,44 @@
         <link href="/org/css/bootstrap-select.css" rel="stylesheet">        
      <link href="/org/css/bootstrap.slider.css" rel="stylesheet">
 
+
+       <?php $js_version = config('constants.JS_VERSION');$css_version = config('constants.CSS_VERSION'); ?>
+
+    <link href="{{ asset('/js/bootstrap-rating/bootstrap-rating.css') }}" rel="stylesheet">
+    <link href="{{ asset('/css/sportsjun.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
+    <link href="{{ asset('/css/bootstrap-datepicker.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
+    <link href="{{ asset('/css/bootstrap-datetimepicker.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
+    <link href="{{ asset('/css/jquery-confirm.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
+    <link href="{{ asset('/css/jquery-ui.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
+    <link href="{{ asset('/css/ladda.min.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
+    <link href="{{ asset('/css/sportsform.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
+    <link href="{{ asset('/css/bootstrap-switch.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
+    <link href="{{ asset('/css/album-popup.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
+    <link href="{{ asset('/css/marketplace-showdetails.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
+    <link href="{{ asset('/css/aftab.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
+    <link href="{{ asset('/css/scorecard.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
+    <link href="{{ asset('/css/teams.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
+    <link href="{{ asset('/css/members.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
+    <link href="{{ asset('/css/green.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
+    <link href="{{ asset('/css/_all.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
+    <link href="{{ asset('/css/sinister.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
+    <link href="{{ asset('/css/bootstrap-select.css') }}?v=<?php echo $css_version;?>" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ asset('/css/sidebar-menu.css') }}?v=<?php echo $css_version;?>" />
+    <link rel="stylesheet" href="{{ asset('/css/select-multiple.css') }}?v=<?php echo $css_version;?>" />
+    <link rel="stylesheet" href="{{ asset('/css/select2.min.css') }}?v=<?php echo $css_version;?>" />
+     <link href="/org/css/main.css" rel="stylesheet">
+ 
      @yield('styles')
+
+       <script src="{{ asset('/js/jquery-2.1.1.min.js') }}?v=<?php echo $js_version;?>"></script>
+    <script src="{{ asset('/js/jquery-ui.js') }}?v=<?php echo $js_version;?>"></script>
+    <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}?v=<?php echo $js_version;?>"></script>
+    <script src="{{ asset('/js/bootstrap-switch.js') }}?v=<?php echo $js_version;?>"></script>
+    <script type="text/javascript" src="{{ asset('/js/jquery-form.js')}}?v=<?php echo $js_version;?>"></script>
+    <script src="{{ asset('/js/sinister.js') }}?v=<?php echo $js_version;?>" type="text/javascript"></script>
+    <script src="{{ asset('/js/sidebar-menu.js') }}?v=<?php echo $js_version;?>"></script>
+    <script src="{{ asset('/js/select2/select2.full.min.js') }}?v=<?php echo $js_version;?>"></script>
 </head>
 
 <body>
@@ -129,7 +169,7 @@
     <div class="clearfix"></div>
     <hr> </footer>
     <!-- jQuery --> 
-    <script src="/org/js/jquery.min.js"></script>
+
     <script src="/org/js/bootstrap.min.js"></script>
     <script src="/org/js/w3data.js"></script>
     <script src="/org/js/bootstrap-select.js"></script>
@@ -137,6 +177,29 @@
             var is_organization=true;
             var base_url = '';
     </script>
+
+    <div id="fb-root"></div>
+<script>
+  window.fbAsyncInit = function() {
+    // init the FB JS SDK
+    FB.init({
+      appId      : "{{env('FACEBOOK_APP_ID')}}",   // App ID from the app dashboard
+      status     : true,                                 // Check Facebook Login status
+      xfbml      : true                                  // Look for social plugins on the page
+    });
+
+    // Additional initialization code such as adding Event Listeners goes here
+  };
+
+  // Load the SDK asynchronously
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/all.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
     @include ('layouts.footer_scripts')
     @yield('end_scripts')
         <script type="text/javascript" src='/org/js/scripts.js'></script>

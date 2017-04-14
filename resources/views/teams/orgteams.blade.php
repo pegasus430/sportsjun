@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends(Helper::check_if_org_template_enabled()?'layouts.organisation':'layouts.app') 
 @section('content')
     @include ('teams.orgleftmenu')
     <div id="content" class="col-sm-10" style="height: 986px;">
