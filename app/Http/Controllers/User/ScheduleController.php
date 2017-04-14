@@ -1660,8 +1660,9 @@ class ScheduleController extends Controller {
     public function getmymanagingteams()
     {
         $request = Request::all();
-        $sportId =  Request::get('sport_id');        
-        $managingteams = Helper::getManagingTeamsWithTeamLevel(Auth::user()->id,$sportId);
+        $sportId =  Request::get('sport_id');
+        $managingteams = Helper::getManagingTeams(Auth::user()->id,$sportId);
+
         return Response::json(['managingteams'=>$managingteams]);
     }
     // function to insert record for next round if the result is selected as bye

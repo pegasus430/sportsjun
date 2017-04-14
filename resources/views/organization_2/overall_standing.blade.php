@@ -1,7 +1,7 @@
 <div id="overall_standing_{{$parent_tournament->id}}" class="modal fade">
 		<div class="modal-dialog sj_modal sportsjun-forms">
 			<div class="modal-content">
-				<div class="alert alert-danger" id="div_failure1"></div>
+				<div class="alert alert-danger" id="div_failure1" style="display: none"></div>
 				<div class="alert alert-success" id="div_success1" style="display:none;"></div>
 				<div class="modal-body">
 					<div class='row'>
@@ -61,7 +61,7 @@
 
 						<tr class='add_sport' id='add_sport_overall_standing_{{$parent_tournament->id}}'>
 
-						<form id='form_{{$parent_tournament->id}}' onsubmit="return saveOverallStanding({{$parent_tournament->id}},this)">
+						<form id='form_{{$parent_tournament->id}}' onsubmit="return saveOverallStanding({{$parent_tournament->id}},this); return false">
 							<td>
 
 							
@@ -82,7 +82,7 @@
 
 							<input type='hidden' name="max_index" value="{{{$group_key or ""}}}">
 							<input type='hidden' name='parent_tournament' value="{{$parent_tournament->id}}">
-
+				{!!csrf_field()!!}
 							
 
 						</tr>
@@ -131,7 +131,7 @@
 		</div>
 	</div>
 
-
+@section('end_scripts')
 	<script>	
 
 	$('.add_sport').hide();
@@ -158,13 +158,15 @@
 	}
 
 	function saveOverallStanding(tp_id, that){
-
+	
 		data=$(that).serialize();
 		$.ajax({
-			url:base_url+'/parent_tournament/'+tp_id+'/add_sport',
+			url:'/parent_tournament/'+tp_id+'/add_sport',
 			method:'post',
 			data:data,
 			success:function(response){
+				
+
 				if(response.indexOf('this sports already exists')!=-1){
 
 					$('#display_notification').addClass('alert alert-danger').html(response);
@@ -181,6 +183,9 @@
 					},5000)
 				}
 				
+			},
+			error:function(){
+				return false;
 			}
 	    })
 
@@ -188,3 +193,5 @@
 	}
 	
 	</script>
+
+	@stop

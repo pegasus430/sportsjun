@@ -20,9 +20,11 @@ use App\Http\Controllers\User\SearchController;
 use DB;
 use App\Model\TournamentGroupTeams;
 use App\Model\OrganizationGroupTeamPoint;
+use App\Model\OrganizationStaff;
 
 use Illuminate\Http\Request as ObjRequest;
 use App\Model\BasicSettings;
+use App\Model\Marketplace;
 
 //use Helper;
 
@@ -34,6 +36,7 @@ class OrganizationController extends Controller
           $id = $request->route()->parameter('id');
           $this->is_owner = false;
           $this->new_template = false;
+          $this->view = 'organization';
 
           $allow_newtemplate_setting  = BasicSettings::where('name', 'organization_new_template')->first();
 
@@ -46,7 +49,10 @@ class OrganizationController extends Controller
 
             if(Auth::user()->organizations[0]->id == $id && $this->new_template){
                  $this->is_owner = true;
+                 $this->view = 'organization_2';
                  $organization = Organization::find($id);
+                 $this->organization = $organization;
+
                  view()->share('organisation', $organization);
             }
             
@@ -61,8 +67,52 @@ class OrganizationController extends Controller
     public function index()
     {
         //
+          if($this->is_owner){       
+          $tournaments = $this->organization->tournaments; 
+          $teams = $this->organization->teamplayers;
+          $parent_tournaments = $this->organization->parent_tournaments;
+          
+           foreach ($parent_tournaments as $parent_tournament) {
+                foreach ($parent_tournament->tournaments as $teamdet) {
+                    $currentTimestamp = time();
+                    $startDateTimestamp = strtotime($teamdet->start_date);
+                    $endDateTimestamp = strtotime($teamdet->end_date);
+                    if ($endDateTimestamp <= $currentTimestamp) {
+                        $teamdet->status = "Completed";
+                        $teamdet->statusColor = "black";
+                        $tournament_winner_details = SearchController::getTournamentWinner($teamdet, ["name"]);
+                        if (!empty($tournament_winner_details)) {
+                            $teamdet->winnerName = $tournament_winner_details["name"];
+                        }
+                    } else {
+                        if ($startDateTimestamp > $currentTimestamp) {
+                            $teamdet->status = "Not started";
+                            $teamdet->statusColor = "green";
+                        } else {
+                            if ($currentTimestamp >= $startDateTimestamp) {
+                                $teamdet->status = "In progress";
+                                $teamdet->statusColor = "black";
+                            }
+                        }
+                    }
+                }
 
-        return view('organization_2.index');
+                $sports = Sport::get();
+                foreach ($sports as $sport) {
+                    $sports_array[$sport->id] = $sport->sports_name;
+                }
+            }
+
+        $marketplace = Marketplace::orderBy('id','desc')->get();
+         return view('organization_2.index', compact('tournaments','teams','parent_tournaments','marketplace'));
+        }
+      
+
+    }
+
+    public function new_tournament(){
+
+        return view('organization_2.tournament.new_tournament');
     }
 
     public function getorgDetails($id)
@@ -173,6 +223,9 @@ class OrganizationController extends Controller
     public function show($id)
     {
         //
+        if($this->is_owner){        
+         return view('organization_2.index', compact('teams','photo','orgInfoObj','id','userId'));
+        }
     }
 
     /**
@@ -409,7 +462,7 @@ class OrganizationController extends Controller
             }
         }
 
-        return view('organization.tournaments')->with([
+        return view($this->view.'.tournaments')->with([
             'tournaments' => $tournaments,
             'id' => $id,
             'userId' => $user_id,
@@ -499,7 +552,7 @@ class OrganizationController extends Controller
             'followingOrgs' => $followingOrgs,
             'joinedOrgs' => $joinedOrgs,
             'user' => $user,
-            'user_id'=>$user_id
+            'user_id'=>$user_id 
         ]);
     }
 
@@ -513,5 +566,21 @@ class OrganizationController extends Controller
             'orgInfoObj'=>$organization,
         ));
     }
+
+    public function delete_actions(objrequest $request){
+        switch ($request->type) {
+            case 'staff':
+                $staff = OrganizationStaff::find($request->id);
+                $staff->delete();
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+
+        return 'ok';
+    }
+
 
 }

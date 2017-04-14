@@ -139,6 +139,9 @@
 
 
 				<div class="modal-footer">
+			
+				<a href="/download/event_points?tournament_id={{$lis->id}}&organization_id={{$orgInfoObj->id}}" class="btn-danger btn" name="match_schedule_tournament_201"><i class="fa fa-download"></i> Download Standing </a>
+		
 					<button type="button" class="button btn-secondary" data-dismiss="modal">Close</button>
 				</div>
 

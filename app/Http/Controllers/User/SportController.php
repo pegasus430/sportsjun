@@ -6,6 +6,8 @@ use App\Model\Sport;
 use App\Model\SportQuestion;
 use App\Model\SportQuestionAnswer;
 use App\Model\UserStatistic;
+use App\Model\GameUsername;
+use App\Model\SmiteMatchStats;
 use Request;
 use Auth;
 use Carbon\Carbon;
@@ -71,8 +73,9 @@ class SportController extends Controller {
         }
         $userStatistic = UserStatistic::where('user_id', $userId)->first();
         if (count($userStatistic)) {
-            if(Auth::user())
+            if(Auth::user()) {
                 return redirect()->route('editsportprofile', [$userId]);
+            }
             else return redirect()->to("/viewpublic/editsportprofile/$userId");
         }
         $sports = Sport::all(['id', 'sports_name']);
@@ -117,12 +120,14 @@ class SportController extends Controller {
         }
         $userStatistic = UserStatistic::where('user_id', $userId)->first();
         if (count($userStatistic)) {
-            if(count($userStatistic->following_sports)){
+            if(count($userStatistic->following_sports))
+            {
                 $followingSportsArray = explode(',', trim($userStatistic->following_sports, ','));
                 $userSports = Sport::whereIn('id', $followingSportsArray)->get(['id', 'sports_name']);
                 $sports = Sport::whereNotIn('id', $followingSportsArray)->get(['id', 'sports_name']);
                 return view('sportprofile.edit', ['sports' => $sports, 'userSports' => $userSports, 'followingSports' => !empty($followingSportsArray) ? $followingSportsArray : [],'userId'=>  $userId,'managing_teams'=>$managing_teams,'userExists' => $userExists,'selfProfile'=>$selfProfile]);
-            }else
+            }
+            else
             {
                 $sports = Sport::all(['id', 'sports_name']);
                 return view('sportprofile.show', ['sports' => $sports, 'followingTeams' => !empty($followingSportsArray) ? $followingSportsArray : [],'userId'=>  $userId,'managing_teams'=>$managing_teams,'userExists' => $userExists]);
@@ -177,6 +182,14 @@ class SportController extends Controller {
         $userId = Request::get('userId');
         $flag = Request::get('flag');
         $viewFlag = Request::get('viewflag');
+
+        // Check if it's an eSport
+        $sportsName = Sport::where('id', $sportsId)->first();
+        $game_username = '';
+        if(strtolower($sportsName->sports_name) == 'smite') {
+            $game_username = GameUsername::where('user_id', $userId)->where('sport_id', $sportsId)->first();
+        }
+
         if (empty($sportsId) || empty($userId))
             return view('sportprofile.question', ['sportsQuestions' => [], 'exception' => []]);
         $questions = array();
@@ -263,6 +276,22 @@ class SportController extends Controller {
                 }
                 $sportsPlayerStatistics= $stats->get();
             }
+            else
+            {
+                $sport = Sport::where('id', $sportsId)->first();
+                $stats = '';
+                switch(strtolower($sport->sports_name))
+                {
+                    case strtolower('smite'):
+                        $stats = SmiteMatchStats::select('final_level as FinalLevel','kills as Kills','deaths as Deaths','assists as Assists','gold_earned as GoldEarned','gpm as GoldPerMinute','magical_damage_done as MagicalDamage','physical_damage_done as PhysicalDamage')->where('user_id', $userId)->get();
+
+                        break;
+                    default:
+                        break;
+
+                }
+                $sportsPlayerStatistics = $stats;
+            }
 
             $statsview = 'sportprofile.'.preg_replace('/\s+/', '',strtolower(config('constants.SPORT_NAME.'.$sportsId))).'statsview';
 
@@ -294,12 +323,12 @@ class SportController extends Controller {
                 'userId'=>$userId,'existingAllowedSportsArray' => !empty($existingAllowedSportsArray)?$existingAllowedSportsArray:[],'existingAllowedMatchesArray' => !empty($existingAllowedMatchesArray)?$existingAllowedMatchesArray:[],
                 'statsview'=>!empty($statsview)?$statsview:'', 'matchScheduleData'=>!empty($matchScheduleData)?$matchScheduleData:[],
                 'sportDetails'=>$sportDetails,'sportsCount' => $sportsCount,'exception' => $e->getMessage(),
-                'viewFlag'=>$viewFlag, 'flag'=>$flag]);
+                'viewFlag'=>$viewFlag, 'flag'=>$flag, 'gameUsername' => $game_username]);
         }
         return view('sportprofile.'.$dispView, ['sportsQuestions' => $questions, 'sportsPlayerStatistics' => $sportsPlayerStatistics, 'sportsId' => $sportsId,
             'userId'=>$userId,'existingAllowedSportsArray' => $existingAllowedSportsArray,'existingAllowedMatchesArray' => $existingAllowedMatchesArray, 'matchScheduleData'=>$matchScheduleData,
             'statsview'=>$statsview,'sportDetails'=>$sportDetails,'sportsCount' => $sportsCount,
-            'exception' => [], 'viewFlag'=>$viewFlag, 'flag'=>$flag]);
+            'exception' => [], 'viewFlag'=>$viewFlag, 'flag'=>$flag, 'gameUsername' => $game_username]);
     }
 
     /*

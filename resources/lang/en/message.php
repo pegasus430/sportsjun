@@ -59,6 +59,9 @@ return [
 	    	'sportsprofile' => 'Sports Profile',
             'sportsrequired' => "Required Step - Please select at least 1 Sport from below list and Click Select Sports",
 		],
+        'esports' => [
+            'matchstarted' => 'Match Started!'
+        ]
 
     ],
     'schedule' => [
@@ -315,14 +318,16 @@ return [
 		'nofinalstageteams' => 'Final Stage Teams Not Added Yet.',
 		'editscheduletoaddscore' => 'Edit Match Schedule To Add Score.',
                 ],
-            'addteam' => [
-		'requestedteam' => 'Requested Teams',
-		'allteam' => 'All Teams',
+        'addteam' => [
+            'requestedteam' => 'Requested Teams',
+            'allteam' => 'All Teams',
                 ],
-            'tournamentnotification'=>'A match has been scheduled for :teamonename against :teamtwoname at :matchStartDate in :tournamentname.',
-            'matchnotification'=>'A match has been scheduled for :teamonename against :teamtwoname at :matchStartDate.',
-            'bye'=>':teamonename advances to next round in :tournamentname.',
-			'access_msg'=>'You Have No access to Edit This Tournament. ',
+        'tournamentnotification'=>'A match has been scheduled for :teamonename against :teamtwoname at :matchStartDate in :tournamentname.',
+        'matchnotification'=>'A match has been scheduled for :teamonename against :teamtwoname at :matchStartDate.',
+        'smitetournamentnotification' => 'Your match in :tournamentname just started. :teamonename has to create a private lobby with this name and password. Lobby name: :lobbyname . Password: :password. Good luck!',
+        'smitematchnotification' => 'Your match just started. :teamonename has to create a private lobby with this name and password. Lobby name: :lobbyname . Password: :password. Good luck!',
+        'bye'=>':teamonename advances to next round in :tournamentname.',
+        'access_msg'=>'You Have No access to Edit This Tournament. ',
 	],
 	'team' => [
 	'create' => 'Team Created successfully.',

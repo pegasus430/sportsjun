@@ -56,7 +56,7 @@ class Authenticate
                         $allowedRoutesBeforeProfileUpdate = ['user/{user}/edit',
                                 'user/{user}', 'getcities','getstates', 'tempphoto/store'];
                         
-                        if ($this->auth->user()->profile_updated == 0 && !in_array(Route::getCurrentRoute()->getPath(), $allowedRoutesBeforeProfileUpdate))
+                        if (!$this->auth->user()->type==1 && ( $this->auth->user()->profile_updated == 0 && !in_array(Route::getCurrentRoute()->getPath(), $allowedRoutesBeforeProfileUpdate)))
                         {
                                 return redirect(route('user.edit', [$this->auth->user()->id]));
                         }
@@ -75,7 +75,8 @@ class Authenticate
                                 'tournaments/registerstep3/{id}',
                                 'tournaments/registerstep3/{id}/{event_id}',
                                 'getcities',
-                                'getstates'
+                                'getstates',
+                                'smite/save_nickname'
                                 ];
 
                         $followingSports = Helper::getFollowingSportIds($this->auth->user()->id);

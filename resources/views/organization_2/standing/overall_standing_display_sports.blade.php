@@ -11,6 +11,7 @@
 												?>
 
 										<td class="text-center">{{$og_sports}}</td>
+										</tr>
 											@endforeach
 											
 										</tr>	
@@ -24,8 +25,9 @@
 													{{ $og->total_points}}
 													
 												</th>
-											@endforeach
 										</tr>
+											@endforeach
+
 
 					{{--
 

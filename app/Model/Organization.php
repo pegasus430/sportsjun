@@ -38,7 +38,7 @@ class Organization extends Model
     {
         return $this->belongsToMany(User::class, 'organization_staffs',
             'organization_id', 'user_id')
-                    ->withPivot('organization_role_id', 'status')
+                    ->withPivot('organization_role_id', 'status','id as staff_id')
                     ->withTimestamps();
     }
 
@@ -124,6 +124,14 @@ class Organization extends Model
         public function getLogoImageAttribute()
         {
             return Helper::getImagePath($this->logo,'organization');
+        }
+
+        public function tournaments(){
+            return $this->hasManyThrough('App\Model\Tournaments','App\Model\TournamentParent');
+        }
+
+        public function parent_tournaments(){
+            return $this->hasMany('App\Model\TournamentParent', 'organization_id');
         }
 
 }

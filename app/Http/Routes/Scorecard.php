@@ -47,6 +47,10 @@ Route::group(['prefix'=>'match'], function(){
          ['as'=>'match/confirmSquadVolleyball', 
          'uses'=>'User\ScoreCard\VolleyballScoreCardController@confirmSquad']);
 
+    Route::post('confirmSmitePlayingTeam',
+        ['as' => 'match/confirmSmitePlayingTeam',
+         'uses' => 'User\Esports\SmiteController@confirmSquad']);
+
     Route::post('submitServingPlayersvolleyball',         
         ['as'=>'match/submitServingPlayersVolleyball', 
         'uses'=>'User\ScoreCard\VolleyballScoreCardController@submitServingPlayers']);
@@ -182,8 +186,14 @@ Route::group(['prefix'=>'match'], function(){
     Route::post('archery/select_team_player', 'User\ScoreCard\ArcheryController@select_team_player');
     Route::post('archery/update_settings', 'User\ScoreCard\ArcheryController@update_settings');
 
-
 });
-
 //End Matches
+
+
+// Routes for Smite
+Route::post('smite/save_nickname', 'User\Esports\SmiteController@store')->name('smite.saveNickname');
+Route::post('match/manualScoringSmite', 'User\Esports\SmiteController@manualScoring')->name('smite.manualScoring');
+Route::post('match/endMatchSmite', 'User\Esports\SmiteController@endMatch')->name('smite.endMatch');
+
+
 

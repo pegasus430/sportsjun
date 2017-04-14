@@ -2709,6 +2709,41 @@ class Helper
         }
     }
 
+    public static function getAverageStats($stats)
+    {
+        $avgStats = [];
+        if(!count($stats) > 0)
+            return array();
+
+        foreach($stats as $stat)
+        {
+            foreach($stat as $attribute=>$val)
+            {
+                $avgStats[$attribute] += $val;
+            }
+        }
+
+        foreach($avgStats as $attribute=>$val)
+        {
+            $avgStats[$attribute] = $avgStats[$attribute] / count($stats);
+        }
+    }
+
+    public static function get_fielder_team($user_id, $tournament_id){
+    $team=TeamPlayers::join('teams', 'teams.id','=', 'team_players.team_id')
+        ->leftjoin('tournament_group_teams','tournament_group_teams.team_id','=','teams.id')
+        ->leftjoin('tournament_final_teams','tournament_final_teams.team_id','=','teams.id') 
+        ->where(function($query) use($tournament_id, $user_id) {
+            $query
+            ->where('tournament_group_teams.tournament_id',$tournament_id)                           
+            ->orwhere('tournament_final_teams.tournament_id',$tournament_id);
+        })    
+        ->where('team_players.user_id',$user_id)
+        ->first();
+
+        return $team;
+    }
+
 
 }
 

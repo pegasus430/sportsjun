@@ -121,6 +121,9 @@ $("textarea").on('keyup', function (event) {
 // End TeaxtArea length
 var showLoader = true;
 
+
+if(typeof is_organization !='undefined') showLoader=false;
+
 $(function() {
     $(window).bind("load resize", function() {
         topOffset = 50;
@@ -509,6 +512,7 @@ function appendTabElement(a, b, c, d) {
 function selectSport(el){
     var sport_id = $(el).data('id');
     var sport = $('#sports_'+sport_id);
+
     sport.prop("checked", !sport.prop("checked"));
     $(el).toggleClass('active');
     var selectedCount = $('.sports-checkbox:checked').length;
@@ -516,6 +520,11 @@ function selectSport(el){
         $('#select_sports').removeClass('disabled').addClass('btn-primary').prop('disabled', false);
     else
         $('#select_sports').removeClass('btn-primary').addClass('disabled').prop('disabled', true);
+
+    if($(el).text().toLowerCase() == 'smite' && $(el).hasClass('active')) {
+        $("#smiteModal").modal('show');
+        sport.prop("checked", !sport.prop("checked"));
+    }
 
 }
 
@@ -1180,7 +1189,55 @@ function rubberEdit(id)
             }
         });
     }
-            
+
+$('#save_smite_nickname').on('click', function()
+{
+    var username = $('#smite-username').val();
+
+    $.ajax({
+        url:base_url+'/smite/save_nickname',
+        type:'post',
+        data: {
+            _token: CSRF_TOKEN,
+            username: username
+        },
+        success: function(response){
+            $('#smiteModal').modal('hide');
+            $('#smiteModal').data('entered','true');
+        }
+    });
+});
+
+
+$('#smiteModal').on('hidden.bs.modal', function () {
+    var self = $(this);
+
+    if(self.data('entered') == false) {
+        $('#sports-checkbox[data-name="Smite"]').attr('checked', false);
+        $('a[data-name="Smite"]').removeClass('active');
+
+        var selectedCount = $('.sports-checkbox:checked').length;
+        if (selectedCount)
+            $('#select_sports').removeClass('disabled').addClass('btn-primary').prop('disabled', false);
+        else
+            $('#select_sports').removeClass('btn-primary').addClass('disabled').prop('disabled', true);
+    }
+});
+
+$('#close_smite_modal').on('click', function() {
+    var self = $(this);
+
+    if(self.data('entered') == false) {
+        $('#sports-checkbox[data-name="Smite"]').attr('checked', false);
+        $('a[data-name="Smite"]').removeClass('active');
+
+        var selectedCount = $('.sports-checkbox:checked').length;
+        if (selectedCount)
+            $('#select_sports').removeClass('disabled').addClass('btn-primary').prop('disabled', false);
+        else
+            $('#select_sports').removeClass('btn-primary').addClass('disabled').prop('disabled', true);
+    }
+});
 
 $(window).load(function(){
     //$('form').dontJustLeaveMe();
@@ -1454,11 +1511,10 @@ function filterDiv(that, index){
 
 }
 
-
-
-
-
-
+function smiteRedirect(that)
+{
+    window.location.href = that.href;
+}
 
     $(document).ready(function(){
         $(".show_sub_field").click(function(){

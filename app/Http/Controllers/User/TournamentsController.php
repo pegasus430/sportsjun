@@ -438,7 +438,7 @@ class TournamentsController extends Controller
 			return $this->createParentTournament($request);
 		}
 		//echo Carbon::now()->toDateString();exit;
-		$request['country_id'] = config('constants.COUNTRY_INDIA');
+		$request['country_id'] = config('constants.COUNTRY_INDIA'); 
 		$request['country'] = Country::where('id', config('constants.COUNTRY_INDIA'))->first()->country_name;
 		$request['state'] = !empty($request['state_id']) ? State::where('id', $request['state_id'])->first()->state_name : 'null';
 		$request['city'] = !empty($request['city_id']) ? City::where('id', $request['city_id'])->first()->city_name : 'null';
@@ -590,8 +590,14 @@ class TournamentsController extends Controller
 		$request['email'] = !empty($request['email'])?$request['email']:'';
 		$request['description'] = !empty($request['description'])?$request['description']:'';
 		$request['manager_id'] = !empty($request['managerId'])?$request['managerId']:'';
+
 		$TournamentParent = TournamentParent::create($request->all());
 
+
+
+		if(!empty($request['from_organization']) && $request['from_organization']=='yes'){
+			
+		}
 
 		if (is_numeric($request['organization_group_id'])) {
 				$TournamentParent->orgGroups()
@@ -604,6 +610,9 @@ class TournamentsController extends Controller
 		//Upload Photos
 		$albumID = 1;//Default album if no album is not selected.
 		$coverPic = 1;
+
+		if($request->has('filelist_photos')){
+
 		if(isset($input['album_id']) && $input['album_id'])
 			$albumID = $input['album_id'];
 		if(isset($input['cover_pic']) && $input['cover_pic'])
@@ -619,6 +628,14 @@ class TournamentsController extends Controller
 			}
 
 		}
+
+		if($request->has('logo')){
+			$str = str_random(10).$request->file('logo')->getClientOriginalExtension();
+			$request->file('logo')->move(public_path().'/uploads/organization/', $str);
+			TournamentParent::where('id', $last_inserted_sport_id)->update(['logo' => $str]);
+
+		}
+	}
 		//return redirect()->back()->with('status', trans('message.tournament.create'));
 		return redirect()->route('tournaments.edit', [$last_inserted_sport_id])->with('status', trans('message.tournament.create'));
 	}
@@ -628,8 +645,8 @@ class TournamentsController extends Controller
         $user_name = Request::get('term');
         $users = User::where('users.name','LIKE','%'.$user_name.'%')->select(['users.id','users.name'])->limit(50);
         if ($organization_id){
-            $users->join('organization','organization.user_id','=','users.id');
-            $users->where('organization.id',$organization_id);
+           // $users->leftJoin('organization','organization.user_id','=','users.id');
+            // $users->where('organization.id',$organization_id);
 
             $users->join('organization_staffs',function($join){
                 $join->on('organization_staffs.user_id','=','users.id');
@@ -2840,8 +2857,41 @@ class TournamentsController extends Controller
 							->selectRaw('CAST(AVG(average_bowl) AS DECIMAL(10,2))  average_bowl')
 							->selectRaw('CAST(AVG(ecomony) AS DECIMAL(10,2)) ecomony')							
 							->orderBy('wickets', 'desc')
+							->orderBy('ecomony','asc')
 							->groupBy('user_id')							
 							->get();
+
+					$player['fielding'] = CricketPlayerMatchwiseStats::join('match_schedules', 'match_schedules.id', '=', 'cricket_player_matchwise_stats.match_id')
+							->join('team_players', 'team_players.user_id','=','cricket_player_matchwise_stats.fielder_id')						
+							->join('teams', 'teams.id','=', 'team_players.team_id')
+							->leftjoin('tournament_group_teams','tournament_group_teams.team_id','=','teams.id')
+							->leftjoin('tournament_final_teams','tournament_final_teams.team_id','=','teams.id')	
+							 ->where(function($query) use($tournament_id) {
+					            $query
+					            ->where('tournament_group_teams.tournament_id',$tournament_id)                           
+					            ->orwhere('tournament_final_teams.tournament_id',$tournament_id);
+					        })   
+							//->where('teams.sports_id','=',1)
+							->join('users', 'users.id', '=', 'cricket_player_matchwise_stats.fielder_id')
+							->where('cricket_player_matchwise_stats.tournament_id', $tournament_id)
+							->select('cricket_player_matchwise_stats.*','users.*')
+							->selectRaw('count(cricket_player_matchwise_stats.match_id) as matches')		
+							->selectRaw('sum(IF(out_as="caught", 1, 0)) as caught')
+								->selectRaw('count(innings) as innings_bowled')
+							->selectRaw('sum(IF(out_as="stumped", 1, 0)) as stumped')
+							->selectRaw('sum(IF(out_as="run_out", 1, 0)) as run_out')
+							->selectRaw('sum(IF(out_as="run_out", 1, 0) + IF(out_as="stumped", 1, 0) +IF(out_as="caught", 1, 0) ) as total')
+							->selectRaw('teams.name as fielder_team_name')
+							->selectRaw('teams.id as fielder_team_id')
+							->orderBy('total','desc')
+							->groupBy('fielder_id')	
+							->groupBy('team_players.id')
+							//->groupBy('out_as')					
+							->get(); 
+							
+
+
+
 
 					
 

@@ -1,7 +1,9 @@
 @if (count($player_standing))
     <h4><b>{{ config('constants.SOCCER_STATS.SOCCER_STATISTICS')}}</b></h4>
-    <div class="table-responsive stats-table teamStatsDiv" >
-    <table class="table table-hover">
+
+    <div class="table-responsive stats-table print_table teamStatsDiv" >
+    <table class="table table-hover table-bordered">
+
         <thead>
             <tr>
                 <th>PLAYER </th>
@@ -26,7 +28,7 @@
                    <span class='hidden-xs hidden-sm'> 
                    
                          
- {!! Helper::Images($statistic->logo,'user_profile',array('class'=>'img-circle img-border','height'=>52,'width'=>52) )!!}
+ {!! Helper::Images($statistic->logo,'user_profile',array('class'=>'img-circle img-border','height'=>52,'width'=>52), isset($to_print)?true:false )!!}
                              
                                 
                              

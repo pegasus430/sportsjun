@@ -61,6 +61,10 @@ Route::group(['prefix' => 'organization/{id}'], function () {
         'uses' => 'User\OrganizationMembersController@index',
     ]);
 
+    Route::get('/', 'User\OrganizationController@index');
+    Route::get('/delete_actions','User\OrganizationController@delete_actions');
+    Route::post('/save_player', 'User\OrganizationMembersController@save_player');
+    Route::get('/create_team', 'User\TeamController@create');
 
 
 
@@ -68,6 +72,9 @@ Route::group(['prefix' => 'organization/{id}'], function () {
         'as'   => 'organization.schedules.list',
         'uses' => 'User\OrganizationSchedulesController@index',
     ]);
+
+    Route::get('marketplace','User\MarketplaceController@organization_marketplace');
+    Route::get('new_tournament', 'User\OrganizationController@new_tournament');
 
 
 
@@ -428,7 +435,7 @@ Route::post('/marketplace/verifyOTP', [
 Route::post('marketplace/isOtpSent', [
     'uses' => 'User\MarketplaceController@isOtpSent',
 ]);
-Route::resource('marketplace', 'User\MarketplaceController');
+Route::resource('marketplace', 'User\MarketplaceController'); 
 //End Marketplace 	
 
 //Search

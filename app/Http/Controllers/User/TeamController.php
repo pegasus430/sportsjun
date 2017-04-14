@@ -28,6 +28,8 @@ use Carbon\Carbon;
 use DB;
 use Request;
 use Response;
+use Illuminate\Http\Request as ObjRequest;
+use App\Model\BasicSettings;
 
 class TeamController extends Controller
 {
@@ -36,6 +38,34 @@ class TeamController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+       public function __construct(ObjRequest $request){
+          $id = $request->route()->parameter('id');
+          $this->is_owner = false;
+          $this->new_template = false;
+          $this->view = 'teams';
+
+          $allow_newtemplate_setting  = BasicSettings::where('name', 'organization_new_template')->first();
+
+
+          if($allow_newtemplate_setting && $allow_newtemplate_setting->description=='1'){
+             $this->new_template=true;
+          }
+
+        if($id && (Auth::user()->type==1 && count(Auth::user()->organizations))){
+
+            if(Auth::user()->organizations[0]->id == $id && $this->new_template){
+                 $this->is_owner = true;
+                 $this->view = 'organization_2';
+                 $organization = Organization::find($id);
+                 $this->organization = $organization;
+
+                 view()->share('organisation', $organization);
+            }
+            
+        }    
+    }
+
     public function index()
     {
         //
@@ -56,7 +86,7 @@ class TeamController extends Controller
         $organization = Organization::orderBy('name')->where('user_id',
             (isset(Auth::user()->id) ? Auth::user()->id : 0))->lists('name', 'id')->all();
         $cities = array();
-        return view('teams.createteam')->with(array('sports' => ['' => 'Select Sport'] + $sports))
+        return view($this->view.'.createteam')->with(array('sports' => ['' => 'Select Sport'] + $sports))
             ->with('countries', ['' => 'Select Country'] + $countries)
             ->with('states', ['' => 'Select State'] + $states)
             ->with('cities', ['' => 'Select City'] + $cities)
@@ -82,6 +112,7 @@ class TeamController extends Controller
         $request['country'] = !empty($request['country_id']) ? Country::where('id',
             $request['country_id'])->first()->country_name : 'null';
         $location = Helper::address($request['address'], $request['city'], $request['state'], $request['country']);
+        $request['team_level'] = ($request['team_level'] == '') ? 'ANY' : $request['team_level'];
         $request['location'] = trim($location, ",");
         //model call to save the data
         $team_details = Team::create($request->all());
@@ -553,13 +584,22 @@ class TeamController extends Controller
 
         // $photo= Photo::select('url')->where('imageable_id', '=', $id)->where('imageable_type', '=', config('constants.PHOTO.TEAM_PHOTO'))->where('user_id', (isset(Auth::user()->id)?Auth::user()->id:0))->get()->toArray();
         $orgInfoObj = Organization::find($id);
+        $staffList = $orgInfoObj->staff;
+        $group = OrganizationGroup::find($group_id);
 
-        return view('teams.orgteams')->with(array(
+        return view($this->view.'.orgteams')->with(array(
             'teams' => $teams,
             'id' => $id,
             'orgInfoObj' => $orgInfoObj,
-            'userId' => $user_id
+            'userId' => $user_id,
+            'staffList'=>$staffList,
+            'group'=>$group
         ));
+    }
+
+
+    public function create_team_org($id){
+        return view('organization_2.groups.create_team', compact('id'));
     }
 
     //function to make team makeasteammanager

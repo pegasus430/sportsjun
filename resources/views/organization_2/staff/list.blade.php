@@ -23,3 +23,27 @@
 
     @include('organization_2.staff.partials.add_staff_modal')
 @stop
+
+
+@section('end_scripts')
+    <script type="text/javascript">
+            $('.del_staff').click(function(){
+                var that = $(this)
+                var id = $(this).attr('staff_id')
+                var data = {type:'staff',id:id}
+                if(confirm('Do you want to delete this staff?')){
+                     $.ajax({
+                        url:'/organization/{{$organisation->id}}/delete_actions',
+                        data:data,
+                        success:function(){
+                            $(that).parents('.record').hide('slow');
+                        },
+                        error:function(){
+
+                        }
+                     })
+                }
+            })
+    </script>
+
+@stop

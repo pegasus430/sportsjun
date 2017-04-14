@@ -129,6 +129,7 @@ class AuthController extends Controller
             'password' => bcrypt($data['password']),
             'newsletter' => !empty($data['newsletter']) ? 1 : 0,
             'type'       => 1,
+            'profile_updated '=>1,
             'verification_key' => md5($data['email']) //TODO:: these thing should be changed across all site
         ]);
         if ($user) {

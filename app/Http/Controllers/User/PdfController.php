@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use PDF;
 use App\Helpers\Helper;
 use App\Http\Controllers\User\InvitePlayerController;
+use App\Http\Controllers\User\TournamentsController;
 use App\Model\City;
 use App\Model\Country;
 use App\Model\Facilityprofile;
@@ -27,6 +28,7 @@ use App\Model\TournamentParent;
 use App\Model\Tournaments;
 use App\Model\UserStatistic;
 use App\Model\TournamentMatchPreference as Settings;
+use App\Model\Organization;
 use App\User;
 use Auth;
 use Carbon\Carbon;
@@ -191,5 +193,39 @@ class PdfController extends Controller
         return $pdf->stream('match_schedule_tournament_' . $tournament_id . '_' . time() . '.pdf');
         return view('pdf.schedules',
             compact('schedules', 'tournament', 'team_logo', 'user_name', 'team_name_array', 'user_profile', 'logo'));
+    }
+
+
+    public function player_standing(request $request){
+        $t_controller = new TournamentsController;
+        $tournament_id = $request->tournament_id;
+
+        $tournament = Tournaments::find($tournament_id);
+        $sport_id=$tournament->sports_id;
+        $sport_name=strtolower(Sport::find($sport_id)->sports_name);
+          $logo = object_get($tournament, 'logo', '');
+        $player_standing = $t_controller->getPlayerStanding($sport_id,$tournament_id);
+        $to_print = true;
+        $pdf = PDF::loadView('pdf.player_standing', compact('player_standing', 'tournament_id','tournament','sports_id','sports_name','logo','sport_name','to_print'));
+
+        return $pdf->stream('player_standing_'.$tournament_id.'_'.time().'.pdf');
+    }
+
+    public function overall_standing(request $request){
+        $orgInfoObj = Organization::find($request->organization_id);
+        $parent_tournament = tournamentParent::find($request->parent_tournament_id);
+
+
+
+              $pdf = PDF::loadView('pdf.overall_standing', compact('lis','orgInfoObj','parent_tournament'));
+              return $pdf->stream('overall_standing_'.$parent_tournament->id.'_'.time().'.pdf');
+    }
+
+    public function event_points(request $request){
+              $orgInfoObj = Organization::find($request->organization_id);
+              $lis = Tournaments::find($request->tournament_id);
+
+              $pdf = PDF::loadView('pdf.event_points', compact('lis','orgInfoObj'));
+              return $pdf->stream('event_points_'.$lis->id.'_'.time().'.pdf');
     }
 }

@@ -146,7 +146,8 @@ return [
                 15=> 'UltimatefrisbeeStatistic',
                 16=> 'WaterpoloStatistic',
                 17=> 'ThrowballStatistic',
-                18=> 'ArcheryStatistic' 
+                18=> 'ArcheryStatistic',
+                19=> 'Smite'
 
         ],
         'SPORT_NAME'               => [
@@ -163,7 +164,8 @@ return [
                 15 => 'Ultimate Frisbee',
                 16 => 'Water Polo',
                 17 => 'Throw Ball',
-                18 => 'Archery'
+                18 => 'Archery',
+                19 => 'Smite'
 
         ],
         'SPORT_ID'                 => [
@@ -180,7 +182,8 @@ return [
                 'Ultimate Frisbee'      => 15,
                 'Water Polo'   => 16,
                 'Throw Ball'   => 17,
-                'Archery'      => 18
+                'Archery'      => 18,
+                'Smite'        => 19
 
         ],
         'SERVICES'                 => [

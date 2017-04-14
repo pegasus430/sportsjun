@@ -11,69 +11,30 @@
                 <div class="wg wg-white">
                     <div class="wg-wrap">
                         <div class="wg-hd">
-                            <h4>Tournaments</h4> <a href="" class="wg-cnlink">Create Tournament</a> </div>
+                            <h4>Tournaments</h4> <a href="/organization/{{$organisation->id}}/new_tournament" class="wg-cnlink">Create Tournament</a> </div>
                         <select class="selectpicker">
-                            <optgroup label="Swimming">
-                                <option>Hyderabad Corporate Olymipics - 2016</option>
-                                <option>Hyderabad Corporate Olymipics - 2016</option>
-                                <option>Hyderabad Corporate Olymipics - 2016</option>
-                            </optgroup>
-                            <optgroup label="Cricket">
-                                <option>Hyderabad Corporate Olymipics - 2016</option>
-                                <option>Hyderabad Corporate Olymipics - 2016</option>
-                                <option>Hyderabad Corporate Olymipics - 2016</option>
-                            </optgroup>
+                         @foreach($parent_tournaments as $parent)
+                            <optgroup label="{{$parent->name}}">
+                                      @foreach($parent->tournaments as $tournament)
+                                <option>{{$tournament->name}}</option>
+                                      @endforeach
+                             </optgroup>
+                         @endforeach
                         </select>
                         <div class="carousel slide event-carousel events" id="events">
                             <div class="carousel-inner">
+                                @foreach($parent_tournaments as $parent)
                                 <div class="item  active">
                                     <div class="row">
+                                    @foreach($parent->tournaments as $tournament)
                                         <div class="col-md-4">
-                                            <h4><a href="#">Hyderabad Corporate Olymipics - Mens Socces 2016</a></h4> <span class="schedule">23rd Oct, 2017 - 05th Nov, 2017</span>
-                                            <label>Status: Completed</label>
+                                            <h4><a href="#">{{$tournament->name}}</a></h4> <span class="schedule">23rd Oct, 2017 - 05th Nov, 2017</span>
+                                            <label>Status: {{$tournament->status}}</label>
                                         </div>
-                                        <div class="col-md-4">
-                                            <h4><a href="#">Hyderabad Corporate Olymipics - Mens Socces 2016</a></h4> <span class="schedule">23rd Oct, 2017 - 05th Nov, 2017</span>
-                                            <label>Status: Completed</label>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <h4><a href="#">Hyderabad Corporate Olymipics - Mens Socces 2016</a></h4> <span class="schedule">23rd Oct, 2017 - 05th Nov, 2017</span>
-                                            <label>Status: Completed</label>
-                                        </div>
+                                    @endforeach
                                     </div>
                                 </div>
-                                <div class="item">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <h4><a href="#">Hyderabad Corporate Olymipics - Mens Socces 2016</a></h4> <span class="schedule">23rd Oct, 2017 - 05th Nov, 2017</span>
-                                            <label>Status: Completed</label>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <h4><a href="#">Hyderabad Corporate Olymipics - Mens Socces 2016</a></h4> <span class="schedule">23rd Oct, 2017 - 05th Nov, 2017</span>
-                                            <label>Status: Completed</label>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <h4><a href="#">Hyderabad Corporate Olymipics - Mens Socces 2016</a></h4> <span class="schedule">23rd Oct, 2017 - 05th Nov, 2017</span>
-                                            <label>Status: Completed</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <h4><a href="#">Hyderabad Corporate Olymipics - Mens Socces 2016</a></h4> <span class="schedule">23rd Oct, 2017 - 05th Nov, 2017</span>
-                                            <label>Status: Completed</label>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <h4><a href="#">Hyderabad Corporate Olymipics - Mens Socces 2016</a></h4> <span class="schedule">23rd Oct, 2017 - 05th Nov, 2017</span>
-                                            <label>Status: Completed</label>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <h4><a href="#">Hyderabad Corporate Olymipics - Mens Socces 2016</a></h4> <span class="schedule">23rd Oct, 2017 - 05th Nov, 2017</span>
-                                            <label>Status: Completed</label>
-                                        </div>
-                                    </div>
-                                </div>
+                             @endforeach
                             </div> <a data-slide="prev" href="#events" class="left carousel-control">‹</a> <a data-slide="next" href="#events" class="right carousel-control">›</a> </div>
                     </div>
                 </div>
@@ -138,22 +99,16 @@
                     <div class="col-md-12">
                         <div class="wg wg-dk-grey no-shadow">
                             <div class="wg-wrap clearfix">
-                                <h4 class="no-margin pull-left">Just Added Teams</h4> <a href="" class="wg-viewmore pull-right">View More <i class="fa fa-angle-double-right">    </i></a> </div>
+                                <h4 class="no-margin pull-left">Just Added Teams</h4> <a href="/organizationTeamlist/{{$organisation->id}}" class="wg-viewmore pull-right">View More <i class="fa fa-angle-double-right">    </i></a> </div>
                         </div>
                     </div>
                 </div>
                 <div class="row space-top-half text-center">
+                    @foreach($organisation->teamplayers as $team)
                     <div class="col-lg-3 col-sm-6">
-                        <p class="text-center">AUSTRALIA</p> <img src="/org/images/nations-flags/australia-lg.png" alt="" class="img-responsve"> </div>
+                        <p class="text-center">{{$team->name}}</p> <img src="/uploads/teams/{{$team->logo}}" alt="" class="img-responsve" style="height: 150px; width: 150px; border-radius: 50%"> </div>
                     <!-- .col-lg-3.col-sm-6 -->
-                    <div class="col-lg-3 col-sm-6">
-                        <p class="text-center">ENGLAND</p> <img src="/org/images/nations-flags/england-lg.png" alt="" class="img-responsve"> </div>
-                    <!-- .col-lg-3.col-sm-6 -->
-                    <div class="col-lg-3 col-sm-6">
-                        <p class="text-center">GERMANY</p> <img src="/org/images/nations-flags/germany-lg.png" alt="" class="img-responsve"> </div>
-                    <!-- .col-lg-3.col-sm-6 -->
-                    <div class="col-lg-3 col-sm-6">
-                        <p class="text-center">INDIA</p> <img src="/org/images/nations-flags/india-lg.png" alt="" class="img-responsve"> </div>
+                    @endforeach
                     <!-- .col-lg-3.col-sm-6 -->
                 </div>
             </div>
@@ -272,6 +227,8 @@
             </div>
         </div>
         <div class="row space-top-half">
+
+            @foreach($marketplace as $item)
             <div class="col-lg-3 col-sm-6">
                 <div class="shop-item">
                     <div class="shop-thumbnail"> <span class="shop-label text-danger">Sale</span>
@@ -286,75 +243,15 @@
                         </div>
                     </div>
                     <div class="shop-item-details">
-                        <h3 class="shop-item-title"><a href="shop-single.html">Storage Box</a></h3> <span class="shop-item-price">
-                        <span class="old-price">$49.00</span> $38.00 </span>
+                        <h3 class="shop-item-title"><a href="shop-single.html">{{$item->item}}</a></h3> <span class="shop-item-price">
+                        <span class="old-price">${{$item->base_price}}</span> ${{$item->actual_price}} </span>
                     </div>
                 </div>
                 <!-- .shop-item -->
             </div>
+            @endforeach
             <!-- .col-lg-3.col-sm-6 -->
-            <div class="col-lg-3 col-sm-6">
-                <div class="shop-item">
-                    <div class="shop-thumbnail">
-                        <a href="shop-single.html" class="item-link"></a> <img src="/org/marketplace/mp_img_2.png" alt="Shop item">
-                        <div class="shop-item-tools">
-                            <a href="#" class="add-to-whishlist" data-toggle="tooltip" data-placement="top" title="" data-original-title="Wishlist"> <i class="fa fa-heart-o"></i> </a>
-                            <a href="#" class="add-to-cart"> <em>Add to Cart</em>
-                                <svg x="0px" y="0px" width="32px" height="32px" viewBox="0 0 32 32">
-                                    <path stroke-dasharray="19.79 19.79" stroke-dashoffset="19.79" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" d="M9,17l3.9,3.9c0.1,0.1,0.2,0.1,0.3,0L23,11"></path>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="shop-item-details">
-                        <h3 class="shop-item-title"><a href="shop-single.html">Shoulder Bag</a></h3> <span class="shop-item-price">
-                        $125.00
-                      </span> </div>
-                </div>
-                <!-- .shop-item -->
-            </div>
-            <!-- .col-lg-3.col-sm-6 -->
-            <div class="col-lg-3 col-sm-6">
-                <div class="shop-item">
-                    <div class="shop-thumbnail">
-                        <a href="shop-single.html" class="item-link"></a> <img src="/org/marketplace/mp_img_3.png" alt="Shop item">
-                        <div class="shop-item-tools">
-                            <a href="#" class="add-to-whishlist" data-toggle="tooltip" data-placement="top" title="" data-original-title="Wishlist"> <i class="fa fa-heart-o"></i> </a>
-                            <a href="#" class="add-to-cart"> <em>Add to Cart</em>
-                                <svg x="0px" y="0px" width="32px" height="32px" viewBox="0 0 32 32">
-                                    <path stroke-dasharray="19.79 19.79" stroke-dashoffset="19.79" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" d="M9,17l3.9,3.9c0.1,0.1,0.2,0.1,0.3,0L23,11"></path>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="shop-item-details">
-                        <h3 class="shop-item-title"><a href="shop-single.html">Glass Vase</a></h3> <span class="shop-item-price">
-                        $62.50
-                      </span> </div>
-                </div>
-                <!-- .shop-item -->
-            </div>
-            <!-- .col-lg-3.col-sm-6 -->
-            <div class="col-lg-3 col-sm-6">
-                <div class="shop-item">
-                    <div class="shop-thumbnail">
-                        <a href="shop-single.html" class="item-link"></a> <img src="/org/marketplace/mp_img_4.png" alt="Shop item">
-                        <div class="shop-item-tools">
-                            <a href="#" class="add-to-whishlist" data-toggle="tooltip" data-placement="top" title="" data-original-title="Wishlist"> <i class="fa fa-heart-o"></i> </a>
-                            <a href="#" class="add-to-cart"> <em>Add to Cart</em>
-                                <svg x="0px" y="0px" width="32px" height="32px" viewBox="0 0 32 32">
-                                    <path stroke-dasharray="19.79 19.79" stroke-dashoffset="19.79" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" d="M9,17l3.9,3.9c0.1,0.1,0.2,0.1,0.3,0L23,11"></path>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="shop-item-details">
-                        <h3 class="shop-item-title"><a href="shop-single.html">Alarm Clock</a></h3> <span class="shop-item-price">
-                        $178.00
-                      </span> </div>
-                </div>
-                <!-- .shop-item -->
-            </div>
+           
             <!-- .col-lg-3.col-sm-6 -->
         </div>
     </div>

@@ -123,7 +123,9 @@
 						<button class='button btn-primary' type="button" save='0' onclick="addSport({{$parent_tournament->id}}, this)">Add Sport</button>
 					@endcan
 				@endif
-				</form>			
+				</form>		
+
+				<a href="/download/overall_standing?parent_tournament_id={{$parent_tournament->id}}&organization_id={{$orgInfoObj->id}}" class="btn btn-danger " name="match_schedule_tournament_201"><i class="fa fa-download"></i> Download Standing </a>	
 					<button type="button" class="button btn-secondary" data-dismiss="modal" >Close</button>
 				</div>
 				

@@ -2,7 +2,7 @@
 
 <div class="row ">
     <div class="table-responsive stats-table teamStatsDiv" >
-    <table class="table table-striped " >
+    <table class="table table-bordered table-striped " >
         <thead>
             <tr>
                 <th>PLAYER </th>
@@ -22,7 +22,7 @@
                 <span class='hidden-xs hidden-sm'> 
                    
                          
- {!! Helper::Images($statistic->logo,'user_profile',array('class'=>'img-circle img-border ','height'=>52,'width'=>52) )!!}
+ {!! Helper::Images($statistic->logo,'user_profile',array('class'=>'img-circle img-border ','height'=>52,'width'=>52), isset($to_print)?true:false )!!}
                              
                                 
                              
