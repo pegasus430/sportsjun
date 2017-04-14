@@ -10,6 +10,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class MatchSchedule extends Model
 {
+    public static $STATUS_COMPLETED = 'completed';
+
+
+    public static $SCORING_REJECTED = 'rejected';
 
     /**
      * The database table used by the model.

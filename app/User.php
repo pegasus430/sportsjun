@@ -36,6 +36,8 @@ class User extends Model implements AuthenticatableContract,
     static $TYPE_REGULAR = 0;
     static $TYPE_ORGANIZATION = 1;
 
+    static $ROLE_ADMIN = 'admin';
+
     use Authenticatable,
         Authorizable,
         CanResetPassword,
@@ -429,4 +431,7 @@ class User extends Model implements AuthenticatableContract,
         return $this->hasMany('App\Model\SmiteMatchStats');
     }
 
+    public function isAdmin(){
+        return $this->role === self::$ROLE_ADMIN;
+    }
 }
