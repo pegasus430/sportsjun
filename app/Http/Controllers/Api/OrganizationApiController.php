@@ -6,6 +6,11 @@ use App\Model\Organization;
 
 class OrganizationApiController extends BaseApiController
 {
+    /**
+     * Organization - list
+     * @return array
+     */
+
     public function index(){
         $organizations = Organization::
                     select([

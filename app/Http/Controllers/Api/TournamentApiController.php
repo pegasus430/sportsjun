@@ -27,19 +27,18 @@ use Response;
 class TournamentApiController extends BaseApiController
 {
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
     public function __construct()
     {
         $this->functionsApi = new functionsApi;
         $this->tournamentsApi = new tournamentsApi;
     }
 
-
+    /**
+     * Tournament - list
+     *
+     * @param bool $filter
+     * @return array
+     */
     public function index($filter = false)
     {
         $tournaments = Tournaments::joinParent()->with('sports');
@@ -118,28 +117,7 @@ class TournamentApiController extends BaseApiController
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
+     * Tournament - info
      *
      * @param  int $id
      * @return \Illuminate\Http\Response
@@ -246,47 +224,13 @@ class TournamentApiController extends BaseApiController
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * Tournament - group stage
+     * @param $id
+     * @return array
      */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-    public function search(Request $request)
-    {
-
-    }
 
     public function group_stage($id)
     {
-
         $groups = TournamentGroups::
         where('tournament_id', $id)
             ->with(['group_teams' => function ($with) {
@@ -411,6 +355,11 @@ class TournamentApiController extends BaseApiController
         return $this->CollectionMapResponse($groups, $map);
     }
 
+    /**
+     * Tournament - final stage
+     * @param $id
+     * @return array
+     */
     public function final_stage($id)
     {
         $tournament = Tournaments::find($id);
@@ -539,6 +488,11 @@ class TournamentApiController extends BaseApiController
         return self::ApiResponse($players);
     }
 
+    /**
+     * Tournament - gallery
+     * @param $id
+     * @return array
+     */
 
     public function gallery($id)
     {

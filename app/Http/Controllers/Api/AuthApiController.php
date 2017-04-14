@@ -17,7 +17,6 @@ class AuthApiController extends BaseApiController
 {
     /**
      * API Login, on success return JWT Auth token
-     *
      * @param Request $request
      */
     public function login(Request $request)
@@ -35,6 +34,13 @@ class AuthApiController extends BaseApiController
         }
         return self::ApiResponse(compact('token'));
     }
+
+    /**
+     * Register user
+     * @param Request $request
+     * @return array
+     */
+
 
     public function register(Request $request)
     {
@@ -95,6 +101,12 @@ class AuthApiController extends BaseApiController
         }
     }
 
+    /**
+     * Generate OTP
+     * @param Request $request
+     * @return array
+     */
+
     public function generateOTP(Request $request)
     {
         $data = $request->all();
@@ -116,9 +128,13 @@ class AuthApiController extends BaseApiController
         } else {
             return self::ApiResponse(['error' => $validator->errors()->first()], 500);
         }
-
-
     }
+
+    /**
+     * Verify OTP
+     * @param Request $request
+     * @return array
+     */
 
     public function verifyOTP(Request $request)
     {
@@ -146,7 +162,12 @@ class AuthApiController extends BaseApiController
         }
     }
 
-    //check is OTP sent to mobileNumber
+    /**
+     * Check Otp sent
+     * @param Request $request
+     * @return array
+     */
+    
     public function isOtpSent(Request $request)
     {
         $data = $request->all();

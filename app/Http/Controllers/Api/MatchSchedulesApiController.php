@@ -9,6 +9,10 @@ use App\User;
 
 class  MatchSchedulesApiController extends BaseApiController
 {
+    /**
+     * Match - List
+     * @return array
+     */
 
     function getList()
     {
@@ -76,6 +80,12 @@ class  MatchSchedulesApiController extends BaseApiController
 
         return $this->PaginatedMapResponse($schedules, $map);
     }
+
+    /**
+     * Match - Info
+     * @param $id
+     * @return array
+     */
 
     public function getInfo($id)
     {
