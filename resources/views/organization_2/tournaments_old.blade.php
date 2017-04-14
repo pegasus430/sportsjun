@@ -1,25 +1,40 @@
- @extends(Helper::check_if_org_template_enabled()?'layouts.organisation':'layouts.app') 
- @section('content') 
- @include ('teams.orgleftmenu')
-<div id="content" class="col-sm-10" style="height: 986px;">
-    <div class="col-sm-9 tournament_profile">
-       
-        @if(count($parent_tournaments)) 
-			<div class="group_no clearfix">
-                <h4 class="stage_head">Tournaments</h4>
-            </div>        
-			@foreach($parent_tournaments as $parent_tournament)
-                <div class="teams_search_display row main_tour">
-                    <div class='col-sm-12'>	
-                       <div class='t_tltle' style="padding-left:30px;"><div><h3>Tournament : {{ $parent_tournament->name }}
+@extends('layouts.organisation')
 
-                       </h3>
-                            <span class="pull-right"><button class="btn btn-event" href="javascript:void(0);" data-toggle="modal" data-target="#overall_standing_{{$parent_tournament->id}}">Overall Standing</span>
-                       </div></div>
+@section('content')
+
+    <div class="container">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 class="page-header"><div class="ph-mark"><div class="glyphicon glyphicon-menu-right"></div></div> Tournaments</h2>
+                          <div class="create-btn-link"><a href="/organization/{{$organisation->id}}/new_tournament" class="wg-cnlink" >Create New Tournament</a></div>
                     </div>
+            </div>
+            <div class="row">
+        <div class="col-md-8">
+    @foreach($parent_tournaments as $parent_tournament)
 
-                    @foreach($parent_tournament->tournaments as $lis)
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="heading-{{$parent_tournament->id}}">
+                        <h4 class="panel-title">
+                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-{{$parent_tournament->id}}" aria-expanded="true" aria-controls="collapseOne">
+                            {{$parent_tournament->name}}
+                        </a>
+                      </h4>             
+                 </div>
 
+        <div id="collapse-{{$parent_tournament->id}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                             <div class="row">
+                <div class="col-md-12">
+                      <span class="pull-right">
+                        <br><button class="btn btn-danger" href="javascript:void(0);" data-toggle="modal" data-target="#overall_standing_{{$parent_tournament->id}}">Overall Standing</button></span>
+                </div>
+               </div>
+                 
+                            @foreach($parent_tournament->tournaments as $lis)
+
+            <div class="panel-body">
                     <div class="search_thumbnail right-caption">
 
                         <div class="col-md-2 col-sm-3 col-xs-12 text-center">
@@ -71,10 +86,10 @@
                                 <div class="sb_join_tournament_main" id="{{$lis->id}}" spid="{{$lis->sports_id}}" val="{{!empty($lis->schedule_type)?(($lis->schedule_type=='individual')?'PLAYER_TO_TOURNAMENT':'TEAM_TO_TOURNAMENT'):''}}"><a href="#" class="sj_add_but"><span><i class="fa fa-check"></i>Join Tournament</span></a></div>
                                 <?php }?>
                                 <div class="follow_unfollow_tournament" id="follow_unfollow_tournament_{{$lis->id}}" uid="{{$lis->id}}" val="TOURNAMENT" flag="{{ in_array($lis->id,$follow_array)?0:1 }}"><a href="#" id="follow_unfollow_tournament_a_{{$lis->id}}" class="{{ in_array($lis->id,$follow_array)?'sj_unfollow':'sj_follow' }}"><span id="follow_unfollow_tournament_span_{{$lis->id}}"><i class="{{ in_array($lis->id,$follow_array)?'fa fa-remove':'fa fa-check' }}"></i>{{ in_array($lis->id,$follow_array)?'Unfollow':'Follow' }}</span></a></div> 
-                            </div>	
+                            </div>  
                              * 
                              */
-                            ?>			
+                            ?>          
                         </div>
                     </div>
                 
@@ -87,19 +102,26 @@
 
                 
                 @endforeach
-
-                     @can('createTeam', $orgInfoObj)
-                          
-                          <center>   <a href='/tournaments/{{$parent_tournament->id}}/edit' class='btn btn-tiny btn-primary'> Add Event</a> </center>
-                      @endcan
-                         
+                            </div>
+                    </div>
                 </div>
-            @include('organization.overall_standing')
 
-        @endforeach 
-		@else
-		<div class="sj-alert sj-alert-info sj-alert-sm">No tournament conducted by the organization.</div>
-		@endif
-    </div>
-</div>
-@endsection
+                    
+                        
+
+                @endforeach
+                    
+                    </div>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+        </div>
+
+@if(isset($parent_tournament))
+   
+   @include('organization_2.overall_standing')
+
+@endif
+
+           
+@stop

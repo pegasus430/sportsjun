@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends(Helper::check_if_org_template_enabled()?'layouts.organisation':'layouts.app') 
 @section('content')
 <div class="col-sm-3">
         <div class="row" id="create-tournament-instructions">

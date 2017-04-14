@@ -1,7 +1,8 @@
 <!DOCTYPE html>
  
 <?php 
-    if(!isset($organisation)){ $organisation = \App\Model\Organization::find(35);}
+    if(!isset($organisation)){ $organisation = Session::get('organization');}
+    $organization = $organisation;
 ?>
 <html lang="en">
 
@@ -45,7 +46,7 @@
     <link rel="stylesheet" href="{{ asset('/css/sidebar-menu.css') }}?v=<?php echo $css_version;?>" />
     <link rel="stylesheet" href="{{ asset('/css/select-multiple.css') }}?v=<?php echo $css_version;?>" />
     <link rel="stylesheet" href="{{ asset('/css/select2.min.css') }}?v=<?php echo $css_version;?>" />
-     <link href="/org/css/main.css" rel="stylesheet">
+
  
      @yield('styles')
 
