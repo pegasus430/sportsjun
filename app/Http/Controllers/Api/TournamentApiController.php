@@ -2,27 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Helpers\Helper;
+use App\Http\Controllers\Api\FunctionsApiController as functionsApi;
 use App\Http\Controllers\User\TournamentsController;
+use App\Http\Controllers\User\TournamentsController as tournamentsApi;
 use App\Model\Album;
-use App\Model\Followers;
 use App\Model\MatchSchedule;
-use App\Model\Photo;
 use App\Model\Sport;
 use App\Model\Team;
 use App\Model\TournamentGroups;
-use App\Model\TournamentGroupTeams;
-use DB;
-use Illuminate\Http\Request;
-
-use App\Http\Controllers\Api\FunctionsApiController as functionsApi;
-use App\Http\Controllers\User\TournamentsController as tournamentsApi;
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 use App\Model\Tournaments;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Debug\Dumper;
-use Response;
+use DB;
 
 class TournamentApiController extends BaseApiController
 {
