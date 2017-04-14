@@ -1,56 +1,43 @@
 <?php
 namespace App\Http\Controllers\User;
+use App\Helpers\AllRequests;
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
-use App\Http\Requests;
+use App\Model\BasketballPlayerMatchwiseStats;
+use App\Model\CricketPlayerMatchwiseStats;
+use App\Model\CricketStatistic;
+use App\Model\HockeyPlayerMatchwiseStats;
 use App\Model\MatchSchedule;
 use App\Model\MatchScheduleRubber;
-use App\Model\UserStatistic;
-use App\Model\State;
-use App\Model\City;
-use App\Model\Team;
-use App\Model\TeamPlayers;
-use App\Model\Sport;
-use App\Model\Facilityprofile;
-use App\Model\Country;
 use App\Model\Photo;
-use App\Model\Tournaments;
-use App\Model\TennisPlayerMatchScore;
-use App\Model\TennisPlayerRubberScore;
-use App\Model\TournamentGroupTeams;
-use App\Model\TtPlayerMatchScore;
-use App\Model\TtPlayerRubberScore;
-use App\Model\CricketStatistic;
-use App\Model\TennisStatistic;
-use App\Model\TtStatistic;
-use App\Model\CricketPlayerMatchwiseStats;
-//soccer
 use App\Model\SoccerPlayerMatchwiseStats;
 use App\Model\SoccerStatistic;
-//badminton
-use App\Model\BadmintonPlayerMatchScore;
-use App\Model\BadmintonStatistic;
-//hockey
-use App\Model\HockeyPlayerMatchwiseStats;
-use App\Model\HockeyStatistic;
-//squash
-use App\Model\SquashPlayerMatchScore;
-use App\Model\SquashStatistic;
-//Basketball
-use App\Model\BasketballPlayerMatchwiseStats;
-use App\Model\BasketballStatistic;
-use App\Model\Organization;
-
+use App\Model\Sport;
+use App\Model\Team;
+use App\Model\TeamPlayers;
+use App\Model\TennisPlayerMatchScore;
+use App\Model\TennisPlayerRubberScore;
+use App\Model\TennisStatistic;
+use App\Model\TournamentGroupTeams;
+use App\Model\Tournaments;
+use App\Model\TtPlayerMatchScore;
+use App\Model\TtPlayerRubberScore;
+use App\Model\TtStatistic;
 use App\User;
+use Auth;
+use Carbon\Carbon;
 use DB;
 use Request;
-use Carbon\Carbon;
 use Response;
-use Auth;
-use App\Helpers\Helper;
-use DateTime;
-use App\Helpers\AllRequests;
-use Session;
 use ScoreCard as ScoreCardHelper;
+use Session;
+
+//soccer
+//badminton
+//hockey
+//squash
+//Basketball
+
 class ScoreCardController extends Controller {
 	/**
 	 * Display a listing of the resource.
