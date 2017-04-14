@@ -30,24 +30,35 @@
 								TOURNAMENT EVENTS </a> </li>
                             </ul>
                             <div class="tab-content">
-                                <div class="tab-pane active" id="tournament_detail">
-                                    <div class="sportsjun-forms">
-                                {!! Form::open(['route' => 'tournaments.store','class'=>'form-horizontal','method' => 'POST','id' => 'parent-tournaments']) !!}   
-                                   <div class="form-body">
-                                         @include ('organization_2.tournament._parentform', ['submitButtonText' => 'Create'])
-                                         <input type="hidden" name="isParent" id="isParent" value="yes">
-                                </div>      
-                                 <div class="form-footer">
-                                  <button type="submit" class="button btn-primary">Create</button>
+                                <div class="tab-pane active" id="tournament_detail"> 
+                           <div class="sportsjun-forms">
 
-                                </div>              
-                                    {!! Form::close() !!}
-                                    {!! JsValidator::formRequest('App\Http\Requests\CreateTournamentRequest', '#parent-tournaments'); !!}
-                                </div>
+                             {!! Form::model( $tournament,(array('route' => array('tournaments.update',$id),'class'=>'form-horizontal','method' => 'put','id' => 'my-tournaments'))) !!}  
 
+                                <form action="/tournaments/{{$tournament->id}}/update" class="form create-form clearfix" method="post" enctype="multipart/form-data" id='my-tournaments'>
+
+                 <div class="form-body">
+                        @include ('organization_2.tournament._parentform', ['submitButtonText' => 'Update'])
+                        <input type="hidden" name="isParent" id="isParent" value="yes">
+                        </div>  
+                 <div class="form-footer">
+                  <button type="submit" class="button btn-primary">Update</button>
+
+                </div>  
+                {!! Form::close() !!}
+                    {!! JsValidator::formRequest('App\Http\Requests\CreateTournamentRequest', '#my-tournaments'); !!}
+          
+                            </div>
                                 </div>
                                 <div class="tab-pane" id="tournament_events">
-                                    <div class="text-center">Firsly, add tournament details, and then you'll be able to add tournament events.</div>
+                                 
+                                  <a href="#" data-toggle="modal" data-target="#subtournament" class="add-tour"><i class="fa fa-plus"></i> Add Tournament Event</a>
+
+                                    @if(!empty($subTournamentArray) && count($subTournamentArray)>0)
+                                        @include('organization_2.tournament.viewsubtournaments')
+
+                                   
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -55,4 +66,6 @@
                 </div>
             </div>
         </div>
+
+        @include('tournaments.create')  
 @stop

@@ -18,7 +18,7 @@
 		 <div class="form-header header-primary"><h4><i class="fa fa-pencil-square"></i>{{ trans('message.team.fields.heading') }}</h4></div><!-- end .form-header section -->
 		 {!! Form::open(['route' => 'team.store','class'=>'form-horizontal','method' => 'POST','files'=>true,'id' => 'team-form']) !!}
 		<div class="form-body">
-				@include ('teams._form', ['submitButtonText' => 'Create'])
+				@include ('organization_2.teams._form', ['submitButtonText' => 'Create'])
 		</div>
 		<div class="form-footer">
 		  <button type="submit" class="button btn-primary"> Create </button>
