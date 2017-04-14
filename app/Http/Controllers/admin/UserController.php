@@ -5,7 +5,7 @@ namespace App\Http\Controllers\admin;
 //namespace App\Http\Controllers\Controller;
 
 use App\User;
-use App\Sports;
+use App\Model\Sport;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Auth\Guard;

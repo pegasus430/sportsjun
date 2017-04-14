@@ -18,6 +18,6 @@ class GameUsername extends Model
 
     public function game()
     {
-        return $this->hasOne('App\Sports');
+        return $this->hasOne(Sport::class);
     }
 }
