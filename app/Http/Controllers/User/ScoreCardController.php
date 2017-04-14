@@ -460,7 +460,7 @@ class ScoreCardController extends Controller {
         $game_type = $match_model->game_type; 
 		 if($game_type=='rubber'){
             $number_of_rubber = $match_model->number_of_rubber;
-            $active_rubber = $this->getActiveRubber($match_id);
+            $active_rubber = $match_model->getActiveRubber();
             $rubber_number= $active_rubber->rubber_number;
 
             if($number_of_rubber==$rubber_number) $rubber_completed=1;
@@ -950,7 +950,7 @@ class ScoreCardController extends Controller {
         $game_type = $match_model->game_type; 
 		 if($game_type=='rubber'){
             $number_of_rubber = $match_model->number_of_rubber;
-            $active_rubber = $this->getActiveRubber($match_id);
+            $active_rubber = $match_model->getActiveRubber();
             $rubber_number= $active_rubber->rubber_number;
 
             if($number_of_rubber==$rubber_number) $rubber_completed=1;

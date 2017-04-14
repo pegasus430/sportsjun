@@ -304,4 +304,20 @@ class MatchSchedule extends Model
     {
         return $this->hasOne('App\Model\SmiteMatchStats');
     }
+
+
+    public function getActiveRubber()
+    {
+        if (Session::has('rubberInfo')) {
+            return Session::get('rubberInfo');
+        }
+
+        $active_rubber = MatchScheduleRubber::whereMatchId($this->id)
+                                            ->scheduled()
+                                            ->orderBy('id', 'asc')
+                                            ->first();
+        return $active_rubber;
+    }
+
+
 }

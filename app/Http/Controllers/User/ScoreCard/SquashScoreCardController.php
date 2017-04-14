@@ -39,8 +39,9 @@ class SquashScoreCardController extends parentScoreCardController
  
 
   public function squashScoreCard($match_data,$match,$sportsDetails=[],$tournamentDetails=[],$is_from_view=0)
-    { 
+    {
 
+        $match_model = MatchSchedule::whereId($match_data[0]['id'])->first();
         $game_type=$match_data[0]['game_type'];
             if($game_type=='rubber'){              
                 $rubbers=MatchscheduleRubber::whereMatchId($match_data[0]['id'])->get();
@@ -50,7 +51,7 @@ class SquashScoreCardController extends parentScoreCardController
                     $rubbers            = $scheduleController->insertGroupRubber($match_data[0]['id']);
                 }
 
-                $active_rubber=$this->getActiveRubber($match_data[0]['id']);
+                $active_rubber=$match_model->getActiveRubber();
 
 
                 if(count($active_rubber)){
@@ -275,7 +276,7 @@ class SquashScoreCardController extends parentScoreCardController
 
         $game_type=$match_model->game_type;
         if($game_type=='rubber'){            
-             $active_rubber = $this->getActiveRubber($match_id);
+             $active_rubber = $match_model->getActiveRubber();
              $rubber_number=$active_rubber->rubber_number;
              $rubber_id=$active_rubber->id;
              $rubber_model=MatchScheduleRubber::find($rubber_id);
@@ -477,7 +478,7 @@ class SquashScoreCardController extends parentScoreCardController
           }
         else {
 
-            $active_rubber=$this->getActiveRubber($match_id);
+            $active_rubber=$match_model->getActiveRubber();
             $rubber_id=$active_rubber->id;
 
             //get the match model from rubber;
@@ -797,7 +798,7 @@ class SquashScoreCardController extends parentScoreCardController
 
         if($game_type=='rubber'){
             $number_of_rubber = $match_model->number_of_rubber;
-            $active_rubber = $this->getActiveRubber($match_id);
+            $active_rubber = $match_model->getActiveRubber();
             $rubber_number= $active_rubber->rubber_number;
 
             if($number_of_rubber==$rubber_number) $rubber_completed=0;

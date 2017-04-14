@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class MatchScheduleRubber extends Model
 {
+
+    static $MATCH_STATUS_SCHEDULED = 'scheduled';
     //
 
     protected $table = 'match_schedules_rubber';
@@ -40,4 +42,20 @@ class MatchScheduleRubber extends Model
     public function referees(){
         return $this->hasMany('App\Model\RefereeSchedule', 'rubber_id');    
     }
+
+
+    /** Scopes */
+
+    /**
+     * Scope a query to only include scheduled
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+
+    public function scopeScheduled($query){
+        return $query->where('match_status', '=', self::$MATCH_STATUS_SCHEDULED);
+    }
+
+
 }
