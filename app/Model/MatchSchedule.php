@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class MatchSchedule extends Model
 {
     public static $STATUS_COMPLETED = 'completed';
-
+    public static $STATUS_SCHEDULED = 'scheduled';
 
     public static $SCORING_REJECTED = 'rejected';
 
@@ -319,5 +319,200 @@ class MatchSchedule extends Model
         return $active_rubber;
     }
 
+
+    //function to call sport statistics
+    public function insertPlayerStatistics()
+    {
+        $match_type = $this->match_type; //!empty($match_data[0]['match_type'])?$match_data[0]['match_type']:'';
+        $match_details = $this->match_details;//  !empty($match_data[0]['match_details'])?$match_data[0]['match_details']:'';
+        $winner_id = $this->winner_id;// !empty($match_data[0]['winner_id'])?$match_data[0]['winner_id']:'';
+
+        switch ($this->sports_id) {
+            case Sport::$TENNIS:
+                if ($this->match_details_p)
+                    foreach ($this->match_details_p as $key => $players) {
+                        $is_win = $winner_id == $key ? 'yes' : 'no';
+                        //$this->tennisStatistics($players,$match_type,$is_win);
+                    }
+                break;
+            case Sport::$TABLE_TENNIS:
+                if ($this->match_details_p)
+                    foreach ($this->match_details_p as $key => $players) {
+                        $is_win = $winner_id == $key ? 'yes' : 'no';
+                        //$this->tableTennisStatistics($players,$match_type,$is_win);
+                    }
+                break;
+            case Sport::$SOCCER:
+                $soccer_details = SoccerPlayerMatchwiseStats::where('match_id', $this->id)->lists(['user_id']);
+                foreach ($soccer_details as $user_id) {
+                    SoccerStatistic::updateUserStatistic($user_id);
+                }
+                break;
+            case Sport::$HOKKEY:
+                $soccer_details = HockeyPlayerMatchwiseStats::where('match_id', $this->id)->lists(['user_id']);
+                foreach ($soccer_details as $user_id) {
+                    HockeyStatistic::updateUserStatistic($user_id);
+                }
+                break;
+            case Sport::$BASKETBALL:
+                $basketball_details = BasketballPlayerMatchwiseStats::where('match_id', $this->id)->lists(['user_id']);
+                foreach ($basketball_details as $user_id) {
+                    BasketballStatistic::updateUserStatistic($user_id);
+                }
+                break;
+            case Sport::$WATER_POLO:
+                // 	$basketball_details = BasketballPlayerMatchwiseStats::where('match_id',$match_id)->get(['user_id']);
+                // 	if(!empty($basketball_details) && count($basketball_details)>0)
+                // 	{
+                // 		foreach($basketball_details as $user_id)
+                // 		{
+                // 			$this->waterpoloStatistics($user_id['user_id']);
+                // 		}
+
+                // 	}
+                break;
+            case Sport::$KABADDI:
+                //$basketball_details = BasketballPlayerMatchwiseStats::where('match_id',$match_id)->get(['user_id']);
+                // 	if(!empty($basketball_details) && count($basketball_details)>0)
+                // 	{
+                // 		foreach($basketball_details as $user_id)
+                // 		{
+                // 			$this->kabaddiStatistics($user_id['user_id']);
+                // 		}
+
+                // 	}
+                break;
+            case Sport::$VOLEYBALL:
+                // {
+                // 	$basketball_details = BasketballPlayerMatchwiseStats::where('match_id',$match_id)->get(['user_id']);
+                // 	if(!empty($basketball_details) && count($basketball_details)>0)
+                // 	{
+                // 		foreach($basketball_details as $user_id)
+                // 		{
+                // 			$this->volleyballStatistics($user_id['user_id']);
+                // 		}
+
+                // 	}
+                break;
+            case Sport::$ULTIMATE_FRISBEE:
+                // {
+                // 	$basketball_details = BasketballPlayerMatchwiseStats::where('match_id',$match_id)->get(['user_id']);
+                // 	if(!empty($basketball_details) && count($basketball_details)>0)
+                // 	{
+                // 		foreach($basketball_details as $user_id)
+                // 		{
+                // 			$this->volleyballStatistics($user_id['user_id']);
+                // 		}
+
+                // 	}
+                break;
+            case Sport::$CRICKET:
+                $cricket_details = CricketPlayerMatchwiseStats::where('match_id', $this->id)
+                                                              ->where('match_type', $match_type)
+                                                              ->where('innings', 'first')
+                                                              ->get(['user_id']);
+                if (!empty($cricket_details) && count($cricket_details) > 0) {
+                    foreach ($cricket_details as $players) {
+                        $this->cricketBatsmenStatistic($players['user_id'], $match_type, $inning = 'first');//batsmen statistics
+                        $this->cricketBowlerStatistic($players['user_id'], $match_type, $inning = 'first');//bowler statistics
+                    }
+
+                }
+
+                if ($match_type == 'test')//for test match
+                {
+                    $cricket_second_ing_details = CricketPlayerMatchwiseStats::where('match_id', $this->id)
+                                                                             ->where('match_type', $match_type)
+                                                                             ->where('innings', 'second')
+                                                                             ->get(['user_id']);
+                    if (!empty($cricket_second_ing_details) && count($cricket_second_ing_details) > 0) {
+                        foreach ($cricket_second_ing_details as $users) {
+                            $this->cricketBatsmenStatistic($users['user_id'], $match_type, $inning = 'second');//batsmen statistics
+                            $this->cricketBowlerStatistic($users['user_id'], $match_type, $inning = 'second');//bowler statistics
+                        }
+
+                    }
+
+                }
+                break;
+            default:
+                \Log::error('Insert Player Statistics not implemented for sport');
+                break;
+        };
+        $this->updateTournamentGroups();
+    }
+
+    private function updateTournamentGroups()
+    {
+        //if match is scheduled from tournament
+        if ($this->tournament_id != '' && $this->tournament_group_id != '') {
+            $team_a_id = $this->a_id;
+            $team_b_id = $this->b_id;
+
+            $tournamentDetails = $this->tournament;
+
+            $tournament_won_poins = !empty($tournamentDetails[0]['points_win']) ? $tournamentDetails[0]['points_win'] : 0;
+            $tournament_lost_poins = !empty($tournamentDetails[0]['points_loose']) ? $tournamentDetails[0]['points_loose'] : 0;
+            $tournament_tie_poins = !empty($tournamentDetails[0]['points_tie']) ? $tournamentDetails[0]['points_tie'] : 0;
+
+
+            $team_a_groupdetails = TournamentGroupTeams::where('tournament_id', $this->tournament_id)
+                                                       ->where('tournament_group_id', $this->tournament_group_id)
+                                                       ->where('team_id', $team_a_id)->get(['won', 'lost', 'points']);
+
+            $team_b_groupdetails = TournamentGroupTeams::where('tournament_id', $this->tournament_id)
+                                                       ->where('tournament_group_id', $this->tournament_group_id)
+                                                       ->where('team_id', $team_b_id)->get(['won', 'lost', 'points']);
+
+            $team_a_won_count = !empty($team_a_groupdetails[0]['won']) ? $team_a_groupdetails[0]['won'] : 0;
+            $team_a_lost_count = !empty($team_a_groupdetails[0]['lost']) ? $team_a_groupdetails[0]['lost'] : 0;
+            $team_a_points = !empty($team_a_groupdetails[0]['points']) ? $team_a_groupdetails[0]['points'] : 0;
+
+            $team_b_won_count = !empty($team_b_groupdetails[0]['won']) ? $team_b_groupdetails[0]['won'] : 0;
+            $team_b_lost_count = !empty($team_b_groupdetails[0]['lost']) ? $team_b_groupdetails[0]['lost'] : 0;
+            $team_b_points = !empty($team_b_groupdetails[0]['points']) ? $team_b_groupdetails[0]['points'] : 0;
+
+
+            $tournamentGroupAquery = TournamentGroupTeams::where('tournament_id', $this->tournament_id)
+                                                    ->where('tournament_group_id', $this->tournament_group_id)
+                                                    ->where('team_id', $team_a_id);
+            $tournamentGroupBquery = TournamentGroupTeams::where('tournament_id', $this->tournament_id)
+                                                    ->where('tournament_group_id', $this->tournament_group_id)
+                                                    ->where('team_id', $team_b_id);
+            //if winner id exists
+            if ($this->winner_id != '') {
+                //if team a wons
+                if ($team_a_id == $this->winner_id) {
+                    $tournamentGroupAquery->update([
+                        'won' => $team_a_won_count + 1, 'points' => $team_a_points + $tournament_won_poins]);
+
+                    $tournamentGroupBquery->update([
+                        'lost' => $team_b_lost_count + 1, 'points' => $team_b_points + $tournament_lost_poins]);
+                } else {
+                    $tournamentGroupAquery->update([
+                        'lost' => $team_a_lost_count + 1, 'points' => $team_a_points + $tournament_lost_poins]);
+
+                    $tournamentGroupBquery->update([
+                        'won' => $team_b_won_count + 1, 'points' => $team_b_points + $tournament_won_poins
+                    ]);
+                }
+            } else if ($this->is_tied > 0 || $this->match_result == "washout")//if match is tied/washout
+            {
+                $tournamentGroupAquery
+                                    ->update(['points' => $team_a_points + $tournament_tie_poins]);
+
+                $tournamentGroupBquery
+                                    ->update(['points' => $team_b_points + $tournament_tie_poins]);
+
+            }
+
+            //update organization points;
+
+            if (!is_null($this->tournament_id)) {
+                Helper::updateOrganizationTeamsPoints($this->tournament_id);
+            }
+
+        }
+    }
 
 }
