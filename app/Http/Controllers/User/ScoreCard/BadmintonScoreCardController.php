@@ -2,43 +2,30 @@
 
 namespace App\Http\Controllers\User\ScoreCard;
 
-use Illuminate\Http\Request as ObjectRequest;       //get all my requests data as object
-
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
-use App\Model\Tournaments;
-use App\Http\Controllers\User\ScoreCardController as parentScoreCardController;
+use App\Helpers\Helper;
+use App\Helpers\ScoreCard;
 use App\Http\Controllers\User\ScheduleController;
-use App\Model\MatchSchedule;
-use App\Model\UserStatistic;
-use App\Model\State;
-use App\Model\City;
-use App\Model\Team;
-use App\Model\TeamPlayers;
-use App\Model\Sport;
-use App\Model\BadmintonPlayerMatchwiseStats;
+use App\Http\Controllers\User\ScoreCardController as parentScoreCardController;
 use App\Model\BadmintonPlayerMatchScore;
 use App\Model\BadmintonPlayerRubberScore;
 use App\Model\BadmintonStatistic;
+use App\Model\MatchSchedule;
 use App\Model\MatchScheduleRubber;
 use App\Model\Photo;
+use App\Model\Sport;
+use App\Model\Team;
+use App\Model\Tournaments;
 use App\User;
-use DB;
-use Carbon\Carbon;
-use Response;
 use Auth;
-use App\Helpers\Helper;
-use App\Helpers\ScoreCard;
-use DateTime;
-use App\Helpers\AllRequests;
-use Session;
+use Illuminate\Http\Request as ObjectRequest;
 use Request;
+use Session;       //get all my requests data as object
 
 class BadmintonScoreCardController extends parentScoreCardController
 {
- 
 
-  public function badmintonScoreCard($match_data,$match,$sportsDetails=[],$tournamentDetails=[],$is_from_view=0)
+
+    public function badmintonScoreCard($match_data,$match,$sportsDetails=[],$tournamentDetails=[],$is_from_view=0)
     { 
 
         $game_type=$match_data[0]['game_type'];
