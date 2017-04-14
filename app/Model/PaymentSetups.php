@@ -19,7 +19,7 @@ class PaymentSetups extends Model
 
   public function paymentGayeWays()
     {
-        return $this->belongsTo('App\Model\paymentGayeWays', 'gateway_id',
+        return $this->belongsTo(\App\Model\PaymentGateWays::class, 'gateway_id',
             'id');
     }
 
