@@ -35,8 +35,8 @@ class TournamentApiController extends BaseApiController
                 switch ($filter) {
                     case 'managed':
                         $tournaments = $user->getManagedParentTournamentQuery()
-                            ->with(['tournaments', 'tournaments.sports'])
-                            ->paginate(15);
+                                            ->with(['tournaments', 'tournaments.sports'])
+                                            ->paginate(15);
                         return $this->PaginatedMapResponse($tournaments,
                             [
                                 'id',
@@ -49,18 +49,18 @@ class TournamentApiController extends BaseApiController
                                 'email',
                                 'description',
                                 'events' => [
-                                    'type' => 'list',
+                                    'type'   => 'list',
                                     'source' => 'tournaments',
                                     'fields' => function ($obj) {
                                         return [
                                             'id',
-                                            'image' => 'logoImage',
+                                            'image'   => 'logoImage',
                                             'name',
                                             'address' => 'location',
-                                            'date' => 'dateString',
+                                            'date'    => 'dateString',
                                             'status',
                                             'sports_id',
-                                            'sport' => 'sports.sports_name'
+                                            'sport'   => 'sports.sports_name'
                                         ];
                                     }
                                 ]
@@ -93,13 +93,13 @@ class TournamentApiController extends BaseApiController
 
         return $this->PaginatedMapResponse($tournaments, [
             'id',
-            'image' => 'logoImage',
+            'image'   => 'logoImage',
             'name',
             'address' => 'location',
-            'date' => 'dateString',
+            'date'    => 'dateString',
             'status',
             'sports_id',
-            'sport' => 'sports.sports_name'
+            'sport'   => 'sports.sports_name'
         ]);
     }
 
@@ -123,7 +123,7 @@ class TournamentApiController extends BaseApiController
                 'name',
                 'created_by',
                 'manager_id',
-                'manager' => 'manager.name',
+                'manager'                => 'manager.name',
                 'sports_id',
                 'match_type',
                 'player_type',
@@ -141,13 +141,13 @@ class TournamentApiController extends BaseApiController
                 'latitude',
                 'address',
                 'city_id',
-                'city' => 'city',
+                'city'                   => 'city',
                 'state_id',
                 'state',
                 'country_id',
                 'country',
                 'zip',
-                'image' => 'logoImage',
+                'image'                  => 'logoImage',
                 'type',
                 'groups_number',
                 'groups_teams',
@@ -164,7 +164,7 @@ class TournamentApiController extends BaseApiController
                 'final_stage_teams',
                 'isactive',
                 'p_1', 'p_2', 'p_3', 'p_4', 'group_is_ended',
-                'sports_name' => 'sports.sports_name',
+                'sports_name'            => 'sports.sports_name',
 
                 /*
                 'tournament_parent' => [
@@ -220,21 +220,22 @@ class TournamentApiController extends BaseApiController
     {
         $groups = TournamentGroups::
         where('tournament_id', $id)
-            ->with(['group_teams' => function ($with) {
-                $with->orderBy('points', 'desc');
-            }, 'tournament'])
-            ->get();
+                                  ->with([
+                                      'group_teams' => function ($with) {
+                                          $with->orderBy('points', 'desc');
+                                      }, 'tournament'])
+                                  ->get();
 
         $map = [
             'id',
             'name',
             'isactive',
             'group_teams' => [
-                'type' => 'list',
+                'type'   => 'list',
                 'source' => 'group_teams',
                 'fields' => function ($obj) {
                     $fields = [
-                        'rank' => self::$COUNTER_KEY,
+                        'rank'    => self::$COUNTER_KEY,
                         'tournament_group_id',
                         'tournament_id',
                         'id',
@@ -247,10 +248,10 @@ class TournamentApiController extends BaseApiController
                         'points',
                         'final_points',
                         'players' => [
-                            'type' => 'list',
+                            'type'   => 'list',
                             'source' => 'team.teamplayers',
                             'fields' => [
-                                'id' => 'user.id',
+                                'id'   => 'user.id',
                                 'name' => 'user.name',
                                 'role',
                                 'logo' => 'user.logoImage'
@@ -276,15 +277,17 @@ class TournamentApiController extends BaseApiController
     public function group_stage_matches($id)
     {
         $groups = TournamentGroups
-            ::with(['match_schedules' => function ($with) {
-                $with->orderby('match_start_date', 'desc')->orderby('match_start_time', 'desc');
-            }])
+            ::with([
+                'match_schedules' => function ($with) {
+                    /** @var \Eloquent $with */
+                    $with->orderby('match_start_date', 'desc')->orderby('match_start_time', 'desc');
+                }])
             ->where('tournament_id', $id)->get();
 
         function prepareSideField($side = 'sideA')
         {
             return [
-                'type' => 'model',
+                'type'   => 'model',
                 'source' => $side,
                 'fields' => function ($obj) {
                     $schedule_type = object_get($obj, 'schedule_type');
@@ -295,11 +298,11 @@ class TournamentApiController extends BaseApiController
                     ];
                     if ($schedule_type == 'team') {
                         $result['players'] = [
-                            'type' => 'list',
+                            'type'   => 'list',
                             'source' => 'teamplayers',
                             'fields' => [
-                                'id' => 'user.id',
-                                'name' => 'user.name',
+                                'id'    => 'user.id',
+                                'name'  => 'user.name',
                                 'image' => 'user.logoImage',
                                 'role'
                             ]
@@ -314,28 +317,28 @@ class TournamentApiController extends BaseApiController
             'id',
             'name',
             'matches' => [
-                'type' => 'list',
+                'type'   => 'list',
                 'source' => 'match_schedules',
                 'fields' => [
                     'id',
                     'Image1' => 'sideALogo',
-                    'Name1' => 'sideA.name',
+                    'Name1'  => 'sideA.name',
                     'Score1' => 'sideAScore',
                     'Overs1' => 'sideAOvers',
                     'Image2' => 'sideBLogo',
-                    'Name2' => 'sideB.name',
+                    'Name2'  => 'sideB.name',
                     'Score2' => 'sideBScore',
                     'Overs2' => 'sideBOvers',
                     'Status' => 'match_status',
                     'Winner' => 'winner',
-                    'Date' => 'match_start_date',
+                    'Date'   => 'match_start_date',
                     'match_location',
                     'match_start_time',
                     "match_category",
                     "schedule_type",
                     "match_type",
-                    'sideA' => prepareSideField('sideA'),
-                    'sideB' => prepareSideField('sideB')
+                    'sideA'  => prepareSideField('sideA'),
+                    'sideB'  => prepareSideField('sideB')
                 ]
             ]
         ];
@@ -362,10 +365,10 @@ class TournamentApiController extends BaseApiController
             ];
             if ($obj instanceof Team) {
                 $map['players'] = [
-                    'type' => 'list',
+                    'type'   => 'list',
                     'source' => 'teamplayers',
                     'fields' => [
-                        'id' => 'user.id',
+                        'id'   => 'user.id',
                         'name' => 'user.name',
                         'role',
                         'logo' => 'user.logoImage'
@@ -389,8 +392,8 @@ class TournamentApiController extends BaseApiController
         }
         if ($tournament->final_stage_teams) {
             $matchScheduleData = MatchSchedule::where('tournament_id', $id)->whereNull('tournament_group_id')
-                ->orderBy('tournament_round_number')
-                ->get();
+                                              ->orderBy('tournament_round_number')
+                                              ->get();
 
             $maxRoundNumber = $matchScheduleData->max('tournament_round_number');
             $schedule_type = !empty($tournament->schedule_type) ? $tournament->schedule_type : 'team';
@@ -404,15 +407,17 @@ class TournamentApiController extends BaseApiController
     public function final_stage_matches($id)
     {
         $tournament = Tournaments::with(
-            ['finalMatches' => function ($with) {
-                $with->orderby('match_start_date', 'desc')->orderby('match_start_time', 'desc');
-            }]
+            [
+                'finalMatches' => function ($with) {
+                    /** @var \Eloquent $with */
+                    $with->orderby('match_start_date', 'desc')->orderby('match_start_time', 'desc');
+                }]
         )->find($id);
 
         function prepareSideField($side = 'sideA')
         {
             return [
-                'type' => 'model',
+                'type'   => 'model',
                 'source' => $side,
                 'fields' => function ($obj) {
                     $schedule_type = object_get($obj, 'schedule_type');
@@ -423,11 +428,11 @@ class TournamentApiController extends BaseApiController
                     ];
                     if ($schedule_type == 'team') {
                         $result['players'] = [
-                            'type' => 'list',
+                            'type'   => 'list',
                             'source' => 'teamplayers',
                             'fields' => [
-                                'id' => 'user.id',
-                                'name' => 'user.name',
+                                'id'    => 'user.id',
+                                'name'  => 'user.name',
                                 'image' => 'user.logoImage',
                                 'role'
                             ]
@@ -441,23 +446,23 @@ class TournamentApiController extends BaseApiController
         $map = [
             'id',
             'Image1' => 'sideALogo',
-            'Name1' => 'sideA.name',
+            'Name1'  => 'sideA.name',
             'Score1' => 'sideAScore',
             'Overs1' => 'sideAOvers',
             'Image2' => 'sideBLogo',
-            'Name2' => 'sideB.name',
+            'Name2'  => 'sideB.name',
             'Score2' => 'sideBScore',
             'Overs2' => 'sideBOvers',
             'Status' => 'match_status',
             'Winner' => 'winner',
-            'Date' => 'match_start_date',
+            'Date'   => 'match_start_date',
             'match_location',
             'match_start_time',
             "match_category",
             "schedule_type",
             "match_type",
-            'sideA' => prepareSideField('sideA'),
-            'sideB' => prepareSideField('sideB')
+            'sideA'  => prepareSideField('sideA'),
+            'sideB'  => prepareSideField('sideB')
         ];
         if ($tournament) {
             return $this->CollectionMapResponse($tournament->finalMatches, $map);
@@ -472,7 +477,7 @@ class TournamentApiController extends BaseApiController
     public function player_standing($id)
     {
         $tournamentInfo = Tournaments::whereId($id)->firstOrFail();
-        $players =  $tournamentInfo->playerStanding();
+        $players = $tournamentInfo->playerStanding();
         return self::ApiResponse($players);
     }
 
@@ -485,24 +490,26 @@ class TournamentApiController extends BaseApiController
     public function gallery($id)
     {
         $imageable_type_album = config('constants.PHOTO.GALLERY_TOURNAMENTS');
-        $loginUserId = \Auth::user()->id;
+        //$loginUserId = \Auth::user()->id;
         # $allowed = Helper::isValidUserForTournamentGallery($id, $loginUserId);
-        $allowed = true;
+        //  $allowed = true;
 
         $albums = Album::select('id', 'title', 'user_id')
-            ->where('imageable_type', $imageable_type_album)
-            ->where('imageable_id', $id)
-            ->with(['photos' => function ($with) {
-                $imageable_type_name = array(config('constants.PHOTO.GALLERY_TOURNAMENTS'));
-                $with->where('imageable_type', $imageable_type_name);
-            }])
-            ->get();
+                       ->where('imageable_type', $imageable_type_album)
+                       ->where('imageable_id', $id)
+                       ->with([
+                           'photos' => function ($with) {
+                               /** @var \Eloquent $with */
+                               $imageable_type_name = [config('constants.PHOTO.GALLERY_TOURNAMENTS')];
+                               $with->where('imageable_type', $imageable_type_name);
+                           }])
+                       ->get();
         $map = [
             'id',
             'title',
             'user_id',
             'photos' => [
-                'type' => 'list',
+                'type'   => 'list',
                 'source' => 'photos',
                 'fields' => [
                     'id',
