@@ -352,117 +352,180 @@ class Tournaments extends Model
         switch ($sport_id) {
             case  Sport::$SOCCER:
                 $player = SoccerPlayerMatchwiseStats::join('match_schedules', 'match_schedules.id', '=', 'soccer_player_matchwise_stats.match_id')
-                    ->join('teams', 'teams.id', '=', 'soccer_player_matchwise_stats.team_id')
-                    ->join('users', 'users.id', '=', 'soccer_player_matchwise_stats.user_id')
-                    ->where('match_schedules.tournament_id', $tournament_id)
-                    ->select('soccer_player_matchwise_stats.*', 'users.*')
-                    ->selectRaw('sum(yellow_cards) as yellow_cards')
-                    ->selectRaw('count(match_schedules.id) as matches')
-                    ->selectRaw('sum(red_cards) as red_cards')
-                    ->selectRaw('sum(goals_scored) as goals')
-                    ->orderBy('goals', 'desc')
-                    ->groupBy('user_id')
-                    ->get();
+                                                    ->join('teams', 'teams.id', '=', 'soccer_player_matchwise_stats.team_id')
+                                                    ->join('users', 'users.id', '=', 'soccer_player_matchwise_stats.user_id')
+                                                    ->where('match_schedules.tournament_id', $tournament_id)
+                                                    ->select('soccer_player_matchwise_stats.*', 'users.*')
+                                                    ->selectRaw('sum(yellow_cards) as yellow_cards')
+                                                    ->selectRaw('count(match_schedules.id) as matches')
+                                                    ->selectRaw('sum(red_cards) as red_cards')
+                                                    ->selectRaw('sum(goals_scored) as goals')
+                                                    ->orderBy('goals', 'desc')
+                                                    ->groupBy('user_id')
+                                                    ->get();
+# code...
                 break;
             case Sport::$HOKKEY:
                 $player = HockeyPlayerMatchwiseStats::join('match_schedules', 'match_schedules.id', '=', 'hockey_player_matchwise_stats.match_id')
-                    ->join('teams', 'teams.id', '=', 'hockey_player_matchwise_stats.team_id')
-                    ->join('users', 'users.id', '=', 'hockey_player_matchwise_stats.user_id')
-                    ->where('match_schedules.tournament_id', $tournament_id)
-                    ->select('hockey_player_matchwise_stats.*', 'users.*')
-                    ->selectRaw('sum(yellow_cards) as yellow_cards')
-                    ->selectRaw('count(match_schedules.id) as matches')
-                    ->selectRaw('sum(red_cards) as red_cards')
-                    ->selectRaw('sum(goals_scored) as goals')
-                    ->orderBy('goals', 'desc')
-                    ->groupBy('user_id')
-                    ->get();
+                                                    ->join('teams', 'teams.id', '=', 'hockey_player_matchwise_stats.team_id')
+                                                    ->join('users', 'users.id', '=', 'hockey_player_matchwise_stats.user_id')
+                                                    ->where('match_schedules.tournament_id', $tournament_id)
+                                                    ->select('hockey_player_matchwise_stats.*', 'users.*')
+                                                    ->selectRaw('sum(yellow_cards) as yellow_cards')
+                                                    ->selectRaw('count(match_schedules.id) as matches')
+                                                    ->selectRaw('sum(red_cards) as red_cards')
+                                                    ->selectRaw('sum(goals_scored) as goals')
+                                                    ->orderBy('goals', 'desc')
+                                                    ->groupBy('user_id')
+                                                    ->get();
                 break;
-            case Sport::$BASKETBALL:
+            case Sport::$BASKETBALL:    //basketball
                 $player = BasketballPlayerMatchwiseStats::join('match_schedules', 'match_schedules.id', '=', 'basketball_player_matchwise_stats.match_id')
-                    ->join('teams', 'teams.id', '=', 'basketball_player_matchwise_stats.team_id')
-                    ->join('users', 'users.id', '=', 'basketball_player_matchwise_stats.user_id')
-                    ->where('match_schedules.tournament_id', $tournament_id)
-                    ->select('basketball_player_matchwise_stats.*', 'users.*')
-                    ->selectRaw('sum(points_1) as points_1')
-                    ->selectRaw('count(match_schedules.id) as matches')
-                    ->selectRaw('sum(points_2) as points_2')
-                    ->selectRaw('sum(points_3) as points_3')
-                    ->selectRaw('sum(total_points) as total_points')
-                    ->selectRaw('sum(fouls) as fouls')
-                    ->orderBy('total_points', 'desc')
-                    ->groupBy('user_id')
-                    ->get();
+                                                        ->join('teams', 'teams.id', '=', 'basketball_player_matchwise_stats.team_id')
+                                                        ->join('users', 'users.id', '=', 'basketball_player_matchwise_stats.user_id')
+                                                        ->where('match_schedules.tournament_id', $tournament_id)
+                                                        ->select('basketball_player_matchwise_stats.*', 'users.*')
+                                                        ->selectRaw('sum(points_1) as points_1')
+                                                        ->selectRaw('count(match_schedules.id) as matches')
+                                                        ->selectRaw('sum(points_2) as points_2')
+                                                        ->selectRaw('sum(points_3) as points_3')
+                                                        ->selectRaw('sum(total_points) as total_points')
+                                                        ->selectRaw('sum(fouls) as fouls')
+                                                        ->orderBy('total_points', 'desc')
+                                                        ->groupBy('user_id')
+                                                        ->get();
+
+
                 break;
-            case Sport::$KABADDI:
+
+            case Sport::$KABADDI;
                 $player = KabaddiPlayerMatchwiseStats::join('match_schedules', 'match_schedules.id', '=', 'kabaddi_player_matchwise_stats.match_id')
-                    ->join('teams', 'teams.id', '=', 'kabaddi_player_matchwise_stats.team_id')
-                    ->join('users', 'users.id', '=', 'kabaddi_player_matchwise_stats.user_id')
-                    ->where('match_schedules.tournament_id', $tournament_id)
-                    ->select('kabaddi_player_matchwise_stats.*', 'users.*')
-                    ->selectRaw('sum(points_1) as points_1')
-                    ->selectRaw('count(match_schedules.id) as matches')
-                    ->selectRaw('sum(points_2) as points_2')
-                    ->selectRaw('sum(points_3) as points_3')
-                    ->selectRaw('sum(total_points) as total_points')
-                    ->selectRaw('sum(fouls) as fouls')
-                    ->orderBy('total_points', 'desc')
-                    ->groupBy('user_id')
-                    ->get();
+                                                     ->join('teams', 'teams.id', '=', 'kabaddi_player_matchwise_stats.team_id')
+                                                     ->join('users', 'users.id', '=', 'kabaddi_player_matchwise_stats.user_id')
+                                                     ->where('match_schedules.tournament_id', $tournament_id)
+                                                     ->select('kabaddi_player_matchwise_stats.*', 'users.*')
+                                                     ->selectRaw('sum(points_1) as points_1')
+                                                     ->selectRaw('count(match_schedules.id) as matches')
+                                                     ->selectRaw('sum(points_2) as points_2')
+                                                     ->selectRaw('sum(points_3) as points_3')
+                                                     ->selectRaw('sum(total_points) as total_points')
+                                                     ->selectRaw('sum(fouls) as fouls')
+                                                     ->orderBy('total_points', 'desc')
+                                                     ->groupBy('user_id')
+                                                     ->get();
+
+
                 break;
-            case Sport::$WATER_POLO:
+
+
+            case Sport::$WATER_POLO:    //water polo
                 $player = WaterpoloPlayerMatchwiseStats::join('match_schedules', 'match_schedules.id', '=', 'waterpolo_player_matchwise_stats.match_id')
-                    ->join('teams', 'teams.id', '=', 'waterpolo_player_matchwise_stats.team_id')
-                    ->join('users', 'users.id', '=', 'waterpolo_player_matchwise_stats.user_id')
-                    ->where('match_schedules.tournament_id', $tournament_id)
-                    ->select('waterpolo_player_matchwise_stats.*', 'users.*')
-                    ->selectRaw('sum(points_1) as points_1')
-                    ->selectRaw('count(match_schedules.id) as matches')
-                    ->selectRaw('sum(total_points) as total_points')
-                    ->selectRaw('sum(fouls) as fouls')
-                    ->orderBy('total_points', 'desc')
-                    ->groupBy('user_id')
-                    ->get();
+                                                       ->join('teams', 'teams.id', '=', 'waterpolo_player_matchwise_stats.team_id')
+                                                       ->join('users', 'users.id', '=', 'waterpolo_player_matchwise_stats.user_id')
+                                                       ->where('match_schedules.tournament_id', $tournament_id)
+                                                       ->select('waterpolo_player_matchwise_stats.*', 'users.*')
+                                                       ->selectRaw('sum(points_1) as points_1')
+                                                       ->selectRaw('count(match_schedules.id) as matches')
+                                                       ->selectRaw('sum(total_points) as total_points')
+                                                       ->selectRaw('sum(fouls) as fouls')
+                                                       ->orderBy('total_points', 'desc')
+                                                       ->groupBy('user_id')
+                                                       ->get();
+
+
                 break;
-            case Sport::$CRICKET:
+
+            case Sport::$ARCHERY:    //water polo
+                $player = ArcheryPlayerStats::join('match_schedules', 'match_schedules.id', '=', 'archery_player_stats.match_id')
+                                            ->join('teams', 'teams.id', '=', 'archery_player_stats.team_id')
+                                            ->join('users', 'users.id', '=', 'archery_player_stats.user_id')
+                                            ->where('match_schedules.tournament_id', $tournament_id)
+                                            ->select('archery_player_stats.*', 'users.*', 'teams.*')
+                                            ->selectRaw('count(match_schedules.id) as matches')
+                                            ->selectRaw('sum(total) as total_points')
+                                            ->orderBy('total_points', 'desc')
+                                            ->groupBy('user_id')
+                                            ->get();
+
+
+                break;
+            case Sport::$CRICKET:    //cricket
+
                 $player = [];
                 $player['batting'] = CricketPlayerMatchwiseStats::join('match_schedules', 'match_schedules.id', '=', 'cricket_player_matchwise_stats.match_id')
-                    ->join('teams', 'teams.id', '=', 'cricket_player_matchwise_stats.team_id')
-                    ->join('users', 'users.id', '=', 'cricket_player_matchwise_stats.user_id')
-                    ->where('match_schedules.tournament_id', $tournament_id)
-                    ->select('cricket_player_matchwise_stats.*', 'users.*')
-                    ->selectRaw('count(innings) as innings_bat')
-                    ->selectRaw('sum(totalruns) as totalruns')
-                    ->selectRaw('sum(balls_played) as balls_played')
-                    ->selectRaw('sum(fifties) as fifties')
-                    ->selectRaw('sum(hundreds) as hundreds')
-                    ->selectRaw('sum(fours) as fours')
-                    ->selectRaw('sum(sixes) as sixes')
-                    ->selectRaw('sum(IF(bat_status="notout", 1, 0)) as notouts')
-                    ->selectRaw('max(totalruns) as highscore')
-                    ->orderBy('totalruns', 'desc')
-                    ->groupBy('user_id')
-                    ->get();
+                                                                ->join('teams', 'teams.id', '=', 'cricket_player_matchwise_stats.team_id')
+                                                                ->join('users', 'users.id', '=', 'cricket_player_matchwise_stats.user_id')
+                                                                ->where('match_schedules.tournament_id', $tournament_id)
+                                                                ->select('cricket_player_matchwise_stats.*', 'users.*')
+                                                                ->selectRaw('count(innings) as innings_bat')
+                                                                ->selectRaw('sum(totalruns) as totalruns')
+                                                                ->selectRaw('sum(balls_played) as balls_played')
+                                                                ->selectRaw('sum(fifties) as fifties')
+                                                                ->selectRaw('sum(hundreds) as hundreds')
+                                                                ->selectRaw('sum(fours) as fours')
+                                                                ->selectRaw('sum(sixes) as sixes')
+                                                                ->selectRaw('sum(IF(bat_status="notout", 1, 0) + IF(out_as="not_out",1,0)) as notouts')
+                                                                ->selectRaw('((sum(totalruns) / sum(balls_played) ) * 100) as strikerates')
+                                                                ->selectRaw('max(totalruns) as highscore')
+                                                                ->orderBy('totalruns', 'desc')
+                                                                ->groupBy('user_id')
+                                                                ->get();
+
+
                 $player['bowling'] = CricketPlayerMatchwiseStats::join('match_schedules', 'match_schedules.id', '=', 'cricket_player_matchwise_stats.match_id')
-                    ->join('teams', 'teams.id', '=', 'cricket_player_matchwise_stats.team_id')
-                    ->join('users', 'users.id', '=', 'cricket_player_matchwise_stats.user_id')
-                    ->where('match_schedules.tournament_id', $tournament_id)
-                    ->select('cricket_player_matchwise_stats.*', 'users.*')
-                    ->selectRaw('count(DISTINCT(match_id)) as matches')
-                    ->selectRaw('sum(wickets) as wickets')
-                    ->selectRaw('sum(runs_conceded) as runs_conceded')
-                    ->selectRaw('sum(overs_bowled) as overs_bowled')
-                    ->selectRaw('SUM(innings) innings_bowl')
-                    ->selectRaw('count(innings) as innings_bowled')
-                    ->selectRaw('CAST(AVG(average_bowl) AS DECIMAL(10,2))  average_bowl')
-                    ->selectRaw('CAST(AVG(ecomony) AS DECIMAL(10,2)) ecomony')
-                    ->orderBy('wickets', 'desc')
-                    ->groupBy('user_id')
-                    ->get();
+                                                                ->join('teams', 'teams.id', '=', 'cricket_player_matchwise_stats.team_id')
+                                                                ->join('users', 'users.id', '=', 'cricket_player_matchwise_stats.user_id')
+                                                                ->where('match_schedules.tournament_id', $tournament_id)
+                                                                ->select('cricket_player_matchwise_stats.*', 'users.*')
+                                                                ->selectRaw('count(DISTINCT(match_id)) as matches')
+                                                                ->selectRaw('sum(wickets) as wickets')
+                                                                ->selectRaw('sum(runs_conceded) as runs_conceded')
+                                                                ->selectRaw('sum(overs_bowled) as overs_bowled')
+                                                                ->selectRaw('SUM(innings) innings_bowl')
+                                                                ->selectRaw('count(innings) as innings_bowled')
+                                                                ->selectRaw('CAST(AVG(average_bowl) AS DECIMAL(10,2))  average_bowl')
+                                                                ->selectRaw('CAST(AVG(ecomony) AS DECIMAL(10,2)) ecomony')
+                                                                ->orderBy('wickets', 'desc')
+                                                                ->orderBy('ecomony', 'asc')
+                                                                ->groupBy('user_id')
+                                                                ->get();
+
+                $player['fielding'] = CricketPlayerMatchwiseStats::join('match_schedules', 'match_schedules.id', '=', 'cricket_player_matchwise_stats.match_id')
+                                                                 ->join('team_players', 'team_players.user_id', '=', 'cricket_player_matchwise_stats.fielder_id')
+                                                                 ->join('teams', 'teams.id', '=', 'team_players.team_id')
+                                                                 ->leftjoin('tournament_group_teams', 'tournament_group_teams.team_id', '=', 'teams.id')
+                                                                 ->leftjoin('tournament_final_teams', 'tournament_final_teams.team_id', '=', 'teams.id')
+                                                                 ->where(function ($query) use ($tournament_id) {
+                                                                     $query
+                                                                         ->where('tournament_group_teams.tournament_id', $tournament_id)
+                                                                         ->orwhere('tournament_final_teams.tournament_id', $tournament_id);
+                                                                 })
+//->where('teams.sports_id','=',1)
+                                                                 ->join('users', 'users.id', '=', 'cricket_player_matchwise_stats.fielder_id')
+                                                                 ->where('cricket_player_matchwise_stats.tournament_id', $tournament_id)
+                                                                 ->select('cricket_player_matchwise_stats.*', 'users.*')
+                                                                 ->selectRaw('count(cricket_player_matchwise_stats.match_id) as matches')
+                                                                 ->selectRaw('sum(IF(out_as="caught", 1, 0)) as caught')
+                                                                 ->selectRaw('count(innings) as innings_bowled')
+                                                                 ->selectRaw('sum(IF(out_as="stumped", 1, 0)) as stumped')
+                                                                 ->selectRaw('sum(IF(out_as="run_out", 1, 0)) as run_out')
+                                                                 ->selectRaw('sum(IF(out_as="run_out", 1, 0) + IF(out_as="stumped", 1, 0) +IF(out_as="caught", 1, 0) ) as total')
+                                                                 ->selectRaw('teams.name as fielder_team_name')
+                                                                 ->selectRaw('teams.id as fielder_team_id')
+                                                                 ->orderBy('total', 'desc')
+                                                                 ->groupBy('fielder_id')
+                                                                 ->groupBy('team_players.id')
+//->groupBy('out_as')
+                                                                 ->get();
+
+
                 return $player;
+
                 break;
+
+
             default:
-                # code...
+# code...
                 $player = [];
                 break;
         }

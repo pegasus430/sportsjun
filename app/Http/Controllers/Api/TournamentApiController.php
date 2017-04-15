@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Api\FunctionsApiController as functionsApi;
 use App\Http\Controllers\User\TournamentsController;
-use App\Http\Controllers\User\TournamentsController as tournamentsApi;
 use App\Model\Album;
 use App\Model\MatchSchedule;
 use App\Model\Sport;
@@ -19,7 +18,6 @@ class TournamentApiController extends BaseApiController
     public function __construct()
     {
         $this->functionsApi = new functionsApi;
-        $this->tournamentsApi = new tournamentsApi;
     }
 
     /**
@@ -473,7 +471,8 @@ class TournamentApiController extends BaseApiController
 
     public function player_standing($id)
     {
-        $players = $this->tournamentsApi->playerStanding($id, true);
+        $tournamentInfo = Tournaments::whereId($id)->firstOrFail();
+        $players =  $tournamentInfo->playerStanding();
         return self::ApiResponse($players);
     }
 

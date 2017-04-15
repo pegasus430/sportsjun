@@ -26,6 +26,12 @@ class Sport extends Model {
     public static $WATER_POLO = 16;
     public static $THROW_BALL = 17;
 
+    public static $ARCHERY = 1000; //TODO: set correct value
+
+
+
+    public static $CATEGORY_ATHLETICS = 'athletics';
+
     /**
      * The database table used by the model.
      *

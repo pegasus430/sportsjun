@@ -197,14 +197,14 @@ class PdfController extends Controller
 
 
     public function player_standing(request $request){
-        $t_controller = new TournamentsController;
         $tournament_id = $request->tournament_id;
 
         $tournament = Tournaments::find($tournament_id);
+        /** @var Tournaments $tournament */
         $sport_id=$tournament->sports_id;
         $sport_name=strtolower(Sport::find($sport_id)->sports_name);
           $logo = object_get($tournament, 'logo', '');
-        $player_standing = $t_controller->getPlayerStanding($sport_id,$tournament_id);
+        $player_standing = $tournament->playerStanding();
         $to_print = true;
         $pdf = PDF::loadView('pdf.player_standing', compact('player_standing', 'tournament_id','tournament','sports_id','sports_name','logo','sport_name','to_print'));
 
