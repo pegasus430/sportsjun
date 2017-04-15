@@ -264,4 +264,27 @@ class  MatchSchedulesApiController extends BaseApiController
         return $this->ModelMapResponse($schedule, $map);
     }
 
+    /**
+     * @param $id
+     * @return array
+     */
+    public function endMatch($id)
+    {
+        $schedule = MatchSchedule::whereId($id)->firstOrFail();
+        $data = \Request::all();
+
+        switch ($schedule->sports_id) {
+            case Sport::$CRICKET:
+
+                break;
+            default:
+                return $this->ApiResponse(['message' => 'Please update api for this sport_id - ' . $schedule->sports_id], 404);
+        }
+
+        $match_result = (in_array($data['match_result'], ['tie', 'win', 'washout'])) ? $data['match_result'] : NULL;
+
+        $schedule->endMatch($match_result,$data);
+        return $this->ApiResponse(['message' => 'Match ended']);
+    }
+
 }

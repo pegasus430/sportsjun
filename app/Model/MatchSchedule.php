@@ -319,6 +319,61 @@ class MatchSchedule extends Model
         return $active_rubber;
     }
 
+    public function endMatch($match_result,$data)
+    {
+        $is_tie = ($match_result == 'tie') ? 1 : 0;
+        $is_washout = ($match_result == 'washout') ? 1 : 0;
+        $has_result     = ($is_washout == 1) ? 0 : 1;
+
+        $winner_team_id = NULL;
+        $looser_team_id = NULL;
+        $match_status = MatchSchedule::$STATUS_SCHEDULED;
+        $approved = '';
+        if ($is_tie == 0 || $is_washout == 0) {
+            if (isset($data['winner_team_id'])) {
+                $looser_team_id = ($data['winner_team_id']== $this->a_id)
+                    ? $this->b_id : $this->a_id;
+                $winner_team_id = $data['winner_team_id'];
+                $match_status = MatchSchedule::$STATUS_COMPLETED;
+                $approved = MatchSchedule::$APPROVED;
+            }
+        }
+
+        if ($this->tournament_id) {
+
+            $new_data = [
+                'winner_id'           => $winner_team_id,
+                'looser_id'           => $looser_team_id,
+                'is_tied'             => $is_tie,
+                'has_result'          => $has_result,
+                'match_result'        => $match_result,
+            ];
+
+
+            if (Helper::isTournamentOwner($this->tournament->manager_id, $this->tournament->parent_id) || \Auth::user()
+                                                                                                               ->isAdmin()
+            ) {
+                if (($is_tie == 1 || $match_result == "washout") && !empty($matchScheduleDetails['tournament_group_id'])) {
+                    $new_data['match_status'] = MatchSchedule::$STATUS_COMPLETED;
+                }
+                if (\Auth::user()->isAdmin()) {
+                    if ($is_tie == 1 || $match_result == "washout") {
+                        $new_data['match_status'] = MatchSchedule::$STATUS_COMPLETED;
+                        $new_data['scoring_status'] = self::$APPROVED;
+                    }
+                }
+                $this->fill($new_data);
+                if (!empty($matchScheduleDetails['tournament_round_number'])) {
+                    $this->updateBracketDetails();
+                }
+                if ($match_status == self::$STATUS_COMPLETED) {
+                    $this->insertPlayerStatistics();
+                    Helper::sendEmailPlayers($matchScheduleDetails,
+                        $this->match_type);
+                }
+            }
+        }
+    }
 
     //function to call sport statistics
 
