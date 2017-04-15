@@ -14,10 +14,21 @@ use App\Http\Controllers\Controller;
 
 class UserApiController extends BaseApiController
 {
+    /**
+     * User - list
+     * @return array
+     */
+
     public function index(){
         $users = User::select(['id','name'])->paginate(20);
         return self::ApiResponse($users);
     }
+
+    /**
+     * User - info
+     * @param $id
+     * @return array
+     */
 
     public function show($id)
     {

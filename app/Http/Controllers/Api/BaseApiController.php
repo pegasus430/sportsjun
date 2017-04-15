@@ -12,6 +12,11 @@ class BaseApiController extends Controller
 {
     static $COUNTER_KEY = 999;
 
+    /**
+     * @param Model|Builder $query
+     * @param array $fields
+     * @return mixed
+     */
     function applyFilter($query, $fields = [])
     {
         $data = \Request::all();
@@ -228,6 +233,7 @@ class BaseApiController extends Controller
 
     function routeNotFound($catchall)
     {
+        \Log::info('Api route not found - '.$catchall);
         return self::ApiResponse(['error' => 'route not found'], 404);
     }
 

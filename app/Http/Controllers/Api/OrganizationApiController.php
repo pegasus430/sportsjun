@@ -6,6 +6,11 @@ use App\Model\Organization;
 
 class OrganizationApiController extends BaseApiController
 {
+    /**
+     * Organization - list
+     * @return array
+     */
+
     public function index(){
         $organizations = Organization::
                     select([
@@ -32,6 +37,7 @@ class OrganizationApiController extends BaseApiController
             where('id',$id)
             ->with([
                 'groups' =>function($query){
+                    /** @var \Eloquent $query */
                     $query->select(['id','name','logo']);
                 }
             ])

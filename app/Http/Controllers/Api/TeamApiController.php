@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Model\Team;
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 
 class TeamApiController extends BaseApiController
 {
+    /**
+     * Team - list
+     * @return array
+     */
     public function index()
     {
         $teams = Team::select([
@@ -35,6 +35,12 @@ class TeamApiController extends BaseApiController
         ])->paginate(50);
         return self::ApiResponse($teams);
     }
+
+    /**
+     * Team - info
+     * @param $id
+     * @return array
+     */
 
     public function show($id)
     {

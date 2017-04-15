@@ -16,6 +16,7 @@ class ScoreApiController extends BaseApiController
     {
         $data = $request->all();
 
+        /** @var CricketOverwiseScore $score */
         $score = CricketOverwiseScore::firstOrCreate(
             [
                 'tournamet_id' => $data['Tournament_Id'],
@@ -48,6 +49,7 @@ class ScoreApiController extends BaseApiController
             $player = User::whereId($bowl_data['BatsMan_Id'])->first();
 
             if ($player) {
+                /** @var CricketPlayerMatchwiseStats $stats */
                 $stats = CricketPlayerMatchwiseStats::firstOrCreate(
                     [
                         'user_id' => $player->id,
