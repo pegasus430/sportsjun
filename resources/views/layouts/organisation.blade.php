@@ -13,12 +13,14 @@
     <title>{{$organisation->name}}: Sportsjun</title>
     <!-- CSS -->
 
-        <link href="/org/css/bootstrap.css" rel="stylesheet">
+    <link href="/css/bootstrap.css" rel="stylesheet">
+         
+
+
         <link href="/org/css/main.css" rel="stylesheet">
             <link href="/org/css/marketplace.css" rel="stylesheet"> 
-        <link href="/org/css/font-awesome.min.css" rel="stylesheet">
-        <link href="/org/css/bootstrap-select.css" rel="stylesheet">        
-     <link href="/org/css/bootstrap.slider.css" rel="stylesheet">
+        <link href="/org/css/font-awesome.min.css" rel="stylesheet">        
+     <link href="/org/css/bootstrap.slider.css" rel="stylesheet"> 
 
 
        <?php $js_version = config('constants.JS_VERSION');$css_version = config('constants.CSS_VERSION'); ?>
@@ -49,6 +51,7 @@
 
  
      @yield('styles')
+     <meta property="fb:app_id" content="{{ env('FACEBOOK_APP_ID') }}" />
 
        <script src="{{ asset('/js/jquery-2.1.1.min.js') }}?v=<?php echo $js_version;?>"></script>
     <script src="{{ asset('/js/jquery-ui.js') }}?v=<?php echo $js_version;?>"></script>
@@ -169,11 +172,8 @@
     </div>
     <div class="clearfix"></div>
     <hr> </footer>
-    <!-- jQuery --> 
 
-    <script src="/org/js/bootstrap.min.js"></script>
-    <script src="/org/js/w3data.js"></script>
-    <script src="/org/js/bootstrap-select.js"></script>
+
     <script type="text/javascript">
             var is_organization=true;
             var base_url = '';
@@ -203,10 +203,10 @@
 </script>
     @include ('layouts.footer_scripts')
     @yield('end_scripts')
+
         <script type="text/javascript" src='/org/js/scripts.js'></script>
     <script>
-        // HTML Include
-        w3IncludeHTML();
+
         // Page Active
         jQuery(function () {
             var page = location.pathname.split('/').pop();
@@ -254,6 +254,9 @@
             }, 3000);
         }
     </script>
+
+
+
 </body>
 
 </html>

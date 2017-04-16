@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends(Helper::check_if_org_template_enabled()?'layouts.organisation':'layouts.app') 
 @section('content')
 @include ('album._leftmenu')
 <script src="{{ asset('/js/fullcalendar.js') }}"></script>

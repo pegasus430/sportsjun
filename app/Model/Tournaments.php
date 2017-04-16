@@ -534,4 +534,29 @@ class Tournaments extends Model
     }
 
 
+    public function get_schedules($type='current(array)'){
+        $query =$this->hasMany('App\Model\MatchSchedule', 'tournament_id')->orderBy('match_start_date', 'match_start_time','desc');
+        switch ($type) {
+            case 'old':
+            $query->where('match_status','completed');
+                break;
+            case 'current':
+            $query->where('hasSetupSquad','1')->where('match_status','!=','completed');
+                break;
+
+            case 'next':
+            $query->where('hasSetupSquad','!=','1')->where('match_status','!=','completed');
+                break;            
+            default:
+                # code...
+                break;
+        }
+
+        return $query->get();
+
+    
+    }
+
+
+
 }
