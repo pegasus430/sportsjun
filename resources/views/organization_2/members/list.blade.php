@@ -50,7 +50,8 @@
                                                     <canvas id="canvas" class="circle" width="96" height="96"></canvas>
                                                 </div>
                                             </td>
-                                            <td> <a class="player-name" onclick="openNav({{$member->id}})">
+                                            <td> <!-- <a class="player-name" onclick="openNav({{$member->id}})"> -->
+                                            <a class="player-name" href="/viewsportsprofile/{{$member->id}}" >
                                                   {{$member->name}}
                                                 </a></td>
                                             <td>@foreach($member->userdetails as $team)  {{$team->team?$team->team->name:''}}, @endforeach</td>

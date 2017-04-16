@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends(Helper::check_if_org_template_enabled()?'layouts.organisation':'layouts.app') 
 @section('content')
 @include ('album._leftmenu')
 <div class="col-lg-10 col-md-10 col-sm-12 tournament_profile teamslist-pg" style="padding-top: 3px !important;">

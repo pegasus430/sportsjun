@@ -96,16 +96,26 @@ class OrganizationSchedulesController extends Controller
         $current_tournaments = $tquery->where('start_date','<',date('Y-m-d'))->where('end_date','>',date('Y-m-d'))->paginate(15);
 
 
-        $mquery = Tournaments::whereHas('tournamentParent', function ($query) use ($id) {
-            $query->where('organization_id', $id);
-        })->join('match_schedules','match_schedules.tournament_id','=','tournaments.id')
-          ->orderBy('match_start_date', 'match_start_time','desc');
+        function mquery($id){
+            return Tournaments::join('tournament_parent', 'tournament_parent.id','=','tournaments.tournament_parent_id')
+                ->where('organization_id', $id)
+                ->join('match_schedules','match_schedules.tournament_id','=','tournaments.id')
+              ->orderBy('match_start_date', 'match_start_time','desc')
+              ->select('tournaments.*')
+              ->groupBy('tournaments.id');
 
-        $old_schedules = $mquery->where('match_status','completed')->paginate(15);
-        $next_schedules = $mquery->where('match_start_date','=',date('Y-m-d'))->where('match_status','!=','completed')->paginate(15);
-        $current_schedules = $mquery->where('match_start_date','>',date('Y-m-d'))->paginate(15);
+          }
 
-    
+        $old_schedules = mquery($id);
+        $old_schedules = $old_schedules->where('match_status','completed')->paginate(15);
+
+        $next_schedules = mquery($id);
+        $next_schedules = $next_schedules->where('hasSetupSquad','!=','1')->where('match_status','!=','completed')->paginate(15);
+
+        $current_schedules = mquery($id);
+        $current_schedules = $current_schedules->where('hasSetupSquad','1')->where('match_status','!=','completed')->paginate(15);
+  
+
 
         /*
         $schedules = MatchSchedule::whereHas('tournament', function ($query) use ($id, $tournament_parent_ids) {
@@ -131,7 +141,7 @@ class OrganizationSchedulesController extends Controller
 
 
         return view($this->view.'.schedules.list',
-            compact('id', 'organization','next_tournaments','current_tournaments','old_tournaments', 'staffList', 'tournaments', 'filter_event','teamNames','userNames'),
+            compact('id', 'organization','next_tournaments','current_tournaments','old_tournaments', 'staffList', 'tournaments', 'filter_event','teamNames','userNames', 'old_schedules','next_schedules','current_schedules'),
             ['orgInfoObj'=>$organization]
         );
     }

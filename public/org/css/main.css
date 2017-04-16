@@ -1264,6 +1264,13 @@ div#staff_foot_info {
     transition: transform .3s ease-out;
 }
 
+body {
+padding-right:0px !important;
+margin-right:0px !important;
+}
+
+
+
 .modal-header {
     padding: 14px 30px 14px 30px;
     border-color: rgba(204, 204, 204, 0.2);
@@ -1723,12 +1730,12 @@ footer .social-icons-wrapper a.linkedin:focus {
 }
 
 #canvas {
-    -webkit-transition: opacity 0.075s;
+  /*  -webkit-transition: opacity 0.075s;
     -moz-transition: opacity 0.075s;
     -ms-transition: opacity 0.075s;
     -o-transition: opacity 0.075s;
     transition: opacity 0.075s;
-    opacity: 0.01;
+    opacity: 0.01;*/
 }
 
 .sr-table .player-name {
