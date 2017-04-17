@@ -24,61 +24,7 @@
                         <div class="tabbable-line">
                             <ul class="nav nav-tabs ">
                      
-                                    <form action="/tournaments" class="form create-form clearfix" method="post" enctype="multipart/form-data">
-                                        <div class="input-container one-col">
-                                            <input type="text" id="tournament_name" required="required" name="name">
-                                            <label for="tournament_name">Team Name <span class="req">&#42;</span></label>
-                                            <div class="bar"></div>
-                                        </div>
-                                        {!! csrf_field() !!}
-                                        <div class="input-container one-col file nomgbtm">
-                                            <label>Group Logo</label>
-                                            <input type="file" id="staff_email" required="" name="filelist_photos"> </div>
-                                        
-                                        <div class="input-container two-col">
-                                            <input type="text" id="contact_number" required="required" name="contact_number">
-                                            <label for="contact_number">Contact Number <span class="req">&#42;</span></label>
-                                            <div class="bar"></div>
-                                     </div>
-                                        <input type="hidden" name="organization_id" value="{{$organisation->id}}">
-                                        <input type="hidden" name="isParent" value="yes">
-                                        <input type="hidden" name="from_organization" value="yes">
-
-                                         <div class="input-container two-col">
-                                            <input type="text" id="alternate_number" name="alternate_contact_number">
-                                            <label for="alternate_number">Alternate Number</label>
-                                            <div class="bar"></div>
-                                        </div>
-                                        <div class="input-container two-col select">
-                                           
-                                            <label for="manager_name">Manager Name <span class="req">&#42;</span></label>
-                                            <select name="managerId">
-                                            	@foreach($organisation->staff as $staff)
-                                            		<option value="{{$staff->id}}"> {{$staff->name}}</option>
-                                            	@endforeach
-                                            </select>
-                                            <div class="bar"></div>
-                                        </div>
-                                        <div class="input-container two-col">
-                                            <input type="text" id="email" required="required" name="email">
-                                            <label for="email">Email <span class="req">&#42;</span></label>
-                                            <div class="bar"></div>
-                                        </div>
-                                        <div class="input-container select one-col">
-                                            <label>Description</label>
-                                            <div>
-                                                <textarea class="textarea" style="resize:none" rows="3" name="description" cols="50" maxlength="250"></textarea>
-                                                <div class="characterLeft"><span class="characterLefts">250 </span> characters left</div>
-                                            </div>
-                                        </div>
-                                        <div class="text-center">
-                                            <button type="submit" class="btn btn-primary">Create</button>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="tab-pane" id="tournament_events">
-                                    <div class="text-center">Firsly, add tournament details, and then you'll be able to add tournament events.</div>
-                                </div>
+                                @include('organization_2.teams.createteam')
                             </div>
                         </div>
                     </div>

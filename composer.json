@@ -25,7 +25,8 @@
         "barryvdh/laravel-dompdf": "^0.7.0",
         "intervention/image": "2.3.8",
         "thujohn/twitter": "~2.0",
-        "illuminate/html": "5.*"
+        "illuminate/html": "5.*",
+        "darryldecode/cart": "~2.0"
            },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

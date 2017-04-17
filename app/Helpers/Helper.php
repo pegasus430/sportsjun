@@ -34,6 +34,7 @@ use View;
 use Carbon\Carbon;
 use Route;
 use PDO;
+use Session;
 use App\Helpers\SendMail;
 use App\Model\TournamentGroupTeams;
 use App\Model\TournamentFinalTeams;
@@ -41,6 +42,7 @@ use App\Model\OrganizationGroupTeamPoint;
 use App\Model\ArcheryStatistic;
 use App\Model\ArcheryTeamStats;
 use App\Model\ArcheryArrowStats;
+use App\Model\BasicSettings;
 class Helper
 {
 
@@ -2744,7 +2746,6 @@ class Helper
         return $team;
     }
 
-
     public static function fillArrayMissingFields($array, $fields = [], $value = NULL){
         foreach ($fields as $field){
            if(!isset($array[$field]))
@@ -2752,5 +2753,26 @@ class Helper
         }
         return $array;
     }
+
+    public static function check_if_org_template_enabled(){
+        $response = false; 
+
+
+          $allow_newtemplate_setting  = BasicSettings::where('name', 'organization_new_template')->first();
+          if($allow_newtemplate_setting && $allow_newtemplate_setting->description=='1'){
+             $new_template=true;
+          }
+          else {
+            return false;
+          }
+
+          if(Auth::user()->type==1 && count(Auth::user()->organizations)){
+             $organization = Auth::user()->organizations[0];
+             session::put('organization_id',$organization->id);
+             return true;
+          }
+          else return false;
+    }
+    
 }
 

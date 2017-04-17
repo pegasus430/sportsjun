@@ -1,10 +1,11 @@
 <script>
     var data_token = CSRF_TOKEN = "{{csrf_token()}}";
-</script>
+</script> 
 
 
 <?php $js_version = config('constants.JS_VERSION');$css_version = config('constants.CSS_VERSION'); ?>
-
+<script src="{{ asset('/js/jquery-ui.min.js') }}?v=<?php echo $js_version;?>"></script>
+<script src="{{ asset('/js/bootstrap.min.js') }}?v=<?php echo $js_version;?>"></script>
 <script src="{{ asset('/js/moment.js') }}?v=<?php echo $js_version;?>"></script>
 <script src="{{ asset('/js/bootstrap-rating/bootstrap-rating.js') }}?v=<?php echo $js_version;?>"></script>
 <script src="{{ asset('/js/bootstrap-datepicker.min.js') }}?v=<?php echo $js_version;?>"></script>

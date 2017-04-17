@@ -36,16 +36,16 @@
                                 </ul>
                                 <div class="tab-content">
                                     <div class="tab-pane" id="page_past">
-                                         @foreach($old_tournaments as $nt)
+                                         @foreach($old_schedules as $nt)
                                         <div class="schedule_teams clearfix">
                                             <div class="col-md-2 col-sm-3 col-xs-12 text-center">
                                                 <div class="glyphicon-lg default-img"></div>
                                             </div>
                                             <div class="col-md-10 col-sm-9 col-xs-12">
                                                 <div class="t_tltle">
-                                                    <h4><a href="/gettournamentdetails/95" id="touname_95">{{$nt}}</a></h4>
+                                                    <h4><a href="/gettournamentdetails/{{$nt->id}}" id="touname_95">{{$nt->name}}</a></h4>
                                                     <ul class="t_tags">
-                                                        <li> Matches: <span class="green">{{$nt->matches->count()}}</span> </li>
+                                                        <li> Matches: <span class="green">{{$nt->get_schedules('old')->count()}}</span> </li>
                                                         <li><a href="#" class="downlowd_url"><i class="fa fa-download"></i> Download Schedule</a> </li>
                                                     </ul>
                                                 </div>
@@ -54,16 +54,16 @@
                                        @endforeach
                                     </div>
                                     <div class="tab-pane active" id="page_ongoing">
-                                          @foreach($current_tournaments as $nt)
+                                           @foreach($current_schedules as $nt)
                                         <div class="schedule_teams clearfix">
                                             <div class="col-md-2 col-sm-3 col-xs-12 text-center">
                                                 <div class="glyphicon-lg default-img"></div>
                                             </div>
                                             <div class="col-md-10 col-sm-9 col-xs-12">
                                                 <div class="t_tltle">
-                                                    <h4><a href="/gettournamentdetails/95" id="touname_95">{{$nt}}</a></h4>
+                                                    <h4><a href="/gettournamentdetails/{{$nt->id}}" id="touname_{{$nt->id}}">{{$nt->name}}</a></h4>
                                                     <ul class="t_tags">
-                                                        <li> Matches: <span class="green">{{$nt->matches->count()}}</span> </li>
+                                                        <li> Matches: <span class="green">{{$nt->get_schedules('current')->count()}}</span> </li>
                                                         <li><a href="#" class="downlowd_url"><i class="fa fa-download"></i> Download Schedule</a> </li>
                                                     </ul>
                                                 </div>
@@ -72,16 +72,16 @@
                                        @endforeach
                                     </div>
                                     <div class="tab-pane" id="page_upcoming">
-                                        @foreach($next_tournaments as $nt)
+                                         @foreach($next_schedules as $nt)
                                         <div class="schedule_teams clearfix">
                                             <div class="col-md-2 col-sm-3 col-xs-12 text-center">
                                                 <div class="glyphicon-lg default-img"></div>
                                             </div>
                                             <div class="col-md-10 col-sm-9 col-xs-12">
                                                 <div class="t_tltle">
-                                                    <h4><a href="/gettournamentdetails/95" id="touname_95">{{$nt->name}}</a></h4>
+                                                    <h4><a href="/gettournamentdetails/{{$nt->id}}" id="touname_{{$nt->id}}">{{$nt->name}}</a></h4>
                                                     <ul class="t_tags">
-                                                        <li> Matches: <span class="green">{{$nt->matches->count()}}</span> </li>
+                                                        <li> Matches: <span class="green">{!!$nt->get_schedules('next')->count()!!}</span> </li>
                                                         <li><a href="#" class="downlowd_url"><i class="fa fa-download"></i> Download Schedule</a> </li>
                                                     </ul>
                                                 </div>
@@ -96,9 +96,7 @@
                 </div>
             </div>
         </div>
-        <!-- Footer -->
-        <div data-include="footer"></div>
-    </div>
+
     <div class="modal fade" id="ongoing_games" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -119,100 +117,79 @@
                                 </ul>
                                 <div class="tab-content">
                                     <div class="tab-pane" id="popup_past">
+                                            @foreach($old_schedules as $nt)
+                                            <center>  <h4><a href="/gettournamentdetails/{{$nt->id}}">{{strtoupper($nt->name)}}</a></h4> </center>
+                                            @foreach($nt->get_schedules('old') as $sc)
                                         <div class="row fixture-team-inner clearfix">
-                                            <div class="col-xs-4 col-sm-4 text-center"><img width="40" src="images/nations-flags/barcelona-sm.png" alt="Barcelona">
-                                                <h4>Barcelona</h4></div>
+                                            <div class="col-xs-4 col-sm-4 text-center"><img width="40" src="{{$sc->getSideALogoAttribute()}}" alt="{{count($sc->getSideAAttribute())?$sc->getSideAAttribute()->name:''}}">
+                                                <h4>{{count($sc->getSideAAttribute())?$sc->getSideAAttribute()->name:''}}</h4></div>
                                             <div class="col-xs-4 col-sm-4 status text-center">
                                                 <p class="time">12:00 PM</p>
-                                                <p><strong>20th Feb 2017</strong></p>
-                                                <p><strong>Basketball</strong></p>
-                                                <p>ISB, Gachibowli, Hyderabad.</p>
+                                                <p><strong>{{date('jS M Y', strtotime($sc->match_start_date))}}</strong></p>
+                                                <p><strong>{{$sc->sport->sports_name}}</strong></p>
+                                                <p>{{$sc->address}}</p>
                                                 <p>Scores: 12 - 20</p>
                                                 <p>Winners: The Hurricanes</p>
                                             </div>
-                                            <div class="col-xs-4 col-sm-4 text-center"><img width="40" src="images/nations-flags/atletico-sm.png" alt="Atlético Madrid">
-                                                <h4>Atlético Madrid</h4></div>
+                                            <div class="col-xs-4 col-sm-4 text-center"><img width="40" src="images/nations-flags/atletico-sm.png" alt="{{count($sc->getSideBAttribute())?$sc->getSideBAttribute()->name:''}}">
+                                                <h4>{{count($sc->getSideBAttribute())?$sc->getSideBAttribute()->name:''}}</h4></div>
                                         </div>
-                                        <div class="row fixture-team-inner clearfix">
-                                            <div class="col-xs-4 col-sm-4 text-center"><img width="40" src="images/nations-flags/barcelona-sm.png" alt="Barcelona">
-                                                <h4>Barcelona</h4></div>
-                                            <div class="col-xs-4 col-sm-4 status text-center">
-                                                <p class="time">12:00 PM</p>
-                                                <p><strong>20th Feb 2017</strong></p>
-                                                <p><strong>Basketball</strong></p>
-                                                <p>ISB, Gachibowli, Hyderabad.</p>
-                                                <p>Scores: 12 - 20</p>
-                                                <p>Winners: The Hurricanes</p>
-                                            </div>
-                                            <div class="col-xs-4 col-sm-4 text-center"><img width="40" src="images/nations-flags/atletico-sm.png" alt="Atlético Madrid">
-                                                <h4>Atlético Madrid</h4></div>
-                                        </div>
+                                            @endforeach
+                                       @endforeach
                                     </div>
                                     <div class="tab-pane active" id="popup_ongoing">
+                                            @foreach($current_schedules as $nt)
+                                            <center>  <h4><a href="/gettournamentdetails/{{$nt->id}}">{{strtoupper($nt->name)}}</a></h4> </center>
+                                            @foreach($nt->get_schedules('current') as $sc)
                                         <div class="row fixture-team-inner clearfix">
-                                            <div class="col-xs-4 col-sm-4 text-center"><img width="40" src="images/nations-flags/barcelona-sm.png" alt="Barcelona">
-                                                <h4>Barcelona</h4></div>
+                                            <div class="col-xs-4 col-sm-4 text-center"><img width="40" src="{{$sc->getSideALogoAttribute()}}" alt="{{count($sc->getSideAAttribute())?$sc->getSideAAttribute()->name:''}}">
+                                                <h4>{{count($sc->getSideAAttribute())?$sc->getSideAAttribute()->name:''}}</h4></div>
                                             <div class="col-xs-4 col-sm-4 status text-center">
                                                 <p class="time">12:00 PM</p>
-                                                <p><strong>20th Feb 2017</strong></p>
-                                                <p><strong>Basketball</strong></p>
-                                                <p>ISB, Gachibowli, Hyderabad.</p>
+                                                <p><strong>{{date('jS M Y', strtotime($sc->match_start_date))}}</strong></p>
+                                                <p><strong>{{$sc->sport->sports_name}}</strong></p>
+                                                <p>{{$sc->address}}</p>
                                                 <p>Scores: 12 - 20</p>
                                                 <p>Winners: The Hurricanes</p>
                                             </div>
-                                            <div class="col-xs-4 col-sm-4 text-center"><img width="40" src="images/nations-flags/atletico-sm.png" alt="Atlético Madrid">
-                                                <h4>Atlético Madrid</h4></div>
+                                            <div class="col-xs-4 col-sm-4 text-center"><img width="40" src="images/nations-flags/atletico-sm.png" alt="{{count($sc->getSideBAttribute())?$sc->getSideBAttribute()->name:''}}">
+                                                <h4>{{count($sc->getSideBAttribute())?$sc->getSideBAttribute()->name:''}}</h4></div>
                                         </div>
-                                        <div class="row fixture-team-inner clearfix">
-                                            <div class="col-xs-4 col-sm-4 text-center"><img width="40" src="images/nations-flags/barcelona-sm.png" alt="Barcelona">
-                                                <h4>Barcelona</h4></div>
-                                            <div class="col-xs-4 col-sm-4 status text-center">
-                                                <p class="time">12:00 PM</p>
-                                                <p><strong>20th Feb 2017</strong></p>
-                                                <p><strong>Basketball</strong></p>
-                                                <p>ISB, Gachibowli, Hyderabad.</p>
-                                                <p>Scores: 12 - 20</p>
-                                                <p>Winners: The Hurricanes</p>
-                                            </div>
-                                            <div class="col-xs-4 col-sm-4 text-center"><img width="40" src="images/nations-flags/atletico-sm.png" alt="Atlético Madrid">
-                                                <h4>Atlético Madrid</h4></div>
-                                        </div>
+                                            @endforeach
+                                       @endforeach
                                     </div>
                                     <div class="tab-pane" id="popup_upcoming">
+
+                                        @foreach($next_schedules as $nt)
+                                            <center>  <h4><a href="/gettournamentdetails/{{$nt->id}}">{{strtoupper($nt->name)}}</a></h4> </center>
+                                            @foreach($nt->get_schedules('next') as $sc)
                                         <div class="row fixture-team-inner clearfix">
-                                            <div class="col-xs-4 col-sm-4 text-center"><img width="40" src="images/nations-flags/barcelona-sm.png" alt="Barcelona">
-                                                <h4>Barcelona</h4></div>
+                                            <div class="col-xs-4 col-sm-4 text-center"><img width="40" src="{{$sc->getSideALogoAttribute()}}" alt="{{count($sc->getSideAAttribute())?$sc->getSideAAttribute()->name:''}}">
+                                                <h4>{{count($sc->getSideAAttribute())?$sc->getSideAAttribute()->name:''}}</h4></div>
                                             <div class="col-xs-4 col-sm-4 status text-center">
                                                 <p class="time">12:00 PM</p>
-                                                <p><strong>20th Feb 2017</strong></p>
-                                                <p><strong>Basketball</strong></p>
-                                                <p>ISB, Gachibowli, Hyderabad.</p>
+                                                <p><strong>{{date('jS M Y', strtotime($sc->match_start_date))}}</strong></p>
+                                                <p><strong>{{$sc->sport->sports_name}}</strong></p>
+                                                <p>{{$sc->address}}</p>
                                                 <p>Scores: 12 - 20</p>
                                                 <p>Winners: The Hurricanes</p>
                                             </div>
-                                            <div class="col-xs-4 col-sm-4 text-center"><img width="40" src="images/nations-flags/atletico-sm.png" alt="Atlético Madrid">
-                                                <h4>Atlético Madrid</h4></div>
+                                            <div class="col-xs-4 col-sm-4 text-center"><img width="40" src="images/nations-flags/atletico-sm.png" alt="{{count($sc->getSideBAttribute())?$sc->getSideBAttribute()->name:''}}">
+                                                <h4>{{count($sc->getSideBAttribute())?$sc->getSideBAttribute()->name:''}}</h4></div>
                                         </div>
-                                        <div class="row fixture-team-inner clearfix">
-                                            <div class="col-xs-4 col-sm-4 text-center"><img width="40" src="images/nations-flags/barcelona-sm.png" alt="Barcelona">
-                                                <h4>Barcelona</h4></div>
-                                            <div class="col-xs-4 col-sm-4 status text-center">
-                                                <p class="time">12:00 PM</p>
-                                                <p><strong>20th Feb 2017</strong></p>
-                                                <p><strong>Basketball</strong></p>
-                                                <p>ISB, Gachibowli, Hyderabad.</p>
-                                                <p>Scores: 12 - 20</p>
-                                                <p>Winners: The Hurricanes</p>
-                                            </div>
-                                            <div class="col-xs-4 col-sm-4 text-center"><img width="40" src="images/nations-flags/atletico-sm.png" alt="Atlético Madrid">
-                                                <h4>Atlético Madrid</h4></div>
-                                        </div>
+                                            @endforeach
+                                       @endforeach
+                                     
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+        </div>
+    </div>
+</div>
+
           
 
 @stop

@@ -1,4 +1,4 @@
-@extends(Auth::user() ? 'layouts.app' : 'home.layout')
+@extends(Auth::user() ? (Helper::check_if_org_template_enabled()?'layouts.organisation':'layouts.app') : 'home.layout')
 @section('content')
 @include ('tournaments._leftmenu')
 

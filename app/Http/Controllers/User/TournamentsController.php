@@ -61,6 +61,8 @@ use App\Model\ArcheryStatistic;
 use App\Model\ArcheryPlayerStats;
 use App\Model\ArcheryTeamStats;
 
+use Illuminate\Http\Request as ObjRequest;
+
 
 class TournamentsController extends Controller
 {
@@ -69,6 +71,27 @@ class TournamentsController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
+
+	public function __construct( objrequest $request){
+		$this->is_org_owner = Auth::user()->type;
+		$this->is_owner = false;
+		$this->layout = 'tournaments';
+		$id = $request->route()->parameter('id');
+
+		if($this->is_org_owner==1){
+			 $this->organization = Auth::user()->organizations[0];
+			 $this->org_tournaments = $this->organization->parent_tournaments->lists('id')->toArray();
+			 $this->org_events = $this->organization->tournaments->lists('id')->toArray();
+
+			 if(in_array($id, [$this->org_tournaments])){
+			 	$this->is_owner = true;
+			 	$this->layout='organization_2.tournament';
+			 }
+
+		}
+
+	}
+
 	public function index($id = '') {
 
 
@@ -589,7 +612,11 @@ class TournamentsController extends Controller
 		$request['alternate_contact_number'] = !empty($request['alternate_contact_number'])?$request['alternate_contact_number']:'';
 		$request['email'] = !empty($request['email'])?$request['email']:'';
 		$request['description'] = !empty($request['description'])?$request['description']:'';
-		$request['manager_id'] = !empty($request['managerId'])?$request['managerId']:'';
+		$request['old_manager_id'] = !empty($request['managerId'])?$request['managerId']:'';
+		$request['manager_id'] = !empty($request['manager_id'])?$request['manager_id']:$request['old_manager_id'];
+
+
+
 
 		$TournamentParent = TournamentParent::create($request->all());
 
@@ -631,7 +658,7 @@ class TournamentsController extends Controller
 
 		if($request->has('logo')){
 			$str = str_random(10).$request->file('logo')->getClientOriginalExtension();
-			$request->file('logo')->move(public_path().'/uploads/organization/', $str);
+			$request->file('logo')->move(public_path().'/uploads/'.config('constants.PHOTO_PATH.TOURNAMENT').'/', $str);
 			TournamentParent::where('id', $last_inserted_sport_id)->update(['logo' => $str]);
 
 		}
@@ -839,9 +866,11 @@ class TournamentsController extends Controller
 	public function updateParentTournament($request,$id)
 	{
 		
+
 		$manager_id = TournamentParent::where('id', $id)->pluck('manager_id');
 		//$request = Request::all();
-		$request['manager_id'] = !empty($request['managerId'])?$request['managerId']:$manager_id;
+		$request['old_manager_id'] = !empty($request['managerId'])?$request['managerId']:$manager_id;
+		$request['manager_id'] = !empty($request['manager_id'])?$request['manager_id']:$request['old_manager_id'];
 
         /** @var TournamentParent $tournamentParent */
         $tournamentParent = TournamentParent::findOrFail($id);
@@ -872,6 +901,14 @@ class TournamentsController extends Controller
 			{
 				TournamentParent::where('id', $id)->update(['logo' => $l['url']]);
 			}
+
+
+		}
+
+		if($request->has('logo')){
+			$str = str_random(10).$request->file('logo')->getClientOriginalExtension();
+			$request->file('logo')->move(public_path().'/uploads/'.config('constants.PHOTO_PATH.TOURNAMENT').'/', $str);
+			TournamentParent::where('id', $last_inserted_sport_id)->update(['logo' => $str]);
 
 		}
 		return redirect()->back()->with('status', trans('message.tournament.update'));
@@ -992,9 +1029,18 @@ class TournamentsController extends Controller
         $vendorBankAccounts = VendorBankAccounts::where('user_id',$loginUserId)->get();
         $disclaimer_content = BasicSettings::where('id',1)->value('description');
 
+        if($this->is_org_owner==1){		
+
+			 if(in_array($id, $this->org_tournaments)){
+			 	$this->is_owner = true;
+			 	$this->layout='organization_2.tournament';
+			 	view()->share('organisation', $this->organization);
+			 }
+
+		}
        
 
-        return view('tournaments.tournamentsedit',
+        return view($this->layout.'.tournamentsedit',
             compact('tournament'))->with([
             'sports'              => ['' => 'Select Sport'] + $sports,
             'id'                  => $id,
