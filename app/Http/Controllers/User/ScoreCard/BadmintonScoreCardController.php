@@ -956,7 +956,7 @@ class BadmintonScoreCardController extends parentScoreCardController
                             'match_result'   => $match_result,
                             'score_added_by' => $json_score_status]);
                         if (!empty($matchScheduleDetails['tournament_round_number'])) {
-                            $this->updateBracketDetails($match_model, $tournamentDetails, $winner_team_id);
+                            $matchScheduleDetails->updateBracketDetails();
                         }
                         if ($match_status == 'completed') {
 
@@ -988,7 +988,7 @@ class BadmintonScoreCardController extends parentScoreCardController
                                 'score_added_by' => $json_score_status]);
 
                             if (!empty($matchScheduleDetails['tournament_round_number'])) {
-                                $this->updateBracketDetails($match_model, $tournamentDetails, $winner_team_id);
+                                $matchScheduleDetails->updateBracketDetails();
                             }
 
                             $sportName = Sport::where('id', $match_model->sports_id)->pluck('sports_name');
@@ -1047,7 +1047,7 @@ class BadmintonScoreCardController extends parentScoreCardController
 
 
                         if (!empty($matchScheduleDetails['tournament_round_number'])) {
-                            $this->updateBracketDetails($match_model, $tournamentDetails, $winner_team_id);
+                            $matchScheduleDetails->updateBracketDetails();
                         }
 
                         $sportName = Sport::where('id', $match_model->sports_id)->pluck('sports_name');
@@ -1170,7 +1170,7 @@ class BadmintonScoreCardController extends parentScoreCardController
             'score_added_by' => $json_score_status]);
 
         if (!empty($match_model->tournament_round_number)) {
-            $this->updateBracketDetails($match_model, $tournamentDetails, $winner_team_id);
+            $match_model->updateBracketDetails();
         }
 
         $sportName = Sport::where('id', $match_model->sports_id)->pluck('sports_name');
