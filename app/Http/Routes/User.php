@@ -638,7 +638,7 @@ Route::post('match/addPlayertoTeam', [
 ]);
 Route::post('match/insertAndUpdateSoccerCard', [
     'as' 	=> 'match/insertAndUpdateSoccerCard',
-    'uses' 	=> 'User\ScoreCardController@insertAndUpdateSoccerScoreCard'
+    'uses' 	=> 'User\ScoreCard\SoccerScoreCardController@insertAndUpdateSoccerScoreCard'
 ]);
 Route::post('match/insertAndUpdateHockeyCard', [
     'as'    => 'match/insertAndUpdateHockeyCard',

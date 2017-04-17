@@ -66,7 +66,7 @@ Route::group(['prefix' => 'viewpublic'], function () {
     // Routes for match details loaded with ajax
 
     Route::get('/match/getBadmintonDetails', 'User\ScoreCard\BadmintonScoreCardController@getBadmintonDetails');
-    Route::get('/match/getSoccerDetails', 'User\ScoreCardController@getSoccerDetails');
+    Route::get('/match/getSoccerDetails', 'User\Scorecard\SoccerScoreCardController@getSoccerDetails');
 
     //Route::get('organization/{slug}','User\TeamController@getorgDetails');
     Route::get('organization/{id}', 'User\TeamController@getorgDetails');
