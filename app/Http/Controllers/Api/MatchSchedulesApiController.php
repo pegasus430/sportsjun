@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Model\CricketPlayerMatchwiseStats;
 use App\Model\MatchSchedule;
+use App\Model\Sport;
 use App\User;
 
 

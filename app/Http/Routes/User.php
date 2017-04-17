@@ -617,11 +617,11 @@ Route::post('match/insertTennisScoreCard', [
 ]);
 Route::post('match/insertTableTennisScoreCard', [
     'as'   => 'match/insertTableTennisScoreCard',
-    'uses' => 'User\ScoreCardController@insertTableTennisScoreCard',
+    'uses' => 'User\ScoreCard\TabletennisScoreCardController@insertTableTennisScoreCard',
 ]);
 Route::post('match/insertCricketScoreCard', [
     'as'   => 'match/insertCricketScoreCard',
-    'uses' => 'User\ScoreCardController@insertCricketScoreCard',
+    'uses' => 'User\ScoreCard\CricketScoreCardController@insertCricketScoreCard',
 ]);
 Route::get('match/getplayers', [
     'as'   => 'match/getplayers',
