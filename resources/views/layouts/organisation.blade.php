@@ -51,6 +51,12 @@
 
  
      @yield('styles')
+
+     <style type="text/css">
+            .glyphicon-lg img{
+                    border-radius: 50%;
+            }
+     </style>
      <meta property="fb:app_id" content="{{ env('FACEBOOK_APP_ID') }}" />
 
        <script src="{{ asset('/js/jquery-2.1.1.min.js') }}?v=<?php echo $js_version;?>"></script>
@@ -70,7 +76,13 @@
        <div class="container">
     <div class="row">
         <div class="col-md-2">
-            <div class="glyphicon-lg default-img" style="width: 100px; height: 100px;"></div>
+           
+         
+            <div class="glyphicon-lg " style="width: 100px; height: 100px;  ">
+                <a href="/" >   {!! Helper::makeImageHtml($organisation->logoImage,array('height'=>100,'width'=>100) )!!} </a>
+            </div>
+   
+            
             <!--<img src="http://placehold.it/110x110/6a737b/ffffff" class="img-circle"> --></div>
         <div class="col-md-7">
             <h1>{{$organisation->name}}</h1>
@@ -78,7 +90,7 @@
         </div>
         <div class="col-md-3">
         <ul class="nav navbar-nav navbar-right">
-                <li><a href="/organization/{{$organisation->id}}"><span class="fa fa-home"></span></a></li>
+                <li><a href="{{Auth::user()->type=='1'?"/organization/$organisation->id":'/'}}><span class="fa fa-home"></span></a></li>
                 <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-user"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="#"><span class="fa fa-user-circle-o"></span> User Profile</a></li>

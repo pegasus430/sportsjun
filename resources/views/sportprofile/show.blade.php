@@ -1,4 +1,4 @@
-@extends(Helper::check_if_org_template_enabled()?'layouts.organisation':'layouts.app') : 'home.layout')
+@extends(Auth::check()?(Helper::check_if_org_template_enabled()?'layouts.organisation':'layouts.app') : 'home.layout')
 
 @section('content')
     <!--<div class="container">

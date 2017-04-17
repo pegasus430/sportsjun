@@ -1,4 +1,4 @@
-@extends(Auth::user() || (isset($is_widget) && $is_widget) ? 'layouts.app' : 'home.layout')
+@extends(Auth::user() || (isset($is_widget) && $is_widget) ? (Helper::check_if_org_template_enabled()?'layouts.organisation':'layouts.app') : 'home.layout')
 @section('content')
     @if (Auth::user() || (isset($is_widget) && $is_widget))
             @include ('teams.orgleftmenu')
