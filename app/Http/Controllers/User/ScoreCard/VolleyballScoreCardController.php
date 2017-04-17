@@ -493,7 +493,7 @@ class VolleyballscoreCardController extends parentScoreCardController
 //                                Helper::printQueries();
 
                     if(!empty($matchScheduleDetails['tournament_round_number'])) {
-                        $this->updateBracketDetails($matchScheduleDetails,$tournamentDetails,$winner_team_id);
+                        $matchScheduleDetails->updateBracketDetails();
                     }
                     if($match_status=='completed')
                     {

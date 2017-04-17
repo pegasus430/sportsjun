@@ -21,8 +21,6 @@ use App\Model\TennisStatistic;
 use App\Model\TournamentGroupTeams;
 use App\Model\Tournaments;
 use App\Model\TtPlayerMatchScore;
-use App\Model\TtPlayerRubberScore;
-use App\Model\TtStatistic;
 use App\User;
 use Auth;
 use Carbon\Carbon;
@@ -31,12 +29,6 @@ use Request;
 use Response;
 use ScoreCard as ScoreCardHelper;
 use Session;
-
-//soccer
-//badminton
-//hockey
-//squash
-//Basketball
 
 class ScoreCardController extends Controller {
 	//function to create score card
@@ -66,7 +58,7 @@ class ScoreCardController extends Controller {
 						'winner_id'=>$match_data[0]['a_id'] ]);
 
 					if(!empty($matchScheduleDetails['tournament_round_number'])) {
-						$this->updateBracketDetails($matchScheduleDetails,$tournamentDetails,$match_data[0]['a_id']);
+                        $matchScheduleDetails->updateBracketDetails();
 					}
 
 				}
@@ -586,7 +578,7 @@ class ScoreCardController extends Controller {
 // //                                Helper::printQueries();
 
 // 					if(!empty($matchScheduleDetails['tournament_round_number'])) {
-// 						$this->updateBracketDetails($matchScheduleDetails,$tournamentDetails,$winner_team_id);
+// 						$matchScheduleDetails->updateBracketDetails();
 // 					}
 // 					if($match_status=='completed')
 // 					{
@@ -652,7 +644,7 @@ class ScoreCardController extends Controller {
                           'match_result'   => $match_result,
                         'score_added_by'=>$json_score_status]);
                     if(!empty($matchScheduleDetails['tournament_round_number'])) {
-                        $this->updateBracketDetails($match_model,$tournamentDetails,$winner_team_id);
+                        $matchScheduleDetails->updateBracketDetails();
                     }
                      if($match_status=='completed')            {
 
@@ -685,7 +677,7 @@ class ScoreCardController extends Controller {
                                     'score_added_by'=>$json_score_status]);
 
                     if(!empty($matchScheduleDetails['tournament_round_number'])) {
-                        $this->updateBracketDetails($match_model,$tournamentDetails,$winner_team_id);
+                        $matchScheduleDetails->updateBracketDetails();
                     }
                      
                         $sportName = Sport::where('id',$match_model->sports_id)->pluck('sports_name');
@@ -741,7 +733,7 @@ class ScoreCardController extends Controller {
 
                        
                         if(!empty($matchScheduleDetails['tournament_round_number'])) {
-                            $this->updateBracketDetails($match_model,$tournamentDetails,$winner_team_id);
+                            $matchScheduleDetails->updateBracketDetails();
                         }
                      
                         $sportName = Sport::where('id',$match_model->sports_id)->pluck('sports_name');
@@ -908,66 +900,6 @@ class ScoreCardController extends Controller {
 
 	}
 
-	//function to insert tennis statitistics
-	public function tableTennisStatisticsOld($player_ids_array,$match_type,$is_win='')
-	{
-		//$player_ids_array = explode(',',$player_ids);
-		foreach($player_ids_array as $user_id)
-		{
-			$double_faults_count = '';
-
-			$player_match_details = TtPlayerMatchScore::selectRaw('sum(double_faults) as double_faults_count')->where('user_id_a',$user_id)->groupBy('user_id_a')->get();
-
-			if($match_type=='singles')
-			{
-				$double_faults_count = (!empty($player_match_details[0]['double_faults_count']))?$player_match_details[0]['double_faults_count']:'';
-			}
-
-			//check already user id exists or not
-			$tennis_statistics_array = array();
-			$tennisStatistics = TtStatistic::select()->where('user_id',$user_id)->where('match_type',$match_type)->get();
-			if(count($tennisStatistics)>0)
-			{
-				$tennis_statistics_array = $tennisStatistics->toArray();
-				$matches = !empty($tennis_statistics_array[0]['matches'])?$tennis_statistics_array[0]['matches']:0;
-				$won = !empty($tennis_statistics_array[0]['won'])?$tennis_statistics_array[0]['won']:0;
-				$lost = !empty($tennis_statistics_array[0]['lost'])?$tennis_statistics_array[0]['lost']:0;
-				TtStatistic::where('user_id',$user_id)->where('match_type',$match_type)->update(['matches'=>$matches+1,'double_faults'=>$double_faults_count]);
-				if($is_win=='yes') //win count
-				{
-					$won_percentage = number_format((($won+1)/($matches+1))*100,2);
-					TtStatistic::where('user_id',$user_id)->where('match_type',$match_type)->update(['won'=>$won+1,'won_percentage'=>$won_percentage]);
-
-				}else if($is_win=='no')//loss count
-				{
-					TtStatistic::where('user_id',$user_id)->where('match_type',$match_type)->update(['lost'=>$lost+1]);
-				}
-			}else
-			{
-				$won='';
-				$won_percentage='';
-				$lost='';
-				if($is_win=='yes') //win count
-				{
-					$won = 1;
-					$won_percentage = number_format(100,2);
-				}else if($is_win=='no') //lost count
-				{
-					$lost=1;
-				}
-				$tennisStatisticsModel = new TtStatistic();
-				$tennisStatisticsModel->user_id = $user_id;
-				$tennisStatisticsModel->match_type = $match_type;
-				$tennisStatisticsModel->matches = 1;
-				$tennisStatisticsModel->won_percentage = $won_percentage;
-				$tennisStatisticsModel->won = $won;
-				$tennisStatisticsModel->lost = $lost;
-				$tennisStatisticsModel->double_faults = $double_faults_count;
-				$tennisStatisticsModel->save();
-			}
-		}
-
-	}
 
 	//function to get player names
 	public function getplayers()
