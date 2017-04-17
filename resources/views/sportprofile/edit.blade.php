@@ -1,4 +1,4 @@
-@extends(Helper::check_if_org_template_enabled()?'layouts.organisation':'layouts.app') : 'home.layout')
+@extends(Auth::check()?(Helper::check_if_org_template_enabled()?'layouts.organisation':'layouts.app') : 'home.layout')
 @section('content')
     @include ('album._leftmenu')
     <div id="content-team" class="col-sm-10">

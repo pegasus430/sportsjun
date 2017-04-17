@@ -100,5 +100,17 @@ class TournamentParent extends Model
     {
         return Helper::getImagePath($this->logo, 'tournaments');
     }
+
+      public function manager(){
+            return $this->belongsTo('App\User', 'manager_id');
+        }
+
+    public function owner(){
+        return $this->belongsTo('App\User', 'owner_id');
+    }
+
+    public function creator(){
+        return $this->belongsTo('App\User', 'created_by');
+    }
 }
 
