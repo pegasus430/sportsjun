@@ -2728,15 +2728,15 @@ class TournamentsController extends Controller
 
 
 
-	public function playerStanding($tournament_id, $from_api=false){
+	public function playerStanding($id, $from_api=false){
 		$left_menu_data = array();
 		
-
-		$id=$tournament_id;
+		$tournament_id = $id;
 		$action_id=$tournament_id;
 
 		/** @var Tournaments $tournamentInfo */
 		$tournamentInfo= Tournaments::whereId($tournament_id)->get();
+		$tournament = Tournaments::find($id);
 
 		
 		$tournament_type=$tournamentInfo[0]['type'];
@@ -2748,7 +2748,7 @@ class TournamentsController extends Controller
 		$sport_id=$tournamentInfo[0]['sports_id'];
 		$sport_name=strtolower(Sport::find($sport_id)->sports_name);
 
-		$player_standing= $tournamentInfo->playerStanding();
+		$player_standing= $tournament->playerStanding();
 	
 		if($from_api) return Response::json($player_standing);
 		
