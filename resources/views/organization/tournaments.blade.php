@@ -1,7 +1,7 @@
  @extends(Helper::check_if_org_template_enabled()?'layouts.organisation':'layouts.app') 
  @section('content') 
  @include ('teams.orgleftmenu')
-<div id="content" class="col-sm-10" style="height: 986px;">
+<div id="content" class="col-sm-10" >
     <div class="col-sm-9 tournament_profile">
        
         @if(count($parent_tournaments)) 
