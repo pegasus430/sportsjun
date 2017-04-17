@@ -7,6 +7,7 @@ use App\Model\BasketballPlayerMatchwiseStats;
 use App\Model\CricketPlayerMatchwiseStats;
 use App\Model\CricketStatistic;
 use App\Model\HockeyPlayerMatchwiseStats;
+use App\Model\HockeyStatistic;
 use App\Model\MatchSchedule;
 use App\Model\MatchScheduleRubber;
 use App\Model\Photo;
@@ -1400,7 +1401,7 @@ class ScoreCardController extends Controller {
 			{
 				foreach($soccer_details as $user_id)
 				{
-					$this->hockeyStatistics($user_id['user_id']);
+                    HockeyStatistic::updateUserStatistic($user_id['user_id']);
 				}
 
 			}

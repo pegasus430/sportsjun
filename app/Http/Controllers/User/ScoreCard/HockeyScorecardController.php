@@ -517,7 +517,8 @@ class HockeyScorecardController extends parentScoreCardController
                 $hockey_model->save();
 
                 $this->updateHockeyScore($user_id,$match_id,$team_id,$player_name,$yellow_card_count,$red_card_count,$goals_count);
-                $this->hockeyStatistics($user_id);          
+                HockeyStatistic::updateUserStatistic($user_id);
+
 
 
         $match_data->match_details=json_encode($match_details);
@@ -542,31 +543,7 @@ class HockeyScorecardController extends parentScoreCardController
         $player_stat=HockeyPlayerMatchwiseStats::where('user_id',$user_id)->where('match_id',$match_id)->where('team_id',$team_id)->update(['user_id'=>$user_id,'player_name'=>$player_name,'yellow_cards'=>$yellow_card_count,'red_cards'=>$red_card_count,'goals_scored'=>$goal_count]);
         //hockeyStatistic::where('user_id',$user_id)->update(['yellow_cards'=>$yellow_card_count,'red_cards'=>$red_card_count,'goals_scored'=>$goal_count]);
     }
-    //hockey statistics function player wise
-    public function hockeyStatistics($user_id)
-    {
-        //check already player has record or not
-        $user_hockey_details = HockeyStatistic::select()->where('user_id',$user_id)->get();
 
-        $hockey_details = HockeyPlayerMatchwiseStats::selectRaw('count(match_id) as match_count')->selectRaw('sum(yellow_cards) as yellow_cards')->selectRaw('sum(red_cards) as red_cards')->selectRaw('sum(goals_scored) as goals_scored')->where('user_id',$user_id)->groupBy('user_id')->get();
-        $yellow_card_cnt = (!empty($hockey_details[0]['yellow_cards']))?$hockey_details[0]['yellow_cards']:0;
-        $red_card_cnt = (!empty($hockey_details[0]['red_cards']))?$hockey_details[0]['red_cards']:0;
-        $goals_cnt = (!empty($hockey_details[0]['goals_scored']))?$hockey_details[0]['goals_scored']:0;
-        if(count($user_hockey_details)>0)
-        {
-            $match_count = (!empty($hockey_details[0]['match_count']))?$hockey_details[0]['match_count']:0;
-            HockeyStatistic::where('user_id',$user_id)->update(['matches'=>$match_count,'yellow_cards'=>$yellow_card_cnt,'red_cards'=>$red_card_cnt,'goals_scored'=>$goals_cnt]);
-        }else
-        {
-            $hockey_statistics = new HockeyStatistic();
-            $hockey_statistics->user_id = $user_id;
-            $hockey_statistics->matches = 1;
-            $hockey_statistics->yellow_cards = $yellow_card_cnt;
-            $hockey_statistics->red_cards = $red_card_cnt;
-            $hockey_statistics->goals_scored = $goals_cnt;
-            $hockey_statistics->save();
-        }
-    }
     //check is score enter for match
     public function isScoreEntered($user_id,$match_id,$team_id)
     {
