@@ -5,6 +5,7 @@ namespace App\Model;
 use App\Helpers\Helper;
 use App\User;
 use Carbon\Carbon;
+use DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -15,6 +16,7 @@ class MatchSchedule extends Model
 
     public static $SCORING_REJECTED = 'rejected';
 
+    public static $APPROVED = 'approved';
     /**
      * The database table used by the model.
      *
@@ -24,7 +26,7 @@ class MatchSchedule extends Model
 
     protected $table = 'match_schedules';
     protected $dates = ['deleted_at'];
-    protected $fillable = array(
+    protected $fillable = [
         'tournament_id',
         'tournament_group_id',
         'tournament_round_number',
@@ -65,27 +67,7 @@ class MatchSchedule extends Model
         'is_third_position',
         'sports_category',
         'player_or_team_ids'
-    );
-
-    public function scheduleteamone()
-    {
-        return $this->belongsTo('App\Model\Team', 'a_id');
-    }
-
-    public function scheduleteamtwo()
-    {
-        return $this->belongsTo('App\Model\Team', 'b_id');
-    }
-
-    public function scheduleuserone()
-    {
-        return $this->belongsTo('App\User', 'a_id');
-    }
-
-    public function scheduleusertwo()
-    {
-        return $this->belongsTo('App\User', 'b_id');
-    }
+    ];
 
     public function sport()
     {
@@ -102,9 +84,6 @@ class MatchSchedule extends Model
         return $this->belongsTo('App\Model\Tournaments', 'tournament_id');
     }
 
-    /**
-     * Attributes
-     */
 
     public function getMatchDetailsPAttribute()
     {
@@ -125,6 +104,16 @@ class MatchSchedule extends Model
         }
     }
 
+    public function scheduleteamone()
+    {
+        return $this->belongsTo('App\Model\Team', 'a_id');
+    }
+
+    public function scheduleuserone()
+    {
+        return $this->belongsTo('App\User', 'a_id');
+    }
+
     public function getSideBAttribute()
     {
         if ($this->schedule_type == 'team') {
@@ -132,6 +121,16 @@ class MatchSchedule extends Model
         } else {
             return $this->scheduleusertwo ? $this->scheduleusertwo : $this->scheduleusertwo()->get();
         }
+    }
+
+    public function scheduleteamtwo()
+    {
+        return $this->belongsTo('App\Model\Team', 'b_id');
+    }
+
+    public function scheduleusertwo()
+    {
+        return $this->belongsTo('App\User', 'b_id');
     }
 
     public function getSideALogoAttribute()
@@ -150,6 +149,11 @@ class MatchSchedule extends Model
         } else {
             return User::logoImage($this->b_id);
         }
+    }
+
+    public function getSideAScoreAttribute()
+    {
+        return $this->extractScoreString($this->a_id);
     }
 
     function extractScoreString($id)
@@ -180,6 +184,16 @@ class MatchSchedule extends Model
         }
     }
 
+    public function getSideBScoreAttribute()
+    {
+        return $this->extractScoreString($this->b_id);
+    }
+
+    public function getSideAOversAttribute()
+    {
+        return $this->extractOversString($this->a_id);
+    }
+
     function extractOversString($id)
     {
         switch ($this->sports_id) {
@@ -208,24 +222,8 @@ class MatchSchedule extends Model
 
     }
 
-
-
-
-    public function getSideAScoreAttribute()
+    public function getSideBOversAttribute()
     {
-        return $this->extractScoreString($this->a_id);
-    }
-
-    public function getSideBScoreAttribute()
-    {
-        return $this->extractScoreString($this->b_id);
-    }
-
-    public function getSideAOversAttribute(){
-        return $this->extractOversString($this->a_id);
-    }
-
-    public function getSideBOversAttribute(){
         return $this->extractOversString($this->b_id);
     }
 
@@ -273,15 +271,18 @@ class MatchSchedule extends Model
         }
     }
 
-   public function referees(){
+    public function referees()
+    {
         return $this->hasMany('App\Model\RefereeSchedule', 'match_id');    
     }
 
-   public function archery_rounds(){
+    public function archery_rounds()
+    {
         return $this->hasMany('App\Model\ArcheryRound', 'match_id');
    }
 
-   public function archery_players($team_id=null,$order=null){
+    public function archery_players($team_id = null, $order = null)
+    {
 
     if($this->schedule_type=='player')
         $players = $this->hasMany('App\Model\ArcheryPlayerStats','match_id');
@@ -304,6 +305,13 @@ class MatchSchedule extends Model
     {
         return $this->hasOne('App\Model\SmiteMatchStats');
     }
+
+
+    /*  */
+    public function setTossInfo(){
+
+    }
+
 
 
     public function getActiveRubber()
@@ -464,8 +472,16 @@ class MatchSchedule extends Model
                 }
             }
         }
+    }
 
 
+    public function updateScoreCard($data){
+        switch ($this->sports_id) {
+            case Sport::$CRICKET:
+                return CricketPlayerMatchwiseStats::insertScoreCard($this,$data);
+                return true;
+        }
+        return false;
     }
 
     public function insertPlayerStatistics()

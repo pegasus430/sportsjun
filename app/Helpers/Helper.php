@@ -2745,5 +2745,12 @@ class Helper
     }
 
 
+    public static function fillArrayMissingFields($array, $fields = [], $value = NULL){
+        foreach ($fields as $field){
+           if(!isset($array[$field]))
+               $array[$field]=$value;
+        }
+        return $array;
+    }
 }
 

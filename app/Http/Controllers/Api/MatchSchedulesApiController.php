@@ -273,11 +273,7 @@ class  MatchSchedulesApiController extends BaseApiController
         $schedule = MatchSchedule::whereId($id)->firstOrFail();
         $data = \Request::all();
 
-        switch ($schedule->sports_id) {
-            case Sport::$CRICKET:
-
-                break;
-            default:
+        if (!$schedule->updateScoreCard($data)){
                 return $this->ApiResponse(['message' => 'Please update api for this sport_id - ' . $schedule->sports_id], 404);
         }
 

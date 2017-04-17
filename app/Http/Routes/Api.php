@@ -58,20 +58,15 @@ Route::group(['prefix' => '/api/v1', 'middleware' => 'cors'], function ($router)
         Route::post('/otp/issent', ['uses' => 'Api\AuthApiController@isOtpSent']);
 
 
-
         //handle teams
 
 
         //handle tournaments
 
 
-
-
-
-
         //update tournament details;
-        $router->post('/tournaments/{id}/update', 'Api\TournamentApiController@update');
-        $router->get('/tournaments/search', 'Api\TournamentApiController@search');
+        //   $router->post('/tournaments/{id}/update', 'Api\TournamentApiController@update');
+        //playerStanding    $router->get('/tournaments/search', 'Api\TournamentApiController@search');
 
         //get sports
 
