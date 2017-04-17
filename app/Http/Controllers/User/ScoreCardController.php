@@ -4,6 +4,7 @@ use App\Helpers\AllRequests;
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Model\BasketballPlayerMatchwiseStats;
+use App\Model\BasketballStatistic;
 use App\Model\CricketPlayerMatchwiseStats;
 use App\Model\CricketStatistic;
 use App\Model\HockeyPlayerMatchwiseStats;
@@ -1415,7 +1416,7 @@ class ScoreCardController extends Controller {
 			{
 				foreach($basketball_details as $user_id)
 				{
-					$this->basketballStatistics($user_id['user_id']);
+					BasketballStatistic::updateUserStatistic($user_id['user_id']);
 				}
 
 			}
