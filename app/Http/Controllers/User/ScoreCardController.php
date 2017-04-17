@@ -2012,7 +2012,7 @@ class ScoreCardController extends Controller {
 						]);
 				}else
 				{
-					$this->insertBatsmenScore($user_id_a,$tournament_id,$match_id,$team_a_id,$match_type,$balls_played_a,$totalruns_a,$fours_a,$sixes_a,$out_as_a,$strikerate_a,$team_a_name,$player_name,$inning,$fielder_id_a,$bowled_id_a,$a_bat_status,$i,$fifties,$hundreds);
+					CricketPlayerMatchwiseStats::insertBatsmenScore($user_id_a,$tournament_id,$match_id,$team_a_id,$match_type,$balls_played_a,$totalruns_a,$fours_a,$sixes_a,$out_as_a,$strikerate_a,$team_a_name,$player_name,$inning,$fielder_id_a,$bowled_id_a,$a_bat_status,$i,$fifties,$hundreds);
 				}
 
 
@@ -2044,7 +2044,7 @@ class ScoreCardController extends Controller {
 
 				}else
 				{
-					$this->insertBowlerScore($bowler_id_a,$tournament_id,$match_id,$team_a_id,$match_type,$a_overs_bowled,$a_wickets,$a_runs_conceded,$a_ecomony,$team_a_name,$bowler_name,$inning,$a_wide,$a_noball,$a_maidens,$j);
+                    CricketPlayerMatchwiseStats::insertBowlerScore($bowler_id_a,$tournament_id,$match_id,$team_a_id,$match_type,$a_overs_bowled,$a_wickets,$a_runs_conceded,$a_ecomony,$team_a_name,$bowler_name,$inning,$a_wide,$a_noball,$a_maidens,$j);
 
 				}
 
@@ -2122,7 +2122,7 @@ class ScoreCardController extends Controller {
 						]);
 				}else
 				{
-					$this->insertBatsmenScore($user_id_b,$tournament_id,$match_id,$team_b_id,$match_type,$balls_played_b,$totalruns_b,$fours_b,$sixes_b,$out_as_b,$strikerate_b,$team_b_name,$player_b_name,$inning,$fielder_id_b,$bowled_id_b,$b_bat_status,$k,$fifties,$hundreds);
+                    CricketPlayerMatchwiseStats::insertBatsmenScore($user_id_b,$tournament_id,$match_id,$team_b_id,$match_type,$balls_played_b,$totalruns_b,$fours_b,$sixes_b,$out_as_b,$strikerate_b,$team_b_name,$player_b_name,$inning,$fielder_id_b,$bowled_id_b,$b_bat_status,$k,$fifties,$hundreds);
 				}
 
 
@@ -2154,7 +2154,7 @@ class ScoreCardController extends Controller {
 
 				}else
 				{
-					$this->insertBowlerScore($bowler_id_b,$tournament_id,$match_id,$team_b_id,$match_type,$b_overs_bowled,$b_wickets,$b_runs_conceded,$b_ecomony,$team_b_name,$bowler_b_name,$inning,$b_wide,$b_noball,$b_maidens,$l);
+                    CricketPlayerMatchwiseStats::insertBowlerScore($bowler_id_b,$tournament_id,$match_id,$team_b_id,$match_type,$b_overs_bowled,$b_wickets,$b_runs_conceded,$b_ecomony,$team_b_name,$bowler_b_name,$inning,$b_wide,$b_noball,$b_maidens,$l);
 				}
 
 
@@ -2411,55 +2411,7 @@ class ScoreCardController extends Controller {
 		//return redirect()->back()->with('status', trans('message.scorecard.scorecardmsg'));
 		//return Response()->json( array('success' => trans('message.scorecard.scorecardmsg')) );
 	}
-	//function to insert batsmen score
-	public function insertBatsmenScore($user_id,$tournament_id,$match_id,$team_id,$match_type,$balls_played,$totalruns,$fours,$sixes,$out_as,$strikerate,$team_name,$player_name,$innings,$fielder_id,$bowled_id,$bat_status,$sr_no_in_batting_team=0,$fifties=0,$hundreds=0)
-	{
-		$model                        = new CricketPlayerMatchwiseStats();
-		$model->user_id               = $user_id;
-		$model->tournament_id         = $tournament_id;
-		$model->match_id              = $match_id;
-		$model->team_id               = $team_id;
-		$model->match_type            = $match_type;
-		$model->balls_played          = $balls_played;
-		$model->totalruns             = $totalruns;
-		$model->fours                 = $fours;
-		$model->sixes                 = $sixes;
-		$model->out_as                = $out_as;
-		$model->strikerate            = $strikerate;
-		$model->team_name             = $team_name;
-		$model->player_name           = $player_name;
-		$model->innings               = $innings;
-		$model->fielder_id            = $fielder_id;
-		$model->bowled_id             = $bowled_id;
-		$model->bat_status            = $bat_status;
-		$model->sr_no_in_batting_team = $sr_no_in_batting_team;
-		$model->fifties               = $fifties;
-		$model->hundreds              = $hundreds;
-		$model->save();
-	}
 
-	//insert bowler score
-	public function insertBowlerScore($bowler_id,$tournament_id,$match_id,$team_id,$match_type,$overs_bowled,$wickets,$runs_conceded,$ecomony,$team_name,$bowler_name,$inning,$wide,$noball,$maidens,$sr_no_in_bowling_team=0)
-	{
-		$bowler_model = new CricketPlayerMatchwiseStats();
-		$bowler_model->user_id = $bowler_id;
-		$bowler_model->tournament_id = $tournament_id;
-		$bowler_model->match_id = $match_id;
-		$bowler_model->team_id = $team_id;
-		$bowler_model->match_type = $match_type;
-		$bowler_model->overs_bowled = $overs_bowled;
-		$bowler_model->wickets = $wickets;
-		$bowler_model->runs_conceded = $runs_conceded;
-		$bowler_model->ecomony = $ecomony;
-		$bowler_model->team_name = $team_name;
-		$bowler_model->player_name = $bowler_name;
-		$bowler_model->innings = $inning;
-		$bowler_model->wides_bowl = $wide;
-		$bowler_model->noballs_bowl = $noball;
-		$bowler_model->overs_maiden = $maidens;
-		$bowler_model->sr_no_in_bowling_team = $sr_no_in_bowling_team;
-		$bowler_model->save();
-	}
 
 	//function to insert or update batsmen statistics
 	public function cricketBatsmenStatistic($user_id,$match_type,$inning)
@@ -2923,7 +2875,7 @@ class ScoreCardController extends Controller {
 				if(!$a_is_score_exist)
 				{
 					//save soccer score card details
-					$this->insertSoccerScore($user_id_a,$tournament_id,$match_id,$team_a_id,$a_player_name,$team_a_name,$a_yellow_card,$a_red_card,$a_goal);
+                    SoccerPlayerMatchwiseStats::insertSoccerScore($user_id_a,$tournament_id,$match_id,$team_a_id,$a_player_name,$team_a_name,$a_yellow_card,$a_red_card,$a_goal);
 
 				}else
 				{
@@ -2963,7 +2915,7 @@ class ScoreCardController extends Controller {
 				if(!$b_is_score_exist)
 				{
 					//save soccer score card details
-					$this->insertSoccerScore($user_id_b,$tournament_id,$match_id,$team_b_id,$b_player_name,$team_b_name,$b_yellow_card,$b_red_card,$b_goal);
+                    SoccerPlayerMatchwiseStats::insertSoccerScore($user_id_b,$tournament_id,$match_id,$team_b_id,$b_player_name,$team_b_name,$b_yellow_card,$b_red_card,$b_goal);
 				}
 				else
 				{
@@ -3086,21 +3038,6 @@ class ScoreCardController extends Controller {
 	}
 
 
-	public function insertSoccerScore($user_id,$tournament_id,$match_id,$team_id,$player_name,$team_name,$yellow_card_count,$red_card_count,$goal_count, $playing_status='S')
-	{
-		$soccer_model = new SoccerPlayerMatchwiseStats();
-		$soccer_model->user_id 			= $user_id;
-		$soccer_model->tournament_id 	= $tournament_id;
-		$soccer_model->match_id 		= $match_id;
-		$soccer_model->team_id 			= $team_id;
-		$soccer_model->player_name 		= $player_name;
-		$soccer_model->team_name 		= $team_name;
-		$soccer_model->yellow_cards 	= $yellow_card_count;
-		$soccer_model->red_cards 		= $red_card_count;
-		$soccer_model->goals_scored 	= $goal_count;
-		$soccer_model->playing_status 	= $playing_status;
-		$soccer_model->save();
-	}
 
 	public function insertAndUpdateSoccerScoreCard(){
 
@@ -4210,20 +4147,20 @@ class ScoreCardController extends Controller {
 
 		foreach($team_a_playing_players as $p){
 			$player_name=User::find($p)->name;
-			$this->insertSoccerScore($p, $tournament_id, $match_id, $team_a_id,$player_name, $team_a_name,0,0,0,'P');
+            SoccerPlayerMatchwiseStats::insertSoccerScore($p, $tournament_id, $match_id, $team_a_id,$player_name, $team_a_name,0,0,0,'P');
 		}
 		foreach($team_a_substitute_players as $p){
 			$player_name=User::find($p)->name;
-			$this->insertSoccerScore($p, $tournament_id, $match_id, $team_a_id,$player_name, $team_a_name,0,0,0,'S');
+            SoccerPlayerMatchwiseStats::insertSoccerScore($p, $tournament_id, $match_id, $team_a_id,$player_name, $team_a_name,0,0,0,'S');
 				
 		}
 		foreach($team_b_playing_players as $p){
 			$player_name=User::find($p)->name;
-			$this->insertSoccerScore($p, $tournament_id, $match_id, $team_b_id,$player_name, $team_b_name,0,0,0,'P');
+            SoccerPlayerMatchwiseStats::insertSoccerScore($p, $tournament_id, $match_id, $team_b_id,$player_name, $team_b_name,0,0,0,'P');
 		}
 		foreach($team_b_substitute_players as $p){			
 			$player_name=User::find($p)->name;
-			$this->insertSoccerScore($p, $tournament_id, $match_id, $team_b_id,$player_name, $team_b_name,0,0,0,'S');
+            SoccerPlayerMatchwiseStats::insertSoccerScore($p, $tournament_id, $match_id, $team_b_id,$player_name, $team_b_name,0,0,0,'S');
 				
 		}
 		
