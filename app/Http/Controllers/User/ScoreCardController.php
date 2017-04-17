@@ -2504,63 +2504,7 @@ class ScoreCardController extends Controller {
 			$objStatistics->save();
 		}
 	}
-	//cricket bowler statistics
-	public function cricketBowlerStatistic($bowler_id,$match_type,$inning)
-	{
-		//check already record is exists or not
-		$cricket_statistics_array = array();
-		$bowler_cricket_statistics = CricketStatistic::select()->where('user_id',$bowler_id)->where('match_type',$match_type)->where('innings',$inning)->get();
 
-		$bowler_detais = CricketPlayerMatchwiseStats::selectRaw('count(DISTINCT(match_id)) as match_count')->selectRaw('count(innings) as inningscount')->selectRaw('sum(wickets) as wickets')->selectRaw('sum(runs_conceded) as runs_conceded')->selectRaw('sum(overs_bowled) as overs_bowled')->where('user_id',$bowler_id)->where('match_type',$match_type)->where('innings',$inning)->groupBy('user_id')->get();
-
-		$innings_bowl = (!empty($bowler_detais[0]['inningscount']))?$bowler_detais[0]['inningscount']:0;
-		$wickets = (!empty($bowler_detais[0]['wickets']))?$bowler_detais[0]['wickets']:0;
-		$runs_conceded = (!empty($bowler_detais[0]['runs_conceded']))?$bowler_detais[0]['runs_conceded']:0;
-		$overs_bowled = (!empty($bowler_detais[0]['overs_bowled']))?$bowler_detais[0]['overs_bowled']:0;
-		$match_count = (!empty($bowler_detais[0]['match_count']))?$bowler_detais[0]['match_count']:0;
-		if(count($bowler_cricket_statistics)>0)
-		{
-
-			$ecomony  = '';
-			if($overs_bowled>0)
-			{
-				$ecomony = $runs_conceded/$overs_bowled;
-			}
-			$average_bowl ='';
-			if($wickets>0)
-			{
-				$average_bowl = $runs_conceded/$wickets;
-			}
-			CricketStatistic::where('user_id',$bowler_id)->where('match_type',$match_type)->update(['matches'=>$match_count,'innings_bowl'=>$innings_bowl,'wickets'=>$wickets,'runs_conceded'=>$runs_conceded,'overs_bowled'=>$overs_bowled,'ecomony'=>$ecomony,'average_bowl'=>$average_bowl]);
-		}
-		else
-		{
-			$matchcount = (!empty($bowler_detais[0]['match_count']))?$bowler_detais[0]['match_count']:0;;
-			$innings_bowl = (!empty($bowler_detais[0]['inningscount']))?$bowler_detais[0]['inningscount']:0;;
-
-			$objBowlerStatistics = new CricketStatistic();
-			$objBowlerStatistics->user_id = $bowler_id;
-			$objBowlerStatistics->match_type = $match_type;
-			$objBowlerStatistics->matches = $matchcount;
-			$objBowlerStatistics->innings_bowl = $innings_bowl;
-			$objBowlerStatistics->wickets = $wickets;
-			$objBowlerStatistics->runs_conceded = $runs_conceded;
-			$objBowlerStatistics->overs_bowled = $overs_bowled;
-			$objBowlerStatistics->innings = $inning;
-			$ecomony='';
-			if($overs_bowled>0)
-			{
-				$ecomony = $runs_conceded/$overs_bowled;//economy calculation [total runs/total overs]
-			}
-			$average_bowl ='';
-			if($wickets>0)
-			{
-				$average_bowl = $runs_conceded/$wickets;//[total runs/total wickets]
-			}
-			$objBowlerStatistics->ecomony = $ecomony;
-			$objBowlerStatistics->save();
-		}
-	}
 	//function to get player names
 	public function getplayers()
 	{
@@ -3903,8 +3847,8 @@ class ScoreCardController extends Controller {
 			{
 				foreach($cricket_details as $players)
 				{
-					$this->cricketBatsmenStatistic($players['user_id'],$match_type,$inning='first');//batsmen statistics
-					$this->cricketBowlerStatistic($players['user_id'],$match_type,$inning='first');//bowler statistics
+					CricketStatistic::cricketBatsmenStatistic($players['user_id'],$match_type,$inning='first');//batsmen statistics
+                    CricketStatistic::cricketBowlerStatistic($players['user_id'],$match_type,$inning='first');//bowler statistics
 				}
 
 			}
@@ -3916,8 +3860,8 @@ class ScoreCardController extends Controller {
 				{
 					foreach($cricket_second_ing_details as $users)
 					{
-						$this->cricketBatsmenStatistic($users['user_id'],$match_type,$inning='second');//batsmen statistics
-						$this->cricketBowlerStatistic($users['user_id'],$match_type,$inning='second');//bowler statistics
+                        CricketStatistic::cricketBatsmenStatistic($users['user_id'],$match_type,$inning='second');//batsmen statistics
+                        CricketStatistic::cricketBowlerStatistic($users['user_id'],$match_type,$inning='second');//bowler statistics
 					}
 
 				}

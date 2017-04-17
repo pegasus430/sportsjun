@@ -576,8 +576,8 @@ class MatchSchedule extends Model
                                                               ->get(['user_id']);
                 if (!empty($cricket_details) && count($cricket_details) > 0) {
                     foreach ($cricket_details as $players) {
-                        $this->cricketBatsmenStatistic($players['user_id'], $match_type, $inning = 'first');//batsmen statistics
-                        $this->cricketBowlerStatistic($players['user_id'], $match_type, $inning = 'first');//bowler statistics
+                        CricketStatistic::cricketBatsmenStatistic($players['user_id'], $match_type, $inning = 'first');//batsmen statistics
+                        CricketStatistic::cricketBowlerStatistic($players['user_id'], $match_type, $inning = 'first');//bowler statistics
                     }
 
                 }
@@ -590,8 +590,8 @@ class MatchSchedule extends Model
                                                                              ->get(['user_id']);
                     if (!empty($cricket_second_ing_details) && count($cricket_second_ing_details) > 0) {
                         foreach ($cricket_second_ing_details as $users) {
-                            $this->cricketBatsmenStatistic($users['user_id'], $match_type, $inning = 'second');//batsmen statistics
-                            $this->cricketBowlerStatistic($users['user_id'], $match_type, $inning = 'second');//bowler statistics
+                            CricketStatistic::cricketBatsmenStatistic($users['user_id'], $match_type, $inning = 'second');//batsmen statistics
+                            CricketStatistic::cricketBowlerStatistic($users['user_id'], $match_type, $inning = 'second');//bowler statistics
                         }
 
                     }
