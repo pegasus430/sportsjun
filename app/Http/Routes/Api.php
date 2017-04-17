@@ -5,16 +5,16 @@ Route::group(['prefix' => '/api/v1', 'middleware' => 'cors'], function ($router)
     Route::post('register', 'Api\AuthApiController@register');
     Route::post('login', 'Api\AuthApiController@login');
 
-    Route::get('/cities','Api\DataApiController@cities');
-    Route::get('/countries','Api\DataApiController@countries');
-    Route::get('/states','Api\DataApiController@states');
+    Route::get('/cities', 'Api\DataApiController@cities');
+    Route::get('/countries', 'Api\DataApiController@countries');
+    Route::get('/states', 'Api\DataApiController@states');
 
-    Route::group(['middleware'=> ['jwt.api.auth'] , 'namespace'=>'Api','alias'=>'api'],function ($router){
+    Route::group(['middleware' => ['jwt.api.auth'], 'namespace' => 'Api', 'alias' => 'api'], function ($router) {
         $router->get('logout', 'AuthApiController@logout');
 
 
-        $router->get('/organizations','OrganizationApiController@index');
-        $router->get('/organizations/{id}','OrganizationApiController@show');
+        $router->get('/organizations', 'OrganizationApiController@index');
+        $router->get('/organizations/{id}', 'OrganizationApiController@show');
 
         $router->get('/sports', ['as' => 'sports', 'uses' => 'SportApiController@index']);
 
@@ -35,19 +35,20 @@ Route::group(['prefix' => '/api/v1', 'middleware' => 'cors'], function ($router)
         $router->get('/tournaments/{id}/gallery', 'TournamentApiController@gallery');
 
 
-        $router->get('/users','UserApiController@index');
-        $router->get('/users/{id}','UserApiController@show');
-        $router->get('/users/{id}/sports','UserApiController@sports');
-        $router->post('/users/{id?}','UserApiController@update');
-        $router->post('/users/{id}/sports','UserApiController@updateSports');
+        $router->get('/users', 'UserApiController@index');
+        $router->get('/users/{id}', 'UserApiController@show');
+        $router->get('/users/{id}/sports', 'UserApiController@sports');
+        $router->post('/users/{id?}', 'UserApiController@update');
+        $router->post('/users/{id}/sports', 'UserApiController@updateSports');
 
-        $router->get('/match-schedules/{id}',['uses'=>'MatchSchedulesApiController@getInfo']);
-        $router->get('/match-schedules/{id}/scores',['uses'=>'MatchSchedulesApiController@getScores']);
-        $router->get('/match-schedules',['uses'=>'MatchSchedulesApiController@getList']);
+        $router->get('/match-schedules/{id}', ['uses' => 'MatchSchedulesApiController@getInfo']);
+        $router->get('/match-schedules/{id}/scores', ['uses' => 'MatchSchedulesApiController@getScores']);
+        $router->post('/match-schedules/{id}/end_match', ['uses' => 'MatchSchedulesApiController@endMatch']);   
+        $router->get('/match-schedules', ['uses' => 'MatchSchedulesApiController@getList']);
 
 
 
-        $router->post('/scores/cricket','ScoreApiController@setScoreCricket');
+        $router->post('/scores/cricket', 'ScoreApiController@setScoreCricket');
 
     });
 
@@ -71,8 +72,8 @@ Route::group(['prefix' => '/api/v1', 'middleware' => 'cors'], function ($router)
         //get sports
 
 
-       $router->group(['prefix'=>'sports',],function($router){
-            $router->group(['prefix'=>'cricket'],function($router){
+        $router->group(['prefix' => 'sports',], function ($router) {
+            $router->group(['prefix' => 'cricket'], function ($router) {
                 $router->get('/statistics', ['uses' => 'Api\SportCricketApiController@cricketStatistics']);
                 $router->get('/player-match-score', ['uses' => 'Api\SportCricketApiController@cricketPlayerMatchScore']);
                 $router->get('/overwise-score', ['uses' => 'Api\SportCricketApiController@cricketOverwiseScore']);
@@ -90,7 +91,7 @@ Route::group(['prefix' => '/api/v1', 'middleware' => 'cors'], function ($router)
 
     });
 
-    Route::any( '{catchall}', 'Api\BaseApiController@routeNotFound')->where('catchall', '(.*)');
+    Route::any('{catchall}', 'Api\BaseApiController@routeNotFound')->where('catchall', '(.*)');
 });
 
 
