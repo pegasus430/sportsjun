@@ -88,6 +88,10 @@ class MarketplaceController extends Controller
 
 
     }
+
+    public function marketplace_details($item_id){
+
+    }
    
    //view more based on search items
     public function marketplaceSearch(Request $request)

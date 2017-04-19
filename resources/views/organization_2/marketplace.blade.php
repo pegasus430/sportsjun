@@ -12,12 +12,55 @@
             </div>
             <div class="row">
 
-    <div class="sportsjun-forms sportsjun-container wrap-2">
+    <div class="sportsjun-forms sportsjun-container ">
         
 
             @if(count($items))
                 
-                
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                                <tr>
+                                        <th>S/N</th>
+                                        <th>Item</th>
+                                        <th>Image</th>
+                                        <th>Details</th>
+                                        <th>Price</th>
+                                        <th>Discount Price</th>
+                                        <th>Total Sales</th>
+                                        <th>Action</th>                                        
+                                </tr>
+                        </thead>
+                        <tbody>
+                                @foreach($items as $key=>$item)
+                                    <tr>
+                                        <td>{{$key+1}}</td>
+                                        <td><a href="{{url('/organization/'.$organisation->id.'/marketplace/'.$item['id'].'/details')}}"  data-pid="{{ $item['id'] }}" data-toggle="tooltip" data-placement="top" title="Edit" class="icon-edit mp_edit">{{$item->item}}</a></td>
+                                        <td>
+                                @if(count($item->photos)>0)
+                               <!-- <img src="{{ url('/uploads/marketplace/'.$item->photos[0]['url'])}}" alt="" class="img-responsive" />-->
+                            {!! Helper::Images($item->photos[0]['url'],'marketplace',array('class'=>'img-responsive','style'=>'height:50px!important;width:50px!important' ) )
+!!} 
+
+                                @else
+                                <!--<img src="{{ url('uploads/marketplace/market_place_default.png')}}" alt="" class="img-responsive" />-->
+                              {!! Helper::Images('market_place_default.png','marketplace',array('class'=>'img-responsive','style'=>'height:50px;width:50px') )
+!!}     
+                                @endif</td>
+                                        <td>{{$item->item_description}}</td>
+                                        <td>{{$item->actual_price}}</td>
+                                        <td>{{$item->base_price}}</td>
+                                        <td>{{$item->sales}}</td>
+                                        <td>
+                                        <a href="{{url('/marketplace/'.$item['id'].'/details')}}" >Edit</a> | 
+                                       <a href="javascript:void(0);" class="removephoto icon-delete mp_delete"  data-pid="{{ $item['id'] }}" data-toggle="tooltip" data-placement="top" title="Delete" >Delete</a>
+                                        </td>
+                                    </tr>
+
+                                @endforeach
+                        </tbody>
+                    </table>
+                </div>
 
 
              @else
