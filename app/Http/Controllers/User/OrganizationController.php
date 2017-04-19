@@ -13,6 +13,7 @@ use App\Model\City;
 use App\Model\Team;
 use App\Helpers\Helper;
 use App\Model\TournamentParent;
+use App\Model\Tournaments;
 use Auth;
 use App\Model\Photo;
 use App\Model\Sport;
@@ -107,8 +108,28 @@ class OrganizationController extends Controller
                 }
             }
 
-        $marketplace = Marketplace::orderBy('id','desc')->get();
-         return view('organization_2.index', compact('tournaments','teams','parent_tournaments','marketplace'));
+        $schedules =  Tournaments::join('tournament_parent', 'tournament_parent.id','=','tournaments.tournament_parent_id')
+                ->where('organization_id', $this->organization->id)
+                ->join('match_schedules','match_schedules.tournament_id','=','tournaments.id')
+                ->where('hasSetupSquad','1')->where('match_status','!=','completed')
+              ->orderBy('match_start_date', 'match_start_time','desc')              
+              ->select('match_schedules.*')
+              ->get();
+
+        $reports=  Tournaments::join('tournament_parent', 'tournament_parent.id','=','tournaments.tournament_parent_id')
+                ->where('organization_id', $this->organization->id)
+                ->join('match_schedules','match_schedules.tournament_id','=','tournaments.id')
+                ->whereNotNull('match_report')
+              ->orderBy('match_start_date', 'match_start_time','desc')             
+              ->select('match_schedules.*')
+              ->get();
+             
+           
+
+        $marketplace = marketplace::where('organization_id', $this->organization->id)->get();
+        $imageable_type_name = config('constants.PHOTO.GALLERY_ORGANIZATION');
+        $photos = Photo::where('imageable_type',$imageable_type_name)->where('imageable_id',$this->organization->id)->get();
+         return view('organization_2.index', compact('tournaments','teams','parent_tournaments','marketplace','items','photos','schedules','reports'));
         }
       
 

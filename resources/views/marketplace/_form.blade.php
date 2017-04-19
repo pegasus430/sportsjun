@@ -16,6 +16,8 @@ $(document).ready(function(){
 $readonly='';
 if($isCreate=='no')
 	$readonly='readonly';
+
+if($is_org) $isCreate = 'false';
 ?>
 <input type="hidden" name="time_token" id="time_token" value="<?php echo md5(time());?>">
 <div class="row">
@@ -55,6 +57,8 @@ if($isCreate=='no')
 </div>
 </div> 
 </div> 
+
+<input type="hidden" name="organization_id" value="{{Session::get('organization_id')}}">
 
 <div class="row">
 
@@ -151,7 +155,13 @@ if($isCreate=='no')
 @endif
 
 <script>
+
 var is_from_create = '{{$isCreate}}';
+
+@if($is_org)
+	is_from_create = 'no';
+@endif
+
 if(is_from_create=='yes')
 {
 	function btnClick()

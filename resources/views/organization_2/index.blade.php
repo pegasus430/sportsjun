@@ -149,6 +149,8 @@
                                 </ul>
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="tab_default_1">
+                                    @if(count($schedules))
+                                        @foreach($schedules as $schedule)
                                         <table class="wg-score-table">
                                             <tr>
                                                 <td width="36"><img src="/org/images/nations-flags/india-sm.png" alt="" width="36"></td>
@@ -165,11 +167,19 @@
                                                 <td colspan="5">Result: IND won by 8 wkts</td>
                                             </tr>
                                         </table>
+                                        @endforeach
+                                    @else
+                                        <p>No Schedule Available
+                                    @endif
                                     </div>
                                     <div class="tab-pane" id="tab_default_2">
-                                        <p>2nd ODI: India v England at Cuttack
-                                            <br> - Jan 19, 2017
-                                            <br> India won by 15 runs</p>
+                                    @if(count($reports))
+                                        @foreach($reports as $report)
+                                            {!!$report->match_report!!}
+                                        @endforeach
+                                    @else
+                                        <p>No Results available
+                                    @endif
                                     </div>
                                     <div class="tab-pane" id="tab_default_3"> ... </div>
                                 </div>
@@ -182,9 +192,10 @@
                                 <h4>Media Gallery</h4></div>
                             <div id="Carousel" class="carousel slide carousel-fade col-offset-2">
                                 <div class="carousel-inner">
-                                    <div class="item active"> <img src="http://placehold.it/300x200/6a737b/ffffff" class="img-responsive"> </div>
-                                    <div class="item"> <img src="http://placehold.it/300x200/6a737b/ffffff" class="img-responsive"> </div>
-                                    <div class="item"> <img src="http://placehold.it/300x200/6a737b/ffffff" class="img-responsive"> </div>
+
+                                @foreach($photos as $key_p=>$photo)
+                                    <div class="item {{$key_p==0?'active':''}}"> <img src="http://placehold.it/300x200/6a737b/ffffff" class="img-responsive"> </div>
+                                @endforeach
                                 </div> <a class="left carousel-control" href="#Carousel" data-slide="prev">‹</a> <a class="right carousel-control" href="#Carousel" data-slide="next">›</a> </div>
                         </div>
                     </div>

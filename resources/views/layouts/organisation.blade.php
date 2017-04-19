@@ -90,16 +90,19 @@
         </div>
         <div class="col-md-3">
         <ul class="nav navbar-nav navbar-right">
-                <li><a href="{{Auth::user()->type=='1'?"/organization/$organisation->id":'/'}}><span class="fa fa-home"></span></a></li>
+                <li><a href="{{Auth::user()->type=='1'?"/organization/$organisation->id":'/'}}"><span class="fa fa-home"></span></a></li>
                 <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-user"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#"><span class="fa fa-user-circle-o"></span> User Profile</a></li>
-                        <li><a href="#"><span class="fa fa-trophy"></span> Sports Profile</a></li>
+                      <!--   <li><a href="#"><span class="fa fa-user-circle-o"></span> User Profile</a></li>
+                        <li><a href="#"><span class="fa fa-trophy"></span> Sports Profile</a></li> -->
                         <li><a href="#"><span class="fa fa-lock"></span> Change password</a></li>
-                        <li><a href="#"><span class="fa fa-power-off"></span> Logout</a></li>
+                        <li><a href="/auth/logout"><span class="fa fa-power-off"></span> Logout</a></li>
                     </ul>
                 </li>
+
+            @if(Auth::user()->type!='1')
                 <li><a href="index.php"><span class="fa fa-shopping-cart"></span><span class="cart-bubble">0</span></a></li>
+            @endif
                 <!--
                 <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-plus"></span> Create New</a>
     <ul class="dropdown-menu">
