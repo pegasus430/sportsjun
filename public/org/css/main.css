@@ -1875,3 +1875,12 @@ footer .social-icons-wrapper a.linkedin:focus {
         left: 35px;
     }
 }
+
+
+.modal-title{
+        color: #34495e !important;
+}
+
+#teamStatsDiv .table thead th, .teamStatsDiv .table thead th {
+    color: #34495e !important;
+}

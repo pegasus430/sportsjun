@@ -12,7 +12,7 @@ class MarketPlace extends Model
     //
     protected $table = 'marketplace';
 	protected $searchableColumns = ['item'];
-    protected $fillable = array('item','item_description','marketplace_category_id','base_price','actual_price','item_type','item_status','user_id','address','city_id','city' ,'state_id','state','country_id','country','zip','location','contact_number');
+    protected $fillable = array('item','item_description','marketplace_category_id','base_price','actual_price','item_type','item_status','user_id','address','city_id','city' ,'state_id','state','country_id','country','zip','location','contact_number','organization_id');
     protected $morphClass = 'marketplace';
     protected $dates = ['deleted_at'];
 

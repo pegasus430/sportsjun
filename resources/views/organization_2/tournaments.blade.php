@@ -9,10 +9,10 @@
                     </div>
             </div>
 <div class="col-md-2">
-    <p>
+  
 </div>
 <div id="content" class="col-sm-10" >
-    <div class="col-sm-9 tournament_profile">
+    <div class=" tournament_profile">
        
         @if(count($parent_tournaments)) 
             <div class="group_no clearfix">

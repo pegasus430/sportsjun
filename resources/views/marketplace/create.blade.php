@@ -1,4 +1,4 @@
-@extends('layouts.app')
+ @extends(Helper::check_if_org_template_enabled()?'layouts.organisation':'layouts.app') 
 
 @section('content')
 <div class="container-fluid">
@@ -10,7 +10,7 @@
 				 @include ('marketplace._form', ['submitButtonText' => 'Create','isCreate' => 'yes'])
 		</div>
 		<div class="form-footer">
-						 <button onclick="btnClick();" type="button" class="button btn-primary"> Create </button>		
+						 <button onclick="btnClick();" type="{{$is_org?'submit':'button'}}" class="button btn-primary"> Create </button>		
          </div>
 			  {!! Form::close() !!}			  
                     {!! JsValidator::formRequest('App\Http\Requests\CreateMarketPlaceRequest', '#my-form'); !!}
