@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers\User\Esports;
 
-use Request;
-
-use App\Http\Requests;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Helpers\Helper;
 
@@ -50,7 +48,6 @@ class SmiteController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request);
 
         $this->validate($request, [
             'username' => 'required|max:30',
@@ -58,7 +55,7 @@ class SmiteController extends Controller
 
         $user_id = \Auth::user();
         $sport = Sport::where('sports_name', strtolower('smite'))->first();
-        $username = $request->input('username');
+        $username = $request->get('username');
 
         if($game_username = GameUsername::where('user_id', $user_id->id)->where('sport_id', $sport->id)->exists())
             $game_username = GameUsername::where('user_id', $user_id->id)->where('sport_id', $sport->id)->first();
