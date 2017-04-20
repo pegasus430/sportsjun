@@ -39,8 +39,8 @@ class TeamController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-       public function __construct(ObjRequest $request){
-          $id = $request->route()->parameter('id');
+       public function __construct(){
+          $id = \Request::route()->parameter('id');
           $this->is_owner = false;
           $this->new_template = false;
           $this->view = 'teams';
