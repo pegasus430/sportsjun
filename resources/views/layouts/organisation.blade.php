@@ -48,6 +48,7 @@
     <link rel="stylesheet" href="{{ asset('/css/sidebar-menu.css') }}?v=<?php echo $css_version;?>" />
     <link rel="stylesheet" href="{{ asset('/css/select-multiple.css') }}?v=<?php echo $css_version;?>" />
     <link rel="stylesheet" href="{{ asset('/css/select2.min.css') }}?v=<?php echo $css_version;?>" />
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
  
      @yield('styles')
@@ -189,6 +190,7 @@
     <hr> </footer>
 
 
+
     <script type="text/javascript">
             var is_organization=true;
             var base_url = '';
@@ -217,7 +219,10 @@
    }(document, 'script', 'facebook-jssdk'));
 </script>
     @include ('layouts.footer_scripts')
-    @yield('end_scripts')
+
+
+
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script> 
 
         <script type="text/javascript" src='/org/js/scripts.js'></script>
     <script>
@@ -270,6 +275,33 @@
         }
     </script>
 
+
+<script type="text/javascript">
+
+
+        function add_to_cart(id,item){
+          
+            $.ajax({
+                url:'/cart/add_to_cart',
+                data:{id:id},
+                success:function(){
+                    toastr.success('Added to Cart',item)
+                },
+                error:function(){
+                    toastr.error('Sorry an Error Occured!',item)
+                }
+
+            })
+        }
+</script>
+
+
+  @yield('end_scripts')
+
+
+
+
+   
 
 
 </body>

@@ -76,7 +76,7 @@ Route::group(['prefix' => 'organization/{id}'], function () {
     ]);
 
     Route::get('marketplace','User\MarketplaceController@organization_marketplace');
-    Route::get('/marketplace/{item_id}/details', 'User\MarketplaceController@marketplace_details');
+    Route::get('/marketplace/{item_id}/details', 'User\MarketplaceController@marketplace_details');   
     Route::get('new_tournament', 'User\OrganizationController@new_tournament');
 
 
@@ -87,6 +87,12 @@ Route::group(['prefix' => 'organization/{id}'], function () {
     ]);
 
 
+});
+
+
+Route::group(['prefix'=>'cart','namespace'=>'User'], function($cart){
+    $cart->get('/', 'CartController@index');
+    $cart->get('/add_to_cart', 'CartController@add_to_cart');
 });
 
 Route::get('getteamdetails', [

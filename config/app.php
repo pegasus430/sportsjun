@@ -163,6 +163,7 @@ return [
         Barryvdh\Cors\ServiceProvider::class,
         'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
         Barryvdh\DomPDF\ServiceProvider::class,
+        Darryldecode\Cart\CartServiceProvider::class
 
         //'Xaamin\Whatsapi\WhatsapiServiceProvider'
     ],
@@ -225,6 +226,7 @@ return [
         'JWTFactory'    => 'Tymon\JWTAuth\Facades\JWTFactory',
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'Image' => Intervention\Image\Facades\Image::class,
+        'Cart' => Darryldecode\Cart\Facades\CartFacade::class
     ],
 
 ];

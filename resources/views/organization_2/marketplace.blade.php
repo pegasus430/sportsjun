@@ -7,7 +7,11 @@
                 <div class="col-md-12">
                     <h2 class="page-header"><div class="ph-mark"><div class="glyphicon glyphicon-menu-right"></div></div> Marketplace</h2> 
 
-                     <div class="create-btn-link"><a href="/marketplace/create" class="wg-cnlink" >New Item</a></div>
+               
+                     <div class="create-btn-link">
+                     <a href="/organization/{{$organisation->id}}/orders" class="wg-cnlink" style="margin-right: 150px;" >Orders</a>
+                     <a href="/marketplace/create" class="wg-cnlink" >New Item</a>
+                     </div>
                     </div>
             </div>
             <div class="row">
