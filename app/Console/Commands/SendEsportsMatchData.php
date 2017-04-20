@@ -45,10 +45,10 @@ class SendEsportsMatchData extends Command
     {
         //Query to notify users about the match info (lobby creator, lobby name, lobby password)
         $time1_day = Carbon::now()->format('Y-m-d');
-        $time1_time = Carbon::now()->subMinutes(5)->format('H:m:s');
+        $time1_time = Carbon::now()->subMinutes(5)->format('H:i:s');
 
         $time2_day = Carbon::now()->format('Y-m-d');
-        $time2_time = Carbon::now()->format('H:m:s');
+        $time2_time = Carbon::now()->format('H:i:s');
         $sport = Sport::where('sports_name', strtolower('smite'))->first();
 
         $this->info($time1_day);
