@@ -53,7 +53,11 @@ class CheckSmiteMatches extends Command
         $time2_day = Carbon::now()->addMinute()->format('Y-m-d');
         $time2_time = Carbon::now()->addMinute()->subHours(3)->format('h:m:s');
         $this->info($time1_day);
+        $this->info($time2_day);
+        $this->info($time1_time);
+        $this->info($time2_time);
         */
+
         $sport = Sport::where('sports_name', strtolower('smite'))->first();
         $matchScheduleData = SmiteMatch::where('match_status', 'started')->get();
 
@@ -113,7 +117,7 @@ class CheckSmiteMatches extends Command
                     $matchTime->addSeconds($matchHistory->Time_In_Match_Seconds);
 
                     /* Check if match finished 5 minutes ago */
-                    $fiveMinutesAgo = Carbon::now()->subDays(8)->subMinutes(5);
+                    $fiveMinutesAgo = Carbon::now()->subMinutes(5);
                     if($matchTime < $fiveMinutesAgo)
                         continue;
 
