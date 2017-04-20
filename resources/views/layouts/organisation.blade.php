@@ -72,6 +72,10 @@
 
 <body>
 
+@if (!(isset($is_widget) && $is_widget) && (Auth::check() && Auth::user()->type!='1'))
+        @include('layouts.menu')
+    @endif
+
 <div class="page-head jumbotron">
         <!-- Hero Panel -->
        <div class="container">
