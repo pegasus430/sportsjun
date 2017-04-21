@@ -48,9 +48,16 @@
     <link rel="stylesheet" href="{{ asset('/css/sidebar-menu.css') }}?v=<?php echo $css_version;?>" />
     <link rel="stylesheet" href="{{ asset('/css/select-multiple.css') }}?v=<?php echo $css_version;?>" />
     <link rel="stylesheet" href="{{ asset('/css/select2.min.css') }}?v=<?php echo $css_version;?>" />
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
  
      @yield('styles')
+
+     <style type="text/css">
+            .glyphicon-lg img{
+                    border-radius: 50%;
+            }
+     </style>
      <meta property="fb:app_id" content="{{ env('FACEBOOK_APP_ID') }}" />
 
        <script src="{{ asset('/js/jquery-2.1.1.min.js') }}?v=<?php echo $js_version;?>"></script>
@@ -65,12 +72,22 @@
 
 <body>
 
+@if (!(isset($is_widget) && $is_widget) && (Auth::check() && Auth::user()->type!='1'))
+        @include('layouts.menu')
+    @endif
+
 <div class="page-head jumbotron">
         <!-- Hero Panel -->
        <div class="container">
     <div class="row">
         <div class="col-md-2">
-            <div class="glyphicon-lg default-img" style="width: 100px; height: 100px;"></div>
+           
+         
+            <div class="glyphicon-lg " style="width: 100px; height: 100px;  ">
+                <a href="/" >   {!! Helper::makeImageHtml($organisation->logoImage,array('height'=>100,'width'=>100) )!!} </a>
+            </div>
+   
+            
             <!--<img src="http://placehold.it/110x110/6a737b/ffffff" class="img-circle"> --></div>
         <div class="col-md-7">
             <h1>{{$organisation->name}}</h1>
@@ -78,16 +95,19 @@
         </div>
         <div class="col-md-3">
         <ul class="nav navbar-nav navbar-right">
-                <li><a href="/organization/{{$organisation->id}}"><span class="fa fa-home"></span></a></li>
+                <li><a href="{{Auth::user()->type=='1'?"/organization/$organisation->id":'/'}}"><span class="fa fa-home"></span></a></li>
                 <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-user"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#"><span class="fa fa-user-circle-o"></span> User Profile</a></li>
-                        <li><a href="#"><span class="fa fa-trophy"></span> Sports Profile</a></li>
+                      <!--   <li><a href="#"><span class="fa fa-user-circle-o"></span> User Profile</a></li>
+                        <li><a href="#"><span class="fa fa-trophy"></span> Sports Profile</a></li> -->
                         <li><a href="#"><span class="fa fa-lock"></span> Change password</a></li>
-                        <li><a href="#"><span class="fa fa-power-off"></span> Logout</a></li>
+                        <li><a href="/auth/logout"><span class="fa fa-power-off"></span> Logout</a></li>
                     </ul>
                 </li>
+
+            @if(Auth::user()->type!='1')
                 <li><a href="index.php"><span class="fa fa-shopping-cart"></span><span class="cart-bubble">0</span></a></li>
+            @endif
                 <!--
                 <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-plus"></span> Create New</a>
     <ul class="dropdown-menu">
@@ -174,6 +194,7 @@
     <hr> </footer>
 
 
+
     <script type="text/javascript">
             var is_organization=true;
             var base_url = '';
@@ -202,7 +223,10 @@
    }(document, 'script', 'facebook-jssdk'));
 </script>
     @include ('layouts.footer_scripts')
-    @yield('end_scripts')
+
+
+
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script> 
 
         <script type="text/javascript" src='/org/js/scripts.js'></script>
     <script>
@@ -255,6 +279,33 @@
         }
     </script>
 
+
+<script type="text/javascript">
+
+
+        function add_to_cart(id,item){
+          
+            $.ajax({
+                url:'/cart/add_to_cart',
+                data:{id:id},
+                success:function(){
+                    toastr.success('Added to Cart',item)
+                },
+                error:function(){
+                    toastr.error('Sorry an Error Occured!',item)
+                }
+
+            })
+        }
+</script>
+
+
+  @yield('end_scripts')
+
+
+
+
+   
 
 
 </body>

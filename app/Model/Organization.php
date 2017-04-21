@@ -134,4 +134,9 @@ class Organization extends Model
             return $this->hasMany('App\Model\TournamentParent', 'organization_id');
         }
 
+      
+
+
+
+
 }

@@ -24,10 +24,11 @@ class OrganizationMembersController extends Controller
 {
 
 
-        public function __construct(ObjRequest $request){
-          $id = $request->route()->parameter('id');
+        public function __construct(){
+          $id = \Request::route()->parameter('id');
           $this->is_owner = false;
           $this->new_template = false; 
+
 
           $allow_newtemplate_setting  = BasicSettings::where('name', 'organization_new_template')->first();
 

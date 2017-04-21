@@ -36,6 +36,7 @@
                                 </ul>
                                 <div class="tab-content">
                                     <div class="tab-pane" id="page_past">
+                                    @if(count($old_schedules))
                                          @foreach($old_schedules as $nt)
                                         <div class="schedule_teams clearfix">
                                             <div class="col-md-2 col-sm-3 col-xs-12 text-center">
@@ -52,8 +53,13 @@
                                             </div>
                                         </div>
                                        @endforeach
+                                         @else
+                                           <div class="text-center">No Schedule Available</div>
+                                            
+                                    @endif
                                     </div>
                                     <div class="tab-pane active" id="page_ongoing">
+                                    @if(count($current_schedules))
                                            @foreach($current_schedules as $nt)
                                         <div class="schedule_teams clearfix">
                                             <div class="col-md-2 col-sm-3 col-xs-12 text-center">
@@ -70,8 +76,13 @@
                                             </div>
                                         </div>
                                        @endforeach
+                                         @else
+                                           <div class="text-center">No Schedule Available</div>
+                                            
+                                    @endif
                                     </div>
                                     <div class="tab-pane" id="page_upcoming">
+                                    @if(count($next_schedules))
                                          @foreach($next_schedules as $nt)
                                         <div class="schedule_teams clearfix">
                                             <div class="col-md-2 col-sm-3 col-xs-12 text-center">
@@ -88,6 +99,11 @@
                                             </div>
                                         </div>
                                        @endforeach
+
+                                         @else
+                                           <div class="text-center">No Schedule Available</div>
+                                            
+                                    @endif
                                     </div>
                                 </div>
                             </div>
@@ -116,69 +132,88 @@
                                 UPCOMPING </a> </li>
                                 </ul>
                                 <div class="tab-content">
+
                                     <div class="tab-pane" id="popup_past">
+                                    @if(count($old_schedules))
                                             @foreach($old_schedules as $nt)
-                                            <center>  <h4><a href="/gettournamentdetails/{{$nt->id}}">{{strtoupper($nt->name)}}</a></h4> </center>
+                                            <center>  <h4>Event: <a href="/gettournamentdetails/{{$nt->id}}">{{strtoupper($nt->name)}}</a></h4> </center>
                                             @foreach($nt->get_schedules('old') as $sc)
                                         <div class="row fixture-team-inner clearfix">
                                             <div class="col-xs-4 col-sm-4 text-center"><img width="40" src="{{$sc->getSideALogoAttribute()}}" alt="{{count($sc->getSideAAttribute())?$sc->getSideAAttribute()->name:''}}">
                                                 <h4>{{count($sc->getSideAAttribute())?$sc->getSideAAttribute()->name:''}}</h4></div>
                                             <div class="col-xs-4 col-sm-4 status text-center">
-                                                <p class="time">12:00 PM</p>
-                                                <p><strong>{{date('jS M Y', strtotime($sc->match_start_date))}}</strong></p>
+                                                <p class="time">@if($sc->match_start_time) {{date('h:i A', strtotime($sc->match_start_time))}} @endif</p>
+                                                <p><strong>@if($sc->match_start_date) {{date('jS M Y', strtotime($sc->match_start_date))}} @endif</strong></p>
                                                 <p><strong>{{$sc->sport->sports_name}}</strong></p>
                                                 <p>{{$sc->address}}</p>
                                                 <p>Scores: 12 - 20</p>
                                                 <p>Winners: The Hurricanes</p>
                                             </div>
-                                            <div class="col-xs-4 col-sm-4 text-center"><img width="40" src="images/nations-flags/atletico-sm.png" alt="{{count($sc->getSideBAttribute())?$sc->getSideBAttribute()->name:''}}">
+                                            <div class="col-xs-4 col-sm-4 text-center"><img width="40" src="{{$sc->getSideALogoAttribute()}}" alt="{{count($sc->getSideBAttribute())?$sc->getSideBAttribute()->name:''}}">
                                                 <h4>{{count($sc->getSideBAttribute())?$sc->getSideBAttribute()->name:''}}</h4></div>
                                         </div>
                                             @endforeach
                                        @endforeach
+
+                                         @else
+                                           <div class="text-center">No Schedule Available</div>
+                                            
+                                    @endif
                                     </div>
                                     <div class="tab-pane active" id="popup_ongoing">
+
+                                        @if(count($current_schedules))
                                             @foreach($current_schedules as $nt)
-                                            <center>  <h4><a href="/gettournamentdetails/{{$nt->id}}">{{strtoupper($nt->name)}}</a></h4> </center>
+                                            <center>  <h4>Event: <a href="/gettournamentdetails/{{$nt->id}}">{{strtoupper($nt->name)}}</a></h4> </center>
                                             @foreach($nt->get_schedules('current') as $sc)
                                         <div class="row fixture-team-inner clearfix">
                                             <div class="col-xs-4 col-sm-4 text-center"><img width="40" src="{{$sc->getSideALogoAttribute()}}" alt="{{count($sc->getSideAAttribute())?$sc->getSideAAttribute()->name:''}}">
                                                 <h4>{{count($sc->getSideAAttribute())?$sc->getSideAAttribute()->name:''}}</h4></div>
                                             <div class="col-xs-4 col-sm-4 status text-center">
-                                                <p class="time">12:00 PM</p>
-                                                <p><strong>{{date('jS M Y', strtotime($sc->match_start_date))}}</strong></p>
+                                                <p class="time">@if($sc->match_start_time) {{date('h:i A', strtotime($sc->match_start_time))}} @endif</p>
+                                                <p><strong>@if($sc->match_start_date) {{date('jS M Y', strtotime($sc->match_start_date))}} @endif</strong></p>
                                                 <p><strong>{{$sc->sport->sports_name}}</strong></p>
                                                 <p>{{$sc->address}}</p>
                                                 <p>Scores: 12 - 20</p>
                                                 <p>Winners: The Hurricanes</p>
                                             </div>
-                                            <div class="col-xs-4 col-sm-4 text-center"><img width="40" src="images/nations-flags/atletico-sm.png" alt="{{count($sc->getSideBAttribute())?$sc->getSideBAttribute()->name:''}}">
+                                            <div class="col-xs-4 col-sm-4 text-center"><img width="40" src="{{$sc->getSideALogoAttribute()}}" alt="{{count($sc->getSideBAttribute())?$sc->getSideBAttribute()->name:''}}">
                                                 <h4>{{count($sc->getSideBAttribute())?$sc->getSideBAttribute()->name:''}}</h4></div>
                                         </div>
                                             @endforeach
                                        @endforeach
+
+                                         @else
+                                           <div class="text-center">No Schedule Available</div>
+                                            
+                                    @endif
                                     </div>
                                     <div class="tab-pane" id="popup_upcoming">
 
+                                    @if(count($next_schedules))
                                         @foreach($next_schedules as $nt)
-                                            <center>  <h4><a href="/gettournamentdetails/{{$nt->id}}">{{strtoupper($nt->name)}}</a></h4> </center>
+                                            <center>  <h4>Event: <a href="/gettournamentdetails/{{$nt->id}}">{{strtoupper($nt->name)}}</a></h4> </center>
                                             @foreach($nt->get_schedules('next') as $sc)
                                         <div class="row fixture-team-inner clearfix">
                                             <div class="col-xs-4 col-sm-4 text-center"><img width="40" src="{{$sc->getSideALogoAttribute()}}" alt="{{count($sc->getSideAAttribute())?$sc->getSideAAttribute()->name:''}}">
                                                 <h4>{{count($sc->getSideAAttribute())?$sc->getSideAAttribute()->name:''}}</h4></div>
                                             <div class="col-xs-4 col-sm-4 status text-center">
-                                                <p class="time">12:00 PM</p>
-                                                <p><strong>{{date('jS M Y', strtotime($sc->match_start_date))}}</strong></p>
+                                                <p class="time">@if($sc->match_start_time) {{date('h:i A', strtotime($sc->match_start_time))}} @endif</p>
+                                                <p><strong>@if($sc->match_start_date) {{date('jS M Y', strtotime($sc->match_start_date))}} @endif</strong></p>
                                                 <p><strong>{{$sc->sport->sports_name}}</strong></p>
                                                 <p>{{$sc->address}}</p>
                                                 <p>Scores: 12 - 20</p>
                                                 <p>Winners: The Hurricanes</p>
                                             </div>
-                                            <div class="col-xs-4 col-sm-4 text-center"><img width="40" src="images/nations-flags/atletico-sm.png" alt="{{count($sc->getSideBAttribute())?$sc->getSideBAttribute()->name:''}}">
+                                            <div class="col-xs-4 col-sm-4 text-center"><img width="40" src="{{$sc->getSideBLogoAttribute()}}" alt="{{count($sc->getSideBAttribute())?$sc->getSideBAttribute()->name:''}}">
                                                 <h4>{{count($sc->getSideBAttribute())?$sc->getSideBAttribute()->name:''}}</h4></div>
                                         </div>
                                             @endforeach
                                        @endforeach
+                                    @else
+                                           <div class="text-center">No Schedule Available</div>
+                                            
+                                    @endif
                                      
                                     </div>
                                 </div>

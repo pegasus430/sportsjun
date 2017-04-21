@@ -43,6 +43,8 @@ use App\Model\ArcheryStatistic;
 use App\Model\ArcheryTeamStats;
 use App\Model\ArcheryArrowStats;
 use App\Model\BasicSettings;
+use Request;
+
 class Helper
 {
 
@@ -2757,6 +2759,8 @@ class Helper
     public static function check_if_org_template_enabled(){
         $response = false; 
 
+        $request = Request::url();      
+
 
           $allow_newtemplate_setting  = BasicSettings::where('name', 'organization_new_template')->first();
           if($allow_newtemplate_setting && $allow_newtemplate_setting->description=='1'){
@@ -2766,12 +2770,27 @@ class Helper
             return false;
           }
 
+        
           if(Auth::user()->type==1 && count(Auth::user()->organizations)){
              $organization = Auth::user()->organizations[0];
              session::put('organization_id',$organization->id);
              return true;
           }
-          else return false;
+          else{
+
+        //if user is not organization but view organization pages, allow
+            $url = Request::url();
+            $id = Request::route()->parameter('id');
+
+                if(str_contains($url,'org')){
+                     $org = Organization::find($id); 
+                    if($org) session::put('organization_id',$id);
+                    return true;
+                }    
+
+          }
+        
+        return false;
     }
     
 }

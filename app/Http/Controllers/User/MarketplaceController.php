@@ -27,6 +27,7 @@ use App\Model\Photo;
 use App\Model\Otp;
 use App\Model\Organization;
 
+
 use Illuminate\Http\Request as ObjRequest;
 use App\Model\BasicSettings;
 
@@ -52,7 +53,8 @@ class MarketplaceController extends Controller
              $id = $request->route()->parameter('id');
           $this->is_owner = false;
           $this->new_template = false;
-          $this->view ='organization';        
+          $this->view ='organization';   
+          $is_owner = false;     
 
           $allow_newtemplate_setting  = BasicSettings::where('name', 'organization_new_template')->first();
 
@@ -65,15 +67,16 @@ class MarketplaceController extends Controller
 
             if(Auth::user()->organizations[0]->id == $id && $this->new_template){
                  $this->is_owner = true;
+                 $is_owner = true;
                  $this->view = 'organization_2';
-                 $organization = Organization::find($id);
-                 view()->share('organisation', $organization);
+                 $this->organization = Organization::find($id);
+                 view()->share('organisation', $this->organization);
             }
             
         }    
 
 
-        if($this->is_owner){
+       // if($this->is_owner){
             $max = MarketPlace::select()->max('base_price');           
             $states = State::where('country_id', config('constants.COUNTRY_INDIA'))->orderBy('state_name')->lists('state_name', 'id')->all();
             $cities=[];
@@ -81,9 +84,20 @@ class MarketplaceController extends Controller
             $marketplace = Marketplace::all();            
             $categories = Helper::setMenuToSelect(7,0,$marketPlaceCategories);   
             $categories = $marketPlaceCategories;
-                return view($this->view.'.marketplace', compact('categories','states','cities','max','marketplace','search_by'));
-        }
+            $organisation = Organization::find($id);
 
+            $items= marketplace::where('organization_id', $id)->get();
+            $page = 'org';
+
+        if($this->is_owner)
+                return view('organization_2.marketplace', compact('categories','states','cities','max','marketplace','search_by','items','is_owner','organisation'));
+        else  return view('organization_2.marketplace_buy', compact('categories','states','cities','max','marketplace','search_by','items','is_owner','organisation','page'));
+       // }
+
+
+    }
+
+    public function marketplace_details($item_id){
 
     }
    
@@ -97,6 +111,8 @@ class MarketplaceController extends Controller
 	   $amount=explode("-",$request['amount']);
        $page =$request['query'];
        $loginuserid=Auth::user()->id;
+
+       $org_id = Session::get('organization_id');
 	   
 	    if($request['query']=='marketplace')
 		{
@@ -120,6 +136,11 @@ class MarketplaceController extends Controller
 	                       
                            ->where('user_id','<>',Auth::user()->id)->where('item_status','available')->limit($limit)->offset($offset);	
 		}
+
+        if($request['searchType'] =='org'){
+             $query = MarketPlace::with('photos')->where('organization_id',$org_id)->where('item_status','available')->limit($limit)->offset($offset);  
+        }
+
 		  if($request['searchType']=='myitems')
 		{
        $query = MarketPlace::with('photos')
@@ -199,8 +220,14 @@ class MarketplaceController extends Controller
 		}
 		$marketplace =new MarketPlace();
         $enum = config('constants.ENUM.MARKETPLACE.ITEMTYPE');
+
+        $is_org = false;
+        if(Auth::user()->type=='1'){
+            $is_org = true;
+        }
+
         Helper::setMenuToSelect(7,0);
-        return view('marketplace.create')->with(array( 'marketPlaceCategories' => ['' => 'Select Category'] + $marketPlaceCategories,'enum'=> ['' => 'Select Item Type'] +$enum,'countries' =>  ['' => 'Select Country'] +$countries,'states' =>  ['' => 'Select State'] +$states,'cities' =>  ['' => 'Select City'] + $cities));
+        return view('marketplace.create')->with(array( 'is_org'=>$is_org, 'marketPlaceCategories' => ['' => 'Select Category'] + $marketPlaceCategories,'enum'=> ['' => 'Select Item Type'] +$enum,'countries' =>  ['' => 'Select Country'] +$countries,'states' =>  ['' => 'Select State'] +$states,'cities' =>  ['' => 'Select City'] + $cities));
     }
 
     /**
@@ -272,7 +299,14 @@ class MarketplaceController extends Controller
 	    $cities = City::where('state_id',    $marketplace->state_id)->orderBy('city_name')->lists('city_name', 'id')->all();
 		$location=Helper::address($request['address'],$request['city'],$request['state'],$request['country']);
 	    $request['location']=trim($location,",");
-        return view('marketplace.edit')->with(array('marketPlaceCategories'=>['' => 'Select Category'] + $marketPlaceCategories,'countries' =>  ['' => 'Select Country'] +$countries,'states' =>  ['' => 'Select State'] +$states,'cities' =>  ['' => 'Select City'] + $cities,'enum'=>['' => 'Select Item type']+$enum,'id'=>$id,'marketplace'=>$marketplace));
+
+
+        $is_org = false;
+        if(Auth::user()->type=='1'){
+            $is_org = true;
+        }
+
+        return view('marketplace.edit')->with(array('is_org'=>$is_org,'marketPlaceCategories'=>['' => 'Select Category'] + $marketPlaceCategories,'countries' =>  ['' => 'Select Country'] +$countries,'states' =>  ['' => 'Select State'] +$states,'cities' =>  ['' => 'Select City'] + $cities,'enum'=>['' => 'Select Item type']+$enum,'id'=>$id,'marketplace'=>$marketplace));
     }
 
     /**
@@ -361,6 +395,7 @@ class MarketplaceController extends Controller
 		  $user_id=$marketplace->user_id;
 		   $loginuser_id=Auth::user()->id;
 		   $location=$marketplace->location;
+           
 		  
   return view('marketplace.showgallery')->with(array('item'=>$marketplace,'photos'=> $photo,'itemname'=>$item, 'itemdescription'=>$itemdescription, 'base_price'=> $base_price,'actual_price' => $actual_price,'id'=>$id, 'contact_number'=> $contact_number,'page'=>'myitems','user_id'=>$user_id,   'loginuser_id'=>$loginuser_id,'location'=>$location));        
     }   
