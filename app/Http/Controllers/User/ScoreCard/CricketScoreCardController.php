@@ -5,10 +5,14 @@ namespace App\Http\Controllers\User\ScoreCard;
 use App\Helpers\Helper;
 use App\Http\Controllers\User\ScoreCardController as parentScoreCardController;
 use App\Model\CricketPlayerMatchwiseStats;
+use App\Model\MatchSchedule;
 use App\Model\Photo;
 use App\Model\Team;
+use App\Model\Tournaments;
 use App\User;
 use Auth;
+use Carbon\Carbon;
+use Request;
 
 //get all my requests data as object
 

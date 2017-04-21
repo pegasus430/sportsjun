@@ -149,7 +149,7 @@ class ScoreCard {
 			  	  	 'has_winner'=> true,
 			  	  	 'winner' => $b_id,
 			  	  	 'looser' => $b_id,
-			  	  	 'message'	 => Team::find($b_id)->name." <b>wins</b> with <b>$score_b</b> rubbers on <b>". $number_of_rubbers . "</b>, will you like to <b>continue</b> or <b>end match</b>?"
+			  	  	 'message'	 => object_get(Team::find($b_id),'name')." <b>wins</b> with <b>$score_b</b> rubbers on <b>". $number_of_rubbers . "</b>, will you like to <b>continue</b> or <b>end match</b>?"
 			  	  ];
 			  }
 			  else{
