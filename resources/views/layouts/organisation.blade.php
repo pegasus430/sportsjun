@@ -144,9 +144,9 @@
                 <li class='nav-item'>
                     <a href="/organization/{{$organisation->id}}/schedules"><img src="/org/images/icons/icon-schedule.png" alt="" width="16" height="16"> Schedule</a>
                 </li>
-                <li class='nav-item'>
+              <!--   <li class='nav-item'>
                     <a href="coaching.php"><img src="/org/images/icons/icon-coach.png" alt="" width="16" height="16"> Coaching</a>
-                </li>
+                </li> -->
                 <li class='nav-item'>
                     <a href="/organization/{{$organisation->id}}/marketplace"><img src="/org/images/icons/icon-marketplace.png" alt="" width="16" height="16"> marketplace</a>
                 </li>
