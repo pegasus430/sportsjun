@@ -315,12 +315,12 @@ class AlbumController extends Controller {
 			if($match_schedule_type == 'player'){
 
 				//to create album permissions
-				$matchalbumcreate = DB::select("SELECT * FROM `match_schedules` tp WHERE id = $action_id AND (a_id = $loginuserId OR b_id = $loginuserId) AND tp.deleted_at is NULL");
+				$matchalbumcreate = DB::select("SELECT * FROM `match_schedules` tp WHERE id = $action_id AND (a_id = $loginUserId OR b_id = $loginUserId) AND tp.deleted_at is NULL");
 
 				DB::setFetchMode(PDO::FETCH_ASSOC);
 				$album_array = DB::select("SELECT a.id,a.user_id,a.title,
 									(CASE a.user_id
-									WHEN $loginuserId THEN 'yes'
+									WHEN $loginUserId THEN 'yes'
 									ELSE 'no' END) AS 'accessflag'
 									FROM `albums` a
 									LEFT JOIN `match_schedules` ms ON a.imageable_id = ms.id AND a.imageable_type = 'gallery_match' AND ms.schedule_type = 'player'									
@@ -330,7 +330,7 @@ class AlbumController extends Controller {
 			else{
 
 				//to create album permissions
-				$matchalbumcreate = DB::select("SELECT * FROM `team_players` tp WHERE tp.user_id =$loginuserId AND tp.team_id in ($ids) AND `status` = 'accepted'  AND tp.deleted_at is NULL");
+				$matchalbumcreate = DB::select("SELECT * FROM `team_players` tp WHERE tp.user_id =$loginUserId AND tp.team_id in ($ids) AND `status` = 'accepted'  AND tp.deleted_at is NULL");
 				DB::setFetchMode(PDO::FETCH_ASSOC);
 				$album_array = DB::select("SELECT a.id,a.user_id,a.title,
 									(CASE tp.role
@@ -339,7 +339,7 @@ class AlbumController extends Controller {
 									WHEN 'player' THEN IF(a.user_id = tp.user_id,'yes','no') ELSE 'no' END) AS 'accessflag'
 									FROM `albums` a
 									LEFT JOIN `match_schedules` ms ON a.imageable_id = ms.id AND a.imageable_type = 'gallery_match' AND ms.schedule_type = 'team' 
-									LEFT JOIN `team_players` tp ON (ms.a_id = tp.team_id OR ms.b_id = tp.team_id) AND tp.user_id = $loginuserId
+									LEFT JOIN `team_players` tp ON (ms.a_id = tp.team_id OR ms.b_id = tp.team_id) AND tp.user_id = $loginUserId
 									WHERE a.imageable_id = $action_id  AND a.deleted_at is NULL GROUP BY a.id;
 									");
 				//echo $flag.count($matchalbumcreate)	;exit;
@@ -570,12 +570,12 @@ class AlbumController extends Controller {
 
 			if($match_schedule_type == 'player'){
 
-				$matchalbumcreate = DB::select("SELECT * FROM `match_schedules` tp WHERE id = $action_id AND (a_id = $loginuserId OR b_id = $loginuserId) AND tp.deleted_at is NULL");
+				$matchalbumcreate = DB::select("SELECT * FROM `match_schedules` tp WHERE id = $action_id AND (a_id = $loginUserId OR b_id = $loginUserId) AND tp.deleted_at is NULL");
 
 				DB::setFetchMode(PDO::FETCH_ASSOC);
 				$album_array = DB::select("SELECT a.id,a.user_id,a.title,
 									(CASE a.user_id
-									WHEN $loginuserId THEN 'yes'
+									WHEN $loginUserId THEN 'yes'
 									ELSE 'no' END) AS 'accessflag'
 									FROM `albums` a
 									LEFT JOIN `match_schedules` ms ON a.imageable_id = ms.id AND a.imageable_type = 'gallery_match' AND ms.schedule_type = 'player'									
@@ -584,7 +584,7 @@ class AlbumController extends Controller {
 			}
 			else{
 
-				$matchalbumcreate = DB::select("SELECT * FROM `team_players` tp WHERE tp.user_id =$loginuserId AND tp.team_id in ($ids) AND `status` = 'accepted'");
+				$matchalbumcreate = DB::select("SELECT * FROM `team_players` tp WHERE tp.user_id =$loginUserId AND tp.team_id in ($ids) AND `status` = 'accepted'");
 				DB::setFetchMode(PDO::FETCH_ASSOC);
 				$album_array = DB::select("SELECT a.id,a.user_id,a.title,
 									(CASE tp.role
@@ -593,7 +593,7 @@ class AlbumController extends Controller {
 									WHEN 'player' THEN IF(a.user_id = tp.user_id,'yes','no') ELSE 'no' END) AS 'accessflag'
 									FROM `albums` a
 									LEFT JOIN `match_schedules` ms ON a.imageable_id = ms.id AND a.imageable_type = 'gallery_match' AND ms.schedule_type = 'team' 
-									LEFT JOIN `team_players` tp ON (ms.a_id = tp.team_id OR ms.b_id = tp.team_id) AND tp.user_id = $loginuserId
+									LEFT JOIN `team_players` tp ON (ms.a_id = tp.team_id OR ms.b_id = tp.team_id) AND tp.user_id = $loginUserId
 									WHERE a.imageable_id = $action_id  AND a.id=$lastinsertedid  AND a.deleted_at is NULL GROUP BY a.id;
 									");
 				//echo $flag.count($matchalbumcreate)	;exit;
@@ -1393,12 +1393,12 @@ class AlbumController extends Controller {
 
 				if($match_schedule_type == 'player'){
 
-					// $matchalbumcreate = DB::select("SELECT * FROM `match_schedules` tp WHERE id = $album[0]['imageable_id'] AND (a_id = $loginuserId OR b_id = $loginuserId)");
+					// $matchalbumcreate = DB::select("SELECT * FROM `match_schedules` tp WHERE id = $album[0]['imageable_id'] AND (a_id = $loginUserId OR b_id = $loginUserId)");
 
 					DB::setFetchMode(PDO::FETCH_ASSOC);
 					$album_array = DB::select("SELECT a.id,a.user_id,a.title,
 									(CASE a.user_id
-									WHEN $loginuserId THEN 'yes'
+									WHEN $loginUserId THEN 'yes'
 									ELSE 'no' END) AS 'accessflag'
 									FROM `albums` a
 									LEFT JOIN `match_schedules` ms ON a.imageable_id = ms.id AND a.imageable_type = 'gallery_match' AND ms.schedule_type = 'player'									
@@ -1408,7 +1408,7 @@ class AlbumController extends Controller {
 				}
 				else{
 
-					// $matchalbumcreate = DB::select("SELECT * FROM `team_players` tp WHERE tp.user_id =$loginuserId AND tp.team_id in ($ids) AND `status` = 'accepted'");
+					// $matchalbumcreate = DB::select("SELECT * FROM `team_players` tp WHERE tp.user_id =$loginUserId AND tp.team_id in ($ids) AND `status` = 'accepted'");
 					DB::setFetchMode(PDO::FETCH_ASSOC);
 					$album_array = DB::select("SELECT a.id,a.user_id,a.title,
 									(CASE tp.role
@@ -1417,7 +1417,7 @@ class AlbumController extends Controller {
 									WHEN 'player' THEN IF(a.user_id = tp.user_id,'yes','no') ELSE 'no' END) AS 'accessflag'
 									FROM `albums` a
 									LEFT JOIN `match_schedules` ms ON a.imageable_id = ms.id AND a.imageable_type = 'gallery_match' AND ms.schedule_type = 'team' 
-									LEFT JOIN `team_players` tp ON (ms.a_id = tp.team_id OR ms.b_id = tp.team_id) AND tp.user_id = $loginuserId
+									LEFT JOIN `team_players` tp ON (ms.a_id = tp.team_id OR ms.b_id = tp.team_id) AND tp.user_id = $loginUserId
 									WHERE a.imageable_id =  $imageable_id  AND a.deleted_at is NULL GROUP BY a.id;
 									");
 					DB::setFetchMode(PDO::FETCH_CLASS);
