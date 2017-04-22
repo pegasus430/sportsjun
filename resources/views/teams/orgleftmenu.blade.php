@@ -28,7 +28,7 @@ if ($is_widget) {
 
 
 
-
+@if(!Helper::check_if_org_template_enabled())
 
 <div class="col-sm-2" id="sidebar-left">
     <div class="row">
@@ -177,5 +177,12 @@ if ($is_widget) {
         });
     });
 </script>
+
+
+@else
+    <div class="col-md-2">
+
+    </div>
+@endif
 
 

@@ -2782,6 +2782,20 @@ class Helper
             $url = Request::url();
             $id = Request::route()->parameter('id');
 
+            if(Request::route()->parameter('team_id')){
+                $id=Request::route()->parameter('team_id');               
+            }
+
+            if(str_contains($url,'tournament')){
+                if(session::has('organization_id')){
+                    $org = Organization::find(session::get('organization_id'));
+                    $org_tournaments = $org->tournaments->lists('id')->toArray();
+             
+                    if(in_array($id, $org_tournaments)) return true;
+                }
+                else return false;
+            }
+
                 if(str_contains($url,'org')){
                      $org = Organization::find($id); 
                     if($org) session::put('organization_id',$id);
