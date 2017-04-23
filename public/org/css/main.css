@@ -1896,3 +1896,189 @@ footer .social-icons-wrapper a.linkedin:focus {
 #teamStatsDiv .table thead th, .teamStatsDiv .table thead th , .sportsjun-datatable-head th {
     color: #34495e !important;
 }
+
+@media screen and (max-width: 767px) {
+    .mlogo {
+        width: 20%;
+        float: left;
+    }
+    .mtitle {
+        width: 60%;
+        float: left;
+    }
+    .mtitle h1 {
+        font-size: 24px;
+        margin-bottom: 18px;
+        margin-top: 20px;
+    }
+    .minfolinks {
+        width: 80%;
+        margin-left: 20%;
+        float: left;
+    }
+    .minfolinks .navbar-nav {
+        margin: 12px;
+    }
+    .minfolinks .nav > li {
+        margin-right: 8px;
+        display: inline-block;
+    }
+    .minfolinks .nav > li > a {
+        font-size: 14px;
+    }
+    .minfolinks .nav > li > a .cart-bubble {
+        width: 16px;
+        height: 16px;
+        font-size: 12px;
+        line-height: 16px;
+        background-color: transparent;
+    }
+    .minfolinks .navbar-nav .open .dropdown-menu {
+        position: absolute;
+        background-color: #fff;
+    }
+    .minfolinks .navbar-nav .dropdown-menu {
+        font-size: 10px;
+    }
+    .minfolinks .navbar-nav .open .dropdown-menu > li > a,
+    .minfolinks .navbar-nav .open .dropdown-menu .dropdown-header {
+        padding: 4px 12px;
+        line-height: 16px;
+    }
+    .minfolinks .dropdown-menu > li > a .fa {
+        margin-right: 12px;
+        font-size: 14px;
+        width: 14px;
+    }
+    .table-responsive {
+        border: none;
+    }
+    .filter-button {
+        padding: 2px !important;
+        font-size: 8px !important;
+    }   
+    .form .input-container.two-col {
+        width: 90%;
+    }
+}
+
+@media (max-width: 680px) {
+    .search-reasult .t_tltle {
+        text-align: center;
+    }
+    .search-reasult .t_tltle h4 {
+        font-size: 12px;
+    }
+    .search-reasult .tabbable-line > .nav-tabs > li > a {
+        padding: 2px 14px;
+        font-size: 8px;
+    }
+    hr {
+        margin-top: 8px;
+        margin-bottom: 8px;
+    }
+    .jumbotron {
+        margin-bottom: 10px;
+    }
+    div#staff_foot_info {
+        font-size: 8px;
+        text-align: center;
+    }
+    .follow {
+        padding: 0px 8px;
+        margin-left: 0px;
+        display: inline-block;
+      /*  font-size: 8px;*/
+    }
+ 
+   
+    .event-carousel {
+        margin-top: 4px;
+    }
+    .events .schedule,
+    .events label,
+    .wg-viewmore {
+        font-size: 8px;
+    }
+    .pdtb-30 {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+    .create-btn-link {
+        margin-bottom: 14px;
+    }
+    .tabbable-panel {
+        float: left;
+        width: 100%;
+    }
+    .tabbable-line > .nav-tabs > li > a {
+        padding: 3px 15px;
+        font-size: 8px;
+    }
+    .tabbable-line > .nav-tabs > li.active {
+        border-bottom: 1px solid #ff5252;
+    }
+    .create-btn-link .wg-cnlink {
+        top: 0;
+        position: relative;
+        display: inline-block;
+        margin: 0 !important;
+    }
+   
+    .page-header {
+        font-size: 14px;
+        line-height: 30px;
+        margin-bottom: 8px;
+        padding-bottom: 3px;
+    }
+    .page-header .ph-mark {
+        width: 18px;
+        height: 18px;
+        line-height: 27px;
+        margin-top: 6px;
+    }
+    .page-header .ph-mark .glyphicon {
+        font-size: 8px;
+        top: -8px;
+    }
+    .search-reasult .no-records:before {
+        left: -40px;
+    }
+    .search-reasult .no-records:after {
+        right: -40px;
+    }
+    .search-reasult .no-records:before,
+    .search-reasult .no-records:after {
+        width: 40px;
+        font-size: 8px;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .page-head {
+        background-size: cover;
+        padding: 12px 0 64px;
+    }
+    .mlogo .default-img {
+        width: 60px !important;
+        height: 60px !important;
+    }
+    .mlogo .default-img:after {
+        top: 35%;
+    }
+    .mlogo,
+    .mtitle,
+    .minfolinks {
+        width: 100%;
+        float: left;
+        margin: 0;
+        text-align: center;
+    }
+    .mtitle h1 {
+        width: auto;
+        margin-top: 10px;
+    }
+    .mtitle .pull-left {
+        float: none !important;
+    }
+}

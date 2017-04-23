@@ -8,10 +8,18 @@
     <div class="container">
         <div class="row">
             <div class="col-md-9">
+                 <div class="row">
+                    <div class="col-md-12">
+                        <div class="wg wg-dk-grey  no-shadow no-margin">
+                            <div class="wg-wrap clearfix ">
+                                <h4 class="no-margin pull-left">Tournaments</h4> <a href="/organization/{{$organisation->id}}/new_tournament"  class="wg-viewmore pull-right">New Tournament <i class="fa fa-angle-double-right">    </i></a> </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="wg wg-white">
                     <div class="wg-wrap">
-                        <div class="wg-hd">
-                            <h4>Tournaments</h4> <a href="/organization/{{$organisation->id}}/new_tournament" class="wg-cnlink">Create Tournament</a> </div>
+                      
                         <select class="selectpicker">
                          @foreach($parent_tournaments as $parent)
                             <optgroup label="{{$parent->name}}">
@@ -55,10 +63,19 @@
                             </div> <a data-slide="prev" href="#events-list" class="left carousel-control">‹</a> <a data-slide="next" href="#events-list" class="right carousel-control">›</a> </div>
                     </div>
                 </div>
+
+                  <div class="row">
+                    <div class="col-md-12">
+                        <div class="wg wg-dk-grey  no-shadow no-margin">
+                            <div class="wg-wrap clearfix ">
+                                <h4 class="no-margin pull-left">Coaching</h4> <a  class="wg-viewmore pull-right">View More <i class="fa fa-angle-double-right">    </i></a> </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="wg wg-white">
                     <div class="wg-wrap">
                         <div class="wg-hd">
-                            <h4>Coachings</h4> <a href="" class="wg-cnlink">Create Coaching</a> </div>
+                            <a href="" class="wg-cnlink">Create Coaching</a> </div>
                         <div class="carousel slide event-carousel events" id="coachings">
                             <div class="carousel-inner">
                                 <div class="item  active">
@@ -114,16 +131,17 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="wg wg-dk-grey  no-shadow">
+                        <div class="wg wg-dk-grey  no-shadow no-margin">
                             <div class="wg-wrap clearfix ">
                                 <h4 class="no-margin pull-left">Just Added Teams</h4> <a href="/organizationTeamlist/{{$organisation->id}}" class="wg-viewmore pull-right">View More <i class="fa fa-angle-double-right">    </i></a> </div>
                         </div>
                     </div>
                 </div>
-                <div class="row space-top-half text-center ">
+                 <div class="col-md-12 wg wg-white space-top-half text-center">
                     @foreach($organisation->teamplayers as $team)
                     <div class="col-lg-3 col-sm-6 ">
-                        <p class="text-center">{{$team->name}}</p> <img src="/uploads/teams/{{$team->logo}}" alt="" class="img-responsve" style="height: 150px; width: 150px; border-radius: 50%"> </div>
+                        <p class="text-center">{{$team->name}}</p> <img src="/uploads/teams/{{$team->logo}}" alt="" class="img-responsive" style="height: 150px; width: 150px; border-radius: 50%"> 
+                    </div>
                     <!-- .col-lg-3.col-sm-6 -->
                     @endforeach
                     <!-- .col-lg-3.col-sm-6 -->

@@ -22,6 +22,9 @@
         <link href="/org/css/font-awesome.min.css" rel="stylesheet">        
      <link href="/org/css/bootstrap.slider.css" rel="stylesheet"> 
 
+       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+
 
        <?php $js_version = config('constants.JS_VERSION');$css_version = config('constants.CSS_VERSION'); ?>
 
@@ -72,7 +75,7 @@
 
 <body>
 
-
+  <div class="wrap">
 
 @if(!Request::has('from_org'))
 
@@ -85,20 +88,18 @@
         <!-- Hero Panel -->
        <div class="container">
     <div class="row">
-        <div class="col-md-2">
-           
+        <div class="col-sm-2 mlogo">          
          
             <div class="glyphicon-lg " style="width: 100px; height: 100px;  ">
                 <a href="/" >   {!! Helper::makeImageHtml($organisation->logoImage,array('height'=>100,'width'=>100) )!!} </a>
             </div>
-   
-            
+             
             <!--<img src="http://placehold.it/110x110/6a737b/ffffff" class="img-circle"> --></div>
-        <div class="col-md-7">
+        <div class="col-sm-7 mtitle">
             <h1>{{$organisation->name}}</h1>
             <div class="pull-left"> <span><i class="fa fa-map-marker"></i> {{$organisation->location}}</span> <a href="#" class="follow"><i class="fa fa-star-o"></i> Follow Us</a> </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-sm-3 minfolinks">
         <ul class="nav navbar-nav navbar-right">
                 <li><a href="{{Auth::user()->type=='1'?"/organization/$organisation->id":'/'}}"><span class="fa fa-home"></span></a></li>
                 <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-user"></span></a>
