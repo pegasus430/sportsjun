@@ -46,24 +46,56 @@
                                     @foreach($members as $member)
                                         <tr>
                                             <td>
-                                                <div class="circle-mask">
-                                                    <canvas id="canvas" class="circle" width="96" height="96"></canvas>
-                                                </div>
+                                               <span class="member-image">
+                    {!! Helper::Images( (count($member['user']['photos'])?$member['user']['photos'][0]['url']:''),'user_profile',array('height'=>60,'width'=>60,'class'=>'img-circle img-border ') ) !!}
+                </span>
                                             </td>
                                             <td> <!-- <a class="player-name" onclick="openNav({{$member->id}})"> -->
-                                            <a class="player-name" href="/showsportprofile/{{$member->id}}" >
+                                            <a class="player-name" href="#"  onclick="openNav({{$member->id}})" >
                                                   {{$member->name}}
                                                 </a></td>
                                             <td>@foreach($member->userdetails as $team)  {{$team->team?$team->team->name:''}}, @endforeach</td>
                                             <td>@foreach($member->getSportListAttribute() as $sport) {{$sport->sports_name}} @endforeach</td>
                                             <td>
-                                                <div id="stars" class="starrr"></div>
+                                                  <input type="hidden" class="rating b-rating" value="{{$member->rate}}" data-filled="fa fa-star s-rating" data-empty="fa fa-star-o s-rating"
+                           data-target_id="{{$member->id}}" data-type="user"
+                    />
                                             </td>
                                         </tr>
+
                                          <div id="myNav{{$member->id}}" class="overlay"> <a href="javascript:void(0)" class="closebtn" onclick="closeNav({{$member->id}})">&times;</a>
-                                            <div class="overlay-content"> Player data goes here...</div>
+                                
+                                            <div class="overlay-content"> 
+                                                         <iframe src="/editsportprofile/{{$member->id}}?from_org=true" width="100%"; height="1000px">
+                                             
+                                                          </iframe>
+
+
+                                            </div>
                                         </div>
                                       @endforeach
+
+        
+                                        <tr>
+    <td colspan="5">
+        @if ($members->hasMorePages())
+            <div id="viewmorediv">
+                <a id="viewmorebutton" class="view_tageline_mkt" data-replace="tr"
+                   @if (!(isset($is_widget) && $is_widget))
+                        data-url="{{route('organization.members.list',['id'=>$id,'page'=>$members->currentPage()+1,'filter-team'=>$filter_team])}}"
+                   @else
+                        data-url="{{route('widget.organization.members',['id'=>$id,'page'=>$members->currentPage()+1,'filter-team'=>$filter_team])}}"
+                   @endif
+
+                   onclick="return DataTableLoadMore(this,function() {InitRatings();})"
+                >
+                    <span class="market_place"><i
+                                class="fa fa-arrow-down"></i> <label>{{ trans('message.view_more') }}</label></span>
+                </a>
+            </div>
+        @endif
+    </td>
+</tr>
                                     </tbody>
                                 </table>
                             </div>
