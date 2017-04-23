@@ -23,7 +23,7 @@ class HomeController extends Controller {
         }
         if (\Auth::user() && Auth::user()->type=='1'){
             $org = Auth::user()->organizations;
-            if(count($org)) return redirect()->to('/getorgteamdetails/'.$org[0]['id']);
+            if(count($org)) return redirect()->to('/organization/'.$org[0]['id']);
 
             return redirect(url('/organization/organizations',[\Auth::user()->id]));
         }

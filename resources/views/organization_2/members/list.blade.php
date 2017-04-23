@@ -17,7 +17,7 @@
                         <div class="sb-label">Filter by teams in your organization</div>
                         <div class="input-group col-md-12">
                         <form action="" method="get">
-                            <input type="text" class="form-control input-lg" placeholder="" name="filter-team" value="{{$filter_team}}" /> <span class="input-group-btn" type='submit'>                       
+                            <input type="text" class="form-control input-lg" placeholder="" name="filter-team" value="{{$filter_team}}" id='filter_team'/> <span class="input-group-btn" type='submit'>                       
               <i class="fa fa-search"></i>
             </span> 
              </form></div>

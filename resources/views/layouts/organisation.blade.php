@@ -126,8 +126,11 @@
           <nav class='container'>
         <div class="scroll row nav-icons">
             <ul class="col-md-12" id="nav">
+                 <li class='nav-item li_info'>
+                    <a href="/getorgteamdetails/{{$organisation->id}}"><span class="fa fa-home fa-lg" style=""></span> Home</a>
+                </li>
                 <li class='nav-item li_info'>
-                    <a href="/getorgteamdetails/{{$organisation->id}}"><img src="/org/images/icons/icon-info.png" alt="" width="16" height="16"> Info</a>
+                    <a href="/organization/{{$organisation->id}}/info"><img src="/org/images/icons/icon-info.png" alt="" width="16" height="16"> Info</a>
                 </li>
                 <li class='nav-item li_staff'>
                     <a href="/organization/{{$organisation->id}}/staff"><img src="/org/images/icons/icon-staff.png" alt="" width="16" height="16"> Staff</a>

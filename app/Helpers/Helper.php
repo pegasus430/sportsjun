@@ -2790,10 +2790,19 @@ class Helper
                 if(session::has('organization_id')){
                     $org = Organization::find(session::get('organization_id'));
                     $org_tournaments = $org->tournaments->lists('id')->toArray();
-             
-                    if(in_array($id, $org_tournaments)) return true;
                 }
-                else return false;
+            }
+
+            if(str_contains($url,'team/members/')){
+                 if(session::has('organization_id')){
+                    $org = Organization::find(session::get('organization_id'));
+                    $org_tournaments = $org->teamplayers->lists('id')->toArray();
+                }
+            }
+
+            if(isset($org_tournaments)){ 
+                    if(in_array($id, $org_tournaments)) return true;                
+                    else return false;
             }
 
                 if(str_contains($url,'org')){

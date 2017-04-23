@@ -14,7 +14,7 @@ Route::get('team/teams/{user_id?}', [
 ]);
 Route::get('getorgteamdetails/{id}', [
     'as'   => 'getorgteamdetails',
-    'uses' => 'User\OrganizationController@getorgDetails',
+    'uses' => 'User\OrganizationController@index',
 ]);
 Route::get('gettournamentdetails/{id}', [
     'as'   => 'gettournamentdetails',
@@ -69,6 +69,7 @@ Route::group(['prefix' => 'organization/{id}'], function () {
     Route::post('/album/add', 'User\OrganizationController@album_save');
     Route::post('/photo/add', 'User\OrganizationController@photo_save');
     Route::get('/update_fields', 'User\OrganizationController@update_fields');
+    Route::get('/info', 'User\OrganizationController@getorgDetails');
 
     Route::get('schedules', [
         'as'   => 'organization.schedules.list',
