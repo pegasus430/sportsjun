@@ -9,6 +9,7 @@ use App\Model\MatchSchedule;
 use App\Model\Photo;
 use App\Model\Team;
 use App\Model\Tournaments;
+use App\Model\Sport;
 use App\User;
 use Auth;
 use Carbon\Carbon;
