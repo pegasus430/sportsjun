@@ -316,8 +316,8 @@ class MatchSchedule extends Model
 
     public function getActiveRubber()
     {
-        if (Session::has('rubberInfo')) {
-            return Session::get('rubberInfo');
+        if (\Session::has('rubberInfo')) {
+            return \Session::get('rubberInfo');
         }
 
         $active_rubber = MatchScheduleRubber::whereMatchId($this->id)
