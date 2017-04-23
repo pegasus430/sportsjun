@@ -18,13 +18,13 @@
             @endif
             <span class="member-user-info">
                 @if (!(isset($is_widget) && $is_widget))
-                        <a href="{{route('showsportprofile',['id'=>$member['id']])}}" class="member-user-info-name">{{ $member->name }}</a>
+                        <a href="javascript:void(0)" class="member-user-info-name" onclick="openNav({{$member->id}})">{{ $member->name }}</a>
                 @else
-                    <span class="member-user-info-name">{{ $member->name }}</span>
+                    <span class="member-user-info-name" >{{ $member->name }}</span>
                 @endif
             </span>
 
-        </td>
+        </td> 
         <td>
             <?php $teamNames = $teams->lists('name'); ?>
             @foreach ($teamNames as $teamName)
@@ -48,6 +48,17 @@
         </td>
         <td></td>
     </tr>
+
+     <div id="myNav{{$member->id}}" class="overlay"> <a href="javascript:void(0)" class="closebtn" onclick="closeNav({{$member->id}})">&times;</a>
+                                
+                                            <div class="overlay-content"> 
+                                                         <iframe src="/editsportprofile/{{$member->id}}?from_org=true" width="100%"; height="1000px">
+                                             
+                                                          </iframe>
+
+
+                                            </div>
+                                        </div>
 @endforeach
 <tr>
     <td colspan="5">

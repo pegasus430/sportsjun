@@ -180,7 +180,7 @@ if ($is_widget) {
 
 
 @else
-    <div class="col-md-2">
+    <div class="col-md-1">
 
     </div>
 @endif

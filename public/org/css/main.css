@@ -1850,7 +1850,7 @@ footer .social-icons-wrapper a.linkedin:focus {
 
 .overlay-content {
     position: relative;
-    top: 25%;
+    top: 10%;
     width: 100%;
     text-align: center;
     margin-top: 30px;
@@ -1872,9 +1872,9 @@ footer .social-icons-wrapper a.linkedin:focus {
 
 .overlay .closebtn {
     position: absolute;
-    top: 20px;
+    top: 10px;
     left: 45px;
-    font-size: 60px;
+    font-size: 40px;
 }
 
 @media screen and (max-height: 450px) {
@@ -1893,6 +1893,6 @@ footer .social-icons-wrapper a.linkedin:focus {
         color: #34495e !important;
 }
 
-#teamStatsDiv .table thead th, .teamStatsDiv .table thead th {
+#teamStatsDiv .table thead th, .teamStatsDiv .table thead th , .sportsjun-datatable-head th {
     color: #34495e !important;
 }

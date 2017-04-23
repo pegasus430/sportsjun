@@ -1,6 +1,6 @@
 @extends(Helper::check_if_org_template_enabled()?'layouts.organisation':'layouts.app') 
 @section('content')
-@if(is_numeric(Request::segment(3)))
+@if(is_numeric(Request::segment(3)) || Request::has('from_org'))
     @include ('album._leftmenu')
 @endif
 <?php if(is_numeric(Request::segment(3))) {?>

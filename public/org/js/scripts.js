@@ -14,6 +14,12 @@ jQuery(function () {
 // Overlay
 function openNav(i) {
     document.getElementById("myNav"+i).style.width = "100%";
+    $.ajax({
+    	url:'/editsportprofile/'+i,
+    	success:function(response){
+    	//	$('#myNav'+i).children('.overlay-content').html(response);
+    	}
+    })
 }
 
 function closeNav(i) {

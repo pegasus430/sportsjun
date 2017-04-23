@@ -98,7 +98,7 @@ class MyScheduleController extends Controller {
             $managing_teams = $managing_teams->toArray();
         }
         $selectedSport = '';
-        $request = Request::all();
+        $request = Request::except('from_org');
         $sports = Helper::getDevelopedSport(1,1);
         if (count($request)) {
             $selectedSport = $request['sportsId'];
