@@ -94,6 +94,8 @@ Route::group(['prefix' => 'organization/{id}'], function () {
 Route::group(['prefix'=>'cart','namespace'=>'User'], function($cart){
     $cart->get('/', 'CartController@index');
     $cart->get('/add_to_cart', 'CartController@add_to_cart');
+    $cart->get('/list', 'CartController@list');
+    $cart->get('/checkout', 'CartController@checkout');
 });
 
 Route::get('getteamdetails', [

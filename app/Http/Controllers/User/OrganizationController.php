@@ -28,6 +28,7 @@ use App\Model\BasicSettings;
 use App\Model\Marketplace;
 use App\Model\Album;
 use File;
+use Session;
 
 //use Helper;
 
@@ -69,14 +70,19 @@ class OrganizationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
         //
-          if($this->is_owner){       
+
+          if($this->new_template){     
+          $this->organization = Organization::find($id);  
           $tournaments = $this->organization->tournaments; 
           $teams = $this->organization->teamplayers;
           $parent_tournaments = $this->organization->parent_tournaments;
           
+          Session::put('organization_id', $id);
+          $organisation = $this->organization;
+
            foreach ($parent_tournaments as $parent_tournament) {
                 foreach ($parent_tournament->tournaments as $teamdet) {
                     $currentTimestamp = time();
@@ -129,8 +135,11 @@ class OrganizationController extends Controller
         $marketplace = marketplace::where('organization_id', $this->organization->id)->get();
         $imageable_type_name = config('constants.PHOTO.GALLERY_ORGANIZATION');
         $photos = Photo::where('imageable_type',$imageable_type_name)->where('imageable_id',$this->organization->id)->get();
-         return view('organization_2.index', compact('tournaments','teams','parent_tournaments','marketplace','items','photos','schedules','reports'));
+
+         return view('organization_2.index', compact('tournaments','teams','parent_tournaments','marketplace','items','photos','schedules','reports','organisation'));
         }
+
+        else return redirect()->to('/organization/'.$id.'/info');
       
 
     }

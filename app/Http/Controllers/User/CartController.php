@@ -103,4 +103,13 @@ class CartController extends Controller
 
         return Cart::getContent();
     }
+
+    public function list(Request $request){
+
+        return view('cart.list');
+    }
+
+    public function checkout(){
+        return view('cart.checkout');
+    }
 }

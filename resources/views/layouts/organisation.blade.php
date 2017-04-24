@@ -112,7 +112,20 @@
                 </li>
 
             @if(Auth::user()->type!='1')
-                <li><a href="index.php"><span class="fa fa-shopping-cart"></span><span class="cart-bubble">0</span></a></li>
+             
+                  <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-shopping-cart"></span><span class="cart-bubble">{{Cart::getContent()->count()}}</span></a>
+                    <ul class="dropdown-menu" >
+                  
+                 @if(Cart::getContent()->count())
+                    @foreach(Cart::getContent() as $ca)
+                        <li ><a href="/cart/list"> {{str_limit($ca->name,15)}} <span class='pull-right'>X {{$ca->quantity}}</span> </a> </li>
+                    @endforeach    
+                 @else
+                    <li> Cart is empty!</li>
+                 @endif
+                      
+                    </ul>
+                </li>
             @endif
                 <!--
                 <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-plus"></span> Create New</a>
