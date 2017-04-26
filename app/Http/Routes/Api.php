@@ -44,8 +44,9 @@ Route::group(['prefix' => '/api/v1', 'middleware' => 'cors'], function ($router)
         $router->get('/match-schedules/{id}', ['uses' => 'MatchSchedulesApiController@getInfo']);
         $router->get('/match-schedules/{id}/scores', ['uses' => 'MatchSchedulesApiController@getScores']);
         $router->post('/match-schedules/{id}/update-players', ['uses' => 'MatchSchedulesApiController@updatePlayers']);
+        $router->post('/match-schedules/{id}/update-toss-info', ['uses' => 'MatchSchedulesApiController@updateTossInfo']);
 
-        $router->post('/match-schedules/{id}/end_match', ['uses' => 'MatchSchedulesApiController@endMatch']);   
+        $router->post('/match-schedules/{id}/end_match', ['uses' => 'MatchSchedulesApiController@endMatch']);
         $router->get('/match-schedules', ['uses' => 'MatchSchedulesApiController@getList']);
 
 

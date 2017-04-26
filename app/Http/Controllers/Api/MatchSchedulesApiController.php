@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\Api\MatchSchedule\SetMatchPlayersRequest;
+use App\Http\Requests\Api\MatchSchedule\SetMatchTossInfoRequest;
 use App\Model\CricketPlayerMatchwiseStats;
 use App\Model\MatchSchedule;
 use App\Model\Sport;
+use App\Model\Team;
 use App\User;
+use Helper;
 
 
 class  MatchSchedulesApiController extends BaseApiController
@@ -207,6 +210,37 @@ class  MatchSchedulesApiController extends BaseApiController
         return $this->ApiResponse(['message' => 'Players updated']);
     }
 
+    public function updateTossInfo(SetMatchTossInfoRequest $request, $id){
+        $matchSchedule = $request->matchSchedule;
+        $score_added_by = json_decode($matchSchedule->score_added_by,true);
+
+        if (!is_array($score_added_by)){
+            $score_added_by = [];
+        }
+        $userId = \Auth::user()->id;
+        $data = $request->all();
+        $team = Team::where('id',$data['toss_won_by'])->firstOrFail();
+
+        if (array_get($score_added_by,'added_by',false) != $userId){
+            return $this->ApiResponse(['message' => 'Score already added by userId '.array_get($score_added_by,'added_by')]);
+        }
+
+        $score_added_by = [
+            'added_by'=>$userId,
+            'active_user'=>$userId,
+            'modified_users'=>array_get($score_added_by,'modified_users',"").','.$userId,
+            'rejected_note'=> "",
+            'toss_won_by'=> $data['toss_won_by'],
+            'toss_won_team_name'=>$team->name,
+            'fst_ing_batting'=>$data['fst_ing_batting'],
+            'scnd_ing_batting'=>$data['scnd_ing_batting']
+        ];
+
+        $matchSchedule->score_added_by = json_encode($score_added_by);
+        $matchSchedule->update();
+
+        return $this->ApiResponse(['message' => 'Toss info updated']);
+    }
 
     public function getScores($id)
     {
