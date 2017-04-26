@@ -69,6 +69,15 @@ class MatchSchedule extends Model
         'player_or_team_ids'
     ];
 
+    public $casts =[
+        'a_playing_players'=>'array',
+        'b_playing_players'=>'array',
+        'a_sub'=>'array',
+        'b_sub'=>'array',
+        'summary_info'=>'array'
+    ];
+
+
     public function sport()
     {
         return $this->belongsTo('App\Model\Sport', 'sports_id');
