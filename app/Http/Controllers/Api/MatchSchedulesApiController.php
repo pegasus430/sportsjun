@@ -80,7 +80,8 @@ class  MatchSchedulesApiController extends BaseApiController
             'a_score',
             'b_score',
             'is_third_position',
-            'selected_half_or_quarter'
+            'selected_half_or_quarter',
+            'summary_info'
         ];
 
         return $this->PaginatedMapResponse($schedules, $map);
@@ -184,7 +185,7 @@ class  MatchSchedulesApiController extends BaseApiController
             'b_score',
             'is_third_position',
             'selected_half_or_quarter',
-
+            'summary_info',
             'Sides' => [
                 'type'   => 'model',
                 'fields' => [

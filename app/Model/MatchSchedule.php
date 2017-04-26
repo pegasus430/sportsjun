@@ -73,8 +73,10 @@ class MatchSchedule extends Model
         'a_playing_players'=>'array',
         'b_playing_players'=>'array',
         'a_sub'=>'array',
-        'b_sub'=>'array'
+        'b_sub'=>'array',
+        'summary_info'=>'array'
     ];
+
 
     public function sport()
     {
