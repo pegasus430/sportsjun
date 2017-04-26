@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\Api\MatchSchedule\SetMatchPlayersRequest;
 use App\Model\CricketPlayerMatchwiseStats;
 use App\Model\MatchSchedule;
 use App\Model\Sport;
@@ -95,30 +96,31 @@ class  MatchSchedulesApiController extends BaseApiController
         function getSideField($side)
         {
             return [
-                'type' => 'model',
+                'type'   => 'model',
                 'source' => $side,
                 'fields' => function ($obj, $base) use ($side) {
                     $fields = ['id', 'name', 'logoImage'];
 
                     if ($base->schedule_type == 'team') {
                         $fields['players'] = [
-                            'type' => 'value',
+                            'type'  => 'value',
                             'value' => function ($obj, $base) use ($side) {
                                 $result = [];
                                 $ids = ($side == 'sideA') ? explode(',', trim($base->player_a_ids, ',')) : explode(',', trim($base->player_b_ids, ','));
                                 $team_id = ($side == 'sideA') ? $base->a_id : $base->b_id;
-                                $users = User::whereIn('id', $ids)->with(['userdetails' => function ($query) use ($team_id) {
-                                    return $query->where(['team_id' => $team_id]);
-                                }])
-                                    ->get()->keyBy('id');
+                                $users = User::whereIn('id', $ids)->with([
+                                    'userdetails' => function ($query) use ($team_id) {
+                                        return $query->where(['team_id' => $team_id]);
+                                    }])
+                                             ->get()->keyBy('id');
                                 $ids = array_unique($ids);
                                 foreach ($ids as $id) {
                                     if (isset($users[$id]))
                                         $result[] = [
-                                            'id' => $id,
-                                            'name' => $users[$id]['name'],
+                                            'id'        => $id,
+                                            'name'      => $users[$id]['name'],
                                             'logoImage' => $users[$id]->logoImage,
-                                            'role' => object_get($users[$id]->userdetails->first(), 'role')
+                                            'role'      => object_get($users[$id]->userdetails->first(), 'role')
                                         ];
                                 }
                                 return $result;
@@ -181,7 +183,7 @@ class  MatchSchedulesApiController extends BaseApiController
             'selected_half_or_quarter',
 
             'Sides' => [
-                'type' => 'model',
+                'type'   => 'model',
                 'fields' => [
                     getSideField('sideA'),
                     getSideField('sideB')
@@ -192,6 +194,19 @@ class  MatchSchedulesApiController extends BaseApiController
 
         return $this->ModelMapResponse($schedule, $map);
     }
+
+    public function updatePlayers(SetMatchPlayersRequest $request, $id)
+    {
+        $matchSchedule = $request->matchSchedule;
+        $data = $request->data;
+        $matchSchedule->a_playing_players = $data['players_a_main'];
+        $matchSchedule->b_playing_players = $data['players_b_main'];
+        $matchSchedule->a_sub = array_get($data,'players_a_sub');
+        $matchSchedule->b_sub = array_get($data,'players_b_sub');
+        $matchSchedule->save();
+        return $this->ApiResponse(['message' => 'Players updated']);
+    }
+
 
     public function getScores($id)
     {
@@ -207,16 +222,16 @@ class  MatchSchedulesApiController extends BaseApiController
             $tableName = $sports_name . '_player_matchwise_stats';
             if (\Schema::hasTable($tableName))
                 $stats = \DB::table($tableName)
-                    ->whereMatchId($schedule->id)
-                    ->whereNull('deleted_at')
-                    ->get();
+                            ->whereMatchId($schedule->id)
+                            ->whereNull('deleted_at')
+                            ->get();
 
         }
 
 
         $map = [
-            'Sport' => [
-                'type' => 'model',
+            'Sport'         => [
+                'type'   => 'model',
                 'source' => 'sport',
                 'fields' => [
                     'id',
@@ -234,12 +249,12 @@ class  MatchSchedulesApiController extends BaseApiController
             "match_end_date",
             "match_end_time",
             'winner',
-            'match_details'=>[
-                'type'=> 'value',
-                'value'=> json_decode($schedule->match_details)
+            'match_details' => [
+                'type'  => 'value',
+                'value' => json_decode($schedule->match_details)
             ],
-            'Sides' => [
-                'type' => 'array',
+            'Sides'         => [
+                'type'   => 'array',
                 'fields' => [
                     'sideA.name',
                     'sideB.name',
@@ -247,7 +262,7 @@ class  MatchSchedulesApiController extends BaseApiController
             ],
 
             'player_of_the_match' => [
-                'type' => 'value',
+                'type'  => 'value',
                 'value' => function ($schedule) {
                     $id = $schedule->player_of_the_match;;
                     $player = User::whereId($id)->first();
@@ -255,8 +270,8 @@ class  MatchSchedulesApiController extends BaseApiController
                         return array_only($player->toArray(), ['id', 'name']);
                 }
             ],
-            'stats' => [
-                'type' => 'value',
+            'stats'               => [
+                'type'  => 'value',
                 'value' => $stats
             ]
         ];
@@ -274,13 +289,13 @@ class  MatchSchedulesApiController extends BaseApiController
         $schedule = MatchSchedule::whereId($id)->firstOrFail();
         $data = \Request::all();
 
-        if (!$schedule->updateScoreCard($data)){
-                return $this->ApiResponse(['message' => 'Please update api for this sport_id - ' . $schedule->sports_id], 404);
+        if (!$schedule->updateScoreCard($data)) {
+            return $this->ApiResponse(['message' => 'Please update api for this sport_id - ' . $schedule->sports_id], 404);
         }
 
         $match_result = (in_array($data['match_result'], ['tie', 'win', 'washout'])) ? $data['match_result'] : NULL;
 
-        $schedule->endMatch($match_result,$data);
+        $schedule->endMatch($match_result, $data);
         return $this->ApiResponse(['message' => 'Match ended']);
     }
 
