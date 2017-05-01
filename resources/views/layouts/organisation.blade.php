@@ -106,7 +106,8 @@
                     <ul class="dropdown-menu">
                       <!--   <li><a href="#"><span class="fa fa-user-circle-o"></span> User Profile</a></li>
                         <li><a href="#"><span class="fa fa-trophy"></span> Sports Profile</a></li> -->
-                        <li><a href="#"><span class="fa fa-lock"></span> Change password</a></li>
+                        <li><a href="/organization/{{$organisation->id}}/settings"><span class="fa fa-gear"></span> Settings</a></li>
+                        <li><a href="/organization/{{$organisation->id}}/settings#change-password"><span class="fa fa-lock"></span> Change password</a></li>
                         <li><a href="/auth/logout"><span class="fa fa-power-off"></span> Logout</a></li>
                     </ul>
                 </li>
@@ -198,6 +199,20 @@
                @foreach ($errors->all() as $error)
                   <div>{{ $error }}</div>
               @endforeach
+                </div>
+            @endif
+
+            @if(Session::has('message'))
+                  <div class="alert  alert-success"> 
+                          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    {{Session::get('message')}}
+                </div>
+            @endif
+
+             @if(Session::has('error'))
+                  <div class="alert  alert-danger"> 
+                          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    {{Session::get('error')}}
                 </div>
             @endif
     </div>

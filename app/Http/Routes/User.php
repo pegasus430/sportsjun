@@ -70,7 +70,11 @@ Route::group(['prefix' => 'organization/{id}'], function () {
     Route::post('/photo/add', 'User\OrganizationController@photo_save');
     Route::get('/update_fields', 'User\OrganizationController@update_fields');
     Route::get('/info', 'User\OrganizationController@getorgDetails');
-    Route::get('/polls', 'User\OrganizationController@get_polls');
+    Route::get('/settings', 'User\OrganizationController@settings');
+    Route::post('/settings/add_bank', 'User\OrganizationController@save_bank');
+    Route::post('/settings/change_password', 'User\OrganizationController@change_password');
+
+    Route::get('/polls', 'User\OrganizationController@get_polls');   
     Route::post('/polls/add', 'User\OrganizationController@add_poll');
 
     Route::get('schedules', [

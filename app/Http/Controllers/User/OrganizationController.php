@@ -31,6 +31,7 @@ use File;
 use Session;
 use App\Model\poll;
 use App\Model\poll_options as poll_option;
+use App\Model\VendorBankAccounts;
 
 //use Helper;
 
@@ -717,6 +718,88 @@ class OrganizationController extends Controller
         $poll->delete();
 
         return redirect()->back()->with('message', 'Poll Deleted!');
+    }
+
+
+    public function settings($id){
+         $organization = organization::find($id);
+         $teams = $organization->teamplayers;
+         $bank_accounts = VendorBankAccounts::where('user_id',Auth::user()->id)->get();
+
+        $type = config('constants.ENUM.ORGANIZATION.ORGANIZATION_TYPE');
+        $countries = Country::orderBy('country_name')->lists('country_name', 'id')->all();
+        $states = State::where('country_id', $organization->country_id)->orderBy('state_name')->lists('state_name',
+            'id')->all();
+        $cities = City::where('state_id', $organization->state_id)->orderBy('city_name')->lists('city_name',
+            'id')->all();
+        $teams = Team::where('team_owner_id', Auth::user()->id)->orderBy('name')->lists('name', 'id')->all();
+        $selectedTeams = Team::where('team_owner_id', Auth::user()->id)->where('organization_id', $id)->get(['id']);
+        $selectedTeamsIds = '';
+        if (count($selectedTeams)) {
+            $selectedTeamsIds = array_divide(array_flatten($selectedTeams->toArray()));
+        }
+        if ($selectedTeamsIds == '') {
+            $selectedTeams = '';
+        } else {
+            $selectedTeams = $selectedTeamsIds[1];
+        }
+
+
+        return view('organization_2.settings.index', compact('bank_accounts','organization','id','teams','selectedTeams','cities','states','type','countries'));
+    }
+
+
+    public function save_bank($id, objrequest $request){       
+
+        if(!empty($request['account_holder_name']) && 
+            !empty($request['account_number']) &&
+            !empty($request['bank_name']) && 
+            !empty($request['branch']) &&
+            !empty($request['ifsc'])
+         ){
+            $vendor = new VendorBankAccounts();
+            $vendor_bank_account_id = $vendor->saveBankDetails(
+                $request['account_holder_name'],
+                $request['account_number'],
+                $request['bank_name'],
+                $request['branch'],
+                $request['ifsc'],
+                Auth::user()->id
+            );
+            if($vendor_bank_account_id){
+                $request['vendor_bank_account_id'] = $vendor_bank_account_id;
+            
+          }
+
+        }
+
+        else redirect()->back()->with('error', 'A field is missing sorry!');
+
+
+         if(!empty($request['filelist_file_upload'])) {
+
+           //  /*--files moving from temp directory to attachments directory--*/
+             $image_moved=Helper::moveImage($request['filelist_file_upload'],$vendor_bank_account_id);
+           /*--files moving from temp directory to attachments directory--*/
+          
+        }  
+
+        return redirect()->back()->with('message', 'Bank Added!');
+
+    }
+
+    public function change_password($id, ObjRequest $request){
+        $user = Auth::user(); 
+
+        if(bcrypt($request->old_password) != $user->password || ($request->new_password!=$request->new_password_2)){
+            return redirect()->back()->with('error', 'Wrong Password');
+        }
+        else{
+            $user->password = bcrypt($request->new_password);
+            $user->save();
+        }
+
+        return redirect()->back()->with('message','Password Updated!');
     }
 
 
