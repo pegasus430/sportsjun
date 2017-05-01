@@ -222,7 +222,8 @@ class  MatchSchedulesApiController extends BaseApiController
         $data = $request->all();
         $team = Team::where('id',$data['toss_won_by'])->firstOrFail();
 
-        if (array_get($score_added_by,'added_by',false) != $userId){
+        $added_by = array_get($score_added_by,'added_by',false);
+        if ( $added_by && $added_by != $userId){
             return $this->ApiResponse(['message' => 'Score already added by userId '.array_get($score_added_by,'added_by')]);
         }
 
