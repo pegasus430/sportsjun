@@ -238,26 +238,34 @@
                         <br>
                         <br> </div>
                     <div class="col-md-12 col-sm-6">
-                        <div class="wg wg-purple no-shadow wg-poll">
+                        <div class="wg wg-purple no-shadow wg-poll" style="min-height: 200px;">
                             <div class="wg-wrap">
                                 <h4>Poll</h4>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.?</p>
-                                <div class="panel-body">
-                                    <ul class="list-group">
-                                        <li class="list-group-item">
-                                            <div class="radio">
-                                                <label>
-                                                    <input type="radio" name="optionsRadios"> YES </label>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <div class="radio">
-                                                <label>
-                                                    <input type="radio" name="optionsRadios"> NO </label>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
+
+                                   <div id="poll_carousel" class="carousel slide carousel-fade col-offset-2">
+                                        <div class="carousel-inner">
+                                            @foreach($polls as $key=>$poll)
+                                                <div class="item {{$key_p==0?'active':''}}" >
+                                                    <p>{{$poll->title}}</p>
+                                                    <div class="panel-body">
+                                                        <ul class="list-group">
+                                                            @foreach($poll->options as $option)
+                                                            <li class="list-group-item">
+                                                                <div class="radio">
+                                                                    <label>
+                                                                        <input type="radio" name="optionsRadios"> {{$option->title}} </label>
+                                                                </div>
+                                                            </li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+
+                                            <a class="left carousel-control" href="#poll_carousel" data-slide="prev">‹</a> <a class="right carousel-control" href="poll_carousel" data-slide="next">›</a> </div>
+
+                                        </div>
+                                    </div>
                             </div>
                         </div>
                     </div>

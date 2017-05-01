@@ -29,6 +29,8 @@ use App\Model\Marketplace;
 use App\Model\Album;
 use File;
 use Session;
+use App\Model\poll;
+use App\Model\poll_options as poll_option;
 
 //use Helper;
 
@@ -135,8 +137,9 @@ class OrganizationController extends Controller
         $marketplace = marketplace::where('organization_id', $this->organization->id)->get();
         $imageable_type_name = config('constants.PHOTO.GALLERY_ORGANIZATION');
         $photos = Photo::where('imageable_type',$imageable_type_name)->where('imageable_id',$this->organization->id)->get();
+        $polls = poll::where('organization_id', $id)->get();
 
-         return view('organization_2.index', compact('tournaments','teams','parent_tournaments','marketplace','items','photos','schedules','reports','organisation'));
+         return view('organization_2.index', compact('tournaments','teams','parent_tournaments','marketplace','items','photos','schedules','reports','organisation','polls'));
         }
 
         else return redirect()->to('/organization/'.$id.'/info');
@@ -677,6 +680,43 @@ class OrganizationController extends Controller
         $org->save(); 
 
         return 'ok';
+    }
+
+    public function get_polls($id){
+        $polls = poll::where('organization_id',$id)->get();
+        return view('organization_2.polls.index', compact('polls'));
+    }
+
+    public function add_poll(objrequest $request){
+        $i = $request->i;
+        $poll = new poll; 
+
+        $poll->title = $request->question;
+        $poll->user_id = Auth::user()->id;
+        $poll->organization_id = Auth::user()->organizations[0]->id;
+        $poll->start_date = $request->start_date;
+        $poll->end_date = $request->end_date;
+        $poll->save();
+
+        for($j=0; $j<=$i; $j++){
+            if($request->{'option_'.$j}){
+                $option = new poll_option;
+                $option->poll_id = $poll->id;
+                $option->title = $request->{'option_'.$j};
+                $option->save();
+            }
+        }
+
+        return redirect()->back()->with('message', 'Poll Added');
+    }
+
+    public function delete_poll($id, $poll_id){
+        $poll = poll::find($id);
+        $poll->options->delete();
+        $poll->voters->delete();
+        $poll->delete();
+
+        return redirect()->back()->with('message', 'Poll Deleted!');
     }
 
 

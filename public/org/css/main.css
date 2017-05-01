@@ -98,8 +98,15 @@ h6,
 
 /* Margins */
 
+
+
 .mgb-20 {
     margin-bottom: 20px;
+}
+
+/* Padding */
+.pd-30 {
+    padding: 15px;
 }
 
 
@@ -2081,4 +2088,29 @@ footer .social-icons-wrapper a.linkedin:focus {
     .mtitle .pull-left {
         float: none !important;
     }
+}
+
+
+/* Polls Page */
+.pia_ {
+    margin: 0px 40px 20px;
+    width: 89%;
+}
+.pia_ ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.pia_ ul li {
+    display: block;
+    margin-bottom: 8px;
+}
+.pia_ ul li input[type="text"] {
+    border: 1px solid rgba(0,0,0,.05) !important;
+    padding: 8px 12px;
+    margin-right: 12px;
+    width: 80%
+}
+.pia_ ul li span a {
+    color: crimson;
 }
