@@ -74,6 +74,10 @@ Route::group(['prefix' => 'organization/{id}'], function () {
     Route::post('/settings/add_bank', 'User\OrganizationController@save_bank');
     Route::post('/settings/change_password', 'User\OrganizationController@change_password');
 
+    Route::get('/news', 'User\OrganizationController@news');
+    Route::post('/news/add', 'User\OrganizationController@news_add');
+    Route::get('/news/{id}', 'User\OrganizationController@news_show'); 
+    
     Route::get('/polls', 'User\OrganizationController@get_polls');   
     Route::post('/polls/add', 'User\OrganizationController@add_poll');
 

@@ -2815,6 +2815,32 @@ class Helper
         
         return false;
     }
+
+
+    public static function get_organization_schedules($id){
+         $schedules =  Tournaments::join('tournament_parent', 'tournament_parent.id','=','tournaments.tournament_parent_id')
+                ->where('organization_id', $id)
+                ->join('match_schedules','match_schedules.tournament_id','=','tournaments.id')
+                ->where('hasSetupSquad','1')->where('match_status','!=','completed')
+              ->orderBy('match_start_date', 'match_start_time','desc')              
+              ->select('match_schedules.*')
+              ->get();
+
+            return $schedules; 
+    }
+     
+
+    public static function get_organization_reports($id){
+        $reports=  Tournaments::join('tournament_parent', 'tournament_parent.id','=','tournaments.tournament_parent_id')
+                ->where('organization_id', $id)
+                ->join('match_schedules','match_schedules.tournament_id','=','tournaments.id')
+                ->whereNotNull('match_report')
+              ->orderBy('match_start_date', 'match_start_time','desc')             
+              ->select('match_schedules.*')
+              ->get();
+
+        return $reports;
+    }
     
 }
 

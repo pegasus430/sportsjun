@@ -32,6 +32,7 @@ use Session;
 use App\Model\poll;
 use App\Model\poll_options as poll_option;
 use App\Model\VendorBankAccounts;
+use App\Model\news; 
 
 //use Helper;
 
@@ -117,30 +118,16 @@ class OrganizationController extends Controller
                 }
             }
 
-        $schedules =  Tournaments::join('tournament_parent', 'tournament_parent.id','=','tournaments.tournament_parent_id')
-                ->where('organization_id', $this->organization->id)
-                ->join('match_schedules','match_schedules.tournament_id','=','tournaments.id')
-                ->where('hasSetupSquad','1')->where('match_status','!=','completed')
-              ->orderBy('match_start_date', 'match_start_time','desc')              
-              ->select('match_schedules.*')
-              ->get();
-
-        $reports=  Tournaments::join('tournament_parent', 'tournament_parent.id','=','tournaments.tournament_parent_id')
-                ->where('organization_id', $this->organization->id)
-                ->join('match_schedules','match_schedules.tournament_id','=','tournaments.id')
-                ->whereNotNull('match_report')
-              ->orderBy('match_start_date', 'match_start_time','desc')             
-              ->select('match_schedules.*')
-              ->get();
-             
+                  
            
 
         $marketplace = marketplace::where('organization_id', $this->organization->id)->get();
         $imageable_type_name = config('constants.PHOTO.GALLERY_ORGANIZATION');
         $photos = Photo::where('imageable_type',$imageable_type_name)->where('imageable_id',$this->organization->id)->get();
         $polls = poll::where('organization_id', $id)->get();
+        $news = news::where('organization_id', $id)->orderBy('id','desc')->take(5)->get();
 
-         return view('organization_2.index', compact('tournaments','teams','parent_tournaments','marketplace','items','photos','schedules','reports','organisation','polls'));
+         return view('organization_2.index', compact('tournaments','teams','parent_tournaments','marketplace','items','photos','schedules','reports','organisation','polls','news'));
         }
 
         else return redirect()->to('/organization/'.$id.'/info');
@@ -800,6 +787,12 @@ class OrganizationController extends Controller
         }
 
         return redirect()->back()->with('message','Password Updated!');
+    }
+
+
+    public function news($id){
+        $news = news::where('organization_id', $id)->orderBy('id', 'desc')->get();
+        return view('organization_2.news.index', compact('news'));
     }
 
 

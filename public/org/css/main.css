@@ -1900,7 +1900,7 @@ footer .social-icons-wrapper a.linkedin:focus {
         color: #34495e !important;
 }
 
-#teamStatsDiv .table thead th, .teamStatsDiv .table thead th , .sportsjun-datatable-head th {
+#teamStatsDiv .table thead th, .teamStatsDiv .table thead th , .sportsjun-datatable-head th,.thead {
     color: #34495e !important;
 }
 

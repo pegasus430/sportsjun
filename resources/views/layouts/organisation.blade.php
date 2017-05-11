@@ -114,7 +114,7 @@
 
             @if(Auth::user()->type!='1')
              
-                  <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-shopping-cart"></span><span class="cart-bubble">{{Cart::getContent()->count()}}</span></a>
+                  <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-shopping-cart"></span><span class="cart-bubble cart_total">{{Cart::getContent()->count()}}</span></a>
                     <ul class="dropdown-menu" >
                   
                  @if(Cart::getContent()->count())
@@ -327,8 +327,9 @@
             $.ajax({
                 url:'/cart/add_to_cart',
                 data:{id:id},
-                success:function(){
+                success:function(response){
                     toastr.success('Added to Cart',item)
+                    $('.cart_total').html(response.lenght)
                 },
                 error:function(){
                     toastr.error('Sorry an Error Occured!',item)
@@ -343,6 +344,10 @@
 
 
 
+
+<script type="text/javascript">
+        $.ajax();
+</script>
 
    
 
