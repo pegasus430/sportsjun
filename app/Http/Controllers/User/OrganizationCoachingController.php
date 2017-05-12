@@ -26,4 +26,8 @@ class OrganizationCoachingController extends OrganizationController
     	$types = config('constants.ENUM.SUBSCRIPTION_TYPE');
     	return view('organization_2.coaching.create_session', compact('types'));
     }
+
+    public function store_session($id, Request $request){
+        return $request->all();
+    }
 }

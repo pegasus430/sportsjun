@@ -41,7 +41,7 @@
                                 </ul>
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="tab_default_1">
-                                    @if(count($schedules = Helper::get_organization_reports($organisation->id)))
+                                    @if(count($schedules = Helper::get_organization_schedules($organisation->id)))
                                         @foreach($schedules as $schedule)
                                         <table class="wg-score-table">
                                             <tr>
@@ -65,8 +65,8 @@
                                     @endif
                                     </div>
                                     <div class="tab-pane" id="tab_default_2">
-                                    @if(count($organisation->reports))
-                                        @foreach($organization->reports as $report)
+                                    @if(count($reports = Helper::get_organization_reports($organisation->id))))
+                                        @foreach($reports as $report)
                                             {!!$report->match_report!!}
                                         @endforeach
                                     @else

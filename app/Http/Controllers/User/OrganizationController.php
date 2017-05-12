@@ -838,6 +838,11 @@ class OrganizationController extends Controller
         return view('organization_2.news.manage', compact('news'));
     }
 
+    public function news_show($id, $news_id){
+        $news = news::find($news_id);
+        return view('organization_2.news.show', compact('news'));
+    }
+
     public function news_edit($id,$news_id){
         $news = news::find($news_id);
 

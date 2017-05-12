@@ -15,86 +15,136 @@
 			align-items: center;
 		}
 		
-		.flex input[type="checkbox"] {
+		/*.flex input[type="checkbox"] {
 			width: 100px;
-		}
+		}*/
 		
 		.flex span {
 			width: 250px;
 			font-size: 16px;
 		}
 		
-		.form .input-container .flex input[type="text"] {
+	/*	.form .input-container .flex input[type="text"] {
 			border: 1px solid rgba(0, 0, 0, 0.2);
 			box-shadow: none;
 			height: inherit;
 			font-size: 16px;
-		}
+		}*/
 	</style>
 
-<div class="container">
-			<div class="row">
-				<div class="col-md-12">
-					<h2 class="page-header"><div class="ph-mark"><div class="glyphicon glyphicon-menu-right"></div></div> New Coaching Sessions</h2> </div>
-			</div>
-			<div class="row">
-				<div class="col-md-offset-2 col-md-8 bg-white pdtb-30 text-center">
-					<form action="" class="form form-horizontal">
-						<div class="content">
-							<div class="input-container">
-								<input type="text" id="session_title" required="required">
-								<label for="session_title">Session Title</label>
-								<div class="bar"></div>
-							</div>
-							<div class="input-container select two-col">
-								<div>
-									<label>Sport</label>
-									<select class="" name="staff_role">
-											@foreach(Helper::getAllSports() as $sport)
 
-											@endforeach
-						 			</select>
-								</div>
+			<div class="container-fluid col-sm-12">
+	<div class="sportsjun-forms sportsjun-container wrap-1">
+<div class="form-header header-primary"><h4><i class="fa fa-pencil-square"></i>New Coaching Sessions</h4></div>
+					<form action="/organization/{{$organisation->id}}/coaching/add" class="form form-horizontal" method="post">
+									<div class="form-body">
+						{!! csrf_field() !!}
+						<div class="row">	
+<div class="col-sm-12">					
+			<div class="section">
+			    	<label class="form_label">Title<span  class='required'>*</span> </label>
+				<label class="field ">
+					{!! Form::text('title', null, array('required','class'=>'gui-input','placeholder'=> 'News title')) !!}
+					@if ($errors->has('name')) <p class="help-block">{{ $errors->first('name') }}</p> @endif
+			       
+				</label>
+			</div>
+			</div>	
+
+			<div class="col-sm-12" 	>
+										
+			@include ('common.upload')
+			@include ('common.uploadfield', ['uploadLimit' => '1','field'=>'photos','fieldname'=>'Choose  Image'])
+			</div>
+			
+
+				<div class="col-sm-6">
+					<div class="section">
+					    	<label class="form_label">Category </label>
+						<label class="field select">
+
+						{!! Form::select('category_id',Helper::getAllSports()->lists('sports_name','id'),null, array('class'=>'gui-input','id'=>'team')) !!}
+						@if ($errors->has('name')) <p class="help-block">{{ $errors->first('name') }}</p> @endif
+					     <i class="arrow double"></i>      
+						</label>
+					</div>
+		</div>
+		<div class="col-sm-6">
+						<div class="section">
+						    	<label class="form_label">Coach </label>
+							<label class="field select">
+
+							<select class="" name="coach_id">
+								@foreach($organisation->staff as $staff)
+									@if($staff->roleForOrganization($organisation->id)->name=='Coach')
+									<option value="{{$staff->id}}">{{$staff->name}}</option>
+									@endif
+								@endforeach
+								</select>
+								 <i class="arrow double"></i>      
+						</label>
 							</div>
-							<div class="input-container select two-col">
-								<div>
-									<label>Coach</label>
-									<select class="" name="staff_role">
-										@foreach($organisation->staff as $staff)
-											@if($staff->roleForOrganization($organisation->id)->name=='Coach')
-											<option value="{{$staff->id}}">{{$staff->name}}</option>
-											@endif
-										@endforeach
-									</select>
-								</div>
-							</div>
-							<div class="input-container two-col">
-								<input type="text" id="start_date" required="" class="datepicker">
-								<label for="start_date">Start Date</label>
-								<div class="bar"></div>
-							</div>
-							<div class="input-container two-col">
-								<input type="text" id="end_date" required="" class="datepicker">
-								<label for="end_date">End Date</label>
-								<div class="bar"></div>
-							</div>
-							
-							<div class="input-container">
-								<input type="text" id="no_of_players" required="">
-								<label for="no_of_players">Number of Players</label>
-								<div class="bar"></div>
-							</div>
-							<div class="input-container select two-col">
-								<div>
-									<label>Payment method by</label>
+				</div>
+					
+		
+        <div class="col-sm-6">
+            <div class="section">
+                <label class="form_label">{{  trans('message.tournament.fields.startdate') }} <span  class='required'>*</span></label>         
+                <label class='field' >
+                    <div class="input-group date" id='startdate'>
+                        {!! Form::text('start_date', null, array('class'=>'gui-input datepicker','placeholder'=>trans('message.tournament.fields.startdate'))) !!}
+                        <span class="input-group-addon">
+        	                <span class="glyphicon glyphicon-calendar"></span>
+    	                </span>
+                    </div>
+                    @if ($errors->has('start_date')) <p class="help-block">{{ $errors->first('start_date') }}</p> @endif
+                </label>
+            
+            </div>
+        </div>
+       
+         <div class="col-sm-6">
+                <div class="section">
+                    <label class="form_label">{{  trans('message.tournament.fields.enddate') }}  <span  class='required'>*</span></label>		
+                        <label class='field'>
+                        	<div class='input-group date' id='enddate'>
+                                {!! Form::text('end_date', null, array('class'=>'gui-input datepicker','placeholder'=>trans('message.tournament.fields.enddate'))) !!}
+                                <span class="input-group-addon">
+    	                            <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                        	</div>
+                        @if ($errors->has('end_date')) <p class="help-block">{{ $errors->first('end_date') }}</p> @endif
+                        </label>
+                        
+                </div>
+         </div>
+    						 					 
+   <div class="col-sm-12">					
+			<div class="section">
+			    	<label class="form_label">Number of Players<span  class='required'>*</span> </label>
+				<label class="field prepend-icon">
+					{!! Form::text('number_of_players', null, array('required','class'=>'gui-input','placeholder'=> 'Number of Players')) !!}
+					@if ($errors->has('name')) <p class="help-block">{{ $errors->first('name') }}</p> @endif
+			       
+				</label>
+			</div>
+	</div>	
+	 <div class="col-sm-12">					
+			<div class="section">
+									<label class="form_label">Payment method by</label>
+									<label class="field select">
+
 									<select class="pmethod" name="payment_method" required="">
 										<option value="">Choose payment method</option>
 										@foreach($types as $key=>$type)
 											<option value="{{$key}}">{{$type}}</option>
 										@endforeach
 									</select>
-								</div>
+										 <i class="arrow double"></i>      
+						</label>
 							</div>
+			</div>
+	
 							@foreach($types as $key=>$type)
 							<div class="pay_options input-container {{$key}}">
 								<h5>Options to pay</h5>
@@ -104,16 +154,20 @@
 									<div class="row">
 										<div class="col-md-6">
 											<div class="flex">
-												<input type="checkbox" id="full_payment" /> <span for="full_payment">{{$sm->title}}</span>
-												<input type="text" placeholder="Amount" class="form-control" /> </div>
+												<input type="checkbox" id="full_payment" name="{{$key}}_choose_{{$sm->id}}"  /> <span for="full_payment" checked>{{$sm->title}}</span>
+												<input type="text" placeholder="Amount" class="form-control"  name="{{$key}}_amount_{{$sm->id}}" /> </div>
 										</div>
 										<div class="col-md-6">
 											<div class="flex">
-												<input type="checkbox" id="discount" /> <span for="discount" style="font-size: 12px;">Include discount of</span>
+												<input type="checkbox" id="discount" checked="" /> <span for="discount" style="font-size: 12px;">Include discount of</span>
 												<input type="text" placeholder="" class="form-control" style="width: 100px;" />&nbsp;&nbsp; <span for="discount" style="font-size: 16px;">%</span> </div>
+
+												<input type="hidden" name="{{$key}}_index_{{$sm->id}}" value="{{$sm->id}}" >
 										</div>
 									</div>
 								</div>
+
+
 
 								@endforeach
 							</div>
@@ -129,7 +183,8 @@
 					</form>
 				</div>
 			</div>
-		</div>
+		
+
 
 @stop
 
@@ -155,6 +210,10 @@ $(document).ready(function () {
 
 <script type="text/javascript">
 	  $(".datepicker").datepicker();
+
+	  $(document).ready(function(){
+	  		$('[type="checkbox"]').iCheck();
+	  })
    
 </script>
 
