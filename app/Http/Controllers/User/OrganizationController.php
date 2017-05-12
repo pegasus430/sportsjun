@@ -126,7 +126,7 @@ class OrganizationController extends Controller
         $photos = Photo::where('imageable_type',$imageable_type_name)->where('imageable_id',$this->organization->id)->get();
         $polls = poll::where('organization_id', $id)->get();
         $news = news::where('organization_id', $id)->orderBy('id','desc')->take(5)->get();
-
+ 
          return view('organization_2.index', compact('tournaments','teams','parent_tournaments','marketplace','items','photos','schedules','reports','organisation','polls','news'));
         }
 
@@ -795,5 +795,101 @@ class OrganizationController extends Controller
         return view('organization_2.news.index', compact('news'));
     }
 
+    public function news_create(){
+        return view('organization_2.news.create');
+    }
+
+    public function news_add($id, objRequest $request){
+
+        $user_id = Auth::user()->id;
+        Helper::uploadPhotos($request['filelist_photos'], config('constants.PHOTO_PATH.ORGANIZATION_NEWS'), $id, 1,
+            1, config('constants.PHOTO.ORGANIZATION_NEWS'), $user_id);
+      
+        $logo = Photo::select('url')->where('imageable_type',
+            config('constants.PHOTO.ORGANIZATION_NEWS'))->where('imageable_id', $id)->where('user_id',
+            Auth::user()->id)->where('is_album_cover', 1)->get()->toArray();
+       
+
+        $news = new news; 
+        $news->title = $request->title;
+        $news->details = $request->details;
+        $news->category_id = $request->category_id; 
+        $news->organization_id = $id;
+        $news->save(); 
+
+         if (!empty($logo)) {
+            foreach ($logo as $l) {
+                $news->image = $l['url'];
+                $news->image_url = asset('/uploads/organization_news'.$news->image);
+                $news->save();
+                Organization::where('id', $id)->update(['logo' => $l['url']]);
+                //echo $l['url'];exit;
+            }
+
+        }
+
+        return redirect()->to('/organization/'.$news->organization_id.'/news/manage')->with('message', 'News Added Successfully!');
+
+    }
+
+    public function news_manage($id){
+        $news = news::where('organization_id', $id)->get(); 
+
+        return view('organization_2.news.manage', compact('news'));
+    }
+
+    public function news_edit($id,$news_id){
+        $news = news::find($news_id);
+
+        return view('organization_2.news.edit', compact('news'));
+    }
+
+    public function news_delete($id, $news_id){
+        news::find($news_id)->delete(); 
+
+        return 'ok';
+    }
+
+    public function news_update($id, $news_id, objRequest $request){
+        $user_id = Auth::user()->id;
+        Helper::uploadPhotos($request['filelist_photos'], config('constants.PHOTO_PATH.ORGANIZATION_NEWS'), $id, 1,
+            1, config('constants.PHOTO.ORGANIZATION_NEWS'), $user_id);
+      
+        $logo = Photo::select('url')->where('imageable_type',
+            config('constants.PHOTO.ORGANIZATION_NEWS'))->where('imageable_id', $id)->where('user_id',
+            Auth::user()->id)->where('is_album_cover', 1)->get()->toArray();
+       
+
+        $news = news::find($news_id); 
+        $news->title = $request->title;
+        $news->details = $request->details;
+        $news->category_id = $request->category_id; 
+        $news->organization_id = $id; 
+        $news->save(); 
+
+         if (!empty($logo)) {
+            foreach ($logo as $l) {
+                $news->image = $l['url'];
+                $news->image_url = asset('/uploads/organization_news/'.$news->image);
+                $news->save();
+                Organization::where('id', $id)->update(['logo' => $l['url']]);
+                //echo $l['url'];exit;
+            }
+
+        }
+
+        return redirect()->to('/organization/'.$news->organization_id.'/news/manage')->with('message', 'News Updated Successfully!');
+    }
+
+    public function news_toggle($id, $news_id){
+        $news = news::find($news_id);
+
+        if($news->status==1)$news->status=0; 
+        else $news->status=1; 
+
+        $news->save(); 
+
+        return 'Status Changed';
+    }
 
 }

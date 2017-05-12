@@ -11,53 +11,38 @@
 								<thead>
 									<tr>
 										<th>NEWS</th>
+										<th width="200" style="text-align: right;">
+											<div class="create-btn-link">
+												<a href="/organization/{{$organisation->id}}/news/create" class="wg-cnlink" style="top: -24px;"> <i class="fa fa-plus"></i> &nbsp; Create News</a>
+											</div>
+										</th>
 									</tr>
 								</thead>
 								<tbody>
+							@foreach($news as $nw)
 									<tr>
-										<td>
+										<td colspan="2">
 											<div class="news-item news-type-news-list">
 												<div class="news-item-wrapper">
 													<div class="news-thumbnail">
-														<a href="news-details.php"> <img src="images/news-thumb.jpg" alt="" title=""> </a>
+														<a href="/organization/{{$organisation->id}}/news/{{$nw->id}}"> <img src="{{$nw->image_url}}" alt="" title=""> </a>
 													</div>
 													<div class="news-content">
-														<div class="news-name"> <span>Cricket</span> </div>
+														<div class="news-name"> <span>{{$nw->category->sports_name}}</span> </div>
 														<div class="news-title">
-															<h3><a href="news-details.php"><span>IPL 2017: Delhi Daredevils End Losing Streak, Stun Sunrisers Hyderabad By 6 Wickets</span></a></h3> </div>
+															<h3><a href="/organization/{{$organisation->id}}/news/{{$nw->id}}"><span>{{$nw->title}}</span></a></h3> </div>
 														<div class="news-description">
-															<p>After beating Sunrisers Hyderabad by 6 wickets, Delhi Daredevils keep their chances alive to qualify for the IPL Play-offs.</p>
+															<p>{{$nw->details}}</p>
 														</div>
 														<div class="news-meta">
-															<div class="news-meta-news"> <span>03 May 2017</span> </div>
+															<div class="news-meta-news"> <span>{{date('jS M, Y', strtotime($nw->created_at))}}</span> </div>
 														</div>
 													</div>
 												</div>
 											</div>
 										</td>
-									</tr>
-									<tr>
-										<td>
-											<div class="news-item news-type-news-list">
-												<div class="news-item-wrapper">
-													<div class="news-thumbnail">
-														<a href="news-details.php"> <img src="images/news-thumb.jpg" alt="" title=""> </a>
-													</div>
-													<div class="news-content">
-														<div class="news-name"> <span>Cricket</span> </div>
-														<div class="news-title">
-															<h3><a href="news-details.php"><span>IPL 2017: Delhi Daredevils End Losing Streak, Stun Sunrisers Hyderabad By 6 Wickets</span></a></h3> </div>
-														<div class="news-description">
-															<p>After beating Sunrisers Hyderabad by 6 wickets, Delhi Daredevils keep their chances alive to qualify for the IPL Play-offs.</p>
-														</div>
-														<div class="news-meta">
-															<div class="news-meta-news"> <span>03 May 2017</span> </div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</td>
-									</tr>
+								</tr>
+								@endforeach
 								</tbody>
 							</table>
 						</div>

@@ -75,8 +75,14 @@ Route::group(['prefix' => 'organization/{id}'], function () {
     Route::post('/settings/change_password', 'User\OrganizationController@change_password');
 
     Route::get('/news', 'User\OrganizationController@news');
+    Route::get('/news/create', 'User\OrganizationController@news_create');
     Route::post('/news/add', 'User\OrganizationController@news_add');
-    Route::get('/news/{id}', 'User\OrganizationController@news_show'); 
+    Route::get('/news/manage', 'User\OrganizationController@news_manage');
+    Route::get('/news/{news_id}', 'User\OrganizationController@news_show'); 
+    Route::get('/news/{news_id}/delete','User\OrganizationController@news_delete');
+    Route::get('/news/{news_id}/edit', 'User\OrganizationController@news_edit');
+    Route::post('/news/{news_id}/update', 'User\OrganizationController@news_update');
+    Route::get('/news/{news_id}/toggle', 'User\OrganizationController@news_toggle');
     
     Route::get('/polls', 'User\OrganizationController@get_polls');   
     Route::post('/polls/add', 'User\OrganizationController@add_poll');

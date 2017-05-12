@@ -8,10 +8,8 @@
                           <div class="create-btn-link"><a href="/organization/{{$organisation->id}}/new_tournament" class="wg-cnlink" >Create New Tournament</a></div>
                     </div>
             </div>
-<div class="col-md-2">
-  
-</div>
-<div id="content" class="col-sm-10" >
+
+<div  class="col-sm-9" >
     <div class=" tournament_profile">
        
         @if(count($parent_tournaments)) 
@@ -149,6 +147,11 @@
         @endif
     </div>
 </div>
+
+
+
+@include('organization_2._sidebar')
+
 @endsection
 
 

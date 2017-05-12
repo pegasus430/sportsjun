@@ -134,6 +134,18 @@ class Organization extends Model
             return $this->hasMany('App\Model\TournamentParent', 'organization_id');
         }
 
+
+        // public function reports(){
+
+        // }
+
+        public function news(){
+            return $this->hasMany('App\Model\news');
+        }
+
+        public function polls(){
+            return $this->hasMany('App\Model\poll');
+        }
       
 
 

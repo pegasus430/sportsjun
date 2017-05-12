@@ -29,6 +29,7 @@ return [
                 'FACILITY_PROFILE'     => 'form_gallery_facility', //form gallery
                 //organization
                 'ORGANIZATION_LOGO'    => 'organization', //logo
+                'ORGANIZATION_NEWS'    => 'organization_news',
                 'GALLERY_ORGANIZATION' => 'gallery_organization',
                 'ORGANIZATION_PROFILE' => 'form_gallery_organization', //form gallery		
                 'GALLERY_MATCH'        => 'gallery_match', //scorecard gallery		
@@ -45,6 +46,7 @@ return [
                 'ORGANIZATION_PROFILE' => 'form_gallery_organization',
                 'TOURNAMENT_PROFILE'   => 'form_gallery_tournaments',
                 'FACILITY_PROFILE'     => 'form_gallery_facility',
+                'ORGANIZATION_NEWS'    => 'organization_news',
         ],
         'ENUM'                     => [
                 'MARKETPLACE'  =>
