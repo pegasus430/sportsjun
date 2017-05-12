@@ -83,6 +83,13 @@ Route::group(['prefix' => 'organization/{id}'], function () {
     Route::get('/news/{news_id}/edit', 'User\OrganizationController@news_edit');
     Route::post('/news/{news_id}/update', 'User\OrganizationController@news_update');
     Route::get('/news/{news_id}/toggle', 'User\OrganizationController@news_toggle');
+
+
+    Route::group(['prefix'=>'coaching','namespace'=>'User'], function(){
+        //coaching routes
+        Route::get('/', 'OrganizationCoachingController@coaching_index');
+        Route::get('/create_session','OrganizationCoachingController@create_session');
+    });
     
     Route::get('/polls', 'User\OrganizationController@get_polls');   
     Route::post('/polls/add', 'User\OrganizationController@add_poll');

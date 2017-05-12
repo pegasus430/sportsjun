@@ -164,9 +164,9 @@
                 <li class='nav-item'>
                     <a href="/organization/{{$organisation->id}}/schedules"><img src="/org/images/icons/icon-schedule.png" alt="" width="16" height="16"> Schedule</a>
                 </li>
-              <!--   <li class='nav-item'>
-                    <a href="coaching.php"><img src="/org/images/icons/icon-coach.png" alt="" width="16" height="16"> Coaching</a>
-                </li> -->
+                <li class='nav-item'>
+                    <a href="/organization/{{$organisation->id}}/coaching"><img src="/org/images/icons/icon-coach.png" alt="" width="16" height="16"> Coaching</a>
+                </li>
                 <li class='nav-item'>
                     <a href="/organization/{{$organisation->id}}/marketplace"><img src="/org/images/icons/icon-marketplace.png" alt="" width="16" height="16"> marketplace</a>
                 </li>
@@ -175,6 +175,9 @@
                 </li>
                   <li class='nav-item'>
                     <a href="/organization/{{$organisation->id}}/polls"><i class="fa fa-bar-chart"></i> Polls</a>
+                </li>
+                 <li class='nav-item'>
+                    <a href="/organization/{{$organisation->id}}/news"><i class="fa fa-bar-chart"></i> News</a>
                 </li>
             </ul>
         </div>

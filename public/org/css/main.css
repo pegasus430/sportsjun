@@ -752,7 +752,7 @@ header {
     display: inline-block;
     padding: 0px 8px;
 }
-
+ 
 
 /* Coaching Section */
 
@@ -845,11 +845,11 @@ figure.snip1174.green {
 }
 
 figure.snip1174.navy {
-    background-color: #222f3d;
+    background-color: #5d5c63;
 }
 
 figure.snip1174.red {
-    background-color: #962d22;
+    background-color: rgb(251, 96, 127);
 }
 
 figure.snip1174:hover img,
