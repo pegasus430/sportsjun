@@ -5,6 +5,9 @@ Route::group(array('middleware' => 'role'), function() {
     //End Dashboard
 
     //Home
+
+
+
     Route::group(["as"=>'admin.home.',"prefix"=>"admin","namespace"=>"admin"],function(\Illuminate\Routing\Router $router){
         $router->get('infolist/{infolist}',['as'=>'infolists.edit','uses'=>"HomepageInfolistsController@edit"]);
         $router->put('infolist/{infolist}',['uses'=>"HomepageInfolistsController@update"]);
@@ -193,6 +196,9 @@ Route::group(array('middleware' => 'role'), function() {
     // 'as' => 'admin/online/availability', 'uses' => 'admin\ScoreCardController@createScorecardView']);
 
 
+    Route::get('/admin/subscription_methods', 'admin\subscriptionMethodController@index');
+    Route::post('/admin/subscription_methods/add', 'admin\subscriptionMethodController@store');
+
 
     //admin score card end
 
@@ -209,4 +215,5 @@ Route::group(array('middleware' => 'role'), function() {
     Route::resource('admin', 'admin\UserController');
 
     //Route::get('admin/paymentgateways/availability/{c_id}', 'admin\PaymentGateWaysController@postAvailability');
-});
+
+ });

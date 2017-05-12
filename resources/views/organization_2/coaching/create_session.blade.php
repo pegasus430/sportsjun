@@ -53,31 +53,32 @@
 											@foreach(Helper::getAllSports() as $sport)
 
 											@endforeach
-									</select>
+						 			</select>
 								</div>
 							</div>
 							<div class="input-container select two-col">
 								<div>
 									<label>Coach</label>
 									<select class="" name="staff_role">
-										@foreach($organisation->coaches as $staff)
-
+										@foreach($organisation->staff as $staff)
+											@if($staff->roleForOrganization($organisation->id)->name=='Coach')
+											<option value="{{$staff->id}}">{{$staff->name}}</option>
+											@endif
 										@endforeach
 									</select>
 								</div>
 							</div>
 							<div class="input-container two-col">
-								<input type="text" id="start_date" required="">
+								<input type="text" id="start_date" required="" class="datepicker">
 								<label for="start_date">Start Date</label>
 								<div class="bar"></div>
 							</div>
 							<div class="input-container two-col">
-								<input type="text" id="end_date" required="">
+								<input type="text" id="end_date" required="" class="datepicker">
 								<label for="end_date">End Date</label>
 								<div class="bar"></div>
 							</div>
-							<div class="input-container two-col">
-						
+							
 							<div class="input-container">
 								<input type="text" id="no_of_players" required="">
 								<label for="no_of_players">Number of Players</label>
@@ -86,20 +87,24 @@
 							<div class="input-container select two-col">
 								<div>
 									<label>Payment method by</label>
-									<select class="pmethod" name="payment_method">
+									<select class="pmethod" name="payment_method" required="">
 										<option value="">Choose payment method</option>
-										<option value="by_month">By duration in months</option>
-										<option value="by_installment">By installments</option>
+										@foreach($types as $key=>$type)
+											<option value="{{$key}}">{{$type}}</option>
+										@endforeach
 									</select>
 								</div>
 							</div>
-							<div class="pay_options input-container by_month">
+							@foreach($types as $key=>$type)
+							<div class="pay_options input-container {{$key}}">
 								<h5>Options to pay</h5>
+
+								@foreach(Helper::get_subscription_methods($key) as $sm)
 								<div class="well">
 									<div class="row">
 										<div class="col-md-6">
 											<div class="flex">
-												<input type="checkbox" id="full_payment" /> <span for="full_payment">Yearly payment</span>
+												<input type="checkbox" id="full_payment" /> <span for="full_payment">{{$sm->title}}</span>
 												<input type="text" placeholder="Amount" class="form-control" /> </div>
 										</div>
 										<div class="col-md-6">
@@ -109,94 +114,11 @@
 										</div>
 									</div>
 								</div>
-								<div class="well">
-									<div class="row">
-										<div class="col-md-6">
-											<div class="flex">
-												<input type="checkbox" id="full_payment" /> <span for="full_payment">Half yearly payment</span>
-												<input type="text" placeholder="Amount" class="form-control" /> </div>
-										</div>
-										<div class="col-md-6">
-											<div class="flex">
-												<input type="checkbox" id="discount" /> <span for="discount" style="font-size: 12px;">Include discount of</span>
-												<input type="text" placeholder="" class="form-control" style="width: 100px;" />&nbsp;&nbsp; <span for="discount" style="font-size: 16px;">%</span> </div>
-										</div>
-									</div>
-								</div>
-								<div class="well">
-									<div class="row">
-										<div class="col-md-6">
-											<div class="flex">
-												<input type="checkbox" id="full_payment" /> <span for="full_payment">Quarterly Payment</span>
-												<input type="text" placeholder="Amount" class="form-control" /> </div>
-										</div>
-										<div class="col-md-6">
-											<div class="flex">
-												<input type="checkbox" id="discount" /> <span for="discount" style="font-size: 12px;">Include discount of</span>
-												<input type="text" placeholder="" class="form-control" style="width: 100px;" />&nbsp;&nbsp; <span for="discount" style="font-size: 16px;">%</span> </div>
-										</div>
-									</div>
-								</div>
-								<div class="well">
-									<div class="row">
-										<div class="col-md-6">
-											<div class="flex">
-												<input type="checkbox" id="full_payment" /> <span for="full_payment">Monthly Payment</span>
-												<input type="text" placeholder="Amount" class="form-control" /> </div>
-										</div>
-										<div class="col-md-6">
-											<div class="flex">
-												<input type="checkbox" id="discount" /> <span for="discount" style="font-size: 12px;">Include discount of</span>
-												<input type="text" placeholder="" class="form-control" style="width: 100px;" />&nbsp;&nbsp; <span for="discount" style="font-size: 16px;">%</span> </div>
-										</div>
-									</div>
-								</div>
+
+								@endforeach
 							</div>
-							<div class="pay_options input-container by_installment">
-								<h5>Options to pay</h5>
-								<div class="well">
-									<div class="row">
-										<div class="col-md-6">
-											<div class="flex">
-												<input type="checkbox" id="full_payment" /> <span for="full_payment">Full payment</span>
-												<input type="text" placeholder="Amount" class="form-control" /> </div>
-										</div>
-										<div class="col-md-6">
-											<div class="flex">
-												<input type="checkbox" id="discount" /> <span for="discount" style="font-size: 12px;">Include discount of</span>
-												<input type="text" placeholder="" class="form-control" style="width: 100px;" />&nbsp;&nbsp; <span for="discount" style="font-size: 16px;">%</span> </div>
-										</div>
-									</div>
-								</div>
-								<div class="well">
-									<div class="row">
-										<div class="col-md-6">
-											<div class="flex">
-												<input type="checkbox" id="full_payment" /> <span for="full_payment">Two half payment</span>
-												<input type="text" placeholder="Amount" class="form-control" /> </div>
-										</div>
-										<div class="col-md-6">
-											<div class="flex">
-												<input type="checkbox" id="discount" /> <span for="discount" style="font-size: 12px;">Include discount of</span>
-												<input type="text" placeholder="" class="form-control" style="width: 100px;" />&nbsp;&nbsp; <span for="discount" style="font-size: 16px;">%</span> </div>
-										</div>
-									</div>
-								</div>
-								<div class="well">
-									<div class="row">
-										<div class="col-md-6">
-											<div class="flex">
-												<input type="checkbox" id="full_payment" /> <span for="full_payment">Four quarter Payment</span>
-												<input type="text" placeholder="Amount" class="form-control" /> </div>
-										</div>
-										<div class="col-md-6">
-											<div class="flex">
-												<input type="checkbox" id="discount" /> <span for="discount" style="font-size: 12px;">Include discount of</span>
-												<input type="text" placeholder="" class="form-control" style="width: 100px;" />&nbsp;&nbsp; <span for="discount" style="font-size: 16px;">%</span> </div>
-										</div>
-									</div>
-								</div>
-							</div>
+
+							@endforeach
 							<center>
 								<input type="checkbox" id="parental_info" />
 								<label for="parental_info">Parental information is mandatory for registration. </label>
@@ -229,6 +151,11 @@ $(document).ready(function () {
 				});
 			}).change();
 		});
+</script>
+
+<script type="text/javascript">
+	  $(".datepicker").datepicker();
+   
 </script>
 
 @stop

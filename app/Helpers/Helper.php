@@ -44,6 +44,7 @@ use App\Model\ArcheryTeamStats;
 use App\Model\ArcheryArrowStats;
 use App\Model\BasicSettings;
 use Request;
+use App\Model\subscription_method as sm;
 
 class Helper
 {
@@ -2840,6 +2841,10 @@ class Helper
               ->get();
 
         return $reports;
+    }
+
+    public static function get_subscription_methods($type){
+        return sm::where(['type'=>$type])->get();
     }
     
 }

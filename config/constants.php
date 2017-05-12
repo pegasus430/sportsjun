@@ -132,7 +132,9 @@ return [
                 [
                         'SPORTS_TYPE' => [ 'player' => 'PLAYER', 'team' => 'TEAM',
                                 'both' => 'BOTH']
-                ]
+                ],
+                'SUBSCRIPTION_TYPE' => ['installment'=>'INSTALLMENT',
+                                        'monthly'=>'MONTHLY']
         ],
         'SPORT'                    => [
                 1 => 'CricketStatistic',

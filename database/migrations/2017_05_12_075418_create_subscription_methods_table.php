@@ -15,6 +15,7 @@ class CreateSubscriptionMethodsTable extends Migration
         Schema::create('subscription_methods', function (Blueprint $table) {
             $table->increments('id');
             $table->enum('type',['installment','monthly','other'])->default('monthly')->nullable();
+            $table->enum('duration_type',['days','months','years'])->default('months')->nullable();
             $table->string('title')->nullable();
             $table->integer('duration')->nullable();
             $table->text('details')->nullable();

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\User\OrganizationController; 
+use App\Model\subscription_method;
 class OrganizationCoachingController extends OrganizationController
 {
     /**
@@ -22,6 +23,7 @@ class OrganizationCoachingController extends OrganizationController
     }
 
     public function create_session(){
-    	return view('organization_2.coaching.create_session');
+    	$types = config('constants.ENUM.SUBSCRIPTION_TYPE');
+    	return view('organization_2.coaching.create_session', compact('types'));
     }
 }
