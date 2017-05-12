@@ -16,7 +16,7 @@
 }
 
 .tour_score{
-  
+   
 }
 
 <?php $empty_rounds=[];?>
@@ -63,6 +63,7 @@
                                           <a href="javascript:void(0)" id="scheduleEdit_{{$schedule['id']}}"  onclick="editMatchSchedule({{$schedule['id']}},1,'','myModal')">Edit</a>
                                       @endif
                                   @endif
+
                                   </span>
                                </div>
                           <div  id="tour_{{$round}}_match_{{$schedule['tournament_match_number']}}">
@@ -176,6 +177,8 @@
 
                                     @else
 
+
+
                                         @if(isset($bracket['match_start_date']))
                                             <div class="clearfix">
                                                <span class="tour_match_date fa fa-info"  data-toggle="tooltip" data-placement="left" title="{{(isset($bracket['winner_text'])&&$bracket['winner_text']!='edit')?$bracket['match_start_date'].$sport_name.' '.$bracket['match_type']:trans('message.tournament.final.editscheduletoaddscore')}}"></span>
@@ -188,6 +191,8 @@
                                                     @else
                                                         @if(isset($bracket['id']))
                                                             <a href="{{ url('match/scorecard/edit/'.$bracket['id']) }}">{{$bracket['winner_text']}}</a>
+                                                        @else
+                                                          <a>Not started</a>
                                                         @endif    
                                                     @endif
                                                @else
@@ -195,6 +200,8 @@
                                                         @if(isset($bracket['id']))
                                                             <a href="javascript:void(0)" id="scheduleEdit_{{$bracket['id']}}" onclick="editMatchSchedule({{$bracket['schdule_id']}},1,{{$round}},'myModal')">Edit</a>
                                                         @endif    
+                                                    @else
+                                                        Not Started
                                                     @endif
                                                @endif
                                                </span>
@@ -260,7 +267,10 @@
                                   @else
                                       @if($isOwner)
                                           <a href="javascript:void(0)" id="scheduleEdit_{{$schedule['id']}}"  onclick="editMatchSchedule({{$schedule['id']}},1,{{$round}},'myModal')">Edit</a>
+                                      @else
+                                        Not Started
                                       @endif
+
                                   @endif
                                   </span>
                                </div>

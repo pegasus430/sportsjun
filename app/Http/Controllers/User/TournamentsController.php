@@ -745,7 +745,7 @@ class TournamentsController extends Controller
 		$request['manager_id'] = !empty($request['user_id'])?$request['user_id']:$manager_id;
 		$request['match_type'] = !empty($request['match_type'])?$request['match_type']:'';
 		$request['player_type'] = !empty($request['player_type'])?$request['player_type']:'';
-		if($request->input('facility_response')!=''&& $request->input('facility_response_name')!='')
+		if($request->input('facility_response')!=''&& $request->input('facility_response_name')!='') 
 		{
 			$request['facility_id'] = $request->input('facility_response');
 			$request['facility_name'] =$request->input('facility_response_name');
