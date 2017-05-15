@@ -2791,6 +2791,15 @@ class Helper
                 if(session::has('organization_id')){
                     $org = Organization::find(session::get('organization_id'));
                     $org_tournaments = $org->tournaments->lists('id')->toArray();
+                    
+                }
+                else{
+                    $tournament = Tournaments::find($id);
+                    if(isset($tournament->tournamentParent->organization)){
+                        Session::put('organization_id', $tournament->tournamentParent->organization->id);
+
+                        return true;
+                    }
                 }
             }
 

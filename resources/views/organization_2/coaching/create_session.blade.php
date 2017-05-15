@@ -146,29 +146,32 @@
 			</div>
 	
 							@foreach($types as $key=>$type)
-							<div class="pay_options input-container {{$key}}">
+							<div class="pay_options {{$key}}">
 								<h5>Options to pay</h5>
 
 								@foreach(Helper::get_subscription_methods($key) as $sm)
 								<div class="well">
-									<div class="row">
-										<div class="col-md-6">
-											<div class="flex">
-												<input type="checkbox" id="full_payment" name="{{$key}}_choose_{{$sm->id}}"  /> <span for="full_payment" checked>{{$sm->title}}</span>
-												<input type="text" placeholder="Amount" class="form-control"  name="{{$key}}_amount_{{$sm->id}}" /> </div>
+									<div class="row ">
+										<div class="col-md-6 flex">
+											
+												<input type="checkbox" id="full_payment" name="{{$key}}_choose_amount_{{$sm->id}}"  /> <span for="full_payment" checked><label class="form_label">{{$sm->title}}</label></span>
+												<input type="text" placeholder="Amount" class="form-control"  name="{{$key}}_amount_{{$sm->id}}" /> 
 										</div>
-										<div class="col-md-6">
-											<div class="flex">
-												<input type="checkbox" id="discount" checked="" /> <span for="discount" style="font-size: 12px;">Include discount of</span>
-												<input type="text" placeholder="" class="form-control" style="width: 100px;" />&nbsp;&nbsp; <span for="discount" style="font-size: 16px;">%</span> </div>
+										<div class="col-md-6 flex">
+										
+					<input type="checkbox" id="discount" name="{{$key}}_choose_discount_{{$sm->id}}" /> <span for="discount" style="font-size: 12px;">Include discount of</span>
+						
+						<label class="field select">
+						<input type="text" class="form-control" name="{{$key}}_discount_{{$sm->id}}" >
+						 	 <i class="arrow">%</i>
+						 </label>
 
 												<input type="hidden" name="{{$key}}_index_{{$sm->id}}" value="{{$sm->id}}" >
 										</div>
 									</div>
-								</div>
 
-
-
+							
+						</div>
 								@endforeach
 							</div>
 
@@ -182,7 +185,7 @@
 						</div>
 					</form>
 				</div>
-			</div>
+
 		
 
 

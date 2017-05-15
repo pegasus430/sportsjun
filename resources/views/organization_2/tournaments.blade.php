@@ -109,18 +109,56 @@
                             @if($lis->description)
                             <p class="lt-grey">{{$lis->description}}</p>
                             @endif
-                            <?php /*
-                            <div class="sj_actions_new">
-                                <?php if(!in_array($lis->id,$exist_array) && (!empty($lis->end_date && $lis->end_date!='0000-00-00')?strtotime($lis->end_date) >= strtotime(date(config('constants.DATE_FORMAT.DB_STORE_DATE_FORMAT'))):strtotime($lis->start_date) >= strtotime(date(config('constants.DATE_FORMAT.DB_STORE_DATE_FORMAT'))))) {?>
-                                <div class="sb_join_tournament_main" id="{{$lis->id}}" spid="{{$lis->sports_id}}" val="{{!empty($lis->schedule_type)?(($lis->schedule_type=='individual')?'PLAYER_TO_TOURNAMENT':'TEAM_TO_TOURNAMENT'):''}}"><a href="#" class="sj_add_but"><span><i class="fa fa-check"></i>Join Tournament</span></a></div>
-                                <?php }?>
-                                <div class="follow_unfollow_tournament" id="follow_unfollow_tournament_{{$lis->id}}" uid="{{$lis->id}}" val="TOURNAMENT" flag="{{ in_array($lis->id,$follow_array)?0:1 }}"><a href="#" id="follow_unfollow_tournament_a_{{$lis->id}}" class="{{ in_array($lis->id,$follow_array)?'sj_unfollow':'sj_follow' }}"><span id="follow_unfollow_tournament_span_{{$lis->id}}"><i class="{{ in_array($lis->id,$follow_array)?'fa fa-remove':'fa fa-check' }}"></i>{{ in_array($lis->id,$follow_array)?'Unfollow':'Follow' }}</span></a></div> 
-                            </div>  
-                             * 
-                             */
-                            ?>          
+                         
+                        <div class="sj_actions_new">
+                            <?php if(!in_array($lis['id'],$exist_array) && (!empty($lis['end_date'] && $lis['end_date']!='0000-00-00')?strtotime($lis['end_date']) >= strtotime(date(config('constants.DATE_FORMAT.DB_STORE_DATE_FORMAT'))):strtotime($lis['start_date']) >= strtotime(date(config('constants.DATE_FORMAT.DB_STORE_DATE_FORMAT'))))) {?>
+                            <div class="sb_join_tournament_main" id="{{$lis['id']}}" spid="{{$lis['sports_id']}}" val="{{!empty($lis['schedule_type'])?(($lis['schedule_type']=='individual')?'PLAYER_TO_TOURNAMENT':'TEAM_TO_TOURNAMENT'):''}}">
+
+        @if($lis['enrollment_type'] == 'online' && $lis->bankaccount !== null && $lis->bankaccount->varified == 1)
+                                     
+
+            @if($lis->is_sold_out==1)
+                                <a href="#" class="sj_add_but"><span><i class="fa fa-check"></i>Sold Out / Registrations closed</span></a>
+            @else
+
+                           
+                @if($lis->total_enrollment==0)
+                                <a  class="sj_add_but_closed"><span><i class="fa fa-check"></i>Registrations closed</span></a>
+                @else
+
+                            
+                    @if($open_dt_tm < $current_dt_tm && $close_dt_tm > $current_dt_tm) 
+                               <a href="{{ url('/tournaments/eventregistration').'/'.$lis['id'] }}" class="sj_add_but_closed"><span><i class="fa fa-check"></i>Event Registration (Online Payment)</span></a>
+                               @elseif($open_dt_tm > $current_dt_tm)
+                                <a  class="sj_add_but_closed"><span><i class="fa fa-check"></i>Registration Not Started</span></a>
+                    @elseif($close_dt_tm < $current_dt_tm)
+                              <a  class="sj_add_but_closed"><span><i class="fa fa-check"></i>Registration Closed</span></a>
+                    @else
+                              <a  class="sj_add_but_closed"><span><i class="fa fa-check"></i>Registration Not Available</span></a>
+                    @endif
+
+                              
+                @endif
+                              
+
+            @endif
+
+                             
+
+        @else
+                            <a href="#" class="sj_add_but"><span><i class="fa fa-check"></i> Event Registration (Offline Payment)</span></a>
+        @endif
+                            </div>
+
+                            
+                            
+                            <?php }?>  
+
+                                <div class="follow_unfollow_tournament" id="follow_unfollow_tournament_{{$lis['id']}}" uid="{{$lis['id']}}" val="TOURNAMENT" flag="{{ in_array($lis['id'],$follow_array)?0:1 }}"><a href="#" id="follow_unfollow_tournament_a_{{$lis['id']}}" class="{{ in_array($lis['id'],$follow_array)?'sj_unfollow':'sj_follow' }}"><span id="follow_unfollow_tournament_span_{{$lis['id']}}"><i class="{{ in_array($lis['id'],$follow_array)?'fa fa-remove':'fa fa-check' }}"></i>{{ in_array($lis['id'],$follow_array)?'Unfollow':'Follow' }}</span></a></div> 
+
                         </div>
                     </div>
+                </div>
                 
                 <div class=''>
                     <p>&nbsp;</p>
@@ -151,6 +189,7 @@
 
 
 @include('organization_2._sidebar')
+@include ('widgets.teamspopup')
 
 @endsection
 
@@ -164,5 +203,77 @@
                     $("#subtournament_"+parent_id).slideToggle("1500");
                 });
             });
+        </script>
+
+
+        <script type="text/javascript">
+            $(document.body).on('click', '.sb_join_tournament_main .sj_add_but' ,function(){        
+        var sport_id = $(this).attr('spid');
+        var val = $(this).attr('val');
+        var id = $(this).attr('id');
+        var title = $("#touname_"+id).html();
+        var jsflag = 'Tournaments';
+
+        console.log(title)
+        if(val === 'PLAYER_TO_TOURNAMENT')
+        {
+            id = [$(this).attr('id')];
+            var user_id = '{{ Auth::user()->id }}';
+            $.confirm({
+                title: 'Confirm',
+                content: "Do you want to join "+title+"?",
+                confirm: function() {
+                    $.post(base_url+'/team/saverequest',{flag:val,player_tournament_id:user_id,team_ids:id},function(response,status){
+                        if(status == 'success')
+                        {
+                            if(response.status == 'success')
+                            {
+                                 $.alert({
+                                    title: "Alert!",
+                                    content: 'Request sent successfully.'
+                                });
+                                $("#hid_flag").val('');
+                                $("#hid_val").val('');
+                            }
+                            else if(response.status == 'exist')
+                            {
+                                $.alert({
+                                    title: "Alert!",
+                                    content: 'Request already sent.'
+                                });
+                                $("#hid_flag").val('');
+                                $("#hid_val").val('');              
+                            }
+                            else
+                            {
+                                $.alert({
+                                    title: "Alert!",
+                                    content: 'Failed to send the request.'
+                                });
+                                $("#hid_flag").val('');
+                                $("#hid_val").val('');                          
+                            }
+                        }
+                        else
+                        {
+                            $.alert({
+                                title: "Alert!",
+                                content: 'Failed to send the request.'
+                            });
+                            $("#hid_flag").val('');
+                            $("#hid_val").val('');
+                        }
+                    })              
+                },
+                cancel: function() {
+                    // nothing to do
+                }
+            });   
+        }
+        else
+        {
+            generateteamsdiv(sport_id,val,id,title,jsflag); 
+        }
+    }); 
         </script>
 @stop

@@ -55,9 +55,11 @@ class OrganizationController extends Controller
              $this->new_template=true;
           }
 
-        if($id && (Auth::user()->type==1 && count(Auth::user()->organizations))){
+        //if($id && (Auth::user()->type==1 && count(Auth::user()->organizations))){
 
-            if(Auth::user()->organizations[0]->id == $id && $this->new_template){
+            // if(Auth::user()->organizations[0]->id == $id && $this->new_template){
+
+            if( $this->new_template){
                  $this->is_owner = true;
                  $this->view = 'organization_2';
                  $organization = Organization::find($id);
@@ -66,8 +68,12 @@ class OrganizationController extends Controller
                  view()->share('organisation', $organization);
             }
             
-        }    
+        //}    
+
     }
+
+    
+
 
     /**
      * Display a listing of the resource.
@@ -820,10 +826,9 @@ class OrganizationController extends Controller
          if (!empty($logo)) {
             foreach ($logo as $l) {
                 $news->image = $l['url'];
-                $news->image_url = asset('/uploads/organization_news'.$news->image);
+                $news->image_url = asset('/uploads/organization_news/'.$news->image);
                 $news->save();
-                Organization::where('id', $id)->update(['logo' => $l['url']]);
-                //echo $l['url'];exit;
+            
             }
 
         }

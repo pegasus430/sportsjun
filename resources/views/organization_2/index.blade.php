@@ -61,8 +61,7 @@
                         @endif
 
                             </div> <a data-slide="prev" href="#events-list" class="left carousel-control">‹</a> <a data-slide="next" href="#events-list" class="right carousel-control">›</a> </div>
-                    </div>
-                </div>
+                  
 
                   <div class="row">
                     <div class="col-md-12">
@@ -150,7 +149,9 @@
             <div class="col-md-12 hidden-lg hidden-md">
                 <br>
                 <br> </div>
-            @include('organization_2._sidebar')
+
+                    @include('organization_2._sidebar')
+        
 
             </div>
       
@@ -168,7 +169,17 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="shop-item">
                     <div class="shop-thumbnail"> <span class="shop-label text-danger">Sale</span>
-                        <a href="javascript:void(0)" data-pid="{{ $item['id'] }}"  data-page='marketplace' data-toggle="tooltip" data-placement="top" title="View Detail" class="view_gallery  item-link"></a> <img src="/org/marketplace/mp_img_1.png" alt="Shop item">
+                        <a href="javascript:void(0)" data-pid="{{ $item['id'] }}"  data-page='marketplace' data-toggle="tooltip" data-placement="top" title="View Detail" class="view_gallery  item-link"></a> 
+                            @if(count($item->photos)>0)
+                              
+                            {!! Helper::Images($item->photos[0]['url'],'marketplace',array('class'=>'img-responsive' ) )
+!!} 
+
+                                @else
+                                <!--<img src="{{ url('uploads/marketplace/market_place_default.png')}}" alt="" class="img-responsive" />-->
+                              {!! Helper::Images('market_place_default.png','marketplace',array('class'=>'img-responsive') )
+!!}     
+                                @endif
                         <div class="shop-item-tools">
                          @if(Auth::user()->type !=1)
                             <a href="#" class="add-to-whishlist" data-toggle="tooltip" data-placement="top" title="" data-original-title="Wishlist"> <i class="fa fa-heart-o"></i> </a>
@@ -193,6 +204,8 @@
             <!-- .col-lg-3.col-sm-6 -->
         </div>
     </div>
+
+
 
 
 

@@ -9,7 +9,7 @@
                     <div class="create-btn-link"> <a href="" class="wg-cnlink" data-toggle="modal" data-target="#ongoing_games">On Going Games</a></div>
                 </div>
             </div>
-            <div class="row">
+          <!--   <div class="row">
                 <div class="col-md-12">
                     <div class="search-box">
                         <div class="sb-label">Filter events in your organization</div>
@@ -19,11 +19,11 @@
                         </span> </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="row">
                 <div class="col-md-12">
                     <div class="search-reasult">
-                        <div class="no-records"><i class="fa fa-frown-o" aria-hidden="true"></i> No Records Found</div>
+             <!--            <div class="no-records"><i class="fa fa-frown-o" aria-hidden="true"></i> No Records Found</div> -->
                         <div class="tabbable-panel">
                             <div class="tabbable-line">
                                 <ul class="nav nav-tabs ">

@@ -1,4 +1,4 @@
-<div class="col-md-3">
+<div class="col-md-3 col-sm-3">
                 <div class="row">
                 <div class="col-md-12">                       
                     </div>
@@ -78,15 +78,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12 col-sm-6">
+                    <div class="col-md-12 ">
                         <div class="wg wg-white no-shadow">
                             <div class="wg-wrap">
                                 <h4>Media Gallery</h4></div>
                             <div id="Carousel" class="carousel slide carousel-fade col-offset-2">
                                 <div class="carousel-inner">
 
-                                @foreach($organisation->photos as $key_p=>$photo)
-                                    <div class="item {{$key_p==0?'active':''}}"> <img src="" class="img-responsive"> </div>                                
+                                @foreach($organisation->all_photos as $key_p=>$photo)
+                                    <div class="item {{$key_p==0?'active':''}}"> <img src="{{$photo->imagePath}}" class="img-responsive"> 
+                                    {{$photo}}
+                                    </div>                                
                                 @endforeach
                                 </div> <a class="left carousel-control" href="#Carousel" data-slide="prev">‹</a> <a class="right carousel-control" href="#Carousel" data-slide="next">›</a> </div>
                         </div>
@@ -94,7 +96,7 @@
                     <div class="col-md-12 visible-xs ">
                         <br>
                         <br> </div>
-                    <div class="col-md-12 col-sm-6">
+                    <div class="col-md-12">
                         <div class="wg wg-purple no-shadow wg-poll" style="min-height: 100px;">
                             <div class="wg-wrap">
                                 <h4>Poll</h4>

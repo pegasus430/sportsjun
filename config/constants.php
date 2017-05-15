@@ -32,7 +32,8 @@ return [
                 'ORGANIZATION_NEWS'    => 'organization_news',
                 'GALLERY_ORGANIZATION' => 'gallery_organization',
                 'ORGANIZATION_PROFILE' => 'form_gallery_organization', //form gallery		
-                'GALLERY_MATCH'        => 'gallery_match', //scorecard gallery		
+                'GALLERY_MATCH'        => 'gallery_match', //scorecard gallery	
+                'ORGANIZATION_COACHING'    => 'organization_coaching',	
         ],
         // folder path for storing and retrieving all the photos
         'PHOTO_PATH'               => [
@@ -47,6 +48,7 @@ return [
                 'TOURNAMENT_PROFILE'   => 'form_gallery_tournaments',
                 'FACILITY_PROFILE'     => 'form_gallery_facility',
                 'ORGANIZATION_NEWS'    => 'organization_news',
+                'ORGANIZATION_COACHING'    => 'organization_coaching',
         ],
         'ENUM'                     => [
                 'MARKETPLACE'  =>

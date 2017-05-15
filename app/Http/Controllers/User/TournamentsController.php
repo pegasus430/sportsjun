@@ -697,7 +697,8 @@ class TournamentsController extends Controller
     public function show($id)
     {
         //
-    }
+
+     }
 
   
 
@@ -1418,7 +1419,6 @@ class TournamentsController extends Controller
 					'tournament_match_number', 'a_id', 'b_id', 'match_start_date',
 					'winner_id', 'match_invite_status', 'looser_id',
 					'match_status', 'match_type']);
-
 
 
 

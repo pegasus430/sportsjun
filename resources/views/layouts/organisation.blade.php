@@ -224,8 +224,13 @@
     @yield('content')
 
 
+</div>
+
+
     <!-- Footer -->
-   <footer class="container">
+
+    <div class="clearfix">
+   <footer class="">
     <hr>
     <div class="col-md-12">
         <div class="social-icons-wrapper text-center"> <a href="#" target="_self" class="google-plus"><i class="fa fa-google-plus"></i></a> <a href="#" target="_self" class="twitter"><i class="fa fa-twitter"></i></a> <a href="#" target="_self" class="facebook"><i class="fa fa-facebook"></i></a> <a href="#" target="_self" class="linkedin"><i class="fa fa-linkedin"></i></a> </div>

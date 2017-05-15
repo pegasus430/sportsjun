@@ -65,6 +65,13 @@ class Organization extends Model
                 return $this->morphMany('App\Model\Photo', 'imageable')->where('imageable_type', 'form_gallery_organization')->where('is_album_cover', 1);
         }
 
+        public function all_photos()
+        {
+                //$this->morphClass = 'organization';
+                return $this->hasMany('App\Model\Photo', 'imageable_id')->where('imageable_type','like',"%organization%");
+        }
+
+
         public function user()
         {
                 return $this->hasOne('App\User', 'id', 'user_id');
