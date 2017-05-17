@@ -29,6 +29,10 @@ use App\Model\Marketplace;
 use App\Model\Album;
 use File;
 use Session;
+use App\Model\poll;
+use App\Model\poll_options as poll_option;
+use App\Model\VendorBankAccounts;
+use App\Model\news; 
 
 //use Helper;
 
@@ -51,9 +55,11 @@ class OrganizationController extends Controller
              $this->new_template=true;
           }
 
-        if($id && (Auth::user()->type==1 && count(Auth::user()->organizations))){
+        //if($id && (Auth::user()->type==1 && count(Auth::user()->organizations))){
 
-            if(Auth::user()->organizations[0]->id == $id && $this->new_template){
+            // if(Auth::user()->organizations[0]->id == $id && $this->new_template){
+
+            if( $this->new_template){
                  $this->is_owner = true;
                  $this->view = 'organization_2';
                  $organization = Organization::find($id);
@@ -62,8 +68,12 @@ class OrganizationController extends Controller
                  view()->share('organisation', $organization);
             }
             
-        }    
+        //}    
+
     }
+
+    
+
 
     /**
      * Display a listing of the resource.
@@ -114,29 +124,16 @@ class OrganizationController extends Controller
                 }
             }
 
-        $schedules =  Tournaments::join('tournament_parent', 'tournament_parent.id','=','tournaments.tournament_parent_id')
-                ->where('organization_id', $this->organization->id)
-                ->join('match_schedules','match_schedules.tournament_id','=','tournaments.id')
-                ->where('hasSetupSquad','1')->where('match_status','!=','completed')
-              ->orderBy('match_start_date', 'match_start_time','desc')              
-              ->select('match_schedules.*')
-              ->get();
-
-        $reports=  Tournaments::join('tournament_parent', 'tournament_parent.id','=','tournaments.tournament_parent_id')
-                ->where('organization_id', $this->organization->id)
-                ->join('match_schedules','match_schedules.tournament_id','=','tournaments.id')
-                ->whereNotNull('match_report')
-              ->orderBy('match_start_date', 'match_start_time','desc')             
-              ->select('match_schedules.*')
-              ->get();
-             
+                  
            
 
         $marketplace = marketplace::where('organization_id', $this->organization->id)->get();
         $imageable_type_name = config('constants.PHOTO.GALLERY_ORGANIZATION');
         $photos = Photo::where('imageable_type',$imageable_type_name)->where('imageable_id',$this->organization->id)->get();
-
-         return view('organization_2.index', compact('tournaments','teams','parent_tournaments','marketplace','items','photos','schedules','reports','organisation'));
+        $polls = poll::where('organization_id', $id)->get();
+        $news = news::where('organization_id', $id)->orderBy('id','desc')->take(5)->get();
+ 
+         return view('organization_2.index', compact('tournaments','teams','parent_tournaments','marketplace','items','photos','schedules','reports','organisation','polls','news'));
         }
 
         else return redirect()->to('/organization/'.$id.'/info');
@@ -679,5 +676,230 @@ class OrganizationController extends Controller
         return 'ok';
     }
 
+    public function get_polls($id){
+        $polls = poll::where('organization_id',$id)->get();
+        return view('organization_2.polls.index', compact('polls'));
+    }
+
+    public function add_poll(objrequest $request){
+        $i = $request->i;
+        $poll = new poll; 
+
+        $poll->title = $request->question;
+        $poll->user_id = Auth::user()->id;
+        $poll->organization_id = Auth::user()->organizations[0]->id;
+        $poll->start_date = $request->start_date;
+        $poll->end_date = $request->end_date;
+        $poll->save();
+
+        for($j=0; $j<=$i; $j++){
+            if($request->{'option_'.$j}){
+                $option = new poll_option;
+                $option->poll_id = $poll->id;
+                $option->title = $request->{'option_'.$j};
+                $option->save();
+            }
+        }
+
+        return redirect()->back()->with('message', 'Poll Added');
+    }
+
+    public function delete_poll($id, $poll_id){
+        $poll = poll::find($id);
+        $poll->options->delete();
+        $poll->voters->delete();
+        $poll->delete();
+
+        return redirect()->back()->with('message', 'Poll Deleted!');
+    }
+
+
+    public function settings($id){
+         $organization = organization::find($id);
+         $teams = $organization->teamplayers;
+         $bank_accounts = VendorBankAccounts::where('user_id',Auth::user()->id)->get();
+
+        $type = config('constants.ENUM.ORGANIZATION.ORGANIZATION_TYPE');
+        $countries = Country::orderBy('country_name')->lists('country_name', 'id')->all();
+        $states = State::where('country_id', $organization->country_id)->orderBy('state_name')->lists('state_name',
+            'id')->all();
+        $cities = City::where('state_id', $organization->state_id)->orderBy('city_name')->lists('city_name',
+            'id')->all();
+        $teams = Team::where('team_owner_id', Auth::user()->id)->orderBy('name')->lists('name', 'id')->all();
+        $selectedTeams = Team::where('team_owner_id', Auth::user()->id)->where('organization_id', $id)->get(['id']);
+        $selectedTeamsIds = '';
+        if (count($selectedTeams)) {
+            $selectedTeamsIds = array_divide(array_flatten($selectedTeams->toArray()));
+        }
+        if ($selectedTeamsIds == '') {
+            $selectedTeams = '';
+        } else {
+            $selectedTeams = $selectedTeamsIds[1];
+        }
+
+
+        return view('organization_2.settings.index', compact('bank_accounts','organization','id','teams','selectedTeams','cities','states','type','countries'));
+    }
+
+
+    public function save_bank($id, objrequest $request){       
+
+        if(!empty($request['account_holder_name']) && 
+            !empty($request['account_number']) &&
+            !empty($request['bank_name']) && 
+            !empty($request['branch']) &&
+            !empty($request['ifsc'])
+         ){
+            $vendor = new VendorBankAccounts();
+            $vendor_bank_account_id = $vendor->saveBankDetails(
+                $request['account_holder_name'],
+                $request['account_number'],
+                $request['bank_name'],
+                $request['branch'],
+                $request['ifsc'],
+                Auth::user()->id
+            );
+            if($vendor_bank_account_id){
+                $request['vendor_bank_account_id'] = $vendor_bank_account_id;
+            
+          }
+
+        }
+
+        else redirect()->back()->with('error', 'A field is missing sorry!');
+
+
+         if(!empty($request['filelist_file_upload'])) {
+
+           //  /*--files moving from temp directory to attachments directory--*/
+             $image_moved=Helper::moveImage($request['filelist_file_upload'],$vendor_bank_account_id);
+           /*--files moving from temp directory to attachments directory--*/
+          
+        }  
+
+        return redirect()->back()->with('message', 'Bank Added!');
+
+    }
+
+    public function change_password($id, ObjRequest $request){
+        $user = Auth::user(); 
+
+        if(bcrypt($request->old_password) != $user->password || ($request->new_password!=$request->new_password_2)){
+            return redirect()->back()->with('error', 'Wrong Password');
+        }
+        else{
+            $user->password = bcrypt($request->new_password);
+            $user->save();
+        }
+
+        return redirect()->back()->with('message','Password Updated!');
+    }
+
+
+    public function news($id){
+        $news = news::where('organization_id', $id)->orderBy('id', 'desc')->get();
+        return view('organization_2.news.index', compact('news'));
+    }
+
+    public function news_create(){
+        return view('organization_2.news.create');
+    }
+
+    public function news_add($id, objRequest $request){
+
+        $user_id = Auth::user()->id;
+        Helper::uploadPhotos($request['filelist_photos'], config('constants.PHOTO_PATH.ORGANIZATION_NEWS'), $id, 1,
+            1, config('constants.PHOTO.ORGANIZATION_NEWS'), $user_id);
+      
+        $logo = Photo::select('url')->where('imageable_type',
+            config('constants.PHOTO.ORGANIZATION_NEWS'))->where('imageable_id', $id)->where('user_id',
+            Auth::user()->id)->where('is_album_cover', 1)->get()->toArray();
+       
+
+        $news = new news; 
+        $news->title = $request->title;
+        $news->details = $request->details;
+        $news->category_id = $request->category_id; 
+        $news->organization_id = $id;
+        $news->save(); 
+
+         if (!empty($logo)) {
+            foreach ($logo as $l) {
+                $news->image = $l['url'];
+                $news->image_url = asset('/uploads/organization_news/'.$news->image);
+                $news->save();
+            
+            }
+
+        }
+
+        return redirect()->to('/organization/'.$news->organization_id.'/news/manage')->with('message', 'News Added Successfully!');
+
+    }
+
+    public function news_manage($id){
+        $news = news::where('organization_id', $id)->get(); 
+
+        return view('organization_2.news.manage', compact('news'));
+    }
+
+    public function news_show($id, $news_id){
+        $news = news::find($news_id);
+        return view('organization_2.news.show', compact('news'));
+    }
+
+    public function news_edit($id,$news_id){
+        $news = news::find($news_id);
+
+        return view('organization_2.news.edit', compact('news'));
+    }
+
+    public function news_delete($id, $news_id){
+        news::find($news_id)->delete(); 
+
+        return 'ok';
+    }
+
+    public function news_update($id, $news_id, objRequest $request){
+        $user_id = Auth::user()->id;
+        Helper::uploadPhotos($request['filelist_photos'], config('constants.PHOTO_PATH.ORGANIZATION_NEWS'), $id, 1,
+            1, config('constants.PHOTO.ORGANIZATION_NEWS'), $user_id);
+      
+        $logo = Photo::select('url')->where('imageable_type',
+            config('constants.PHOTO.ORGANIZATION_NEWS'))->where('imageable_id', $id)->where('user_id',
+            Auth::user()->id)->where('is_album_cover', 1)->get()->toArray();
+       
+
+        $news = news::find($news_id); 
+        $news->title = $request->title;
+        $news->details = $request->details;
+        $news->category_id = $request->category_id; 
+        $news->organization_id = $id; 
+        $news->save(); 
+
+         if (!empty($logo)) {
+            foreach ($logo as $l) {
+                $news->image = $l['url'];
+                $news->image_url = asset('/uploads/organization_news/'.$news->image);
+                $news->save();
+                Organization::where('id', $id)->update(['logo' => $l['url']]);
+                //echo $l['url'];exit;
+            }
+
+        }
+
+        return redirect()->to('/organization/'.$news->organization_id.'/news/manage')->with('message', 'News Updated Successfully!');
+    }
+
+    public function news_toggle($id, $news_id){
+        $news = news::find($news_id);
+
+        if($news->status==1)$news->status=0; 
+        else $news->status=1; 
+
+        $news->save(); 
+
+        return 'Status Changed';
+    }
 
 }

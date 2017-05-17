@@ -5,7 +5,7 @@
 <div class="container-fluid col-sm-10 col-sm-offset-1">
 	       <div class="row">
 
-    <div class="sportsjun-forms sportsjun-container ">
+    <div class="sportsjun-forms sportsjun-container wrap-1 ">
         
 
             @if(count(Cart::getContent()->count()))
@@ -25,10 +25,10 @@
                                 </tr>
                         </thead>
                         <tbody>
-                                @foreach(Cart::getContent() as $key=>$item)
-                                    <tr>
+                                @foreach(Cart::getContent() as $key=>$item_cart)
+                                    <tr>   <?php $item = $item_cart->attributes;?>
                                         <td>{{$key+1}}</td>
-                                        <td><a href="{{url('/organization/'.$item->attributes['organization_id'].'/marketplace/'.$item['id'].'/details')}}"  data-pid="{{ $item['id'] }}" data-toggle="tooltip" data-placement="top" title="Edit" class="icon-edit mp_edit">{{$item->attributes['item']}}</a></td>
+                                        <td><a href="{{url('/organization/'.$item->attributes['organization_id'].'/marketplace/'.$item['id'].'/details')}}"  data-pid="{{ $item['id'] }}" data-toggle="tooltip" data-placement="top" title="Edit" class="icon-edit mp_edit">{{$item_cart->attributes['item']}}</a></td>
                                         <td>
                                 @if(count($item->photos)>0)
                                <!-- <img src="{{ url('/uploads/marketplace/'.$item->photos[0]['url'])}}" alt="" class="img-responsive" />-->
@@ -44,17 +44,18 @@
                                         <td>{{$item->actual_price}}</td>
                                         <td>{{$item->base_price}}</td>
                                         <td>{{$item->sales}}</td>
-                                        <td>
-                                        <a href="{{url('/marketplace/'.$item['id'].'/details')}}" >Edit</a> | 
-                                       <a href="javascript:void(0);" class="removephoto icon-delete mp_delete"  data-pid="{{ $item['id'] }}" data-toggle="tooltip" data-placement="top" title="Delete" >Delete</a>
+                                        <td>                                       
+                                       <a href="javascript:void(0);" class="removephoto icon-delete mp_delete"  data-pid="{{ $item['id'] }}" data-toggle="tooltip" data-placement="top" title="Delete" >Remove</a>
                                         </td>
+
+                           
                                     </tr>
 
                                 @endforeach
                         </tbody>
                     </table>
 
-                    <div class="">
+                    <div class=" col-sm-12">
 
                     <b>Total : </b>
                     <br><br>

@@ -61,8 +61,7 @@
                         @endif
 
                             </div> <a data-slide="prev" href="#events-list" class="left carousel-control">‹</a> <a data-slide="next" href="#events-list" class="right carousel-control">›</a> </div>
-                    </div>
-                </div>
+                  
 
                   <div class="row">
                     <div class="col-md-12">
@@ -150,120 +149,12 @@
             <div class="col-md-12 hidden-lg hidden-md">
                 <br>
                 <br> </div>
-            <div class="col-md-3">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="wg wg-dk-grey no-shadow no-margin">
-                            <div class="wg-wrap">
-                                <h4>Top Headlines</h4>
-                                <div class="wg wg-white no-shadow no-margin">
-                                    <ul class="wg-tp-headlines">
-                                        <li><a href="#">Lorem ipsum dolor sit amet</a></li>
-                                        <li><a href="#">Sed do eiusmod tempor incididunt</a></li>
-                                        <li><a href="#">Velit esse cillum dolore eu fugiat</a></li>
-                                        <li><a href="#">Excepteur sint occaecat cupidatat</a></li>
-                                        <li><a href="#">Sunt in culpa qui officia</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12 hidden-lg hidden-md">
-                        <br>
-                        <br> </div>
-                    <div class="col-md-12">
-                        <div class="tabbable-panel">
-                            <div class="tabbable-line">
-                                <ul class="nav nav-tabs ">
-                                    <li class="active"> <a href="#tab_default_1" data-toggle="tab">
-							LIVE </a> </li>
-                                    <li> <a href="#tab_default_2" data-toggle="tab">
-							RESULT </a> </li>
-                                    <li> <a href="#tab_default_3" data-toggle="tab">
-							FIXTURE </a> </li>
-                                </ul>
-                                <div class="tab-content">
-                                    <div class="tab-pane active" id="tab_default_1">
-                                    @if(count($schedules))
-                                        @foreach($schedules as $schedule)
-                                        <table class="wg-score-table">
-                                            <tr>
-                                                <td width="36"><img src="/org/images/nations-flags/india-sm.png" alt="" width="36"></td>
-                                                <td>IND</td>
-                                                <td rowspan="2" style="vertical-align: middle">VS</td>
-                                                <td>ENG</td>
-                                                <td width="36"><img src="/org/images/nations-flags/england-sm.png" alt="" width="36"></td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2">312/3 <span>(32.4)</span></td>
-                                                <td colspan="2">312/3 <span>(32.4)</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="5">Result: IND won by 8 wkts</td>
-                                            </tr>
-                                        </table>
-                                        @endforeach
-                                    @else
-                                        <p>No Schedule Available
-                                    @endif
-                                    </div>
-                                    <div class="tab-pane" id="tab_default_2">
-                                    @if(count($reports))
-                                        @foreach($reports as $report)
-                                            {!!$report->match_report!!}
-                                        @endforeach
-                                    @else
-                                        <p>No Results available
-                                    @endif
-                                    </div>
-                                    <div class="tab-pane" id="tab_default_3"> ... </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12 col-sm-6">
-                        <div class="wg wg-white no-shadow">
-                            <div class="wg-wrap">
-                                <h4>Media Gallery</h4></div>
-                            <div id="Carousel" class="carousel slide carousel-fade col-offset-2">
-                                <div class="carousel-inner">
 
-                                @foreach($photos as $key_p=>$photo)
-                                    <div class="item {{$key_p==0?'active':''}}"> <img src="http://placehold.it/300x200/6a737b/ffffff" class="img-responsive"> </div>
-                                @endforeach
-                                </div> <a class="left carousel-control" href="#Carousel" data-slide="prev">‹</a> <a class="right carousel-control" href="#Carousel" data-slide="next">›</a> </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12 visible-xs ">
-                        <br>
-                        <br> </div>
-                    <div class="col-md-12 col-sm-6">
-                        <div class="wg wg-purple no-shadow wg-poll">
-                            <div class="wg-wrap">
-                                <h4>Poll</h4>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.?</p>
-                                <div class="panel-body">
-                                    <ul class="list-group">
-                                        <li class="list-group-item">
-                                            <div class="radio">
-                                                <label>
-                                                    <input type="radio" name="optionsRadios"> YES </label>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <div class="radio">
-                                                <label>
-                                                    <input type="radio" name="optionsRadios"> NO </label>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    @include('organization_2._sidebar')
+        
+
             </div>
-        </div>
+      
         <div class="row">
             <div class="col-md-12">
                 <div class="wg wg-dk-grey no-shadow">
@@ -278,7 +169,17 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="shop-item">
                     <div class="shop-thumbnail"> <span class="shop-label text-danger">Sale</span>
-                        <a href="javascript:void(0)" data-pid="{{ $item['id'] }}"  data-page='marketplace' data-toggle="tooltip" data-placement="top" title="View Detail" class="view_gallery  item-link"></a> <img src="/org/marketplace/mp_img_1.png" alt="Shop item">
+                        <a href="javascript:void(0)" data-pid="{{ $item['id'] }}"  data-page='marketplace' data-toggle="tooltip" data-placement="top" title="View Detail" class="view_gallery  item-link"></a> 
+                            @if(count($item->photos)>0)
+                              
+                            {!! Helper::Images($item->photos[0]['url'],'marketplace',array('class'=>'img-responsive' ) )
+!!} 
+
+                                @else
+                                <!--<img src="{{ url('uploads/marketplace/market_place_default.png')}}" alt="" class="img-responsive" />-->
+                              {!! Helper::Images('market_place_default.png','marketplace',array('class'=>'img-responsive') )
+!!}     
+                                @endif
                         <div class="shop-item-tools">
                          @if(Auth::user()->type !=1)
                             <a href="#" class="add-to-whishlist" data-toggle="tooltip" data-placement="top" title="" data-original-title="Wishlist"> <i class="fa fa-heart-o"></i> </a>
@@ -303,6 +204,8 @@
             <!-- .col-lg-3.col-sm-6 -->
         </div>
     </div>
+
+
 
 
 
