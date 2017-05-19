@@ -8,11 +8,13 @@ use App\Model\MatchSchedule;
 use App\Model\Photo;
 use App\Model\SoccerPlayerMatchwiseStats;
 use App\Model\SoccerStatistic;
+use App\Model\Sport;
 use App\Model\Team;
 use App\User;
 use Auth;
 use Request;
 use Session;
+use App\Model\Tournaments;
 
 //get all my requests data as object
 
