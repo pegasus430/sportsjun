@@ -2,6 +2,8 @@
 
 @section('content')
 
+<?php $is_widget = false;?>
+
 <div class="container cards-row">
 			<div class="row">
 				<div class="col-md-12">
@@ -25,41 +27,86 @@
 			@endif
 
 				<div class="col-md-8 col-md-offset-1">
-					@foreach($teams as $t)			
-					<div class="border-box">
-						<div class="col-md-2 col-sm-3 col-xs-12 text-center">
-							<div class="glyphicon-lg default-img"></div>
-							<!--                                    <img data-original="http://www.sportsjun.com/uploads/tournaments/jlXE2OrNeNlDqciAAbAT.png" src="http://www.sportsjun.com/uploads/tournaments/jlXE2OrNeNlDqciAAbAT.png" title="" onerror="this.onerror=null;this.src=&quot;http://www.sportsjun.com/images/default-profile-pic.jpg&quot;" height="90" width="90" class="img-circle img-border img-scale-down img-responsive lazy" style="display: block;"> --></div>
-						<div class="col-md-10 col-sm-9 col-xs-12">
-							<div class="t_tltle">
-								<h4><a   href="{{ url('/team/members').'/'.(!empty($t->id)?$t->id:0) }}">{{ !empty($t->teamname)?$t->teamname:'' }}</a></h4>
-								<p class="label label-default">By <a target="_blank"                                         
+					@foreach($teams as $t)
+    <div class="t_details" style="min-height: inherit;">
+        <div class="row main_tour">
+            <div id="searchresultsDiv">
+                <div class="col-sm-2 text-center">
+                    {!! Helper::Images((!empty($t->logo)?$t->logo:''),'teams',array('class'=>'img-circle img-border img-scale-down img-responsive','height'=>90,'width'=>90) )!!}
+                </div>
+                <div class="col-sm-10">
+                    <div class="t_tltle">
+                        <div class="pull-left"><a
+                                    @if (!$is_widget)
+                                        href="{{ url('/team/members').'/'.(!empty($t->id)?$t->id:0) }}"
+                                    @else
+                                        href="#" style="pointer-events:none;text-decoration: none"
+                                        <?php /* href="{{ route('widget.team.info', (!empty($t->id)?$t->id:0))}}" */ ?>
+                                    @endif
+                            >{{ !empty($t->teamname)?$t->teamname:'' }}</a>
+
+                            <p class="t_by">By <a target="_blank"
+                                                  @if (!$is_widget)
                                                     href="{{ url('/editsportprofile/'.(!empty($t->team_owner_id)?$t->team_owner_id:0))}}"
-                                                 
-                                >{{  !empty($t->name)?$t->name:'' }}</a></p>
-							</div>
-							<hr>
-							<div class="clearfix"></div>							
-							<p>Owner's Name: <strong>{{ $t->ownersName }} </strong></p>
-							<p>Manager Name: <strong> {{ $t->managerName }} </strong></p>
-							<p>Coach: <strong> {{ $t->coachsName }}</strong></p>
-							  <p>Sport : <strong class='blue match_type_text'>{{Helper::getSportName($t->sports_id)}}</strong> &nbsp;
-                        &nbsp; Players : <strong
-                                class='blue match_type_text'> {{Helper::getTeamDetails($t->id)->teamplayers->count()}}  </strong>&nbsp;
-                        &nbsp; Group : <strong class='blue match_type_text'>
+                                                  @else
+                                                  href="#"  style="pointer-events:none;text-decoration: none"
+                                                  <?php /*  href="{{ route('widget.member.info', (!empty($t->team_owner_id)?$t->team_owner_id:0))}}" */ ?>
+                                                  @endif
+                                >{{  !empty($t->name)?$t->name:'' }}</a>
+                            </p>
+                        </div>
+                        @if (!$is_widget)
+                            @if(isset($userId) && ($userId == $t->team_owner_id))
+                                <div class="pull-right ed-btn">
+                                    <a href="{{ url('/team/edit/'.(!empty($t->id)?$t->id:0))}}" class="edit"><i
+                                                class="fa fa-pencil"></i></a>
+
+
+                                    <a href="{{ url('/team/deleteteam/'.(!empty($t->id)?$t->id:0)).'/'.(empty($t->isactive)?'a':'d')}}"
+                                       class="delete" title="{{empty($t->isactive)?'Activate':'Deactivate'}}"
+                                       data-toggle="tooltip" data-placement="top">
+                                        {!! empty($t->isactive)?"<i class='fa fa-check'></i>":"<i class='fa fa-ban'></i>" !!}</a>
+                                </div>
+                            @endif
+                        @endif
+                        <div class="col-xs-8 teams-teamplayers">
+                            <p><b>Owner's name:</b> {{ $t->ownersName }} </p>
+                            <p><b>Manager name:</b> {{ $t->managersName }} </p>
+                            <p><b>Coach:</b> {{ $t->coachsName }} </p>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <p class="lt-grey">{{ !empty($t->description)?$t->description:'' }}</p>
+                    <br>
+                    <?php
+                         $manager_ids = $t->playersByRole(\App\Model\TeamPlayers::$ROLE_MANAGER)->lists('id')->all();
+                    ?>
+                    @if(!$is_widget && isset($userId) && ($userId == $t->team_owner_id  || $organization->user_id = $userId  || in_array($userId,$manager_ids)))
+                        <div class="pull-right">
+                            <button type="button" class="btn btn-info btn-block" data-toggle="modal"
+                                    data-target="#transfer-owner-modal" data-team-id="{{$t->id}}"><i
+                                        class="fa fa-exchange"></i> Transfer ownership
+                            </button>
+                        </div>
+                    @endif
+                    <p>Sport : <span class='blue match_type_text'>{{Helper::getSportName($t->sports_id)}}</span> &nbsp;
+                        &nbsp; Players : <span
+                                class='blue match_type_text'> {{Helper::getTeamDetails($t->id)->teamplayers->count()}}  </span>&nbsp;
+                        &nbsp; Group : <span class='blue match_type_text'>
 
                     @foreach(Helper::getTeamDetails($t->id)->organizationGroups as $og)
                                 {{$og->name}},
                             @endforeach
-                            </strong>
-							<div class="action-bar">
-								<button class="btn btn-sm btn-mini btn-edit" href="javascript:void(0);"><i class="fa fa-pencil"></i></button>
-								<button class="btn btn-sm btn-mini btn-danger" href="javascript:void(0);"><i class="fa fa-remove"></i></button>
-								<button class="btn btn-sm btn-secondary" href="javascript:void(0);"><i class="fa fa-exchange"></i> Transfer Ownership </button>
-							</div>
-						</div>
-					</div>				
-			@endforeach
+                    </span>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    @include('teams.modal.change_ownership')
+@endforeach
+
 				</div>
 			</div>
 		</div>

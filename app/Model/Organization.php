@@ -43,6 +43,8 @@ class Organization extends Model
     }
 
 
+
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -62,6 +64,13 @@ class Organization extends Model
                 $this->morphClass = 'form_gallery_organization';
                 return $this->morphMany('App\Model\Photo', 'imageable')->where('imageable_type', 'form_gallery_organization')->where('is_album_cover', 1);
         }
+
+        public function all_photos()
+        {
+                //$this->morphClass = 'organization';
+                return $this->hasMany('App\Model\Photo', 'imageable_id')->where('imageable_type','like',"%organization%");
+        }
+
 
         public function user()
         {
@@ -134,6 +143,18 @@ class Organization extends Model
             return $this->hasMany('App\Model\TournamentParent', 'organization_id');
         }
 
+
+        // public function reports(){
+
+        // }
+
+        public function news(){
+            return $this->hasMany('App\Model\news');
+        }
+
+        public function polls(){
+            return $this->hasMany('App\Model\poll');
+        }
       
 
 

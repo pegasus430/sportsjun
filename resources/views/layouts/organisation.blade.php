@@ -106,14 +106,15 @@
                     <ul class="dropdown-menu">
                       <!--   <li><a href="#"><span class="fa fa-user-circle-o"></span> User Profile</a></li>
                         <li><a href="#"><span class="fa fa-trophy"></span> Sports Profile</a></li> -->
-                        <li><a href="#"><span class="fa fa-lock"></span> Change password</a></li>
+                        <li><a href="/organization/{{$organisation->id}}/settings"><span class="fa fa-gear"></span> Settings</a></li>
+                        <li><a href="/organization/{{$organisation->id}}/settings#change-password"><span class="fa fa-lock"></span> Change password</a></li>
                         <li><a href="/auth/logout"><span class="fa fa-power-off"></span> Logout</a></li>
                     </ul>
                 </li>
 
             @if(Auth::user()->type!='1')
              
-                  <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-shopping-cart"></span><span class="cart-bubble">{{Cart::getContent()->count()}}</span></a>
+                  <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-shopping-cart"></span><span class="cart-bubble cart_total">{{Cart::getContent()->count()}}</span></a>
                     <ul class="dropdown-menu" >
                   
                  @if(Cart::getContent()->count())
@@ -163,9 +164,9 @@
                 <li class='nav-item'>
                     <a href="/organization/{{$organisation->id}}/schedules"><img src="/org/images/icons/icon-schedule.png" alt="" width="16" height="16"> Schedule</a>
                 </li>
-              <!--   <li class='nav-item'>
-                    <a href="coaching.php"><img src="/org/images/icons/icon-coach.png" alt="" width="16" height="16"> Coaching</a>
-                </li> -->
+                <li class='nav-item'>
+                    <a href="/organization/{{$organisation->id}}/coaching"><img src="/org/images/icons/icon-coach.png" alt="" width="16" height="16"> Coaching</a>
+                </li>
                 <li class='nav-item'>
                     <a href="/organization/{{$organisation->id}}/marketplace"><img src="/org/images/icons/icon-marketplace.png" alt="" width="16" height="16"> marketplace</a>
                 </li>
@@ -174,6 +175,9 @@
                 </li>
                   <li class='nav-item'>
                     <a href="/organization/{{$organisation->id}}/polls"><i class="fa fa-bar-chart"></i> Polls</a>
+                </li>
+                 <li class='nav-item'>
+                    <a href="/organization/{{$organisation->id}}/news"><i class="fa fa-bar-chart"></i> News</a>
                 </li>
             </ul>
         </div>
@@ -200,14 +204,33 @@
               @endforeach
                 </div>
             @endif
+
+            @if(Session::has('message'))
+                  <div class="alert  alert-success"> 
+                          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    {{Session::get('message')}}
+                </div>
+            @endif
+
+             @if(Session::has('error'))
+                  <div class="alert  alert-danger"> 
+                          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    {{Session::get('error')}}
+                </div>
+            @endif
     </div>
     <!-- Page Head -->
     
     @yield('content')
 
 
+</div>
+
+
     <!-- Footer -->
-   <footer class="container">
+
+    <div class="clearfix">
+   <footer class="">
     <hr>
     <div class="col-md-12">
         <div class="social-icons-wrapper text-center"> <a href="#" target="_self" class="google-plus"><i class="fa fa-google-plus"></i></a> <a href="#" target="_self" class="twitter"><i class="fa fa-twitter"></i></a> <a href="#" target="_self" class="facebook"><i class="fa fa-facebook"></i></a> <a href="#" target="_self" class="linkedin"><i class="fa fa-linkedin"></i></a> </div>
@@ -312,8 +335,9 @@
             $.ajax({
                 url:'/cart/add_to_cart',
                 data:{id:id},
-                success:function(){
+                success:function(response){
                     toastr.success('Added to Cart',item)
+                    $('.cart_total').html(response.lenght)
                 },
                 error:function(){
                     toastr.error('Sorry an Error Occured!',item)
@@ -328,6 +352,10 @@
 
 
 
+
+<script type="text/javascript">
+        $.ajax();
+</script>
 
    
 

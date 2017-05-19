@@ -29,9 +29,11 @@ return [
                 'FACILITY_PROFILE'     => 'form_gallery_facility', //form gallery
                 //organization
                 'ORGANIZATION_LOGO'    => 'organization', //logo
+                'ORGANIZATION_NEWS'    => 'organization_news',
                 'GALLERY_ORGANIZATION' => 'gallery_organization',
                 'ORGANIZATION_PROFILE' => 'form_gallery_organization', //form gallery		
-                'GALLERY_MATCH'        => 'gallery_match', //scorecard gallery		
+                'GALLERY_MATCH'        => 'gallery_match', //scorecard gallery	
+                'ORGANIZATION_COACHING'    => 'organization_coaching',	
         ],
         // folder path for storing and retrieving all the photos
         'PHOTO_PATH'               => [
@@ -45,6 +47,8 @@ return [
                 'ORGANIZATION_PROFILE' => 'form_gallery_organization',
                 'TOURNAMENT_PROFILE'   => 'form_gallery_tournaments',
                 'FACILITY_PROFILE'     => 'form_gallery_facility',
+                'ORGANIZATION_NEWS'    => 'organization_news',
+                'ORGANIZATION_COACHING'    => 'organization_coaching',
         ],
         'ENUM'                     => [
                 'MARKETPLACE'  =>
@@ -130,7 +134,9 @@ return [
                 [
                         'SPORTS_TYPE' => [ 'player' => 'PLAYER', 'team' => 'TEAM',
                                 'both' => 'BOTH']
-                ]
+                ],
+                'SUBSCRIPTION_TYPE' => ['installment'=>'INSTALLMENT',
+                                        'monthly'=>'MONTHLY']
         ],
         'SPORT'                    => [
                 1 => 'CricketStatistic',
