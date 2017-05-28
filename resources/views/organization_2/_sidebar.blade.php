@@ -1,4 +1,4 @@
-<div class="col-md-3 col-sm-3">
+<div class="col-md-3 col-sm-12">
                 <div class="row">
                 <div class="col-md-12">                       
                     </div>
@@ -44,6 +44,7 @@
                                     @if(count($schedules = Helper::get_organization_schedules($organisation->id)))
                                         @foreach($schedules as $schedule)
                                         <table class="wg-score-table">
+                                            <a href='match/scorecard/edit/{{$schedule->id}}'>
                                             <tr>
                                                 <td width="36"><img src="{{$schedule->getSideALogoAttribute()}}" alt="" width="36"></td>
                                                 <td>{{count($schedule->getSideAAttribute())?$schedule->getSideAAttribute()->name:''}}</td>
@@ -53,14 +54,17 @@
                                             </tr>
                                             <tr> 
                                                 <td colspan="2">{{$schedule->getScoresAttribute(true)['a']}}</td>
-                                                <td colspan="2">{{$schedule->getScoresAttribute(true)['a']}}</td>
+                                                <td colspan="2">{{$schedule->getScoresAttribute(true)['b']}}</td>
                                             </tr>
-                                            @if($schedule->match_results)
+                                           </a>
+                                          
+                                            @if($schedule->match_report)
                                             <tr>
-                                                <td colspan="5">Result: {{$schedule->match_results}}</td>
+                                                <td colspan="5"><a href='match/scorecard/edit/{{$schedule->id}}'>Result:</a> {{$schedule->match_report}}</td>
                                             </tr>
                                             @endif
                                         </table>
+                                        <hr>
                                         @endforeach
                                     @else
                                         <p>No Schedule Available
@@ -68,8 +72,10 @@
                                     </div>
                                     <div class="tab-pane" id="tab_default_2">
                                     @if(count($reports = Helper::get_organization_reports($organisation->id)))
-                                        @foreach($reports as $report)
-                                            {!!$report->match_report!!}
+                                        @foreach($reports as $key=>$report)
+                                         <a href='match/scorecard/edit/{{$report->id}}'>Match {{$key+1}} : </a>   {!!$report->match_report!!}
+                                       
+                                         <hr>
                                         @endforeach
                                     @else
                                         <p>No Results available

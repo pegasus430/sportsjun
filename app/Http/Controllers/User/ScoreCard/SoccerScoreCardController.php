@@ -8,11 +8,17 @@ use App\Model\MatchSchedule;
 use App\Model\Photo;
 use App\Model\SoccerPlayerMatchwiseStats;
 use App\Model\SoccerStatistic;
+use App\Model\Tournaments;
+use App\Model\Sport;
+use App\Model\TeamPlayers;
+use App\Model\TournamentGroupTeams;
+
 use App\Model\Team;
 use App\User;
 use Auth;
 use Request;
 use Session;
+
 
 //get all my requests data as object
 
@@ -721,8 +727,8 @@ class SoccerScoreCardController extends parentScoreCardController
         $soccer_model->save();
 
         $this->updateSoccerScore($user_id,$match_id,$team_id,$player_name,$yellow_card_count,$red_card_count,$goals_count);
-        $this->soccerStatistics($user_id);
-
+        SoccerStatistic::updateUserStatistic($user_id);
+ 
 
         $match_data->match_details=json_encode($match_details);
         $match_data->save();

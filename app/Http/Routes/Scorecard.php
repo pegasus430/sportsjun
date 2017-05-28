@@ -7,8 +7,8 @@ Route::group(['prefix'=>'match'], function(){
     Route::post('soccerSwapPlayers', 	['as'=>'match/soccerSwapPlayers', 'uses'=>'User\Scorecard\SoccerScoreCardController@soccerSwapPlayers']);
     Route::post('choosePenaltyPlayers', ['as'=>'match/choosePenaltyPlayers', 'uses'=>'User\ScoreCardController@choosePenaltyPlayers']);
     Route::post('scorePenalty', ['as'=>'match/scorePenalty', 'uses'=>'User\ScoreCardController@scorePenalty']);
-    Route::post('/saveMatchRecord', 'User\Scorecard\SoccerScoreCardController@soccerStoreRecord');
-    Route::get('/getSoccerDetails', 'User\Scorecard\SoccerScoreCardController@getSoccerDetails');
+    Route::post('/saveMatchRecord', 'User\ScoreCard\SoccerScoreCardController@soccerStoreRecord');
+    Route::get('/getSoccerDetails', 'User\ScoreCard\SoccerScoreCardController@getSoccerDetails');
 
     //routes for hockey
     Route::post('confirmSquadHockey',         ['as'=>'match/confirmSquadHockey', 'uses'=>'User\ScoreCard\HockeyScorecardController@confirmSquad']);

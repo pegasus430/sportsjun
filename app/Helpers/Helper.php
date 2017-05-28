@@ -2185,7 +2185,7 @@ class Helper
 
     }
 
-    public static function getScoresFromMatchDetails($match_details, $sports_id=null, $a_id=null, $b_id=null,$array=null)
+    public static function getScoresFromMatchDetails($match_details, $sports_id=null, $a_id=null, $b_id=null,$is_array=false)
     {
         $a_score='';
         $b_score='';
@@ -2220,10 +2220,10 @@ class Helper
                 return '';
                 break;
 
+        }   
 
-            if($array) return ['a'=>$a_score,'b'=>$b_score];
+            if($is_array) return ['a'=>$a_score,'b'=>$b_score];
             else return $a_score.$b_score;
-        }
     }
 
 
@@ -2843,7 +2843,7 @@ class Helper
               ->join('tournament_parent', 'tournament_parent.id','=','tournaments.tournament_parent_id')
               ->where('organization_id', $id)
                 
-               ->where('hasSetupSquad','1')->where('match_status','!=','completed')
+              ->where('hasSetupSquad','1')->where('match_status','!=','completed')
               ->orderBy('match_start_date', 'match_start_time','desc')              
               ->select('match_schedules.*')
               ->get();
@@ -2856,7 +2856,7 @@ class Helper
         $reports=  Tournaments::join('tournament_parent', 'tournament_parent.id','=','tournaments.tournament_parent_id')
                 ->where('organization_id', $id)
                 ->join('match_schedules','match_schedules.tournament_id','=','tournaments.id')
-                ->whereNotNull('match_report')
+                ->whereNotNull('match_report')->where('match_report','!=','')
               ->orderBy('match_start_date', 'match_start_time','desc')             
               ->select('match_schedules.*')
               ->get();
