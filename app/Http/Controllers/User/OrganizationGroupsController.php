@@ -46,7 +46,9 @@ class OrganizationGroupsController extends Controller
                  view()->share('organisation', $organization);
             }
             
-        }    
+        }
+
+        view()->share('is_owner', $this->is_owner);     
     }
 
     public function index($id)

@@ -45,7 +45,9 @@ class OrganizationMembersController extends Controller
                  view()->share('organisation', $organization);
             }
             
-        }    
+        }   
+
+         view()->share('is_owner', $this->is_owner);  
     }
 
     public function teamList($id)
@@ -79,7 +81,7 @@ class OrganizationMembersController extends Controller
                 ->join('teams', 'teams.id', '=', 'team_players.team_id');
             if ($filter_team) {
                 $query->where('users.name', 'LIKE', '%' . $filter_team . '%');
-                   //   ->orWhere('users.name', 'LIKE', '%' . $filter_team . '%');
+                   //$query->where('teams.name', 'LIKE', '%' . $filter_team . '%');
             }
         })->with([
             'userdetails' => function ($query) use ($id) {

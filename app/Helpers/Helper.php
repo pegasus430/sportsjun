@@ -2185,33 +2185,44 @@ class Helper
 
     }
 
-    public static function getScoresFromMatchDetails($match_details, $sports_id, $a_id, $b_id)
+    public static function getScoresFromMatchDetails($match_details, $sports_id=null, $a_id=null, $b_id=null,$array=null)
     {
-        switch ($sports_id) {
+        $a_score='';
+        $b_score='';
+
+           switch ($sports_id) {
             case '5':           //badminton
                 $scores = $match_details->scores;
-                return $scores->{$a_id . '_score'} . ' sets - ' . $scores->{$b_id . '_score'} . ' sets';
+                    $a_score = $scores->{$a_id . '_score'} . ' sets - ' ;
+                    $b_score = $scores->{$b_id . '_score'} . ' sets';
                 break;
+
             case in_array($sports_id, ['13', '17', '7']):           //squash
                 $scores = $match_details->scores;
-                return $scores->{$a_id . '_score'} . ' sets - ' . $scores->{$b_id . '_score'} . ' sets';
+                    $a_score = $scores->{$a_id . '_score'} . ' sets - ' ;
+                    $b_score = $scores->{$b_id . '_score'} . ' sets';
                 break;
-            case '4':           //soccer
-                return $match_details->{$a_id}->goals . ' - ' . $match_details->{$b_id}->goals;
+
+            case in_array($sports_id, ['4','11']):           //soccer
+                    $a_score = $match_details->{$a_id}->goals . ' - ' ;
+                    $b_score = $match_details->{$b_id}->goals;
                 break;
-            case '11':           //hockey
-                return $match_details->{$a_id}->goals . ' - ' . $match_details->{$b_id}->goals;
-                break;
+           
             case in_array($sports_id, [6, 14, 15, 16]):           //basketball
-                return $match_details->{$a_id}->total_points . ' - ' . $match_details->{$b_id}->total_points;
+                    $a_score = $match_details->{$a_id}->total_points . ' - ' ;
+                    $b_score =  $match_details->{$b_id}->total_points;
                 break;
             case '1':           //cricket
-                return Team::find($a_id)->name . " (" . $match_details->{$a_id}->fst_ing_score . "/" . $match_details->{$a_id}->fst_ing_wkt . (!empty($match_details->{$a_id}->scnd_ing_overs) ? ", " . $match_details->{$a_id}->scnd_ing_score . "/" . $match_details->{$a_id}->scnd_ing_wkt : "") . ") &nbsp;" .
-                Team::find($b_id)->name . " (" . $match_details->{$b_id}->fst_ing_score . "/" . $match_details->{$b_id}->fst_ing_wkt . (!empty($match_details->{$b_id}->scnd_ing_overs) ? ", " . $match_details->{$b_id}->scnd_ing_score . "/" . $match_details->{$b_id}->scnd_ing_wkt : "") . ")";
+                    $a_score =  Team::find($a_id)->name . " (" . $match_details->{$a_id}->fst_ing_score . "/" . $match_details->{$a_id}->fst_ing_wkt . (!empty($match_details->{$a_id}->scnd_ing_overs) ? ", " . $match_details->{$a_id}->scnd_ing_score . "/" . $match_details->{$a_id}->scnd_ing_wkt : "") . ") &nbsp;" ;
+                    $b_score =  Team::find($b_id)->name . " (" . $match_details->{$b_id}->fst_ing_score . "/" . $match_details->{$b_id}->fst_ing_wkt . (!empty($match_details->{$b_id}->scnd_ing_overs) ? ", " . $match_details->{$b_id}->scnd_ing_score . "/" . $match_details->{$b_id}->scnd_ing_wkt : "") . ")";
                 break;
             default:
                 return '';
                 break;
+
+
+            if($array) return ['a'=>$a_score,'b'=>$b_score];
+            else return $a_score.$b_score;
         }
     }
 
@@ -2828,10 +2839,11 @@ class Helper
 
 
     public static function get_organization_schedules($id){
-         $schedules =  Tournaments::join('tournament_parent', 'tournament_parent.id','=','tournaments.tournament_parent_id')
-                ->where('organization_id', $id)
-                ->join('match_schedules','match_schedules.tournament_id','=','tournaments.id')
-                ->where('hasSetupSquad','1')->where('match_status','!=','completed')
+         $schedules =  MatchSchedule::join('tournaments','match_schedules.tournament_id','=','tournaments.id')
+              ->join('tournament_parent', 'tournament_parent.id','=','tournaments.tournament_parent_id')
+              ->where('organization_id', $id)
+                
+               ->where('hasSetupSquad','1')->where('match_status','!=','completed')
               ->orderBy('match_start_date', 'match_start_time','desc')              
               ->select('match_schedules.*')
               ->get();

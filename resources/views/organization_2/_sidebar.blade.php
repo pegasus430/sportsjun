@@ -45,19 +45,21 @@
                                         @foreach($schedules as $schedule)
                                         <table class="wg-score-table">
                                             <tr>
-                                                <td width="36"><img src="/org/images/nations-flags/india-sm.png" alt="" width="36"></td>
-                                                <td>IND</td>
+                                                <td width="36"><img src="{{$schedule->getSideALogoAttribute()}}" alt="" width="36"></td>
+                                                <td>{{count($schedule->getSideAAttribute())?$schedule->getSideAAttribute()->name:''}}</td>
                                                 <td rowspan="2" style="vertical-align: middle">VS</td>
-                                                <td>ENG</td>
-                                                <td width="36"><img src="/org/images/nations-flags/england-sm.png" alt="" width="36"></td>
+                                                <td>{{count($schedule->getSideBAttribute())?$schedule->getSideBAttribute()->name:''}}</td>
+                                                <td width="36"><img src="{{$schedule->getSideBLogoAttribute()}}" alt="" width="36"></td>
                                             </tr>
+                                            <tr> 
+                                                <td colspan="2">{{$schedule->getScoresAttribute(true)['a']}}</td>
+                                                <td colspan="2">{{$schedule->getScoresAttribute(true)['a']}}</td>
+                                            </tr>
+                                            @if($schedule->match_results)
                                             <tr>
-                                                <td colspan="2">312/3 <span>(32.4)</span></td>
-                                                <td colspan="2">312/3 <span>(32.4)</span></td>
+                                                <td colspan="5">Result: {{$schedule->match_results}}</td>
                                             </tr>
-                                            <tr>
-                                                <td colspan="5">Result: IND won by 8 wkts</td>
-                                            </tr>
+                                            @endif
                                         </table>
                                         @endforeach
                                     @else
@@ -65,7 +67,7 @@
                                     @endif
                                     </div>
                                     <div class="tab-pane" id="tab_default_2">
-                                    @if(count($reports = Helper::get_organization_reports($organisation->id))))
+                                    @if(count($reports = Helper::get_organization_reports($organisation->id)))
                                         @foreach($reports as $report)
                                             {!!$report->match_report!!}
                                         @endforeach
@@ -97,6 +99,7 @@
                         <br>
                         <br> </div>
                     <div class="col-md-12">
+                        <a href="/organization/{{$organisation->id}}/polls">
                         <div class="wg wg-purple no-shadow wg-poll" style="min-height: 100px;">
                             <div class="wg-wrap">
                                 <h4>Poll</h4>
@@ -121,12 +124,10 @@
                                                     </div>
                                                 </div>
                                             @endforeach
-
-                                            <a class="left carousel-control" href="#poll_carousel" data-slide="prev">‹</a> <a class="right carousel-control" href="#poll_carousel" data-slide="next">›</a> </div>
-
                                         </div>
                                     </div>
                             </div>
                         </div>
+                        </a>
                     </div>
                 </div>

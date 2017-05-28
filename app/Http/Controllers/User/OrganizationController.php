@@ -33,6 +33,7 @@ use App\Model\poll;
 use App\Model\poll_options as poll_option;
 use App\Model\VendorBankAccounts;
 use App\Model\news; 
+use App\Model\coaching; 
 
 //use Helper;
 
@@ -60,15 +61,19 @@ class OrganizationController extends Controller
             // if(Auth::user()->organizations[0]->id == $id && $this->new_template){
 
             if( $this->new_template){
-                 $this->is_owner = true;
+                 if(Auth::user()->organizations->count() && Auth::user()->organizations[0]->id==$id)
+                    $this->is_owner = true;
+
                  $this->view = 'organization_2';
                  $organization = Organization::find($id);
                  $this->organization = $organization;
 
                  view()->share('organisation', $organization);
+
             }
             
         //}    
+            view()->share('is_owner', $this->is_owner); 
 
     }
 
@@ -132,8 +137,9 @@ class OrganizationController extends Controller
         $photos = Photo::where('imageable_type',$imageable_type_name)->where('imageable_id',$this->organization->id)->get();
         $polls = poll::where('organization_id', $id)->get();
         $news = news::where('organization_id', $id)->orderBy('id','desc')->take(5)->get();
+        $coaching_sessions = coaching::where('organization_id', $id)->get();
  
-         return view('organization_2.index', compact('tournaments','teams','parent_tournaments','marketplace','items','photos','schedules','reports','organisation','polls','news'));
+         return view('organization_2.index', compact('tournaments','teams','parent_tournaments','marketplace','items','photos','schedules','reports','organisation','polls','news','coaching_sessions'));
         }
 
         else return redirect()->to('/organization/'.$id.'/info');

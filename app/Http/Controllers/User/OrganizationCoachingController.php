@@ -80,17 +80,18 @@ class OrganizationCoachingController extends OrganizationController
          if (!empty($logo)) {
             foreach ($logo as $l) {
                 $coaching->image = $l['url'];
-                $coaching->image_url = asset('/uploads/organization_news/'.$l['url']);
+                $coaching->image_url = asset('/uploads/'.config('constants.PHOTO_PATH.ORGANIZATION_COACHING').'/'.$l['url']);
                 $coaching->save();
             
             }
 
         }
 
-
-
         return redirect()->back()->with('message', 'Coaching Session Added');
 
+    }
 
+    public function show_session(){
+        
     }
 }

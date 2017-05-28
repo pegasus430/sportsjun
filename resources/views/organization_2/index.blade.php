@@ -12,7 +12,7 @@
                     <div class="col-md-12">
                         <div class="wg wg-dk-grey  no-shadow no-margin">
                             <div class="wg-wrap clearfix ">
-                                <h4 class="no-margin pull-left">Tournaments</h4> <a href="/organization/{{$organisation->id}}/new_tournament"  class="wg-viewmore pull-right">New Tournament <i class="fa fa-angle-double-right">    </i></a> </div>
+                                <h4 class="no-margin pull-left">Tournaments</h4> <a href="/organization/{{$organisation->id}}/tournaments"  class="wg-viewmore pull-right">View More <i class="fa fa-angle-double-right">    </i></a> </div>
                         </div>
                     </div>
                 </div>
@@ -37,7 +37,7 @@
                                           
                                     @foreach($parent->tournaments as $tournament)
                                           @if($ik%3==0)
-                                        <div class="item  {{$key==0?'active':''}}">
+                                        <div class="item  {{$ik==0?'active':''}}">
                                         <div class="row">
                                             @endif
                                         <div class="col-md-4">
@@ -55,13 +55,9 @@
                                     @endforeach
                                    
                              @endforeach
-                         @if(!$ik%3==0 )
-                            </div>
-                        </div>
-                        @endif
-
-                            </div> <a data-slide="prev" href="#events-list" class="left carousel-control">‹</a> <a data-slide="next" href="#events-list" class="right carousel-control">›</a> </div>
-                  
+                         </div> <a data-slide="prev" href="#events-list" class="left carousel-control">‹</a> <a data-slide="next" href="#events-list" class="right carousel-control">›</a> </div>               
+                </div>
+                </div>
 
                   <div class="row">
                     <div class="col-md-12">
@@ -73,59 +69,37 @@
                 </div>
                 <div class="wg wg-white">
                     <div class="wg-wrap">
-                        <div class="wg-hd">
-                            <a href="" class="wg-cnlink">Create Coaching</a> </div>
+                        @if($is_owner) 
+                            <div class="wg-hd">
+                               <a href="/organization/{{$organisation->id}}/coaching" class="wg-cnlink">Create Coaching</a>                        
+                            </div>
+                        @endif
                         <div class="carousel slide event-carousel events" id="coachings">
                             <div class="carousel-inner">
-                                <div class="item  active">
+                                <?php $p =0;?>
+                                @foreach($coaching_sessions as $key=>$coaching) 
+                                @if($p%3==0)
+                                <div class="item  {{$key==0?'active':''}}">
                                     <div class="row">
+                                @endif
                                         <div class="col-md-4">
-                                            <h4><a href="#">Hyderabad Corporate Olymipics - Mens Socces 2016</a></h4> <span class="schedule">23rd Oct, 2017 - 05th Nov, 2017</span>
-                                            <label>Status: Completed</label>
+                                            <h4><a href="/organization/{{$organisation->id}}/coachings/{{$coaching->id}}">{{$coaching->title}}</a></h4> <span class="schedule">{{date('jS M, Y', strtotime($coaching->start_date))}} - {{date('jS M, Y', strtotime($coaching->end_date))}}</span>
+                                            <label>Players: {{$coaching->number_of_players}}</label>
                                         </div>
-                                        <div class="col-md-4">
-                                            <h4><a href="#">Hyderabad Corporate Olymipics - Mens Socces 2016</a></h4> <span class="schedule">23rd Oct, 2017 - 05th Nov, 2017</span>
-                                            <label>Status: Completed</label>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <h4><a href="#">Hyderabad Corporate Olymipics - Mens Socces 2016</a></h4> <span class="schedule">23rd Oct, 2017 - 05th Nov, 2017</span>
-                                            <label>Status: Completed</label>
-                                        </div>
+                                    
+                                @if($p%3==2 || ($key==$coaching_sessions->count()-1))
                                     </div>
                                 </div>
-                                <div class="item">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <h4><a href="#">Hyderabad Corporate Olymipics - Mens Socces 2016</a></h4> <span class="schedule">23rd Oct, 2017 - 05th Nov, 2017</span>
-                                            <label>Status: Completed</label>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <h4><a href="#">Hyderabad Corporate Olymipics - Mens Socces 2016</a></h4> <span class="schedule">23rd Oct, 2017 - 05th Nov, 2017</span>
-                                            <label>Status: Completed</label>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <h4><a href="#">Hyderabad Corporate Olymipics - Mens Socces 2016</a></h4> <span class="schedule">23rd Oct, 2017 - 05th Nov, 2017</span>
-                                            <label>Status: Completed</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <h4><a href="#">Hyderabad Corporate Olymipics - Mens Socces 2016</a></h4> <span class="schedule">23rd Oct, 2017 - 05th Nov, 2017</span>
-                                            <label>Status: Completed</label>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <h4><a href="#">Hyderabad Corporate Olymipics - Mens Socces 2016</a></h4> <span class="schedule">23rd Oct, 2017 - 05th Nov, 2017</span>
-                                            <label>Status: Completed</label>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <h4><a href="#">Hyderabad Corporate Olymipics - Mens Socces 2016</a></h4> <span class="schedule">23rd Oct, 2017 - 05th Nov, 2017</span>
-                                            <label>Status: Completed</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> <a data-slide="prev" href="#coachings" class="left carousel-control">‹</a> <a data-slide="next" href="#coachings" class="right carousel-control">›</a> </div>
+                                @endif
+                                    <?php $p++;?>
+                                @endforeach
+                              
+                            </div> 
+
+                            @if($coaching_sessions->count())
+                             <a data-slide="prev" href="#coachings" class="left carousel-control">‹</a> <a data-slide="next" href="#coachings" class="right carousel-control">›</a> 
+                            @endif
+                        </div>
                     </div>
                 </div>
                 <div class="row">

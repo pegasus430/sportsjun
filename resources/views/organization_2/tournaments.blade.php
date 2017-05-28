@@ -5,7 +5,9 @@
             <div class="row">
                 <div class="col-md-12">
                     <h2 class="page-header"><div class="ph-mark"><div class="glyphicon glyphicon-menu-right"></div></div> Tournaments</h2>
+                        @if($is_owner)
                           <div class="create-btn-link"><a href="/organization/{{$organisation->id}}/new_tournament" class="wg-cnlink" >Create New Tournament</a></div>
+                        @endif
                     </div>
             </div>
 
