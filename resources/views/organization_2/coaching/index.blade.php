@@ -15,28 +15,36 @@
 				</div>
 			</div>
 			<div class="row ">
-				<div class="wrap-2 ">
+				<div class="">
 
 				@foreach($coachings as $coaching)
-					<div class="col-md-12 col-sm-12">
-						<div class="row">
-						<div class="col-sm-8">
-							<h3 class="text-primary">{{$coaching->title}}</h3>
-							<hr class="text-primary">
-						</div> 
-						<div class="col-sm-4">
-						</div>
-					</div>
 
-					<a href="javascript:void(0)" data-toggle='accordion' data-target='#view_coaching_details'>View Details</a>
+				<div class="col-md-4">
+					
+						<figure class="snip1174 col-md-4">
+						@if($is_owner)
+							  <div class="pull-right ed-btn">
+                                    <a href="/organization/{{$organisation->id}}/coaching/{{$coaching->id}}/edit" class="edit"><i
+                                                class="fa fa-pencil"></i></a>
 
-					<div class="collapse" id='view_coaching_details'>
 
-					</div>
+                                    <a href="/organization/{{$organisation->id}}/coaching/{{$coaching->id}}/delete"
+                                       class="delete" title="{{empty($t->isactive)?'Activate':'Deactivate'}}"
+                                       data-toggle="tooltip" data-placement="top">
+                                        {!! empty($t->isactive)?"<i class='fa fa-ban'></i>":"<i class='fa fa-ban'></i>" !!}</a>
+                         </div>
+                         @endif
 
-					<br>
-					<a href="/organization/{{$organisation->id}}/coaching/{{$coaching->id}}" class="btn btn-waning">Enter</a>
-					</div>
+							 <img src="{{$coaching->image_url}}" />
+							<figcaption>
+								<h2>{{$coaching->title}}</h2>
+								<div class="row mgb-20">
+									<div class="col-md-6">No. of Players: {{$coaching->number_of_players}}</div>
+									<div class="col-md-6">Coach: {{$coaching->coach?$coaching->coach->name:''}}</div>
+								</div> <a href="/organization/{{$organisation->id}}/coaching/{{$coaching->id}}">Enter</a> </figcaption>
+						</figure>
+				</div>
+					
 				@endforeach
 				</div>
 			</div>

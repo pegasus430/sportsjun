@@ -44,20 +44,21 @@
                                     @if(count($schedules = Helper::get_organization_schedules($organisation->id)))
                                         @foreach($schedules as $schedule)
                                         <table class="wg-score-table">
-                                            <a href='match/scorecard/edit/{{$schedule->id}}'>
+                                           
                                             <tr>
                                                 <td width="36"><img src="{{$schedule->getSideALogoAttribute()}}" alt="" width="36"></td>
                                                 <td>{{count($schedule->getSideAAttribute())?$schedule->getSideAAttribute()->name:''}}</td>
-                                                <td rowspan="2" style="vertical-align: middle">VS</td>
+                                                <td rowspan="2" style="vertical-align: middle"><a href='match/scorecard/edit/{{$schedule->id}}'>VS
+                                                </a></td>
                                                 <td>{{count($schedule->getSideBAttribute())?$schedule->getSideBAttribute()->name:''}}</td>
                                                 <td width="36"><img src="{{$schedule->getSideBLogoAttribute()}}" alt="" width="36"></td>
                                             </tr>
                                             <tr> 
                                                 <td colspan="2">{{$schedule->getScoresAttribute(true)['a']}}</td>
+                                              
                                                 <td colspan="2">{{$schedule->getScoresAttribute(true)['b']}}</td>
                                             </tr>
-                                           </a>
-                                          
+                                         
                                             @if($schedule->match_report)
                                             <tr>
                                                 <td colspan="5"><a href='match/scorecard/edit/{{$schedule->id}}'>Result:</a> {{$schedule->match_report}}</td>

@@ -194,7 +194,7 @@ class OrganizationMembersController extends Controller
 
             $parent = new user; 
             $parent->email = $request->parent_email;
-            $parent->name = $request->name;
+            $parent->name = $request->parent_name;
             $parent->country_id = $request->country_id;
             $parent->state_id = $request->state_id;
             $parent->city_id     = $request->city_id;
