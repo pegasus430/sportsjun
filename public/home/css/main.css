@@ -1,0 +1,87 @@
+html {
+  height: 100%; }
+
+body {
+  min-height: 100%; }
+
+body {
+  font-size: 16px;
+  font-family: 'Roboto Condensed', "Franklin Gothic Medium", Tahoma, sans-serif;
+  line-height: normal;
+  background: #000; }
+
+main.container-fluid {
+  background: #000 url("../images/background-image1800.jpg");
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-attachment: fixed;
+  background-size: cover;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  min-height: 100%; }
+  @media only screen and (min-width: 550px) {
+    main.container-fluid {
+      background-size: contain;
+      -webkit-background-size: contain;
+      -moz-background-size: contain; } }
+  @media only screen and (min-width: 750px) {
+    main.container-fluid {
+      min-height: 100vh; } }
+
+.row {
+  max-width: 1250px;
+  margin: 0 auto;
+  min-height: 100%; }
+  @media only screen and (min-width: 750px) {
+    .row {
+      min-height: 100vh; } }
+
+.col-sm-4,
+.col-xs-12 {
+  height: 100%;
+  background: #000;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding-top: 4.2em;
+  padding-top: 5vw; }
+  @media only screen and (min-width: 750px) {
+    .col-sm-4,
+    .col-xs-12 {
+      min-height: 100vh; } }
+
+.col-sm-4 .list {
+  width: auto; }
+  @media only screen and (min-width: 460px) {
+    .col-sm-4 .list {
+      width: 360px; } }
+  @media only screen and (min-width: 960px) {
+    .col-sm-4 .list {
+      width: auto; } }
+
+h1 {
+  font-size: 24px;
+  font-size: 1.5em;
+  font-weight: 700;
+  line-height: 1.6;
+  text-transform: uppercase;
+  text-align: center; }
+
+h1.secondpage-header {
+  font-size: 20px;
+  font-size: 1.3em;
+  margin-bottom: 2em; }
+
+form {
+  display: block;
+  margin-top: 2.2em;
+  margin-top: 2.6vw; }
+
+.need-help {
+  display: block;
+  color: #fff;
+  margin-top: 1em;
+  text-align: center;
+  text-decoration: underline; }
+
+.need-help:hover {
+  color: #b3b3b3; }

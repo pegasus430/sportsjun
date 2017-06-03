@@ -1,0 +1,214 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline; }
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block; }
+
+body {
+  line-height: 1; }
+
+ol, ul {
+  list-style: none; }
+
+blockquote, q {
+  quotes: none; }
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none; }
+
+/* remember to define visible focus styles! 
+:focus {
+	outline: ?????;
+} */
+/* remember to highlight inserts somehow! */
+ins {
+  text-decoration: none; }
+
+del {
+  text-decoration: line-through; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+.section-why-use-sportsjun {
+  color: #2D3746;
+  font-size: 16px;
+  font-family: "Segoe UI", sans-serif;
+  background: #f8f8f8;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+  .section-why-use-sportsjun .inner-container {
+    max-width: 1300px;
+    margin: 0 auto; }
+    .section-why-use-sportsjun .inner-container > .row {
+      margin-top: 2em; }
+    .section-why-use-sportsjun .inner-container .col-xs-12,
+    .section-why-use-sportsjun .inner-container .col-sm-6,
+    .section-why-use-sportsjun .inner-container .col-md-3 {
+      padding-right: 0;
+      padding-left: 0; }
+      @media only screen and (min-width: 480px) {
+        .section-why-use-sportsjun .inner-container .col-xs-12,
+        .section-why-use-sportsjun .inner-container .col-sm-6,
+        .section-why-use-sportsjun .inner-container .col-md-3 {
+          padding-right: 7px;
+          padding-left: 7px; } }
+  .section-why-use-sportsjun .content {
+    height: 100%; }
+    .section-why-use-sportsjun .content .entry {
+      height: 100%; }
+    .section-why-use-sportsjun .content .entry:first-child h4 {
+      position: relative;
+      left: -15px; }
+  .section-why-use-sportsjun h2, .section-why-use-sportsjun h3 {
+    text-transform: uppercase; }
+  .section-why-use-sportsjun h2 {
+    font-size: 26px;
+    font-weight: bold;
+    line-height: 1.4;
+    margin-top: 0.6em; }
+    @media only screen and (min-width: 1024px) {
+      .section-why-use-sportsjun h2 {
+        line-height: 2; } }
+  .section-why-use-sportsjun h3 {
+    font-size: 16px;
+    font-weight: normal;
+    color: #95989A;
+    line-height: 1.4;
+    margin-top: 0.3em; }
+  .section-why-use-sportsjun h4 {
+    display: block;
+    font-weight: bold;
+    font-size: 20px;
+    text-transform: uppercase;
+    transform: translateY(60%); }
+  .section-why-use-sportsjun .card {
+    background: #fff;
+    padding: 2em 0.8em 1em 2em; }
+    @media only screen and (min-width: 560px) {
+      .section-why-use-sportsjun .card {
+        width: 80%;
+        margin: 0 auto; } }
+    @media only screen and (min-width: 768px) {
+      .section-why-use-sportsjun .card {
+        width: 100%;
+        margin-top: 1em; } }
+    @media only screen and (min-width: 1024px) {
+      .section-why-use-sportsjun .card {
+        padding: 2em 0.8em 1em 1.5em; } }
+    @media only screen and (min-width: 1100px) {
+      .section-why-use-sportsjun .card {
+        padding: 2em 0.8em 1em 2em; } }
+    .section-why-use-sportsjun .card .row .img {
+      padding: 0; }
+      .section-why-use-sportsjun .card .row .img img {
+        height: 55px;
+        width: auto; }
+    .section-why-use-sportsjun .card .row .card-title {
+      padding: 0; }
+    .section-why-use-sportsjun .card .benefits-list {
+      margin-top: 0.3em;
+      margin-bottom: 2em;
+      padding-left: 1.35em; }
+      .section-why-use-sportsjun .card .benefits-list li {
+        font-size: 15px;
+        line-height: 2;
+        position: relative;
+        padding: 0.2em 0; }
+      .section-why-use-sportsjun .card .benefits-list li:before {
+        position: absolute;
+        top: 8px;
+        left: -28px;
+        content: '';
+        background-image: url(../images/check.svg);
+        background-size: 22px 22px;
+        width: 22px;
+        height: 22px; }
+      .section-why-use-sportsjun .card .benefits-list .coming-soon::before {
+        opacity: 0.5; }
+      .section-why-use-sportsjun .card .benefits-list .coming-soon i {
+        color: #ababab;
+        font-style: italic;
+        font-size: 12px; }
+    .section-why-use-sportsjun .card .register-btn {
+      display: block;
+      color: #fff;
+      background: #6DBE79;
+      -webkit-border-radius: 0;
+      -moz-border-radius: 0;
+      border-radius: 0;
+      font-weight: bold;
+      font-size: 16px;
+      margin: 0 auto 2em;
+      text-transform: uppercase;
+      width: 80%;
+      -webkit-transition: all 0.3s linear;
+      -moz-transition: all 0.3s linear;
+      -ms-transition: all 0.3s linear;
+      -o-transition: all 0.3s linear;
+      transition: all 0.3s linear; }
+      .section-why-use-sportsjun .card .register-btn:hover, .section-why-use-sportsjun .card .register-btn:active {
+        background: #4cac5b; }
+  .section-why-use-sportsjun .section-footer {
+    width: 80%;
+    margin: 0 auto 3em; }
+    .section-why-use-sportsjun .section-footer .col-xs-12 {
+      padding-right: 0;
+      padding-left: 0; }
+      .section-why-use-sportsjun .section-footer .col-xs-12 img {
+        margin: 0 auto; }
+        @media only screen and (min-width: 1024px) {
+          .section-why-use-sportsjun .section-footer .col-xs-12 img {
+            float: right;
+            margin: 0; } }
+    .section-why-use-sportsjun .section-footer .col-xs-12:last-child img {
+      margin: 3em auto 1em; }
+      @media only screen and (min-width: 768px) {
+        .section-why-use-sportsjun .section-footer .col-xs-12:last-child img {
+          margin: 0; } }
+      @media only screen and (min-width: 1024px) {
+        .section-why-use-sportsjun .section-footer .col-xs-12:last-child img {
+          float: left;
+          margin: 0; } }
+    .section-why-use-sportsjun .section-footer p {
+      font-size: 20px;
+      font-weight: bold;
+      color: #6DBE79;
+      text-transform: uppercase;
+      transform: translateY(50%);
+      text-align: center; }
+      @media only screen and (min-width: 480px) {
+        .section-why-use-sportsjun .section-footer p {
+          font-size: 30px; } }
+      @media only screen and (min-width: 768px) {
+        .section-why-use-sportsjun .section-footer p {
+          font-size: 30px; } }
+
+.no-inlinesvg .section-why-use-sportsjun .benefits-list li:before {
+  background-image: url(../images/check.png); }
+
+.no-csstransforms .section-why-use-sportsjun .section-footer p {
+  margin-top: 1em; }

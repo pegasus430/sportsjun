@@ -1912,7 +1912,7 @@ class TournamentsController extends Controller
 											$bracketTeamArray[$j][$k]['match_start_date']=  date(config('constants.DATE_FORMAT.VALIDATION_DATE_TIME_FORMAT'));
 											$bracketTeamArray[$j][$k]['winner_text'] = 'edit';
 											$bracketTeamArray[$j][$k]['schdule_id'] = $currentScheduleData['id'];
-											$bracketTeamArray[$j][$k]['id'] = $currentScheduleData['id'];
+										//	$bracketTeamArray[$j][$k]['id'] = $currentScheduleData['id'];
 											if($currentScheduleData->match_type!='other')
 											{
 												$bracketTeamArray[$j][$k]['match_type'] = $currentScheduleData->match_type=='odi'?'('.strtoupper($currentScheduleData->match_type).')':'('.ucfirst($currentScheduleData->match_type).')';
