@@ -2404,7 +2404,7 @@ class Helper
 
                 break;
 
-            case in_array($sports_id, [3, 5, 13, 17, 7]):
+            case in_array($sports_id, [3, 5, 13, 17, 7, 19]):
                 //die(json_encode($team_id));
                 foreach ($match_models as $key => $match) {
 

@@ -1134,10 +1134,10 @@ class TournamentsController extends Controller
 
 				
 					$match_count_details=Helper::getMatchGroupDetails($tournament_id, $group_id, $scheduled_teams['team_id']);
-
+                   // dd($match_count_details);
 					//calculate ga, gf and tie.
 						$scheduled_teams['tie']=$match_count_details['tie'];
-			     			if(in_array($tournaments[0]['sports_id'], [3,4,5,6,2,3,7,13,14,15,16,17,11])){
+			     			if(in_array($tournaments[0]['sports_id'], [3,4,5,6,2,3,7,13,14,15,16,17,11, 19])){
 			     				
 									$scheduled_teams['ga']=$match_count_details['ga'];
 									$scheduled_teams['gf']=$match_count_details['gf'];
@@ -1161,7 +1161,7 @@ class TournamentsController extends Controller
 
 				 		}
 
-				 	if(in_array($tournaments[0]['sports_id'], [3,4,5,6,2,3,7,13,14,15,16,17,11,18])){
+				 	if(in_array($tournaments[0]['sports_id'], [3,4,5,6,2,3,7,13,14,15,16,17,11,18,19])){
 				 		$team_details[$group_id]=$this->sortGroupTeams($team_details[$group_id]);
 				 	}
 
