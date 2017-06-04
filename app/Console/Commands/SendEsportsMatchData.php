@@ -51,15 +51,17 @@ class SendEsportsMatchData extends Command
         $time2_time = Carbon::now()->format('H:i:s');
         $sport = Sport::where('sports_name', strtolower('smite'))->first();
 
+        /*
         $this->info($time1_day);
         $this->info($time2_day);
         $this->info($time1_time);
         $this->info($time2_time);
+        */
 
         $matchScheduleData = MatchSchedule::whereBetween('match_start_date', array($time1_day,$time2_day))
             ->whereBetween('match_start_time', array($time1_time, $time2_time))
             ->where('sports_id', $sport->id)
-            ->where('match_status', 'pending')
+            ->whereIn('match_status', ['scheduled','pending'])
             ->get();
 
         if (count($matchScheduleData) > 0)
