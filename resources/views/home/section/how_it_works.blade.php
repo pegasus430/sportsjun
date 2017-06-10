@@ -1,5 +1,6 @@
 <!--// Page Content //-->
     <link rel="stylesheet" type="text/css" href="/home/css/styles.css">
+     <script type="text/javascript" src="/home/js/jquery.matchHeight.js"></script>
 <section class="kode-pagesection padding-30-topbottom bg-squre-pattren" id="howitworks">
 <!--     <div class="container">
         <div class="row">
