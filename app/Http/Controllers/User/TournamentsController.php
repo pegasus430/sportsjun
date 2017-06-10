@@ -1418,7 +1418,7 @@ class TournamentsController extends Controller
 				->get(['id', 'tournament_id', 'tournament_round_number',
 					'tournament_match_number', 'a_id', 'b_id', 'match_start_date',
 					'winner_id', 'match_invite_status', 'looser_id',
-					'match_status', 'match_type']);
+					'match_status', 'match_type','hasSetupSquad']);
 
 
 
@@ -1469,6 +1469,10 @@ class TournamentsController extends Controller
 						{
 							if ($isOwner)
 							{
+								if($matchScheduleData[$key]['hasSetupSquad'])
+								$matchScheduleData[$key]['winner_text'] = trans('message.schedule.editscore');
+							
+								else
 								$matchScheduleData[$key]['winner_text'] = trans('message.schedule.addscore');
 							}
 							else{
@@ -1807,7 +1811,7 @@ class TournamentsController extends Controller
 						->where('tournament_round_number', ($i - 1))
 						->whereIN('tournament_match_number', [$matchAlgorithmCount - 1, $matchAlgorithmCount])
 						->orderBy('tournament_match_number')
-						->get(['id', 'tournament_id', 'tournament_round_number', 'tournament_match_number', 'a_id', 'b_id', 'match_start_date', 'winner_id','match_type']);
+						->get(['id', 'tournament_id', 'tournament_round_number', 'tournament_match_number', 'a_id', 'b_id', 'match_start_date', 'winner_id','match_type','hasSetupSquad']);
 					$bracketTeamArray[$j]['start_date'] = '';
 					if (count($bracketScheduleData)) {
 						foreach ($bracketScheduleData->toArray() as $brkey => $brschedule) {
@@ -1848,7 +1852,7 @@ class TournamentsController extends Controller
 
 //                                            ->where('a_id', $brschedule['winner_id'])->orWhere('b_id', $brschedule['winner_id'])
 										->orderBy('id','asc')
-										->first(['id', 'tournament_id', 'tournament_round_number', 'tournament_match_number', 'a_id', 'b_id', 'match_start_date', 'winner_id', 'match_invite_status', 'match_status','match_type']);
+										->first(['id', 'tournament_id', 'tournament_round_number', 'tournament_match_number', 'a_id', 'b_id', 'match_start_date', 'winner_id', 'match_invite_status', 'match_status','match_type','hasSetupSquad']);
 //                                    Helper::printQueries();
 //                                            dd($winnerTeamSchedule);
 
@@ -1865,8 +1869,14 @@ class TournamentsController extends Controller
 //                                            else if (Carbon::now()->gte($startDate) && $winnerTeamSchedule->match_invite_status=='accepted') {
 											else if (Carbon::now()->gte($startDate)) {
 												if ($isOwner) {
-													$bracketTeamArray[$j][$k]['winner_text'] = trans('message.schedule.addscore');
+													if($winnerTeamSchedule->hasSetupSquad)
+													$bracketTeamArray[$j][$k]['winner_text'] = trans('message.schedule.editscore');
+												    else
+												    $bracketTeamArray[$j][$k]['winner_text'] = trans('message.schedule.addscore');
+
 												}
+
+							
 											}
 //                                            $bracketTeamArray[$j][$k]['match_start_date'] = $startDate->toDayDateTimeString();
 											$bracketTeamArray[$j][$k]['match_start_date'] = Helper::getFormattedTimeStamp($winnerTeamSchedule);
@@ -1886,7 +1896,7 @@ class TournamentsController extends Controller
 //                                                $bracketTeamArray[$j][$k]['match_start_date']=  Carbon::now();
 												$bracketTeamArray[$j][$k]['match_start_date']=  date(config('constants.DATE_FORMAT.VALIDATION_DATE_TIME_FORMAT'));
 												$bracketTeamArray[$j][$k]['winner_text'] = 'edit';
-											//	$bracketTeamArray[$j][$k]['schdule_id'] = $currentScheduleData['id'];
+												$bracketTeamArray[$j][$k]['schdule_id'] = $currentScheduleData['id'];
 												if($currentScheduleData->match_type!='other')
 												{
 													$bracketTeamArray[$j][$k]['match_type'] = $currentScheduleData->match_type=='odi'?'('.strtoupper($currentScheduleData->match_type).')':'('.ucfirst($currentScheduleData->match_type).')';

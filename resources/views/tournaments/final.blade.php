@@ -183,7 +183,7 @@
                                                @if(isset($bracket['winner_text']))
                                                     @if($bracket['winner_text']=='edit')
                                                         @if(isset($bracket['id']))
-                                                            <a href="javascript:void(0)" id="scheduleEdit_{{$bracket['id']}}" onclick="editMatchSchedule({{$bracket['schdule_id']}},1,{{$round}},'myModal')">Edit</a>
+                                                            <a href="javascript:void(0)" id="scheduleEdit_{{$bracket['id']}}" onclick="editMatchSchedule({{$bracket['schdule_id']}},1,{{$round}},'myModal')">Edit Schedule</a>
                                                         @endif    
                                                     @else
                                                         @if(isset($bracket['id']))
@@ -193,7 +193,7 @@
                                                @else
                                                     @if($isOwner)
                                                         @if(isset($bracket['id']))
-                                                            <a href="javascript:void(0)" id="scheduleEdit_{{$bracket['id']}}" onclick="editMatchSchedule({{$bracket['schdule_id']}},1,{{$round}},'myModal')">Edit</a>
+                                                            <a href="javascript:void(0)" id="scheduleEdit_{{$bracket['id']}}" onclick="editMatchSchedule({{$bracket['schdule_id']}},1,{{$round}},'myModal')">Edit Schedule</a>
                                                         @endif    
                                                     @endif
                                                @endif
@@ -259,7 +259,7 @@
                                   <a href="{{ url('match/scorecard/edit/'.$schedule['id']) }}">{{$schedule['winner_text']}}</a>
                                   @else
                                       @if($isOwner)
-                                          <a href="javascript:void(0)" id="scheduleEdit_{{$schedule['id']}}"  onclick="editMatchSchedule({{$schedule['id']}},1,{{$round}},'myModal')">Edit</a>
+                                          <a href="javascript:void(0)" id="scheduleEdit_{{$schedule['id']}}"  onclick="editMatchSchedule({{$schedule['id']}},1,{{$round}},'myModal')">Edit Schedule</a>
                                       @endif
                                   @endif
                                   </span>
