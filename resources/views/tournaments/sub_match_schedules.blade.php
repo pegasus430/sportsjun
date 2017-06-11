@@ -90,12 +90,12 @@
 					@endif
 									<br/>
 									<!-- match_details -->
-									
+						<?php $match_details_helper = Helper::getMatchDetails($match['id']);?>
 									<span class=''>{{$match['address']}}</span><br>
 									Status: <span class='event_date sports_text'>{{ ucfirst($match['match_status']) }}</span> <br>
-									Scores: <span class='blue'>{{Helper::getMatchDetails($match['id'])->scores}} </span> <br>
+									Scores: <span class='blue'>{{$match_details_helper->getScoresAttribute()}} </span> <br>
 					@if(!is_null($match['winner_id']))
-								<span class='red'>Winner: {{Helper::getMatchDetails($match['id'])->winner}} </span>
+								<span class='red'>Winner: {{$match_details_helper->winner}} </span>
 								
 					@endif
 

@@ -378,7 +378,7 @@
 									
 									<span class=''>{{$match['address']}}</span><br>
 									Status: <span class='event_date '>{{ ucfirst($match['match_status']) }}</span> <br>
-									Scores: <span class='blue'>{{Helper::getMatchDetails($match['id'])->scores}} </span> <br>
+									Scores: <span class='blue'>{{Helper::getMatchDetails($match['id'])->getScoresAttribute()}} </span> <br>
 									@if(!is_null($match['winner_id']))
 								<span class='red'>Winner: {{Helper::getMatchDetails($match['id'])->winner}} </span>
 								

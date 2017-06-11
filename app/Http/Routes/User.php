@@ -90,6 +90,11 @@ Route::group(['prefix' => 'organization/{id}'], function () {
         Route::get('/', 'OrganizationCoachingController@coaching_index');
         Route::get('/create_session','OrganizationCoachingController@create_session');
         Route::post('/add', 'OrganizationCoachingController@store_session'); 
+        Route::get('/{coaching_id}', 'OrganizationCoachingController@show_session');
+        Route::get('/{coaching_id}/edit', 'OrganizationCoachingController@edit_session');
+        Route::get('/{coaching_id}/delete', 'OrganizationCoachingController@delete_session');
+        Route::post('/{coaching_id}/update', 'OrganizationCoachingController@update_session');
+        Route::post('/{coaching_id}/add_player', 'OrganizationCoachingController@add_player_to_session');
     });
     
     Route::get('/polls', 'User\OrganizationController@get_polls');   

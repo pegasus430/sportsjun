@@ -6,7 +6,9 @@
             <th>Name</th>
             <th>Role</th>
             <th>Added On</th>
+            @if($is_owner)
             <th></th>
+            @endif
         </tr>
         </thead>
 
@@ -16,6 +18,7 @@
                 <td>{{ $staff->name}}</td>
                 <td>{{ $staff->roleForOrganization($id)->name }}</td>
                 <td>{{ $staff->pivot->created_at->format('M d, Y') }}</td>
+                @if($is_owner)
                 <td>
                     @if (!(isset($is_widget) && $is_widget))
                     <a href="javascript:void(0);"
@@ -25,6 +28,7 @@
                     </a>
                     @endif
                 </td>
+                @endif
             </tr>
         @endforeach
         </tbody>

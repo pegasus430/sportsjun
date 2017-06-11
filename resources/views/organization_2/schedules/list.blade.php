@@ -146,8 +146,10 @@
                                                 <p><strong>@if($sc->match_start_date) {{date('jS M Y', strtotime($sc->match_start_date))}} @endif</strong></p>
                                                 <p><strong>{{$sc->sport->sports_name}}</strong></p>
                                                 <p>{{$sc->address}}</p>
-                                                <p>Scores: 12 - 20</p>
-                                                <p>Winners: The Hurricanes</p>
+                                                <p>Scores: {!! $sc->getScoresAttribute() !}}</p>
+                                                @if($sc->winner_id)
+                                                <p style="color:red">Winners: {{$sc->getWinnerAttribute}} </p>
+                                                @endif
                                             </div>
                                             <div class="col-xs-4 col-sm-4 text-center"><img width="40" src="{{$sc->getSideALogoAttribute()}}" alt="{{count($sc->getSideBAttribute())?$sc->getSideBAttribute()->name:''}}">
                                                 <h4>{{count($sc->getSideBAttribute())?$sc->getSideBAttribute()->name:''}}</h4></div>

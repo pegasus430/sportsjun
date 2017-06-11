@@ -12,9 +12,11 @@
 									<tr>
 										<th>NEWS</th>
 										<th width="200" style="text-align: right;">
+										@if($is_owner)
 											<div class="create-btn-link">
 												<a href="/organization/{{$organisation->id}}/news/create" class="wg-cnlink" style="top: -24px;"> <i class="fa fa-plus"></i> &nbsp; Create News</a>
 											</div>
+										@endif
 										</th>
 									</tr>
 								</thead>

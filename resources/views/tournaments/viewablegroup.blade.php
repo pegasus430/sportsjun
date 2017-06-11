@@ -274,7 +274,7 @@
 							<span class=''>{{$match['address']}} ({{ $match['city'] }}, {{ $match['state'] }}, {{ $match['country'] }})</span><br>
 									Status: <span class='event_date sports_text'>{{ucfirst($match['match_status'])}}</span> <br>
                                     
-                                    <span class="match-detail-score">Scores: <span class='blue'>{{Helper::getMatchDetails($match['id'])->scores}} </span></span><br>
+                                    <span class="match-detail-score">Scores: <span class='blue'>{{Helper::getMatchDetails($match['id'])->getScoresAttribute()}} </span></span><br>
 									@if(!is_null($match['winner_id']))
                                         <span class="match-detail-winner red">Winner: {{Helper::getMatchDetails($match['id'])->winner}} </span>
 									@endif

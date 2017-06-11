@@ -237,8 +237,9 @@ class MatchSchedule extends Model
     }
 
 
-    public function getScoresAttribute()
+    public function getScoresAttribute($array=false)
     {
+        //return as array, false for string, yes for array
         if ($this->game_type != 'normal') {
             return $this->a_score . ' - ' . $this->b_score;
         }
@@ -246,7 +247,7 @@ class MatchSchedule extends Model
             $match_details = json_decode($this->match_details);
             $a_id = $this->a_id;
             $b_id = $this->b_id;
-            return Helper::getScoresFromMatchDetails($match_details, $this->sports_id, $a_id, $b_id);
+            return Helper::getScoresFromMatchDetails($match_details, $this->sports_id, $a_id, $b_id,$array);
         }
         return ' - ';
     }

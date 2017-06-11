@@ -551,8 +551,8 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 					<!-- Temporal Data -->
 					<div class="col-sm-10 col-sm-offset-1 " id='new_records_match'>
 						<h3 id='team_b' class="team_bowl table_head">New Records</h3>
-						<div class="table-responsive">
-							<div class='row table-stripped'>
+						<div class="row" >
+							<div class='col-sm-12 table-stripped' >
 							<h3 class='team_bat team_title_head'  ><center>First Half</center></h3>
 								
 								<div class="col-lg-12 col-sm-12 visible-md visible-sm visible-lg not-visible-xs">
@@ -586,7 +586,8 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 							</div>
 							
 						</div>
-
+						<br>
+						<p>&nbsp;</p>
 					</div>
 
 
