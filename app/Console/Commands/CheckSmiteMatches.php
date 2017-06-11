@@ -125,7 +125,6 @@ class CheckSmiteMatches extends Command
 
                     break;
                 }
-
                 if(empty($matchId))
                     continue;
                 foreach($teamTwo as $participant)
