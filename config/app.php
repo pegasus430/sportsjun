@@ -151,7 +151,7 @@ return [
        
         'SocialiteProviders\Manager\ServiceProvider',
         'Thujohn\Twitter\TwitterServiceProvider',
-        'Payum\LaravelPackage\PayumServiceProvider',
+        //'Payum\LaravelPackage\PayumServiceProvider',
         Collective\Html\HtmlServiceProvider::class,
 		    Zofe\Rapyd\RapydServiceProvider::class,
 		    App\Providers\HelperServiceProvider::class,
@@ -166,7 +166,7 @@ return [
         'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
         Barryvdh\DomPDF\ServiceProvider::class,
         Darryldecode\Cart\CartServiceProvider::class,
-         App\Providers\payumServiceProvider::class,
+        //App\Providers\payumServiceProvider::class,
 
         //'Xaamin\Whatsapi\WhatsapiServiceProvider'
     ],
