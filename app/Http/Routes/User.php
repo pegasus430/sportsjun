@@ -73,6 +73,7 @@ Route::group(['prefix' => 'organization/{id}'], function () {
     Route::get('/settings', 'User\OrganizationController@settings');
     Route::post('/settings/add_bank', 'User\OrganizationController@save_bank');
     Route::post('/settings/change_password', 'User\OrganizationController@change_password');
+    Route::post('/settings/payment_settings', 'User\OrganizationCoachingController@payment_settings');
 
     Route::get('/news', 'User\OrganizationController@news');
     Route::get('/news/create', 'User\OrganizationController@news_create');
@@ -130,7 +131,9 @@ Route::group(['prefix'=>'cart','namespace'=>'User'], function($cart){
     $cart->get('/add_to_cart', 'CartController@add_to_cart');
     $cart->get('/list', 'CartController@list');
     $cart->get('/checkout', 'CartController@checkout');
+    $cart->get('/payments/paypal', 'CartController@prepare_paypal');
 });
+
 
 Route::get('getteamdetails', [
     'as'   => 'getteamdetails',

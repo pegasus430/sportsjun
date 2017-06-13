@@ -158,7 +158,11 @@ class Organization extends Model
 
         public function poll_settings(){
             return $this->hasOne('App\Model\poll_setting');
-        }  
+        }
+
+        public function payment_settings(){
+            return $this->hasOne('App\Model\PaymentSetting');
+        }
 
 
 

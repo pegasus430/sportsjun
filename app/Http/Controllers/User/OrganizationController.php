@@ -27,6 +27,7 @@ use Illuminate\Http\Request as ObjRequest;
 use App\Model\BasicSettings;
 use App\Model\Marketplace;
 use App\Model\Album;
+use App\Model\PaymentSetting;
 use File;
 use Session;
 use App\Model\poll;
@@ -829,6 +830,8 @@ End of Poll actions
 
 
 
+/* start settings
+*/
     public function settings($id){
          $organization = organization::find($id);
          $teams = $organization->teamplayers;
@@ -852,8 +855,10 @@ End of Poll actions
             $selectedTeams = $selectedTeamsIds[1];
         }
 
+        $paymentsetting = $organization->payment_settings;
 
-        return view('organization_2.settings.index', compact('bank_accounts','organization','id','teams','selectedTeams','cities','states','type','countries'));
+
+        return view('organization_2.settings.index', compact('bank_accounts','organization','id','teams','selectedTeams','cities','states','type','countries','paymentsetting'));
     }
 
 
@@ -909,6 +914,34 @@ End of Poll actions
 
         return redirect()->back()->with('message','Password Updated!');
     }
+
+    public function payment_settings($id, objrequest $request){
+        $organization = Organization::find($id);
+
+        if(!$paymentsetting = $organization->payment_settings) $paymentsetting = new paymentsetting;
+
+        $paymentsetting->user_id = Auth::user()->id;
+        $paymentsetting->organization_id = $id; 
+        $paymentsetting->paypal_username = $request->paypal_username;
+        $paymentsetting->paypal_password = $request->paypal_password;
+        $paymentsetting->paypal_signature = $request->paypal_signature;
+        $paymentsetting->paypal_sandbox = $request->paypal_sandbox;
+        $paymentsetting->save(); 
+
+        return redirect()->back()->with('message', 'Settings update');
+    }
+
+/* End of settings
+
+===================================================================================================
+*/
+
+
+
+
+/* Start of news
+====================================================================================================
+*/
 
 
     public function news($id){

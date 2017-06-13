@@ -148,8 +148,10 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\ComposerServiceProvider::class,
+       
         'SocialiteProviders\Manager\ServiceProvider',
         'Thujohn\Twitter\TwitterServiceProvider',
+        'Payum\LaravelPackage\PayumServiceProvider',
         Collective\Html\HtmlServiceProvider::class,
 		    Zofe\Rapyd\RapydServiceProvider::class,
 		    App\Providers\HelperServiceProvider::class,
@@ -163,7 +165,8 @@ return [
         Barryvdh\Cors\ServiceProvider::class,
         'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
         Barryvdh\DomPDF\ServiceProvider::class,
-        Darryldecode\Cart\CartServiceProvider::class
+        Darryldecode\Cart\CartServiceProvider::class,
+         App\Providers\payumServiceProvider::class,
 
         //'Xaamin\Whatsapi\WhatsapiServiceProvider'
     ],
