@@ -1,7 +1,13 @@
+@extends('layouts.organisation')
+
+@section('content')
+
+
 
 		<div class="container">
+		<div class="container">
 			<div class="row">
-			<form action="/organization/{{$organisation->id}}/polls/add" class="form create-form clearfix" method="post">
+			<form action="/organization/{{$organisation->id}}/polls/{{$poll->id}}/update" class="form create-form clearfix" method="post">
 				<div class="col-sm-4">
 
 					<div class="bg-white pd-30 clearfix">
@@ -35,7 +41,7 @@
 						<p>&nbsp;</p>
 						
 							<div class="input-container one-col">
-								<input type="text" id="poll_questions" required="required" name="question">
+								<input type="text" id="poll_questions" required="required" name="question" value="{{$poll->title}}">
 								<label for="poll_questions">Question <span class="req">&#42;</span></label>
 								<div class="bar"></div>
 							</div>
@@ -46,7 +52,7 @@
                 <label class="form_label">{{  trans('message.tournament.fields.startdate') }} <span  class='required'>*</span></label>         
                 <label class='field' >
                     <div class="input-group date" id='startdate'>
-                        {!! Form::text('start_date', null, array('class'=>'gui-input date','placeholder'=>trans('message.tournament.fields.startdate'))) !!}
+                        {!! Form::text('start_date', $poll->start_date, array('class'=>'gui-input date','placeholder'=>trans('message.tournament.fields.startdate'))) !!}
                         <span class="input-group-addon">
         	                <span class="glyphicon glyphicon-calendar"></span>
     	                </span>
@@ -62,7 +68,7 @@
                     <label class="form_label">{{  trans('message.tournament.fields.enddate') }}  <span  class='required'>*</span></label>		
                         <label class='field'>
                         	<div class='input-group date' id='enddate'>
-                                {!! Form::text('end_date', null, array('class'=>'gui-input date','placeholder'=>trans('message.tournament.fields.enddate'))) !!}
+                                {!! Form::text('end_date', $poll->end_date, array('class'=>'gui-input date','placeholder'=>trans('message.tournament.fields.enddate'))) !!}
                                 <span class="input-group-addon">
     	                            <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
@@ -79,23 +85,23 @@
 							<div class="pia_">
 								<p class="lead">Answers</p>
 								<ul class="options_list">
+								  @foreach($poll->options as $key=>$option)
 									<li>
-										<input type="text" placeholder="Yes" name="option_1" required="">
+										<input type="text" value='{{$option->title}}' name="option_{{$key+1}}" required="">
+										<input type="hidden" name="option_old_{{$key+1}}" value="{{$option->id}}">
 									</li>
-									<li>
-										<input type="text" placeholder="No" name="option_2" required="">
-									</li>
-									<li class="li_3">
-										<input type="text" placeholder="Undecided" name="option_3"> <span><a href="#" class="del_option" del_id='3' >X</a></span></li>
+								  @endforeach
+									<li class="li_{{isset($key)?$key+2:1}}">
+										<input type="text" placeholder="Undecided" name="option_{{$key+2}}"> <span><a href="#" class="del_option" del_id='{{$key+2}}' >X</a></span></li>
 
 
 								</ul>
 
-								<input type="hidden" name="i" value="3" id='option_index'>
-								<button type="submit" class="btn btn-secondary btn-xs btn-add_option"><i class="fa fa-plus"></i> Add another</button>
+								<input type="hidden" name="i" value="{{isset($key)?$key+2:1}}" id='option_index'>
+								<button type="button" class="btn btn-secondary btn-xs btn-add_option"><i class="fa fa-plus"></i> Add another</button>
 							</div>
 							<div class="text-center">
-								<button type="submit" class="btn btn-primary">Pubish</button>
+								<button type="submit" class="btn btn-primary">Update</button>
 							</div>
 						</form>
 						<p>&nbsp;</p>
@@ -103,54 +109,47 @@
 				</div>
 			</div>
 
-			<div class="clearfix" style="height: 40px"></div>
-			<div class="row">
-				<div class="col-md-12">
-					<div class="sr-table">
-						<div class="table-responsive">
-							<table class="table">
-								<thead>
-									<tr>
-										<th>
-											<input type="checkbox">
-										</th>
-										<th>Question</th>
-										<th class="text-center">Answer</th>
-										<th class="text-center">Action</th>
-									</tr>
-								</thead>
-								<tbody>
-									@foreach($polls as $poll)
-									<tr class="record">
-										<td>
-											<input type="checkbox"> </td>
-										<td>{{$poll->title}}</td>
-										<td class="text-center">
-											@foreach($poll->options as $option)
-												{{$option->title}} ({{$option->percentage()}}%) |
-											@endforeach</td>
-										<td class="text-center">
-											
-											
-                                                <a href="/organization/{{$organisation->id}}/polls/{{$poll->id}}/edit" data-toggle="tooltip" data-placement="top" title="Edit!" class="label label-primary label-a-primary" poll-id='{{$poll->id}}'><i class="fa fa-pencil"></i></a>
-                                                <a href="javascript:void(0)" data-toggle="tooltip" data-placement="top" title="Delete!" class="label label-danger label-a-danger del" poll-id='{{$poll->id}}'><i class="fa fa-remove"></i></a>
-                                              	<span style='{{$poll->status?"display:none":''}}' id='published-{{$poll->id}}'>
-                                              		  <a href="javascript:void(0)" data-toggle="tooltip" data-placement="top" title="Publish!" class="label label-success label-a-success toggle" type="un-published"  poll-id='{{$poll->id}}'><i class="fa fa-eye"></i></a>
-                                              	</span>
-                                              
-                                                <span style='{{!$poll->status?"display:none":''}}' id='un-published-{{$poll->id}}' >
-                                                <a href="javascript:void(0)" data-toggle="tooltip" data-placement="top" title="Un-publish!" class="label label-danger label-a-danger toggle" type="published"  poll-id='{{$poll->id}}'><i class="fa fa-eye-slash"></i></a>
-                                                </span>
-                                            </td>
-										
-									</tr>
-								    @endforeach
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
 
         </div>
-      
+
+  @stop
+
+
+@section('end_scripts')
+<script type="text/javascript">
+var i = $('#option_index').val();
+		$('.btn-add_option').click(function(){
+			$('.options_list').append("<li class='li_"+i+"'><input type='text' name='option_"+i+"'><span><a href='javascript:void(0)' class='del_option' del_id='"+i+"' >X</a></span></li>");
+			i++;
+
+			$('.del_option').click(function(){
+				$(this).parents('li').remove();
+			})
+
+			$('#option_index').val(i);
+		});
+
+		$('.del_option').click(function(){
+			$(this).parents('li').remove();
+		})
+
+		 $(".date").datepicker();
+        $(".date").datepicker();
+
+
+
+        $(function() {
+	$.validator.addMethod("greater_startdate", function(value, element) {
+		 var startDate = $('[name="start_date"]').val();
+		  var endDate = $('[name="end_date"]').val();
+		  var startDate = startDate.split('/').reverse().join('-');
+		var endDate = endDate.split('/').reverse().join('-');										
+		return Date.parse(endDate) >= Date.parse(startDate);
+	}, "End Date must be equal to or after Start Date");
+	$('[name="end_date"]').rules("add", "greater_startdate");
+		})
+</script>
+
+
+@stop
+

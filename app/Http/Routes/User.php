@@ -98,7 +98,12 @@ Route::group(['prefix' => 'organization/{id}'], function () {
     });
     
     Route::get('/polls', 'User\OrganizationController@get_polls');   
-    Route::post('/polls/add', 'User\OrganizationController@add_poll');
+    Route::post('/polls/add', 'User\OrganizationController@add_poll');    
+    Route::get('/polls/{poll_id}/delete','User\OrganizationController@polls_delete');
+    Route::get('/polls/{poll_id}/edit', 'User\OrganizationController@polls_edit');
+    Route::post('/polls/{poll_id}/update', 'User\OrganizationController@polls_update');
+    Route::get('/polls/{poll_id}/toggle', 'User\OrganizationController@polls_toggle');
+    Route::post('/polls/{poll_id}/vote', 'User\OrganizationController@polls_vote');
 
     Route::get('schedules', [
         'as'   => 'organization.schedules.list',

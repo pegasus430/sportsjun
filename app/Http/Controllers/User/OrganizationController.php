@@ -31,6 +31,8 @@ use File;
 use Session;
 use App\Model\poll;
 use App\Model\poll_options as poll_option;
+use App\Model\poll_voters as poll_vote;
+use App\Model\poll_setting;
 use App\Model\VendorBankAccounts;
 use App\Model\news; 
 use App\Model\coaching; 
@@ -682,18 +684,25 @@ class OrganizationController extends Controller
         return 'ok';
     }
 
+
+
+/* 
+    Polls Actions 
+*/
+
     public function get_polls($id){
         $polls = poll::where('organization_id',$id)->get();
         return view('organization_2.polls.index', compact('polls'));
     }
 
-    public function add_poll(objrequest $request){
+    public function add_poll(objrequest $request, $id){
+
         $i = $request->i;
         $poll = new poll; 
 
         $poll->title = $request->question;
         $poll->user_id = Auth::user()->id;
-        $poll->organization_id = Auth::user()->organizations[0]->id;
+        $poll->organization_id = $id;
         $poll->start_date = $request->start_date;
         $poll->end_date = $request->end_date;
         $poll->save();
@@ -707,6 +716,18 @@ class OrganizationController extends Controller
             }
         }
 
+        $organization  = Organization::find($id);
+
+        if($organization->poll_settings){
+            $organization->poll_settings->update(['poll_result' => $request->poll_results,
+                                                  'block_votes' => $request->block_votes]);
+        }
+        else{
+            poll_setting::create(['poll_result' => $request->poll_results,
+                                  'block_votes' => $request->block_votes,
+                                  'organization_id'=>$id]);
+        }
+
         return redirect()->back()->with('message', 'Poll Added');
     }
 
@@ -715,9 +736,97 @@ class OrganizationController extends Controller
         $poll->options->delete();
         $poll->voters->delete();
         $poll->delete();
-
         return redirect()->back()->with('message', 'Poll Deleted!');
     }
+
+    public function polls_show($id, $poll_id){
+        $poll = poll::find($poll_id);
+        return view('organization_2.polls.show', compact('poll'));
+    }
+
+    public function polls_edit($id,$poll_id){
+        $poll = poll::find($poll_id);
+        return view('organization_2.polls.edit', compact('poll'));
+    }
+
+     public function polls_toggle($id, $poll_id){
+        $poll = poll::find($poll_id);
+
+        if($poll->status==1)$poll->status=0; 
+        else $poll->status=1; 
+
+        $poll->save(); 
+
+        return 'Status Changed';
+    }
+
+    public function polls_vote($id, $poll_id, objRequest $request){
+        $poll_vote = new poll_vote; 
+
+        $check = poll_vote::where(['user_id'=>Auth::user()->id,'poll_id'=>$request->poll_id])->first();
+
+        if($check){
+            $poll_vote = $check;
+            $poll_vote->option_id = $request->option_id; 
+            $poll_vote->user_id = Auth::check()?Auth::user()->id:0;
+            $poll_vote->save();
+        }
+        else{
+            $poll_vote->poll_id = $poll_id;
+            $poll_vote->option_id = $request->option_id; 
+            $poll_vote->user_id = Auth::check()?Auth::user()->id:0;
+            $poll_vote->save();
+        }
+       
+
+
+        return 'ok';
+    }
+
+    public function polls_update($id, $poll_id, objrequest $request){
+        $poll = poll::find($poll_id);
+
+         $i = $request->i;  
+
+
+        $poll->title = $request->question;
+        $poll->user_id = Auth::user()->id;
+        $poll->organization_id = $id;
+        $poll->start_date = $request->start_date;
+        $poll->end_date = $request->end_date;
+        $poll->save();
+
+        for($j=0; $j<=$i; $j++){
+            if($request->{'option_'.$j}){
+               if($request->{'option_old_'.$j}) $option = poll_option::find($request->{'option_old_'.$j}); 
+               else $option = new poll_option;
+
+                $option->poll_id = $poll->id;
+                $option->title = $request->{'option_'.$j};
+                $option->save();
+            }
+        }
+
+        $organization  = Organization::find($id);
+
+        if($organization->poll_settings){
+            $organization->poll_settings->update(['poll_result' => $request->poll_results,
+                                                  'block_votes' => $request->block_votes]);
+        }
+        else{
+            poll_setting::create(['poll_result' => $request->poll_results,
+                                  'block_votes' => $request->block_votes,
+                                  'organization_id'=>$id]);
+        }
+
+        return redirect()->back()->with('message', 'Poll Added');
+    }
+
+/* 
+End of Poll actions 
+*/
+
+
 
 
     public function settings($id){

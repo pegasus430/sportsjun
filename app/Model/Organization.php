@@ -155,7 +155,10 @@ class Organization extends Model
         public function polls(){
             return $this->hasMany('App\Model\poll');
         }
-      
+
+        public function poll_settings(){
+            return $this->hasOne('App\Model\poll_setting');
+        }  
 
 
 

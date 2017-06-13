@@ -22,7 +22,7 @@
 
 
 <script type="text/javascript">
-var i =4;
+var i =$('#option_index').val();
 		$('.btn-add_option').click(function(){
 			$('.options_list').append("<li class='li_"+i+"'><input type='text' name='option_"+i+"'><span><a href='javascript:void(0)' class='del_option' del_id='"+i+"' >X</a></span></li>");
 			i++;
@@ -54,5 +54,42 @@ var i =4;
 	$('[name="end_date"]').rules("add", "greater_startdate");
 		})
 </script>
+
+
+	<script type="text/javascript">
+		$('.toggle').click(function(){
+			var type = $(this).attr('type'); 
+			var id = $(this).attr('poll-id'); 
+			var url = '/organization/{{$organisation->id}}/polls/'+id+'/toggle';
+			var that = $(this);
+
+			$.ajax({
+				url:url,
+				success:function(){
+					$(that).parents('span').hide();
+					$('#'+type+'-'+id).show();
+				}
+			})
+		})
+
+		$('.del').click(function(){
+
+            if(confirm('are you sure you want to delete this post?')){
+                var type = $(this).attr('type'); 
+            var id = $(this).attr('poll-id'); 
+            var url = '/organization/{{$organisation->id}}/polls/'+id+'/delete';
+            var that = $(this);
+
+            $.ajax({
+                url:url,
+                success:function(){
+                    $(that).parents('.record').hide('slow');
+                    
+                }
+            })
+   
+            }
+		})
+	</script>
 
 @stop
