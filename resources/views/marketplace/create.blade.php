@@ -31,4 +31,11 @@
 
 
 <div class="clearfix"></div>
+
+@if($is_org)
+	<div style="height: 150px">
+	</div>
+@endif
+
+
 @endsection

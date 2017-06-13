@@ -15,4 +15,8 @@ class poll extends Model
     public function voters(){
     	return $this->hasMany('App\Model\poll_voters', 'poll_id');
     }
+
+    public function option_voters($id){
+    	return $this->hasMany('App\Model\poll_voters', 'poll_id')->where('option_id', $id);
+    }
 }

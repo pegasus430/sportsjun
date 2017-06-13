@@ -1,3 +1,9 @@
+<style type="text/css">
+    .icheck input{
+z-index: 999;
+}
+</style>
+
 <div class="col-md-3 col-sm-12">
                 <div class="row">
                 <div class="col-md-12">                       
@@ -99,14 +105,18 @@
                                     {{$photo}}
                                     </div>                                
                                 @endforeach
-                                </div> <a class="left carousel-control" href="#Carousel" data-slide="prev">‹</a> <a class="right carousel-control" href="#Carousel" data-slide="next">›</a> </div>
+                                </div> 
+                            @if(count($organisation->all_photos))
+                                <a class="left carousel-control" href="#Carousel" data-slide="prev">‹</a> <a class="right carousel-control" href="#Carousel" data-slide="next">›</a> 
+                            @endif
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-12 visible-xs ">
                         <br>
                         <br> </div>
                     <div class="col-md-12">
-                        <a href="/organization/{{$organisation->id}}/polls">
+                      
                         <div class="wg wg-purple no-shadow wg-poll" style="min-height: 100px;">
                             <div class="wg-wrap">
                                 <h4>Poll</h4>
@@ -115,7 +125,7 @@
                                         <div class="carousel-inner">
                                             @foreach($organisation->polls as $key=>$poll)
                                                 <div class="item {{$key==0?'active':''}}" >
-                                                    <p>{{$poll->title}}</p>
+                                                    <h5 class="text-left"><b> {{$key+1}}.) {{$poll->title}}</b></h5>
                                                     <div class="panel-body">
                                                         <ul class="list-group">
                                                             @foreach($poll->options as $option)
@@ -123,7 +133,9 @@
                                                             <li class="list-item" style="text-align: left; padding-left: 10px;">
                                                                 <div class="radio">
                                                                     <label>
-                                                                        <input type="radio" name="optionsRadios"> {{$option->title}} </label>
+                                                                        <input type="radio" name="optionsRadios" class="vote-poll" poll-id='{{$poll->id}}' option-id='{{$option->id}}' organization-id='{{$organisation->id}}'> {{$option->title}}
+
+                                                                         </label>
                                                                 </div>
                                                             </li>
                                                             @endforeach
@@ -132,9 +144,13 @@
                                                 </div>
                                             @endforeach
                                         </div>
+
+                                @if(count($organisation->all_photos))
+                                        <a class="left carousel-control" href="#poll_carousel" data-slide="prev">‹</a> <a class="right carousel-control" href="#poll_carousel" data-slide="next">›</a> 
+                                @endif
                                     </div>
                             </div>
                         </div>
-                        </a>
+                   
                     </div>
                 </div>

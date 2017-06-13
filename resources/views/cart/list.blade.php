@@ -20,7 +20,6 @@
                                         <th>Details</th>
                                         <th>Price</th>
                                         <th>Discount Price</th>
-                                        <th>Total Sales</th>
                                         <th>Action</th>                                        
                                 </tr>
                         </thead>
@@ -43,7 +42,6 @@
                                         <td>{{$item->item_description}}</td>
                                         <td>{{$item->actual_price}}</td>
                                         <td>{{$item->base_price}}</td>
-                                        <td>{{$item->sales}}</td>
                                         <td>                                       
                                        <a href="javascript:void(0);" class="removephoto icon-delete mp_delete"  data-pid="{{ $item['id'] }}" data-toggle="tooltip" data-placement="top" title="Delete" >Remove</a>
                                         </td>
@@ -59,7 +57,31 @@
 
                     <b>Total : </b>
                     <br><br>
-                    	<a href="/cart/checkout" class="btn btn-success">Checkout </a>
+
+                    <div class="sportsjun-forms">
+                    <form class="form form-horizontal" action="/cart/checkout">
+                        <div class="form-body">
+                        <div class="col-sm-6">
+                        <div class="section">
+                        <label class="form_label">Payment Option<span  class='required'>*</span> </label>
+                        <label class="field select">
+                
+                        <select name="payment_option" required="" class="control-form gui-input"> 
+                            <option value="" > Select Payment Option </option> 
+                            <option value="paypal"> Paypal </option>
+                            <option value="bank-transfer"> Bank Transfer </option>
+                        </select>
+                        </label>
+                        </div>
+                        </div>
+                        <div class="col-sm-6">
+                        <br>
+                        <button type='submit' class="btn btn-success"> Proceed to Checkout</button>
+                        </div>
+                        </div>
+                    </form>
+
+                    </div>
                     </div>
                 </div>
 

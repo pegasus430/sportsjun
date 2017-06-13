@@ -27,7 +27,7 @@
                                     </thead>
                                     <tbody>
                                     	@foreach($news as $nw)
-                                        <tr>
+                                        <tr class="record">
                                            <td><input type="checkbox"></td>
                                             <td width="50">
                                                
@@ -82,18 +82,22 @@
 		})
 
 		$('.del').click(function(){
-			var type = $(this).attr('type'); 
-			var id = $(this).attr('news-id'); 
-			var url = '/organization/{{$organisation->id}}/news/'+id+'/delete';
-			var that = $(this);
 
-			$.ajax({
-				url:url,
-				success:function(){
-					$(that).parents('.record').hide('slow');
-					
-				}
-			})
+            if(confirm('are you sure you want to delete this post?')){
+                var type = $(this).attr('type'); 
+            var id = $(this).attr('news-id'); 
+            var url = '/organization/{{$organisation->id}}/news/'+id+'/delete';
+            var that = $(this);
+
+            $.ajax({
+                url:url,
+                success:function(){
+                    $(that).parents('.record').hide('slow');
+                    
+                }
+            })
+   
+            }
 		})
 	</script>
 @stop

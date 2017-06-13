@@ -129,9 +129,21 @@ class AuthController extends Controller
             'password' => bcrypt($data['password']),
             'newsletter' => !empty($data['newsletter']) ? 1 : 0,
             'type'       => 1,
-            'profile_updated '=>1,
+            'profile_updated '=>'1',
+                    'address' => $data['address'],
+                    'city_id' => $data['city_id'],
+                    'city' => object_get(CityRepository::getModel($data['city_id']),'city_name'),
+                    'state_id' => $data['state_id'],
+                    'state' => object_get(StateRepository::getModel($data['state_id']), 'state_name'),
+                    'country_id' => $data['country_id'],
+                    'country' => object_get(CountryRepository::getModel($data['country_id']), 'country_name'),
+                    'logo' => $logo,
             'verification_key' => md5($data['email']) //TODO:: these thing should be changed across all site
         ]);
+
+        $user->profile_updated = 1;  //profile updated
+        $user->save(); 
+
         if ($user) {
             \Event::fire(new UserRegistered($user));
 

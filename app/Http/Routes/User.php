@@ -73,6 +73,7 @@ Route::group(['prefix' => 'organization/{id}'], function () {
     Route::get('/settings', 'User\OrganizationController@settings');
     Route::post('/settings/add_bank', 'User\OrganizationController@save_bank');
     Route::post('/settings/change_password', 'User\OrganizationController@change_password');
+    Route::post('/settings/payment_settings', 'User\OrganizationCoachingController@payment_settings');
 
     Route::get('/news', 'User\OrganizationController@news');
     Route::get('/news/create', 'User\OrganizationController@news_create');
@@ -98,7 +99,12 @@ Route::group(['prefix' => 'organization/{id}'], function () {
     });
     
     Route::get('/polls', 'User\OrganizationController@get_polls');   
-    Route::post('/polls/add', 'User\OrganizationController@add_poll');
+    Route::post('/polls/add', 'User\OrganizationController@add_poll');    
+    Route::get('/polls/{poll_id}/delete','User\OrganizationController@polls_delete');
+    Route::get('/polls/{poll_id}/edit', 'User\OrganizationController@polls_edit');
+    Route::post('/polls/{poll_id}/update', 'User\OrganizationController@polls_update');
+    Route::get('/polls/{poll_id}/toggle', 'User\OrganizationController@polls_toggle');
+    Route::post('/polls/{poll_id}/vote', 'User\OrganizationController@polls_vote');
 
     Route::get('schedules', [
         'as'   => 'organization.schedules.list',
@@ -125,7 +131,9 @@ Route::group(['prefix'=>'cart','namespace'=>'User'], function($cart){
     $cart->get('/add_to_cart', 'CartController@add_to_cart');
     $cart->get('/list', 'CartController@list');
     $cart->get('/checkout', 'CartController@checkout');
+    $cart->get('/payments/paypal', 'CartController@prepare_paypal');
 });
+
 
 Route::get('getteamdetails', [
     'as'   => 'getteamdetails',
