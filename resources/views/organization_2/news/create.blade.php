@@ -13,7 +13,7 @@
 			</div>
 
 <div class="container-fluid col-sm-12">
-	<div class="sportsjun-forms sportsjun-container wrap-2">
+	<div class="sportsjun-forms sportsjun-container wrap-1">
 <div class="form-header header-primary"><h4><i class="fa fa-pencil-square"></i>Add News</h4></div>
 
 					<form action="/organization/{{$organisation->id}}/news/add" method="post" class="form form-horizontal">
@@ -48,16 +48,18 @@
 	</label>
 </div>
 
-							<div class="section">
+							<div class="section summernote_wrapper">
 	<label class="form_label">Description </label>
-	<label for="comment" class="field prepend-icon">
-	
-		   {!! Form::textarea('details', null, array('class'=>'gui-textarea','style'=>'resize:none','rows'=>3)) !!}
+		   {!! Form::textarea('details', null, array('id'=>'match_report','class'=>'summernote','style'=>'resize:none','rows'=>3)) !!}
 		   @if ($errors->has('about')) <p class="help-block">{{ $errors->first('about') }}</p> @endif
-	<label for="comment" class="field-icon"><i class="fa fa-comments"></i></label>
+	
 	</label>
-</div>		
-							<center>
+
+	</div>
+
+
+
+				<center>
 								<button type="submit" class="btn btn-primary">Create</button>
 							</center>
 						</div>

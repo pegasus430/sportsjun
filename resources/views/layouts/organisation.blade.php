@@ -14,8 +14,6 @@
     <!-- CSS -->
 
     <link href="/css/bootstrap.css" rel="stylesheet">
-         
-
 
         <link href="/org/css/main.css" rel="stylesheet">
             <link href="/org/css/marketplace.css" rel="stylesheet"> 

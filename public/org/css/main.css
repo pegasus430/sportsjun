@@ -977,6 +977,10 @@ div#staff_foot_info {
     color: #fff;
 }
 
+.note-btn {
+    min-width: 10px !important;
+}
+
 .btn-mini {
     min-width: inherit;
 }

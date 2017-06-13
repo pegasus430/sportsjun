@@ -19,7 +19,8 @@
 
                 <div class="wg wg-white">
                     <div class="wg-wrap">
-                      
+
+                                
                         <select class="selectpicker">
                          @foreach($parent_tournaments as $parent)
                             <optgroup label="{{$parent->name}}">
@@ -29,6 +30,13 @@
                              </optgroup>
                          @endforeach
                         </select>
+
+                          @if($is_owner) 
+                            <div class="wg-hd">
+                               <a href="/organization/{{$organisation->id}}/new_tournament" class="wg-cnlink">Create Tournaments</a>                        
+                            </div>
+                        @endif
+
                         <div class="carousel slide event-carousel events" id="events-list">
                             <div class="carousel-inner">
 
@@ -55,7 +63,14 @@
                                     @endforeach
                                    
                              @endforeach
-                         </div> <a data-slide="prev" href="#events-list" class="left carousel-control">‹</a> <a data-slide="next" href="#events-list" class="right carousel-control">›</a> </div>               
+
+                             @if($ik%3!=0) </div></div> @endif
+                            </div>  
+                 @if(count($parent_tournaments))
+                     <a data-slide="prev" href="#events-list" class="left carousel-control">‹</a> <a data-slide="next" href="#events-list" class="right carousel-control">›</a>
+                @endif  
+             </div> 
+
                 </div>
                 </div>
 
@@ -113,7 +128,8 @@
                  <div class="col-md-12 wg wg-white space-top-half text-center">
                     @foreach($organisation->teamplayers as $team)
                     <div class="col-lg-3 col-sm-6 ">
-                        <p class="text-center">{{$team->name}}</p> <img src="/uploads/teams/{{$team->logo}}" alt="" class="img-responsive" style="height: 150px; width: 150px; border-radius: 50%"> 
+                        <a href="/team/members/{{$team->id}}">
+                        <p class="text-center">{{$team->name}}</p> <img src="/uploads/teams/{{$team->logo}}" alt="" class="img-responsive" style="height: 150px; width: 150px; border-radius: 50%"> </a>
                     </div>
                     <!-- .col-lg-3.col-sm-6 -->
                     @endforeach
