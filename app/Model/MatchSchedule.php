@@ -423,13 +423,18 @@ class MatchSchedule extends Model
                       MatchSchedule::where('id',$matchScheduleData['id'])->update(['a_id'=>$winner_team_id,'player_a_ids'=>!empty($player_b_ids)?(','.trim($player_b_ids).','):NULL]);
                    }   
 
+            $maxRoundNumber = MatchSchedule::
+            where('tournament_id', $matchScheduleDetails['tournament_id'])->whereNull('tournament_group_id')
+                ->orderBy('tournament_round_number')
+                ->max('tournament_round_number');
 
              $tournamentDetails = Tournaments::where('id',$matchScheduleDetails['tournament_id'])->first(['final_stage_teams']);
+
             if(count($tournamentDetails)) {
                 $lastRoundWinner = intval(ceil(log($tournamentDetails['final_stage_teams'], 2)));
             }
             if(count($maxRoundNumber) && !empty($lastRoundWinner)) {
-                        MatchSchedule::where('id',$matchScheduleData['id'])->update([
+                        $matchScheduleData->update([
                             'match_status'=>'completed',
                             'winner_id'=>$winner_team_id
                         ]);
