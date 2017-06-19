@@ -2680,7 +2680,11 @@ class Helper
             else {
                 if (Carbon::now()->gte($matchStartDate)) {
                     if ($isOwner) {
+                        if($check_schedule->hasSetupSquad)
+                        $check_schedule['winner_text'] = trans('message.schedule.editscore');
+                        else 
                         $check_schedule['winner_text'] = trans('message.schedule.addscore');
+
                     } else {
                         $check_schedule['winner_text'] = trans('message.schedule.viewscore');
                     }

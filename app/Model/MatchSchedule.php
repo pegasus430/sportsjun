@@ -421,7 +421,21 @@ class MatchSchedule extends Model
                    }
               else{
                       MatchSchedule::where('id',$matchScheduleData['id'])->update(['a_id'=>$winner_team_id,'player_a_ids'=>!empty($player_b_ids)?(','.trim($player_b_ids).','):NULL]);
-                   }            
+                   }   
+
+
+             $tournamentDetails = Tournaments::where('id',$matchScheduleDetails['tournament_id'])->first(['final_stage_teams']);
+            if(count($tournamentDetails)) {
+                $lastRoundWinner = intval(ceil(log($tournamentDetails['final_stage_teams'], 2)));
+            }
+            if(count($maxRoundNumber) && !empty($lastRoundWinner)) {
+                        MatchSchedule::where('id',$matchScheduleData['id'])->update([
+                            'match_status'=>'completed',
+                            'winner_id'=>$winner_team_id
+                        ]);
+                    
+                
+            }         
 
         }else{
             if ($matchScheduleData['schedule_type'] == 'team') {
@@ -460,6 +474,15 @@ class MatchSchedule extends Model
             if(!$matchScheduleDetails['is_third_position']){
                 $matchSchedule = MatchSchedule::create($scheduleArray);
             }
+            else{
+                 $scheduleArray = [
+                'tournament_id' => $matchScheduleDetails['tournament_id'],
+                'tournament_round_number' => $roundNumber+1,
+                'tournament_match_number' => $matchNumberToCheck,
+                'sports_id' => $matchScheduleDetails['sports_id']
+                ];
+                $matchSchedule = MatchSchedule::create($scheduleArray);
+            }
 
             // Update the winner Id of the for the winner team.
             $maxRoundNumber = MatchSchedule::
@@ -471,7 +494,7 @@ class MatchSchedule extends Model
                 $lastRoundWinner = intval(ceil(log($tournamentDetails['final_stage_teams'], 2)));
             }
             if(count($maxRoundNumber) && !empty($lastRoundWinner)) {
-                if($maxRoundNumber==$lastRoundWinner+1){
+                if(($maxRoundNumber==$lastRoundWinner+1) && !$matchScheduleDetails['is_third_position']){
                     if(!empty($matchSchedule) && $matchSchedule['id']>0) {
                         MatchSchedule::where('id',$matchSchedule['id'])->update([
                             'match_status'=>'completed',

@@ -19,7 +19,6 @@ use App\User;
 use Auth;
 use Request;
 use Session;
-use App\Model\Tournaments;
 
 
 //get all my requests data as object

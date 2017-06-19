@@ -150,7 +150,17 @@
                     @foreach($bracketTeamArray as $brk => $bracketTeam)
                       
                     <div class="match_set tourn_{{$round}}_remove_{{$brk+1}} " style="height: <?php echo $height.'px';?>">
-                        <ul  id="tour_{{$round}}_match_{{($brk+1)}}">
+                      <?php 
+                            $brk_number = $brk+1;
+                            if($round==($lastRoundWinner+1) ){                              
+                                    $brk_number ='1000';
+                                foreach($bracketTeam as $bt => $bracket){
+                                    if((isset($bracket['tournament_round_number']) && $bracket['tournament_round_number']==$round ) && !$bracket['is_third_position'])  
+                                        $brk_number = $brk+1;
+                                }
+                            }
+                      ?>
+                        <ul  id="tour_{{$round}}_match_{{($brk_number)}}">
                             @foreach($bracketTeam as $bt => $bracket)
                                 @if(isset($bracket['tournament_round_number']) && $bracket['tournament_round_number']==$round)
                    <?php 
@@ -160,15 +170,16 @@
                                     @if($round==($lastRoundWinner+1))
                                       <?php $w++;?>
 
-                                        @if($w==2)
+
+                                        @if($bracket['is_third_position'])
                                         <div class="clearfix">
                                           <span class="fa fa-star" style="color:#f27676;"></span>&nbsp;&nbsp;Third Position&nbsp;&nbsp;<span class="fa fa-star" style="color:#f27676;"></span>
                                         </div>
                                         @else
-
                                            <div class="clearfix">
                                             <span class="winner_text"><span class="fa fa-star" style="color:#f27676;"></span>&nbsp;&nbsp;Winner&nbsp;&nbsp;<span class="fa fa-star" style="color:#f27676;"></span></span>
                                         </div>
+                                      
 
 
                                         @endif
@@ -203,9 +214,10 @@
                                     @endif
 
 
+            
                                    <li title="{{isset($bracket['name'])?$bracket['name']:''}}"  data-toggle="tooltip" data-placement="top">
                                        {!! Helper::Images($bracket['url'],config('constants.PHOTO_PATH.TEAMS_FOLDER_PATH'),array('class'=>'img-circle img-border','height'=>30,'width'=>30) )!!}
-          @if(isset($bracket['name']))
+                                       @if(isset($bracket['name']))
                                                 <span>
                                                    <a href="{{ url($linkUrl,[$bracket['team_or_player_id']]) }}">
                                                     {{Helper::get_first_20_letters($bracket['name'])}}
@@ -215,11 +227,11 @@
                                                 <span></span>
                                         @endif
                                     </li>
-                                     @if($round==($lastRoundWinner+1) && $w==1)
-                                        <div style="height:200px">
-                                        </div>
-                                 @endif
-
+                       @if($round==($lastRoundWinner+1) && $w==1)
+                          <div style="height:200px">
+                          </div>
+                        @endif
+                   
                                 @else
                                  
                                   <?php 

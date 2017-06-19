@@ -1811,12 +1811,17 @@ class TournamentsController extends Controller
 						->where('tournament_round_number', ($i - 1))
 						->whereIN('tournament_match_number', [$matchAlgorithmCount - 1, $matchAlgorithmCount])
 						->orderBy('tournament_match_number')
-						->get(['id', 'tournament_id', 'tournament_round_number', 'tournament_match_number', 'a_id', 'b_id', 'match_start_date', 'winner_id','match_type','hasSetupSquad']);
+						->get(['id', 'tournament_id', 'tournament_round_number', 'tournament_match_number', 'a_id', 'b_id', 'match_start_date', 'winner_id','match_type','hasSetupSquad','is_third_position']);
 					$bracketTeamArray[$j]['start_date'] = '';
 					if (count($bracketScheduleData)) {
 						foreach ($bracketScheduleData->toArray() as $brkey => $brschedule) {
+
 							$bracketTeamArray[$j][$k]['match_type'] = '';
+							
+							
+
 							if (isset($brschedule['winner_id'])) {
+
 								if($scheduleType=='team') {
 									$winnerTeamDetails = Team::where('id', $brschedule['winner_id'])->first(['name','id']);
 									$imageableType = config('constants.PHOTO.TEAM_PHOTO');
@@ -1827,6 +1832,7 @@ class TournamentsController extends Controller
 								if (count($winnerTeamDetails)) {
 									$bracketTeamArray[$j][$k]['name'] = $winnerTeamDetails->name;
 									$bracketTeamArray[$j][$k]['team_or_player_id'] = $winnerTeamDetails->id;
+									$bracketTeamArray[$j][$k]['is_third_position'] = $brschedule['is_third_position'];
 								} else {
 									$bracketTeamArray[$j][$k]['name'] = '';
 									$bracketTeamArray[$j][$k]['team_or_player_id'] = '';
