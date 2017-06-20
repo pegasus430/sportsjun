@@ -434,11 +434,12 @@ class MatchSchedule extends Model
                 $lastRoundWinner = intval(ceil(log($tournamentDetails['final_stage_teams'], 2)));
             }
             if(count($maxRoundNumber) && !empty($lastRoundWinner)) {
+                    if(($maxRoundNumber==$lastRoundWinner+1) && !$matchScheduleDetails['is_third_position']){
                         $matchScheduleData->update([
                             'match_status'=>'completed',
                             'winner_id'=>$winner_team_id
                         ]);
-                    
+                    }                   
                 
             }         
 
