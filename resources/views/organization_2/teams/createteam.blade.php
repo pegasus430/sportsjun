@@ -26,6 +26,9 @@
 			  {!! Form::close() !!}
 			   {!! JsValidator::formRequest('App\Http\Requests\CreateTeamRequest', '#team-form'); !!}
 		</div>
+        <div style="height: 380px">
+    
+</div>
 </div>
 
     @if($organization_id)
@@ -36,4 +39,6 @@
             });
         </script>
     @endif
+
+
 @endsection

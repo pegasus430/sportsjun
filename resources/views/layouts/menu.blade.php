@@ -97,7 +97,9 @@
                         @endif
                         <li><a href="{{ url('/team/create') }}"><i class="ico ico-team mgt-10"></i> Team</a></li>
                         <li><a href="{{ url('/tournaments/create') }}"><i class="ico ico-tournament mgt-10"></i> Tournament</a></li>
+            {{--
                         <li><a href="{{ url('/organization/create') }}"><i class="ico ico-org mgt-10"></i> Organization</a></li>
+            --}}
                         <li><a href="{{ url('/marketplace/create') }}"><i class="ico ico-marketplace mgt-10"></i> Item for Sale</a></li>
 
                     </ul>
