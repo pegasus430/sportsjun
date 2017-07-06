@@ -2217,13 +2217,15 @@ class Helper
                     $b_score =  Team::find($b_id)->name . " (" . $match_details->{$b_id}->fst_ing_score . "/" . $match_details->{$b_id}->fst_ing_wkt . (!empty($match_details->{$b_id}->scnd_ing_overs) ? ", " . $match_details->{$b_id}->scnd_ing_score . "/" . $match_details->{$b_id}->scnd_ing_wkt : "") . ")";
                 break;
             default:
-                return '';
-                break;
+               // return '';
+             break;
 
         }   
 
-            if($is_array) return ['a'=>$a_score,'b'=>$b_score];
-            else return $a_score.$b_score;
+            // if($is_array) return ['a'=>$a_score,'b'=>$b_score];
+            // else return $a_score.$b_score;
+
+            return $a_score.$b_score;
     }
 
 
@@ -2252,8 +2254,11 @@ class Helper
             $match_details = json_decode($match_model->match_details);
             $a_id = $match_model->a_id;
             $b_id = $match_model->b_id;
-            $match_model->scores = self::getScoresFromMatchDetails($match_details, $match_model->sports_id, $a_id,
-                $b_id);
+            $sc= Helper::getScoresFromMatchDetails($match_details, $match_model->sports_id, $a_id, $b_id);
+
+
+          $match_model->scores = json_encode(json_encode($sc));
+
         } else {
             $match_model->scores = ' - ';
         }

@@ -148,7 +148,7 @@
                                                 <p>{{$sc->address}}</p>
                                                 <p>Scores: {!! $sc->getScoresAttribute() !}}</p>
                                                 @if($sc->winner_id)
-                                                <p style="color:red">Winners: {{$sc->getWinnerAttribute}} </p>
+                                                <p style="color:red">Winners: {{$sc->getWinnerAttribute()}} </p>
                                                 @endif
                                             </div>
                                             <div class="col-xs-4 col-sm-4 text-center"><img width="40" src="{{$sc->getSideALogoAttribute()}}" alt="{{count($sc->getSideBAttribute())?$sc->getSideBAttribute()->name:''}}">

@@ -673,6 +673,7 @@ Route::post('match/insertCricketScoreCard', [
     'as'   => 'match/insertCricketScoreCard',
     'uses' => 'User\ScoreCard\CricketScoreCardController@insertCricketScoreCard',
 ]);
+Route::get('/reloadcricketstats', 'User\ScoreCard\CricketScoreCardController@reloadcricketstats');
 Route::get('match/getplayers', [
     'as'   => 'match/getplayers',
     'uses' => 'User\ScoreCardController@getplayers',
@@ -830,6 +831,8 @@ Route::resource('team', 'User\TeamController');
 
 
 Route::get('/reloadgroupteampoints', 'User\OrganizationController@testTournaments');
+
+
 Route::get('/updatehalftime/{match_id?}/{half_time}', 'User\ScoreCardController@updatehalftime');
 
 Route::post('/rating/set','User\RateController@setUserRate');

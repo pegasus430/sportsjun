@@ -690,14 +690,14 @@ class CricketScoreCardController extends parentScoreCardController
                 // 50's and 100's - start
                 $fifties = $hundreds = 0;
 
-                if ((int) $totalruns_a > 50)
+                if ((int) $totalruns_a >= 50 && $totalruns_a<100)
                 {
-                    $fifties = (int) floor($totalruns_a / 50);
+                    $fifties = 1; // (int) floor($totalruns_a / 50);
                 }
 
                 if ((int) $totalruns_a > 100)
                 {
-                    $hundreds = (int) floor($totalruns_a / 100);
+                    $hundreds = 1; //(int) floor($totalruns_a / 100);
                 }
 
                 if (count($is_player_exist)>0)// if player already exist
@@ -800,14 +800,14 @@ class CricketScoreCardController extends parentScoreCardController
                 // 50's and 100's - start
                 $fifties = $hundreds = 0;
 
-                if ((int) $totalruns_b > 50)
+                if ((int) $totalruns_b >= 50 && $totalruns_b<10)
                 {
-                    $fifties = (int) ($totalruns_b / 50);
+                    $fifties = 1; //(int) ($totalruns_b / 50);
                 }
 
                 if ((int) $totalruns_b > 100)
                 {
-                    $hundreds = (int) ($totalruns_b / 100);
+                    $hundreds = 1; //(int) ($totalruns_b / 100);
                 }
 
                 if(count($is_b_player_exist)>0)
@@ -1120,6 +1120,37 @@ class CricketScoreCardController extends parentScoreCardController
         //return Response()->json( array('success' => trans('message.scorecard.scorecardmsg')) );
     }
 
+
+    public function reloadcricketstats(){
+        $players = cricketPlayerMatchwiseStats::all();
+
+        foreach($players as $player){
+            $runs = $player->totalruns;
+
+             $fifties = $hundreds = 0;
+
+                if ((int) $runs >= 50 && $runs<100)
+                {
+                    $fifties = 1; // (int) floor($totalruns_a / 50);
+                }
+                else{
+                  $fifties=null;
+                }
+
+                if ((int) $runs > 100)
+                {
+                    $hundreds = 1; //(int) floor($totalruns_a / 100);
+                }
+                else{
+                    $hundreds=null;
+                }
+
+                $player->fifties=$fifties;
+                $player->hundreds = $hundreds;
+                $player->save();
+
+        }
+    }
 
 }
 

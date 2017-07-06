@@ -49,7 +49,7 @@
                                         <div class="row">
                                             @endif
                                         <div class="col-md-4">
-                                            <h4><a href="/tournaments/{{$tournament->id}}">{{$tournament->name}}</a></h4> <span class="schedule">23rd Oct, 2017 - 05th Nov, 2017</span>
+                                            <h4><a href="/tournaments/groups/{{$tournament->id}}">{{$tournament->name}}</a></h4> <span class="schedule">{{date('jS M, Y', strtotime($tournament->start_date))}} - {{date('jS M, Y', strtotime($tournament->end_date))}}</span>
                                             <label>Status: {{$tournament->status}}</label>
                                         </div>                                        
 
