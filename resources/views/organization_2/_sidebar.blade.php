@@ -60,9 +60,8 @@ z-index: 999;
                                                 <td width="36"><img src="{{$schedule->getSideBLogoAttribute()}}" alt="" width="36"></td>
                                             </tr>
                                             <tr> 
-                                                <td colspan="2">{{$schedule->getScoresAttribute(true)['a']}}</td>
-                                              
-                                                <td colspan="2">{{$schedule->getScoresAttribute(true)['b']}}</td>
+                                                <td colspan="2">{{$schedule->getScoresAttribute(true)}}</td>
+                                           </td>
                                             </tr>
                                          
                                             @if($schedule->match_report)

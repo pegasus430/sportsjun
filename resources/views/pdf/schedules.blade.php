@@ -82,14 +82,14 @@
                     </td>
                     <td>
                         @if($match['schedule_type']=='team' )
-                            <p>{{ $team_name_array[$match['a_id']] }}  {{'VS'}} {{ $team_name_array[$match['b_id']] }}</p>
+                            <p>{{ $team_name_array[$match['a_id']] }} <span style="color:red"> {{'VS'}} </span> {{ $team_name_array[$match['b_id']] }}</p>
                             <p>
                                 <img src="{!! Helper::ImageCheck('uploads/teams/'.$team_logo[$match['a_id']]['url']) !!}" height="32px" width="32px"/>
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 <img src="{!! Helper::ImageCheck('uploads/teams/'.$team_logo[$match['b_id']]['url']) !!}" height="32px" width="32px"/>
                             </p>
                         @else
-                            <p>{{ $user_name[$match['a_id']] }}   {{'VS'}} {{ $user_name[$match['b_id']] }}</p>
+                            <p>{{ $user_name[$match['a_id']] }}  <span style="color:red">   {{'VS'}} </span> {{ $user_name[$match['b_id']] }}</p>
                             <p>
                                 <img src="{!! Helper::ImageCheck('uploads/user_profile/'.$user_profile[$match['a_id']]['url']) !!}" height="32px" width="32px"/>
                                 &nbsp;&nbsp;&nbsp;&nbsp;

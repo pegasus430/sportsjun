@@ -49,8 +49,11 @@
                                         <div class="row">
                                             @endif
                                         <div class="col-md-4">
-                                            <h4><a href="/tournaments/groups/{{$tournament->id}}">{{$tournament->name}}</a></h4> <span class="schedule">{{date('jS M, Y', strtotime($tournament->start_date))}} - {{date('jS M, Y', strtotime($tournament->end_date))}}</span>
-                                            <label>Status: {{$tournament->status}}</label>
+                                            <h4><a href="/tournaments/groups/{{$tournament->id}}">{{$tournament->name}}</a></h4> 
+
+                                            <br><span class="schedule">{{date('jS M, Y', strtotime($tournament->start_date))}} - {{date('jS M, Y', strtotime($tournament->end_date))}}</span>
+                                            <br?
+                                            <p>Status: <span class={{$tournament->status=='Completed'?'text-danger':'text-success'}}> {{$tournament->status}}</span></p>
                                         </div>                                        
 
                                           @if($ik%3==2 )

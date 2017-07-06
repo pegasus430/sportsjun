@@ -243,7 +243,7 @@ class MatchSchedule extends Model
         if ($this->game_type != 'normal') {
             return $this->a_score . ' - ' . $this->b_score;
         }
-        if ($this->match_details != null) {
+        if ($this->match_details != null && $this->b_id!=0) {
             $match_details = json_decode($this->match_details);
             $a_id = $this->a_id;
             $b_id = $this->b_id;
