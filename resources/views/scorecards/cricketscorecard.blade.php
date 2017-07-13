@@ -132,11 +132,20 @@
         <div class="container">	
                 <div class="panel panel-default">	
                         <div class="panel-body row">
-                                <h5 class="scoreboard_title">Cricket Scorecard 
+                                <h5 class="scoreboard_title" style="color:#455469">Cricket Scorecard 
                                         @if($match_data[0]['match_type']!='other')
                                         <span class='match_type_text'>({{ $match_data[0]['match_type']=='odi'?strtoupper($match_data[0]['match_type']):ucfirst($match_data[0]['match_type']) }}, {{ucfirst($match_data[0]['match_category']) }})</span>
                                         @endif
+
+                                   <form style="display: inline;" style="" onsubmit="return confirm('are you sure you want to save this value?')" action="/match/scorecard/edit/{{$match_data[0]['id']}}/update_reduced_overs" method="post">
+                                        <label style="z-index: 3; padding-left:80px">Reduced Overs</label>
+                                        <input type="number" name="reduced_overs"  id='reduced_overs' class="allownumericwithdecimal gui-input runs_new" value="{{$match_data[0]['reduced_overs']}}" maxlength="2" max="{{ScoreCard::get_max_overs($match_data[0]['match_type'])}}">  
+                                        {!!csrf_field()!!}                                  
+                                        <button class="btn btn-primary btn-xs">Update</button>
+                                     
+                                    </form>
                                 </h5>
+                 </div>
 
                                 <div class="form-inline">
                                     <?php if (!empty($score_status_array['toss_won_by']))

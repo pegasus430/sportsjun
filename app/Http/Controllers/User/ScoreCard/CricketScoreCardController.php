@@ -14,6 +14,7 @@ use App\User;
 use Auth;
 use Carbon\Carbon;
 use Request;
+use Illuminate\Http\Request as ObjectRequest;
 
 //get all my requests data as object
 
@@ -1150,6 +1151,18 @@ class CricketScoreCardController extends parentScoreCardController
                 $player->save();
 
         }
+    }
+
+    public function update_reduced_overs($id, ObjectRequest $request){
+        $match_schedule = MatchSchedule::findOrFail($id);
+          if($request->reduced_overs){
+              $match_schedule->reduced_overs = $request->reduced_overs;
+          }
+          else $match_schedule->reduced_overs=null;
+        $match_schedule->save();
+
+
+        return redirect()->back()->with('message','updated');
     }
 
 }

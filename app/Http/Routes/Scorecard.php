@@ -186,6 +186,8 @@ Route::group(['prefix'=>'match'], function(){
     Route::post('archery/select_team_player', 'User\ScoreCard\ArcheryController@select_team_player');
     Route::post('archery/update_settings', 'User\ScoreCard\ArcheryController@update_settings');
 
+    Route::post('scorecard/edit/{id}/update_reduced_overs','User\ScoreCard\CricketScoreCardController@update_reduced_overs');
+
 });
 //End Matches
 

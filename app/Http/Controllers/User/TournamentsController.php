@@ -1239,7 +1239,7 @@ class TournamentsController extends Controller
 					//add score link conditions
 					if (!empty($match_details[$group_id]))
 					{
-						foreach ($match_details[$group_id] as $matchdata)
+						foreach ($match_details[$group_id] as $matchdata) 
 						{
 							// net run rate changes - start
 							if (isset($matchdata['sports_id']) && $matchdata['sports_id'] == config('constants.SPORT_ID.Cricket') && !empty($matchdata['match_details']) && $matchdata['has_result'] == 1)
@@ -1255,6 +1255,10 @@ class TournamentsController extends Controller
 								else if ($matchdata['match_type'] == "test")
 								{
 									$maxOverCount = 90;
+								}
+
+								if(is_numeric($matchdata['reduced_overs'])){
+									$maxOverCount = $matchdata['reduced_overs'];
 								}
 								$match_stats = json_decode($matchdata['match_details'], true);
 

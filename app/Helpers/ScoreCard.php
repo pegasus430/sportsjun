@@ -434,6 +434,18 @@ class ScoreCard {
 
     }
 
+    public static function get_max_overs($match_type){
+        if($match_type=='test'){
+            return 90;
+        }
+        if($match_type=='odi'){
+            return 50;
+        }
+        else {
+           return filter_var($match_type, FILTER_SANITIZE_NUMBER_INT);
+        }
+    }
+
 
 
 }
