@@ -12,20 +12,20 @@ class AddSoftDeletesToTables extends Migration
      */
     public function up()
     {
-        Schema::table('coachings', function (Blueprint $table) {
-            //
-            $table->softDeletes();
-        });
+        // Schema::table('coachings', function (Blueprint $table) {
+        //     //
+        //     $table->softDeletes();
+        // });
 
-         Schema::table('news', function (Blueprint $table) {
-            //
-            $table->softDeletes();
-        });
+        //  Schema::table('news', function (Blueprint $table) {
+        //     //
+        //     $table->softDeletes();
+        // });
 
-        Schema::table('polls', function (Blueprint $table) {
-            //
-            $table->softDeletes();
-        });
+        // Schema::table('polls', function (Blueprint $table) {
+        //     //
+        //     $table->softDeletes();
+        // });
     
     
 
