@@ -11,7 +11,7 @@
 
 <!--<div class="form-header header-primary"><h4><i class="fa fa-pencil-square"></i>{{ trans('message.tournament.fields.heading') }}</h4></div>--><!-- end .form-header section -->
          @if( $roletype=='admin')
-                    {!! Form::open(['route' => 'admin.tournaments.store','class'=>'form-horizontal','method' => 'POST','id' => 'sub-tournaments']) !!}   
+                    {!! Form::open(['route' => 'admin.tournaments.store','class'=>'form-horizontal','method' => 'POST','id' => 'sub-tournaments']) !!}
 				<div class="form-body">
                          @include ('tournaments._form', ['submitButtonText' => 'Create','formType'=>''])
 				 		@include ('tournaments._enrolform', ['submitButtonText' => 'Create','formType'=>''])
@@ -26,12 +26,12 @@
                     {!! Form::close() !!}
 					{!! JsValidator::formRequest('App\Http\Requests\CreateTournamentRequest', '#sub-tournaments'); !!}
 			      @endif
-				  
-				  
+
+
 			      @if( $roletype=='user')
 			      {!! Form::open(['route' => 'tournaments.store','class'=>'form-horizontal create-only','method' => 'POST','id' => 'sub-tournaments']) !!}
 		<div class="modal-body">
-            
+
             <div class="sportsjun-forms sportsjun-container" >
 			  	<div class="form-body">
 				 @include ('tournaments._form', ['submitButtonText' => 'Create','formType'=>''])
@@ -67,17 +67,17 @@ $(function() {
 		 var startDate = $('[name="start_date"]').val();
 		  var endDate = $('[name="end_date"]').val();
 		  var startDate = startDate.split('/').reverse().join('-');
-		var endDate = endDate.split('/').reverse().join('-');										
+		var endDate = endDate.split('/').reverse().join('-');
 		return Date.parse(endDate) >= Date.parse(startDate);
 	}, "End Date must be equal to or after Start Date");
 	$('[name="end_date"]').rules("add", "greater_startdate");
-	
-	
-	
+
+
+
 	$.validator.addMethod("win_loose_points", function(value, element) {
 		 var points_win = $('[name="points_win"]').val();
 		  var points_loose = $('[name="points_loose"]').val();
-		  
+
 		  	if(points_win == '' && points_loose == '')
 		    return true;
 	    else
@@ -90,14 +90,14 @@ $(function() {
 	$.validator.addMethod("win_tie_points", function(value, element) {
 		 var points_win = $('[name="points_win"]').val();
 		  var points_tie = $('[name="points_tie"]').val();
-		  
+
 		  	if(points_win == '' && points_tie == '')
 		    return true;
 	    else
 		return (parseInt(points_win)) >= parseInt((points_tie));
 	}, " tie match points must be less than Winning team points");
 	$('[name="points_tie"]').rules("add", "win_tie_points");
-	
+
 
 
     $.validator.addMethod("total_enrollment", function(value, element) {
@@ -106,20 +106,20 @@ $(function() {
 
       var to = parseInt($('[name="total_enrollment"]').val());
 
-  
-      
+
+
        var enroltype = $('#enrollment_type').val();
          sub_to = gn * gt;
          window.sub = sub_to;
             if(enroltype != 'online'){
               return true
-            }      
+            }
       else
     return (sub_to >= to);
   }, "Total Number of Enrolments cannot be greater than the total group teams");
   $('[name="total_enrollment"]').rules("add", "total_enrollment");
-  
-									
+
+
 });
 </script>
 <script type="text/javascript">
@@ -133,7 +133,7 @@ $(function() {
         $('.payment_form').hide();
         $("body").on('click','.btn-tournament', function(){
 
-        
+
 
 
         	if($("#sub-tournaments").valid()){
@@ -145,16 +145,16 @@ $(function() {
 	        	} else {
 	        		$('.form_enrol').show();
 	        	}
-	            
+
 	            $('.main_tour_form').hide();
         	}
 
 
 
-         
-            
-        	
-        	
+
+
+
+
         })
         $("body").on('click','.add_account_div', function(){
         	$('.payment_form').show();
@@ -200,7 +200,7 @@ $( document ).ready(function() {
               }));
 
              }
-                
+
            }
         }
     })
@@ -234,22 +234,22 @@ $('.create-only #country_id').change(function(){
         		$('.create-only .btn-create').show();
         		$('.create-only .enroltypeedit').show();
            } else {
-             
+
             if($(".create-only #enrollment_type option[value='online']").length > 0) {
 
             } else {
               $('.create-only #enrollment_type').append($('<option>', {
                 value: 'online',
                 text: 'ONLINE PAYMENT'
-              })); 
+              }));
 
             }
-                
+
            }
         }
     })
-  
-}); 
+
+});
 
 
 
@@ -259,7 +259,7 @@ $( ".btn-tournament" ).click(function() {
 
  var isChecked = $("#disclaimer_agree").is(":checked");
          if($('#disclaimer_agree:visible').length == 0){
-                 
+
           } else {
             if (isChecked) {
                 $('#agree_conditions-val').hide();
@@ -267,7 +267,7 @@ $( ".btn-tournament" ).click(function() {
                 $('#agree_conditions-val').show();
                  return false;
             }
-                
+
           }
 
 });
@@ -282,41 +282,41 @@ $(".btn-create").click(function(){
 if($( "#enrollment_type option:selected" ).text() == "ONLINE PAYMENT") {
 
   $('.validation_msg').hide();
-  if (!$('input[name=vendor_bank_account_id]:checked').val() ) {          
-     
+  if (!$('input[name=vendor_bank_account_id]:checked').val() ) {
+
      if($('#add_bank_account_form:visible').length == 0){
-        $('.bank_account_validation').show(); 
-        return false;    
+        $('.bank_account_validation').show();
+        return false;
       } else{
 
                 if(document.getElementsByName("account_holder_name")[0].value==''){
-                      $('#account_name_validator').show(); 
-                      return false;    
+                      $('#account_name_validator').show();
+                      return false;
                 }
                 if(document.getElementsByName("account_number")[0].value==''){
-                      $('#account_number_validator').show(); 
-                      return false;    
-                } 
+                      $('#account_number_validator').show();
+                      return false;
+                }
                 if(document.getElementsByName("bank_name")[0].value==''){
-                      $('#account_bankname_validator').show(); 
-                      return false;    
+                      $('#account_bankname_validator').show();
+                      return false;
                 }
                 if(document.getElementsByName("branch")[0].value==''){
-                      $('#account_branch_validator').show(); 
-                      return false;    
-                }
-                
-                if(document.getElementsByName("ifsc")[0].value==''){
-                      $('#account_ifsc_validator').show(); 
-                      return false;    
+                      $('#account_branch_validator').show();
+                      return false;
                 }
 
-                
+                if(document.getElementsByName("ifsc")[0].value==''){
+                      $('#account_ifsc_validator').show();
+                      return false;
+                }
+
+
           }
-            
+
     } else {
-      
-  } 
+
+  }
 
 }
 

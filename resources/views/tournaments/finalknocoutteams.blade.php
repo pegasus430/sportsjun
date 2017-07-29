@@ -133,7 +133,7 @@
                 </tbody>
 		</table>
     <br>
-                <button type="button" class="button btn-primary" onclick="finalStageTeams('ko')">Submit </button>
+                <button type="button" class="button btn-primary" id='generateKnockoutBtn' onclick="finalStageTeams('ko')">Submit</button> 
               @endif
             </div>
         </div>
@@ -142,6 +142,8 @@
 <script type="text/javascript">
     var tournamentId = {{$tournamentDetails[0]['id']}};
     var scheduleType = '{{$schedule_type}}';
+
+
     $(function() {
         $("#auto_user").autocomplete({
 			source: base_url+'/tournaments/getfinalstageteams/'+{{$tournamentDetails[0]['id']}},

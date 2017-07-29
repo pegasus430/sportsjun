@@ -1,9 +1,9 @@
-@extends(Helper::check_if_org_template_enabled()?'layouts.organisation':'layouts.app') 
+@extends(Helper::check_if_org_template_enabled()?'layouts.organisation':'layouts.app')
 @section('content')
 <div class="">
 <div class="sportsjun-wrap">
 <div class="sportsjun-forms sportsjun-container wrap-2">
-<?php 
+<?php
 $lis = $tournament_data->toArray();
 ?>
 <div class="payment_header_logo">
@@ -16,7 +16,7 @@ $lis = $tournament_data->toArray();
 <?php
 
 
-  
+
   $open_timestamp = strtotime($tournament_data->start_date);
   $open_day = date('D', $open_timestamp);
   $newopen = date("d-m-Y", strtotime($tournament_data->start_date));
@@ -46,7 +46,7 @@ $lis = $tournament_data->toArray();
 
 
 
-@if(Auth::user()) 
+@if(Auth::user())
 {!! Form::open(array('url' => '/tournaments/registrationdata', 'method' => 'post')) !!}
 @else
 {!! Form::open(array('url' => 'guest/tournaments/guestregistrationdata', 'method' => 'post')) !!}
@@ -63,7 +63,7 @@ $lis = $tournament_data->toArray();
         <label class="field prepend-icon head_tr">
             Tournament Events
             </label>
-          
+
 
            </div>
         </div>
@@ -72,23 +72,23 @@ $lis = $tournament_data->toArray();
 <label class="field prepend-icon">
   <div class="section">
     <label class="field prepend-icon head_tr">Enrollment Fee</label>
-     
+
     </div>
  </div>
-<!-- end section -->  
+<!-- end section -->
 
 <div class="col-sm-3">
     <div class="section">
-    
-    
+
+
 
 
     <label class="field prepend-icon head_tr">
              Participant Count
             </label>
 
-         
-    
+
+
     </div>
 </div>
 
@@ -117,9 +117,9 @@ $options=array();?>
           <label class="field prepend-icon">
            <label class="field-icon"><i class="fa fa-trophy"></i></label>
             {!! Form::text("data[$events->id][name]", $events->name, array('required','class'=>'gui-input form_rows','readonly' => 'true' )) !!}
-            <label  class="form_label last_date_span">Last Date : {{date("d-M-Y", strtotime($events->reg_closing_date))   }}</label>  
+            <label  class="form_label last_date_span">Last Date : {{date("d-M-Y", strtotime($events->reg_closing_date))   }}</label>
             </label>
-          
+
 
            </div>
         </div>
@@ -127,30 +127,30 @@ $options=array();?>
 <div class="col-sm-2">
   <div class="section">
     <label class="form_label"><i class="fa fa-inr"></i> {{$events->enrollment_fee}}</label>
-     
+
     </div>
  </div>
-<!-- end section -->  
+<!-- end section -->
 
 <div class="col-sm-3">
     <div class="section">
-    
-    
+
+
 
 
     <label class="field prepend-icon">
-              <?php 
+              <?php
                      if($events->match_type == 'singles') {
-                       $options=array(0=>0,1=>1,2=>2,3=>3,4=>4,5=>5,6=>6,7=>7,8=>8,9=>9); 
+                       $options=array(0=>0,1=>1,2=>2,3=>3,4=>4,5=>5,6=>6,7=>7,8=>8,9=>9);
                    } else {
                          $options=array(0=>0,1=>1);
                    } ?>
-             {!! Form::select("data[$events->id][count]",$options, null,array('class'=>'form-control valid test')) !!}             
+             {!! Form::select("data[$events->id][count]",$options, null,array('class'=>'form-control valid test')) !!}
              <label for="Pointstolosingteam" class="field-icon"><i class="fa fa-group"></i></label>
             </label>
 
-         
-    
+
+
     </div>
 </div>
 
@@ -166,7 +166,7 @@ $options=array();?>
 {!! Form::close() !!}
 
 @endif
- 
+
 </div>
 
 </div>

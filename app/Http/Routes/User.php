@@ -79,7 +79,7 @@ Route::group(['prefix' => 'organization/{id}'], function () {
     Route::get('/news/create', 'User\OrganizationController@news_create');
     Route::post('/news/add', 'User\OrganizationController@news_add');
     Route::get('/news/manage', 'User\OrganizationController@news_manage');
-    Route::get('/news/{news_id}', 'User\OrganizationController@news_show'); 
+    Route::get('/news/{news_id}', 'User\OrganizationController@news_show');
     Route::get('/news/{news_id}/delete','User\OrganizationController@news_delete');
     Route::get('/news/{news_id}/edit', 'User\OrganizationController@news_edit');
     Route::post('/news/{news_id}/update', 'User\OrganizationController@news_update');
@@ -90,16 +90,16 @@ Route::group(['prefix' => 'organization/{id}'], function () {
         //coaching routes
         Route::get('/', 'OrganizationCoachingController@coaching_index');
         Route::get('/create_session','OrganizationCoachingController@create_session');
-        Route::post('/add', 'OrganizationCoachingController@store_session'); 
+        Route::post('/add', 'OrganizationCoachingController@store_session');
         Route::get('/{coaching_id}', 'OrganizationCoachingController@show_session');
         Route::get('/{coaching_id}/edit', 'OrganizationCoachingController@edit_session');
         Route::get('/{coaching_id}/delete', 'OrganizationCoachingController@delete_session');
         Route::post('/{coaching_id}/update', 'OrganizationCoachingController@update_session');
         Route::post('/{coaching_id}/add_player', 'OrganizationCoachingController@add_player_to_session');
     });
-    
-    Route::get('/polls', 'User\OrganizationController@get_polls');   
-    Route::post('/polls/add', 'User\OrganizationController@add_poll');    
+
+    Route::get('/polls', 'User\OrganizationController@get_polls');
+    Route::post('/polls/add', 'User\OrganizationController@add_poll');
     Route::get('/polls/{poll_id}/delete','User\OrganizationController@polls_delete');
     Route::get('/polls/{poll_id}/edit', 'User\OrganizationController@polls_edit');
     Route::post('/polls/{poll_id}/update', 'User\OrganizationController@polls_update');
@@ -112,7 +112,7 @@ Route::group(['prefix' => 'organization/{id}'], function () {
     ]);
 
     Route::get('marketplace','User\MarketplaceController@organization_marketplace');
-    Route::get('/marketplace/{item_id}/details', 'User\MarketplaceController@marketplace_details');   
+    Route::get('/marketplace/{item_id}/details', 'User\MarketplaceController@marketplace_details');
     Route::get('new_tournament', 'User\OrganizationController@new_tournament');
 
 
@@ -485,8 +485,8 @@ Route::post('/marketplace/verifyOTP', [
 Route::post('marketplace/isOtpSent', [
     'uses' => 'User\MarketplaceController@isOtpSent',
 ]);
-Route::resource('marketplace', 'User\MarketplaceController'); 
-//End Marketplace 	
+Route::resource('marketplace', 'User\MarketplaceController');
+//End Marketplace
 
 //Search
 Route::get('/search', 'User\SearchController@searchresults');
@@ -586,6 +586,25 @@ Route::get('main_addschedule', [
     'as'   => 'main_addschedule',
     'uses' => 'User\ScheduleController@main_saveschedule',
 ]);
+
+//to save match schedule
+Route::get('generateScheduleLeague/{tournament_id}', [
+    'as'   => 'generateScheduleLeague',
+    'uses' => 'User\ScheduleController@generateScheduleLeague',
+]);
+
+//to save match schedule
+Route::get('generateScheduleKnockout/{tournament_id}', [
+    'as'   => 'generateScheduleKnockout',
+    'uses' => 'User\ScheduleController@generateScheduleKnockout',
+]);
+
+//to save match schedule
+Route::get('JsonOutputScheduleKnockout/{tournament_id}', [
+    'as'   => 'JsonOutputScheduleKnockout',
+    'uses' => 'User\ScheduleController@JsonOutputScheduleKnockout',
+]);
+
 //to edit match schedule
 Route::get('editteamschedule', [
     'as'   => 'editteamschedule',
@@ -639,7 +658,7 @@ Route::get('viewmoremylist/{userId}', [
     'uses' => 'User\MyScheduleController@viewMoreMyList',
 ]);
 
-// End My Schedules        
+// End My Schedules
 
 // Following
 Route::get('following/{userId}', [

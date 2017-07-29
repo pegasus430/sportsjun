@@ -87,6 +87,9 @@ class Tournaments extends Model
         'max_enrollment',
         'terms_conditions',
         'vendor_bank_account_id',
+        'noofplaces',
+        'roundofplay',
+
     ];
 
     protected $appends = ['logoImage'];
@@ -194,7 +197,7 @@ class Tournaments extends Model
 
         $query = $query->where('isactive', 1);
         $query = $query->whereNull('deleted_at');
-        //echo $query;exit;	
+        //echo $query;exit;
 
         $totalresult = $query->get();
         $total = count($totalresult);
@@ -546,7 +549,7 @@ class Tournaments extends Model
 
             case 'next':
             $query->where('hasSetupSquad','!=','1')->where('match_status','!=','completed');
-                break;            
+                break;
             default:
                 # code...
                 break;
@@ -554,7 +557,7 @@ class Tournaments extends Model
 
         return $query->get();
 
-    
+
     }
 
 

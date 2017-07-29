@@ -45,7 +45,7 @@
                     <div class="cstmpanel-tabs">
                         <ul class="nav nav-tabs nav-justified">
                         	<li class="active"><a href="#final_stage_teams" data-toggle="tab" aria-expanded="true">Final Stage Teams</a></li>
-                            <li class=""><a href="#tournament_bracket" data-toggle="tab" aria-expanded="false">Tournament Bracket</a></li>
+                            <li class=""><a href="#tournament_bracket" id="tournament_bracket_tab_btn" data-toggle="tab" aria-expanded="false">Tournament Bracket</a></li>
                             <li class=""><a href="#tournament_knockout_schedule" data-toggle="tab" aria-expanded="false">Match Schedules</a></li>
                         </ul>
                         <div  class="tab-content clearfix">
@@ -81,7 +81,7 @@
 <div class='clearfix'>
 
 @include ('tournaments.addtournamentschedule',[])
-
+@include ('tournaments.generatematchform',[])
 <script type="text/javascript">
 $(function() {  
     @if($tournament_type=='knockout')

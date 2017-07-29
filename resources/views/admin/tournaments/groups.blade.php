@@ -169,6 +169,7 @@
     
 </div>	
 @include ('tournaments.addtournamentschedule',[])
+
 <script>
     $(function() {
 		var sport_id = $('#sport_id').val();

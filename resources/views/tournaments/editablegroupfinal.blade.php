@@ -78,6 +78,7 @@
 @endif
 
 <script type="text/javascript">
+
 function finalStageTeams(flag) {
 //    var finalStageTeams = $("#final_stage_teams").val();
     var finalStageTeams = $('select#final_stage_teams').val();
@@ -110,22 +111,9 @@ function finalStageTeams(flag) {
                 $.blockUI({width: '50px', message: $("#spinner").html()});
             },
             success: function(response) {
-                $.unblockUI();
-                window.location.reload();
-//                html ='<div class="col-sm-10">';
-//                html+='<div class="col-sm-8">';
-//                html+='<div class="row group-flex-content">';
-//                html+='<div class="col-sm-3">';
-//                html+='<div class="row round-one">';
-//                html+='<div class="round"><p>ROUND ONE</p></div>';
-//                html+='<span class="button btn-primary" onclick="addRoundMatchesSchedule('+tournamentId+',1)">Add Schedule</span>';
-//                html+='</div>';
-//                html+='</div>';
-//                html+='</div>';
-//                html+='</div>';
-//                html+='</div>';
-//                $("#final_stage_div").html(html);
-
+                $.unblockUI(); 
+				$('#generate_bracket_type').val( 'knockout' );
+				$("#generateScheduleLeagueModal").modal();
             }
         });
 //    }
