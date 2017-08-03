@@ -1109,20 +1109,11 @@ class ScheduleController extends Controller {
         return Response::json($results);
     }
 // pDos 2017.7.21
-    
-    private function generateSingleEliminationMatching( $TeamN , $nPlaces  )
-    {
-         
-    }
-
-    private function generateDoubleEliminationMatching( $TeamN , $nPlaces  )
-    {
-         
-    }
+     
 
    
 
-    function generateLeagueMatching( $TeamN , $G ,  $repeat , $nPlaces  )
+    private function generateLeagueMatching( $TeamN , $G ,  $repeat , $nPlaces  )
     {
         if( $nPlaces <= 0  ) return;
         if( $nPlaces > $TeamN / 2 ) $nPlaces = round( $TeamN / 2 );
@@ -1209,18 +1200,500 @@ class ScheduleController extends Controller {
          $player_ids = TeamPlayers::select(DB::raw('GROUP_CONCAT(DISTINCT user_id) AS player_ids'))->where('deleted_at',null)->where('team_id', $team_id)->pluck('player_ids');
 
          return !empty($player_ids)?(','.trim($player_ids).','):NULL; 
+    }
+
+
+    private function generateDoubleElimination( $TeamN , $nPlaces )
+    {
+            $wingo = $this->build_first_second_line( $TeamN );
+
+            // (win_lose , round number , match number) => 
+        ///////////////////////////////////////////////// loser course construction /////////////////////////////////////////////////
+            
+            // we construct loser game first because of loser hash ( pointor from winner to loser )
+            // loser game course for double elimination
+            $loserstartN = $wingo['firstMatchCount'];
+
+            
+            if( $wingo['NN'] == $TeamN ) // use lose start round with one line
+            {
+                $useoneline = true;            
+            } 
+            else 
+            {
+                $useoneline = false;
+                $loserstartN += $wingo['NN'] / 4;   // $wingo['NN'] / 2 : number of team in second line , 
+                                                    // $wingo['NN'] / 4 : number of match in second line
+            }
+    
+            $losego = $this->build_first_second_line( $loserstartN ); 
+
+            $match_cur = 0;
+            $loser_round_no = 1; 
+            $loser_hash = array(); // $loser_hash[n]: second round no of having n match in lose course
+            $loser_duplicate_start = ( $wingo['NN'] == $TeamN ) ?  $wingo['NN'] / 4 : $wingo['NN'] / 8; 
+                                    // $wingo['NN'] / 4 : match count of second line 
+                                    // $wingo['NN'] / 8 : match count of third line  
+
+            $loser_rmHash = array();
+
+            
+            for( $i = $losego['level'] ; $i > 0 ; $i-- ) // $i >0 , loser course doen't require last one match
+            {
+                $p = pow( 2 , $i - 1 );
+                // build losener side
+                for( $j = 0 ; $j < $p ; $j++ )
+                {
+                    // create box with 2 * j , 2* j + 1
+                    $T1 = -1;
+                    $T2 = -1;
+                    if( $i == $losego['level'] )     { $T1 =  $losego['fline'][ $j * 2 ] ; $T2 = $losego['fline'][ $j * 2 + 1 ]; }
+                    if( $i == $losego['level'] - 1 ) { $T1 =  $losego['sline'][ $j * 2 ] ; $T2 = $losego['sline'][ $j * 2 + 1 ]; }
+                    if( !( $i == $losego['level'] && $T1 == -1 && $T2 == -1 ) )
+                    {
+                        $match_lose[ $match_cur ]['left'] = $T1;
+                        $match_lose[ $match_cur ]['right'] = $T2;
+                        $match_lose[ $match_cur ]['round_no'] = $loser_round_no ;
+                        $match_lose[ $match_cur ]['match_no'] = $j + 1;
+                        $match_lose[ $match_cur ]['double_wl_type']='l';
+                        $loser_rmHash[ $loser_round_no ][ $j + 1 ] = $match_cur ;
+                        
+
+                        if( !isset($H['lose'][$loser_round_no]) )
+                            $H['lose'][$loser_round_no] = array();
+
+                        array_push( $H['lose'][$loser_round_no] , $match_cur );
+                                
+
+                        if( $i >= 1 ) // $i >= 1 is important, last game added
+                        {
+                            if( $losego['NN'] != $loserstartN && $i == $losego['level'] ) // first case , go normal method for next position
+                            {
+                                $next_match_no = floor( $j / 2 ) + 1;
+                                $match_lose[ $match_cur ]['winner'] = array( 'next_round_no' =>  $loser_round_no + 1 ,
+                                                                        'next_match_no' =>  $next_match_no , 
+                                                                        'next_match_ab_pos' =>  $j % 2  ?  'b' : 'a',
+                                                                        'go_wl_type' => 'l'
+                                                                        ); 
+                            }
+                            else
+                            {
+                                $next_match_no = $j;
+                                $match_lose[ $match_cur ]['winner'] = array( 'next_round_no' =>  $loser_round_no + 1 ,
+                                                                        'next_match_no' =>  $next_match_no ,
+                                                                        'next_match_ab_pos' =>  'b',  // always position b
+                                                                        'go_wl_type' => 'l'
+                                                                        ); 
+
+                            }
+                        }
+                        $match_cur++;
+                    }
+                }
+                $loser_round_no++;
+
+                if(  $loser_duplicate_start >= $p ) 
+                // start duplication of loser game
+                {
+                    for( $j = 0 ; $j < $p ; $j++ )
+                    {
+                        // create box with 2 * j , 2* j + 1
+                        $T1 = -1;
+                        $T2 = -1;
+                        
+                        $match_lose[ $match_cur ]['left'] = $T1;
+                        $match_lose[ $match_cur ]['right'] = $T2;
+                        $match_lose[ $match_cur ]['round_no'] = $loser_round_no ;
+                        $match_lose[ $match_cur ]['match_no'] = $j + 1;
+                        $match_lose[ $match_cur ]['double_wl_type']='l';
+                        $loser_rmHash[ $loser_round_no ][ $j + 1 ] = $match_cur ;
+
+                        if( !isset($H['lose'][$loser_round_no]) )
+                            $H['lose'][$loser_round_no] = array();
+
+                        array_push( $H['lose'][$loser_round_no] , $match_cur );
+
+                        $next_match_no = floor( $j / 2 ) + 1;
+                        $match_lose[ $match_cur ]['winner'] = array( 'next_round_no' =>  $loser_round_no + 1 ,
+                                                                'next_match_no' =>  $next_match_no , 
+                                                                'next_match_ab_pos' =>  $j % 2  ?  'b' : 'a' , 
+                                                                'go_wl_type' => 'l' );
+                        $match_cur++; 
+                    }
+                    //only applied for second 
+                    $loser_hash[$p] =  $loser_round_no;
+                    $loser_round_no++;
+                }
+            }
+
+        
+
+
+            ///////////////////////////////////////////////// winner course construction /////////////////////////////////////////////////
+
+            $match_cur = 0;
+            $winner_round_no = 1;
+            
+            
+            // winner course 
+
+            for( $i = $wingo['level'] ; $i >= 0 ; $i-- ) // $i >=0 is important , because double elimination requires last one more game
+            {
+                $p = pow( 2 , $i - 1 );
+                // build winner side
+                for( $j = 0 ; $j < $p ; $j++ )
+                {
+                    // create box with 2 * j , 2* j + 1
+                    $T1 = -1;
+                    $T2 = -1;
+                    if( $i == $wingo['level'] )     { $T1 =  $wingo['fline'][ $j * 2 ] ; $T2 = $wingo['fline'][ $j * 2 + 1 ]; }
+                    if( $i == $wingo['level'] - 1 ) { $T1 =  $wingo['sline'][ $j * 2 ] ; $T2 = $wingo['sline'][ $j * 2 + 1 ]; }
+                    if( !( $i == $wingo['level'] && $T1 == -1 && $T2 == -1 ) )
+                    {
+                        $match_win[ $match_cur ]['left'] = $T1;
+                        $match_win[ $match_cur ]['double_wl_type']='w';
+                        $match_win[ $match_cur ]['right'] = $T2;
+                        $match_win[ $match_cur ]['round_no'] = $winner_round_no ;
+                        $match_win[ $match_cur ]['match_no'] = $j + 1;
+                        
+
+                        if( !isset($H['win'][$winner_round_no]) )
+                                $H['win'][$winner_round_no] = array();
+
+                        array_push( $H['win'][$winner_round_no] , $match_cur ); 
+
+                        if( $i >= 1 ) // $i >= 1 is important, last game added
+                        {
+                            $next_match_no = floor( $j / 2 ) + 1;
+                            $match_win[ $match_cur ]['winner'] = array( 'next_round_no' =>  $winner_round_no + 1 ,
+                                                                    'next_match_no' =>  $next_match_no , 
+                                                                    'next_match_ab_pos' =>  $j % 2  ?  'b' : 'a',
+                                                                    'go_wl_type' => 'w' );
+
+                            $match_win[ $match_cur ]['loser'] = array( 'next_round_no' =>  isset($loser_hash[$p]) ? $loser_hash[$p] : 0 ,
+                                                                    'next_match_no' =>  $j + 1 , 
+                                                                    'next_match_ab_pos' =>  'a', // always go a of loser team
+                                                                    'go_wl_type' => 'l' );
+
+                        }
+                        $match_cur++;
+                    }
+                }
+                $winner_round_no++;
+            }
+
+            // $loserstartN , (first match corresponding)
+
+
+            $j = 0;
+            for( $i = 0 ; $i < $loserstartN ; $i++ )
+            {
+                while( $j < $loserstartN )
+                {
+                    if( $match_lose[$j]['left'] != -1 || $match_lose[$j]['right'] != -1 )
+                    {
+                        $match_win[$i]['loser']['next_round_no'] = $match_lose[$j]['round_no'];
+                        $match_win[$i]['loser']['next_match_no'] = $match_lose[$j]['match_no'];
+                        if(  $match_lose[$j]['left'] != -1 )
+                        {
+                            $match_win[$i]['loser']['next_match_ab_pos'] = 'a';
+                            $match_lose[$j]['left']  = -1;
+                        }
+                        else 
+                        {
+                            $match_win[$i]['loser']['next_match_ab_pos'] = 'b';
+                            $match_lose[$j]['right'] = -1;
+                        }
+                        break;
+                    }
+                    else $j++;
+                }
+            }
+            
+
+            // loser mark for loser team
+
+            // echo "<pre>";
+            // print_r($match_win);
+            // echo "</pre>";
+
+
+            for( $i = 0 ; $i < count($match_win) ; $i++)
+                if( isset($match_win[ $i ]['loser']) )
+                {
+                    $lrno = $match_win[ $i ]['loser']['next_round_no'];
+                    $lmno = $match_win[ $i ]['loser']['next_match_no'];
+                    $labpos = $match_win[ $i ]['loser']['next_match_ab_pos'];
+                    if( $lrno > 0 && $lmno > 0 && isset( $loser_rmHash[ $lrno ][ $lmno ] ) )
+                    {
+                        $match_cur = $loser_rmHash[ $lrno ][ $lmno ];
+                        $enable_loser_match[ $match_cur ][ $labpos ] = 'open'; // mark position of loser of winner course in $match_lose[$match_cur] ,
+                    }
+                        // 
+                }
+
+
+
+    //       echo "<pre>";
+    //       // print_r($match_win);
+    //       print_r($loser_rmHash);
+    //       echo "</pre>";
+    // //      die;
+    
+            // place and time
+            $iPlace = 0;
+            $iTimes = 0;
+            $winner_round_cur = 1;
+            $loser_round_cur  = 1;
+            while( $winner_round_cur < $winner_round_no || $loser_round_cur < $loser_round_no )
+            {
+                //try winner 1 round
+                if( isset( $H['win'][$winner_round_cur] ) )
+                {
+                    foreach( $H['win'][$winner_round_cur] as $key => $match_cur )
+                    {
+                        $timeline[$iTimes][$iPlace] = $match_win[ $match_cur ];
+                        // Mark Loser Match , can processed
+                        if( isset( $match_win[ $match_cur ]['loser']['next_round_no'] )) // winner course last game should be disappeared
+                        {
+                            $loser_next_round_no =  $match_win[ $match_cur ]['loser']['next_round_no'];
+                            $loser_next_match_no =  $match_win[ $match_cur ]['loser']['next_match_no'];
+                            if( !isset($loser_rmHash[ $loser_next_round_no ][ $loser_next_match_no ]) )
+                                echo  $loser_next_round_no."--".$loser_next_match_no."<br>";
+                            $loser_next_cur = $loser_rmHash[ $loser_next_round_no ][ $loser_next_match_no ];
+                            $enable_loser_match[ $loser_next_cur ][ $match_win[ $match_cur ]['loser']['next_match_ab_pos'] ] = 'closed';
+                        }
+                        
+                        $iPlace++;
+                        if( $iPlace == $nPlaces ){
+                            $iPlace = 0;
+                            $iTimes++;
+                        }
+                    }
+                    $winner_round_cur++;
+                }
+                else break;
+
+                //try loser as much round as possible
+                while( $loser_round_cur < $loser_round_no )
+                {
+                    $passFlag = true;
+                    if( isset( $H['lose'][$loser_round_cur] ) ) // checking
+                        foreach( $H['lose'][$loser_round_cur] as $key => $match_cur )
+                        {
+                            if( ( isset( $enable_loser_match[$match_cur]['a'] ) && $enable_loser_match[$match_cur]['a'] == 'open') || 
+                             ( isset( $enable_loser_match[$match_cur]['b'] ) && $enable_loser_match[$match_cur]['b'] == 'open' ) )  
+                            // means  || $enable_loser_match[$match_cur] != 1
+                                {
+                                    $passFlag = false;
+                                    break;
+                                }
+                        }
+
+                    if( !$passFlag ) break;
+
+                    foreach( $H['lose'][$loser_round_cur] as $key => $match_cur )
+                    {
+                        $timeline[$iTimes][$iPlace] = $match_lose[ $match_cur ];
+                        $iPlace++;
+                        if( $iPlace == $nPlaces ){
+                            $iPlace = 0;
+                            $iTimes++;
+                        }
+                    }
+                    $loser_round_cur++;
+                }
+            }
+            // echo "<pre>";
+            // print_r($enable_loser_match);
+            // echo "</pre>";
+
+            return $timeline;
+    }
+
+
+    
+
+    public function JsonOutputScheduleKnockoutDouble($tournament_id)
+    {
+        foreach( array( 'w' , 'l' ) as $key => $WH )
+        {
+
+            $matchschedule = MatchSchedule::where('tournament_id',$tournament_id)->where( 'double_wl_type' , $WH )->orderBy('tournament_round_number')->orderBy('tournament_match_number')->get();
+
+            $roundno = 0;
+            $matchno = 0;
+            $units = Array();
+
+            $fields = Array('id','tournament_id','tournament_round_number','tournament_match_number','sports_id','match_category','schedule_type','match_type','match_start_date','a_id'
+            ,'b_id','winner_id','is_tied','a_score','b_score','winner_schedule_id' , 'winner_schedule_position' , 'winner_go_wl_type' , 'loser_schedule_id' , 'loser_schedule_position' ,'loser_go_wl_type' , 'double_wl_type' );
+
+            foreach( $matchschedule as $r )
+            {
+                $roundno = max( $r['tournament_round_number'] , $roundno );
+                $matchno = max( $r['tournament_match_number'] , $matchno );
+                foreach( $fields as $f )
+                    $fr[$f] = $r[$f];
+
+                $fr['team_name_a'] = $fr['a_id'] > 0 ? Team::where( 'id', $fr['a_id'] )->first()->name : '' ;
+                $fr['team_name_b'] = $fr['b_id'] > 0 ? Team::where( 'id', $fr['b_id'] )->first()->name : '' ;
+                
+                array_push( $units , $fr );
+            }
+            
+            $results[$WH]['success'] = 'Match scheduled successfully.';
+            $results[$WH]['roundno'] = $roundno;
+            $results[$WH]['matchno'] = $matchno;
+            $results[$WH]['units']   = $units;
+        }
+
+        return Response::json($results);
 
     }
 
-    private function generateSingleElimination( $TeamN  , $nPlaces )
+
+      
+    public function generateScheduleKnockoutDouble($tournament_id)
     {
-         $level = log($TeamN) / log(2);
-         if( $level != round($level) ) $level = ceil($level);
+        if( count(MatchSchedule::where('tournament_id',$tournament_id)->where('tournament_round_number','>=',0)->get() ) > 0 )
+        {
+            $results['failure'] = 'Already exist';
+            return Response::json($results);
+        }
+
+        $tournament       = Tournaments::where('id',$tournament_id)->first();
+        $tournamentFinalTeams  = TournamentFinalTeams::where('tournament_id',$tournament_id)->get();
+
+        echo  count($tournamentFinalTeams) ;
+
+        $timeline = $this->generateDoubleElimination( count($tournamentFinalTeams) , $tournament['noofplaces']  );
+
+        $interval = 1;
+
+        if( $tournament['start_date'] && $tournament['end_date'] )
+        {
+            $match_start_date = $tournament['start_date'];
+            $match_end_date   = $tournament['end_date'];
+            $S_tm = strtotime($match_start_date);
+            $E_tm = strtotime($match_end_date);
+    
+            $diff = abs( $S_tm - $E_tm );
+            $interval = $diff / count($timeline);
+        }
+
+        
+
+        // echo "<pre>";
+        // print_r( $timeline );
+        // echo "</pre>";
+        // die;
+ 
+
+
+        for( $i = 0 ; $i < count( $timeline ) ; $i++ )
+            for( $j = 0 ; $j <  $tournament['noofplaces'] ; $j++ )
+            {
+                $matchdate = date("Y-m-d" , ( $S_tm + $interval * $i ) );
+
+                if( !isset( $timeline[$i][$j] ) ) continue;
+
+                $A = $timeline[$i][$j]['left']  != -1 ? $tournamentFinalTeams[ $timeline[$i][$j]['left' ] ] : array('team_id' => 0 );
+                $B = $timeline[$i][$j]['right'] != -1 ? $tournamentFinalTeams[ $timeline[$i][$j]['right'] ] : array('team_id' => 0 );
+                
+                $schedule_data = array(
+                    'tournament_id' => $tournament_id,
+                    'tournament_round_number' => $timeline[$i][$j]['round_no'] ,
+                    'tournament_match_number' => $timeline[$i][$j]['match_no'] ,
+                    'sports_id' => $tournament['sports_id'],
+                    'facility_id' => $tournament['facility_id'],
+                    'facility_name' =>  $tournament['facility_name'],
+                    'created_by' => Auth::user()->id,
+                    'match_category' => $tournament['player_type'],
+                    'schedule_type' => $tournament['schedule_type'],
+                    'match_type' => $tournament['match_type'],
+                    'match_start_date' => $matchdate,
+                    'match_start_time' => '',
+                    'match_end_date' => '',
+                    'match_end_time' => '',
+                    'match_location' => $tournament['location'],
+                    'address' => $tournament['address'],
+                    'city_id' => $tournament['city_id'],
+                    'city' => $tournament['city'],
+                    'state_id' => $tournament['state_id'],
+                    'state' => $tournament['state'],
+                    'country_id' => $tournament['country_id'],
+                    'country' => $tournament['country'],
+                    'zip' => $tournament['zip'],
+                    'match_status' => 'scheduled',
+                    'a_id' => $A['team_id'],
+                    'b_id' => $B['team_id'],
+                    'player_a_ids' => $this->getPlayerListofTeam($A['team_id']),
+                    'player_b_ids' => $this->getPlayerListofTeam($B['team_id']),
+                    'match_invite_status'=> 'pending',
+                    'game_type'     => $tournament['game_type'],
+                    'number_of_rubber' => $tournament['number_of_rubber'],
+                    'sports_category'  =>  Sport::find( $tournament['sports_id'])->sports_category , 
+                    'winner_schedule_position' => isset($timeline[$i][$j]['winner']['next_match_ab_pos']) ? $timeline[$i][$j]['winner']['next_match_ab_pos'] : '' ,
+                    'winner_go_wl_type' => isset( $timeline[$i][$j]['winner']['go_wl_type'] ) ? $timeline[$i][$j]['winner']['go_wl_type'] : '' ,
+                    'loser_schedule_position' => isset( $timeline[$i][$j]['loser']['next_match_ab_pos'] ) ? $timeline[$i][$j]['loser']['next_match_ab_pos'] : '' ,
+                    'loser_go_wl_type' => isset( $timeline[$i][$j]['loser']['go_wl_type'] ) ? $timeline[$i][$j]['loser']['go_wl_type'] : '' ,
+                    'double_wl_type' => $timeline[$i][$j]['double_wl_type']
+                );
+                
+
+                // echo "<pre>";
+                // print_r($schedule_data);
+                // echo "</pre>";
+
+
+                $match_schedule_result = MatchSchedule::create($schedule_data);
+ 
+ 
+                $timeline[$i][$j]['id'] = $match_schedule_result->id;
+                $hash[$timeline[$i][$j]['double_wl_type']][ $timeline[$i][$j]['round_no'] ][ $timeline[$i][$j]['match_no'] ] = $match_schedule_result->id;
+            }
+
+        for( $i = 0 ; $i < count( $timeline ) ; $i++ )
+            for( $j = 0 ; $j <  $tournament['noofplaces'] ; $j++ )
+            {
+                if( isset( $timeline[$i][$j]['winner'] ) ) 
+                {
+                    $next_round_no      = $timeline[$i][$j]['winner']['next_round_no'];
+                    $next_match_no      = $timeline[$i][$j]['winner']['next_match_no']; 
+                    $go_wl_type         = $timeline[$i][$j]['winner']['go_wl_type'];
+
+                    if( isset( $hash[$go_wl_type][$next_round_no][$next_match_no] ) )
+                        MatchSchedule::where('id', $timeline[$i][$j]['id'] )->update( array( 'winner_schedule_id' => $hash[$go_wl_type][$next_round_no][$next_match_no] ) );
+                }
+
+                if( isset( $timeline[$i][$j]['loser'] ) ) 
+                {
+                    $next_round_no      = $timeline[$i][$j]['loser']['next_round_no'];
+                    $next_match_no      = $timeline[$i][$j]['loser']['next_match_no'];
+                    $go_wl_type         = $timeline[$i][$j]['loser']['go_wl_type'];
+
+
+                    if( isset( $hash[$go_wl_type][$next_round_no][$next_match_no] ) )
+                        MatchSchedule::where('id', $timeline[$i][$j]['id'] )->update( array( 'loser_schedule_id' => $hash[$go_wl_type][$next_round_no][$next_match_no] ) );
+                }
+            }
+
+        $results['success'] = 'Match scheduled successfully.';
+
+        return Response::json($results);
+    }
+
+ 
+    private function build_first_second_line( $TeamN )
+    {
+        $level = log($TeamN) / log(2);
+        if( $level != round($level) ) $level = ceil($level);
 //         console.log( "teamcount and level"  , teamcount , level );
 
-         $pos = array() ;
-         $npos = array();
-         $NN = pow( 2 , $level );
+        $pos = array();
+        $npos = array();
+        
+        $NN = pow( 2 , $level );
          
         for( $i = 0 ; $i < $NN / 2 ; $i++ )
         {
@@ -1243,7 +1716,9 @@ class ScheduleController extends Controller {
             $pos[$b * 2 + 1]  = $c;
         }
 
-        // bye action
+        $firstMatchCount = 0;
+
+         // bye action
         for( $i = 0 ; $i < $NN / 2 ; $i++ )
         {
             if( $pos[ $i * 2 + 1 ] == -1  )
@@ -1251,7 +1726,36 @@ class ScheduleController extends Controller {
                 $npos[$i] = $pos[ $i * 2 ];
                 $pos[ $i * 2 ] = -1;
             }
+            else $firstMatchCount++;
         }
+
+        $res['fline'] = $pos;
+        $res['sline'] = $npos;
+        $res['level'] = $level;
+        $res['NN'] = $NN;
+        $res['firstMatchCount'] = $firstMatchCount;
+
+        return $res;
+    }
+
+
+    
+        
+
+        // match information with level , pos , teamA, temaB
+
+
+        
+
+    private function generateSingleElimination( $TeamN  , $nPlaces )
+    {
+        $R = $this->build_first_second_line($TeamN);
+
+        $level = $R['level'];
+        $NN = $R['NN'];
+        $pos = $R['fline'];
+        $npos = $R['sline'];
+          
         // match information with level , pos , teamA, temaB
 
         $match_cur = 0;
@@ -1266,10 +1770,19 @@ class ScheduleController extends Controller {
                 if( $i == $level )     { $T1 =  $pos[ $j * 2 ] ; $T2 =  $pos[ $j * 2 + 1 ]; }
                 if( $i == $level - 1 ) { $T1 = $npos[ $j * 2 ] ; $T2 = $npos[ $j * 2 + 1 ]; }
                 if( $i == $level && $T1 == -1 && $T2 == -1 ) continue;
+
                 $match[ $match_cur ]['left'] = $T1;
                 $match[ $match_cur ]['right'] = $T2;
                 $match[ $match_cur ]['round_no'] = $level - $i + 1 ;
                 $match[ $match_cur ]['match_no'] = $j + 1;
+
+                if( $i > 1 )
+                {
+                    $next_match_no = floor( $j / 2 ) + 1;
+                    $match[ $match_cur ]['winner'] = array( 'next_round_no' =>  $level - $i + 2 ,
+                                                            'next_match_no' =>  $next_match_no , 
+                                                            'next_match_ab_pos' =>  $j % 2  ?  'b' : 'a' );
+                }
                 $match_cur++;
             }
         }
@@ -1349,6 +1862,7 @@ class ScheduleController extends Controller {
             $diff = abs( $S_tm - $E_tm );
             $interval = $diff / count($timeline);
         }
+ 
 
 
         for( $i = 0 ; $i < count( $timeline ) ; $i++ )
@@ -1393,11 +1907,26 @@ class ScheduleController extends Controller {
                     'match_invite_status'=> 'pending',
                     'game_type'     => $tournament['game_type'],
                     'number_of_rubber' => $tournament['number_of_rubber'],
-                    'sports_category'  =>  Sport::find( $tournament['sports_id'])->sports_category
-                );  
+                    'sports_category'  =>  Sport::find( $tournament['sports_id'])->sports_category,
+                    'winner_schedule_position' => $timeline[$i][$j]['winner']['next_match_ab_pos']
+                );
 
                 $match_schedule_result = MatchSchedule::create($schedule_data);
+ 
+                $timeline[$i][$j]['id'] = $match_schedule_result->id;
+                $hash[ $timeline[$i][$j]['round_no'] ][ $timeline[$i][$j]['match_no'] ] = $match_schedule_result->id;
             }
+
+        for( $i = 0 ; $i < count( $timeline ) ; $i++ )
+            for( $j = 0 ; $j <  $tournament['noofplaces'] ; $j++ )
+                if( isset( $timeline[$i][$j]['winner'] ) ) 
+                {
+                    $next_round_no      = $timeline[$i][$j]['winner']['next_round_no'];
+                    $next_match_no      = $timeline[$i][$j]['winner']['next_match_no'];
+
+                    if( isset( $hash[$next_round_no][$next_match_no] ) )
+                        MatchSchedule::where('id', $timeline[$i][$j]['id'] )->update( array( 'winner_schedule_id' => $hash[$next_round_no][$next_match_no] ) );
+                }
 
         $results['success'] = 'Match scheduled successfully.';
 

@@ -600,6 +600,17 @@ Route::get('generateScheduleKnockout/{tournament_id}', [
 ]);
 
 //to save match schedule
+Route::get('generateScheduleKnockoutDouble/{tournament_id}', [
+    'as'   => 'generateScheduleKnockoutDouble',
+    'uses' => 'User\ScheduleController@generateScheduleKnockoutDouble',
+]);
+
+Route::get('JsonOutputScheduleKnockoutDouble/{tournament_id}', [
+    'as'   => 'JsonOutputScheduleKnockoutDouble',
+    'uses' => 'User\ScheduleController@JsonOutputScheduleKnockoutDouble',
+]);
+
+//to save match schedule
 Route::get('JsonOutputScheduleKnockout/{tournament_id}', [
     'as'   => 'JsonOutputScheduleKnockout',
     'uses' => 'User\ScheduleController@JsonOutputScheduleKnockout',

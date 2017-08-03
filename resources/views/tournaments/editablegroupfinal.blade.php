@@ -111,8 +111,7 @@ function finalStageTeams(flag) {
                 $.blockUI({width: '50px', message: $("#spinner").html()});
             },
             success: function(response) {
-                $.unblockUI(); 
-				$('#generate_bracket_type').val( 'knockout' );
+                $.unblockUI();  
 				$("#generateScheduleLeagueModal").modal();
             }
         });

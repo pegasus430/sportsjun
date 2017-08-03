@@ -27,7 +27,7 @@ function TeamLibrary(id)
     }
      
     this.AddTeam = function ( x , y , goH , team1 , team2, linkid , mark1 , mark2 , win  )
-    {  
+    {
         if( team1  && team1.length > 20 ) team1 = team1.substring( 0 , 20 );
         if( team2  && team2.length > 20 ) team2 = team2.substring( 0 , 20 );
         var mark1_col = "rgb(79,139,183)" , mark2_col = "rgb(79,139,183)";
@@ -92,13 +92,21 @@ function TeamLibrary(id)
         {
             var x1 = BOX_C.boxwidth ;
             var y1 = BOX_C.boxheight / 2;
-            var x2 = x1 + BOX_C.boxgap + BOX_C.boxwidth / 2;
-            var y2 = y1 + goH ;
-            pObject.appendChild( SvgCreator.AddLine(  x1 , y1 , x2 , y1  ,"stroke:rgb(0,34,50);stroke-width:1" ) );
-            pObject.appendChild( SvgCreator.AddLine(  x1 , y1 , x2 , y1  ,"stroke:rgb(0,34,50);stroke-width:1" ) );
-            pObject.appendChild( SvgCreator.AddLine(  x2 , y1 , x2 , y2  ,"stroke:rgb(0,34,50);stroke-width:1" ) );
 
-            pObject.appendChild( SvgCreator.AddCircle( x1 + 3 , y1 , 3  ,"rgb(0,34,50)" , "rgb(0,34,50)" , "circlemark" + id ) );
+            if( goH == 0 )
+            {
+                var x2 = x1 + BOX_C.boxgap;
+                pObject.appendChild( SvgCreator.AddLine(  x1 , y1 , x2 , y1  ,"stroke:rgb(0,34,50);stroke-width:1" ) );
+            }
+            else
+            {
+                var x2 = x1 + BOX_C.boxgap + BOX_C.boxwidth / 2;
+                var y2 = y1 + goH ;
+                pObject.appendChild( SvgCreator.AddLine(  x1 , y1 , x2 , y1  ,"stroke:rgb(0,34,50);stroke-width:1" ) );
+                pObject.appendChild( SvgCreator.AddLine(  x1 , y1 , x2 , y1  ,"stroke:rgb(0,34,50);stroke-width:1" ) );
+                pObject.appendChild( SvgCreator.AddLine(  x2 , y1 , x2 , y2  ,"stroke:rgb(0,34,50);stroke-width:1" ) );
+                pObject.appendChild( SvgCreator.AddCircle( x1 + 3 , y1 , 3  ,"rgb(0,34,50)" , "rgb(0,34,50)" , "circlemark" + id ) );
+            }
         }
 
         pObject.setAttribute('transform','translate(' + x + ',' + y + ')' );
@@ -126,7 +134,7 @@ function BracketLibrary(id)
         }
      }
 
-     this.addMatch = function( i , j  , roundno , T1name , T2name , linkid )
+     this.addMatch = function( baseY , i , j  , roundno , T1name , T2name , linkid )
      {
         var xx = ( BOX_C.boxwidth + BOX_C.boxgap ) * ( i - 1 ); // go right
         var ydelta = ( BOX_C.boxheight + BOX_C.boxgap ) * Math.pow( 2 , i - 1 );
@@ -136,12 +144,40 @@ function BracketLibrary(id)
 
         if( i < roundno ) 
                 goH = ( ( j - 1 ) % 2 ) ?  0 - ydelta / 2 + BOX_C.boxheight / 2 - 1: ydelta / 2 - BOX_C.boxheight / 2;
-        B.AddTeam( xx , yy , goH , T1name , T2name , linkid );
+        B.AddTeam( xx , yy + baseY , goH , T1name , T2name , linkid );
      }
 
-     this.generateSingleElimination = function( D )
+     this.addMatchDouble = function( baseY , i , j  , roundno , T1name , T2name , linkid , round_one_two_same )
      {
-        this.remove_content();       
+        var xx = ( BOX_C.boxwidth + BOX_C.boxgap ) * ( i - 1 ); // go right
+
+        var ydelta = ( BOX_C.boxheight + BOX_C.boxgap ) * Math.pow( 2 , ( round_one_two_same ? Math.floor(( i - 1 ) / 2) : Math.floor(i / 2) ) );
+        console.log(round_one_two_same , ydelta);
+        var yy = ydelta / 2 + ydelta * ( j - 1 );
+        var B = new TeamLibrary( 'teambox'+ '_' + i + '_' + j );
+        var goH = null;
+
+        if( i < roundno ) 
+            if( round_one_two_same == 1 )
+            {
+                if( i % 2 )  // 1,3,5 case 
+                    goH = 0;
+                else // init_round_count =  2
+                    goH = ( ( j - 1 ) % 2 ) ?  0 - ydelta / 2 + BOX_C.boxheight / 2 - 1: ydelta / 2 - BOX_C.boxheight / 2;
+            }
+            else 
+            {
+                if( i % 2 )  // 1,3,5 case 
+                    goH = ( ( j - 1 ) % 2 ) ?  0 - ydelta / 2 + BOX_C.boxheight / 2 - 1: ydelta / 2 - BOX_C.boxheight / 2;
+                else // init_round_count =  2
+                    goH = 0;
+            } 
+
+        B.AddTeam( xx , yy + baseY , goH , T1name , T2name , linkid  );
+     }
+
+     this.generateSingleElimination = function( D , baseY , course ) // course 0:single , 1: double winner  2: double loser
+     {      
         var fRound = new Array();
         var sRound = new Array();
         var i , j , k;
@@ -154,6 +190,19 @@ function BracketLibrary(id)
             sRound[i] = -1;
         }
 
+        var round_one_count = 0 , round_two_count = 0;
+
+        for( k = 0 ; k < D.units.length ; k++ )
+        {
+            i = D.units[k]['tournament_round_number'];
+            if( i == 1 ) round_one_count++;
+            if( i == 2 ) round_two_count++;
+        }
+
+   //     console.log( round_one_count , round_two_count );
+
+        //console.log(D.units);
+
         for( k = 0 ; k < D.units.length ; k++ )
         {
             var T1name = D.units[k]['a_id'] > 0 ? D.units[k]['team_name_a'] : null;
@@ -162,33 +211,40 @@ function BracketLibrary(id)
             i = D.units[k]['tournament_round_number'];
             j = D.units[k]['tournament_match_number'];
 
-            if( i == 1 ) fRound[j ] = k;
-            if( i == 2 ) sRound[j ] = k;
-            
-            this.addMatch(  i , j  , D.roundno , T1name , T2name , D.units[k]['id'] );
+            if( i == 1 ) fRound[j] = k;
+            if( i == 2 ) sRound[j] = k;
+          //  console.log( baseY , i , j  , D.roundno , T1name , T2name , D.units[k]['id'] );
+
+            if( course == 1 )
+                if( D.units[k]['tournament_round_number'] == D.roundno ) // special case : last round of winner course
+                     this.addMatch(  baseY , i , j  , D.roundno , T1name , T2name , D.units[k]['id'] );
+                else this.addMatch(  baseY , i , j  , D.roundno , T1name , T2name , D.units[k]['id'] );
+            else 
+                this.addMatchDouble( baseY , i , j  , D.roundno , T1name , T2name , D.units[k]['id'] , round_one_count == round_two_count);
             
         }
 
-        for( i = 1 ; i <= NN ; i++ ) // manual bye insert of first line
-            if( fRound[i] == -1 )
-            {
-                var j = Math.ceil( i / 2 );
-                var isTop = i % 2;
-                if(sRound[j] == -1) continue;
+        // for( i = 1 ; i <= NN ; i++ ) // manual bye insert of first line
+        //     if( fRound[i] == -1 )
+        //     {
+        //         var j = Math.ceil( i / 2 );
+        //         var isTop = i % 2;
+        //         if(sRound[j] == -1) continue;
 
-                var T1name = isTop == 1 ? D.units[sRound[j]]['team_name_a'] : D.units[sRound[j]]['team_name_b'];
+        //         var T1name = isTop == 1 ? D.units[sRound[j]]['team_name_a'] : D.units[sRound[j]]['team_name_b'];
                 
-                this.addMatch(  1 , i  , D.roundno , T1name , "Bye" , null );
-            }
-        
+        //         this.addMatch(  baseY , 1 , i  , D.roundno , T1name , "Bye" , null );
+        //     }
      }
 
-     this.generateDoubleElimination = function( names )
+     this.generateDoubleElimination = function( D )
      {
-       // this.generateSingleElimination( names , true );
-        // add one more match in the end
-        // team numbers
-        
+     //   console.log(D['w'].roundno);
+        var winY = ( BOX_C.boxheight + BOX_C.boxgap ) * ( Math.pow( 2 , D['w'].roundno - 2 ) ) + 100; // -1 means , winner course has one more game for last
+       // console.log( winY );
+        this.generateSingleElimination( D.w, 0 , 1 );
+        this.generateSingleElimination( D.l, winY , 2 );
+       // this.generateSingleElimination( D['l'] , winY );
      }
     
     

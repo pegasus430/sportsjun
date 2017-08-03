@@ -1,13 +1,13 @@
 <div id="final_stage_div">
         <div class="sportsjun-forms">
             <div class="action-panel">
-                @if($maxRoundNumber>1)
+        @if($maxRoundNumber>1)
                 <div class="sj-alert sj-alert-info">
                     {{ trans('message.tournament.final.knockoutstarted') }}
                 </div>
                   <div class="sportsjun-forms">
             <div class="action-panel">
-                @if(count($tournamentDetails[0]['final_stage_teams']))
+            @if(count($tournamentDetails[0]['final_stage_teams']))
                 <table class="table table-striped">
                 <thead>
                     <tr></tr>
@@ -37,10 +37,10 @@
                     {{ trans('message.tournament.final.nofinalstageteams') }}
                 </div>
                   
-              @endif
+            @endif
               </div>
         </div>
-                @else
+        @else
 
                     <div class="action-btns">
                          @if($tournamentDetails[0]['schedule_type']=='team')

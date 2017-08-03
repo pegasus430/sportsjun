@@ -604,7 +604,6 @@ $(function() {
 	
 	function GenerateMatch()
 	{
-		$('#generate_bracket_type').val( 'league' );
 		$("#generateScheduleLeagueModal").modal();
 	}
 

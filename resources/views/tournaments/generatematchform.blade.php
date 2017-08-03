@@ -37,7 +37,7 @@
 
                                     <label for="auto_start_time" class="field prepend-icon">
                                         <div class='input-group date' id='matchStartTime'>
-											{!! Form::hidden('generate_bracket_type',null, array('id'=>'generate_bracket_type')) !!}
+											{!! Form::hidden('generate_bracket_type', $tournament_type, array('id'=>'generate_bracket_type')) !!}
                                             {!! Form::text('auto_start_time',null, array('class'=>'gui-input','placeholder'=>trans('message.schedule.fields.start_time'),'id'=>'auto_start_time')) !!}
                                             <span class="input-group-addon">
 									<span class="glyphicon glyphicon-calendar"></span>
@@ -112,16 +112,29 @@
     $(document).ready(function() {
 			$('#auto_start_time').datetimepicker({format: '{{ config("constants.DATE_FORMAT.JQUERY_TIME_FORMAT") }}'});    
 			$('#auto_end_time').datetimepicker({format: '{{ config("constants.DATE_FORMAT.JQUERY_TIME_FORMAT") }}'});
-
 			$('#generate_schedule').click(function(){
+				    var tm_type = 'league';
+					switch( $('#generate_bracket_type').val() )
+					{
+						case 'league':
+							tm_type = '/generateScheduleLeague/';
+							break;
+						case 'knockout':
+							tm_type = '/generateScheduleKnockout/';
+							break;
+						case 'doubleknockout':
+							tm_type = '/generateScheduleKnockoutDouble/';
+							break;
 
+					}
+					 
 					$.confirm({
 						title: 'Confirmation',
 						content: "Schedule is already created. Do you want to delete and recreate again?",
 						confirm: function() {
 							var tournament_id = "{{$tournament_id}}";
 							$.ajax({
-								url: base_url+( $('#generate_bracket_type').val() == 'league' ? '/generateScheduleLeague/' : '/generateScheduleKnockout/' )+tournament_id,
+								url: base_url + tm_type + tournament_id,
 								type: "Get" ,
 								success: function(response) {
 									location.reload();

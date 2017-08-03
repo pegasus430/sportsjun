@@ -2,7 +2,7 @@
 <script src="{{ asset('/js/bracket/bracket.js') }}"></script>
 <script type="text/javascript" src="https://cdn.rawgit.com/asvd/dragscroll/master/dragscroll.js"></script>
 
-<div class="dragscroll" style="width: 1200px; height: 600px; overflow: hidden; cursor: grab; cursor : -o-grab; cursor : -moz-grab; cursor : -webkit-grab; border:1px solid rgb(200,200,200);">
+<div class="dragscroll" style="width: 1200px; height: 700px; overflow: hidden; cursor: grab; cursor : -o-grab; cursor : -moz-grab; cursor : -webkit-grab; border:1px solid rgb(200,200,200);">
     <svg version="1.1"
         baseProfile="full"
         xmlns="http://www.w3.org/2000/svg"
@@ -20,18 +20,37 @@ $(document).ready(function(){
 
     function update_bracket_table()
     {
-        $.ajax({
-            type: 'GET',
-            url: base_url + '/JsonOutputScheduleKnockout/{{$tournament_id}}',
-            beforeSend: function() {
-                $.blockUI({width: '50px' , message: 'Generating Bracket' });
-            },
-            success: function(response) {
-                console.log(response);
-                $.unblockUI();                
-                B.generateSingleElimination( response );
-            }
-        });
+        if('{{$tournament_type}}' == 'knockout')
+        {
+            $.ajax({
+                type: 'GET',
+                url: base_url + '/JsonOutputScheduleKnockout/{{$tournament_id}}',
+                beforeSend: function() {
+                    $.blockUI({width: '50px' , message: 'Generating Bracket' });
+                },
+                success: function(response) {
+                    console.log(response);
+                    $.unblockUI();                
+                    B.generateSingleElimination( response , 0 , 0 );
+                }
+            });
+        }
+
+        if( '{{$tournament_type}}' == 'doubleknockout' )
+        {
+            $.ajax({
+                type: 'GET',
+                url: base_url + '/JsonOutputScheduleKnockoutDouble/{{$tournament_id}}',
+                beforeSend: function() {
+                    $.blockUI({width: '50px' , message: 'Generating Bracket' });
+                },
+                success: function(response) {
+                    console.log(response);
+                    $.unblockUI();                
+                    B.generateDoubleElimination( response);
+                }
+            });
+        }
     }
 
     update_bracket_table();        
@@ -42,8 +61,5 @@ $(document).ready(function(){
         update_bracket_table();        
     });
 });
-
-
-
 
 </script> 

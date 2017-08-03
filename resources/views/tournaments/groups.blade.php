@@ -19,7 +19,7 @@
     <div class="col-sm-12 group-stage sportsjun-forms">
     @include('tournaments.share_groups')
         @if($dispViewFlag=='group')
-        @if($tournament_type=='league' || $tournament_type=='multistage')
+        @if($tournament_type=='league' || $tournament_type=='multistage'  || $tournament_type=='doublemultistage')
         <div id="group_stage">
         <!-- /.panel-heading -->
             @if(count($tournamentDetails[0]['final_stage_teams']) || $tournamentDetails[0]['group_is_ended'] )
@@ -36,7 +36,7 @@
         @endif
         
         @if($dispViewFlag=='final')
-            @if($tournament_type=='knockout' || $tournament_type=='multistage')
+            @if($tournament_type=='knockout' || $tournament_type=='doubleknockout' ||  $tournament_type=='multistage' || $tournament_type=='doublemultistage' )
 
 
 
@@ -51,7 +51,7 @@
                         <div  class="tab-content clearfix">
                             <div id="final_stage_teams" class="tab-pane fade active in">
                                 @if($isOwner)
-                                    @if($tournament_type=='knockout')
+                                    @if( $tournament_type=='knockout' || $tournament_type=='doubleknockout')
                                         @include ('tournaments.finalknocoutteams')
                                     @else
                                         @include ('tournaments.finalgroupteams')

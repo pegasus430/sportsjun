@@ -66,7 +66,14 @@ class MatchSchedule extends Model
         'game_type',
         'is_third_position',
         'sports_category',
-        'player_or_team_ids'
+        'player_or_team_ids',
+        'winner_schedule_id',
+        'winner_schedule_position',
+        'winner_go_wl_type',
+        'loser_schedule_id',
+        'loser_schedule_position',
+        'loser_go_wl_type',
+        'double_wl_type'
     ];
 
     public $casts =[

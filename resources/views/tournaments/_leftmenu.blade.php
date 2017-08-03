@@ -35,10 +35,10 @@ else $check_user='';
             @if($lef_menu_condition=='display_gallery')
                 <li><a class="sidemenu_2" href="{{ url($check_user.'/user/album/show').'/tournaments'.'/0'.'/'.$action_id }}"><span class="ico ico-media-gallery"></span> Media Gallery</a></li>
             @endif
-            @if($tournament_type=='league' || $tournament_type=='multistage')
+            @if($tournament_type=='league' || $tournament_type=='multistage' || $tournament_type=='doublemultistage')
                 <li><a class="sidemenu_3" href="{{ url($check_user.'/tournaments/groups').'/'.$action_id.'/group'}}"><span class="ico ico-group-stage"></span> Group Stage</a></li>
             @endif
-            @if($tournament_type=='knockout' || $tournament_type=='multistage')
+            @if( $tournament_type=='knockout' || $tournament_type=='multistage'|| $tournament_type=='doublemultistage'|| $tournament_type=='doubleknockout')
                 <li><a class="sidemenu_4" href="{{ url($check_user.'/tournaments/groups').'/'.$action_id.'/final'}}"><span class="ico ico-final-stage"></span> Final Stage</a></li>
             @endif
 

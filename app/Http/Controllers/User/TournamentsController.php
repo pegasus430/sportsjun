@@ -1545,7 +1545,7 @@ class TournamentsController extends Controller
 
 		$requestedFinalTeams = [];
 		// For displaying the teams added for final stage teams as well as the requested teams
-		if ($tournament_type == 'knockout')
+		if ($tournament_type == 'knockout' || $tournament_type == 'doubleknockout')
 		{
 			$tournamentFinalTeams = $this->getFinalStageAddedTeams($tournament_id, $schedule_type);
 
@@ -1595,12 +1595,12 @@ class TournamentsController extends Controller
 		$byeArray     = [1 => 'Match', 2 => 'Bye'];
 		$dispViewFlag = 'group';
 
-		if ($tournament_type == 'league' || $tournament_type == 'multistage')
+		if ($tournament_type == 'league' || $tournament_type == 'multistage' || $tournament_type == 'doublemultistage')
 		{
 			$dispViewFlag = 'group';
 		}
 
-		if ($tournament_type == 'knockout' || count($tournaments[0]['final_stage_teams']))
+		if ( $tournament_type == 'knockout' || $tournament_type == 'doubleknockout' || count($tournaments[0]['final_stage_teams']))
 		{
 			$dispViewFlag = 'final';
 		}
