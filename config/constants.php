@@ -15,7 +15,7 @@ return [
                 'SPORT_LOGO'           => 'sports',
                 //user
                 'USER_PHOTO'           => 'user_photo', //logo
-                'GALLERY_USER'         => 'gallery_user', //user gallery    
+                'GALLERY_USER'         => 'gallery_user', //user gallery
                 //teams
                 'TEAM_PHOTO'           => 'teams',
                 'GALLERY_TEAM'         => 'gallery_team', //team gallery
@@ -31,9 +31,9 @@ return [
                 'ORGANIZATION_LOGO'    => 'organization', //logo
                 'ORGANIZATION_NEWS'    => 'organization_news',
                 'GALLERY_ORGANIZATION' => 'gallery_organization',
-                'ORGANIZATION_PROFILE' => 'form_gallery_organization', //form gallery		
-                'GALLERY_MATCH'        => 'gallery_match', //scorecard gallery	
-                'ORGANIZATION_COACHING'    => 'organization_coaching',	
+                'ORGANIZATION_PROFILE' => 'form_gallery_organization', //form gallery
+                'GALLERY_MATCH'        => 'gallery_match', //scorecard gallery
+                'ORGANIZATION_COACHING'    => 'organization_coaching',
         ],
         // folder path for storing and retrieving all the photos
         'PHOTO_PATH'               => [
@@ -58,15 +58,15 @@ return [
                 ['ROLES' => ['superadmin' => 'SUPERADMIN', 'admin' => 'ADMIN', 'general' => 'GENERAL']]
                 ,
                 'TOURNAMENTS'  =>
-                ['TYPE'          => ['league' => 'Group Tournament', 'knockout' => 'Knock-Out',
-                                'multistage' => 'Groups + Knock-Out'],
+                ['TYPE'          => ['league' => 'Group Tournament', 'knockout' => 'Single Elimination', 'doubleknockout' => 'Double Elimination' ,
+                                'multistage' => 'Groups + Single' , 'doublemultistage' => 'Groups + Double' ],
                         'SCHEDULE_TYPE' => ['team' => 'TEAM', 'individual' => 'INDIVIDUAL'],
                         'GAME_TYPE'     => ['normal'    =>'NORMAL - ONE GAME',     'rubber'   =>   'RUBBER - MULTIPLE GAMES'],
                         'ENROLLMENT_TYPE'     => [''=>'LISTING TYPE','online'    =>'ONLINE PAYMENT',     'offline'   =>   'OFFLINE PAYMENT','onlylisting'   =>   'JUST LISTING'],
                         'STATUS'     => ['0'    =>'PENDING',     '1'   =>   'APPROVED','2'   =>   'REJECTED']
                 ]
                 ,
-                'SCHEDULE'     => 
+                'SCHEDULE'     =>
                 [
                         'MATCH_TYPE'  => [
                                 'CRICKET'      => ['odi' => 'ODI', 't20' => 'T20',
@@ -90,7 +90,7 @@ return [
                 [
                         'MATCH_TYPE'  => [
                                 'CRICKET'      => ['odi' => 'ODI', 't20' => 'T20',
-                                        'test' => 'TEST', 
+                                        'test' => 'TEST',
                                         'F5'=>'F5',
                                         'T10'=>'T10',
                                         'T15'=>'T15','T25'=>'T25',
@@ -103,9 +103,9 @@ return [
                                          'any'=>'ANY'],
                                 'FOOTBALL'     => ['other' => 'OTHERS'],
 
-                                'BADMINTON'    => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES', 
+                                'BADMINTON'    => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES',
                                          'any'=>'ANY'],
-                                'SQUASH'    => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES', 
+                                'SQUASH'    => ['singles' => 'SINGLES', 'doubles' => 'DOUBLES',
                                          'any'=>'ANY'],
                                 'OTHERS'       => ['other' => 'OTHERS']
                         ],
@@ -183,7 +183,7 @@ return [
                 'BasketBall'   => 6,
                 'VolleyBall'   => 7,
                 'Hockey'       => 11,
-                'Squash'       => 13, 
+                'Squash'       => 13,
                 'Kabaddi'      => 14,
                 'Ultimate Frisbee'      => 15,
                 'Water Polo'   => 16,
@@ -259,25 +259,25 @@ return [
                 'LOST'              => 'LOST',
                 'TIED'              => 'TIED',
                 'WON_PERCENTAGE'    => 'WON PERCENTAGE',
-                'POINTS'            => 'POINTS',                
-                'BADMINTON_STATISTICS' => 'BADMINTON', 
-                'SQUASH_STATISTICS' => 'SQUASH',  
+                'POINTS'            => 'POINTS',
+                'BADMINTON_STATISTICS' => 'BADMINTON',
+                'SQUASH_STATISTICS' => 'SQUASH',
                 'VOLLEYBALL_STATISTICS'     => 'VOLLEYBALL',
                 'THROWBALL_STATISTICS'      => 'THROWBALL',
-                'KABADDI'                   => 'KABADDI'              
+                'KABADDI'                   => 'KABADDI'
         ],
         'BASKETBALL_STATS'       => [
                 'WON'               => 'WON',
                 'LOST'              => 'LOST',
                 'TIED'              => 'TIED',
                 'WON_PERCENTAGE'    => 'WON PERCENTAGE',
-                'POINTS'            => 'POINTS',                
-                'BASKETBALL_STATISTICS' => 'BASKETBALL ', 
-                'POINTS_1'          => '1 POINT', 
-                'POINTS_2'          => '2 POINTS', 
+                'POINTS'            => 'POINTS',
+                'BASKETBALL_STATISTICS' => 'BASKETBALL ',
+                'POINTS_1'          => '1 POINT',
+                'POINTS_2'          => '2 POINTS',
                 'POINTS_3'          => '3 POINTS',
                 'TOTAL_POINTS'      => 'TOTAL POINTS',
-                'FOULS'             => 'FOULS'                
+                'FOULS'             => 'FOULS'
         ],
         'DEFAULT_PAGINATION'       => 10,
         'YEAR'                     => [
@@ -339,7 +339,7 @@ return [
                     'active_players' => 6,
                     'substitute'     => 6,
 
-                ], 
+                ],
                 5 => [
                     'number_of_sets'=>3,
                     'score_to_win'  =>21,
@@ -348,11 +348,11 @@ return [
                     'active_players' => 6,
                     'substitute'     => 6,
 
-                ],               
+                ],
                 6 => [
                     'number_of_sets' => 5,
                     'active_players' => 6,
-                    'substitute'     => 6,                   
+                    'substitute'     => 6,
                     'maximum_points' => 25,
                     'maximum_substitutes' => 3,
                     'number_of_quarters' => 4
@@ -361,11 +361,11 @@ return [
                 7 => [
                    'number_of_sets' => 5,
                     'active_players' => 6,
-                    'substitute'     => 6,                   
+                    'substitute'     => 6,
                     'maximum_points' => 25,
                     'maximum_substitutes' => 3,
 
-                ],               
+                ],
                 13 => [
                     'number_of_sets'=>3,
                     'score_to_win'  =>21,
@@ -374,7 +374,7 @@ return [
                     'active_players' => 6,
                     'substitute'     => 6,
 
-                ], 
+                ],
                 14 => [
                     'number_of_sets' => 5,
                     'active_players' => 6,
