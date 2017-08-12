@@ -871,6 +871,8 @@ class SquashScoreCardController extends parentScoreCardController
                          'has_result'     => $has_result,
                          'match_result'   => $match_result,
                         'score_added_by'=>$json_score_status]);
+
+                        $this->move_forward_schedule( $match_id  , $winner_team_id , $looser_team_id  );
                     if(!empty($matchScheduleDetails['tournament_round_number'])) {
                         $matchScheduleDetails->updateBracketDetails();
                     }
@@ -888,8 +890,7 @@ class SquashScoreCardController extends parentScoreCardController
                                             'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
                                              'has_result'     => $has_result,
                                              'match_result'   => $match_result,
-                                            'score_added_by'=>$json_score_status]);
-                    
+                                            'score_added_by'=>$json_score_status]); 
 //                                Helper::printQueries();
                
                 if($rubber_completed && $match_status=='completed'){
@@ -903,6 +904,8 @@ class SquashScoreCardController extends parentScoreCardController
                                      'has_result'     => $has_result,
                                      'match_result'   => $match_result,
                                     'score_added_by'=>$json_score_status]);
+
+                                    $this->move_forward_schedule( $match_id  , $winner_team_id , $looser_team_id  );
 
                     if(!empty($matchScheduleDetails['tournament_round_number'])) {
                         $matchScheduleDetails->updateBracketDetails();
@@ -935,6 +938,8 @@ class SquashScoreCardController extends parentScoreCardController
                          'is_tied'        => $is_tie,
                          'match_result'   => $match_result,
                         'score_added_by'=>$json_score_status, 'scoring_status'=>$approved]);
+
+                        $this->move_forward_schedule( $match_id  , $winner_team_id , $looser_team_id  );
                    
                         if($match_status=='completed')
                         {
@@ -952,6 +957,7 @@ class SquashScoreCardController extends parentScoreCardController
                                              'is_tied'        => $is_tie,
                                              'match_result'   => $match_result,
                                             'score_added_by'=>$json_score_status]);                    
+                                            
 
                     if($rubber_completed && $match_status=='completed'){
                      $winners_from_rubber = ScoreCard::getWinnerInRubber($match_id, $match_model->sports_id);
@@ -965,6 +971,7 @@ class SquashScoreCardController extends parentScoreCardController
                                              'match_result'   => $match_result,
                                             'score_added_by'=>$json_score_status, 
                                             'scoring_status'=>$approved]);
+                                        $this->move_forward_schedule( $match_id  , $winner_team_id , $looser_team_id  );
 
 
                        
@@ -988,6 +995,7 @@ class SquashScoreCardController extends parentScoreCardController
                      'score_added_by'=>$json_score_status]);
 
                          $this->updateStatitics($match_id,$winner_team_id, $looser_team_id);
+                         $this->move_forward_schedule( $match_id  , $winner_team_id , $looser_team_id  );
             }
         }
         //MatchSchedule::where('id',$match_id)->update(['winner_id'=>$winner_team_id,'match_details'=>$json_match_details_array,'score_added_by'=>$json_score_status ]);
@@ -1185,6 +1193,7 @@ class SquashScoreCardController extends parentScoreCardController
                                      'has_result'     => 1,
                                      'match_result'   => 'win',
                                     'score_added_by'=>$json_score_status]);
+                    $this->move_forward_schedule( $match_id  , $winner_team_id , $looser_team_id  );
 
                     if(!empty($match_model->tournament_round_number)) {
                         $match_model->updateBracketDetails();
@@ -1193,6 +1202,24 @@ class SquashScoreCardController extends parentScoreCardController
                         $sportName = Sport::where('id',$match_model->sports_id)->pluck('sports_name');
                         $this->insertPlayerStatistics($sportName,$match_id);
                         $this->updateStatitics($match_id, $winner_team_id, $looser_team_id); 
+    }
+
+     private function move_forward_schedule( $match_id , $winner_team_id , $looser_team_id )
+    {
+            $match_data = MatchSchedule::where('id',$match_id)->first()->get();
+            // winner go 
+            if( isset( $match_data['winner_schedule_id'] ) && $match_data['winner_schedule_id'] * 1 > 0 ) 
+            {
+                $ab_id = $match_data['winner_schedule_position']."_id";
+                MatchSchedule::where('id' , $match_data['winner_schedule_id'] )->update( [ $ab_id=>$winner_team_id ] );
+            }
+
+            if( isset( $match_data['loser_schedule_id'] ) && $match_data['loser_schedule_id'] * 1 > 0 ) 
+            {
+                $ab_id = $match_data['loser_schedule_position']."_id";
+                if( $ab_id == 'a' || $ab_id == 'b' )
+                    MatchSchedule::where('id' , $match_data['loser_schedule_id'] )->update( [ $ab_id=>$looser_team_id ] );
+            }
     }
 
 

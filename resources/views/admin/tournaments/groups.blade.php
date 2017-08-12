@@ -18,7 +18,7 @@
                     <div  class="tab-content clearfix">
                         <div id="group_stage" class="tab-pane fade active in">
                         <!-- /.panel-heading -->
-							@if($tournament_type=='league' || $tournament_type=='multistage')
+							@if($tournament_type=='league' || $tournament_type=='multistage' || $tournament_type=='doublemultistage')
 								@include ('tournaments.editablegroup')
 							@else
 								@include ('tournaments.viewablegroup')

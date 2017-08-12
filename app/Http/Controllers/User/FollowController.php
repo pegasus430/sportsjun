@@ -103,7 +103,7 @@ class FollowController extends Controller
                                         $photoUrl['url'] = '';
                                 }
 
-                                if ($followedTournament['type'] == 'knockout')
+                                if ($followedTournament['type'] == 'knockout' || $followedTournament['type'] == 'doubleknockout')
                                 {
                                         if (!empty($followedTournament['final_stage_teams']))
                                         {
@@ -150,7 +150,7 @@ class FollowController extends Controller
                                 SELECT DISTINCT t.id 
                                 FROM `tournaments` t
                                 INNER JOIN `tournament_group_teams` g ON g.tournament_id = t.id AND g.team_id = $self_user_id
-                                WHERE t.schedule_type = 'individual' AND t.id IN ($tournament_ids) AND t.type != 'knockout' ");
+                                WHERE t.schedule_type = 'individual' AND t.id IN ($tournament_ids) AND t.type != 'knockout' AND t.type != 'doubleknockout' ");
                                 DB::setFetchMode(PDO::FETCH_CLASS);
                                 $existing_tournament_ids = array_column($existing_tournament_ids, 'team');
                         }

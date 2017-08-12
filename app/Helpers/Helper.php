@@ -1751,7 +1751,7 @@ class Helper
                         SELECT DISTINCT t.id 
                         FROM `tournaments` t
                         INNER JOIN `tournament_group_teams` g ON g.tournament_id = t.id AND g.team_id = $userId
-                        WHERE t.schedule_type = 'individual' AND t.id IN ($parent_tournament_id) AND t.type != 'knockout' ");
+                        WHERE t.schedule_type = 'individual' AND t.id IN ($parent_tournament_id) AND t.type != 'knockout' AND t.type != 'doubleknockout' ");
         DB::setFetchMode(PDO::FETCH_CLASS);
 
         $parent_tournament_details = TournamentParent::where('id', $parent_tournament_id)->get();
@@ -1962,7 +1962,7 @@ class Helper
         $userId = isset(Auth::user()->id) ? Auth::user()->id : 0;      //user or guest
         $query = "select u.name as user_name,s.sports_name,t.id,t.name,tp.logo as url,t.description,
                         case 
-                                WHEN t.type='knockout' THEN IFNULL(t.final_stage_teams,0)
+                                WHEN ( t.type='knockout' || t.type='doubleknockout' ) THEN IFNULL(t.final_stage_teams,0)
                                 ELSE (select IFNULL(count(id),0) from tournament_group_teams where tournament_id=t.id group by t.id)
                         end as team_count
                         from tournaments t 

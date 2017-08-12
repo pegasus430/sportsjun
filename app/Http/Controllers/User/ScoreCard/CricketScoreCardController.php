@@ -1052,6 +1052,7 @@ class CricketScoreCardController extends parentScoreCardController
                         'score_added_by' => $json_score_status,
                         'match_report'   => $match_report,
                         'player_of_the_match'   => $player_of_the_match]);
+                    $this->move_forward_schedule( $match_id  , $winner_team_id , $looser_team_id  );
 //                                Helper::printQueries();
 
                     if (!empty($matchScheduleDetails['tournament_round_number']))
@@ -1089,6 +1090,8 @@ class CricketScoreCardController extends parentScoreCardController
                     'scoring_status' => $approved,
                     'match_report'   => $match_report,
                     'player_of_the_match'   => $player_of_the_match]);
+                $this->move_forward_schedule( $match_id  , $winner_team_id , $looser_team_id  );
+
                 if ($match_status == 'completed')
                 {
                     $sportName = Sport::where('id', $matchScheduleDetails['sports_id'])->pluck('sports_name');
@@ -1111,6 +1114,7 @@ class CricketScoreCardController extends parentScoreCardController
                     'score_added_by' => $json_score_status,
                     'match_report'   => $match_report,
                     'player_of_the_match'   => $player_of_the_match]);
+                $this->move_forward_schedule( $match_id  , $winner_team_id , $looser_team_id  );
             }
         }
 
@@ -1163,6 +1167,24 @@ class CricketScoreCardController extends parentScoreCardController
 
 
         return redirect()->back()->with('message','updated');
+    }
+
+     private function move_forward_schedule( $match_id , $winner_team_id , $looser_team_id )
+    {
+            $match_data = MatchSchedule::where('id',$match_id)->first()->get();
+            // winner go 
+            if( isset( $match_data['winner_schedule_id'] ) && $match_data['winner_schedule_id'] * 1 > 0 ) 
+            {
+                $ab_id = $match_data['winner_schedule_position']."_id";
+                MatchSchedule::where('id' , $match_data['winner_schedule_id'] )->update( [ $ab_id=>$winner_team_id ] );
+            }
+
+            if( isset( $match_data['loser_schedule_id'] ) && $match_data['loser_schedule_id'] * 1 > 0 ) 
+            {
+                $ab_id = $match_data['loser_schedule_position']."_id";
+                if( $ab_id == 'a' || $ab_id == 'b' )
+                    MatchSchedule::where('id' , $match_data['loser_schedule_id'] )->update( [ $ab_id=>$looser_team_id ] );
+            }
     }
 
 }

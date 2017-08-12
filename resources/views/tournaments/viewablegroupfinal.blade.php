@@ -59,6 +59,7 @@
 @endif
 
 <script type="text/javascript">
+// viewablegroup final
 function finalStageTeams(flag) {
 //    var finalStageTeams = $("#final_stage_teams").val();
     var finalStageTeams = $('select#final_stage_teams').val();

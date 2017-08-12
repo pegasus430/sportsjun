@@ -17,12 +17,14 @@
 
 
     <div class="col-sm-12 group-stage sportsjun-forms">
+    {!! Form::hidden('dispViewFlag', $dispViewFlag, array('id' => 'dispViewFlag')) !!}
     @include('tournaments.share_groups')
         @if($dispViewFlag=='group')
         @if($tournament_type=='league' || $tournament_type=='multistage'  || $tournament_type=='doublemultistage')
         <div id="group_stage">
-        <!-- /.panel-heading -->
-            @if(count($tournamentDetails[0]['final_stage_teams']) || $tournamentDetails[0]['group_is_ended'] )
+        <!-- /.panel-heading 222 -->
+       
+            @if($tournamentDetails[0]['final_stage_teams'] > 0 || $tournamentDetails[0]['group_is_ended'] )
                     @include ('tournaments.viewablegroup')
             @else
 				@if($isOwner)
@@ -84,7 +86,7 @@
 @include ('tournaments.generatematchform',[])
 <script type="text/javascript">
 $(function() {  
-    @if($tournament_type=='knockout')
+    @if($tournament_type=='knockout' || $tournament_type=='doubleknockout')
         $('.nav-tabs a[href="#final_stage"]').tab("show");
     @endif    
     @if(count($tournamentDetails[0]['final_stage_teams']))

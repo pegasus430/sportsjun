@@ -78,6 +78,7 @@
 @endif
 
 <script type="text/javascript">
+// editable group final
 
 function finalStageTeams(flag) {
 //    var finalStageTeams = $("#final_stage_teams").val();
@@ -112,7 +113,27 @@ function finalStageTeams(flag) {
             },
             success: function(response) {
                 $.unblockUI();  
-				$("#generateScheduleLeagueModal").modal();
+				$.ajax({
+						url: base_url + '/matchScheduleExistCheck/'+tournament_id+'/'+1, //  match check in group stage
+						type: "get", 
+						success: function(response) {
+							if( response.match_count * 1 > 0 )
+							{
+								$.confirm({
+									title: 'Confirmation',
+									content: "Schedule is already created. Do you want to delete and recreate again?",
+									confirm: function () {
+										$("#is_knockout").val( 1 );
+										$("#generateScheduleLeagueModal").modal();
+									}
+								});
+							} else {
+								$("#is_knockout").val( 1 );
+								$("#generateScheduleLeagueModal").modal();
+							}
+
+						}
+				});
             }
         });
 //    }

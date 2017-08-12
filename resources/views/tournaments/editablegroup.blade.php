@@ -11,10 +11,10 @@
      </center>
                  </div>
                         <!-- /.panel-heading -->
+
 			@foreach($tournament as $tour)
 			@foreach($tour->groups as $group)
 			<div id="group_{{ $group->id }}">
-
             <div class="group_no clearfix">
             	<div class="pull-left"><h4 class="stage_head">{{ $group->name }}</h4></div>
                 <div class="pull-right ed-btn">
@@ -22,14 +22,12 @@
                     <a href="#" onclick="deleteGroup({{ $tournament_id }},{{ $group->id }})" class="delete" ><i class="fa fa-remove"></i></a>
                 </div>
             </div>
-
             <div id="edit_group_{{ $group->id }}" class="group_edit">
 				<div class="form-group"><input type="text" class="gui-input" id="group_name_{{ $group->id }}" value="{{ $group->name }}"></div>
 				<button type="button" name="editgroup" id="editgroup" onClick="editgroupname({{ $group->id }});" class="button btn-primary">
 						Update Group Name
 				</button>
 			</div>
-
 			<div class="cstmpanel-tabs">
 				<!-- Nav tabs -->
 				<ul class="nav nav-tabs nav-justified">
@@ -576,7 +574,7 @@
             <hr />
             <div class="form-inline clearfix" style="margin-top: 12px;">
 				<button type="button" class="button btn-primary" onclick="createGroup();" style="margin: 8px 15px 8px 0;">Add More Groups</button>
-				<button type="button" class="button btn-primary" onclick="GenerateMatch();" style="margin: 8px 15px 8px 0;">Generate Matches</button>
+				<button type="button" class="button btn-primary"  id='groupstage_generatematch' style="margin: 8px 15px 8px 0;">Generate Matches</button>
                 <div id="create_group" style="display:none;">
 					<div  class="form-group"><input id="group" class="gui-input" placeholder="No of Groups "></div>
                     <button type="button" name="add_group" id="add_group" onClick="insertgroup({{ $tour->id }},{{ $tour->groups_number }});" class="button btn-primary">Create Group</button>
@@ -584,11 +582,9 @@
             </div>
             <hr />
 			<!-- /.panel-body -->
-
-
 <script type="text/javascript">
 
-$(function() {
+	$(document).ready(function() {
 		var sport_id = $('#sport_id').val();
 		var tournament_id = $('#tournament_id').val();
 		var schedule_type = $('#schedule_type').val();
@@ -600,12 +596,35 @@ $(function() {
                 $('#team_name').val(ui.item.value);
             }
         });
+
+		$("#groupstage_generatematch").click( function(){
+
+			$.ajax({
+				url: base_url + '/matchScheduleExistCheck/'+tournament_id+'/'+0, //  match check in group stage
+				type: "get", 
+				success: function(response) {
+					if( response.match_count * 1 > 0 )
+					{
+						$.confirm({
+							title: 'Confirmation',
+							content: "Schedule is already created. Do you want to delete and recreate again?",
+							confirm: function () {
+								$("#is_knockout").val( 0 );
+								$("#generateScheduleLeagueModal").modal();
+							}
+						});
+					} else {
+						$("#is_knockout").val( 0 );
+						$("#generateScheduleLeagueModal").modal();
+					}
+
+				}
+			});
+		});
+
 	});
 	
-	function GenerateMatch()
-	{
-		$("#generateScheduleLeagueModal").modal();
-	}
+	
 
 	function addTeam(group_id,label,prev_team_coount)
     {

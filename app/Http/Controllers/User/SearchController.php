@@ -356,7 +356,7 @@ class SearchController extends Controller
                                                 SELECT DISTINCT t.id 
                                                 FROM `tournaments` t
                                                 INNER JOIN `tournament_group_teams` g ON g.tournament_id = t.id AND g.team_id = $loginUserId
-                                                WHERE t.schedule_type = 'individual' AND t.id IN ($checkArray) AND t.type != 'knockout' ");
+                                                WHERE t.schedule_type = 'individual' AND t.id IN ($checkArray) AND t.type != 'knockout' AND t.type != 'doubleknockout' ");
                                         $follow_array = DB::select("SELECT DISTINCT tp.type_id as item
 												FROM `followers` tp  
 												WHERE tp.user_id = $loginUserId AND tp.type_id IN ($checkArray) AND `type` = 'tournament' AND tp.deleted_at IS NULL ");
@@ -592,7 +592,7 @@ class SearchController extends Controller
     										SELECT DISTINCT t.id 
     										FROM `tournaments` t
     										INNER JOIN `tournament_group_teams` g ON g.tournament_id = t.id AND g.team_id = $loginUserId
-    										WHERE t.schedule_type = 'individual' AND t.id IN ($checkArray) AND t.type != 'knockout' ");
+    										WHERE t.schedule_type = 'individual' AND t.id IN ($checkArray) AND t.type != 'knockout' AND t.type != 'doubleknockout' ");
                                 $follow_array = DB::select("SELECT DISTINCT tp.type_id as item
 												FROM `followers` tp  
 												WHERE tp.user_id = $loginUserId AND tp.type_id IN ($checkArray) AND `type` = 'tournament' AND tp.deleted_at IS NULL ");

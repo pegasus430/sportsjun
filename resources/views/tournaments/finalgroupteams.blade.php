@@ -24,8 +24,6 @@
                  @endif 
                 </tbody>
                 </table>
-            
-            
             @else   
                      <div class="sj-alert sj-alert-info">
                     {{ trans('message.tournament.final.nofinalstageteams') }}
@@ -39,7 +37,7 @@
                 <div class="section">
                     <label for="firstname" class="field prepend-icon">
                             <!--<input type="text" placeholder="Number Of Teams Qualifying For The Final Stage" value="" id="final_stage_teams">-->
-                            {!! Form::select('final_stage_teams[]',$tournamentTeams,$selectetdFinalStageTeams, array('multiple'=>true,'class'=>'multiselect','id'=>'final_stage_teams','placeholder'=>trans('message.tournament.group.numberofteamsqualify'))) !!}
+                            {!! Form::select('final_stage_teams[]',$tournamentTeams,$selectetdFinalStageTeams, array('multiple'=>true,'class'=>'multiselect','id'=>'final_stage_teams')) !!}
                     </label>
                 </div>
                 <button type="button" class="button btn-primary" onclick="finalStageTeams('group')">Submit </button>
@@ -52,3 +50,5 @@
         </div>
     </div>
 </div>
+
+ 

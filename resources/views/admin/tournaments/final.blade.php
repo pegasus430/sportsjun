@@ -116,6 +116,8 @@
 
 
 <script type="text/javascript">
+// final
+
 function finalStageTeams() {
 //    var finalStageTeams = $("#final_stage_teams").val();
     var finalStageTeams = $('select#final_stage_teams').val();

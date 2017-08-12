@@ -1176,7 +1176,29 @@ class BadmintonScoreCardController extends parentScoreCardController
         $sportName = Sport::where('id', $match_model->sports_id)->pluck('sports_name');
         $this->insertPlayerStatistics($sportName, $match_id);
         $this->updateStatitics($match_id, $winner_team_id, $looser_team_id);
+
+        $this->move_forward_schedule( $match_id  , $winner_team_id , $looser_team_id  );
     }
+    
+
+    private function move_forward_schedule( $match_id , $winner_team_id , $looser_team_id )
+    {
+            $match_data = MatchSchedule::where('id',$match_id)->first()->get();
+            // winner go 
+            if( isset( $match_data['winner_schedule_id'] ) && $match_data['winner_schedule_id'] * 1 > 0 ) 
+            {
+                $ab_id = $match_data['winner_schedule_position']."_id";
+                MatchSchedule::where('id' , $match_data['winner_schedule_id'] )->update( [ $ab_id=>$winner_team_id ] );
+            }
+
+            if( isset( $match_data['loser_schedule_id'] ) && $match_data['loser_schedule_id'] * 1 > 0 ) 
+            {
+                $ab_id = $match_data['loser_schedule_position']."_id";
+                if( $ab_id == 'a' || $ab_id == 'b' )
+                    MatchSchedule::where('id' , $match_data['loser_schedule_id'] )->update( [ $ab_id=>$looser_team_id ] );
+            }
+    }
+
 
 
 }

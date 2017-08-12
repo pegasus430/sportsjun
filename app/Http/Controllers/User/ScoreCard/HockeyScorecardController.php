@@ -395,6 +395,7 @@ class HockeyScorecardController extends parentScoreCardController
                         'is_tied'=>$is_tie,
                         'score_added_by'=>$json_score_status]);
 //                                Helper::printQueries();
+                $this->move_forward_schedule( $match_id  , $winner_team_id , $looser_team_id  );
 
                     if(!empty($matchScheduleDetails['tournament_round_number'])) {
                         $matchScheduleDetails->updateBracketDetails();
@@ -847,6 +848,24 @@ if(!isset($match_details['penalties']['team_b']['players_ids']))$match_details['
         $hockey_model->goals_scored     = $goal_count;
         $hockey_model->playing_status   = $playing_status;
         $hockey_model->save();
+    }
+
+     private function move_forward_schedule( $match_id , $winner_team_id , $looser_team_id )
+    {
+            $match_data = MatchSchedule::where('id',$match_id)->first()->get();
+            // winner go 
+            if( isset( $match_data['winner_schedule_id'] ) && $match_data['winner_schedule_id'] * 1 > 0 ) 
+            {
+                $ab_id = $match_data['winner_schedule_position']."_id";
+                MatchSchedule::where('id' , $match_data['winner_schedule_id'] )->update( [ $ab_id=>$winner_team_id ] );
+            }
+
+            if( isset( $match_data['loser_schedule_id'] ) && $match_data['loser_schedule_id'] * 1 > 0 ) 
+            {
+                $ab_id = $match_data['loser_schedule_position']."_id";
+                if( $ab_id == 'a' || $ab_id == 'b' )
+                    MatchSchedule::where('id' , $match_data['loser_schedule_id'] )->update( [ $ab_id=>$looser_team_id ] );
+            }
     }
 
 

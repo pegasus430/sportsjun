@@ -1358,6 +1358,7 @@ class TabletennisScoreCardController extends parentScoreCardController
                             'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
                             //'match_result'   => $match_result,
                             'score_added_by'=>$json_score_status]);
+                        $this->move_forward_schedule( $match_id  , $winner_team_id , $looser_team_id  );
                         if(!empty($matchScheduleDetails['tournament_round_number'])) {
                             $matchScheduleDetails->updateBracketDetails();
                         }
@@ -1390,6 +1391,7 @@ class TabletennisScoreCardController extends parentScoreCardController
 
                                 //'match_result'   => $match_result,
                                 'score_added_by'=>$json_score_status]);
+                            $this->move_forward_schedule( $match_id  , $winner_team_id , $looser_team_id  );
 
                             if(!empty($matchScheduleDetails['tournament_round_number'])) {
                                 $matchScheduleDetails->updateBracketDetails();
@@ -1415,6 +1417,7 @@ class TabletennisScoreCardController extends parentScoreCardController
                         'winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
                         //'match_result'   => $match_result,
                         'score_added_by'=>$json_score_status, 'scoring_status'=>$approved]);
+                    $this->move_forward_schedule( $match_id  , $winner_team_id , $looser_team_id  );
 
                     if($match_status=='completed')
                     {
@@ -1443,6 +1446,7 @@ class TabletennisScoreCardController extends parentScoreCardController
                             // 'match_result'   => $match_result,
                             'score_added_by'=>$json_score_status,
                             'scoring_status'=>$approved]);
+                            $this->move_forward_schedule( $match_id  , $winner_team_id , $looser_team_id  );
 
 
 
@@ -1463,7 +1467,7 @@ class TabletennisScoreCardController extends parentScoreCardController
 
                                                               // 'match_result'   => $match_result,
                                                               'score_added_by'=>$json_score_status]);
-
+            $this->move_forward_schedule( $match_id  , $winner_team_id , $looser_team_id  );
                 //$this->updateStatitics($match_id,$winner_team_id, $looser_team_id);
             }
         }
@@ -1540,6 +1544,24 @@ class TabletennisScoreCardController extends parentScoreCardController
             TtPlayerRubberScore::where('rubber_id',$rubber_id)->where('team_id',$user_id)->update(['set1'=>$set1,'set2'=>$set2,'set3'=>$set3,'set4'=>$set4,'set5'=>$set5,'user_id_a'=>$user_id_a,'double_faults'=>$double_faults]);
 
         }
+    }
+
+     private function move_forward_schedule( $match_id , $winner_team_id , $looser_team_id )
+    {
+            $match_data = MatchSchedule::where('id',$match_id)->first()->get();
+            // winner go 
+            if( isset( $match_data['winner_schedule_id'] ) && $match_data['winner_schedule_id'] * 1 > 0 ) 
+            {
+                $ab_id = $match_data['winner_schedule_position']."_id";
+                MatchSchedule::where('id' , $match_data['winner_schedule_id'] )->update( [ $ab_id=>$winner_team_id ] );
+            }
+
+            if( isset( $match_data['loser_schedule_id'] ) && $match_data['loser_schedule_id'] * 1 > 0 ) 
+            {
+                $ab_id = $match_data['loser_schedule_position']."_id";
+                if( $ab_id == 'a' || $ab_id == 'b' )
+                    MatchSchedule::where('id' , $match_data['loser_schedule_id'] )->update( [ $ab_id=>$looser_team_id ] );
+            }
     }
 
 

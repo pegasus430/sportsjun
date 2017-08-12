@@ -444,6 +444,24 @@ class ArcheryController extends Controller
         return view('scorecards.archery.round_scoring', compact('match_obj','player','round','isValidUser'));
     }
 
+    private function move_forward_schedule( $match_id , $winner_team_id , $looser_team_id )
+    {
+            $match_data = MatchSchedule::where('id',$match_id)->first()->get();
+            // winner go 
+            if( isset( $match_data['winner_schedule_id'] ) && $match_data['winner_schedule_id'] * 1 > 0 ) 
+            {
+                $ab_id = $match_data['winner_schedule_position']."_id";
+                MatchSchedule::where('id' , $match_data['winner_schedule_id'] )->update( [ $ab_id=>$winner_team_id ] );
+            }
+
+            if( isset( $match_data['loser_schedule_id'] ) && $match_data['loser_schedule_id'] * 1 > 0 ) 
+            {
+                $ab_id = $match_data['loser_schedule_position']."_id";
+                if( $ab_id == 'a' || $ab_id == 'b' )
+                    MatchSchedule::where('id' , $match_data['loser_schedule_id'] )->update( [ $ab_id=>$looser_team_id ] );
+            }
+    }
+
     public function end_match(Request $request){
           $loginUserId = Auth::user()->id;
         
@@ -482,7 +500,10 @@ class ArcheryController extends Controller
         $match_model = MatchSchedule::find($request->match_id);
         $match_model->match_status='completed';
         $match_model->score_added_by=$json_score_status;
+        $loser_team_id = $match_model->a_id == $winner_team_id ? $b_id : $a_id;
         $match_model->save();
+
+        $this->move_forward_schedule( $match_id  , $winner_team_id , $loser_team_id );
 
         return 'ok'; 
 

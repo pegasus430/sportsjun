@@ -414,6 +414,7 @@
         
     function editschedulegroupmatches(schedule_id,is_owner,disableflag)
     {
+		// editrubber.blader
         $.get(base_url+'/editteamschedule',{'scheduleId':schedule_id,'isOwner':is_owner},function(response,status,xhr){
             $("#myModal").modal();
             if(status == 'success')

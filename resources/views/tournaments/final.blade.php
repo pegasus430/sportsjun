@@ -1,4 +1,4 @@
-   <script src="{{ asset('/js/bracket/SvgCreatorLibrary.js') }}"></script>
+<script src="{{ asset('/js/bracket/SvgCreatorLibrary.js') }}"></script>
 <script src="{{ asset('/js/bracket/bracket.js') }}"></script>
 <script type="text/javascript" src="https://cdn.rawgit.com/asvd/dragscroll/master/dragscroll.js"></script>
 
@@ -20,7 +20,7 @@ $(document).ready(function(){
 
     function update_bracket_table()
     {
-        if('{{$tournament_type}}' == 'knockout')
+        if('{{$tournament_type}}' == 'knockout' || '{{$tournament_type}}' == 'multistage')
         {
             $.ajax({
                 type: 'GET',
@@ -30,13 +30,13 @@ $(document).ready(function(){
                 },
                 success: function(response) {
                     console.log(response);
-                    $.unblockUI();                
+                    $.unblockUI();
                     B.generateSingleElimination( response , 0 , 0 );
                 }
             });
         }
 
-        if( '{{$tournament_type}}' == 'doubleknockout' )
+        if( '{{$tournament_type}}' == 'doubleknockout'  || '{{$tournament_type}}' == 'doublemultistage' )
         {
             $.ajax({
                 type: 'GET',

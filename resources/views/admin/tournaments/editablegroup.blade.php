@@ -263,6 +263,7 @@
 
     function editschedulegroupmatches(schedule_id,is_owner)
     {
+		// editablegroup.blade
         $.get(base_url+'/editteamschedule',{'scheduleId':schedule_id,'isOwner':is_owner},function(response,status,xhr){
             $("#myModal").modal();
             if(status == 'success')

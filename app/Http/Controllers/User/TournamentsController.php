@@ -201,7 +201,7 @@ class TournamentsController extends Controller
 								$subTournamentsDetails[$key]['sports_logo'] = $sport_logo['url'];
 							else
 								$subTournamentsDetails[$key]['sports_logo'] = '';
-							if ($subtour['type'] == 'knockout') {
+							if ($subtour['type'] == 'knockout' || $subtour['type'] == 'doubleknockout') {
 								if (!empty($subtour['final_stage_teams'])) {
 									$subTournamentsDetails[$key]['team_count'] = $subtour['final_stage_teams'];
 								} else {
@@ -323,7 +323,7 @@ class TournamentsController extends Controller
 						$followingTournamentDetails[$followKey]['url'] = '';
 					}
 
-					if ($followedTournament['type'] == 'knockout') {
+					if ($followedTournament['type'] == 'knockout' || $followedTournament['type'] == 'doubleknockout') {
 						if (!empty($followedTournament['final_stage_teams'])) {
 							$followingTournamentDetails[$followKey]['team_count'] = $followedTournament['final_stage_teams'];
 						} else {
@@ -446,11 +446,7 @@ class TournamentsController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(Requests\CreateTournamentRequest $request)
-	{
-
-		// echo "<pre>";
-		//   print_r($request->all());
-		// die;
+	{ 
 
 		if(!empty($request['isParent']) && $request['isParent']=='yes')
 		{
@@ -571,7 +567,7 @@ class TournamentsController extends Controller
 		$tournament_type = $Tournaments->type;
 
 
-		if($tournament_type == 'league' || $tournament_type == 'multistage' )
+		if($tournament_type == 'league' || $tournament_type == 'multistage' || $tournament_type == 'doublemultistage' )
 		{
 			if($last_inserted_sport_id > 0)
 			{
@@ -2122,27 +2118,29 @@ class TournamentsController extends Controller
 			return Response::json($result);
 		}
 		$finalStageTeamIds = '';
-		if($flag=='group') {
-			Tournaments::where('id', $tournamentId)->update(['final_stage_teams'=>count($finalStageTeams),
-				'final_stage_teams_ids'=>implode(',',$finalStageTeams)]);
-		}else{
-			$tournamentKnockoutTeams = TournamentFinalTeams::where('tournament_id',$tournamentId)->get(['team_id']);
-			if(count($tournamentKnockoutTeams)) {
-				$finalStageTeamIds = implode(',',array_flatten($tournamentKnockoutTeams->toArray()));
-				Tournaments::where('id', $tournamentId)->update(['final_stage_teams'=>count($tournamentKnockoutTeams),
-					'final_stage_teams_ids'=>$finalStageTeamIds]);
-			}else{
-				$result['result']='error';
-				return Response::json($result);
+
+		Tournaments::where('id', $tournamentId)->update(['final_stage_teams'=>count($finalStageTeams), 'final_stage_teams_ids'=>implode(',',$finalStageTeams)]);
+		TournamentFinalTeams::where('tournament_id', $tournamentId)->delete();
+
+		foreach ($finalStageTeams as $team) {
+				if(!empty($team)) {
+					$finalTeamsArray[] = [
+						'tournament_id' => $tournamentId,
+						'team_id' => $team,
+						'created_at' => Carbon::now(),
+						'updated_at' => Carbon::now()
+					];
+				}
 			}
+			
+		if(!empty($finalTeamsArray)) {
+			TournamentFinalTeams::insert($finalTeamsArray);
 		}
-//            $teamIds = $this->getTournamentTeams($tournamentId);
-//            $result['teamIds'] = implode(',',$finalStageTeams);
-//            $result['finalStageTeams'] = $finalStageTeams;
+		 
 		$result['result']='success';
 		return Response::json($result);
-
 	}
+ 
 
 	public function deleteFinalStageTeams() {
 		$tournamentId = Request::get('tournamentId');
@@ -2622,8 +2620,6 @@ class TournamentsController extends Controller
 				$finalTeamsmodel->team_id = $user->id;
 				$finalTeamsmodel->save();
 				$result['result']='success';
-
-
 		}
 
 		$tournamentFinalTeams = $this->getFinalStageAddedTeams($tournamentId, $scheduleType);

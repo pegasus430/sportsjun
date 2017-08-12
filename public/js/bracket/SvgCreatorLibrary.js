@@ -441,7 +441,7 @@ function SvgCreatorLibrary(id)
     {
         try
         {
-            var svgElement = document.getElementById(id);
+            var svgElement = GetGlobalById(id);
 
             this._SetDefaultTransformValues(transform, "Translate", [0, 0]);
             this._SetDefaultTransformValues(transform, "Rotate", [0, 0, 0]);
@@ -487,7 +487,7 @@ function SvgCreatorLibrary(id)
     {
         try
         {
-            var svgElement = document.getElementById(id);
+            var svgElement = GetGlobalById(id);
             var transform = svgElement.getAttribute("transform");
 
             transform = (transform == null || transform == "") ? "translate(0,0) rotate(0,0,0), scale(1,1)" : transform;

@@ -182,7 +182,7 @@ class TournamentsController extends Controller
 		$tournament_type = $Tournaments->type;
 		
 		
-		if($tournament_type == 'league' || $tournament_type == 'multistage' )
+		if($tournament_type == 'league' || $tournament_type == 'multistage' || $tournament_type == 'doublemultistage' )
 		{
 		  if($last_inserted_sport_id > 0)
 		  {

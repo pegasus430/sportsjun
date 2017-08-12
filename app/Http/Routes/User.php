@@ -581,6 +581,13 @@ Route::get('addschedule', [
     'as'   => 'addschedule',
     'uses' => 'User\ScheduleController@saveschedule',
 ]);
+
+Route::get('matchScheduleExistCheck/{tournament_id}/{is_knockout}', [
+    'as'   => 'matchScheduleExistCheck',
+    'uses' => 'User\ScheduleController@matchScheduleExistCheck',
+]);
+
+
 //to save match schedule
 Route::get('main_addschedule', [
     'as'   => 'main_addschedule',
@@ -588,19 +595,19 @@ Route::get('main_addschedule', [
 ]);
 
 //to save match schedule
-Route::get('generateScheduleLeague/{tournament_id}', [
+Route::post('generateScheduleLeague', [
     'as'   => 'generateScheduleLeague',
     'uses' => 'User\ScheduleController@generateScheduleLeague',
 ]);
 
 //to save match schedule
-Route::get('generateScheduleKnockout/{tournament_id}', [
+Route::post('generateScheduleKnockout', [
     'as'   => 'generateScheduleKnockout',
     'uses' => 'User\ScheduleController@generateScheduleKnockout',
 ]);
 
 //to save match schedule
-Route::get('generateScheduleKnockoutDouble/{tournament_id}', [
+Route::post('generateScheduleKnockoutDouble', [
     'as'   => 'generateScheduleKnockoutDouble',
     'uses' => 'User\ScheduleController@generateScheduleKnockoutDouble',
 ]);

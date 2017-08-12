@@ -43,10 +43,10 @@
     ?>
     <ul class="nav nav-tabs search-tournament-tabs hidden-xs">
         <li class="active"><a data-toggle="tab" href="#tournament_info">Details</a></li>
-        @if($tournament->type=='league' || $tournament->type=='multistage')
+        @if($tournament->type=='league' || $tournament->type=='multistage' || $tournament->type=='doublemultistage' )
             <li><a data-toggle="tab" href="#tournament_group_stage">Group Stage</a></li>
         @endif
-        @if($tournament->type=='knockout' || $tournament->type=='multistage')
+        @if($tournament->type=='knockout' || $tournament->type=='multistage' || $tournament->type=='doubleknockout' || $tournament->type=='doublemultistage')
             <li><a data-toggle="tab" href="#tournament_final_stage">Final Stage</a></li>
         @endif
         <li><a data-toggle="tab" href="#tournament_group_matches">Matches</a></li>
@@ -58,10 +58,10 @@
             <select id="select_tournament_tabs"
                     onchange="return tournamentTabSelect(this)">
                 <option value="#tournament_info" selected>Details</option>
-                @if($tournament->type=='league' || $tournament->type=='multistage')
+                @if($tournament->type=='league' || $tournament->type=='multistage' || $tournament->type=='doublemultistage' )
                     <option value="#tournament_group_stage">Group Stage</option>
                 @endif
-                @if($tournament->type=='knockout' || $tournament->type=='multistage')
+                @if($tournament->type=='knockout' || $tournament->type=='multistage' || $tournament->type=='doubleknockout' || $tournament->type=='doublemultistage')
                     <option value="#tournament_final_stage">Final Stage</option>
                 @endif
                 <option value="#tournament_group_matches">Matches</option>

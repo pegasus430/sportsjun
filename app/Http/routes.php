@@ -31,7 +31,8 @@ $router->group(['middleware' => 'auth'], function ()
 Route::get('auth-check', ['uses' => 'User\UserController@authCheck', 'as' => 'auth.check']);
 
 // pDos SQL Debug
-// Event::listen('illuminate.query', function($query)
+// Try1: Helper::printQueries();
+// Try2: Event::listen('illuminate.query', function($query)
 // {
 //     var_dump($query);
 // });

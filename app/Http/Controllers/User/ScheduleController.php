@@ -1205,6 +1205,7 @@ class ScheduleController extends Controller {
 
     private function generateDoubleElimination( $TeamN , $nPlaces )
     {
+       
             $wingo = $this->build_first_second_line( $TeamN );
 
             // (win_lose , round number , match number) => 
@@ -1512,7 +1513,7 @@ class ScheduleController extends Controller {
     }
 
 
-    
+   
 
     public function JsonOutputScheduleKnockoutDouble($tournament_id)
     {
@@ -1551,49 +1552,24 @@ class ScheduleController extends Controller {
 
     }
 
-
-      
-    public function generateScheduleKnockoutDouble($tournament_id)
+ 
+    public function generateScheduleKnockoutDouble(Requests\GenerateMatchRequest $request)
     {
-        if( count(MatchSchedule::where('tournament_id',$tournament_id)->where('tournament_round_number','>=',0)->get() ) > 0 )
-        {
-            $results['failure'] = 'Already exist';
-            return Response::json($results);
-        }
+        $tournament_id = $request['tournament_id_save'];
+      
+        MatchSchedule::where('tournament_id',$tournament_id)->where('is_knockout' , $request['is_knockout'])->delete();
+        Tournaments::where('id',$tournament_id)->update(array('noofplaces'=>$request['noofplaces'] , 'roundofplay' => $request['roundofplay'] ));
+   
 
         $tournament       = Tournaments::where('id',$tournament_id)->first();
         $tournamentFinalTeams  = TournamentFinalTeams::where('tournament_id',$tournament_id)->get();
 
-        echo  count($tournamentFinalTeams) ;
-
         $timeline = $this->generateDoubleElimination( count($tournamentFinalTeams) , $tournament['noofplaces']  );
-
-        $interval = 1;
-
-        if( $tournament['start_date'] && $tournament['end_date'] )
-        {
-            $match_start_date = $tournament['start_date'];
-            $match_end_date   = $tournament['end_date'];
-            $S_tm = strtotime($match_start_date);
-            $E_tm = strtotime($match_end_date);
-    
-            $diff = abs( $S_tm - $E_tm );
-            $interval = $diff / count($timeline);
-        }
-
-        
-
-        // echo "<pre>";
-        // print_r( $timeline );
-        // echo "</pre>";
-        // die;
+        $timePoints = $this->MakeTimeList( $request , $tournament['start_date'] ,  count( $timeline ) );
  
-
-
         for( $i = 0 ; $i < count( $timeline ) ; $i++ )
             for( $j = 0 ; $j <  $tournament['noofplaces'] ; $j++ )
             {
-                $matchdate = date("Y-m-d" , ( $S_tm + $interval * $i ) );
 
                 if( !isset( $timeline[$i][$j] ) ) continue;
 
@@ -1611,10 +1587,10 @@ class ScheduleController extends Controller {
                     'match_category' => $tournament['player_type'],
                     'schedule_type' => $tournament['schedule_type'],
                     'match_type' => $tournament['match_type'],
-                    'match_start_date' => $matchdate,
-                    'match_start_time' => '',
-                    'match_end_date' => '',
-                    'match_end_time' => '',
+                    'match_start_date' => $timePoints[$i]['match_start_date'],
+                    'match_start_time' => $timePoints[$i]['match_start_time'],
+                    'match_end_date' => $timePoints[$i]['match_end_date'],
+                    'match_end_time' => $timePoints[$i]['match_end_time'],
                     'match_location' => $tournament['location'],
                     'address' => $tournament['address'],
                     'city_id' => $tournament['city_id'],
@@ -1637,7 +1613,8 @@ class ScheduleController extends Controller {
                     'winner_go_wl_type' => isset( $timeline[$i][$j]['winner']['go_wl_type'] ) ? $timeline[$i][$j]['winner']['go_wl_type'] : '' ,
                     'loser_schedule_position' => isset( $timeline[$i][$j]['loser']['next_match_ab_pos'] ) ? $timeline[$i][$j]['loser']['next_match_ab_pos'] : '' ,
                     'loser_go_wl_type' => isset( $timeline[$i][$j]['loser']['go_wl_type'] ) ? $timeline[$i][$j]['loser']['go_wl_type'] : '' ,
-                    'double_wl_type' => $timeline[$i][$j]['double_wl_type']
+                    'double_wl_type' => $timeline[$i][$j]['double_wl_type'],
+                    'is_knockout' => 1
                 );
                 
 
@@ -1834,42 +1811,69 @@ class ScheduleController extends Controller {
         $results['units']   = $units;
 
         return Response::json($results);
-
     }
 
-    public function generateScheduleKnockout($tournament_id)
+    private function MakeTimeList( $D , $start_date , $nRows )
     {
-        if( count(MatchSchedule::where('tournament_id',$tournament_id)->where('tournament_round_number','>=',0)->get() ) > 0 )
+        $i = 0 ;
+        
+        $daystart   = strtotime($start_date." ".$D['auto_start_time']);
+        $dayend     = strtotime($start_date." ".$D['auto_end_time']); 
+        $daymatchcount = 0;
+        $timecurrent = $daystart;
+
+        $R = array();
+        $Delta = $D['breakeachmatch'] * 1 + $D['minutespermatch'];
+
+        while( $i < $nRows )
         {
-            $results['failure'] = 'Failed to update the match schedule.';
-            return Response::json($results);
+            $r['match_start_date']  = date("Y-m-d" , $timecurrent );
+            $r['match_start_time']  = date("H:i:s" , $timecurrent );
+            $r['match_end_date']    = date("Y-m-d" , strtotime( "+".$D['minutespermatch']." minutes" , $timecurrent ) );
+            $r['match_end_time']    = date("H:i:s" , strtotime( "+".$D['minutespermatch']." minutes" , $timecurrent ) );
+
+            array_push( $R , $r );
+
+            $timecurrent = strtotime( "+".$Delta." minutes" , $timecurrent );
+            $daymatchcount++;
+
+            if( $timecurrent > $dayend || $daymatchcount >= $D['matchperday'] )
+            {
+                $dayend = strtotime('+1 day', $dayend );
+                $daystart= strtotime('+1 day', $daystart );
+                $timecurrent = $daystart;
+                $daymatchcount = 0;
+            }
+            // increase time table
+            $i++;
         }
+
+        return $R;
+    }
+
+    public function matchScheduleExistCheck( $tournament_id , $is_knockout )
+    {     
+        $results['match_count'] = count( MatchSchedule::where('tournament_id',$tournament_id)->where('is_knockout',$is_knockout)->get() ) ;
+        return Response::json($results);
+    } 
+
+    public function generateScheduleKnockout(Requests\GenerateMatchRequest $request)
+    {
+        $tournament_id = $request['tournament_id_save'];
+        MatchSchedule::where('tournament_id',$tournament_id)->where('is_knockout' , $request['is_knockout'])->delete();
+
+        Tournaments::where('id',$tournament_id)->update(array('noofplaces'=>$request['noofplaces'] , 'roundofplay' => $request['roundofplay'] ));
 
         $tournament       = Tournaments::where('id',$tournament_id)->first();
         $tournamentFinalTeams  = TournamentFinalTeams::where('tournament_id',$tournament_id)->get();
+        
 
         $timeline = $this->generateSingleElimination( count($tournamentFinalTeams) , $tournament['noofplaces'] );
-
-        $interval = 1;
-
-        if( $tournament['start_date'] && $tournament['end_date'] )
-        {
-            $match_start_date = $tournament['start_date'];
-            $match_end_date   = $tournament['end_date'];
-            $S_tm = strtotime($match_start_date);
-            $E_tm = strtotime($match_end_date);
-    
-            $diff = abs( $S_tm - $E_tm );
-            $interval = $diff / count($timeline);
-        }
- 
-
+        $timePoints = $this->MakeTimeList( $request , $tournament['start_date'] ,  count( $timeline ) );
 
         for( $i = 0 ; $i < count( $timeline ) ; $i++ )
             for( $j = 0 ; $j <  $tournament['noofplaces'] ; $j++ )
-            {
-                $matchdate = date("Y-m-d" , ( $S_tm + $interval * $i ) );
-
+            { 
                 if( !isset( $timeline[$i][$j] ) ) continue;
 
                 $A = $timeline[$i][$j]['left']  != -1 ? $tournamentFinalTeams[ $timeline[$i][$j]['left' ] ] : array('team_id' => 0 );
@@ -1886,10 +1890,10 @@ class ScheduleController extends Controller {
                     'match_category' => $tournament['player_type'],
                     'schedule_type' => $tournament['schedule_type'],
                     'match_type' => $tournament['match_type'],
-                    'match_start_date' => $matchdate,
-                    'match_start_time' => '',
-                    'match_end_date' => '',
-                    'match_end_time' => '',
+                    'match_start_date' => $timePoints[$i]['match_start_date'],
+                    'match_start_time' => $timePoints[$i]['match_start_time'],
+                    'match_end_date' => $timePoints[$i]['match_end_date'],
+                    'match_end_time' => $timePoints[$i]['match_end_time'],
                     'match_location' => $tournament['location'],
                     'address' => $tournament['address'],
                     'city_id' => $tournament['city_id'],
@@ -1908,7 +1912,8 @@ class ScheduleController extends Controller {
                     'game_type'     => $tournament['game_type'],
                     'number_of_rubber' => $tournament['number_of_rubber'],
                     'sports_category'  =>  Sport::find( $tournament['sports_id'])->sports_category,
-                    'winner_schedule_position' => $timeline[$i][$j]['winner']['next_match_ab_pos']
+                    'winner_schedule_position' =>  isset($timeline[$i][$j]['winner']['next_match_ab_pos']) ? $timeline[$i][$j]['winner']['next_match_ab_pos'] : '' ,
+                    'is_knockout' => 1
                 );
 
                 $match_schedule_result = MatchSchedule::create($schedule_data);
@@ -1933,13 +1938,13 @@ class ScheduleController extends Controller {
         return Response::json($results);
     }
 
-    public function generateScheduleLeague($tournament_id)
-    {        
-        if( count(MatchSchedule::where('tournament_id',$tournament_id)->get()) > 0 )
-        {
-            $results['failure'] = 'Failed to update the match schedule.';
-            return Response::json($results);
-        }
+      public function generateScheduleLeague(Requests\GenerateMatchRequest $request)
+    {
+        $tournament_id = $request['tournament_id_save'];
+
+        MatchSchedule::where('tournament_id',$tournament_id)->where('is_knockout' , $request['is_knockout'])->delete();
+  
+        Tournaments::where('id',$tournament_id)->update(array('noofplaces'=>$request['noofplaces'] , 'roundofplay' => $request['roundofplay'] ));
 
         $tournament       = Tournaments::where('id',$tournament_id)->first();
         $tournamentGroups = TournamentGroups::where('tournament_id',$tournament_id)->get();
@@ -1953,30 +1958,12 @@ class ScheduleController extends Controller {
           $no_of_teams += count( $tournamentGroups[$i]['team'] );
         }
   
-        $timeline = $this->generateLeagueMatching( $no_of_teams , $tournamentGroups  , $tournament['roundofplay'], $tournament['noofplaces'] );
-
-        // insert into schedule match
-
-        $interval = 1;
-
-        if( $tournament['start_date'] && $tournament['end_date'] )
-        {
-            $match_start_date = $tournament['start_date'];
-            $match_end_date   = $tournament['end_date'];
-            $S_tm = strtotime($match_start_date);
-            $E_tm = strtotime($match_end_date);
-    
-            $diff = abs( $S_tm - $E_tm );
-            $interval = $diff / count($timeline);
-        }
-
-       
+        $timeline = $this->generateLeagueMatching( $no_of_teams , $tournamentGroups  , $request['roundofplay'], $request['noofplaces'] );
+        $timePoints = $this->MakeTimeList( $request , $tournament['start_date'] ,  count( $timeline ) );
 
         for( $i = 0 ; $i < count( $timeline ) ; $i++ )
             for( $j = 0 ; $j <  $tournament['noofplaces'] ; $j++ )
             {
-                $matchdate = date("Y-m-d" , ( $S_tm + $interval * $i ) );
-
                 if( !isset( $timeline[$i][$j] ) ) continue;
 
                 $A = $tournamentGroups[$timeline[$i][$j]['group']]['team'][ $timeline[$i][$j]['left'] ];
@@ -1994,10 +1981,10 @@ class ScheduleController extends Controller {
                     'match_category' => $tournament['player_type'],
                     'schedule_type' => $tournament['schedule_type'],
                     'match_type' => $tournament['match_type'],
-                    'match_start_date' => $matchdate,
-                    'match_start_time' => '',
-                    'match_end_date' => '',
-                    'match_end_time' => '',
+                    'match_start_date' => $timePoints[$i]['match_start_date'],
+                    'match_start_time' => $timePoints[$i]['match_start_time'],
+                    'match_end_date' => $timePoints[$i]['match_end_date'],
+                    'match_end_time' => $timePoints[$i]['match_end_time'],
                     'match_location' => $tournament['location'],
                     'address' => $tournament['address'],
                     'city_id' => $tournament['city_id'],
@@ -2015,7 +2002,8 @@ class ScheduleController extends Controller {
                     'match_invite_status'=> 'pending',
                     'game_type'     => $tournament['game_type'],
                     'number_of_rubber' => $tournament['number_of_rubber'],
-                    'sports_category'  =>  Sport::find( $tournament['sports_id'])->sports_category
+                    'sports_category'  =>  Sport::find( $tournament['sports_id'])->sports_category ,
+                    'is_knockout' => 0
                 );  
  
 

@@ -22,6 +22,8 @@ class UpgradeTournamentsMatchschedule extends Migration
             $table->string('loser_schedule_position', 5);
             $table->string('loser_go_wl_type', 5);
             $table->string('double_wl_type', 5);
+            $table->integer('is_knockout', 5);
+            
          });
 
         Schema::table('tournaments', function (Blueprint $table) { 
@@ -48,6 +50,7 @@ class UpgradeTournamentsMatchschedule extends Migration
             $table->dropColumn('loser_schedule_position');
             $table->dropColumn('loser_go_wl_type');
             $table->dropColumn('double_wl_type');
+            $table->dropColumn('is_knockout');
         });
 
         Schema::table('tournaments', function (Blueprint $table) {

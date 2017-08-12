@@ -34,7 +34,6 @@ if(!empty($matchScheduleCount) && $matchScheduleCount>0)
         <div class="section">
                 <label class="form_label">{{  trans('message.tournament.fields.type') }} <span  class='required'>*</span></label>
             <label class="field select">
-
             {!! Form::select('type', $enum, null,array('class'=>'gui-input','id'=>'type','onchange'=>'getGroups();',$disable)) !!}
             @if ($errors->has('type')) <p class="help-block">{{ $errors->first('sports') }}</p> @endif
             <i class="arrow double"></i>
@@ -256,34 +255,7 @@ if(!empty($matchScheduleCount) && $matchScheduleCount>0)
              </label>
         </div>
     </div>
-    </div>
-		<div class="row" >
-			<div class="col-sm-6">
-				<div class="section">
-						<label class="form_label">{{  trans('message.tournament.fields.noofplaces') }} <span  class='required'>*</span></label>
-						<label class="field prepend-icon">
-
-								 {!! Form::text('noofplaces', null, array('class'=>'gui-input','placeholder'=>trans('message.tournament.fields.noofplaces'))) !!}
-										@if ($errors->has('noofplaces')) <p class="help-block">{{ $errors->first('noofplaces') }}</p> @endif
-																<label for="noofplaces" class="field-icon"><i class="fa fa-group"></i></label>
-
-						 </label>
-				</div>
-			</div>
-			<div class="col-sm-6">
-				<div class="section">
-						<label class="form_label">{{  trans('message.tournament.fields.roundofplay') }} <span  class='required'>*</span></label>
-						<label class="field prepend-icon">
-
-								 {!! Form::text('roundofplay', null, array('class'=>'gui-input','placeholder'=>trans('message.tournament.fields.roundofplay'))) !!}
-										@if ($errors->has('roundofplay')) <p class="help-block">{{ $errors->first('roundofplay') }}</p> @endif
-																<label for="roundofplay" class="field-icon"><i class="fa fa-group"></i></label>
-
-						 </label>
-				</div>
-			</div>
-		</div>
-
+    </div> 
     <!--<div class="row">
     <div class="section col-sm-6">
         <label class="form_label">{{  trans('message.tournament.fields.facility') }} </label>
@@ -531,7 +503,7 @@ $(function () {
       }
     });
 	var ttype = $('#type').val();
-	if(ttype=='knockout')
+	if(ttype=='knockout' || ttype=='doubleknockout')
 	{
 		//$('#hide_groups').hide();
 		$('[name=groups_number]').val(1).attr('readonly',true);
@@ -544,12 +516,13 @@ $(function () {
 	function getGroups()
 	{
 		var type = $('#type').val();
-		if(type=='knockout')
+		if(type=='knockout' || type=='doubleknockout')
 		{
 			     //$('#hide_groups').hide();
         		$('[name=groups_number]').val(1).attr('readonly',true);
                 $('[name=groups_teams]').val(32);
-		}else
+		}
+        else
 		{
             $('[name=groups_number]').removeAttr('readonly');
 			$('#hide_groups').show();
