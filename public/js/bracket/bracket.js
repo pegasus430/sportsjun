@@ -281,7 +281,7 @@ function BracketLibrary(id)
             {
                 var j = Math.ceil( i / 2 );
                 var isTop = i % 2;
-                if(sRound[j] == -1) continue;
+                if( round_one_count == round_two_count || sRound[j] == -1) continue;
 
                 var T1name = isTop == 1 ? D.units[sRound[j]]['team_name_a'] : D.units[sRound[j]]['team_name_b'];
                 
