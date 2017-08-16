@@ -2113,7 +2113,7 @@ class TournamentsController extends Controller
 			$result['result']='error';
 			return Response::json($result);
 		}
-		if($flag=='group' && empty($finalStageTeams)) {
+		if($flag=='group' || empty($finalStageTeams)) {
 			$result['result']='error';
 			return Response::json($result);
 		}

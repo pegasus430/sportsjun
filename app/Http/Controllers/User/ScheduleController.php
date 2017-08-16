@@ -1418,7 +1418,7 @@ class ScheduleController extends Controller {
             // print_r($match_win);
             // echo "</pre>";
 
-
+            if( isset($match_win) )
             for( $i = 0 ; $i < count($match_win) ; $i++)
                 if( isset($match_win[ $i ]['loser']) )
                 {
