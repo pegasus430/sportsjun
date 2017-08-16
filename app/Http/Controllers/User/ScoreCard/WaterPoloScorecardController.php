@@ -824,7 +824,7 @@ class WaterPoloScorecardController extends parentScoreCardController
 
     private function move_forward_schedule( $match_id , $winner_team_id , $looser_team_id )
     {
-            $match_data = MatchSchedule::where('id',$match_id)->first()->get();
+            $match_data = MatchSchedule::where('id',$match_id)->first();
             // winner go 
             if( isset( $match_data['winner_schedule_id'] ) && $match_data['winner_schedule_id'] * 1 > 0 ) 
             {

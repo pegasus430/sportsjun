@@ -1938,7 +1938,7 @@ class ScheduleController extends Controller {
         return Response::json($results);
     }
 
-      public function generateScheduleLeague(Requests\GenerateMatchRequest $request)
+    public function generateScheduleLeague(Requests\GenerateMatchRequest $request)
     {
         $tournament_id = $request['tournament_id_save'];
 

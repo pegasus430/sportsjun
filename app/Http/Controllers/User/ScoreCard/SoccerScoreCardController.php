@@ -446,24 +446,31 @@ class SoccerScoreCardController extends parentScoreCardController
 
     private function move_forward_schedule( $match_id , $winner_team_id , $looser_team_id )
     {
-            $match_data = MatchSchedule::where('id',$match_id)->first()->get();
+            // echo "match_id ".$match_id." calling w:".$winner_team_id." l:".$looser_team_id."<br>";
+            $match_data = MatchSchedule::where('id',$match_id)->first();
+ 
             // winner go 
+
             if( isset( $match_data['winner_schedule_id'] ) && $match_data['winner_schedule_id'] * 1 > 0 ) 
             {
                 $ab_id = $match_data['winner_schedule_position']."_id";
                 MatchSchedule::where('id' , $match_data['winner_schedule_id'] )->update( [ $ab_id=>$winner_team_id ] );
+                // echo "updated match_id".$match_id." ".$ab_id." w_t_id".$winner_team_id."<br>" ;
+          
             }
 
             if( isset( $match_data['loser_schedule_id'] ) && $match_data['loser_schedule_id'] * 1 > 0 ) 
             {
                 $ab_id = $match_data['loser_schedule_position']."_id";
-                if( $ab_id == 'a' || $ab_id == 'b' )
+                if( $ab_id == 'a_id' || $ab_id == 'b_id' )
                     MatchSchedule::where('id' , $match_data['loser_schedule_id'] )->update( [ $ab_id=>$looser_team_id ] );
+                // echo "updated match_id".$match_id." ".$ab_id." w_l_id".$looser_team_id."<br>" ;
+                 
             }
     }
     
     public function insertAndUpdateSoccerScoreCard(){
-
+    
         $request=Request::all();
 
         $match_id=$request['match_id'];
@@ -576,6 +583,7 @@ class SoccerScoreCardController extends parentScoreCardController
         $has_result     = ($is_washout == 1) ? 0 : 1;
         $match_result   = ( !in_array( $match_result, ['tie','win','washout'] ) ) ? NULL : $match_result;
         $matchScheduleDetails = MatchSchedule::where('id',$match_id)->first();
+ 
         if(count($matchScheduleDetails)) {
             $looser_team_id = NULL;
             $match_status='scheduled';
@@ -603,7 +611,7 @@ class SoccerScoreCardController extends parentScoreCardController
 
             $this->deny_match_edit_by_admin();
 
-            $match_data = MatchSchedule::where('id',$match_id)->first()->get();
+            $match_data = MatchSchedule::where('id',$match_id)->first();
 
             if(!empty($matchScheduleDetails['tournament_id'])) {
 //                        dd($winner_team_id.'<>'.$looser_team_id);
@@ -611,6 +619,7 @@ class SoccerScoreCardController extends parentScoreCardController
                 if (($is_tie == 1 || $match_result == "washout") && !empty($matchScheduleDetails['tournament_group_id'])){
                     $match_status = 'completed';
                 }
+
 
                 if(Helper::isTournamentOwner($tournamentDetails['manager_id'],$tournamentDetails['tournament_parent_id']))
                 {
@@ -621,7 +630,7 @@ class SoccerScoreCardController extends parentScoreCardController
                                                                   'match_result'   => $match_result,
                                                                   'match_report'	  => $match_report,
                                                                   'score_added_by'=>$json_score_status]);
-
+                 
             
                     $this->move_forward_schedule( $match_id  , $winner_team_id , $looser_team_id  );
 
@@ -636,7 +645,7 @@ class SoccerScoreCardController extends parentScoreCardController
                         $this->insertPlayerStatistics($sportName,$match_id);
 
                         //notification ocde
-                        Helper::sendEmailPlayers($matchScheduleDetails, 'Soccer');
+                //        Helper::sendEmailPlayers($matchScheduleDetails, 'Soccer');
                     }
 
                 }
@@ -646,6 +655,7 @@ class SoccerScoreCardController extends parentScoreCardController
                     $match_status = 'completed';
                     $approved = 'approved';
                 }
+ 
                 MatchSchedule::where('id',$match_id)->update(['match_status'=>$match_status,
                                                               'winner_id'      => $winner_team_id,
                                                               'looser_id'      => $looser_team_id,
@@ -674,7 +684,7 @@ class SoccerScoreCardController extends parentScoreCardController
 
             }
             else
-            {
+            { 
                 MatchSchedule::where('id',$match_id)->update(['winner_id'=>$winner_team_id ,'looser_id'=>$looser_team_id,
                                                               'is_tied'=>$is_tie,
                                                               'has_result'     => $has_result,
@@ -685,7 +695,7 @@ class SoccerScoreCardController extends parentScoreCardController
             }
         }
 
-        return $match_data->match_details;
+        //return $match_data->match_details;
     }
     public function soccerStoreRecord(){
         $request=Request::all();
