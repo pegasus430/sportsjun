@@ -2,7 +2,7 @@ function BOX_CONST()
 {
     this.boxwidth  = 200;
     this.boxheight = 44;
-    this.boxgap = 20;
+    this.boxgap =   30;
 }
 
 var SvgCreator = new SvgCreatorLibrary();
@@ -43,58 +43,63 @@ function TeamLibrary(id)
         return p;
     }
      
-    this.AddTeam = function ( x , y , goH , team1 , team2, linkid , mark1 , mark2 , win , match_date )
+    this.AddTeam = function ( x , y , goH , team1 , team2, linkid , mark1 , mark2 , win , match_date , isLastGame )
     {
         if( team1  && team1.length > 20 ) team1 = team1.substring( 0 , 20 );
         if( team2  && team2.length > 20 ) team2 = team2.substring( 0 , 20 );
+
         var mark1_col = "rgb(79,139,183)" , mark2_col = "rgb(79,139,183)";
         if( win )
             if( win == 1 ) mark1_col = "white";
             else mark2_col = "white";
 
         var pObject = this.svg_group;      
-        
-        pObject.appendChild( SvgCreator.AddPolygon( "0,0 38,0 16,22 0,22" , "rgb(131,187,216)" , mark1_col , null , 1 ) ) ;
-        pObject.appendChild( SvgCreator.AddPolygon( "0,22 16,22 38,44 0,44" , "rgb(131,187,216)" , mark2_col , null , 1 ) ) ;
 
-        var rect1 = SvgCreator.AddPolygon( "38,0  16,22 199,22 199,0" ,"rgb(36,121,159)" , "rgb(12,91,126)"  , null , 1 );
-        var rect2 = SvgCreator.AddPolygon( "38,44 16,22 199,22 199,44" ,"rgb(36,121,159)" , "rgb(12,91,126)" , null , 1 );
         
-        pObject.appendChild( rect1 );
-        pObject.appendChild( rect2 );
-        pObject.appendChild( SvgCreator.AddLine( 0 , 22 , 199 , 22 ,"stroke:rgb(5,65,97);stroke-width:1" ) );
+        pObject.appendChild( SvgCreator.AddPolygon( "0,0 199,0 199,44 0,44" ,"rgb(204,204,204)" , "rgb(255,255,255)"  , null , "1" ) );
+        pObject.appendChild( SvgCreator.AddPolygon( "30,1 198,1 198,43 30,43" ,"rgb(204,204,204)" , "rgb(250,250,250)"  , null , "0" ) );
+        pObject.appendChild( SvgCreator.AddLine( 0   , 22 , 199 , 22 ,"stroke:rgb(227,227,227);stroke-width:1" ) );
+        pObject.appendChild( SvgCreator.AddLine( 30 ,  0 , 30 , 44 ,"stroke:rgb(227,227,227);stroke-width:1" ) );
+        
 
         if( team1 != null )
         {
-            var xtext = SvgCreator.AddText( 0 , 0 , team1 , "rgb(158,224,255)" , 'xtext'+id  );
+            var xtext = SvgCreator.AddText( 0 , 0 , team1 , "rgb(119,119,119)" , 'xtext'+id  );
             pObject.appendChild(xtext);
-            this.setTextObjectPosition( xtext , 113 , 8 );
-            if( linkid != null )
-            {
-                xtext.onclick = function() { window.open( "/match/scorecard/edit/" + linkid , '_self' ); }
-                xtext.style.cursor='pointer';
-            }
+            this.setTextObjectPosition( xtext , 113 , 8 ); 
         }
 
         if( team2 != null )
         {
-            var ytext = SvgCreator.AddText( 0 , 0 , team2 , "rgb(158,224,255)" , 'ytext'+id  );
+            var ytext = SvgCreator.AddText( 0 , 0 , team2 , "rgb(119,119,119)" , 'ytext'+id  );
             pObject.appendChild(ytext);
             this.setTextObjectPosition( ytext , 113, 29 );
         }
 
         if( mark1 != null )
         {
-            var xmark = SvgCreator.AddText( 0 , 0 , mark1 , "rgb(0,34,50)" , 'xmark'+id  );
+            var xmark;
+            if( win == 1 )
+                 xmark = SvgCreator.AddText( 0 , 0 , mark1 , "rgb(221,117,40)" , 'xmark'+id  );
+            else xmark = SvgCreator.AddText( 0 , 0 , mark1 , "rgb(85,85,85)" , 'xmark'+id  );
             pObject.appendChild(xmark);
-            this.setTextObjectPosition( xmark , 11, 8 );
+            var xmarkbox = xmark.getBBox();
+            xmark.setAttributeNS( null, "x" ,  15 - xmarkbox.width / 2 );
+            xmark.setAttributeNS( null, "y" ,  8 + xmarkbox.height / 2 );
+            
+
         }
 
         if( mark2 != null )
         {
-            var ymark = SvgCreator.AddText( 0 , 0 , mark2 , "rgb(0,34,50)" , 'ymark'+id  );
-            pObject.appendChild(ymark);
-            this.setTextObjectPosition( ymark , 11, 30 );
+            var xmark;
+            if( win == 2 )
+                 xmark = SvgCreator.AddText( 0 , 0 , mark1 , "rgb(221,117,40)" , 'ymark'+id  );
+            else xmark = SvgCreator.AddText( 0 , 0 , mark1 , "rgb(85,85,85)" , 'ymark'+id  );
+            pObject.appendChild(xmark);
+            var xmarkbox = xmark.getBBox();
+            xmark.setAttributeNS( null, "x" ,  15 - xmarkbox.width / 2 );
+            xmark.setAttributeNS( null, "y" ,  30 + xmarkbox.height / 2 );
         }
  
 
@@ -104,21 +109,23 @@ function TeamLibrary(id)
             var txt_but;
             var editFlag = false;
             console.log( match_date , today );
-            if( match_date >= today )
+            if( match_date <= today )
             {
                 if( win )
-                    txt_but = SvgCreator.AddText( 0 , 0 , 'Score' , "rgb(0,34,50)" , 'add_edit' + id  );
+                    txt_but = SvgCreator.AddText( 0 , 0 , 'Score' , "rgb(255,255,255)", 'font-size: 12px;' , 'add_edit' + id  );
                 else
-                    txt_but = SvgCreator.AddText( 0 , 0 , 'Add Score' , "rgb(0,34,50)" , 'add_edit' + id  );
+                    txt_but = SvgCreator.AddText( 0 , 0 , 'Add Score' , "rgb(255,255,255)", 'font-size: 12px;' , 'add_edit' + id  );
             }
             else {
                 editFlag = true;
-                txt_but = SvgCreator.AddText( 0 , 0 , 'Edit Schedule' , "rgb(0,34,50)" , 'add_edit' + id  );
+                txt_but = SvgCreator.AddText( 0 , 0 , 'Edit Schedule' , "rgb(255,255,255)", 'font-size: 12px;' , 'add_edit' + id  );
             }
-
             pObject.appendChild( txt_but );
             var txtbox = txt_but.getBBox();
-            this.setTextObjectPosition( txt_but , BOX_C.boxwidth - txtbox.width / 2 , BOX_C.boxheight + txtbox.height / 2 - 2 );
+            pObject.removeChild( txt_but );
+            pObject.appendChild( SvgCreator.AddRect( 199-txtbox.width - 10 , 44 , txtbox.width + 10 , txtbox.height + 5 , "rgb(204,204,204)" ,  "rgb(0,172,237)"  ) );
+            pObject.appendChild( txt_but );
+            this.setTextObjectPosition( txt_but , BOX_C.boxwidth - ( txtbox.width + 10 ) / 2 , BOX_C.boxheight + txtbox.height / 2  );
 
             if( linkid != null )
             {
@@ -143,17 +150,29 @@ function TeamLibrary(id)
             if( goH == 0 )
             {
                 var x2 = x1 + BOX_C.boxgap;
-                pObject.appendChild( SvgCreator.AddLine(  x1 , y1 , x2 , y1  ,"stroke:rgb(0,34,50);stroke-width:1" ) );
+                pObject.appendChild( SvgCreator.AddLine(  x1 , y1 , x2 , y1  ,"stroke:rgb(0,172,237);stroke-width:1" ) );
             }
             else
             {
                 var x2 = x1 + BOX_C.boxgap + BOX_C.boxwidth / 2;
                 var y2 = y1 + goH ;
-                pObject.appendChild( SvgCreator.AddLine(  x1 , y1 , x2 , y1  ,"stroke:rgb(0,34,50);stroke-width:1" ) );
-                pObject.appendChild( SvgCreator.AddLine(  x1 , y1 , x2 , y1  ,"stroke:rgb(0,34,50);stroke-width:1" ) );
-                pObject.appendChild( SvgCreator.AddLine(  x2 , y1 , x2 , y2  ,"stroke:rgb(0,34,50);stroke-width:1" ) );
-                pObject.appendChild( SvgCreator.AddCircle( x1 + 3 , y1 , 3  ,"rgb(0,34,50)" , "rgb(0,34,50)" , "circlemark" + id ) );
+                pObject.appendChild( SvgCreator.AddLine(  x1 , y1 , x2 , y1  ,"stroke:rgb(0,172,237);stroke-width:1" ) );
+                pObject.appendChild( SvgCreator.AddLine(  x1 , y1 , x2 , y1  ,"stroke:rgb(0,172,237);stroke-width:1" ) );
+                pObject.appendChild( SvgCreator.AddLine(  x2 , y1 , x2 , y2  ,"stroke:rgb(0,172,237);stroke-width:1" ) ); 
             }
+        }
+
+        if( isLastGame && win > 0 )
+        {
+            var x1 = BOX_C.boxwidth + 50 ;
+            var y1 = BOX_C.boxheight - 128;
+            var gold_medal_team = win == 1 ? team1: team2;
+            var silver_medal_team = win == 1 ? team2: team1;
+            pObject.appendChild( SvgCreator.AddImage( x1 , y1 , 72 , 117       , '/images/medal1.png' , 'goldMedal' ) );
+            pObject.appendChild( SvgCreator.AddImage( x1 , y1 + 128 , 72 , 117 , '/images/medal2.png' , 'silverMedal' ) );
+            pObject.appendChild( SvgCreator.AddText( x1 + 85 , y1 + 50 , '1st: ' + gold_medal_team   , "rgb(0,0,0)" , 'font-size: 21px;', 'goldMedalText'   ) );
+            pObject.appendChild( SvgCreator.AddText( x1 + 85 , y1 + 128 + 50 , '2nd: ' + silver_medal_team , "rgb(0,0,0)" , 'font-size: 21px;', 'silverMedalText' ) );
+
         }
 
         pObject.setAttribute('transform','translate(' + x + ',' + y + ')' );
@@ -176,7 +195,7 @@ function BracketLibrary(id)
         }
      }
 
-     this.addMatch = function( baseY , i , j  , roundno , T1name , T2name , linkid , match_date , a_score , b_score , winner_id )
+     this.addMatch = function( baseY , i , j  , roundno , T1name , T2name , linkid , match_date , a_score , b_score , winner_id , isLastGame )
      {
         var xx = ( BOX_C.boxwidth + BOX_C.boxgap ) * ( i - 1 ); // go right
         var ydelta = ( BOX_C.boxheight + BOX_C.boxgap ) * Math.pow( 2 , i - 1 );
@@ -186,10 +205,10 @@ function BracketLibrary(id)
 
         if( i < roundno ) 
                 goH = ( ( j - 1 ) % 2 ) ?  0 - ydelta / 2 + BOX_C.boxheight / 2 - 1: ydelta / 2 - BOX_C.boxheight / 2;
-        B.AddTeam( xx , yy + baseY , goH , T1name , T2name , linkid , a_score , b_score , winner_id ,  match_date );
+        B.AddTeam( xx , yy + baseY , goH , T1name , T2name , linkid , a_score , b_score , winner_id ,  match_date , isLastGame );
      }
 
-     this.addMatchDouble = function( baseY , i , j  , roundno , T1name , T2name , linkid , match_date, a_score , b_score , winner_id, round_one_two_same  )
+     this.addMatchDouble = function( baseY , i , j  , roundno , T1name , T2name , linkid , match_date, a_score , b_score , winner_id, round_one_two_same , isLastGame )
      {
         var xx = ( BOX_C.boxwidth + BOX_C.boxgap ) * ( i - 1 ); // go right
 
@@ -215,7 +234,7 @@ function BracketLibrary(id)
                     goH = 0;
             } 
 
-        B.AddTeam( xx , yy + baseY , goH , T1name , T2name , linkid , a_score , b_score , winner_id , match_date );
+        B.AddTeam( xx , yy + baseY , goH , T1name , T2name , linkid , a_score , b_score , winner_id , match_date , isLastGame );
      }
 
      this.generateSingleElimination = function( D , baseY , course ) // course 0:single , 1: double winner  2: double loser
@@ -262,16 +281,16 @@ function BracketLibrary(id)
           //  console.log( baseY , i , j  , D.roundno , T1name , T2name , D.units[k]['id'] );
             if( course == 0 )
             {
-                this.addMatch(  baseY , i , j  , D.roundno , T1name , T2name , D.units[k]['id']  , D.units[k]['match_start_date']  , D.units[k]['a_score'] ,D.units[k]['b_score'] , win );
+                this.addMatch(  baseY , i , j  , D.roundno , T1name , T2name , D.units[k]['id']  , D.units[k]['match_start_date']  , D.units[k]['a_score'] ,D.units[k]['b_score'] , win , D.units[k]['winner_schedule_id'] == '0' );
             }
             else 
             {
                 if( course == 1 )
                     if( D.units[k]['tournament_round_number'] == D.roundno ) // special case : last round of winner course
-                         this.addMatch(  baseY , i , j  , D.roundno , T1name , T2name , D.units[k]['id'] , D.units[k]['match_start_date'] , D.units[k]['a_score'] ,D.units[k]['b_score'] , win );
-                    else this.addMatch(  baseY , i , j  , D.roundno , T1name , T2name , D.units[k]['id'] , D.units[k]['match_start_date'] , D.units[k]['a_score'] ,D.units[k]['b_score'] , win );
+                         this.addMatch(  baseY , i , j  , D.roundno , T1name , T2name , D.units[k]['id'] , D.units[k]['match_start_date'] , D.units[k]['a_score'] ,D.units[k]['b_score'] , win , D.units[k]['winner_schedule_id'] == '0' );
+                    else this.addMatch(  baseY , i , j  , D.roundno , T1name , T2name , D.units[k]['id'] , D.units[k]['match_start_date'] , D.units[k]['a_score'] ,D.units[k]['b_score'] , win , D.units[k]['winner_schedule_id'] == '0');
                 else 
-                    this.addMatchDouble( baseY , i , j  , D.roundno , T1name , T2name , D.units[k]['id'] , D.units[k]['match_start_date'] , D.units[k]['a_score'] ,D.units[k]['b_score'] , win , round_one_count == round_two_count );
+                    this.addMatchDouble( baseY , i , j  , D.roundno , T1name , T2name , D.units[k]['id'] , D.units[k]['match_start_date'] , D.units[k]['a_score'] ,D.units[k]['b_score'] , win , round_one_count == round_two_count , D.units[k]['winner_schedule_id'] == '0');
             }
             
         }

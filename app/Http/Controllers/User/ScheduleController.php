@@ -1279,7 +1279,7 @@ class ScheduleController extends Controller {
                             }
                             else
                             {
-                                $next_match_no = $j;
+                                $next_match_no = $j + 1;
                                 $match_lose[ $match_cur ]['winner'] = array( 'next_round_no' =>  $loser_round_no + 1 ,
                                                                         'next_match_no' =>  $next_match_no ,
                                                                         'next_match_ab_pos' =>  'b',  // always position b
@@ -1327,7 +1327,7 @@ class ScheduleController extends Controller {
                 }
             }
 
-        
+            $loser_last_match_cur = $match_cur - 1;
 
 
             ///////////////////////////////////////////////// winner course construction /////////////////////////////////////////////////
@@ -1382,6 +1382,17 @@ class ScheduleController extends Controller {
                 }
                 $winner_round_no++;
             }
+
+            $winner_last_match_cur = $match_cur - 1; 
+
+            $match_lose[ $loser_last_match_cur ]['winner'] = array( 'next_round_no' =>  $match_win[ $winner_last_match_cur ]['round_no'] ,
+                                                                    'next_match_no' =>  $match_win[ $winner_last_match_cur ]['match_no'], 
+                                                                    'next_match_ab_pos' => 'b' , 
+                                                                    'go_wl_type' => 'w' );
+
+            // update transfer from last loser to last winner
+
+
 
             // $loserstartN , (first match corresponding)
 
@@ -1527,7 +1538,7 @@ class ScheduleController extends Controller {
             $units = Array();
 
             $fields = Array('id','tournament_id','tournament_round_number','tournament_match_number','sports_id','match_category','schedule_type','match_type','match_start_date','a_id'
-            ,'b_id','winner_id','is_tied','a_score','b_score','winner_schedule_id' , 'winner_schedule_position' , 'winner_go_wl_type' , 'loser_schedule_id' , 'loser_schedule_position' ,'loser_go_wl_type' , 'double_wl_type' );
+            ,'b_id','winner_id','is_tied','a_score','b_score','winner_schedule_id' , 'winner_schedule_position' , 'winner_go_wl_type' , 'loser_schedule_id' , 'loser_schedule_position' ,'loser_go_wl_type' , 'double_wl_type' , 'winner_schedule_id' );
 
             foreach( $matchschedule as $r )
             {
@@ -1790,7 +1801,7 @@ class ScheduleController extends Controller {
         $units = Array();
 
         $fields = Array('id','tournament_id','tournament_round_number','tournament_match_number','sports_id','match_category','schedule_type','match_type','match_start_date','a_id'
-        ,'b_id','winner_id','is_tied','a_score','b_score');
+        ,'b_id','winner_id','is_tied','a_score','b_score' , 'winner_schedule_id');
 
         foreach( $matchschedule as $r )
         {

@@ -19,6 +19,7 @@ function SvgCreatorLibrary(id)
         shape.setAttributeNS(null, "stroke", strokeColor);
         shape.setAttribute("id", id);
         shape.setAttribute("class", cssClass);
+        shape.setAttributeNS(null, "shape-rendering", "crispEdges");
 
         return shape;
     };
@@ -40,6 +41,7 @@ function SvgCreatorLibrary(id)
         shape.setAttributeNS(null, "stroke", strokeColor);
         shape.setAttribute("id", id);
         shape.setAttribute("class", cssClass);
+        shape.setAttributeNS(null, "shape-rendering", "crispEdges");
 
         return shape;
     };
@@ -61,6 +63,7 @@ function SvgCreatorLibrary(id)
         shape.setAttributeNS(null, "stroke", strokeColor);
         shape.setAttributeNS(null, "stroke-dasharray", strokeDash); 
         shape.setAttributeNS(null, "opacity", opacity);
+        shape.setAttributeNS(null, "shape-rendering", "crispEdges");
         shape.setAttribute("id", id);
         shape.setAttribute("class", cssClass);
 
@@ -89,6 +92,7 @@ function SvgCreatorLibrary(id)
         shape.setAttributeNS(null, "width", width);
         shape.setAttributeNS(null, "height", height);
         shape.setAttributeNS(null, "fill", fillColor);
+        shape.setAttributeNS(null, "shape-rendering", "crispEdges");
 
         if (strokeColor != null)
             shape.setAttributeNS(null, "stroke", strokeColor);
@@ -122,6 +126,7 @@ function SvgCreatorLibrary(id)
         shape.setAttributeNS(null, "y2", y2);
         shape.setAttributeNS(null, "style", style);
         shape.setAttributeNS(null, "id", id);
+        shape.setAttributeNS(null, "shape-rendering", "crispEdges");
 
         return shape;
     };
@@ -144,6 +149,7 @@ function SvgCreatorLibrary(id)
 
         shape.setAttributeNS(null, "points", pList );
         shape.setAttributeNS(null, "fill", fillColor); 
+        shape.setAttributeNS(null, "shape-rendering", "crispEdges");
         
         if (strokeColor != null)
             shape.setAttributeNS(null, "stroke", strokeColor);
@@ -198,6 +204,7 @@ function SvgCreatorLibrary(id)
         shape.setAttributeNS(null, "stroke", color);
         shape.setAttributeNS(null, "stroke-width", strokeWidth);
         shape.setAttributeNS(null, "id", id);
+        shape.setAttributeNS(null, "shape-rendering", "crispEdges");
         return shape;
 
     };
@@ -227,6 +234,7 @@ function SvgCreatorLibrary(id)
         shape.setAttributeNS(null, "stroke", color);
         shape.setAttributeNS(null, "stroke-width", strokeWidth);
         shape.setAttributeNS(null, "id", id);
+        shape.setAttributeNS(null, "shape-rendering", "crispEdges");
         return shape;
 
     };
@@ -244,6 +252,7 @@ function SvgCreatorLibrary(id)
         shape.setAttributeNS(null, "points", points);
         shape.setAttributeNS(null, "style", style);
         shape.setAttributeNS(null, "id", id);
+        shape.setAttributeNS(null, "shape-rendering", "crispEdges");
         return shape;
     }
 
@@ -322,7 +331,7 @@ function SvgCreatorLibrary(id)
         shape.setAttributeNS(null, "fill", fill);
         shape.setAttributeNS(null, "style", style);
         shape.setAttributeNS(null, "class", "DisableSelection");
-
+        shape.setAttributeNS(null, "shape-rendering", "crispEdges");
         shape.setAttributeNS(null, "unselectable", "on");
 
         var data = document.createTextNode(text);
@@ -330,6 +339,18 @@ function SvgCreatorLibrary(id)
 
         return shape;
     };
+
+    this.AddImage = function( x , y , width , height , url , id )
+    {
+        var svgimg = document.createElementNS('http://www.w3.org/2000/svg','image');
+        svgimg.setAttribute('height', height);
+        svgimg.setAttribute('width' , width);
+        svgimg.setAttribute('id'    , id);
+        svgimg.setAttributeNS('http://www.w3.org/1999/xlink','href', url);
+        svgimg.setAttribute('x', x);
+        svgimg.setAttribute('y', y);
+        return svgimg;
+    }
 
     //#region "ViewBox"
     this.GetSvgSize = function (id)
