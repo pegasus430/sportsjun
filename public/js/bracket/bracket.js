@@ -2,7 +2,7 @@ function BOX_CONST()
 {
     this.boxwidth  = 200;
     this.boxheight = 44;
-    this.boxgap =   30;
+    this.boxgap = 20;
 }
 
 var SvgCreator = new SvgCreatorLibrary();
@@ -64,14 +64,14 @@ function TeamLibrary(id)
 
         if( team1 != null )
         {
-            var xtext = SvgCreator.AddText( 0 , 0 , team1 , "rgb(119,119,119)" , 'xtext'+id  );
+            var xtext = SvgCreator.AddText( 0 , 0 , team1 , "rgb(119,119,119)" , null ,'xtext'+id  );
             pObject.appendChild(xtext);
             this.setTextObjectPosition( xtext , 113 , 8 ); 
         }
 
         if( team2 != null )
         {
-            var ytext = SvgCreator.AddText( 0 , 0 , team2 , "rgb(119,119,119)" , 'ytext'+id  );
+            var ytext = SvgCreator.AddText( 0 , 0 , team2 , "rgb(119,119,119)" , null , 'ytext'+id  );
             pObject.appendChild(ytext);
             this.setTextObjectPosition( ytext , 113, 29 );
         }
@@ -80,8 +80,8 @@ function TeamLibrary(id)
         {
             var xmark;
             if( win == 1 )
-                 xmark = SvgCreator.AddText( 0 , 0 , mark1 , "rgb(221,117,40)" , 'xmark'+id  );
-            else xmark = SvgCreator.AddText( 0 , 0 , mark1 , "rgb(85,85,85)" , 'xmark'+id  );
+                 xmark = SvgCreator.AddText( 0 , 0 , mark1 , "rgb(221,117,40)" ,null , 'xmark'+id  );
+            else xmark = SvgCreator.AddText( 0 , 0 , mark1 , "rgb(85,85,85)" , null ,'xmark'+id  );
             pObject.appendChild(xmark);
             var xmarkbox = xmark.getBBox();
             xmark.setAttributeNS( null, "x" ,  15 - xmarkbox.width / 2 );
@@ -94,8 +94,8 @@ function TeamLibrary(id)
         {
             var xmark;
             if( win == 2 )
-                 xmark = SvgCreator.AddText( 0 , 0 , mark1 , "rgb(221,117,40)" , 'ymark'+id  );
-            else xmark = SvgCreator.AddText( 0 , 0 , mark1 , "rgb(85,85,85)" , 'ymark'+id  );
+                 xmark = SvgCreator.AddText( 0 , 0 , mark1 , "rgb(221,117,40)" ,null , 'ymark'+id  );
+            else xmark = SvgCreator.AddText( 0 , 0 , mark1 , "rgb(85,85,85)" , null ,'ymark'+id  );
             pObject.appendChild(xmark);
             var xmarkbox = xmark.getBBox();
             xmark.setAttributeNS( null, "x" ,  15 - xmarkbox.width / 2 );

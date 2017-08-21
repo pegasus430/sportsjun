@@ -8,22 +8,6 @@ function SvgCreatorLibrary(id)
     this.NameSpace_Svg = "http://www.w3.org/2000/svg";
     this.NameSpace_Xlink = "http://www.w3.org/1999/xlink";
 
-    
-    this.AddCircle = function (x, y, r, strokeColor, fillColor, id, cssClass)
-    {
-        var shape = document.createElementNS(this.NameSpace_Svg, "circle");
-        shape.setAttributeNS(null, "cx", x);
-        shape.setAttributeNS(null, "cy", y);
-        shape.setAttributeNS(null, "r", r);
-        shape.setAttributeNS(null, "fill", fillColor);
-        shape.setAttributeNS(null, "stroke", strokeColor);
-        shape.setAttribute("id", id);
-        shape.setAttribute("class", cssClass);
-        shape.setAttributeNS(null, "shape-rendering", "crispEdges");
-
-        return shape;
-    };
-
     this.UpdateCircle = function (circle, x, y)
     {
         circle.attr("cx", x);
@@ -38,9 +22,12 @@ function SvgCreatorLibrary(id)
         shape.setAttributeNS(null, "cy", y);
         shape.setAttributeNS(null, "r", r);
         shape.setAttributeNS(null, "fill", fillColor);
-        shape.setAttributeNS(null, "stroke", strokeColor);
-        shape.setAttribute("id", id);
-        shape.setAttribute("class", cssClass);
+        if(strokeColor)
+            shape.setAttributeNS(null, "stroke", strokeColor);
+        if(id)
+            shape.setAttribute("id", id);
+        if(cssClass)
+            shape.setAttribute("class", cssClass);
         shape.setAttributeNS(null, "shape-rendering", "crispEdges");
 
         return shape;
@@ -61,11 +48,15 @@ function SvgCreatorLibrary(id)
         shape.setAttributeNS(null, "ry", ry);
         shape.setAttributeNS(null, "fill", fillColor);
         shape.setAttributeNS(null, "stroke", strokeColor);
-        shape.setAttributeNS(null, "stroke-dasharray", strokeDash); 
-        shape.setAttributeNS(null, "opacity", opacity);
+        if(strokeDash)
+            shape.setAttributeNS(null, "stroke-dasharray", strokeDash); 
+        if(opacity)
+            shape.setAttributeNS(null, "opacity", opacity);
         shape.setAttributeNS(null, "shape-rendering", "crispEdges");
-        shape.setAttribute("id", id);
-        shape.setAttribute("class", cssClass);
+        if(id)
+            shape.setAttribute("id", id);
+        if(cssClass)
+            shape.setAttribute("class", cssClass);
 
         return shape;
     };
@@ -103,8 +94,8 @@ function SvgCreatorLibrary(id)
         if (opacity != null)
             shape.setAttributeNS(null, "opacity", opacity);
 
-        shape.setAttributeNS(null, "id", id);
-
+        if(id)
+            shape.setAttributeNS(null, "id", id);
 
         return shape;
     };
@@ -124,8 +115,10 @@ function SvgCreatorLibrary(id)
         shape.setAttributeNS(null, "y1", y1);
         shape.setAttributeNS(null, "x2", x2);
         shape.setAttributeNS(null, "y2", y2);
-        shape.setAttributeNS(null, "style", style);
-        shape.setAttributeNS(null, "id", id);
+        if( style )
+            shape.setAttributeNS(null, "style", style);
+        if( id )
+            shape.setAttributeNS(null, "id", id);
         shape.setAttributeNS(null, "shape-rendering", "crispEdges");
 
         return shape;
@@ -145,8 +138,6 @@ function SvgCreatorLibrary(id)
         var shape = document.createElementNS(this.NameSpace_Svg, "polygon");
         var i; 
 
-        
-
         shape.setAttributeNS(null, "points", pList );
         shape.setAttributeNS(null, "fill", fillColor); 
         shape.setAttributeNS(null, "shape-rendering", "crispEdges");
@@ -162,8 +153,8 @@ function SvgCreatorLibrary(id)
         
         if (opacity != null)
             shape.setAttributeNS(null, "opacity", opacity);
-
-        shape.setAttributeNS(null, "id", id);
+        if(id)
+            shape.setAttributeNS(null, "id", id);
 
         if (cssClass != null)
             shape.setAttribute("class", cssClass);
@@ -203,7 +194,9 @@ function SvgCreatorLibrary(id)
         shape.setAttributeNS(null, "fill", fill);
         shape.setAttributeNS(null, "stroke", color);
         shape.setAttributeNS(null, "stroke-width", strokeWidth);
-        shape.setAttributeNS(null, "id", id);
+        if(id)
+            shape.setAttributeNS(null, "id", id);
+
         shape.setAttributeNS(null, "shape-rendering", "crispEdges");
         return shape;
 
@@ -329,8 +322,8 @@ function SvgCreatorLibrary(id)
         shape.setAttributeNS(null, "x", x);
         shape.setAttributeNS(null, "y", y);
         shape.setAttributeNS(null, "fill", fill);
-        shape.setAttributeNS(null, "style", style);
-        shape.setAttributeNS(null, "class", "DisableSelection");
+        if(style)
+            shape.setAttributeNS(null, "style", style);
         shape.setAttributeNS(null, "shape-rendering", "crispEdges");
         shape.setAttributeNS(null, "unselectable", "on");
 
@@ -345,7 +338,8 @@ function SvgCreatorLibrary(id)
         var svgimg = document.createElementNS('http://www.w3.org/2000/svg','image');
         svgimg.setAttribute('height', height);
         svgimg.setAttribute('width' , width);
-        svgimg.setAttribute('id'    , id);
+        if(id)
+            svgimg.setAttribute('id'    , id);
         svgimg.setAttributeNS('http://www.w3.org/1999/xlink','href', url);
         svgimg.setAttribute('x', x);
         svgimg.setAttribute('y', y);
