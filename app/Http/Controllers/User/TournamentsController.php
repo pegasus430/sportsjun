@@ -2110,11 +2110,12 @@ class TournamentsController extends Controller
 		$finalStageTeams = Request::get('finalStageTeams');
 		$flag = Request::get('flag');
 		if(empty($tournamentId)) {
-			$result['result']='error';
+			$result['result']='error tournamentId empty';
 			return Response::json($result);
 		}
-		if($flag=='group' || empty($finalStageTeams)) {
-			$result['result']='error';
+		if( empty($finalStageTeams )) {
+			print_r($finalStageTeams);
+			$result['result']='error second '.$flag;
 			return Response::json($result);
 		}
 		$finalStageTeamIds = '';

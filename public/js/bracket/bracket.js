@@ -2,7 +2,7 @@ function BOX_CONST()
 {
     this.boxwidth  = 200;
     this.boxheight = 44;
-    this.boxgap = 20;
+    this.boxgap = 30;
 }
 
 var SvgCreator = new SvgCreatorLibrary();
