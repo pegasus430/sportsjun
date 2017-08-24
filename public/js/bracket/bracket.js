@@ -281,16 +281,16 @@ function BracketLibrary(id)
           //  console.log( baseY , i , j  , D.roundno , T1name , T2name , D.units[k]['id'] );
             if( course == 0 )
             {
-                this.addMatch(  baseY , i , j  , D.roundno , T1name , T2name , D.units[k]['id']  , D.units[k]['match_start_date']  , D.units[k]['a_score'] ,D.units[k]['b_score'] , win , D.units[k]['winner_schedule_id'] == '0' );
+                this.addMatch(  baseY , i , j  , D.roundno , T1name , T2name , D.units[k]['id']  , D.units[k]['match_start_date']  , D.units[k]['a_score'] ,D.units[k]['b_score'] , win , k == D.units.length - 1 );
             }
             else 
             {
                 if( course == 1 )
                     if( D.units[k]['tournament_round_number'] == D.roundno ) // special case : last round of winner course
-                         this.addMatch(  baseY , i , j  , D.roundno , T1name , T2name , D.units[k]['id'] , D.units[k]['match_start_date'] , D.units[k]['a_score'] ,D.units[k]['b_score'] , win , D.units[k]['winner_schedule_id'] == '0' );
-                    else this.addMatch(  baseY , i , j  , D.roundno , T1name , T2name , D.units[k]['id'] , D.units[k]['match_start_date'] , D.units[k]['a_score'] ,D.units[k]['b_score'] , win , D.units[k]['winner_schedule_id'] == '0');
+                         this.addMatch(  baseY , i , j  , D.roundno , T1name , T2name , D.units[k]['id'] , D.units[k]['match_start_date'] , D.units[k]['a_score'] ,D.units[k]['b_score'] , win , k == D.units.length - 1 );
+                    else this.addMatch(  baseY , i , j  , D.roundno , T1name , T2name , D.units[k]['id'] , D.units[k]['match_start_date'] , D.units[k]['a_score'] ,D.units[k]['b_score'] , win , k == D.units.length - 1);
                 else 
-                    this.addMatchDouble( baseY , i , j  , D.roundno , T1name , T2name , D.units[k]['id'] , D.units[k]['match_start_date'] , D.units[k]['a_score'] ,D.units[k]['b_score'] , win , round_one_count == round_two_count , D.units[k]['winner_schedule_id'] == '0');
+                    this.addMatchDouble( baseY , i , j  , D.roundno , T1name , T2name , D.units[k]['id'] , D.units[k]['match_start_date'] , D.units[k]['a_score'] ,D.units[k]['b_score'] , win , round_one_count == round_two_count , k == D.units.length - 1);
             }
             
         }

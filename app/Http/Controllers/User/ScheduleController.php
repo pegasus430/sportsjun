@@ -1531,7 +1531,7 @@ class ScheduleController extends Controller {
         foreach( array( 'w' , 'l' ) as $key => $WH )
         {
 
-            $matchschedule = MatchSchedule::where('tournament_id',$tournament_id)->where( 'double_wl_type' , $WH )->orderBy('tournament_round_number')->orderBy('tournament_match_number')->get();
+            $matchschedule = MatchSchedule::where('tournament_id',$tournament_id)->where('is_knockout',1)->where( 'double_wl_type' , $WH )->orderBy('tournament_round_number')->orderBy('tournament_match_number')->get();
 
             $roundno = 0;
             $matchno = 0;
@@ -1794,7 +1794,7 @@ class ScheduleController extends Controller {
 
     public function JsonOutputScheduleKnockout($tournament_id)
     {
-        $matchschedule = MatchSchedule::where('tournament_id',$tournament_id)->orderBy('tournament_round_number')->orderBy('tournament_match_number')->get();
+        $matchschedule = MatchSchedule::where('tournament_id',$tournament_id)->where('is_knockout',1)->orderBy('tournament_round_number')->orderBy('tournament_match_number')->get();
 
         $roundno = 0;
         $matchno = 0;

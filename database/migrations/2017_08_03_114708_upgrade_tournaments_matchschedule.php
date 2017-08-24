@@ -22,7 +22,7 @@ class UpgradeTournamentsMatchschedule extends Migration
             $table->string('loser_schedule_position', 5);
             $table->string('loser_go_wl_type', 5);
             $table->string('double_wl_type', 5);
-            $table->integer('is_knockout', 5);
+            $table->integer('is_knockout');
             
          });
 
@@ -30,6 +30,10 @@ class UpgradeTournamentsMatchschedule extends Migration
             $table->integer('noofplaces')->default(1);
             $table->integer('roundofplay')->default(1);
          });
+
+        // data update
+        DB::statement("update match_schedules set is_knockout=1 where tournament_group_id  IS NULL");
+        
     }
 
     /**
