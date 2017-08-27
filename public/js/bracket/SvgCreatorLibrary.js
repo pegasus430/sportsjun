@@ -15,7 +15,7 @@ function SvgCreatorLibrary(id)
     }
 
     
-    this.AddCircle = function (x, y, r, strokeColor, fillColor, id, cssClass)
+    this.AddCircle = function (x, y, r, strokeColor, fillColor, id, cssClass , style)
     {
         var shape = document.createElementNS(this.NameSpace_Svg, "circle");
         shape.setAttributeNS(null, "cx", x);
@@ -28,6 +28,8 @@ function SvgCreatorLibrary(id)
             shape.setAttribute("id", id);
         if(cssClass)
             shape.setAttribute("class", cssClass);
+        if(style)
+            shape.setAttribute("style", style);
         shape.setAttributeNS(null, "shape-rendering", "crispEdges");
 
         return shape;
@@ -68,6 +70,40 @@ function SvgCreatorLibrary(id)
         Ellipse.attr( "rx", rx );
         Ellipse.attr( "ry", ry );
     }
+
+    
+    this.AddRoundRect = function (x , y , rx , ry , width , height , strokeColor , fillColor , strokeDash , opacity , id)
+    {
+        x = isNaN(x) ? 10 : x;
+        y = isNaN(y) ? 10 : y;
+        width = isNaN(width) ? 20 : width;
+        height = isNaN(height) ? 20 : height;
+
+        var shape = document.createElementNS(this.NameSpace_Svg, "rect");
+        shape.setAttributeNS(null, "x", x);
+        shape.setAttributeNS(null, "y", y);
+        shape.setAttributeNS(null, "rx", rx);
+        shape.setAttributeNS(null, "ry", ry);
+        shape.setAttributeNS(null, "width", width);
+        shape.setAttributeNS(null, "height", height);
+        shape.setAttributeNS(null, "fill", fillColor);
+        shape.setAttributeNS(null, "shape-rendering", "crispEdges");
+
+        if (strokeColor != null)
+            shape.setAttributeNS(null, "stroke", strokeColor);
+
+        if (strokeDash != null)
+            shape.setAttributeNS(null, "stroke-dasharray", strokeDash);
+
+        if (opacity != null)
+            shape.setAttributeNS(null, "opacity", opacity);
+
+        if(id)
+            shape.setAttributeNS(null, "id", id);
+
+        return shape;
+    };
+
 
 
     this.AddRect = function (x, y, width, height, strokeColor, fillColor, strokeDash, opacity, id)
@@ -329,7 +365,6 @@ function SvgCreatorLibrary(id)
 
         var data = document.createTextNode(text);
         shape.appendChild(data);
-
         return shape;
     };
 

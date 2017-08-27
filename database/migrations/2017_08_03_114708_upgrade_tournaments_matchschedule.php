@@ -33,6 +33,29 @@ class UpgradeTournamentsMatchschedule extends Migration
 
         // data update
         DB::statement("update match_schedules set is_knockout=1 where tournament_group_id  IS NULL");
+
+        $results = DB::select("select * from tournaments where  type in ('knockout','multistage','doubleknockout','doublemultistage')");
+        foreach( $results as $t )
+        {
+            $matchs = DB::select("select * from match_schedules where tournament_id='".$t->id."' and tournament_group_id is null ");
+            $max_round_no=0;
+            $max_match_no=0;
+
+            foreach( $matchs as $m )
+            {
+                if( $max_round_no < $m->tournament_round_number ) 
+                {
+                    $max_round_no = $m->tournament_round_number ;
+                    $max_match_no = $m->tournament_match_number ;
+                }
+
+                if( $max_round_no == $m->tournament_round_number && $max_match_no < $m->tournament_match_number )
+                { 
+                    $max_match_no = $m->tournament_match_number ;
+                }
+            }
+            DB::table('match_schedules')->where('tournament_id',$t->id)->where('tournament_round_number',$max_round_no)->where('tournament_match_number',$max_match_no)->delete();
+        }
         
     }
 
