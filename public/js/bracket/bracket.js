@@ -45,12 +45,12 @@ function InfoTextBox()
     this.svg_group.setAttributeNS( null , "style","display:none");
     
 
-    this.MoveInformation = function( x , y , match_date , match_type , schedule_type )
+    this.MoveInformation = function( x , y , match_start_date , match_type , schedule_type )
     {
         x += baseX;
         var pObject = this.svg_group;
         this.svg_content.appendChild(pObject);
-        this.topText.innerHTML      = match_date + " " + match_type;
+        this.topText.innerHTML      = ( match_start_date ? match_start_date : "") + " " + match_type;
         this.bottomText.innerHTML   = schedule_type;
         var box1 = this.topText.getBBox();
         var box2 = this.bottomText.getBBox();
@@ -109,7 +109,7 @@ function TeamLibrary(id)
         return p;
     }
      
-    this.AddTeam = function ( x , y , goH , team1 , team2 , win , isLastGame , I )
+    this.AddTeam = function ( x , y , goH , team1 , team2 , win  , I )
     {
         x += baseX;
         if( team1  && team1.length > 20 ) team1 = team1.substring( 0 , 20 );
@@ -151,11 +151,11 @@ function TeamLibrary(id)
         pObject.appendChild( imarktext ); 
         
         imark.addEventListener( "mouseover" , function (){
-            info_text_box.MoveInformation( x+2 , y-3 , I['match_date'] , I['match_type'] , I['schedule_type'] );
+            info_text_box.MoveInformation( x+2 , y-3 , I['match_start_date'] , I['match_type'] , I['schedule_type'] );
         } );
 
         imarktext.addEventListener( "mouseover" , function (){
-            info_text_box.MoveInformation( x+2 , y-3 , I['match_date'] , I['match_type'] , I['schedule_type'] );
+            info_text_box.MoveInformation( x+2 , y-3 , I['match_start_date'] , I['match_type'] , I['schedule_type'] );
         } );
 
         imark.addEventListener( "mouseleave" , function (){
@@ -200,7 +200,7 @@ function TeamLibrary(id)
             var today = getCurrentDate();
             var txt_but;
             var editFlag = false; 
-            if( I['match_date'] <= today )
+            if( I['match_start_date'] <= today )
             {
                 if( win )
                     txt_but = SvgCreator.AddText( 0 , 0 , 'Match Stats' , "rgb(124,190,127)", 'font-size: 14px; font-weight: bold' , 'add_edit' + id  );
@@ -250,7 +250,7 @@ function TeamLibrary(id)
             }
         }
 
-        if( isLastGame && win > 0 )
+        if( I['is_final_match'] == '1' && win > 0 )
         {
             var x1 = BOX_C.boxwidth + 50 ;
             var y1 = BOX_C.boxheight - 128;
@@ -282,7 +282,7 @@ function BracketLibrary(id)
             svg_content.removeChild(svg_content.lastChild);
         }
     }
-     this.addMatch = function( baseY , i , j  , roundno , T1name , T2name , winner_id , isLastGame , I )
+     this.addMatch = function( baseY , i , j  , roundno , T1name , T2name , winner_id  , I )
      {
         var xx = ( BOX_C.boxwidth + BOX_C.boxgap ) * ( i - 1 ); // go right
         var ydelta = ( BOX_C.boxheight + BOX_C.boxgap ) * Math.pow( 2 , i - 1 );
@@ -292,10 +292,10 @@ function BracketLibrary(id)
 
         if( i < roundno ) 
                 goH = ( ( j - 1 ) % 2 ) ?  0 - ydelta / 2 + BOX_C.boxheight / 2 - 1: ydelta / 2 - BOX_C.boxheight / 2;
-        B.AddTeam( xx , yy + baseY , goH , T1name , T2name , winner_id ,  isLastGame , I );
+        B.AddTeam( xx , yy + baseY , goH , T1name , T2name , winner_id  , I );
      }
 
-     this.addMatchDouble = function( baseY , i , j  , roundno , T1name , T2name , winner_id, round_one_two_same , isLastGame , I )
+     this.addMatchDouble = function( baseY , i , j  , roundno , T1name , T2name , winner_id, round_one_two_same , I )
      {
         var xx = ( BOX_C.boxwidth + BOX_C.boxgap ) * ( i - 1 ); // go right
 
@@ -320,7 +320,7 @@ function BracketLibrary(id)
                     goH = 0;
             } 
 
-        B.AddTeam( xx , yy + baseY , goH , T1name , T2name , winner_id  , isLastGame , I );
+        B.AddTeam( xx , yy + baseY , goH , T1name , T2name , winner_id  , I );
      }
 
 
@@ -380,16 +380,16 @@ function BracketLibrary(id)
                 win = D.units[k]['winner_id'] == D.units[k]['a_id'] ? 1 : 2; 
             if( course == 0 )
             {
-                this.addMatch(  baseY , i , j  , D.roundno , T1name , T2name , win , k == D.units.length - 1 , D.units[k] );
+                this.addMatch(  baseY , i , j  , D.roundno , T1name , T2name , win  , D.units[k] );
             }
             else 
             {
                 if( course == 1 )
                     if( D.units[k]['tournament_round_number'] == D.roundno ) // special case : last round of winner course
-                         this.addMatch(  baseY , i , j  , D.roundno , T1name , T2name , win , k == D.units.length - 1 , D.units[k] );
-                    else this.addMatch(  baseY , i , j  , D.roundno , T1name , T2name , win , k == D.units.length - 1 , D.units[k]);
+                         this.addMatch(  baseY , i , j  , D.roundno , T1name , T2name , win  , D.units[k] );
+                    else this.addMatch(  baseY , i , j  , D.roundno , T1name , T2name , win  , D.units[k]);
                 else 
-                    this.addMatchDouble( baseY , i , j  , D.roundno , T1name , T2name , win , round_one_count == round_two_count , k == D.units.length - 1 , D.units[k]);
+                    this.addMatchDouble( baseY , i , j  , D.roundno , T1name , T2name , win , round_one_count == round_two_count , D.units[k]);
             }
             
         }

@@ -74,7 +74,8 @@ class MatchSchedule extends Model
         'loser_schedule_position',
         'loser_go_wl_type',
         'double_wl_type',
-        'is_knockout'
+        'is_knockout',
+        'is_final_match'
     ];
 
     public $casts =[

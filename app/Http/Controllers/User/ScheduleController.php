@@ -1257,6 +1257,7 @@ class ScheduleController extends Controller {
                         $match_lose[ $match_cur ]['round_no'] = $loser_round_no ;
                         $match_lose[ $match_cur ]['match_no'] = $j + 1;
                         $match_lose[ $match_cur ]['double_wl_type']='l';
+                        $match_lose[ $match_cur ]['is_final_match'] =0;
                         $loser_rmHash[ $loser_round_no ][ $j + 1 ] = $match_cur ;
                         
 
@@ -1307,6 +1308,7 @@ class ScheduleController extends Controller {
                         $match_lose[ $match_cur ]['round_no'] = $loser_round_no ;
                         $match_lose[ $match_cur ]['match_no'] = $j + 1;
                         $match_lose[ $match_cur ]['double_wl_type']='l';
+                        $match_lose[ $match_cur ]['is_final_match'] =0;
                         $loser_rmHash[ $loser_round_no ][ $j + 1 ] = $match_cur ;
 
                         if( !isset($H['lose'][$loser_round_no]) )
@@ -1356,6 +1358,7 @@ class ScheduleController extends Controller {
                         $match_win[ $match_cur ]['right'] = $T2;
                         $match_win[ $match_cur ]['round_no'] = $winner_round_no ;
                         $match_win[ $match_cur ]['match_no'] = $j + 1;
+                        $match_win[ $match_cur ]['is_final_match'] =0;
                         
 
                         if( !isset($H['win'][$winner_round_no]) )
@@ -1384,6 +1387,7 @@ class ScheduleController extends Controller {
             }
 
             $winner_last_match_cur = $match_cur - 1; 
+            $match_win[ $winner_last_match_cur ]['is_final_match'] = 1;
 
             $match_lose[ $loser_last_match_cur ]['winner'] = array( 'next_round_no' =>  $match_win[ $winner_last_match_cur ]['round_no'] ,
                                                                     'next_match_no' =>  $match_win[ $winner_last_match_cur ]['match_no'], 
@@ -1538,7 +1542,8 @@ class ScheduleController extends Controller {
             $units = Array();
 
             $fields = Array('id','tournament_id','tournament_round_number','tournament_match_number','sports_id','match_category','schedule_type','match_type','match_start_date','a_id'
-            ,'b_id','winner_id','is_tied','a_score','b_score','winner_schedule_id' , 'winner_schedule_position' , 'winner_go_wl_type' , 'loser_schedule_id' , 'loser_schedule_position' ,'loser_go_wl_type' , 'double_wl_type' , 'winner_schedule_id' );
+            ,'b_id','winner_id','is_tied','a_score','b_score','winner_schedule_id' , 'winner_schedule_position' , 'winner_go_wl_type' , 'loser_schedule_id' , 'loser_schedule_position' ,'loser_go_wl_type' , 'double_wl_type' , 'winner_schedule_id' 
+            ,'is_final_match');
 
             foreach( $matchschedule as $r )
             {
@@ -1625,7 +1630,8 @@ class ScheduleController extends Controller {
                     'loser_schedule_position' => isset( $timeline[$i][$j]['loser']['next_match_ab_pos'] ) ? $timeline[$i][$j]['loser']['next_match_ab_pos'] : '' ,
                     'loser_go_wl_type' => isset( $timeline[$i][$j]['loser']['go_wl_type'] ) ? $timeline[$i][$j]['loser']['go_wl_type'] : '' ,
                     'double_wl_type' => $timeline[$i][$j]['double_wl_type'],
-                    'is_knockout' => 1
+                    'is_knockout' => 1,
+                    'is_final_match' => isset( $timeline[$i][$j]['is_final_match']) ? $timeline[$i][$j]['is_final_match'] : 0
                 );
                 
 
@@ -1763,6 +1769,7 @@ class ScheduleController extends Controller {
                 $match[ $match_cur ]['right'] = $T2;
                 $match[ $match_cur ]['round_no'] = $level - $i + 1 ;
                 $match[ $match_cur ]['match_no'] = $j + 1;
+                $match[ $match_cur ]['is_final_match'] = 0;
 
                 if( $i > 1 )
                 {
@@ -1774,6 +1781,8 @@ class ScheduleController extends Controller {
                 $match_cur++;
             }
         }
+
+        $match[ $match_cur - 1 ]['is_final_match'] = 1;
  
         // place and time
         $iPlace = 0;
@@ -1801,7 +1810,7 @@ class ScheduleController extends Controller {
         $units = Array();
 
         $fields = Array('id','tournament_id','tournament_round_number','tournament_match_number','sports_id','match_category','schedule_type','match_type','match_start_date','a_id'
-        ,'b_id','winner_id','is_tied','a_score','b_score' , 'winner_schedule_id');
+        ,'b_id','winner_id','is_tied','a_score','b_score' , 'winner_schedule_id','is_final_match');
 
         foreach( $matchschedule as $r )
         {
@@ -1882,6 +1891,8 @@ class ScheduleController extends Controller {
         $timeline = $this->generateSingleElimination( count($tournamentFinalTeams) , $tournament['noofplaces'] );
         $timePoints = $this->MakeTimeList( $request , $tournament['start_date'] ,  count( $timeline ) );
 
+    
+
         for( $i = 0 ; $i < count( $timeline ) ; $i++ )
             for( $j = 0 ; $j <  $tournament['noofplaces'] ; $j++ )
             { 
@@ -1924,7 +1935,8 @@ class ScheduleController extends Controller {
                     'number_of_rubber' => $tournament['number_of_rubber'],
                     'sports_category'  =>  Sport::find( $tournament['sports_id'])->sports_category,
                     'winner_schedule_position' =>  isset($timeline[$i][$j]['winner']['next_match_ab_pos']) ? $timeline[$i][$j]['winner']['next_match_ab_pos'] : '' ,
-                    'is_knockout' => 1
+                    'is_knockout' => 1,
+                    'is_final_match' => $timeline[$i][$j]['is_final_match'] 
                 );
 
                 $match_schedule_result = MatchSchedule::create($schedule_data);

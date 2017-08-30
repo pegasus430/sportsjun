@@ -23,6 +23,7 @@ class UpgradeTournamentsMatchschedule extends Migration
             $table->string('loser_go_wl_type', 5);
             $table->string('double_wl_type', 5);
             $table->integer('is_knockout');
+            $table->integer('is_final_match');
             
          });
 
@@ -54,6 +55,18 @@ class UpgradeTournamentsMatchschedule extends Migration
                     $max_match_no = $m->tournament_match_number ;
                 }
             }
+
+            // fetch out last team name data ( this is not match )
+            $LL = DB::select(" select * from match_schedules  where tournament_id='".$t->id."' and tournament_round_number='".$max_round_no."' and tournament_match_number='".$max_match_no."'");
+            foreach($LL as $last)
+            {
+                $final_team_id = $last->b_id > 0 ? $last->b_id : $last->a_id;
+                $final_round_no = $max_round_no - 1;
+
+               // update in final matches  
+                DB::statement("update match_schedules set is_final_match=1 where tournament_id='".$t->id."' and tournament_round_number='".$final_round_no."' and  tournament_group_id  IS NULL 
+                and ( a_id='".$final_team_id."' or b_id='".$final_team_id."' )");
+            }
             DB::table('match_schedules')->where('tournament_id',$t->id)->where('tournament_round_number',$max_round_no)->where('tournament_match_number',$max_match_no)->delete();
         }
         
@@ -78,6 +91,7 @@ class UpgradeTournamentsMatchschedule extends Migration
             $table->dropColumn('loser_go_wl_type');
             $table->dropColumn('double_wl_type');
             $table->dropColumn('is_knockout');
+            $table->dropColumn('is_final_match');
         });
 
         Schema::table('tournaments', function (Blueprint $table) {
