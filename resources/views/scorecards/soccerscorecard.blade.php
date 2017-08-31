@@ -1602,7 +1602,7 @@ $ball_percentage_b=isset($match_details->{$team_b_id}->ball_percentage)?$match_d
 							data:data,
 							method:'post',
 							success:function(response){
-								window.location=window.location.pathname;
+								//window.location=window.location.pathname;
 							},
 							error:function(x,y,z){
 					can_save=true;
