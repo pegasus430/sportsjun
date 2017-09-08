@@ -1568,6 +1568,9 @@ class ScheduleController extends Controller {
 
     }
 
+    
+
+
  
     public function generateScheduleKnockoutDouble(Requests\GenerateMatchRequest $request)
     {
@@ -1732,14 +1735,7 @@ class ScheduleController extends Controller {
         return $res;
     }
 
-
-    
-        
-
-        // match information with level , pos , teamA, temaB
-
-
-        
+    // match information with level , pos , teamA, temaB
 
     private function generateSingleElimination( $TeamN  , $nPlaces )
     {
@@ -1886,16 +1882,13 @@ class ScheduleController extends Controller {
 
         $tournament       = Tournaments::where('id',$tournament_id)->first();
         $tournamentFinalTeams  = TournamentFinalTeams::where('tournament_id',$tournament_id)->get();
-        
 
         $timeline = $this->generateSingleElimination( count($tournamentFinalTeams) , $tournament['noofplaces'] );
         $timePoints = $this->MakeTimeList( $request , $tournament['start_date'] ,  count( $timeline ) );
 
-    
-
         for( $i = 0 ; $i < count( $timeline ) ; $i++ )
             for( $j = 0 ; $j <  $tournament['noofplaces'] ; $j++ )
-            { 
+            {
                 if( !isset( $timeline[$i][$j] ) ) continue;
 
                 $A = $timeline[$i][$j]['left']  != -1 ? $tournamentFinalTeams[ $timeline[$i][$j]['left' ] ] : array('team_id' => 0 );
@@ -2704,5 +2697,109 @@ $matchScheduleData = MatchSchedule::where('tournament_id',$matchScheduleDetails[
 
         return MatchScheduleRubber::whereMatchId($match_id)->get();
 
+    }
+
+    
+    public function generateDemoSingleElimination( $N )
+    {
+        $single = $this->generateSingleElimination( $N , 1 ); // only 1 place
+        $hash  = array();
+        $units = array();
+        $results = array();
+
+        $roundno = 0;
+        $matchno = 0;
+
+        for( $T = 0 ; $T < count( $single ) ; $T++ )
+        {
+            $S = $single[$T][0]; 
+
+            array_push( $units , array( 'id' => $T , 
+            'tournament_id' => $T ,
+            'tournament_round_number' => $S['round_no'] ,
+            'tournament_match_number'=> $S['match_no'],
+            'sports_id' => 4,
+            'match_category' => 2,
+            'schedule_type' => 'team',
+            'match_type' => 't20',
+            'match_start_date' => date("Y-m-d"),
+            'a_id' => $S['left'],
+            'b_id' => $S['right'],
+            'winner_id' => '',
+            'is_tied' => '',
+            'a_score' => '',
+            'b_score' => '', 
+            'team_name_a' => $S['left'] >= 0 ? " team".($S['left'] + 1): '' ,
+            'team_name_b' => $S['right'] >= 0 ? " team".($S['right'] + 1) : '' ,
+            'winner_schedule_id' => '', 
+            'is_final_match' => $S['is_final_match'] ) );
+
+            $hash[ $S['round_no'] ][ $S['match_no'] ] = $T;
+
+            $roundno = max( $roundno , $S['round_no'] );
+            $matchno = max( $matchno , $S['match_no'] );
+        }
+
+        $results['success'] = 'Match scheduled successfully.';
+        $results['roundno'] = $roundno;
+        $results['matchno'] = $matchno;
+        $results['units']   = $units;
+
+        return Response::json($results);
+    }
+
+    public function generateDemoDoubleElimination( $N )
+    {
+        $double = $this->generateDoubleElimination( $N , 1 ); // only 1 place
+        $results = array();
+ 
+
+        foreach( array( 'w' , 'l' ) as $key => $WH )
+        {
+            
+            $hash  = array();
+            $units = array();
+
+            $roundno = 0;
+            $matchno = 0;
+    
+            for( $T = 0 ; $T < count( $double ) ; $T++ )
+            {
+                $S = $double[$T][0]; 
+                if( $S['double_wl_type'] != $WH ) continue;
+    
+                array_push( $units , array( 'id' => $T , 
+                'tournament_id' => $T ,
+                'tournament_round_number' => $S['round_no'] ,
+                'tournament_match_number'=> $S['match_no'],
+                'sports_id' => 4,
+                'match_category' => 2,
+                'schedule_type' => 'team',
+                'match_type' => 't20',
+                'match_start_date' => date("Y-m-d"),
+                'a_id' =>  $S['left'],
+                'b_id' => $S['right'],
+                'winner_id' => '',
+                'is_tied' => '',
+                'a_score' => '',
+                'b_score' => '', 
+                'team_name_a' => $S['left'] >= 0 ? " team".($S['left'] + 1) : '' ,
+                'team_name_b' => $S['right'] >= 0 ? " team".($S['right'] + 1) : '' ,
+                'winner_schedule_id' => '', 
+                'is_final_match' => $S['is_final_match'] ) );
+    
+                $hash[ $S['round_no'] ][ $S['match_no'] ] = $T;
+
+                $roundno = max( $roundno , $S['round_no'] );
+                $matchno = max( $matchno , $S['match_no'] );
+            }
+    
+            $results[$WH]['success'] = 'success';
+            $results[$WH]['roundno'] = $roundno;
+            $results[$WH]['matchno'] = $matchno;
+            $results[$WH]['units']   = $units;
+        }
+        
+        return Response::json($results);
     }
 }

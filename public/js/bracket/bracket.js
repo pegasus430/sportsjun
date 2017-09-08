@@ -9,6 +9,7 @@ var SvgCreator = new SvgCreatorLibrary();
 var BOX_C = new BOX_CONST();
 var info_text_box = null;
 var baseX = 20;
+var BracketDemoMode = false;
 
 function getCurrentDate()
 {
@@ -127,8 +128,7 @@ function TeamLibrary(id)
         pObject.appendChild( SvgCreator.AddPolygon( "30,1 198,1 198,51 30,51" ,"rgb(204,204,204)" , "rgb(250,250,250)"  , null , "0" ) );
         pObject.appendChild( SvgCreator.AddLine( 0   , BOX_C.boxheight / 2 , 199 , BOX_C.boxheight / 2 ,"stroke:rgb(227,227,227);stroke-width:1" ) );
         pObject.appendChild( SvgCreator.AddLine( 30 ,  0 , 30 , BOX_C.boxheight  ,"stroke:rgb(227,227,227);stroke-width:1" ) );
-        
-
+         
         if( team1 != null )
         {
             var xtext = SvgCreator.AddText( 0 , 0 , team1 , "rgb(119,119,119)" ,  'font-size: 14px; font-weight: bold','xtext'+id  );
@@ -149,7 +149,8 @@ function TeamLibrary(id)
 
         pObject.appendChild( imark );
         pObject.appendChild( imarktext ); 
-        
+
+       
         imark.addEventListener( "mouseover" , function (){
             info_text_box.MoveInformation( x+2 , y-3 , I['match_start_date'] , I['match_type'] , I['schedule_type'] );
         } );
@@ -169,7 +170,7 @@ function TeamLibrary(id)
 
    
 
-        if( I['a_score'] != null )
+        if( I && I['a_score'] != null )
         {
             var xmark;
             if( win == 1 )
@@ -183,7 +184,7 @@ function TeamLibrary(id)
 
         }
 
-        if( I['b_score'] != null )
+        if( I && I['b_score'] != null )
         {
             var xmark;
             if( win == 2 )
@@ -215,7 +216,7 @@ function TeamLibrary(id)
             var txtbox = txt_but.getBBox(); 
             txt_but.setAttributeNS(null, "y" , -txtbox.height+10);
 
-            if( I['id']  != null )
+            if( I['id']  != null && !BracketDemoMode )
             {
                 if( editFlag )
                 {
@@ -250,7 +251,7 @@ function TeamLibrary(id)
             }
         }
 
-        if( I['is_final_match'] == '1' && win > 0 )
+        if( I && I['is_final_match'] == '1' && win > 0 )
         {
             var x1 = BOX_C.boxwidth + 50 ;
             var y1 = BOX_C.boxheight - 128;
@@ -274,7 +275,7 @@ function BracketLibrary(id)
 {
     var teamcount ;
     var level;
-    var svg_content = document.getElementById('SVG_CONTENT');
+    var svg_content = document.getElementById('SVG_CONTENT'); 
     svg_content.setAttribute('transform','translate(' + 10 + ',' + 15 + ')' );
     this.remove_content = function()
     {
@@ -336,7 +337,8 @@ function BracketLibrary(id)
         var i , j , k;
 
         // D.roundno
-        AddColumnTitle( baseY ,  D.roundno );
+        if( course != 2 )
+            AddColumnTitle( baseY ,  D.roundno );
 
         baseY += 30;
         
@@ -366,8 +368,8 @@ function BracketLibrary(id)
 
         for( k = 0 ; k < D.units.length ; k++ )
         {
-            var T1name = D.units[k]['a_id'] > 0 ? D.units[k]['team_name_a'] : null;
-            var T2name = D.units[k]['b_id'] > 0 ? D.units[k]['team_name_b'] : null;
+            var T1name = D.units[k]['team_name_a'] ? D.units[k]['team_name_a'] : null;
+            var T2name = D.units[k]['team_name_b'] ? D.units[k]['team_name_b'] : null;
 
             i = D.units[k]['tournament_round_number'];
             j = D.units[k]['tournament_match_number'];
@@ -408,8 +410,7 @@ function BracketLibrary(id)
      }
 
      this.generateDoubleElimination = function( D )
-     {
-         console.log(D);
+     { 
         var winY = ( BOX_C.boxheight + BOX_C.boxgap ) * ( Math.pow( 2 , D['w'].roundno - 2 ) ) + 100; // -1 means , winner course has one more game for last
         this.generateSingleElimination( D.w, 0 , 1 );
         this.generateSingleElimination( D.l, winY , 2 );

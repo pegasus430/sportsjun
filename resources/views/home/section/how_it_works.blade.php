@@ -23,6 +23,10 @@
     </div>
  -->
 <div class="container-fluid section-why-use-sportsjun">
+    <div class="row inner-container">
+        <div class="kode-align-btn"><a class="kode-modren-btn thbg-colortwo" href="virtual-bracket.html">Try Bracket Generator</a>
+        </div>
+    </div>
 
      <div class="row inner-container">
 

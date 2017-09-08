@@ -276,3 +276,15 @@ Route::group(['prefix' => 'guest'], function () {
    Route::get('tournaments/guestregisterstep3/{id}/{event_id}', 'User\TournamentsController@getGuestRegister');
    Route::post('tournaments/guestregisterstep3', 'User\TournamentsController@postGuestRegister');
 });
+
+
+
+Route::get('generateDemoSingleElimination/{noofteam}', [
+    'as'   => 'generateDemoSingleElimination',
+    'uses' => 'User\ScheduleController@generateDemoSingleElimination',
+]);
+
+Route::get('generateDemoDoubleElimination/{noofteam}', [
+    'as'   => 'generateDemoDoubleElimination',
+    'uses' => 'User\ScheduleController@generateDemoDoubleElimination',
+]);
