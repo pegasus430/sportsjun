@@ -43,11 +43,18 @@
     <div class="col-sm-2">
       &nbsp;
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-3">
       <div class="section">
-                <label class="form_label">{{  trans('message.tournament.fields.type') }} <span  class='required'>*</span></label>
-                <label class="field prepend-icon">
-                {!! Form::select('type',  config('constants.ENUM.TOURNAMENTS.TYPE'), null,array('class'=>'gui-input','id'=>'gametype')) !!}
+            <label class="form_label">{{  trans('message.tournament.fields.name') }} <span  class='required'>*</span></label>
+            <label class="field prepend-icon">
+            <input class="form-control" name="tournamentname" id='tournamentname' value=""/>
+       </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="section">
+            <label class="form_label">{{  trans('message.tournament.fields.type') }} <span  class='required'>*</span></label>
+            <label class="field prepend-icon">
+            {!! Form::select('type',  config('constants.ENUM.TOURNAMENTS.TYPE'), null,array('class'=>'gui-input','id'=>'gametype','style'=>'height:35px;')) !!}
        </div>
     </div>
   </div>
@@ -55,21 +62,51 @@
     <div class="col-sm-2">
       &nbsp;
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-3" id='row_noofteams'>
       <div class="section">
             <label class="form_label">{{  trans('message.tournament.fields.noofteams') }} <span  class='required'>*</span></label>
             <label class="field prepend-icon">
             <input class="form-control" name="noofteams" id='noofteams' value=""/>
        </div>
     </div>
+    <div class="col-sm-3">
+      <div class="section">
+            <label class="form_label">{{  trans('message.tournament.fields.noofteamsfinal') }} <span  class='required'>*</span></label>
+            <label class="field prepend-icon">
+            <input class="form-control" name="noofteamsfinal" id='noofteamsfinal' value=""/>
+       </div>
+    </div>
+  </div>
+  <div class="row" id='row_group'>
+    <div class="col-sm-2">
+      &nbsp;
+    </div>
+    <div class="col-sm-3">
+      <div class="section">
+            <label class="form_label">{{  trans('message.tournament.fields.groups') }} <span  class='required'>*</span></label>
+            <label class="field prepend-icon">
+            <input class="form-control" name="noofgroups" id='noofgroups' value=""/>
+       </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="section">
+            <label class="form_label">{{  trans('message.tournament.fields.roundofplay') }} <span  class='required'>*</span></label>
+            <label class="field prepend-icon">
+            <input class="form-control" name="roundofplay" id='roundofplay' value=""/>
+       </div>
+    </div>
   </div>
   <div class="row">
     <div class="col-sm-2">
       &nbsp;
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-6">
       <div class="section" align='right'>
             <button class="button btn-primary" id='GenerateBracket'>Create</button>
+            &nbsp;&nbsp;&nbsp;
+            <button class="button btn-primary" id='ResetBracket'>Reset&nbsp;</button>
+            &nbsp;&nbsp;&nbsp;
+            <button class="button btn-primary" id='PrintBracket'>Export As PDF</button>
        </div>
     </div>
   </div>
@@ -91,21 +128,99 @@ var B = new BracketLibrary('br');
 BracketDemoMode = true;
 
 $(function () {
+    $("#gametype").change( function(){
+      switch( $("#gametype").val() )
+      {
+        case 'knockout':
+        case 'doubleknockout': 
+          $("#row_roundofplay").hide();
+          $("#row_group").hide();
+          $("#row_noofteams").hide();
+          break;
+        default:
+          $("#row_roundofplay").show();
+          $("#row_group").show();
+          $("#row_noofteams").show();
+        break;
+      }
+    });
+    $("#ResetBracket").click( function(){
+        $("#noofteams").val('');
+        $("#noofgroups").val('');
+        $("#roundofplay").val('');
+        $("#noofteamsfinal").val('');
+        $("#tournamentname").val('');
+        
+    });
+    
+      $("#PrintBracket").click( function (){
+          $("#SVG_CONTENT").find('image').remove();
+        
+          var pdf = new jsPDF('p', 'pt', 'c1');
+          var c = pdf.canvas;
+          c.width = 1000;
+          c.height = 500;
+
+          var ctx = c.getContext('2d');
+          ctx.ignoreClearRect = true;
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, 2000, 700);
+          //load a svg snippet in the canvas with id = 'drawingArea'
+          canvg(c, document.getElementById('SVG_CONTENT').outerHTML, {
+              ignoreMouse: true,
+              ignoreAnimation: true,
+              ignoreDimensions: true
+          });
+          pdf.save( $("#tournamentname").val() + '.pdf' );
+    } );
+
     $("#GenerateBracket").click( function (){
         var req_url ;
-        var noofteams = $("#noofteams").val();
+        var noofteams       = $("#noofteams").val();
+        var noofgroups      = $("#noofgroups").val();
+        var roundofplay     = $("#roundofplay").val();
+        var noofteamsfinal  = $("#noofteamsfinal").val();
+
+        if( noofteamsfinal < 3 && ( $("#gametype").val() == 'doubleknockout' || $("#gametype").val() == 'doublemultistage' ) )
+        {
+            return;
+        }
+
         switch( $("#gametype").val() )
         {
             case 'knockout':
-              req_url = '/generateDemoSingleElimination/'+ noofteams; 
+              if( !noofteamsfinal ) 
+              {
+                console.log( 'forbidden' );
+                return;
+              } 
+              req_url = '/generateDemoSingleElimination/'+ noofteamsfinal; 
               break;
 
             case 'doubleknockout':
-              req_url = '/generateDemoDoubleElimination/'+ noofteams;
+              if( !noofteamsfinal ) 
+                {
+                  console.log( 'forbidden' );
+                  return;
+                } 
+              req_url = '/generateDemoDoubleElimination/'+ noofteamsfinal;
+              break;
+
+            default:
+              if( !noofteamsfinal || !noofgroups || !roundofplay || !noofteams ) 
+              {
+                console.log( 'forbidden' );
+                return;
+              } 
+              req_url = '/generateDemoLeagueMatch/'+ noofteams+'/'+noofgroups+'/'+roundofplay+'/';
               break;
         }
-        if( !noofteams || !req_url || noofteams <= 1 || noofteams >= 300 )
-          return;
+ 
+        var groupFlag = true;
+
+        $.ajax({ type: 'GET', url:  '/footprintDemoBracketGeneration/'+ $("#tournamentname").val() + '/'+ $("#gametype").val() , dataType: 'json',  success: function(response) { } });
+        
+
 
         $.ajax({
             type: 'GET',
@@ -118,16 +233,35 @@ $(function () {
                     switch( $("#gametype").val() )
                     {
                       case 'knockout':
-                        B.generateSingleElimination( response , 0 , 0 );
-                        break;
+                          B.generateSingleElimination( response , 50 );
+                          break;
                       case 'doubleknockout':
-                        B.generateDoubleElimination( response );
-                        break;
+                          B.generateDoubleElimination( response , 50 );
+                          break;
+                      default: 
+                        {
+                            var baseY = B.generateLeagueMatch( response , 50 );
+                        
+                            if( $("#gametype").val() == 'multistage' )
+                            {
+                                $.ajax({ type: 'GET', url:  '/generateDemoSingleElimination/'+ noofteamsfinal , dataType: 'json',  success: function(response) { 
+                                      B.generateSingleElimination( response , baseY , true );
+                                    }
+                                });
+                            }
+                            if( $("#gametype").val() == 'doublemultistage' )
+                            {
+                                $.ajax({ type: 'GET', url:  '/generateDemoDoubleElimination/'+ noofteamsfinal , dataType: 'json',  success: function(response) { 
+                                      B.generateDoubleElimination( response , baseY , true );
+                                    }
+                                });
+                            }
+                            break;
+                        }
                     }
-                    
                 }
             }   
-    });
+      });
     });
 });
 </script>  

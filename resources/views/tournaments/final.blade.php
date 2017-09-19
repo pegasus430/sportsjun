@@ -28,13 +28,13 @@ function export_pdf()
   
     var pdf = new jsPDF('p', 'pt', 'c1');
     var c = pdf.canvas;
-    c.width = 1000;
-    c.height = 500;
+    c.width = DocWidth;
+    c.height = DocHeight;
 
     var ctx = c.getContext('2d');
     ctx.ignoreClearRect = true;
     ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, 2000, 700);
+    ctx.fillRect(0, 0, DocWidth * 2, DocHeight * 2);
     //load a svg snippet in the canvas with id = 'drawingArea'
     canvg(c, document.getElementById('SVG_CONTENT').outerHTML, {
         ignoreMouse: true,
@@ -59,7 +59,7 @@ $(document).ready(function(){
                 success: function(response) {
                     console.log(response);
                     $.unblockUI();
-                    B.generateSingleElimination( response , 0 , 0 );
+                    B.generateSingleElimination( response , 50 );
                 }
             });
         }
@@ -74,8 +74,8 @@ $(document).ready(function(){
                 },
                 success: function(response) {
                     console.log(response);
-                    $.unblockUI();                
-                    B.generateDoubleElimination( response);
+                    $.unblockUI();
+                    B.generateDoubleElimination( response , 50 );
                 }
             });
         }

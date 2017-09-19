@@ -1164,7 +1164,7 @@ class ScheduleController extends Controller {
         }// team iterator
        
 
-        //// contructing table with stadium and timeline
+        //// construct table with stadium and timeline
 
         $found = true;
         $iPlace = 0;
@@ -2801,5 +2801,47 @@ $matchScheduleData = MatchSchedule::where('tournament_id',$matchScheduleDetails[
         }
         
         return Response::json($results);
+    }
+
+    
+    public function generateDemoLeagueMatch( $noofteam_pergroup , $noofgroups , $roundofplay ) 
+    {
+        $team_cur = 1;
+        for( $i = 0 ; $i < $noofgroups ; $i++ )
+        {
+            $tournamentGroups[$i]['team'] = [];
+            for( $j = 0 ; $j <  $noofteam_pergroup ; $j++ )
+            {
+                $tournamentGroups[$i]['team'][] = 'gTeam'.$team_cur ;
+                $team_cur++;
+            }
+        }
+
+        $league = $this->generateLeagueMatching( $noofteam_pergroup * $noofgroups , $tournamentGroups  , $roundofplay , 1 );
+        $results = array();
+
+        for( $g = 0; $g < $noofgroups ; $g++ )
+        {
+            $matches = [];
+            for( $i = 0 ; $i < count($league);  $i++ )
+                if( $league[$i][0]['group'] == $g )
+                {
+                    $matches[] = array(  
+                        'team_name_a' => $tournamentGroups[$g]['team'][ $league[$i][0]['left'] ] , 
+                        'team_name_b' => $tournamentGroups[$g]['team'][ $league[$i][0]['right'] ] 
+                    );
+                }
+            $results[] = array('group' => $g + 1, 'matches'=>$matches );
+        }
+
+        return Response::json($results);
+    }
+    public function footprintDemoBracketGeneration( $tournamentname , $tournamenttype ) 
+    {
+        DB::table('bracket_try')->insert(
+            array('bracketName' => $tournamentname,
+                  'bracketType' => $tournamenttype,
+                  'created_at' => date("Y-m-d H:i:s") )
+        );
     }
 }

@@ -288,3 +288,13 @@ Route::get('generateDemoDoubleElimination/{noofteam}', [
     'as'   => 'generateDemoDoubleElimination',
     'uses' => 'User\ScheduleController@generateDemoDoubleElimination',
 ]);
+
+Route::get('generateDemoLeagueMatch/{noofteam}/{noofgroups}/{roundofplay}', [
+    'as'   => 'generateDemoLeagueMatch',
+    'uses' => 'User\ScheduleController@generateDemoLeagueMatch',
+]);
+
+Route::get('footprintDemoBracketGeneration/{tournamentname}/{tournamenttype}', [
+    'as'   => 'footprintDemoBracketGeneration',
+    'uses' => 'User\ScheduleController@footprintDemoBracketGeneration',
+]);
