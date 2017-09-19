@@ -11,6 +11,9 @@ var info_text_box = null;
 var baseX = 20;
 var BracketDemoMode = false;
 
+var DocWidth = 0;
+var DocHeight = 0;
+
 function getCurrentDate()
 {
     var today = new Date();
@@ -32,7 +35,7 @@ function getCurrentDate()
 
 function InfoTextBox()
 {
-    this.svg_content = document.getElementById('SVG_CONTENT')
+    this.svg_content = document.getElementById('SVG_CONTENT');
     this.svg_group = SvgCreator.CreateSvgGroup( "ShowTeamInfo" );
     this.svg_content.appendChild(this.svg_group);
 
@@ -75,7 +78,8 @@ function AddColumnTitle( baseY , roundno )
     this.svg_group = SvgCreator.CreateSvgGroup( "ShowColumnInfo" );
     this.svg_content.appendChild(this.svg_group);
     var pObject     = this.svg_group;
-    var x = baseX;;
+    var x = baseX;
+    var deltaY = 0;
 
     for( var i = roundno - 1 ; i>=0 ; i-- )
     {
@@ -84,12 +88,52 @@ function AddColumnTitle( baseY , roundno )
         console.log(col_name);
         var obj = SvgCreator.AddText( x , baseY + 30 , col_name  , "rgb(0,0,0)" ,  'font-size: 18px; font-weight: bold','matchtext'+i );
         pObject.appendChild( obj );
-        var txt_box = obj.getBBox();
-        obj.setAttributeNS( null , "x" , x + BOX_C.boxwidth/2 - txt_box.width/2 );
+        var txtbox = obj.getBBox();
+        deltaY = txtbox.height;
+        obj.setAttributeNS( null , "x" , x + BOX_C.boxwidth/2 - txtbox.width/2 );
         
         x += BOX_C.boxwidth + BOX_C.boxgap;
     }
+    baseY += deltaY +  BOX_C.boxgap;
+    return baseY;
 }
+
+function AddGroupName( x ,baseY , groupname )
+{
+    this.svg_content = document.getElementById('SVG_CONTENT');
+    this.svg_group = SvgCreator.CreateSvgGroup( "ShowGroupTitle" );
+    this.svg_content.appendChild(this.svg_group);
+    var pObject     = this.svg_group;
+    
+    var col_name = "Group" + groupname;
+    var obj = SvgCreator.AddText( x , baseY , col_name  , "rgb(0,0,0)" ,  'font-size: 18px; font-weight: bold','matchtext'+ groupname );
+    pObject.appendChild( obj );
+    var txtbox = obj.getBBox();
+    baseY += txtbox.height + BOX_C.boxgap;
+    return baseY;
+}
+
+function AddStageTitle( x , baseY , stage , isSepLine )
+{
+    this.svg_content = document.getElementById('SVG_CONTENT');
+    this.svg_group = SvgCreator.CreateSvgGroup( "ShowGroupTitle" );
+    this.svg_content.appendChild(this.svg_group);
+    var pObject     = this.svg_group;
+
+    if( isSepLine )
+    {
+         var sepLine =SvgCreator.AddLine( 5 , baseY + BOX_C.boxgap / 2  , 1000 , baseY + BOX_C.boxgap / 2 ,"stroke:rgb(132,205,147);stroke-width:1" )
+         pObject.appendChild( sepLine );
+         baseY += BOX_C.boxgap * 2;
+    }
+     
+    var obj = SvgCreator.AddText( x , baseY , stage  , "rgb(132,205,147)" ,  'font-size: 20px; font-weight: bold','matchtext'+ stage );
+    pObject.appendChild( obj );
+    var txtbox = obj.getBBox();
+    baseY += txtbox.height + BOX_C.boxgap;
+    return baseY;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 function TeamLibrary(id)
@@ -108,6 +152,35 @@ function TeamLibrary(id)
         obj.setAttributeNS(null, "x" , p.x  );
         obj.setAttributeNS(null, "y" , p.y  );
         return p;
+    }
+
+    this.AddLeagueMatch = function( x , y , team1 , team2 )
+    {
+        var pObject = this.svg_group;
+
+        if( team1  && team1.length > 20 ) team1 = team1.substring( 0 , 20 );
+        if( team2  && team2.length > 20 ) team2 = team2.substring( 0 , 20 );
+
+        pObject.appendChild( SvgCreator.AddPolygon( "0,0 199,0 199,52 0,52" ,"rgb(204,204,204)" , "rgb(255,255,255)"  , null , "1" ) );
+        pObject.appendChild( SvgCreator.AddPolygon( "30,1 198,1 198,51 30,51" ,"rgb(204,204,204)" , "rgb(250,250,250)"  , null , "0" ) );
+        pObject.appendChild( SvgCreator.AddLine( 0   , BOX_C.boxheight / 2 , 199 , BOX_C.boxheight / 2 ,"stroke:rgb(227,227,227);stroke-width:1" ) );
+        pObject.appendChild( SvgCreator.AddLine( 30 ,  0 , 30 , BOX_C.boxheight  ,"stroke:rgb(227,227,227);stroke-width:1" ) );
+         
+        if( team1 != null )
+        {
+            var xtext = SvgCreator.AddText( 0 , 0 , team1 , "rgb(119,119,119)" ,  'font-size: 14px; font-weight: bold','xtext'+id  );
+            pObject.appendChild(xtext);
+            this.setTextObjectPosition( xtext , 113 , 9 ); 
+        }
+
+        if( team2 != null )
+        {
+            var ytext = SvgCreator.AddText( 0 , 0 , team2 , "rgb(119,119,119)" ,  'font-size: 14px; font-weight: bold', 'ytext'+id  );
+            pObject.appendChild(ytext);
+            this.setTextObjectPosition( ytext , 113, 35 );
+        }
+
+        pObject.setAttribute( 'transform','translate(' + x + ',' + y + ')' );
     }
      
     this.AddTeam = function ( x , y , goH , team1 , team2 , win  , I )
@@ -214,7 +287,7 @@ function TeamLibrary(id)
             }
             pObject.appendChild( txt_but );
             var txtbox = txt_but.getBBox(); 
-            txt_but.setAttributeNS(null, "y" , -txtbox.height+10);
+            txt_but.setAttributeNS(null, "y" , -txtbox.height+14);
 
             if( I['id']  != null && !BracketDemoMode )
             {
@@ -324,23 +397,40 @@ function BracketLibrary(id)
         B.AddTeam( xx , yy + baseY , goH , T1name , T2name , winner_id  , I );
      }
 
-
-
-     this.generateSingleElimination = function( D , baseY , course ) // course 0:single , 1: double winner  2: double loser
+     this.AddLeagueOneGroupMatch = function( G , baseY )
      {
+        baseY = AddGroupName( 50 , baseY , G.group );
 
+        var x = 50 , y = baseY;
+        var cur = 0;
+        
+        for( var i = 0 ; i < G.matches.length; i++ )
+        {
+            var B = new TeamLibrary( 'group_    teambox'+ '_' + i );
+            B.AddLeagueMatch(  x , y  , G.matches[i].team_name_a ,  G.matches[i].team_name_b );
+            cur++;
+            if( cur >= 5 )
+            {
+                cur = 0;
+                x = 50;
+                y = y + ( BOX_C.boxheight + BOX_C.boxgap );
+            } else {
+                x += ( BOX_C.boxwidth + BOX_C.boxgap );
+            }
+        }
+
+        baseY = y + ( BOX_C.boxheight + BOX_C.boxgap );
+        return baseY;
+     }
+
+     this.generateElimination = function( D , baseY , course ) // course 0:single , 1: double winner  2: double loser
+     {
         if( !info_text_box )
             info_text_box =new InfoTextBox();
 
         var fRound = new Array();
         var sRound = new Array();
         var i , j , k;
-
-        // D.roundno
-        if( course != 2 )
-            AddColumnTitle( baseY ,  D.roundno );
-
-        baseY += 30;
         
         var NN = Math.pow( 2 , D.roundno - 1 );
 
@@ -359,7 +449,7 @@ function BracketLibrary(id)
             if( i == 2 ) round_two_count++;
         }
 
-   //     console.log( round_one_count , round_two_count );
+    //     console.log( round_one_count , round_two_count );
 
         //console.log(D.units);
 
@@ -407,15 +497,54 @@ function BracketLibrary(id)
                 
                 this.addMatch(  baseY , 1 , i  , D.roundno , T1name , "Bye" );
             }
+        baseY =baseY + ( BOX_C.boxheight + BOX_C.boxgap ) * ( Math.pow( 2 , D.roundno - 2 ) ) + 300 ; // -1 means , winner course has one more game for last
+        return baseY;
      }
 
-     this.generateDoubleElimination = function( D )
-     { 
-        var winY = ( BOX_C.boxheight + BOX_C.boxgap ) * ( Math.pow( 2 , D['w'].roundno - 2 ) ) + 100; // -1 means , winner course has one more game for last
-        this.generateSingleElimination( D.w, 0 , 1 );
-        this.generateSingleElimination( D.l, winY , 2 );
+     this.SetDocumentSize = function( W , H )
+     {
+        DocWidth  = W;
+        DocHeight = H;
+        document.getElementById('SVG_CONTENT').setAttribute( "width"  , W );
+        document.getElementById('SVG_CONTENT').setAttribute( "height" , H ); 
      }
-    
-    
+
+     this.generateSingleElimination = function( D , baseY , isSepLine ) // course 0:single , 1: double winner  2: double loser
+     {
+
+        baseY = AddStageTitle( 50 , baseY , "Single Elimination Stage" , isSepLine );
+        baseY = this.generateElimination( D , baseY , 0 );
+        
+        this.SetDocumentSize( ( BOX_C.boxheight + BOX_C.boxgap ) * ( Math.pow( 2 , D.roundno ) ) + 200 ,  baseY + 500 );
+
+        return baseY;
+     }
+
+     this.generateDoubleElimination = function( D , baseY , isSepLine )
+     { 
+        baseY = AddStageTitle( 50 , baseY , "Double Elimination Stage" , isSepLine );
+
+        baseY = AddColumnTitle( baseY ,  D.roundno );
+        baseY = this.generateElimination( D.w, baseY , 1 );
+        baseY = this.generateElimination( D.l, baseY , 2 );
+
+        this.SetDocumentSize( ( BOX_C.boxheight + BOX_C.boxgap ) * ( Math.pow( 2 , Math.max( D.w.roundno , D.l.roundno ) ) ) + 200 ,  baseY + 500 );
+
+        return baseY;
+     }
+
+     this.generateLeagueMatch = function ( D , baseY )
+     {
+        baseY = AddStageTitle( 50 , baseY , "Group Stage" );
+
+        for( var i = 0 ; i < D.length ; i++ )
+        {
+            baseY = this.AddLeagueOneGroupMatch( D[i] , baseY );
+        }
+
+        this.SetDocumentSize( ( BOX_C.boxwidth + BOX_C.boxgap ) * 5 + 100  , baseY + 500  );
+
+        return baseY;
+     }
 }
  
